@@ -7,5 +7,10 @@ namespace GenericIrcBot
         public IrcBot ()
         {
         }
+
+        public void Derp()
+        {
+            throw new Exception( "error" );
+        }
     }
 }
