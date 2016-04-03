@@ -33,9 +33,6 @@
       <HintPath>..\packages\NUnit.3.2.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Test.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
@@ -48,5 +45,8 @@
       <Project>{501708e7-ac43-4df4-b7bc-6a31074e30d1}</Project>
       <Name>GenericIrcBot</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IrcConfigTest.cs" />
   </ItemGroup>
 </Project>
