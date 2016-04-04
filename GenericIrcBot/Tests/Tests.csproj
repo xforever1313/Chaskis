@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E31AD4E7-7A83-42CE-AE82-BC2CC053B32D}</ProjectGuid>
+    <ProjectGuid>{CDE29556-87E8-4F1F-972A-33A9C849D390}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
@@ -30,23 +30,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.2.0\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <Import Project="..\..\SethCS\SethCS\SethCSMono.projitems" Label="Shared" Condition="Exists('..\..\SethCS\SethCS\SethCSMono.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <Compile Include="IrcConfigTest.cs" />
+    <Compile Include="Mocks\MockIrcConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
-      <Project>{501708e7-ac43-4df4-b7bc-6a31074e30d1}</Project>
+      <Project>{501708E7-AC43-4DF4-B7BC-6A31074E30D1}</Project>
       <Name>GenericIrcBot</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="IrcConfigTest.cs" />
   </ItemGroup>
 </Project>
