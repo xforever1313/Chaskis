@@ -5,18 +5,105 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using SethCS.Basic;
+using System.Collections.Generic;
 
 namespace GenericIrcBot
 {
-    public class IrcBot
+    public class IrcBot : IDisposable
     {
-        public IrcBot ()
+        // -------- Fields --------
+        
+        /// <summary>
+        /// Version in the form of a string.
+        /// </summary>
+        public const string VersionString = "0.0.1";
+
+        /// <summary>
+        /// Semantic Version of the bot.
+        /// </summary>
+        public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );
+
+        /// <summary>
+        /// The irc config.
+        /// </summary>
+        private readonly IIrcConfig ircConfig;
+
+        /// <summary>
+        /// The line configs to use.
+        /// </summary>
+        private readonly IList<LineConfig> lineConfigs;
+
+        /// <summary>
+        /// The IRC Connection.
+        /// </summary>
+        private readonly IConnection ircConnection;
+
+        // -------- Constructor --------
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="ircConfig">The irc config object to use.  This will be cloned after being passed in.</param>
+        /// <param name="lineConfigs>The line configs to be used in this bot.</param>"> 
+        public IrcBot ( IIrcConfig ircConfig, IList<LineConfig> lineConfigs )
         {
+            if ( ircConfig == null )
+            {
+                throw new ArgumentNullException( nameof( ircConfig ) );
+            }
+            else if ( lineConfigs == null )
+            {
+                throw new ArgumentNullException( nameof( lineConfigs ) );
+            }
+
+            this.ircConfig = ircConfig.Clone();
+            this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );
+
+            this.lineConfigs = lineConfigs;
+
+            IrcConnection connection = new IrcConnection( ircConfig );
+            connection.ReadEvent = delegate( string line )
+            {
+                Console.WriteLine( line );
+                foreach ( LineConfig config in this.lineConfigs )
+                {
+                    config.CheckAndFireAction( line, this.ircConfig, connection );
+                }
+            };
+
+            this.ircConnection = connection;
         }
 
-        public void Derp()
+        // -------- Properties --------
+
+        /// <summary>
+        /// Read-only reference to the irc config object.
+        /// </summary>
+        public IIrcConfig IrcConfig { get; private set; }
+
+        // -------- Functions -------
+
+        /// <summary>
+        /// Starts the IRC Connection.  No-op if already started.
+        /// </summary>
+        public void Start()
         {
-            throw new Exception( "error" );
+            if ( this.ircConnection.IsConnected == false )
+            {
+                this.ircConnection.Connect();
+            }
+        }
+
+        /// <summary>
+        /// Stops the IRC Connection.
+        /// </summary>
+        public void Dispose()
+        {
+            if ( this.ircConnection.IsConnected )
+            {
+                this.ircConnection.Disconnect();
+            }
         }
     }
 }

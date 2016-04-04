@@ -6,26 +6,14 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace GenericIrcBot
 {
-    public class IrcConnection : IDisposable, IConnection
+    public class IrcConnection : IDisposable, IConnection, IIrcWriter
     {
         // -------- Fields --------
-
-        /// <summary>
-        /// Called when a line is read.
-        /// The parameter is the line from the connection.
-        /// </summary>
-        private readonly Action<string> readEvent;
-
-        /// <summary>
-        /// The configuration to use.
-        /// </summary>
-        private IrcConfig config;
 
         /// <summary>
         /// Connection to the server.
@@ -63,11 +51,9 @@ namespace GenericIrcBot
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        /// <param name="readEvent">Action called when a line is read.  Parameter is the line read from the irc channel.</param>
-        public IrcConnection ( IrcConfig config, Action<string> readEvent )
+        public IrcConnection ( IIrcConfig config )
         {
-            this.config = config;
-            this.readEvent = readEvent;
+            this.Config = new ReadOnlyIrcConfig( config );
             this.IsConnected = false;
 
             this.connection = null;
@@ -84,6 +70,12 @@ namespace GenericIrcBot
         /// Whether or not we are connected.
         /// </summary>
         public bool IsConnected { get; private set; }
+
+        /// <summary>
+        /// Called when a line is read.
+        /// The parameter is the line from the connection.
+        /// </summary>
+        public Action<string> ReadEvent { get; set; }
 
         /// <summary>
         /// Whether or not to keep reading.
@@ -107,13 +99,11 @@ namespace GenericIrcBot
             }
         }
 
-        public IIrcConfig Config
-        {
-            get
-            {
-                return this.config;
-            }
-        }
+        /// <summary>
+        /// Read-only reference to the IRC Config to use.
+        /// </summary>
+        public IIrcConfig Config{ get; private set; }
+
 
         // -------- Functions --------
 
@@ -131,7 +121,7 @@ namespace GenericIrcBot
             }
 
             // Connect.
-            this.connection = new TcpClient( this.config.Server, this.config.Port );
+            this.connection = new TcpClient( this.Config.Server, this.Config.Port );
             this.ircWriter = new StreamWriter( this.connection.GetStream() );
             this.ircReader = new StreamReader( this.connection.GetStream() );
 
@@ -144,23 +134,23 @@ namespace GenericIrcBot
             // This command is used at the beginning of a connection to specify the username, 
             // real name and initial user modes of the connecting client.
             // <realname> may contain spaces, and thus must be prefixed with a colon. 
-            this.ircWriter.WriteLine( "USER {0} 0 * :{1}", this.config.UserName, this.config.RealName );
+            this.ircWriter.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
             this.ircWriter.Flush();
 
             // NICK <nickname>
-            this.ircWriter.WriteLine( "NICK {0}", this.config.Nick );
+            this.ircWriter.WriteLine( "NICK {0}", this.Config.Nick );
             this.ircWriter.Flush();
 
             // Join Channel.
             // JOIN <channels>
             // If channel does not exist it will be created.
-            this.ircWriter.WriteLine( "JOIN {0}", this.config.Channel );
+            this.ircWriter.WriteLine( "JOIN {0}", this.Config.Channel );
             this.ircWriter.Flush();
 
             // Tell nickserv we are a bot.
-            if ( string.IsNullOrEmpty( this.config.Password ) == false )
+            if ( string.IsNullOrEmpty( this.Config.Password ) == false )
             {
-                this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.config.Password );
+                this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.Config.Password );
             }
 
             this.IsConnected = true;
@@ -174,7 +164,7 @@ namespace GenericIrcBot
         /// <param name="msg">The message to send.</param>
         public void SendCommand( string msg )
         {
-            SendMessageToUser( msg, this.config.Channel );
+            SendMessageToUser( msg, this.Config.Channel );
         }
 
         /// <summary>
@@ -265,9 +255,9 @@ namespace GenericIrcBot
                     string s = this.ircReader.ReadLine();
                     if ( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                     {
-                        if ( this.readEvent != null )
+                        if ( this.ReadEvent != null )
                         {
-                            readEvent( s );
+                            ReadEvent( s );
                         }
 
                     }

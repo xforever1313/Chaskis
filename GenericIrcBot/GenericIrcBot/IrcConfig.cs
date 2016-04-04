@@ -48,6 +48,13 @@ namespace GenericIrcBot
         /// Leave empty to not authenticate.
         /// </summary>
         string Password { get; }
+
+        // -------- Functions ---------
+
+        /// <summary>
+        /// Clone this instance.
+        /// </summary>
+        IIrcConfig Clone();
     }
 
     /// <summary>
@@ -60,7 +67,7 @@ namespace GenericIrcBot
         /// <summary>
         /// Contructor, fills with default settings.
         /// </summary>
-        public IrcConfig()
+        public IrcConfig ()
         {
             this.Server = string.Empty;
             this.Channel = string.Empty;
@@ -108,6 +115,16 @@ namespace GenericIrcBot
         /// Leave empty to not authenticate.
         /// </summary>
         public string Password { get; set; }
+
+        // --------- Functions --------
+
+        /// <summary>
+        /// Returns a copy of this object.
+        /// </summary>
+        public IIrcConfig Clone()
+        {
+            return ( IrcConfig )this.MemberwiseClone();
+        }
     }
 
     /// <summary>
@@ -129,9 +146,9 @@ namespace GenericIrcBot
         /// Constructor.
         /// </summary>
         /// <param name="config">The config to wrap.</param>
-        public ReadOnlyIrcConfig( IIrcConfig config )
+        public ReadOnlyIrcConfig ( IIrcConfig config )
         {
-            if (config == null )
+            if ( config == null )
             {
                 throw new ArgumentNullException( nameof( config ) );
             }
@@ -249,6 +266,14 @@ namespace GenericIrcBot
         }
 
         // -------- Functions --------
+
+        /// <summary>
+        /// Returns a copy of this object.
+        /// </summary>
+        public IIrcConfig Clone()
+        {
+            return new ReadOnlyIrcConfig( this.wrappedConfig.Clone() );
+        }
 
         /// <summary>
         /// Throws the read-only exception.

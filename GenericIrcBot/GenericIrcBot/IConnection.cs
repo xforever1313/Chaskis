@@ -12,6 +12,11 @@ namespace GenericIrcBot
     public interface IConnection
     {
         /// <summary>
+        /// Returns the IRCConfig.
+        /// </summary>
+        IIrcConfig Config { get; }
+
+        /// <summary>
         /// Whether or not we are connected.
         /// </summary>
         bool IsConnected { get; }
@@ -45,10 +50,5 @@ namespace GenericIrcBot
         /// Disconnects the connection.
         /// </summary>
         void Disconnect();
-
-        /// <summary>
-        /// Returns the IRCConfig.
-        /// </summary>
-        IIrcConfig Config { get; }
     }
 }

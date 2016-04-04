@@ -36,6 +36,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IrcBot.cs" />
     <Compile Include="IrcConnection.cs" />
+    <Compile Include="LineConfig.cs" />
+    <Compile Include="IrcResponse.cs" />
+    <Compile Include="IIrcWriter.cs" />
   </ItemGroup>
+  <Import Project="..\..\SethCS\SethCS\SethCSMono.projitems" Label="Shared" Condition="Exists('..\..\SethCS\SethCS\SethCSMono.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
