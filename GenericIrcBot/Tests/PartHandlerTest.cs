@@ -12,14 +12,14 @@ using Tests.Mocks;
 namespace Tests
 {
     [TestFixture]
-    public class JoinHandlerTest
+    public class PartHandlerTest
     {
         // -------- Fields --------
 
         /// <summary>
         /// Unit under test.
         /// </summary>
-        private JoinHandler uut;
+        private PartHandler uut;
 
         /// <summary>
         /// Irc Config to use.
@@ -37,7 +37,7 @@ namespace Tests
         private static IrcResponse responseReceived;
 
         /// <summary>
-        /// The user that joined.
+        /// The user that parted.
         /// </summary>
         private const string RemoteUser = "remoteuser";
 
@@ -49,7 +49,7 @@ namespace Tests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             ircConnection = new MockIrcConnection( this.ircConfig );
             responseReceived = null;
-            this.uut = new JoinHandler( JoinFunction );
+            this.uut = new PartHandler( PartFunction );
         }
 
         // -------- Tests --------
@@ -62,7 +62,7 @@ namespace Tests
         public void ArgumentNullTest()
         {
             Assert.Throws<ArgumentNullException>( () =>
-                new JoinHandler( null )
+                new PartHandler( null )
             );
 
             Assert.Throws<ArgumentNullException>( () =>
@@ -87,15 +87,15 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures if a user joins correctly, the event gets fired.
+        /// Ensures if a user parts correctly, the event gets fired.
         /// </summary>
         [Test]
-        public void JoinSuccess()
+        public void PartSuccess()
         {
             string ircString = 
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
-                    JoinHandler.IrcCommand,
+                    PartHandler.IrcCommand,
                     ircConfig.Channel,
                     string.Empty
                 );
@@ -104,7 +104,7 @@ namespace Tests
 
             Assert.IsNotNull( responseReceived );
 
-            // Join handler has no message.
+            // Part handler has no message.
             Assert.AreEqual( string.Empty, responseReceived.Message );
 
             // Channels should match.
@@ -115,15 +115,15 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures that if the bot joins, the event isn't fired.
+        /// Ensures that if the bot parts, the event isn't fired.
         /// </summary>
         [Test]
-        public void BotJoins()
+        public void BotParts()
         {
             string ircString = 
                 TestHelpers.ConstructIrcString(
                     ircConfig.Nick,
-                    JoinHandler.IrcCommand,
+                    PartHandler.IrcCommand,
                     ircConfig.Channel,
                     string.Empty
                 );
@@ -134,7 +134,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures that if a PRIMSG appears, the join
+        /// Ensures that if a PRIMSG appears, the part
         /// event isn't fired.
         /// </summary>
         [Test]
@@ -154,7 +154,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures that if a PART appears, the join
+        /// Ensures that if a JOIN appears, the part
         /// event isn't fired.
         /// </summary>
         [Test]
@@ -163,7 +163,7 @@ namespace Tests
             string ircString = 
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
-                    PartHandler.IrcCommand,
+                    JoinHandler.IrcCommand,
                     ircConfig.Channel,
                     string.Empty
                 );
@@ -180,7 +180,7 @@ namespace Tests
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
-        private static void JoinFunction( IIrcWriter writer, IrcResponse response )
+        private static void PartFunction( IIrcWriter writer, IrcResponse response )
         {
             Assert.AreSame( ircConnection, writer );
             responseReceived = response;

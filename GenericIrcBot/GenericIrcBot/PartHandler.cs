@@ -65,6 +65,19 @@ namespace GenericIrcBot
         /// <param name="ircWriter">The way to write to the irc channel.</param>
         public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
+            if( string.IsNullOrEmpty( line ) )
+            {
+                throw new ArgumentNullException( nameof( line ) );
+            }
+            else if( ircConfig == null )
+            {
+                throw new ArgumentNullException( nameof( ircConfig ) );
+            }
+            else if( ircWriter == null )
+            {
+                throw new ArgumentNullException( nameof( ircConfig ) );
+            }
+
             Match match = pattern.Match( line );
             if( match.Success )
             {

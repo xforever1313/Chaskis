@@ -43,6 +43,7 @@
     <Compile Include="JoinHandlerTest.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
+    <Compile Include="PartHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
