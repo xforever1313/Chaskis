@@ -32,7 +32,7 @@ namespace GenericIrcBot
         /// <summary>
         /// The line configs to use.
         /// </summary>
-        private readonly IList<LineConfig> lineConfigs;
+        private readonly IList<IIrcHandler> ircHandlers;
 
         /// <summary>
         /// The IRC Connection.
@@ -45,30 +45,30 @@ namespace GenericIrcBot
         /// Constructor.
         /// </summary>
         /// <param name="ircConfig">The irc config object to use.  This will be cloned after being passed in.</param>
-        /// <param name="lineConfigs>The line configs to be used in this bot.</param>"> 
-        public IrcBot ( IIrcConfig ircConfig, IList<LineConfig> lineConfigs )
+        /// <param name="ircHandlers">The line configs to be used in this bot.</param> 
+        public IrcBot ( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
         {
             if ( ircConfig == null )
             {
                 throw new ArgumentNullException( nameof( ircConfig ) );
             }
-            else if ( lineConfigs == null )
+            else if ( ircHandlers == null )
             {
-                throw new ArgumentNullException( nameof( lineConfigs ) );
+                throw new ArgumentNullException( nameof( ircHandlers ) );
             }
 
             this.ircConfig = ircConfig.Clone();
             this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );
 
-            this.lineConfigs = lineConfigs;
+            this.ircHandlers = ircHandlers;
 
             IrcConnection connection = new IrcConnection( ircConfig );
             connection.ReadEvent = delegate( string line )
             {
                 Console.WriteLine( line );
-                foreach ( LineConfig config in this.lineConfigs )
+                foreach ( IIrcHandler config in this.ircHandlers )
                 {
-                    config.CheckAndFireAction( line, this.ircConfig, connection );
+                    config.HandleEvent( line, this.ircConfig, connection );
                 }
             };
 

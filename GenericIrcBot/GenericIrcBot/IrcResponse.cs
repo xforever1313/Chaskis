@@ -36,9 +36,8 @@ namespace GenericIrcBot
         public string Channel { get; private set; }
 
         /// <summary>
-        /// The message that was sent via IRC.
+        /// The message that was sent via IRC.  Empty if a Join/Part event.
         /// </summary>
         public string Message { get; private set; }
     }
 }
-

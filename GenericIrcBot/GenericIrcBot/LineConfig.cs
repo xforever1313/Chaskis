@@ -12,30 +12,8 @@ namespace GenericIrcBot
     /// <summary>
     /// Configuration for responding to a line received from IRC.
     /// </summary>
-    public class LineConfig
+    public class LineConfig : IIrcHandler
     {
-        /// <summary>
-        /// Options for whom the bot will respond to.
-        /// </summary>
-        public enum ResponseOptions
-        {
-            /// <summary>
-            /// The bot will only respond to Private messages.
-            /// </summary>
-            RespondOnlyToPMs,
-
-            /// <summary>
-            /// The bot will only respond to messages in the channel its listening on
-            /// (ignores Private Messages).
-            /// </summary>
-            RespondOnlyToChannel,
-
-            /// <summary>
-            /// The bot will respond to both.
-            /// </summary>
-            RespondToBoth
-        }
-
         /// <summary>
         /// The pattern to search for when a line comes in.
         /// </summary>
@@ -80,6 +58,7 @@ namespace GenericIrcBot
             this.ResponseOption = responseOption;
             this.LastEvent = DateTime.MinValue;
 
+            // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
             this.pattern = new Regex(
                 @"^:(?<nick>\w+)!~(?<user>.+)\s+PRIVMSG\s+(?<channel>#?\w+)\s+:(?<msg>" + lineRegex + ")",
                 RegexOptions.Compiled
@@ -127,7 +106,7 @@ namespace GenericIrcBot
         /// <param name="line">The RAW line from IRC to check.</param>
         /// <param name="ircConfig">The irc config to use when parsing this line.</param>
         /// <param name="ircWriter">The way to write to the irc channel.</param>
-        public void CheckAndFireAction( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
+        public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
             if ( string.IsNullOrEmpty( line ) )
             {

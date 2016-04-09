@@ -39,6 +39,9 @@
     <Compile Include="LineConfig.cs" />
     <Compile Include="IrcResponse.cs" />
     <Compile Include="IIrcWriter.cs" />
+    <Compile Include="IIrcHandler.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="JoinHandler.cs" />
   </ItemGroup>
   <Import Project="..\..\SethCS\SethCS\SethCSMono.projitems" Label="Shared" Condition="Exists('..\..\SethCS\SethCS\SethCSMono.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
