@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 namespace GenericIrcBot
 {
     /// <summary>
-    /// Configuration for responding to a line received from IRC.
+    /// Configuration for responding to a message received from IRC.
     /// </summary>
-    public class LineConfig : IIrcHandler
+    public class MessageHandler : IIrcHandler
     {
         /// <summary>
         /// The pattern to search for when a line comes in.
@@ -30,7 +30,7 @@ namespace GenericIrcBot
         /// <param name="coolDown">How long to wait between firing the line action in seconds.  0 for no cooldown.</param>
         /// <param name="responseOption">Whether or not to respond to PMs, only channels, or both.</param>
         /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param> 
-        public LineConfig (
+        public MessageHandler (
             string lineRegex,
             Action<IIrcWriter, IrcResponse> lineAction,
             int coolDown = 0,
