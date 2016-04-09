@@ -10,20 +10,20 @@ using System.Text.RegularExpressions;
 namespace GenericIrcBot
 {
     /// <summary>
-    /// Handles the event where someone joins the watched channel.
+    /// Handles when a user parts.  That is, leaves the channel and logs off.
     /// </summary>
-    public class JoinHandler : IIrcHandler
+    public class PartHandler : IIrcHandler
     {
         // -------- Fields --------
 
-        // :nickName!~nick@10.0.0.1 JOIN #testchan
+        // :nickName!~nick@10.0.0.1 PART #testchan
 
         /// <summary>
-        /// The pattern to search for when a line comes in.
+        /// The pattern the search for when a line comes in.
         /// </summary>
         private static readonly Regex pattern = 
             new Regex(
-                @"^:(?<nick>\w+)!~(?<user>.+)\s+JOIN\s+(?<channel>#?\w+)",
+                @"^:(?<nick>\w+)!~(?<user>.+)\s+PART\s+(?<channel>#?\w+)",
                 RegexOptions.Compiled
             );
 
@@ -33,22 +33,22 @@ namespace GenericIrcBot
         /// Constructor
         /// </summary>
         /// <param name="response">The action to take when a user joins the channel</param>
-        public JoinHandler ( Action<IIrcWriter, IrcResponse> response )
+        public PartHandler ( Action<IIrcWriter, IrcResponse> response )
         {
             if ( response == null )
             {
                 throw new ArgumentNullException( nameof( response ) );
             }
 
-            this.JoinAction = response;
+            this.PartAction = response;
         }
 
         // -------- Properties --------
 
         /// <summary>
-        /// The action that gets triggered when a user joins.
+        /// The action that gets triggered when a user Parts from the channel.
         /// </summary>
-        public Action<IIrcWriter, IrcResponse> JoinAction { get; private set; }
+        public Action<IIrcWriter, IrcResponse> PartAction { get; private set; }
 
         // -------- Functions --------
 
@@ -78,7 +78,7 @@ namespace GenericIrcBot
                         string.Empty
                     );
 
-                this.JoinAction( ircWriter, response );
+                this.PartAction( ircWriter, response );
             }
         }
     }
