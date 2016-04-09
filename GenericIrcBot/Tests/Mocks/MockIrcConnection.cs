@@ -71,7 +71,7 @@ namespace Tests.Mocks
         /// <param name="msg">The message to send.</param>
         public void SendCommand( string msg )
         {
-            if ( messagesSend.ContainsKey( this.Config.Channel ) == false )
+            if( messagesSend.ContainsKey( this.Config.Channel ) == false )
             {
                 messagesSend[this.Config.Channel] = new List<string>();
             }
@@ -87,7 +87,7 @@ namespace Tests.Mocks
         /// <param name="userNick">The message to send.</param>
         public void SendMessageToUser( string msg, string userNick )
         {
-            if ( messagesSend.ContainsKey( userNick ) == false )
+            if( messagesSend.ContainsKey( userNick ) == false )
             {
                 messagesSend[userNick] = new List<string>();
             }

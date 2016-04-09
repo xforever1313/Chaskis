@@ -17,7 +17,7 @@ namespace GenericIrcBot
         /// <param name="remoteUser">The user that sent the message.</param>
         /// <param name="channel">The message that channel was received on.</param>
         /// <param name="message">The message that was sent.</param>
-        public IrcResponse ( string remoteUser, string channel, string message )
+        public IrcResponse( string remoteUser, string channel, string message )
         {
             this.RemoteUser = remoteUser;
             this.Channel = channel;

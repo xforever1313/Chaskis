@@ -51,7 +51,7 @@ namespace GenericIrcBot
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        public IrcConnection ( IIrcConfig config )
+        public IrcConnection( IIrcConfig config )
         {
             this.Config = new ReadOnlyIrcConfig( config );
             this.IsConnected = false;
@@ -84,7 +84,7 @@ namespace GenericIrcBot
         {
             get
             {
-                lock ( this.keepReadingObject )
+                lock( this.keepReadingObject )
                 {
                     return this.keepReading;
                 }
@@ -92,7 +92,7 @@ namespace GenericIrcBot
 
             set
             {
-                lock ( this.keepReadingObject )
+                lock( this.keepReadingObject )
                 {
                     this.keepReading = value;
                 }
@@ -113,7 +113,7 @@ namespace GenericIrcBot
         /// </summary>
         public void Connect()
         {
-            if ( this.IsConnected == true )
+            if( this.IsConnected == true )
             {
                 throw new InvalidOperationException(
                     "Already connected."
@@ -148,7 +148,7 @@ namespace GenericIrcBot
             this.ircWriter.Flush();
 
             // Tell nickserv we are a bot.
-            if ( string.IsNullOrEmpty( this.Config.Password ) == false )
+            if( string.IsNullOrEmpty( this.Config.Password ) == false )
             {
                 this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.Config.Password );
             }
@@ -177,14 +177,14 @@ namespace GenericIrcBot
         /// <param name="userNick">The user (or #channel) to send the message to.</param>
         public void SendMessageToUser( string msg, string userNick )
         {
-            if ( this.IsConnected == false )
+            if( this.IsConnected == false )
             {
                 throw new InvalidOperationException(
                     "Not connected, can not send command."
                 );
             }
 
-            lock ( this.ircWriter )
+            lock( this.ircWriter )
             {
                 // PRIVMSG < msgtarget > < message >
                 this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", userNick, msg );
@@ -198,7 +198,7 @@ namespace GenericIrcBot
         /// <param name="response">The response we need to send.</param>
         public void SendPong( string response )
         {
-            lock ( this.ircWriter )
+            lock( this.ircWriter )
             {
                 // PONG :response
                 this.ircWriter.WriteLine( "PONG :{0}", response );
@@ -211,7 +211,7 @@ namespace GenericIrcBot
         /// </summary>
         public void Disconnect()
         {
-            if ( IsConnected != false )
+            if( IsConnected != false )
             {
                 this.KeepReading = false;
                 // This will caluse the reader to close, and throw an IOException.
@@ -247,25 +247,25 @@ namespace GenericIrcBot
         /// </summary>
         private void ReaderThread()
         {
-            while ( this.KeepReading )
+            while( this.KeepReading )
             {
                 try
                 {
                     // ReadLine blocks until we call Close().
                     string s = this.ircReader.ReadLine();
-                    if ( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
+                    if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                     {
-                        if ( this.ReadEvent != null )
+                        if( this.ReadEvent != null )
                         {
                             ReadEvent( s );
                         }
 
                     }
-                } catch ( IOException )
+                } catch( IOException )
                 {
                     // If keep reading is still true, the exception
                     // was from not aborting.  Throw.
-                    if ( this.KeepReading )
+                    if( this.KeepReading )
                     {
                         throw;
                     }

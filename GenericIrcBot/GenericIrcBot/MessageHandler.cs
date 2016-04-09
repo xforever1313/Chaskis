@@ -30,7 +30,7 @@ namespace GenericIrcBot
         /// <param name="coolDown">How long to wait between firing the line action in seconds.  0 for no cooldown.</param>
         /// <param name="responseOption">Whether or not to respond to PMs, only channels, or both.</param>
         /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param> 
-        public MessageHandler (
+        public MessageHandler(
             string lineRegex,
             Action<IIrcWriter, IrcResponse> lineAction,
             int coolDown = 0,
@@ -38,15 +38,15 @@ namespace GenericIrcBot
             bool respondToSelf = false
         )
         {
-            if ( string.IsNullOrEmpty( lineRegex ) )
+            if( string.IsNullOrEmpty( lineRegex ) )
             {
                 throw new ArgumentNullException( nameof( lineRegex ) );
             }
-            else if ( lineAction == null )
+            else if( lineAction == null )
             {
                 throw new ArgumentNullException( nameof( lineAction ) );
             }
-            else if ( coolDown < 0 )
+            else if( coolDown < 0 )
             {
                 throw new ArgumentException( "cool down must be greater than zero", nameof( coolDown ) );
             }
@@ -108,21 +108,21 @@ namespace GenericIrcBot
         /// <param name="ircWriter">The way to write to the irc channel.</param>
         public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
-            if ( string.IsNullOrEmpty( line ) )
+            if( string.IsNullOrEmpty( line ) )
             {
                 throw new ArgumentNullException( nameof( line ) );
             }
-            else if ( ircConfig == null )
+            else if( ircConfig == null )
             {
                 throw new ArgumentNullException( nameof( ircConfig ) );
             }
-            else if ( ircWriter == null )
+            else if( ircWriter == null )
             {
                 throw new ArgumentNullException( nameof( ircConfig ) );
             }
 
             Match match = this.pattern.Match( line );
-            if ( match.Success )
+            if( match.Success )
             {
                 IrcResponse response = new IrcResponse(
                                            match.Groups["nick"].Value,
@@ -131,17 +131,17 @@ namespace GenericIrcBot
                                        );
 
                 // Return right away if the nick name from the remote user is our own.
-                if ( ( this.RespondToSelf == false ) && ( response.RemoteUser.ToUpper() == ircConfig.Nick.ToUpper() ) )
+                if( ( this.RespondToSelf == false ) && ( response.RemoteUser.ToUpper() == ircConfig.Nick.ToUpper() ) )
                 {
                     return;
                 }
                 // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
-                else if ( ( this.ResponseOption == ResponseOptions.RespondOnlyToChannel ) && ( response.Channel.ToUpper() != ircConfig.Channel.ToUpper() ) )
+                else if( ( this.ResponseOption == ResponseOptions.RespondOnlyToChannel ) && ( response.Channel.ToUpper() != ircConfig.Channel.ToUpper() ) )
                 {
                     return;
                 }
                 // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
-                else if ( ( this.ResponseOption == ResponseOptions.RespondOnlyToPMs ) && ( response.Channel.ToUpper() != ircConfig.Nick.ToUpper() ) )
+                else if( ( this.ResponseOption == ResponseOptions.RespondOnlyToPMs ) && ( response.Channel.ToUpper() != ircConfig.Nick.ToUpper() ) )
                 {
                     return;
                 }
@@ -151,7 +151,7 @@ namespace GenericIrcBot
                     TimeSpan timeSpan = currentTime - this.LastEvent;
 
                     // Only fire if our cooldown was long enough.
-                    if ( timeSpan.TotalSeconds > this.CoolDown )
+                    if( timeSpan.TotalSeconds > this.CoolDown )
                     {
                         this.LineAction( ircWriter, response );
                         this.LastEvent = currentTime;
@@ -161,4 +161,3 @@ namespace GenericIrcBot
         }
     }
 }
-

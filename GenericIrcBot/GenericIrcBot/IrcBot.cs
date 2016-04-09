@@ -46,13 +46,13 @@ namespace GenericIrcBot
         /// </summary>
         /// <param name="ircConfig">The irc config object to use.  This will be cloned after being passed in.</param>
         /// <param name="ircHandlers">The line configs to be used in this bot.</param> 
-        public IrcBot ( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
+        public IrcBot( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
         {
-            if ( ircConfig == null )
+            if( ircConfig == null )
             {
                 throw new ArgumentNullException( nameof( ircConfig ) );
             }
-            else if ( ircHandlers == null )
+            else if( ircHandlers == null )
             {
                 throw new ArgumentNullException( nameof( ircHandlers ) );
             }
@@ -66,7 +66,7 @@ namespace GenericIrcBot
             connection.ReadEvent = delegate( string line )
             {
                 Console.WriteLine( line );
-                foreach ( IIrcHandler config in this.ircHandlers )
+                foreach( IIrcHandler config in this.ircHandlers )
                 {
                     config.HandleEvent( line, this.ircConfig, connection );
                 }
@@ -89,7 +89,7 @@ namespace GenericIrcBot
         /// </summary>
         public void Start()
         {
-            if ( this.ircConnection.IsConnected == false )
+            if( this.ircConnection.IsConnected == false )
             {
                 this.ircConnection.Connect();
             }
@@ -100,7 +100,7 @@ namespace GenericIrcBot
         /// </summary>
         public void Dispose()
         {
-            if ( this.ircConnection.IsConnected )
+            if( this.ircConnection.IsConnected )
             {
                 this.ircConnection.Disconnect();
             }

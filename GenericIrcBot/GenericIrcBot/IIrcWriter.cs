@@ -29,4 +29,3 @@ namespace GenericIrcBot
         void SendPong( string response );
     }
 }
-

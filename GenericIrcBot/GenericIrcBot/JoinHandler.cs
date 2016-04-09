@@ -33,9 +33,9 @@ namespace GenericIrcBot
         /// Constructor
         /// </summary>
         /// <param name="response">The action to take when a user joins the channel</param>
-        public JoinHandler ( Action<IIrcWriter, IrcResponse> response )
+        public JoinHandler( Action<IIrcWriter, IrcResponse> response )
         {
-            if ( response == null )
+            if( response == null )
             {
                 throw new ArgumentNullException( nameof( response ) );
             }
@@ -61,12 +61,12 @@ namespace GenericIrcBot
         public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
             Match match = pattern.Match( line );
-            if ( match.Success )
+            if( match.Success )
             {
                 string remoteUser = match.Groups["nick"].Value;
 
                 // Don't fire if we were the ones to trigger the event.
-                if ( remoteUser.ToUpper() == ircConfig.Nick.ToUpper() )
+                if( remoteUser.ToUpper() == ircConfig.Nick.ToUpper() )
                 {
                     return;
                 }
@@ -83,4 +83,3 @@ namespace GenericIrcBot
         }
     }
 }
-

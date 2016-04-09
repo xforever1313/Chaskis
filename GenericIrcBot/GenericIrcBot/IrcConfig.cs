@@ -67,7 +67,7 @@ namespace GenericIrcBot
         /// <summary>
         /// Contructor, fills with default settings.
         /// </summary>
-        public IrcConfig ()
+        public IrcConfig()
         {
             this.Server = string.Empty;
             this.Channel = string.Empty;
@@ -146,9 +146,9 @@ namespace GenericIrcBot
         /// Constructor.
         /// </summary>
         /// <param name="config">The config to wrap.</param>
-        public ReadOnlyIrcConfig ( IIrcConfig config )
+        public ReadOnlyIrcConfig( IIrcConfig config )
         {
-            if ( config == null )
+            if( config == null )
             {
                 throw new ArgumentNullException( nameof( config ) );
             }
