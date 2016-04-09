@@ -15,6 +15,11 @@ namespace GenericIrcBot
     public class MessageHandler : IIrcHandler
     {
         /// <summary>
+        /// The irc command that will appear from the server.
+        /// </summary>
+        public const string IrcCommand = "PRIVMSG";
+
+        /// <summary>
         /// The pattern to search for when a line comes in.
         /// </summary>
         private readonly Regex pattern;
@@ -60,7 +65,7 @@ namespace GenericIrcBot
 
             // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
             this.pattern = new Regex(
-                @"^:(?<nick>\w+)!~(?<user>.+)\s+PRIVMSG\s+(?<channel>#?\w+)\s+:(?<msg>" + lineRegex + ")",
+                @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<msg>" + lineRegex + ")",
                 RegexOptions.Compiled
             );
         }

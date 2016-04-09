@@ -25,15 +25,10 @@ namespace Tests
         [SetUp]
         public void TestSetup()
         {
-            this.ircConfig = new IrcConfig();
-            this.ircConfig.Server = "AServer";
-            this.ircConfig.Channel = "#AChannel";
-            this.ircConfig.Port = 1234;
-            this.ircConfig.UserName = "SomeUserName";
-            this.ircConfig.Nick = "SomeNick";
-            this.ircConfig.RealName = "Some Real Name";
-            this.ircConfig.Password = "Password";
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
+
+        // -------- Tests --------
 
         /// <summary>
         /// Ensures the Read-only irc config does its job.

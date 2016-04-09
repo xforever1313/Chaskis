@@ -40,6 +40,9 @@
   <ItemGroup>
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
+    <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="TestHelpers.cs" />
+    <Compile Include="IrcResponseTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">

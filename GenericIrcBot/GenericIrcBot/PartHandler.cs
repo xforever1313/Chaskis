@@ -16,6 +16,11 @@ namespace GenericIrcBot
     {
         // -------- Fields --------
 
+        /// <summary>
+        /// The irc command that will appear from the server.
+        /// </summary>
+        public const string IrcCommand = "PART";
+
         // :nickName!~nick@10.0.0.1 PART #testchan
 
         /// <summary>
@@ -23,7 +28,7 @@ namespace GenericIrcBot
         /// </summary>
         private static readonly Regex pattern = 
             new Regex(
-                @"^:(?<nick>\w+)!~(?<user>.+)\s+PART\s+(?<channel>#?\w+)",
+                @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)",
                 RegexOptions.Compiled
             );
 

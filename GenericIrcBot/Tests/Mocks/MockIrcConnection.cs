@@ -12,7 +12,7 @@ namespace Tests.Mocks
     /// <summary>
     /// Class that mocks an IRC Connection.
     /// </summary>
-    public class MockIrcConnection : IConnection
+    public class MockIrcConnection : IConnection, IIrcWriter
     {
         // -------- Fields --------
 

@@ -11,6 +11,8 @@ namespace GenericIrcBot
     /// </summary>
     public class IrcResponse
     {
+        // -------- Constructor --------
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -23,6 +25,8 @@ namespace GenericIrcBot
             this.Channel = channel;
             this.Message = message;
         }
+
+        // -------- Properties --------
 
         /// <summary>
         /// The user that sent the message.
@@ -39,5 +43,44 @@ namespace GenericIrcBot
         /// The message that was sent via IRC.  Empty if a Join/Part event.
         /// </summary>
         public string Message { get; private set; }
+
+        // -------- Functions --------
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current.</param>
+        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+        public override bool Equals( object obj )
+        {
+            IrcResponse other = obj as IrcResponse;
+            if( other == null )
+            {
+                return false;
+            }
+
+            return (
+                ( this.RemoteUser == other.RemoteUser ) &&
+                ( this.Channel == other.Channel ) &&
+                ( this.Message == other.Message )
+            );
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Clone this instance.
+        /// </summary>
+        public IrcResponse Clone()
+        {
+            return ( IrcResponse )this.MemberwiseClone();
+        }
     }
 }

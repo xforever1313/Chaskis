@@ -30,6 +30,12 @@ Global
 		{CDE29556-87E8-4F1F-972A-33A9C849D390}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDE29556-87E8-4F1F-972A-33A9C849D390}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.StandardHeader = $1
+		$1.Text = @\n         Copyright Seth Hendrick 2016.\nDistributed under the Boost Software License, Version 1.0.\n   (See accompanying file ../../LICENSE_1_0.txt or copy at\n         http://www.boost.org/LICENSE_1_0.txt)\n
+		$1.IncludeInNewFiles = True
+	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCSMono.projitems*{9406b11b-3c52-4266-91f6-b6c176593b01}*SharedItemsImports = 13
 	EndGlobalSection
