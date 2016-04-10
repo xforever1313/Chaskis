@@ -6,6 +6,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using SethCS.Exceptions;
 
 namespace GenericIrcBot
 {
@@ -40,10 +41,7 @@ namespace GenericIrcBot
         /// <param name="response">The action to take when a user joins the channel</param>
         public PartHandler( Action<IIrcWriter, IrcResponse> response )
         {
-            if( response == null )
-            {
-                throw new ArgumentNullException( nameof( response ) );
-            }
+            ArgumentChecker.IsNotNull( response, nameof( response ) );
 
             this.PartAction = response;
         }
@@ -65,18 +63,9 @@ namespace GenericIrcBot
         /// <param name="ircWriter">The way to write to the irc channel.</param>
         public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
-            if( string.IsNullOrEmpty( line ) )
-            {
-                throw new ArgumentNullException( nameof( line ) );
-            }
-            else if( ircConfig == null )
-            {
-                throw new ArgumentNullException( nameof( ircConfig ) );
-            }
-            else if( ircWriter == null )
-            {
-                throw new ArgumentNullException( nameof( ircConfig ) );
-            }
+            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
+            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
+            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
 
             Match match = pattern.Match( line );
             if( match.Success )

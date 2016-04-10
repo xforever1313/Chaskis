@@ -6,6 +6,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using SethCS.Exceptions;
 
 namespace GenericIrcBot
 {
@@ -43,15 +44,9 @@ namespace GenericIrcBot
             bool respondToSelf = false
         )
         {
-            if( string.IsNullOrEmpty( lineRegex ) )
-            {
-                throw new ArgumentNullException( nameof( lineRegex ) );
-            }
-            else if( lineAction == null )
-            {
-                throw new ArgumentNullException( nameof( lineAction ) );
-            }
-            else if( coolDown < 0 )
+            ArgumentChecker.StringIsNotNullOrEmpty( lineRegex, nameof( lineRegex ) );
+            ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
+            if( coolDown < 0 )
             {
                 throw new ArgumentException( "cool down must be greater than zero", nameof( coolDown ) );
             }
@@ -113,18 +108,9 @@ namespace GenericIrcBot
         /// <param name="ircWriter">The way to write to the irc channel.</param>
         public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
         {
-            if( string.IsNullOrEmpty( line ) )
-            {
-                throw new ArgumentNullException( nameof( line ) );
-            }
-            else if( ircConfig == null )
-            {
-                throw new ArgumentNullException( nameof( ircConfig ) );
-            }
-            else if( ircWriter == null )
-            {
-                throw new ArgumentNullException( nameof( ircConfig ) );
-            }
+            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
+            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
+            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
 
             Match match = this.pattern.Match( line );
             if( match.Success )

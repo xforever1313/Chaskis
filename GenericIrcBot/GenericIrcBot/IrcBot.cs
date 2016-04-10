@@ -7,6 +7,7 @@
 using System;
 using SethCS.Basic;
 using System.Collections.Generic;
+using SethCS.Exceptions;
 
 namespace GenericIrcBot
 {
@@ -48,14 +49,8 @@ namespace GenericIrcBot
         /// <param name="ircHandlers">The line configs to be used in this bot.</param> 
         public IrcBot( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
         {
-            if( ircConfig == null )
-            {
-                throw new ArgumentNullException( nameof( ircConfig ) );
-            }
-            else if( ircHandlers == null )
-            {
-                throw new ArgumentNullException( nameof( ircHandlers ) );
-            }
+            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
+            ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
 
             this.ircConfig = ircConfig.Clone();
             this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );

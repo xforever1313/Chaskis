@@ -7,6 +7,7 @@
 using System;
 using GenericIrcBot;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests
 {
@@ -53,15 +54,16 @@ namespace Tests
             // Lastly, ensure setters throw exceptions.
             ReadOnlyIrcConfig roConfig = config as ReadOnlyIrcConfig;
 
-            InvalidOperationException ex = Assert.Throws<InvalidOperationException>(
-                delegate ()
-                {
-                    roConfig.Server = "NewServer";
-                }
-            );
+            ReadOnlyException ex =
+                Assert.Throws<ReadOnlyException>(
+                    delegate ()
+                    {
+                        roConfig.Server = "NewServer";
+                    }
+                );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Server ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.Channel = "#NewChannel";
@@ -69,7 +71,7 @@ namespace Tests
             );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Channel ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.Port = 4;
@@ -77,7 +79,7 @@ namespace Tests
             );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Port ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.UserName = "NewName";
@@ -85,7 +87,7 @@ namespace Tests
             );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.UserName ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.Nick = "NewNick";
@@ -93,7 +95,7 @@ namespace Tests
             );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Nick ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.RealName = "NewRName";
@@ -101,7 +103,7 @@ namespace Tests
             );
             Assert.IsTrue( ex.Message.Contains( nameof( roConfig.RealName ) ) );
 
-            ex = Assert.Throws<InvalidOperationException>(
+            ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
                     roConfig.Password = "NewPass";

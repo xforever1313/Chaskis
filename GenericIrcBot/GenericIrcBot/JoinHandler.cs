@@ -41,10 +41,7 @@ namespace GenericIrcBot
         /// <param name="response">The action to take when a user joins the channel</param>
         public JoinHandler( Action<IIrcWriter, IrcResponse> response )
         {
-            if( response == null )
-            {
-                throw new ArgumentNullException( nameof( response ) );
-            }
+            ArgumentChecker.IsNotNull( response, nameof( response ) );
 
             this.JoinAction = response;
         }

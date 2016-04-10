@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using SethCS.Exceptions;
 
 namespace GenericIrcBot
 {
@@ -129,7 +130,7 @@ namespace GenericIrcBot
 
     /// <summary>
     /// Wraps an IIrcConfig object such that its readonly.
-    /// Note: All setters throw InvalidOperationExceptions.
+    /// Note: All setters throw ReadOnlyException.
     /// </summary>
     public class ReadOnlyIrcConfig : IIrcConfig
     {
@@ -148,11 +149,7 @@ namespace GenericIrcBot
         /// <param name="config">The config to wrap.</param>
         public ReadOnlyIrcConfig( IIrcConfig config )
         {
-            if( config == null )
-            {
-                throw new ArgumentNullException( nameof( config ) );
-            }
-
+            ArgumentChecker.IsNotNull( config, nameof( config ) );
             this.wrappedConfig = config;
         }
 
@@ -281,7 +278,7 @@ namespace GenericIrcBot
         /// <param name="property">The property that was called.</param>
         private static void ThrowException( string property )
         {
-            throw new InvalidOperationException( "Can't modify " + property + ", this config is readonly" );
+            throw new ReadOnlyException( "Can't modify " + property + ", this config is readonly" );
         }
     }
 }
