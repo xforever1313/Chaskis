@@ -12,14 +12,14 @@ using Tests.Mocks;
 namespace Tests
 {
     [TestFixture]
-    public class PartHandlerTest
+    public class PingHandlerTest
     {
         // -------- Fields --------
 
         /// <summary>
         /// Unit under test.
         /// </summary>
-        private PartHandler uut;
+        private PingHandler uut;
 
         /// <summary>
         /// Irc Config to use.
@@ -37,7 +37,7 @@ namespace Tests
         private static IrcResponse responseReceived;
 
         /// <summary>
-        /// The user that parted.
+        /// The user that joined.
         /// </summary>
         private const string RemoteUser = "remoteuser";
 
@@ -49,22 +49,18 @@ namespace Tests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             ircConnection = new MockIrcConnection( this.ircConfig );
             responseReceived = null;
-            this.uut = new PartHandler( PartFunction );
+            this.uut = new PingHandler();
         }
 
         // -------- Tests --------
 
         /// <summary>
-        /// Ensurs everything that needs to throw argument null
+        /// Ensures everything that needs to throw argument null
         /// exceptions does.
         /// </summary>
         [Test]
         public void ArgumentNullTest()
         {
-            Assert.Throws<ArgumentNullException>( () =>
-                new PartHandler( null )
-            );
-
             Assert.Throws<ArgumentNullException>( () =>
                 this.uut.HandleEvent( null, new IrcConfig(), ircConnection )
             );
@@ -87,54 +83,24 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures if a user parts correctly, the event gets fired.
+        /// Ensures the bot PONGS the ping correctly.
         /// </summary>
         [Test]
-        public void PartSuccess()
+        public void PongTest()
         {
-            string ircString = 
-                TestHelpers.ConstructIrcString(
-                    RemoteUser,
-                    PartHandler.IrcCommand,
-                    ircConfig.Channel,
-                    string.Empty
-                );
+            const string response = "12345"; // What we must pong back.
 
-            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
+            this.uut.HandleEvent(
+                TestHelpers.ConstructPingString( response ),
+                this.ircConfig,
+                ircConnection
+            );
 
-            Assert.IsNotNull( responseReceived );
-
-            // Part handler has no message.
-            Assert.AreEqual( string.Empty, responseReceived.Message );
-
-            // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channel, responseReceived.Channel );
-
-            // Nicks should match.
-            Assert.AreEqual( RemoteUser, responseReceived.RemoteUser );
+            Assert.AreEqual( response, ircConnection.PongResponse );
         }
 
         /// <summary>
-        /// Ensures that if the bot parts, the event isn't fired.
-        /// </summary>
-        [Test]
-        public void BotParts()
-        {
-            string ircString = 
-                TestHelpers.ConstructIrcString(
-                    ircConfig.Nick,
-                    PartHandler.IrcCommand,
-                    ircConfig.Channel,
-                    string.Empty
-                );
-
-            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
-
-            Assert.IsNull( responseReceived );
-        }
-
-        /// <summary>
-        /// Ensures that if a PRIMSG appears, the part
+        /// Ensures that if a PRIMSG appears, the PING
         /// event isn't fired.
         /// </summary>
         [Test]
@@ -151,10 +117,32 @@ namespace Tests
             this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
 
             Assert.IsNull( responseReceived );
+            Assert.IsEmpty( ircConnection.PongResponse );
         }
 
         /// <summary>
-        /// Ensures that if a JOIN appears, the part
+        /// Ensures that if a PART appears, the PING
+        /// event isn't fired.
+        /// </summary>
+        [Test]
+        public void PartCommandAppears()
+        {
+            string ircString = 
+                TestHelpers.ConstructIrcString(
+                    RemoteUser,
+                    PartHandler.IrcCommand,
+                    ircConfig.Channel,
+                    string.Empty
+                );
+
+            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
+
+            Assert.IsNull( responseReceived );
+            Assert.IsEmpty( ircConnection.PongResponse );
+        }
+
+        /// <summary>
+        /// Ensures that if a JOIN appears, the PING
         /// event isn't fired.
         /// </summary>
         [Test]
@@ -171,34 +159,7 @@ namespace Tests
             this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
 
             Assert.IsNull( responseReceived );
-        }
-
-        /// <summary>
-        /// Ensures that if a PING appears, the join
-        /// event isn't fired.
-        /// </summary>
-        [Test]
-        public void PingAppears()
-        {
-            this.uut.HandleEvent(
-                TestHelpers.ConstructPingString( "12345" ),
-                this.ircConfig,
-                ircConnection
-            );
-            Assert.IsNull( responseReceived );
-        }
-
-        // -------- Test Helpers --------
-
-        /// <summary>
-        /// The function that is called 
-        /// </summary>
-        /// <param name="writer">The writer that can be written to.</param>
-        /// <param name="response">The response from the server.</param>
-        private static void PartFunction( IIrcWriter writer, IrcResponse response )
-        {
-            Assert.AreSame( ircConnection, writer );
-            responseReceived = response;
+            Assert.IsEmpty( ircConnection.PongResponse );
         }
     }
 }

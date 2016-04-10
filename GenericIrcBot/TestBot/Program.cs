@@ -52,7 +52,9 @@ namespace TestBot
             helpLineConfig = new PartHandler( PartMessage );
             configs.Add( helpLineConfig );
 
-            using ( IrcBot bot = new IrcBot( config, configs ) )
+            configs.Add( new PingHandler() );
+
+            using( IrcBot bot = new IrcBot( config, configs ) )
             {
                 bot.Start();
                 ConsoleKeyInfo key = Console.ReadKey();
@@ -61,7 +63,7 @@ namespace TestBot
 
         private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
         {
-            if ( response.Channel == nick )
+            if( response.Channel == nick )
             {
                 writer.SendMessageToUser( "This is a bot!", response.RemoteUser );
             }

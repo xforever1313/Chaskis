@@ -44,6 +44,7 @@
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />
+    <Compile Include="PingHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">

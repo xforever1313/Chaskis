@@ -173,6 +173,21 @@ namespace Tests
             Assert.IsNull( responseReceived );
         }
 
+        /// <summary>
+        /// Ensures that if a PING appears, the join
+        /// event isn't fired.
+        /// </summary>
+        [Test]
+        public void PingAppears()
+        {
+            this.uut.HandleEvent(
+                TestHelpers.ConstructPingString( "12345" ),
+                this.ircConfig,
+                ircConnection
+            );
+            Assert.IsNull( responseReceived );
+        }
+
         // -------- Test Helpers --------
 
         /// <summary>

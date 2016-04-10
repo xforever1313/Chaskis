@@ -43,6 +43,7 @@
     <Compile Include="JoinHandler.cs" />
     <Compile Include="MessageHandler.cs" />
     <Compile Include="PartHandler.cs" />
+    <Compile Include="PingHandler.cs" />
   </ItemGroup>
   <Import Project="..\..\SethCS\SethCS\SethCSMono.projitems" Label="Shared" Condition="Exists('..\..\SethCS\SethCS\SethCSMono.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

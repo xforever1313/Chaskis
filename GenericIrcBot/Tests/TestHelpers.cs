@@ -4,7 +4,6 @@
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-using System;
 using GenericIrcBot;
 
 namespace Tests
@@ -51,6 +50,16 @@ namespace Tests
             }
 
             return msg;
+        }
+
+        /// <summary>
+        /// Constructs an IRC PING sent from a server.
+        /// </summary>
+        /// <param name="response">What the bot must respond.</param>
+        /// <returns>The ping string.</returns>
+        public static string ConstructPingString( string response )
+        {
+            return "PING :" + response;
         }
     }
 }

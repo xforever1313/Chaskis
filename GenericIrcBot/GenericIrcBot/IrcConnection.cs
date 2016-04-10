@@ -202,6 +202,7 @@ namespace GenericIrcBot
             {
                 // PONG :response
                 this.ircWriter.WriteLine( "PONG :{0}", response );
+                this.ircWriter.Flush();
             }
         }
 
@@ -220,7 +221,14 @@ namespace GenericIrcBot
                 this.readerThread.Join();
 
                 // Disconnect.
-                this.ircWriter.Close();
+                try
+                {
+                    this.ircWriter.Close();
+                }
+                catch( ObjectDisposedException )
+                {
+                    // Swallow Exception.
+                }
                 this.connection.Close();
 
                 // Reset everything to null.
@@ -261,7 +269,8 @@ namespace GenericIrcBot
                         }
 
                     }
-                } catch( IOException )
+                }
+                catch( IOException )
                 {
                     // If keep reading is still true, the exception
                     // was from not aborting.  Throw.
