@@ -186,9 +186,16 @@ namespace GenericIrcBot
 
             lock( this.ircWriter )
             {
-                // PRIVMSG < msgtarget > < message >
-                this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", userNick, msg );
-                this.ircWriter.Flush();
+                using( StringReader reader = new StringReader( msg ) )
+                {
+                    string line;
+                    while( ( line = reader.ReadLine() ) != null )
+                    {
+                        // PRIVMSG < msgtarget > < message >
+                        this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", userNick, line );
+                        this.ircWriter.Flush();
+                    }
+                }
             }
         }
 
