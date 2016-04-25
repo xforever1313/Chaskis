@@ -13,6 +13,8 @@ namespace GenericIrcBot
     /// </summary>
     public interface IPlugin
     {
+        // -------- Functions --------
+
         /// <summary>
         /// Validates that the environment is good for the plugin.
         /// For example, it has all dependencies installed.
@@ -20,6 +22,12 @@ namespace GenericIrcBot
         /// <param name="error">The errors that occurred if any.  string.Empty if none.</param>
         /// <returns>True if its okay to load this plugin, else false.</returns>
         bool Validate( out string error );
+
+        /// <summary>
+        /// Initializes the plugin.  This includes loading any configuration files,
+        /// starting services, etc.  Allowed to throw Exceptions.
+        /// </summary>
+        void Init();
 
         /// <summary>
         /// Gets the handlers that should be added to the main bot.

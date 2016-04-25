@@ -5,14 +5,19 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using GenericIrcBot;
 using System.Collections.Generic;
+using GenericIrcBot;
+using System.IO;
 
 namespace TestBot
 {
     class MainClass
     {
         private const string nick = "SethTestBot";
+
+        private static readonly List<Tuple<string, string>> pluginList = new List<Tuple<string, string>> {
+            new Tuple<string, string>( Path.Combine( "..", "..", "..", "WelcomeBotPlugin", "bin", "Debug", "WelcomeBotPlugin.dll" ), "WelcomeBotPlugin.WelcomeBot" )
+        };
 
         public static void Main( string[] args )
         {
@@ -23,35 +28,20 @@ namespace TestBot
             config.RealName = "Seths Test Bot";
             config.UserName = "SethTestBot";
 
-            // Generate line configs.
-
+            // Load Plugins.
             List<IIrcHandler> configs = new List<IIrcHandler>();
 
-            IIrcHandler helpLineConfig = new MessageHandler(
-                                             @"!bot\s+help",
-                                             HandleHelpCommand,
-                                             30,
-                                             ResponseOptions.RespondOnlyToChannel
-                                         );
+            {
+                PluginManager manager = new PluginManager();
 
-            configs.Add( helpLineConfig );
+                foreach( Tuple<string, string> pluginInfo in pluginList )
+                {
+                    manager.LoadAssembly( Path.GetFullPath( pluginInfo.Item1 ), pluginInfo.Item2 );
+                    configs.AddRange( manager.Handlers );
+                }
+            }
 
-            helpLineConfig = new MessageHandler(
-                @"!?bot\s+help",
-                HandleHelpCommand,
-                0,
-                ResponseOptions.RespondOnlyToPMs
-            );
-
-            configs.Add( helpLineConfig );
-           
-            helpLineConfig = new JoinHandler( JoinMessage );
-
-            configs.Add( helpLineConfig );
-
-            helpLineConfig = new PartHandler( PartMessage );
-            configs.Add( helpLineConfig );
-
+            // Must always check for pings.
             configs.Add( new PingHandler() );
 
             using( IrcBot bot = new IrcBot( config, configs ) )
@@ -59,30 +49,6 @@ namespace TestBot
                 bot.Start();
                 ConsoleKeyInfo key = Console.ReadKey();
             }
-        }
-
-        private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
-        {
-            if( response.Channel == nick )
-            {
-                writer.SendMessageToUser( "This is a bot!", response.RemoteUser );
-            }
-            else
-            {
-                writer.SendCommand( "This is a bot!" );
-            }
-        }
-
-        private static void JoinMessage( IIrcWriter writer, IrcResponse response )
-        {
-            writer.SendMessageToUser( "Greetings!  Welcome to the channel!", response.RemoteUser );
-            writer.SendCommand( response.RemoteUser + " has joined " + response.Channel );
-        }
-
-        private static void PartMessage( IIrcWriter writer, IrcResponse response )
-        {
-            writer.SendMessageToUser( "Thanks for visiting the channel!  Please come back soon!", response.RemoteUser );
-            writer.SendCommand( response.RemoteUser + " has left " + response.Channel );
         }
     }
 }
