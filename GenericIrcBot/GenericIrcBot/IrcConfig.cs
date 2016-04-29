@@ -56,6 +56,21 @@ namespace GenericIrcBot
         /// Clone this instance.
         /// </summary>
         IIrcConfig Clone();
+
+        /// <summary>
+        /// Sees if the given object is equal to this instance.
+        /// That is, all properties match.
+        /// </summary>
+        /// <param name="obj">The object to check.</param>
+        /// <returns>True if the given object is equal to this one, else false.</returns>
+        bool Equals( object other );
+
+        /// <summary>
+        /// Validates the IRC config to ensure no properties are
+        /// bad, such as values being null/empty or negative.
+        /// Only password can be empty, all others need some value in them.
+        /// </summary>
+        void Validate();
     }
 
     /// <summary>
@@ -124,7 +139,52 @@ namespace GenericIrcBot
         /// </summary>
         public IIrcConfig Clone()
         {
-            return ( IrcConfig )this.MemberwiseClone();
+            return ( IrcConfig ) this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Sees if the given object is equal to this instance.
+        /// That is, all properties match.
+        /// </summary>
+        /// <param name="obj">The object to check.</param>
+        /// <returns>True if the given object is equal to this one, else false.</returns>
+        public override bool Equals( object obj )
+        {
+            IIrcConfig other = obj as IIrcConfig;
+
+            if ( other == null )
+            {
+                return false;
+            }
+
+            return
+                ( this.Server == other.Server ) &&
+                ( this.Channel == other.Channel ) &&
+                ( this.Port == other.Port ) &&
+                ( this.UserName == other.UserName ) &&
+                ( this.Nick == other.Nick ) &&
+                ( this.RealName == other.RealName ) &&
+                ( this.Password == other.Password );
+        }
+
+        /// <summary>
+        /// Just returns the base object's hash code.
+        /// </summary>
+        /// <returns>The base object's hash code.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Validates the IRC config to ensure no properties are
+        /// bad, such as values being null/empty or negative.
+        /// Only password can be empty, all others need some value in them.
+        /// </summary>
+        /// <exception cref="ApplicationException">If this object doesn't validate.</exception>
+        public void Validate()
+        {
+            IrcConfigHelpers.Validate( this );
         }
     }
 
@@ -273,12 +333,107 @@ namespace GenericIrcBot
         }
 
         /// <summary>
+        /// Sees if the given object is equal to this instance.
+        /// That is, all properties match.
+        /// </summary>
+        /// <param name="obj">The object to check.</param>
+        /// <returns>True if the given object is equal to this one, else false.</returns>
+        public override bool Equals( object obj )
+        {
+            IIrcConfig other = obj as IIrcConfig;
+
+            return
+                ( this.Server == other.Server ) &&
+                ( this.Channel == other.Channel ) &&
+                ( this.Port == other.Port ) &&
+                ( this.UserName == other.UserName ) &&
+                ( this.Nick == other.Nick ) &&
+                ( this.RealName == other.RealName ) &&
+                ( this.Password == other.Password );
+        }
+
+        /// <summary>
+        /// Just returns the base object's hash code.
+        /// </summary>
+        /// <returns>The base object's hash code.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Validates the IRC config to ensure no properties are
+        /// bad, such as values being null/empty or negative.
+        /// Only password can be empty, all others need some value in them.
+        /// </summary>
+        /// <exception cref="ApplicationException">If this object doesn't validate.</exception>
+        public void Validate()
+        {
+            IrcConfigHelpers.Validate( this );
+        }
+
+        /// <summary>
         /// Throws the read-only exception.
         /// </summary>
         /// <param name="property">The property that was called.</param>
         private static void ThrowException( string property )
         {
             throw new ReadOnlyException( "Can't modify " + property + ", this config is readonly" );
+        }
+    }
+
+    /// <summary>
+    /// Helpers that can be used for all Irc Config object types.
+    /// </summary>
+    internal static class IrcConfigHelpers
+    {
+        /// <summary>
+        /// Validates the IRC config to ensure no properties are
+        /// bad, such as values being null/empty or negative.
+        /// Only password can be empty, all others need some value in them.
+        /// </summary>
+        /// <param name="config">Config to validate.</param>
+        internal static void Validate( IIrcConfig config )
+        {
+            bool success = true;
+            string errorString = "The following errors are wrong with the IrcConfig:" + Environment.NewLine;
+
+            if ( string.IsNullOrEmpty( config.Server ) )
+            {
+                errorString += "Server can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+            if ( string.IsNullOrEmpty( config.Channel ) )
+            {
+                errorString += "Channel can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+            if ( config.Port < 0 )
+            {
+                errorString += "Port can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+            if ( string.IsNullOrEmpty( config.UserName ) )
+            {
+                errorString += "UserName can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+            if ( string.IsNullOrEmpty( config.Nick ) )
+            {
+                errorString += "Nick can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+            if ( string.IsNullOrEmpty( config.RealName ) )
+            {
+                errorString += "RealName can not be null or empty" + Environment.NewLine;
+                success = false;
+            }
+
+            // Password can be empty, its optional on servers.
+            if ( success == false )
+            {
+                throw new ApplicationException( errorString );
+            }
         }
     }
 }

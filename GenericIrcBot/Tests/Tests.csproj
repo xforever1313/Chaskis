@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -45,11 +45,31 @@
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />
     <Compile Include="PingHandlerTest.cs" />
+    <Compile Include="XmlLoaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
       <Project>{501708E7-AC43-4DF4-B7BC-6A31074E30D1}</Project>
       <Name>GenericIrcBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestBot\TestBot.csproj">
+      <Project>{0a5e0053-5976-4e2c-a41b-8baa8f112563}</Project>
+      <Name>TestBot</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
+    <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyNick.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyPort.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
   </ItemGroup>
 </Project>

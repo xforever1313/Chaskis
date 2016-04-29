@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ircbotconfig>
+    <server>irc.testdomain.com</server>
+    <channel>#testchannel</channel>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick></nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
