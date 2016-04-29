@@ -46,6 +46,7 @@
     <Compile Include="PartHandlerTest.cs" />
     <Compile Include="PingHandlerTest.cs" />
     <Compile Include="XmlLoaderTests.cs" />
+    <Compile Include="ArgumentParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
@@ -53,7 +54,7 @@
       <Name>GenericIrcBot</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestBot\TestBot.csproj">
-      <Project>{0a5e0053-5976-4e2c-a41b-8baa8f112563}</Project>
+      <Project>{0A5E0053-5976-4E2C-A41B-8BAA8F112563}</Project>
       <Name>TestBot</Name>
     </ProjectReference>
   </ItemGroup>
