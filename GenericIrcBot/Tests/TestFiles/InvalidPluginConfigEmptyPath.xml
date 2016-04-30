@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pluginconfig>
+	<assembly classname="TestPlugin.TestClass" />
+	<assembly path="/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll" classname="TestPlugin2.TestClass" />
+</pluginconfig>

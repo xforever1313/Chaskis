@@ -37,6 +37,7 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="XmlLoader.cs" />
     <Compile Include="ArgumentParser.cs" />
+    <Compile Include="AssemblyConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -32,10 +32,16 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TestFiles\ValidPluginConfig.xml" />
+    <None Include="TestFiles\ValidPluginConfigEmpty.xml" />
+    <None Include="TestFiles\InvalidPluginConfigBadRootNode.xml" />
+    <None Include="TestFiles\InvalidPluginConfigEmptyPath.xml" />
+    <None Include="TestFiles\InvalidPluginConfigEmptyClass.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IrcConfigTest.cs" />
@@ -47,6 +53,7 @@
     <Compile Include="PingHandlerTest.cs" />
     <Compile Include="XmlLoaderTests.cs" />
     <Compile Include="ArgumentParserTest.cs" />
+    <Compile Include="AssemblyConfigTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
@@ -72,5 +79,6 @@
     <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
     <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
   </ItemGroup>
 </Project>

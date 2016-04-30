@@ -21,9 +21,14 @@ namespace TestBot
     public static class XmlLoader
     {
         /// <summary>
-        /// What the root node name should be.
+        /// What the root node name of the irc config should be.
         /// </summary>
-        private const string rootNodeName = "ircbotconfig";
+        private const string ircConfigRootNodeName = "ircbotconfig";
+
+        /// <summary>
+        /// What the root node of the plugin config should be.
+        /// </summary>
+        private const string pluginConfigRootNodeName = "pluginconfig";
 
         /// <summary>
         /// Parses the given XML file and returns the IRC Config settings.
@@ -35,7 +40,7 @@ namespace TestBot
         /// <returns>The IrcConfig objected based on the XML.</returns>
         public static IIrcConfig ParseIrcConfig( string fileName )
         {
-            if ( File.Exists( fileName ) == false )
+            if( File.Exists( fileName ) == false )
             {
                 throw new FileNotFoundException( "Could not find IRC Config file " + fileName );
             }
@@ -45,18 +50,18 @@ namespace TestBot
             doc.Load( fileName );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != rootNodeName )
+            if( rootNode.Name != ircConfigRootNodeName )
             {
                 throw new XmlException(
-                    "Root XML node should be named \"" + rootNodeName + "\".  Got: " + rootNode.Name
+                    "Root XML node should be named \"" + ircConfigRootNodeName + "\".  Got: " + rootNode.Name
                 );
             }
 
             IrcConfig config = new IrcConfig();
 
-            foreach ( XmlElement childNode in rootNode.ChildNodes )
+            foreach( XmlElement childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "server":
                         config.Server = childNode.InnerText;
@@ -91,6 +96,62 @@ namespace TestBot
             config.Validate();
 
             return config;
+        }
+
+        /// <summary>
+        /// Parses the given XML file and returns the IRC Plugin Config settings.
+        /// </summary>
+        /// <param name="fileName">The file name to parse.</param>
+        /// <exception cref="FileNotFoundException">If the given filename does not exist.</exception>
+        /// <exception cref="ArgumentNullException">If the XML has empty strings or the filename is null/empty.</exception>
+        /// <exception cref="ApplicationException">If the irc config isn't valid.</exception>
+        /// <returns>The IrcConfig objected based on the XML.</returns>
+        public static IList<AssemblyConfig> ParsePluginConfig( string fileName )
+        {
+            if( File.Exists( fileName ) == false )
+            {
+                throw new FileNotFoundException( "Could not find IRC Config file " + fileName );
+            }
+
+            XmlDocument doc = new XmlDocument();
+
+            doc.Load( fileName );
+
+            XmlElement rootNode = doc.DocumentElement;
+            if( rootNode.Name != pluginConfigRootNodeName )
+            {
+                throw new XmlException(
+                    "Root XML node for plugin config should be named \"" + pluginConfigRootNodeName + "\".  Got: " + rootNode.Name
+                );
+            }
+
+            List<AssemblyConfig> plugins = new List<AssemblyConfig>();
+
+            foreach( XmlElement childNode in rootNode.ChildNodes )
+            {
+                if( childNode.Name == "assembly" )
+                {
+                    string path = string.Empty;
+                    string className = string.Empty;
+                    foreach( XmlAttribute attribute in childNode.Attributes )
+                    {
+                        switch( attribute.Name )
+                        {
+                            case "path":
+                                path = attribute.Value;
+                                break;
+
+                            case "classname":
+                                className = attribute.Value;
+                                break;
+                        }
+                    }
+
+                    plugins.Add( new AssemblyConfig( path, className ) );
+                }
+            }
+
+            return plugins;
         }
     }
 }

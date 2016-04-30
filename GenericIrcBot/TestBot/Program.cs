@@ -13,12 +13,6 @@ namespace TestBot
 {
     class MainClass
     {
-        private const string nick = "SethTestBot";
-
-        private static readonly List<Tuple<string, string>> pluginList = new List<Tuple<string, string>> {
-            new Tuple<string, string>( Path.Combine( "..", "..", "..", "WelcomeBotPlugin", "bin", "Debug", "WelcomeBotPlugin.dll" ), "WelcomeBotPlugin.WelcomeBot" )
-        };
-
         public static int Main( string[] args )
         {
             try
@@ -49,22 +43,38 @@ namespace TestBot
 
                 IIrcConfig ircConfig = XmlLoader.ParseIrcConfig( parser.IrcConfigLocation );
 
-                // Load Plugins.
                 List<IIrcHandler> configs = new List<IIrcHandler>();
 
+                // Load Plugins.
                 {
+                    IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( parser.IrcPluginConfigLocation );
+                    if( pluginList.Count == 0 )
+                    {
+                        Console.WriteLine( "WARNING: No plugins loaded." );
+                    }
                     PluginManager manager = new PluginManager();
 
-                    foreach( Tuple<string, string> pluginInfo in pluginList )
+                    foreach( AssemblyConfig pluginInfo in pluginList )
                     {
-                        manager.LoadAssembly( Path.GetFullPath( pluginInfo.Item1 ), pluginInfo.Item2 );
-                        configs.AddRange( manager.Handlers );
+                        bool success = manager.LoadAssembly( Path.GetFullPath( pluginInfo.AssemblyPath ), pluginInfo.ClassName );
+                        if( ( success == false ) && parser.FailOnPluginFailure )
+                        {
+                            Console.WriteLine( "Fail on assembly was enable.  Terminating." );
+                            return 2;
+                        }
+                        else if( success )
+                        {
+                            Console.WriteLine( "Successfully loaded plugin " + pluginInfo.ClassName );
+                        }
                     }
+
+                    configs.AddRange( manager.Handlers );
                 }
 
                 // Must always check for pings.
                 configs.Add( new PingHandler() );
 
+                Console.WriteLine();
                 using( IrcBot bot = new IrcBot( ircConfig, configs ) )
                 {
                     bot.Start();

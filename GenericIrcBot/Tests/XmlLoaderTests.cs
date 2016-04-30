@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using GenericIrcBot;
 using NUnit.Framework;
 using TestBot;
+using System.Xml;
 
 namespace Tests
 {
@@ -171,6 +172,78 @@ namespace Tests
         {
             Assert.Throws<ApplicationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
+            );
+        }
+
+        /// <summary>
+        /// Ensures an exception is thrown when the root node is not correct.
+        /// </summary>
+        [Test]
+        public void TestIrcConfigBadRootName()
+        {
+            Assert.Throws<XmlException>( () =>
+                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigBadRootNode.xml" ) )
+            );
+        }
+
+        // ---- Plugin Xml ----
+
+        /// <summary>
+        /// Ensures the plugin loader works for a valid plugin config.
+        /// </summary>
+        [Test]
+        public void TestValidPluginConfig()
+        {
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "ValidPluginConfig.xml" ) );
+            Assert.AreEqual( 2, configs.Count );
+
+            Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll", configs[0].AssemblyPath );
+            Assert.AreEqual( "TestPlugin.TestClass", configs[0].ClassName );
+
+            Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll", configs[1].AssemblyPath );
+            Assert.AreEqual( "TestPlugin2.TestClass", configs[1].ClassName );
+        }
+
+        /// <summary>
+        /// Ensures that an empty plugin config is okay, we'll just have zero plugins to load.
+        /// </summary>
+        [Test]
+        public void TestValidPluginConfigNoPlugins()
+        {
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "ValidPluginConfigEmpty.xml" ) );
+            Assert.AreEqual( 0, configs.Count ); 
+        }
+
+        /// <summary>
+        /// Ensures an exception is thrown when the root node is not correct.
+        /// </summary>
+        [Test]
+        public void TestInvalidPluginConfigBadRootName()
+        {
+            Assert.Throws<XmlException>( () =>
+                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigBadRootNode.xml" ) )
+            );
+        }
+
+        /// <summary>
+        /// Ensures an empty path in the XML resutls in an exception.
+        /// </summary>
+        [Test]
+        public void TestInvalidPluginConfigNoPath()
+        {
+            Assert.Throws<ArgumentNullException>( () =>
+                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyPath.xml" ) )
+            );
+        }
+
+        /// <summary>
+        /// Ensures an empty class in the XML resutls in an exception.
+        /// </summary>
+        [Test]
+        public void TestInvalidPluginConfigNoClass()
+        {
+            Assert.Throws<ArgumentNullException>( () =>
+                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyClass.xml" ) )
             );
         }
     }

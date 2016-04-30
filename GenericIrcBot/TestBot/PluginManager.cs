@@ -29,11 +29,6 @@ namespace TestBot
         /// </summary>
         private List<IIrcHandler> handlers;
 
-        /// <summary>
-        /// Whether or not the assemblies are loaded.
-        /// </summary>
-        private bool isLoaded;
-
         // -------- Constructor --------
 
         /// <summary>
@@ -51,7 +46,6 @@ namespace TestBot
                 this.logger = logger;
             }
 
-            this.isLoaded = false;
             this.handlers = new List<IIrcHandler>();
             this.Handlers = this.handlers.AsReadOnly();
         }
@@ -59,8 +53,8 @@ namespace TestBot
         // -------- Properties --------
 
         /// <summary>
-        /// Gets the handlers after loading the assembly.
-        /// This is empty unless LoadAssembly is called.
+        /// Any handlers found when calling LoadAssembly are appended to this list.
+        /// Its recommended that this is not called unless you are done loading plugins.
         /// </summary>
         public IList<IIrcHandler> Handlers{ get; private set; }
 
@@ -68,48 +62,48 @@ namespace TestBot
 
         /// <summary>
         /// Loads te given assembly.
+        /// Any handlers are appended to this.Handlers.
         /// Any errors are logged to the passed in logger.
         /// </summary>
         /// <param name="absPath">Absolute Path to the assembly to load.</param>
         /// <param name="className">Class name to load (including namespaces)</param>
-        public void LoadAssembly( string absPath, string className )
+        public bool LoadAssembly( string absPath, string className )
         {
-            if( this.isLoaded == false )
+            try
             {
-                try
+                Assembly dll = Assembly.LoadFile( absPath );
+                Type type = dll.GetType( className );
+
+                MethodInfo validateFunction = type.GetMethod( "Validate" );
+                MethodInfo initFunction = type.GetMethod( "Init" );
+                MethodInfo getHandlerFunction = type.GetMethod( "GetHandlers" );
+
+                // Make instance
+                Object instance = Activator.CreateInstance( type );
+
+                string msg = string.Empty;
+                if( ( bool )validateFunction.Invoke( instance, new object[] { msg } ) == false )
                 {
-                    Assembly dll = Assembly.LoadFile( absPath );
-                    Type type = dll.GetType( className );
+                    throw new Exception( "Error validating " + className + Environment.NewLine + msg );
+                }
 
-                    MethodInfo validateFunction = type.GetMethod( "Validate" );
-                    MethodInfo initFunction = type.GetMethod( "Init" );
-                    MethodInfo getHandlerFunction = type.GetMethod( "GetHandlers" );
-
-                    // Make instance
-                    Object instance = Activator.CreateInstance( type );
-
-                    string msg = string.Empty;
-                    if( ( bool )validateFunction.Invoke( instance, new object[] { msg } ) == false )
-                    {
-                        throw new Exception( "Error validating " + className + Environment.NewLine + msg );
-                    }
-
-                    initFunction.Invoke( instance, new Object[]{ } );
+                initFunction.Invoke( instance, new Object[]{ } );
  
-                    IList<IIrcHandler> handlersToAdd = ( IList<IIrcHandler> )getHandlerFunction.Invoke( instance, new Object[]{ } );
-                    this.handlers.AddRange( handlersToAdd );
-                }
-                catch( Exception e )
-                {
-                    this.logger.WriteLine( "*************" );
-                    this.logger.WriteLine( "Warning! Error when loading assembly " + className + ":" );
-                    this.logger.WriteLine( e.Message );
-                    this.logger.WriteLine( e.StackTrace );
-                    this.logger.WriteLine( "*************" );
-                }
-
-                this.isLoaded = true;
+                IList<IIrcHandler> handlersToAdd = ( IList<IIrcHandler> )getHandlerFunction.Invoke( instance, new Object[]{ } );
+                this.handlers.AddRange( handlersToAdd );
             }
+            catch( Exception e )
+            {
+                this.logger.WriteLine( "*************" );
+                this.logger.WriteLine( "Warning! Error when loading assembly " + className + ":" );
+                this.logger.WriteLine( e.Message );
+                this.logger.WriteLine( e.StackTrace );
+                this.logger.WriteLine( "*************" );
+
+                return false;
+            }
+
+            return true;
         }
     }
 }
