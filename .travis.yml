@@ -5,4 +5,4 @@ install:
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release ./GenericIrcBot/GenericIrcBot.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./GenericIrcBot/Tests/bin/Release/MyProject.Tests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./GenericIrcBot/Tests/bin/Release/Tests.dll
