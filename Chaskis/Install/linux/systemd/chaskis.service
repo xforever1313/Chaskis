@@ -1,0 +1,10 @@
+[Unit]
+Description=chaskis
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/mono /home/chaskis/bin/chaskis.exe --failOnBadPlugin=yes
+
+[Install]
+Alias=chaskis.service
+WantedBy=multi-user.target

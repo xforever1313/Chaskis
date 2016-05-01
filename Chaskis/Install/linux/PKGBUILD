@@ -1,0 +1,73 @@
+# Maintainer: Seth Hendrick <seth@shendrick.net>
+pkgname=chaskis
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc=".NET IRC Bot Framework."
+arch=('any')
+url="https://github.com/xforever1313/Chaskis"
+license=('BSL')
+groups=()
+depends=('mono>=4.2.2')
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=(
+    "/home/chaskis/.config/Chaskis/IrcConfig.xml"
+    "/home/chaskis/.config/Chaskis/PluginConfig.xml"
+)
+options=()
+install=
+changelog=
+source=("https://github.com/xforever1313/Chaskis/archive/master.tar.gz")
+noextract=()
+md5sums=('SKIP')
+validpgpkeys=()
+
+prepare() {
+    echo "Nothing to prepare"
+}
+
+build() {
+        cd "$srcdir"
+        xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+}
+
+check() {
+        cd "$srcdir"
+        
+        nuget restore ./Chaskis/Chaskis.sln
+        nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory /tmp/chaskis
+        mono /tmp/chaskis/testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
+}
+
+package() {
+        # Create home directory if it doesn't exist.
+        id -u chaskis &>/dev/null || useradd -m chaskis
+
+        # Copy all the things!
+        
+        # Start with the executable and main dlls.
+        cd "$srcdir"
+        mkdir -p /home/chaskis/bin
+        cp ./Chaskis/Chaskis/bin/Release/Chaskis.exe /home/chaskis/bin/Chaskis.exe
+        cp ./Chaskis/Chaskis/bin/Release/*.dll /home/chaskis/bin/
+        
+        # Next is the configs.
+        mkdir -p /home/chaskis/.config/Chaskis
+        cp ./Chaskis/Chaskis/Config/SampleIrcConfig.xml /home/chaskis/.config/Chaskis/IrcConfig.xml
+        cp ./Chaskis/Chaskis/Config/SamplePluginConfig.xml /home/chaskis/.config/Chaskis/PluginConfig.xml
+        
+        # Systemd service
+        cp ./Chaskis/Install/linux/systemd/chaskis.service /usr/lib/systemd/system
+        
+        # Last is the plugins
+        mkdir -p /home/chaskis/.config/Chaskis/plugins
+        
+        # Welcome bot
+        mkdir -p /home/chaskis/.config/Chaskis/plugins/WelcomeBot
+        cp ./Chaskis/WelcomeBotPlugin/bin/Release/*.dll /home/chaskis/.config/plugins/WelcomeBot
+}
