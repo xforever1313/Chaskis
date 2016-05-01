@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Sample Bot Config.  This tells Chaskis where to connect to,
+ane which channel to watch.
+
+Notice the password in this field.  Don't be dumb and commit this file to a senstive area.
+Copy/Paste this elsewhere if needed. Chaskis has command line arguments you can use to point
+to that pasted file instead of having to use the one located in ApplicationData
+
+The server and channel are required.  No field can be an empty string.  Port can not be negative.
+Password is optional.
+
+-->
+<ircbotconfig>
+	<server>irc.testdomain.com</server>
+	<channel>#testchannel</channel>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+	<password>apassword</password>
+</ircbotconfig>

@@ -47,4 +47,13 @@
       <Name>GenericIrcBot</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config\SamplePluginConfig.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\SampleIrcConfig.xml" />
+  </ItemGroup>
 </Project>
