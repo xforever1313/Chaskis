@@ -60,7 +60,7 @@
       <Project>{501708E7-AC43-4DF4-B7BC-6A31074E30D1}</Project>
       <Name>GenericIrcBot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestBot\Chaskis.csproj">
+    <ProjectReference Include="..\Chaskis\Chaskis.csproj">
       <Project>{0A5E0053-5976-4E2C-A41B-8BAA8F112563}</Project>
       <Name>Chaskis</Name>
     </ProjectReference>

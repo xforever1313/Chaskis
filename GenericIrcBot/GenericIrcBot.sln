@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericIrcBot", "GenericIrcBot\GenericIrcBot.csproj", "{501708E7-AC43-4DF4-B7BC-6A31074E30D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis", "TestBot\Chaskis.csproj", "{0A5E0053-5976-4E2C-A41B-8BAA8F112563}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis", "Chaskis\Chaskis.csproj", "{0A5E0053-5976-4E2C-A41B-8BAA8F112563}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\SethCS\SethCS\SethCSMono.shproj", "{9406B11B-3C52-4266-91F6-B6C176593B01}"
 EndProject
