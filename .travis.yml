@@ -1,8 +1,8 @@
 language: csharp
-solution: ./GenericIrcBot/GenericIrcBot.sln
+solution: ./Chaskis/Chaskis.sln
 install:
-  - nuget restore GenericIrcBot/GenericIrcBot.sln
+  - nuget restore Chaskis/Chaskis.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release ./GenericIrcBot/GenericIrcBot.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./GenericIrcBot/Tests/bin/Release/Tests.dll
+  - xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
