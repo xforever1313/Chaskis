@@ -6,8 +6,8 @@
 //
 
 using System;
+using Chaskis;
 using NUnit.Framework;
-using TestBot;
 
 namespace Tests
 {

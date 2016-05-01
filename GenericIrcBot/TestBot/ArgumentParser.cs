@@ -9,7 +9,7 @@ using SethCS.Exceptions;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace TestBot
+namespace Chaskis
 {
     /// <summary>
     /// Parses the arguments for this program.

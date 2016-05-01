@@ -5,8 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using Chaskis;
 using NUnit.Framework;
-using TestBot;
 using System.IO;
 
 namespace Tests

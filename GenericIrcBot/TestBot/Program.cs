@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using GenericIrcBot;
 using System.IO;
 
-namespace TestBot
+namespace Chaskis
 {
     class MainClass
     {
@@ -19,7 +19,7 @@ namespace TestBot
             {
                 string rootDir = Path.Combine(
                                      Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                                     "GenericIrcBot"
+                                     "Chaskis"
                                  );
 
                 ArgumentParser parser = new ArgumentParser( args, rootDir );
@@ -95,7 +95,7 @@ namespace TestBot
         /// </summary>
         private static void PrintHelp()
         {
-            Console.WriteLine( "Generic IRC Bot Help:" );
+            Console.WriteLine( "Chaskis IRC Bot Help:" );
             Console.WriteLine( "--help, -h, /?    --------  Prints this message and exits." );
             Console.WriteLine( "--version         --------  Prints this message and exits." );
             Console.WriteLine( "--configPath=xxx  --------  The IRC config xml file to use." );
@@ -111,7 +111,7 @@ namespace TestBot
         /// </summary>
         private static void PrintVersion()
         {
-            Console.WriteLine( "Generic IRC Bot Version:" );
+            Console.WriteLine( "Chaskis IRC Bot Version:" );
             Console.WriteLine( IrcBot.VersionString );
             Console.WriteLine( "Copyright (C) 2016 Seth Hendrick" );
             Console.WriteLine();

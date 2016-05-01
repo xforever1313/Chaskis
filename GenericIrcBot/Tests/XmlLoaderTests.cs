@@ -7,13 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
+using Chaskis;
 using GenericIrcBot;
 using NUnit.Framework;
-using TestBot;
-using System.Xml;
 
 namespace Tests
 {
@@ -26,8 +23,8 @@ namespace Tests
         /// Where the test xml files are located.
         /// </summary>
         private static readonly string testXmlFiles = Path.Combine(
-            "..", "..", "TestFiles"
-        );
+                                                          "..", "..", "TestFiles"
+                                                      );
 
         /// <summary>
         /// The IRC Config to use.  Based off of the XML files.
@@ -58,8 +55,8 @@ namespace Tests
         public void TestValidXmlWithPassword()
         {
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithPassword.xml" )
-            );
+                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithPassword.xml" )
+                                );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -72,8 +69,8 @@ namespace Tests
             this.ircConfig.Password = string.Empty;
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithEmptyPassword.xml" )
-            );
+                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithEmptyPassword.xml" )
+                                );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -86,8 +83,8 @@ namespace Tests
             this.ircConfig.Password = string.Empty;
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
-            );
+                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
+                                );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -104,8 +101,8 @@ namespace Tests
             expectedConfig.Channel = this.ircConfig.Channel;
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
-            );
+                                    Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
+                                );
             Assert.AreEqual( expectedConfig, config );
         }
 

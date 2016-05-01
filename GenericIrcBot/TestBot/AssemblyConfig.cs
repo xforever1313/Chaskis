@@ -7,7 +7,7 @@
 using System;
 using SethCS.Exceptions;
 
-namespace TestBot
+namespace Chaskis
 {
     /// <summary>
     /// Contains information about an assembly.

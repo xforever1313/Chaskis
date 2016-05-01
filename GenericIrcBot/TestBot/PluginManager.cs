@@ -10,7 +10,7 @@ using System.IO;
 using GenericIrcBot;
 using System.Collections.Generic;
 
-namespace TestBot
+namespace Chaskis
 {
     /// <summary>
     /// This class loads plugins.
