@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using SethCS.Basic;
 
 namespace GenericIrcBot
 {
@@ -41,6 +42,11 @@ namespace GenericIrcBot
         private bool keepReading;
 
         /// <summary>
+        /// Event queue.
+        /// </summary>
+        private EventExecutor eventQueue;
+
+        /// <summary>
         /// Used to mutex-protect keepReading.
         /// </summary>
         private object keepReadingObject;
@@ -62,6 +68,18 @@ namespace GenericIrcBot
 
             this.keepReadingObject = new object();
             this.KeepReading = false;
+
+            this.eventQueue = new EventExecutor(
+                true,
+                delegate( Exception err )
+                {
+                    Console.WriteLine( "***************" );
+                    Console.WriteLine( "Caught Exception in Event Queue Thread:" );
+                    Console.WriteLine( err.Message );
+                    Console.WriteLine( err.StackTrace );
+                    Console.WriteLine( "***************" );
+                }
+            );
         }
 
         // -------- Properties --------
@@ -119,6 +137,9 @@ namespace GenericIrcBot
                     "Already connected."
                 );
             }
+
+            // Start Executing
+            this.eventQueue.Start();
 
             // Connect.
             this.connection = new TcpClient( this.Config.Server, this.Config.Port );
@@ -230,6 +251,9 @@ namespace GenericIrcBot
                 this.ircReader.Close();
                 this.readerThread.Join();
 
+                // Execute all remaining events.
+                this.eventQueue.Dispose();
+
                 // Disconnect.
                 try
                 {
@@ -275,7 +299,7 @@ namespace GenericIrcBot
                     {
                         if( this.ReadEvent != null )
                         {
-                            ReadEvent( s );
+                            this.eventQueue.AddEvent( () => ReadEvent( s ) );
                         }
 
                     }
