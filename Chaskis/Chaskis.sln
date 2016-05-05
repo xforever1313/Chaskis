@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "Plugins\WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowSayBot", "Plugins\CowSayBot\CowSayBot.csproj", "{C82EC85E-1885-4F71-BA54-81EF08D169F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{501708E7-AC43-4DF4-B7BC-6A31074E30D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{501708E7-AC43-4DF4-B7BC-6A31074E30D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{501708E7-AC43-4DF4-B7BC-6A31074E30D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDE29556-87E8-4F1F-972A-33A9C849D390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDE29556-87E8-4F1F-972A-33A9C849D390}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDE29556-87E8-4F1F-972A-33A9C849D390}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -81,10 +81,12 @@ namespace Chaskis
                 // Make instance
                 Object instance = Activator.CreateInstance( type );
 
-                string msg = string.Empty;
-                if( ( bool )validateFunction.Invoke( instance, new object[] { msg } ) == false )
+                // This is used to have an out parameter.  See here as to why this works.
+                // http://stackoverflow.com/questions/569249/methodinfo-invoke-with-out-parameter
+                object[] parameters = { null };
+                if( ( bool )validateFunction.Invoke( instance, parameters ) == false )
                 {
-                    throw new Exception( "Error validating " + className + Environment.NewLine + msg );
+                    throw new Exception( "Error validating " + className + Environment.NewLine + Environment.NewLine + parameters[0] );
                 }
 
                 initFunction.Invoke( instance, new Object[]{ } );
@@ -97,6 +99,7 @@ namespace Chaskis
                 this.logger.WriteLine( "*************" );
                 this.logger.WriteLine( "Warning! Error when loading assembly " + className + ":" );
                 this.logger.WriteLine( e.Message );
+                this.logger.WriteLine();
                 this.logger.WriteLine( e.StackTrace );
                 this.logger.WriteLine( "*************" );
 
