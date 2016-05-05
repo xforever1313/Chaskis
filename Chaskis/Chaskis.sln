@@ -11,7 +11,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\SethCS\Set
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CDE29556-87E8-4F1F-972A-33A9C849D390}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "Plugins\WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
