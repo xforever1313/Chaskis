@@ -96,7 +96,7 @@ namespace Chaskis
                     Match configMatch = Regex.Match( arg, configRegex );
                     if( configMatch.Success )
                     {
-                        this.IrcConfigLocation = Path.Combine( rootDir, configMatch.Groups["path"].Value );
+                        this.IrcConfigLocation = configMatch.Groups["path"].Value;
                     }
                     else
                     {
@@ -108,7 +108,7 @@ namespace Chaskis
                     Match pluginMatch = Regex.Match( arg, pluginRegex );
                     if( pluginMatch.Success )
                     {
-                        this.IrcPluginConfigLocation = Path.Combine( rootDir, pluginMatch.Groups["path"].Value );
+                        this.IrcPluginConfigLocation = pluginMatch.Groups["path"].Value;
                     }
                     else
                     {

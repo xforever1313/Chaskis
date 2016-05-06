@@ -19,6 +19,8 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -27,10 +29,28 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Linux|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug Linux</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;__MonoCS__;</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Linux|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release Linux</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>__MonoCS__;</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
