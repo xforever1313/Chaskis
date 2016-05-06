@@ -129,7 +129,7 @@ namespace Tests
                 string[] args = { "--configPath=" + xmlFile };
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( Path.Combine( rootDir, xmlFile ), uut.IrcConfigLocation );
+                Assert.AreEqual( xmlFile, uut.IrcConfigLocation );
                 Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
                 Assert.IsFalse( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
@@ -161,7 +161,7 @@ namespace Tests
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
                 Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( Path.Combine( rootDir, xmlFile ), uut.IrcPluginConfigLocation );
+                Assert.AreEqual( xmlFile, uut.IrcPluginConfigLocation );
                 Assert.IsFalse( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
