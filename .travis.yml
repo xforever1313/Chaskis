@@ -4,5 +4,5 @@ install:
   - nuget restore Chaskis/Chaskis.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration="Release Linux" ./Chaskis/Chaskis.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe "./Chaskis/Tests/bin/Release Linux/Tests.dll"
+  - xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
