@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "Plugins
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowSayBot", "Plugins\CowSayBot\CowSayBot.csproj", "{C82EC85E-1885-4F71-BA54-81EF08D169F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisService", "ChaskisService\ChaskisService.csproj", "{FEAED314-AA03-440F-9463-1D43ABCC471F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCSMono.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -45,6 +47,10 @@ Global
 		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C82EC85E-1885-4F71-BA54-81EF08D169F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEAED314-AA03-440F-9463-1D43ABCC471F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAED314-AA03-440F-9463-1D43ABCC471F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAED314-AA03-440F-9463-1D43ABCC471F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAED314-AA03-440F-9463-1D43ABCC471F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
