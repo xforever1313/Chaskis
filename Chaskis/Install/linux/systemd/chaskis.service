@@ -3,7 +3,7 @@ Description=chaskis
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/mono /home/chaskis/bin/chaskis.exe --failOnBadPlugin=yes
+ExecStart=/usr/bin/mono-service /home/chaskis/bin/ChaskisService.exe
 
 [Install]
 Alias=chaskis.service

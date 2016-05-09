@@ -8,7 +8,7 @@ arch=('any')
 url="https://github.com/xforever1313/Chaskis"
 license=('BSL')
 groups=()
-depends=('mono>=4.2.2')
+depends=('mono>=4.2.2' 'git' 'nuget')
 makedepends=()
 checkdepends=()
 optdepends=()
@@ -16,8 +16,8 @@ provides=()
 conflicts=()
 replaces=()
 backup=(
-    "/home/chaskis/.config/Chaskis/IrcConfig.xml"
-    "/home/chaskis/.config/Chaskis/PluginConfig.xml"
+    "home/chaskis/.config/Chaskis/IrcConfig.xml"
+    "home/chaskis/.config/Chaskis/PluginConfig.xml"
 )
 options=()
 install=
@@ -32,42 +32,69 @@ prepare() {
 }
 
 build() {
-        cd "$srcdir"
+        cd "$srcdir/Chaskis-master"
+        git clone https://github.com/xforever1313/sethcs SethCS
+        nuget restore ./Chaskis/Chaskis.sln
         xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
 }
 
 check() {
-        cd "$srcdir"
-        
+        cd "$srcdir/Chaskis-master"
         nuget restore ./Chaskis/Chaskis.sln
-        nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory /tmp/chaskis
-        mono /tmp/chaskis/testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
+        nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory ./nunit/
+        mono ./nunit/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
 }
 
 package() {
-        # Create home directory if it doesn't exist.
-        id -u chaskis &>/dev/null || useradd -m chaskis
+
+        cd "$srcdir/Chaskis-master"
+
+        #Where everything will be installed
+        installLocation=/home/chaskis/
+
+        #Where the exe files will go.
+        exeLocation=$installLocation/bin/
+
+        #Where the config stuff goes.  Should be the same as
+        #where mono puts application data.
+        configLocation=$installLocation/.config/Chaskis
+
+        # Where plugins go
+        pluginLocation=$configLocation/plugins
 
         # Copy all the things!
-        
+
         # Start with the executable and main dlls.
-        cd "$srcdir"
-        mkdir -p /home/chaskis/bin
-        cp ./Chaskis/Chaskis/bin/Release/Chaskis.exe /home/chaskis/bin/Chaskis.exe
-        cp ./Chaskis/Chaskis/bin/Release/*.dll /home/chaskis/bin/
-        
+        mkdir -p $pkgdir/$exeLocation
+        cp ./Chaskis/ChaskisService/bin/Release/Chaskis.exe $pkgdir/$exeLocation
+        cp ./Chaskis/ChaskisService/bin/Release/GenericIrcBot.dll $pkgdir/$exeLocation
+        cp ./Chaskis/ChaskisService/bin/Release/ChaskisService.exe $pkgdir/$exeLocation
+
         # Next is the configs.
-        mkdir -p /home/chaskis/.config/Chaskis
-        cp ./Chaskis/Chaskis/Config/SampleIrcConfig.xml /home/chaskis/.config/Chaskis/IrcConfig.xml
-        cp ./Chaskis/Chaskis/Config/SamplePluginConfig.xml /home/chaskis/.config/Chaskis/PluginConfig.xml
-        
+        mkdir -p $pkgdir/$configLocation
+        cp ./Chaskis/Chaskis/Config/SampleIrcConfig.xml $pkgdir/$configLocation/IrcConfig.xml
+        cp ./Chaskis/Chaskis/Config/SamplePluginConfig.xml $pkgdir/$configLocation/PluginConfig.xml
+
         # Systemd service
-        cp ./Chaskis/Install/linux/systemd/chaskis.service /usr/lib/systemd/system
-        
+        mkdir -p $pkgdir/usr/lib/systemd/system
+        cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/system
+
         # Last is the plugins
-        mkdir -p /home/chaskis/.config/Chaskis/plugins
-        
+        mkdir -p $pkgdir/$pluginLocation
+
         # Welcome bot
-        mkdir -p /home/chaskis/.config/Chaskis/plugins/WelcomeBot
-        cp ./Chaskis/WelcomeBotPlugin/bin/Release/*.dll /home/chaskis/.config/plugins/WelcomeBot
+        mkdir -p $pkgdir/$pluginLocation/WelcomeBot
+        cp ./Chaskis/Plugins/WelcomeBotPlugin/bin/Release/WelcomeBotPlugin.dll $pkgdir/$pluginLocation/WelcomeBot
+
+        # Cowsay Bot
+        mkdir -p $pkgdir/$pluginLocation/CowSayBot
+        cp ./Chaskis/Plugins/CowSayBot/bin/Release/CowSayBot.dll $pkgdir/$pluginLocation/CowSayBot
+}
+
+pre_install() {
+    id -u chaskis &> /dev/null || useradd -m chaskis
+}
+
+post_remove() {
+    userdel chaskis
 }
