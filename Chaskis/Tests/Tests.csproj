@@ -50,6 +50,8 @@
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
     <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
+    <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />
@@ -67,11 +69,16 @@
       <Project>{0A5E0053-5976-4E2C-A41B-8BAA8F112563}</Project>
       <Name>Chaskis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\CowSayBot\CowSayBot.csproj">
+      <Project>{c82ec85e-1885-4f71-ba54-81ef08d169f6}</Project>
+      <Name>CowSayBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="TestFiles\CowSayBot\cowsay" />
     <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />

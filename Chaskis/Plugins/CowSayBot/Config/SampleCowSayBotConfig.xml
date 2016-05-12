@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+
+    Cow say bot config.
+    
+    command:  The regex that will trigger cowsay bot to respond.
+              Defaulted to ^!{%saycmd&} (?<msg>.+).  Best leave this alone unless yo know regexes.
+              MUST have the (?<msg>.+) group somewhere in it or the plugin will fail validation.
+              {%saycmd%} is replaced by the cowfile command before the regex is created.
+              For example, if you have the vader cowfile whose command is vadersay,
+              "!vadersay something" will trigger the bot to respond with "something" in the bubble.
+              Regex will also accept {%channel%} for the current channel name and {%nick%} for the bots nick name.
+    
+    path:     Path to the cowsay executable. Defaulted to /usr/bin/cowsay.  The plugin will fail validation
+              unless cowsay exists on the specfied path.
+    
+    cowfile:  Cowsay supports many shapes that can appear.  These are called cowfiles.  You
+              can get a list of all the cowfiles your install of cowsay supports by doing "cowsay -l" on
+              the command line.  DEFAULT is a special config, which just sends "cowsay yourMessage" and
+              specifies no cowfile.
+              Note that during plugin validation, each of these commands will be run on the command line and ensure
+              cowsay returns 0 in order for the plugin to be validated.
+              
+              The cowfile's name is what gets passed to the -f on the cowsay command line.  The exception is
+              DEFAULT, which just runs cowsay with no -f specified.  The command is the string the bot is looking
+              for in {%saycmd%}.
+-->
+<cowsaybotconfig>
+    <command><![CDATA[^!{%saycmd%} (?<msg>.+)]]></command>
+    <path>/usr/bin/cowsay</path>
+    <cowfiles>
+        <cowfile name="DEFAULT" command="cowsay"/>
+        <cowfile name="vader" command="vadersay"/>
+        <cowfile name="tux" command="tuxsay" />
+        <cowfile name="moose" command="moosesay"/>
+        <cowfile name="moofasa" command="lionsay"/>
+    </cowfiles>
+</cowsaybotconfig>

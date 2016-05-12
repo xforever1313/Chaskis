@@ -4,6 +4,7 @@
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+using System.IO;
 using GenericIrcBot;
 
 namespace Tests
@@ -14,6 +15,20 @@ namespace Tests
     /// </summary>
     public static class TestHelpers
     {
+        /// <summary>
+        /// Path to the base directory of the Tests directory.
+        /// </summary>
+        public static readonly string BaseDir = Path.Combine(
+            "..", ".."
+        );
+
+        /// <summary>
+        /// Path to the TestFiles directory of the Tests directory.
+        /// </summary>
+        public static readonly string TestFilesDir = Path.Combine(
+            BaseDir, "TestFiles"
+        );
+
         public static IrcConfig GetTestIrcConfig()
         {
             IrcConfig ircConfig = new IrcConfig();
