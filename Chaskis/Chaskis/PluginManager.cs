@@ -79,17 +79,8 @@ namespace Chaskis
                 MethodInfo getHandlerFunction = type.GetMethod( "GetHandlers" );
 
                 // Make instance
-                Object instance = Activator.CreateInstance( type );
-
-                // This is used to have an out parameter.  See here as to why this works.
-                // http://stackoverflow.com/questions/569249/methodinfo-invoke-with-out-parameter
-                object[] parameters = { null };
-                if( ( bool )validateFunction.Invoke( instance, parameters ) == false )
-                {
-                    throw new Exception( "Error validating " + className + Environment.NewLine + Environment.NewLine + parameters[0] );
-                }
-
-                initFunction.Invoke( instance, new Object[]{ } );
+                object instance = Activator.CreateInstance( type );
+                initFunction.Invoke( instance, new object[]{ absPath } );
  
                 IList<IIrcHandler> handlersToAdd = ( IList<IIrcHandler> )getHandlerFunction.Invoke( instance, new Object[]{ } );
                 this.handlers.AddRange( handlersToAdd );

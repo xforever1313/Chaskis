@@ -42,22 +42,11 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         // -------- Functions --------
 
         /// <summary>
-        /// Validates that the environment is good for the plugin.
-        /// For example, it has all dependencies installed.
-        /// </summary>
-        /// <param name="error">The errors that occurred if any.  string.Empty if none.</param>
-        /// <returns>True if its okay to load this plugin, else false.</returns>
-        public bool Validate( out string error )
-        {
-            error = string.Empty;
-            return true;
-        }
-
-        /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.
         /// </summary>
-        public void Init()
+        /// <param name="pluginPath">Path to the plugin.</param>
+        public void Init( string pluginPath )
         {
             if( this.isLoaded == false )
             {

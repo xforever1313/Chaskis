@@ -16,18 +16,18 @@ namespace GenericIrcBot
         // -------- Functions --------
 
         /// <summary>
-        /// Validates that the environment is good for the plugin.
-        /// For example, it has all dependencies installed.
-        /// </summary>
-        /// <param name="error">The errors that occurred if any.  string.Empty if none.</param>
-        /// <returns>True if its okay to load this plugin, else false.</returns>
-        bool Validate( out string error );
-
-        /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.  Allowed to throw Exceptions.
+        /// 
+        /// This function should be used to validates that the environment is good for the plugin.
+        /// For example, it has all dependencies installed, config files are in the correct spot, etc.
+        /// It should also load GetHandlers() with the handlers.
         /// </summary>
-        void Init();
+        /// <param name="pluginPath">
+        /// The absolute path to the plugin, including the file name.  To just get
+        /// the path to the plugin, call Path.GetFullPath on this argument.
+        /// </param>
+        void Init( string pluginPath );
 
         /// <summary>
         /// Gets the handlers that should be added to the main bot.

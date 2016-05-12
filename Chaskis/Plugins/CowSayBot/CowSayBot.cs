@@ -89,39 +89,24 @@ namespace Chaskis.Plugins.CowSayBot
         // -------- Functions --------
 
         /// <summary>
-        /// Validates that the environment is good for the plugin.
-        /// This must have cowsay installed in /usr/bin/cowsay in order to work properly.
-        /// </summary>
-        /// <param name="error">The errors that occurred if any.  string.Empty if none.</param>
-        /// <returns>True if its okay to load this plugin, else false.</returns>
-        public bool Validate( out string error )
-        {
-            if( File.Exists( cowsayProgram ) == false )
-            {
-                error = "Could not load Cowsay Program." + Environment.NewLine;
-                error += "Cowsay not installed in " + cowsayProgram;
-                return false;
-            }
-            else
-            {
-                error = string.Empty;
-                return true;
-            }
-        }
-
-        /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.
         /// </summary>
-        public void Init()
+        /// <param name="pluginPath">Path to the plugin.</param>
+        public void Init( string pluginPath )
         {
+            if ( File.Exists( cowsayProgram ) == false )
+            {
+                throw new InvalidOperationException( "Can not load coway program from " + cowsayProgram );
+            }
+
             IIrcHandler cowSayConfig = 
-                new MessageHandler(
-                    cowsayRegex,
-                    HandleCowsayCommand,
-                    5,
-                    ResponseOptions.RespondOnlyToChannel
-                );
+            new MessageHandler(
+                cowsayRegex,
+                HandleCowsayCommand,
+                5,
+                ResponseOptions.RespondOnlyToChannel
+            );
 
             this.handlers.Add(
                 cowSayConfig
