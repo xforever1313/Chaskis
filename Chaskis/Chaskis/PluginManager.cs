@@ -74,7 +74,6 @@ namespace Chaskis
                 Assembly dll = Assembly.LoadFile( absPath );
                 Type type = dll.GetType( className );
 
-                MethodInfo validateFunction = type.GetMethod( "Validate" );
                 MethodInfo initFunction = type.GetMethod( "Init" );
                 MethodInfo getHandlerFunction = type.GetMethod( "GetHandlers" );
 
