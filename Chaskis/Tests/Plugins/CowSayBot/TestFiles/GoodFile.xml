@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cowsaybotconfig>
+    <command><![CDATA[!{%saycmd%} (?<msg>.+)]]></command>
+    <path>../../Plugins/CowSayBot/TestFiles/cowsay</path>
+    <cowsaycooldown>5</cowsaycooldown>
+    <cowfiles>
+        <cowfile command="cowsay" name="DEFAULT" />
+        <cowfile command="vadersay" name="vader" />
+        <cowfile command="tuxsay" name="tux" />
+        <cowfile command="moosesay" name="moose" />
+        <cowfile command="lionsay" name="moofasa" />
+    </cowfiles>
+</cowsaybotconfig>

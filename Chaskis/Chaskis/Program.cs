@@ -56,7 +56,11 @@ namespace Chaskis
 
                     foreach ( AssemblyConfig pluginInfo in pluginList )
                     {
-                        bool success = manager.LoadAssembly( Path.GetFullPath( pluginInfo.AssemblyPath ), pluginInfo.ClassName );
+                        bool success = manager.LoadAssembly(
+                            Path.GetFullPath( pluginInfo.AssemblyPath ),
+                            pluginInfo.ClassName,
+                            ircConfig
+                        );
                         if ( ( success == false ) && parser.FailOnPluginFailure )
                         {
                             Console.WriteLine( "Fail on assembly was enable.  Terminating." );

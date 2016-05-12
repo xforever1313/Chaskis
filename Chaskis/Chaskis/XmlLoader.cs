@@ -56,7 +56,7 @@ namespace Chaskis
 
             IrcConfig config = new IrcConfig();
 
-            foreach( XmlElement childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
                 switch( childNode.Name )
                 {
@@ -124,7 +124,7 @@ namespace Chaskis
 
             List<AssemblyConfig> plugins = new List<AssemblyConfig>();
 
-            foreach( XmlElement childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
                 if( childNode.Name == "assembly" )
                 {

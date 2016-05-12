@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Chaskis.Plugins.CowSayBot
@@ -22,9 +21,10 @@ namespace Chaskis.Plugins.CowSayBot
         /// </summary>
         public CowSayBotConfig()
         {
-            this.ListenRegex = @"^!{%saycmd%} (?<msg>.+)";
+            this.ListenRegex = @"!{%saycmd%} (?<msg>.+)";
             this.ExeCommand = "/usr/bin/cowsay";
-            this.CowFileInfoList = new List<CowFileInfo>();
+            this.CowFileInfoList = new CowFileInfo();
+            this.CoolDownTimeSeconds = 5;
         }
 
         // -------- Properties --------
@@ -50,7 +50,15 @@ namespace Chaskis.Plugins.CowSayBot
         /// List of cowfiles to look at.  Can not be empty for this thing to validate.
         /// Also each CowFileInfo must validate as well.
         /// </summary>
-        public IList<CowFileInfo> CowFileInfoList { get; private set; }
+        public CowFileInfo CowFileInfoList { get; private set; }
+
+        /// <summary>
+        /// How long to wait between running cowsay again in seconds.  Prevents flooding the IRC
+        /// channel.This means that if someone runs !cowsay and someone else runs !cowsay before
+        /// this time has passed, cowsay will run the first time, but not the second time.
+        /// Defaulted to 5 seconds.
+        /// </summary>
+        public uint CoolDownTimeSeconds { get; set; }
 
         // -------- Functions --------
 
@@ -79,24 +87,21 @@ namespace Chaskis.Plugins.CowSayBot
                 success = false;
             }
 
-            if ( ( this.CowFileInfoList == null ) || ( this.CowFileInfoList.Count == 0 ) )
+            if ( this.CowFileInfoList == null )
             {
-                errors += nameof( this.CowFileInfoList ) + " can not be empty or null" + Environment.NewLine;
+                errors += nameof( this.CowFileInfoList ) + " can not be null" + Environment.NewLine;
                 success = false;
             }
             else
             {
-                foreach ( CowFileInfo info in this.CowFileInfoList )
+                try
                 {
-                    try
-                    {
-                        info.Validate();
-                    }
-                    catch ( InvalidOperationException err )
-                    {
-                        errors += Environment.NewLine + err.Message + Environment.NewLine;
-                        success = false;
-                    }
+                    this.CowFileInfoList.Validate();
+                }
+                catch ( Exception err )
+                {
+                    success = false;
+                    errors += err.Message + Environment.NewLine;
                 }
             }
 
@@ -113,7 +118,7 @@ namespace Chaskis.Plugins.CowSayBot
         public CowSayBotConfig Clone()
         {
             CowSayBotConfig clone = ( CowSayBotConfig ) this.MemberwiseClone();
-            clone.CowFileInfoList = new List<CowFileInfo>( this.CowFileInfoList );
+            clone.CowFileInfoList = this.CowFileInfoList.Clone();
             return clone;
         }
     }

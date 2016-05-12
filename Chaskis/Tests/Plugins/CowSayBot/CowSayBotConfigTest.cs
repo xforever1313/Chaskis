@@ -18,7 +18,7 @@ namespace Tests.Plugins.CowSayBot
         /// Path to the fake cowsay executable.
         /// </summary>
         private static readonly string FakeExe = Path.Combine(
-            TestHelpers.TestFilesDir, "CowSayBot", "cowsay"
+            TestHelpers.BaseDir, "Plugins", "CowSayBot", "TestFiles", "cowsay"
         );
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig uut = new CowSayBotConfig();
             uut.ListenRegex = @"^!{%saycmd%} (?<msg>.+)";
             uut.ExeCommand = FakeExe;
-            uut.CowFileInfoList.Add( new CowFileInfo( "name", "command" ) );
+            uut.CowFileInfoList.CommandList["command"] = "name";
 
             Assert.DoesNotThrow( () => uut.Validate() );
         }
@@ -45,7 +45,7 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig uut = new CowSayBotConfig();
             uut.ListenRegex = null;
             uut.ExeCommand = FakeExe;
-            uut.CowFileInfoList.Add( new CowFileInfo( "name", "command" ) );
+            uut.CowFileInfoList.CommandList["command"] = "name";
 
             Assert.Throws<InvalidOperationException>( () => uut.Validate() );
 
@@ -66,7 +66,7 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig uut = new CowSayBotConfig();
             uut.ListenRegex = @"^!{%saycmd%} (?<msg>.+)";
             uut.ExeCommand = null;
-            uut.CowFileInfoList.Add( new CowFileInfo( "name", "command" ) );
+            uut.CowFileInfoList.CommandList["command"] = "name";
 
             Assert.Throws<InvalidOperationException>( () => uut.Validate() );
 
@@ -90,11 +90,8 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig uut = new CowSayBotConfig();
             uut.ListenRegex = @"^!{%saycmd%} (?<msg>.+)";
             uut.ExeCommand = FakeExe;
-            uut.CowFileInfoList.Clear();
+            uut.CowFileInfoList.CommandList.Clear();
 
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
-
-            uut.CowFileInfoList.Add( new CowFileInfo( null, null ) );
             Assert.Throws<InvalidOperationException>( () => uut.Validate() );
         }
 
@@ -107,12 +104,12 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig uut1 = new CowSayBotConfig();
             uut1.ListenRegex = @"^!{%saycmd%} (?<msg>.+)";
             uut1.ExeCommand = FakeExe;
-            uut1.CowFileInfoList.Add( new CowFileInfo( "name", "command" ) );
+            uut1.CowFileInfoList.CommandList["command"] = "name";
 
             CowSayBotConfig uut2 = uut1.Clone();
 
             Assert.AreNotSame( uut1.CowFileInfoList, uut2.CowFileInfoList );
-            Assert.AreEqual( uut1.CowFileInfoList.Count, uut2.CowFileInfoList.Count );
+            Assert.AreEqual( uut1.CowFileInfoList.CommandList.Count, uut2.CowFileInfoList.CommandList.Count );
 
             Assert.AreEqual( uut1.ListenRegex, uut2.ListenRegex );
             Assert.AreEqual( uut1.ExeCommand, uut2.ExeCommand );

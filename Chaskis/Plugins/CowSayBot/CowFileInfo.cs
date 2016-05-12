@@ -5,10 +5,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using System.Collections.Generic;
 
 namespace Chaskis.Plugins.CowSayBot
 {
-    public struct CowFileInfo
+    public class CowFileInfo
     {
         // -------- Constructor --------
 
@@ -17,24 +18,18 @@ namespace Chaskis.Plugins.CowSayBot
         /// </summary>
         /// <param name="name">Name of the cowfile to open</param>
         /// <param name="command">String to look for in {%saycmd%}</param>
-        public CowFileInfo( string name, string command )
+        public CowFileInfo()
         {
-            this.Name = name;
-            this.Command = command;
+            this.CommandList = new Dictionary<string, string>();
         }
 
         // -------- Properties --------
 
         /// <summary>
-        /// The cowfile's name is what gets passed to the -f on the cowsay command line.  The exception is
-        /// "DEFAULT", which just runs cowsay with no -f specified.T
+        /// List of commands and which cowfile to use.  The key is the command (e.g. cowsay or tuxsay),
+        /// and the value is the cowfile to use.  DEFAULT cowfile is running cowsay with no cowfile specified.
         /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The command is the string the bot is looking for in {%saycmd%}.
-        /// </summary>
-        public string Command { get; set; }
+        public IDictionary<string, string> CommandList { get; private set; }
 
         // -------- Functions ---------
 
@@ -47,15 +42,26 @@ namespace Chaskis.Plugins.CowSayBot
             string errors = "Can not validate this CowFileInfo object:" + Environment.NewLine;
             bool success = true;
 
-            if ( string.IsNullOrEmpty( this.Name ) || string.IsNullOrWhiteSpace( this.Name ) )
+            if ( CommandList.Count == 0 )
             {
-                errors += nameof( this.Name ) + " can not be empty or null" + Environment.NewLine;
+                errors += nameof( this.CommandList ) + " can not be empty." + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( this.Command ) || string.IsNullOrWhiteSpace( this.Command ) )
+            else
             {
-                errors += nameof( this.Command ) + " can not be empty or null" + Environment.NewLine;
-                success = false;
+                foreach ( KeyValuePair<string, string> command in this.CommandList )
+                {
+                    if ( string.IsNullOrEmpty( command.Key ) || string.IsNullOrWhiteSpace( command.Key ) )
+                    {
+                        errors += "Can not have empty or null command in " + nameof( this.CommandList ) + Environment.NewLine;
+                        success = false;
+                    }
+                    if ( string.IsNullOrEmpty( command.Value ) || string.IsNullOrWhiteSpace( command.Value ) )
+                    {
+                        errors += "Can not have empty or null cowfile in " + nameof( this.CommandList ) + Environment.NewLine;
+                        success = false;
+                    }
+                }  
             }
 
             if ( success == false )
@@ -70,7 +76,9 @@ namespace Chaskis.Plugins.CowSayBot
         /// <returns>A copy of this object.</returns>
         public CowFileInfo Clone()
         {
-            return ( CowFileInfo ) this.MemberwiseClone();
+            CowFileInfo clone = ( CowFileInfo ) this.MemberwiseClone();
+            clone.CommandList = new Dictionary<string, string>( clone.CommandList );
+            return clone;
         }
     }
 }

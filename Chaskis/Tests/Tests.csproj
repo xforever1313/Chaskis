@@ -50,6 +50,7 @@
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
     <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
     <Compile Include="TestHelpers.cs" />
@@ -78,7 +79,8 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestFiles\CowSayBot\cowsay" />
+    <None Include="Plugins\CowSayBot\TestFiles\cowsay" />
+    <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />

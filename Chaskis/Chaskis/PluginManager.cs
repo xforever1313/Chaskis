@@ -67,7 +67,8 @@ namespace Chaskis
         /// </summary>
         /// <param name="absPath">Absolute Path to the assembly to load.</param>
         /// <param name="className">Class name to load (including namespaces)</param>
-        public bool LoadAssembly( string absPath, string className )
+        /// <param name="ircConfig">The irc config we are using.</param>
+        public bool LoadAssembly( string absPath, string className, IIrcConfig ircConfig )
         {
             try
             {
@@ -79,7 +80,7 @@ namespace Chaskis
 
                 // Make instance
                 object instance = Activator.CreateInstance( type );
-                initFunction.Invoke( instance, new object[]{ absPath } );
+                initFunction.Invoke( instance, new object[]{ absPath, ircConfig } );
  
                 IList<IIrcHandler> handlersToAdd = ( IList<IIrcHandler> )getHandlerFunction.Invoke( instance, new Object[]{ } );
                 this.handlers.AddRange( handlersToAdd );
@@ -91,6 +92,13 @@ namespace Chaskis
                 this.logger.WriteLine( e.Message );
                 this.logger.WriteLine();
                 this.logger.WriteLine( e.StackTrace );
+                this.logger.WriteLine();
+                if ( e.InnerException != null )
+                {
+                    this.logger.WriteLine( "Inner Exception:" );
+                    this.logger.WriteLine( e.InnerException.Message );
+                    this.logger.WriteLine( e.InnerException.StackTrace );
+                }
                 this.logger.WriteLine( "*************" );
 
                 return false;

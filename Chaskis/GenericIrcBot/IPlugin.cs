@@ -25,9 +25,10 @@ namespace GenericIrcBot
         /// </summary>
         /// <param name="pluginPath">
         /// The absolute path to the plugin, including the file name.  To just get
-        /// the path to the plugin, call Path.GetFullPath on this argument.
+        /// the path to the plugin, call Path.GetDirectoryName on this argument.
         /// </param>
-        void Init( string pluginPath );
+        /// <param name="ircConfig">The IRC config we are using.</param>
+        void Init( string pluginPath, IIrcConfig ircConfig );
 
         /// <summary>
         /// Gets the handlers that should be added to the main bot.

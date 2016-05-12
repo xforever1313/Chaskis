@@ -18,22 +18,6 @@ namespace Chaskis.Plugins.CowSayBot
         // -------- Fields --------
 
         /// <summary>
-        /// Regex to look for while in IRC.
-        /// </summary>
-        private const string cowsayRegex = 
-            @"!(?<cmd>(" +
-            defaultCommand + ")|(" +
-            tuxCommand + @")|(" +
-            vaderCommand + @")|(" +
-            mooseCommand + @")|(" +
-            lionCommand + @"))\s+(?<cowsayMsg>.+)";
-
-        /// <summary>
-        /// Path to the cowsay binary.
-        /// </summary>
-        private static readonly string cowsayProgram = "/usr/bin/cowsay";
-
-        /// <summary>
         /// Process Start info
         /// </summary>
         private readonly ProcessStartInfo cowSayInfo;
@@ -46,29 +30,24 @@ namespace Chaskis.Plugins.CowSayBot
         private const string defaultCommand = "cowsay";
 
         /// <summary>
-        /// Command user uses to have tux appear.
-        /// </summary>
-        private const string tuxCommand = "tuxsay";
-
-        /// <summary>
-        /// Command user uses to have vader appear.
-        /// </summary>
-        private const string vaderCommand = "vadersay";
-
-        /// <summary>
-        /// Command user uses to have a moose appear.
-        /// </summary>
-        private const string mooseCommand = "moosesay";
-
-        /// <summary>
-        /// Command user uses to have a lion appear.
-        /// </summary>
-        private const string lionCommand = "lionsay";
-
-        /// <summary>
         /// The handlers for this plugin.
         /// </summary>
         private readonly List<IIrcHandler> handlers;
+
+        /// <summary>
+        /// The irc config to use.
+        /// </summary>
+        private IIrcConfig ircConfig;
+
+        /// <summary>
+        /// The cowsay bot config.
+        /// </summary>
+        private CowSayBotConfig cowSayConfig;
+
+        /// <summary>
+        /// Regex to look for to respond to.
+        /// </summary>
+        private string cowsayRegex;
 
         // -------- Constructor --------
 
@@ -81,7 +60,6 @@ namespace Chaskis.Plugins.CowSayBot
             this.cowSayInfo.RedirectStandardInput = true;
             this.cowSayInfo.RedirectStandardOutput = true;
             this.cowSayInfo.UseShellExecute = false;
-            this.cowSayInfo.FileName = cowsayProgram;
 
             this.handlers = new List<IIrcHandler>();
         }
@@ -92,24 +70,45 @@ namespace Chaskis.Plugins.CowSayBot
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin.</param>
-        public void Init( string pluginPath )
+        /// <param name="pluginPath">Path to the plugin dll.</param>
+        /// <param name="config">The irc config to use.</param>
+        public void Init( string pluginPath, IIrcConfig config )
         {
-            if ( File.Exists( cowsayProgram ) == false )
+            string configPath = Path.Combine(
+                Path.GetDirectoryName( pluginPath ),
+                "CowSayBotConfig.xml"
+            );
+
+            if ( File.Exists( configPath ) == false )
             {
-                throw new InvalidOperationException( "Can not load coway program from " + cowsayProgram );
+                throw new FileNotFoundException(
+                    "Can not open " + configPath
+                );
             }
 
-            IIrcHandler cowSayConfig = 
-            new MessageHandler(
-                cowsayRegex,
+            this.ircConfig = config;
+
+            this.cowSayConfig = XmlLoader.LoadCowSayBotConfig( configPath );
+
+            if ( File.Exists( cowSayConfig.ExeCommand ) == false )
+            {
+                throw new InvalidOperationException( "Can not load cowsay program from " + cowSayConfig.ExeCommand );
+            }
+
+            this.cowSayInfo.FileName = cowSayConfig.ExeCommand;
+            this.cowsayRegex = ConstructRegex( this.cowSayConfig );
+
+            Console.WriteLine( "CowSayBot: Using Regex '" + this.cowsayRegex + "'" );
+
+            IIrcHandler cowSayHandler = new MessageHandler(
+                this.cowsayRegex,
                 HandleCowsayCommand,
-                5,
+                ( int ) cowSayConfig.CoolDownTimeSeconds,
                 ResponseOptions.RespondOnlyToChannel
             );
 
             this.handlers.Add(
-                cowSayConfig
+                cowSayHandler
             );
         }
 
@@ -123,6 +122,68 @@ namespace Chaskis.Plugins.CowSayBot
         }
 
         /// <summary>
+        /// Constructs the regex the that calls the Cow Say Handler.
+        /// </summary>
+        /// <param name="config">The cowsay bot config to use.</param>
+        /// <returns>The regex that calls the cowsay handler.</returns>
+        private string ConstructRegex( CowSayBotConfig config )
+        {
+            string commandRegex = @"(?<command>(";
+            foreach ( string command in config.CowFileInfoList.CommandList.Keys )
+            {
+                commandRegex += command + ")|(";
+            }
+            commandRegex = commandRegex.TrimEnd( '|', '(' );
+            commandRegex += ")";
+
+            string cowsayRegex = config.ListenRegex.Replace( "{%saycmd%}", commandRegex );
+            cowsayRegex = cowsayRegex.Replace( "{%channel%}", this.ircConfig.Channel );
+            cowsayRegex = cowsayRegex.Replace( "{%nick%}", this.ircConfig.Nick );
+
+            return cowsayRegex;
+        }
+
+        /// <summary>
+        /// Launches the cowsay sub-process
+        /// </summary>
+        /// <param name="messageToCowsay">The message to put through cowsay.</param>
+        /// <param name="processOutput">The standard-output from the cowsay process.</param>
+        /// <param name="cowFile">The cowfile to use.  Null for none.</param>
+        /// <returns>ExitCode of cowsay.  0 for success.</returns>
+        private int LaunchCowsay( string messageToCowsay, out string processOutput, string cowFile = null )
+        {
+            this.cowSayInfo.Arguments = string.Empty;
+            if ( string.IsNullOrEmpty( cowFile ) == false )
+            {
+                this.cowSayInfo.Arguments = "-f " + cowFile;
+            }
+
+            int exitCode = -1;
+            using ( Process cowsayProc = Process.Start( cowSayInfo ) )
+            {
+                using ( StreamReader stdout = cowsayProc.StandardOutput )
+                {
+                    using ( StreamWriter stdin = cowsayProc.StandardInput )
+                    {
+                        stdin.Write( messageToCowsay );
+                        stdin.Flush();
+                    }
+
+                    processOutput = stdout.ReadToEnd();
+                }
+
+                // If we hang for more than 15 seconds, abort.
+                if ( cowsayProc.WaitForExit( 15 * 1000 ) == false )
+                {
+                    cowsayProc.Kill();
+                }
+                exitCode = cowsayProc.ExitCode;
+            }
+
+            return exitCode;
+        }
+
+        /// <summary>
         /// Handles the cowsay command.
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
@@ -131,81 +192,43 @@ namespace Chaskis.Plugins.CowSayBot
         {
             try
             {
-                Match cowMatch = Regex.Match( response.Message, cowsayRegex );
+                Match cowMatch = Regex.Match( response.Message, this.cowsayRegex );
                 if( cowMatch.Success )
                 {
-                    string messageToCowsay = cowMatch.Groups["cowsayMsg"].Value;
-
-                    // Run the cowsay subprocess.
-                    cowSayInfo.Arguments = GetArguments( cowMatch.Groups["cmd"].Value );
-
-                    string cowSayedMessage = string.Empty;
-                    using( Process cowsayProc = Process.Start( cowSayInfo ) )
+                    string cowFile = this.cowSayConfig.CowFileInfoList.CommandList[cowMatch.Groups["command"].Value];
+                    if ( cowFile == "DEFAULT" )
                     {
-                        using( StreamReader stdout = cowsayProc.StandardOutput )
-                        {
-                            using( StreamWriter stdin = cowsayProc.StandardInput )
-                            {
-                                stdin.Write( messageToCowsay );
-                                stdin.Flush();
-                            }
-
-                            cowSayedMessage = stdout.ReadToEnd();
-                        }
-
-                        // If we hang for more than 15 seconds, abort.
-                        if( cowsayProc.WaitForExit( 15 * 1000 ) == false )
-                        {
-                            cowsayProc.Kill();
-                        }
+                        cowFile = null;
                     }
 
-                    if( string.IsNullOrEmpty( cowSayedMessage ) == false )
+                    string cowSayedMessage;
+                    int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out cowSayedMessage, cowFile );
+
+                    if ( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                     {
                         writer.SendCommand( cowSayedMessage );
+                    }
+                    else if ( exitCode != 0 )
+                    {
+                        Console.Error.WriteLine( "CowSayBot: Exit code not 0.  Got: " +  exitCode );
+                    }
+                    else if ( string.IsNullOrEmpty( cowSayedMessage ) )
+                    {
+                        Console.Error.WriteLine( "CowSayBot: Nothing returned from cowsay process." );
                     }
                 }
                 else
                 {
-                    Console.Error.WriteLine( "Saw unknown line:" + response.Message );
+                    Console.Error.WriteLine( "CowSayBot: Saw unknown line:" + response.Message );
                 }
             }
             catch( Exception e )
             {
                 Console.Error.WriteLine( "*********************" );
-                Console.Error.WriteLine( "Caught Exception:" );
+                Console.Error.WriteLine( "CowSayBot: Caught Exception:" );
                 Console.Error.WriteLine( e.Message );
                 Console.Error.WriteLine( e.StackTrace );
                 Console.Error.WriteLine( "**********************" );
-            }
-        }
-
-        /// <summary>
-        /// Gets the arguments based on the command the user gave us.
-        /// </summary>
-        /// <param name="commandString">The command string the user gave.  e.g. !tuxsay</param>
-        /// <returns>The arguments.</returns>
-        private static string GetArguments( string commandString )
-        {
-            switch( commandString )
-            {
-                case defaultCommand:
-                    return string.Empty;
-
-                case tuxCommand:
-                    return "-f tux";
-
-                case vaderCommand:
-                    return "-f vader";
-
-                case mooseCommand:
-                    return "-f moose";
-
-                case lionCommand:
-                    return "-f moofasa";
-
-                default:
-                    return string.Empty;
             }
         }
     }

@@ -23,11 +23,22 @@ namespace Tests.Plugins.CowSayBot
             string name = "name";
             string command = "namesay";
 
-            CowFileInfo uut = new CowFileInfo( name, command );
+            CowFileInfo uut = new CowFileInfo();
+            uut.CommandList[command] = name;
             Assert.DoesNotThrow( () => uut.Validate() );
 
-            Assert.AreEqual( name, uut.Name );
-            Assert.AreEqual( command, uut.Command );
+            Assert.AreEqual( name, uut.CommandList[command] );
+        }
+
+        /// <summary>
+        /// Ensures that a cow file with no files specfied
+        /// results in a failure.
+        /// </summary>
+        [Test]
+        public void ValidateFailEmptyList()
+        {
+            CowFileInfo uut = new CowFileInfo();
+            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -41,20 +52,23 @@ namespace Tests.Plugins.CowSayBot
             string command = "namesay";
 
             {
-                CowFileInfo uut = new CowFileInfo( name, command );
+                CowFileInfo uut = new CowFileInfo();
+                uut.CommandList[command] = name;
                 Assert.Throws<InvalidOperationException>( () => uut.Validate() );
             }
 
             name = null;
 
             {
-                CowFileInfo uut = new CowFileInfo( name, command );
+                CowFileInfo uut = new CowFileInfo();
+                uut.CommandList[command] = name;
                 Assert.Throws<InvalidOperationException>( () => uut.Validate() );
             }
 
             name = "     ";
             {
-                CowFileInfo uut = new CowFileInfo( name, command );
+                CowFileInfo uut = new CowFileInfo();
+                uut.CommandList[command] = name;
                 Assert.Throws<InvalidOperationException>( () => uut.Validate() );
             }
         }
@@ -70,20 +84,15 @@ namespace Tests.Plugins.CowSayBot
             string command = string.Empty;
 
             {
-                CowFileInfo uut = new CowFileInfo( name, command );
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
-            }
-
-            command = null;
-
-            {
-                CowFileInfo uut = new CowFileInfo( name, command );
+                CowFileInfo uut = new CowFileInfo();
+                uut.CommandList[command] = name;
                 Assert.Throws<InvalidOperationException>( () => uut.Validate() );
             }
 
             command = "     ";
             {
-                CowFileInfo uut = new CowFileInfo( name, command );
+                CowFileInfo uut = new CowFileInfo();
+                uut.CommandList[command] = name;
                 Assert.Throws<InvalidOperationException>( () => uut.Validate() );
             }
         }
@@ -97,19 +106,13 @@ namespace Tests.Plugins.CowSayBot
             string name = "name";
             string command = "namesay";
 
-            CowFileInfo uut1 = new CowFileInfo( name, command );
+            CowFileInfo uut1 = new CowFileInfo();
+            uut1.CommandList[command] = name;
             CowFileInfo uut2 = uut1.Clone();
 
             Assert.AreNotSame( uut1, uut2 );
 
-            Assert.AreEqual( uut1.Name, uut2.Name );
-            Assert.AreEqual( uut1.Command, uut2.Command );
-
-            Assert.AreEqual( name, uut1.Name );
-            Assert.AreEqual( command, uut1.Command );
-
-            Assert.AreEqual( name, uut2.Name );
-            Assert.AreEqual( command, uut2.Command );
+            Assert.AreEqual( uut1.CommandList[command], uut2.CommandList[command] );
         }
     }
 }

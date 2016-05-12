@@ -50,7 +50,11 @@ namespace ChaskisService
 
                         foreach ( AssemblyConfig pluginInfo in pluginList )
                         {
-                            bool success = manager.LoadAssembly( Path.GetFullPath( pluginInfo.AssemblyPath ), pluginInfo.ClassName );
+                            bool success = manager.LoadAssembly(
+                                Path.GetFullPath( pluginInfo.AssemblyPath ),
+                                pluginInfo.ClassName,
+                                ircConfig
+                            );
                             if ( ( success == false ) )
                             {
                                 this.ExitCode = 1;

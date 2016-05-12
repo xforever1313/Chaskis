@@ -46,7 +46,8 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// starting services, etc.
         /// </summary>
         /// <param name="pluginPath">Path to the plugin.</param>
-        public void Init( string pluginPath )
+        /// <param name="ircConfig">The IRC config to use.</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig )
         {
             if( this.isLoaded == false )
             {
