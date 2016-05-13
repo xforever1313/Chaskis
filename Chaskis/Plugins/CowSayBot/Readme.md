@@ -26,8 +26,8 @@ CowsayBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chas
 <assembly path="/home/cowsaybot/.config/Chaskis/Plugins/CowSayBot/CowSayBot.dll" classname="Chaskis.Plugins.CowSayBot.CowSayBot" />
 
 You must have cowsay installed.  Install it using your favorite package manager:
-Arch: pacman -S cowsay
-Debian: apt-get install cowsay
+* Arch: pacman -S cowsay
+* Debian: apt-get install cowsay
 
 Configuring
 =====
