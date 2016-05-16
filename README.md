@@ -21,3 +21,5 @@ Install Instructions
 
 Writing Plugins
 ----------------
+
+See WritingPlugins.md for more information.
