@@ -39,6 +39,7 @@ namespace Tests
             ircConfig.Nick = "SomeNick";
             ircConfig.RealName = "Some Real Name";
             ircConfig.Password = "Password";
+            ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
 
             return ircConfig;
         }

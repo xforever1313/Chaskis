@@ -5,6 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SethCS.Exceptions;
 
 namespace GenericIrcBot
@@ -50,6 +52,22 @@ namespace GenericIrcBot
         /// </summary>
         string Password { get; }
 
+        /// <summary>
+        /// Dictionary of bots that act as bridges to other clients (e.g. telegram).
+        /// Key is the bridge's user name
+        /// Value a regex.  Must include (?<bridgeUser>) and (<bridgeMessage>) regex groups.
+        /// somewhere in it so we can tell who the user name from the bridged service and what the
+        /// message was.
+        /// 
+        /// For example, if your bridge bot will output message in the form of:
+        /// bridgeUser: This is the user's message from the bridge
+        /// then your regex should be:
+        /// (?<bridgeUser>\w+:)\s+(?<bridgeMessage>.+)
+        /// 
+        /// If you have no bridges to watch in your channel, leave this blank.
+        /// </summary>
+        IDictionary<string, string> BridgeBots { get; }
+
         // -------- Functions ---------
 
         /// <summary>
@@ -92,6 +110,7 @@ namespace GenericIrcBot
             this.Nick = "SomeIrcBot";
             this.RealName = "Some IRC Bot";
             this.Password = string.Empty;
+            this.BridgeBots = new Dictionary<string, string>();
         }
 
         // -------- Properties --------
@@ -132,6 +151,13 @@ namespace GenericIrcBot
         /// </summary>
         public string Password { get; set; }
 
+        /// <summary>
+        /// Mutable Dictionary of bots that act as bridges to other clients (e.g. telegram).
+        /// Key is the bridge's user name
+        /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
+        /// </summary>
+        public IDictionary<string, string> BridgeBots { get; private set; }
+
         // --------- Functions --------
 
         /// <summary>
@@ -139,7 +165,9 @@ namespace GenericIrcBot
         /// </summary>
         public IIrcConfig Clone()
         {
-            return ( IrcConfig ) this.MemberwiseClone();
+            IrcConfig clone = ( IrcConfig ) this.MemberwiseClone();
+            clone.BridgeBots = new Dictionary<string, string>( clone.BridgeBots );
+            return clone;
         }
 
         /// <summary>
@@ -150,21 +178,7 @@ namespace GenericIrcBot
         /// <returns>True if the given object is equal to this one, else false.</returns>
         public override bool Equals( object obj )
         {
-            IIrcConfig other = obj as IIrcConfig;
-
-            if ( other == null )
-            {
-                return false;
-            }
-
-            return
-                ( this.Server == other.Server ) &&
-                ( this.Channel == other.Channel ) &&
-                ( this.Port == other.Port ) &&
-                ( this.UserName == other.UserName ) &&
-                ( this.Nick == other.Nick ) &&
-                ( this.RealName == other.RealName ) &&
-                ( this.Password == other.Password );
+            return IrcConfigHelpers.Equals( this, obj );
         }
 
         /// <summary>
@@ -211,6 +225,7 @@ namespace GenericIrcBot
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             this.wrappedConfig = config;
+            this.BridgeBots = new ReadOnlyDictionary<string, string>( config.BridgeBots );
         }
 
         // -------- Properties --------
@@ -322,6 +337,13 @@ namespace GenericIrcBot
             }
         }
 
+        /// <summary>
+        /// Read-only Dictionary of bots that act as bridges to other clients (e.g. telegram).
+        /// Key is the bridge's user name
+        /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
+        /// </summary>
+        public IDictionary<string, string> BridgeBots { get; private set; }
+
         // -------- Functions --------
 
         /// <summary>
@@ -340,16 +362,7 @@ namespace GenericIrcBot
         /// <returns>True if the given object is equal to this one, else false.</returns>
         public override bool Equals( object obj )
         {
-            IIrcConfig other = obj as IIrcConfig;
-
-            return
-                ( this.Server == other.Server ) &&
-                ( this.Channel == other.Channel ) &&
-                ( this.Port == other.Port ) &&
-                ( this.UserName == other.UserName ) &&
-                ( this.Nick == other.Nick ) &&
-                ( this.RealName == other.RealName ) &&
-                ( this.Password == other.Password );
+            return IrcConfigHelpers.Equals( this, obj );
         }
 
         /// <summary>
@@ -428,12 +441,92 @@ namespace GenericIrcBot
                 errorString += "RealName can not be null or empty" + Environment.NewLine;
                 success = false;
             }
+            // Bridge bots MAY be empty, but can not be null.
+            if ( config.BridgeBots == null )
+            {
+                errorString += "BridgeBots can not be null" + Environment.NewLine;
+                success = false;
+            }
+            else
+            {
+                foreach ( KeyValuePair<string, string> bridgeBot in config.BridgeBots )
+                {
+                    if ( string.IsNullOrEmpty( bridgeBot.Key ) )
+                    {
+                        errorString += "BrideBots can not have empty or null Key" + Environment.NewLine;
+                        success = false;
+                    }
+                    if ( string.IsNullOrEmpty( bridgeBot.Value ) )
+                    {
+                        errorString += "BrideBots " + bridgeBot.Key + " can not have empty or null Value" + Environment.NewLine;
+                        success = false;
+                    }
+                    else
+                    {
+                        if ( bridgeBot.Value.Contains( @"?<bridgeUser>" ) == false )
+                        {
+                            errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeUser' in it" + Environment.NewLine;
+                            success = false;
+                        }
+                        if ( bridgeBot.Value.Contains( @"?<bridgeMessage>" ) == false )
+                        {
+                            errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeMessage' in it" + Environment.NewLine;
+                            success = false;
+                        }
+                    }
+                }
+            }
 
             // Password can be empty, its optional on servers.
+
             if ( success == false )
             {
                 throw new ApplicationException( errorString );
             }
+        }
+
+        /// <summary>
+        /// Checks to see if the given IIrcConfig object is the same
+        /// as the given object.
+        /// </summary>
+        /// <param name="config1">The IIrcConfig object to check.</param>
+        /// <param name="obj">The object to check.</param>
+        /// <returns>True if the given object is equal to this one, else false.</returns>
+        internal static bool Equals( IIrcConfig config1, object config2 )
+        {
+            IIrcConfig other = config2 as IIrcConfig;
+
+            bool isEqual =
+                ( config1.Server == other.Server ) &&
+                ( config1.Channel == other.Channel ) &&
+                ( config1.Port == other.Port ) &&
+                ( config1.UserName == other.UserName ) &&
+                ( config1.Nick == other.Nick ) &&
+                ( config1.RealName == other.RealName ) &&
+                ( config1.Password == other.Password ) &&
+                ( config1.BridgeBots.Count == other.BridgeBots.Count );
+
+            if ( isEqual )
+            {
+                foreach ( KeyValuePair<string, string> bridgeBot in config1.BridgeBots )
+                {
+                    if ( other.BridgeBots.ContainsKey( bridgeBot.Key ) )
+                    {
+                        if ( bridgeBot.Value != other.BridgeBots[bridgeBot.Key] )
+                        {
+                            isEqual = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            return isEqual;
         }
     }
 }

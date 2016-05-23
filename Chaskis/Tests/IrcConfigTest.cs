@@ -53,6 +53,11 @@ namespace Tests
             Assert.AreEqual( interfaceIrcConfig, roIrcConfig );
             Assert.AreEqual( roIrcConfig, interfaceIrcConfig );
 
+            // BridgeBots should not be same reference.
+            Assert.AreNotSame( interfaceIrcConfig.BridgeBots, this.ircConfig.BridgeBots );
+            Assert.AreNotSame( roIrcConfig, this.ircConfig.BridgeBots );
+            Assert.AreNotSame( interfaceIrcConfig.BridgeBots, roIrcConfig.BridgeBots );
+
             // Next, start changing things.  Everything should become false.
             this.ircConfig.Server = "irc.somewhere.net";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
@@ -81,6 +86,16 @@ namespace Tests
             this.ircConfig.Password = "ABadPassword";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Add an additional bot.
+            this.ircConfig.BridgeBots["slackBridge"] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Change an existing bot's value.
+            this.ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUser>\w+)-\s+(?<bridgeMessage>.+)";
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
 
         /// <summary>
@@ -99,6 +114,7 @@ namespace Tests
             Assert.AreEqual( this.ircConfig.Nick, config.Nick );
             Assert.AreEqual( this.ircConfig.RealName, config.RealName );
             Assert.AreEqual( this.ircConfig.Password, config.Password );
+            Assert.AreNotSame( this.ircConfig.BridgeBots, config.BridgeBots ); // Should not be same reference.
 
             // Next, ensure trying to convert to an IRCConfig results in a null (someone's going to do this).
             Assert.IsNull( config as IrcConfig );
@@ -172,6 +188,12 @@ namespace Tests
             Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
             Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
 
+            // Empty bridge bots config should be valid.
+            this.ircConfig.BridgeBots.Clear();
+            Assert.DoesNotThrow( () => this.ircConfig.Validate() );
+            Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
+            Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
+
             // Empty password should validate
             this.ircConfig.Password = string.Empty;
             Assert.DoesNotThrow( () => this.ircConfig.Validate() );
@@ -203,6 +225,31 @@ namespace Tests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
             this.ircConfig.RealName = string.Empty;
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // No bridge message
+            this.ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUser>\w+)-\s+(?<bridgeMsg>.+)";
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // No bridge user
+            this.ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUsr>\w+)-\s+(?<bridgeMessage>.+)";
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Empty string.
+            this.ircConfig.BridgeBots["telegrambot"] = string.Empty;
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // null string.
+            this.ircConfig.BridgeBots["telegrambot"] = null;
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Empty key
+            this.ircConfig.BridgeBots[string.Empty] = @"(?<bridgeUser>\w+)-\s+(?<bridgeMessage>.+)";
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
