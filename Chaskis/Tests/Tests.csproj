@@ -90,6 +90,7 @@
     <Content Include="TestFiles\InvalidIrcConfigEmptyPort.xml" />
     <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
     <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithBridgeBots.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
     <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
   </ItemGroup>

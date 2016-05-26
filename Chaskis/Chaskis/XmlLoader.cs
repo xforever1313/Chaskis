@@ -84,6 +84,32 @@ namespace Chaskis
                         config.RealName = childNode.InnerText;
                         break;
 
+                    case "bridgebots":
+                        foreach ( XmlNode bridgeBotNode in childNode.ChildNodes )
+                        {
+                            if ( bridgeBotNode.Name == "bridgebot" )
+                            {
+                                string botName = string.Empty;
+                                string botRegex = string.Empty;
+
+                                foreach ( XmlAttribute attr in bridgeBotNode.Attributes )
+                                {
+                                    switch ( attr.Name )
+                                    {
+                                        case "botname":
+                                            botName = attr.Value;
+                                            break;
+
+                                        case "botregex":
+                                            botRegex = attr.Value;
+                                            break;
+                                    }
+                                }
+                                config.BridgeBots.Add( botName, botRegex );
+                            }
+                        }
+                        break;
+
                     case "password":
                         config.Password = childNode.InnerText;
                         break;

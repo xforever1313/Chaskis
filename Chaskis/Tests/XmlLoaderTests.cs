@@ -22,9 +22,10 @@ namespace Tests
         /// <summary>
         /// Where the test xml files are located.
         /// </summary>
-        private static readonly string testXmlFiles = Path.Combine(
-                                                          "..", "..", "TestFiles"
-                                                      );
+        private static readonly string testXmlFiles = 
+            Path.Combine(
+                "..", "..", "TestFiles"
+            );
 
         /// <summary>
         /// The IRC Config to use.  Based off of the XML files.
@@ -55,8 +56,23 @@ namespace Tests
         public void TestValidXmlWithPassword()
         {
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithPassword.xml" )
-                                );
+                Path.Combine( testXmlFiles, "ValidIrcConfigWithPassword.xml" )
+            );
+            Assert.AreEqual( this.ircConfig, config );
+        }
+
+        /// <summary>
+        /// Tests an XML file that is valid and contains a password.
+        /// </summary>
+        [Test]
+        public void TestValidXmlWithPasswordAndBridgeBots()
+        {
+            this.ircConfig.BridgeBots.Add( "telegrambot", @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
+            this.ircConfig.BridgeBots.Add( "slackbot", @"(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
+
+            IIrcConfig config = XmlLoader.ParseIrcConfig(
+                Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )
+            );
             Assert.AreEqual( this.ircConfig, config );
         }
 

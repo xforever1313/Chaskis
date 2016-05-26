@@ -11,6 +11,22 @@ to that pasted file instead of having to use the one located in ApplicationData
 The server and channel are required.  No field can be an empty string.  Port can not be negative.
 Password is optional.
 
+Bridge bots, meanwhile, are IRC bots that bridge other services such as telegram or slack.
+Typically in a channel, bridge bots like this:
+
+<telegrambot> telegramUser: Hello IRC channel!
+<ircUser> Hello telegramUser!
+
+If the channel has bridge bots that you want Chaskis to interact with, you'll need to configure
+those in the commented out <bridgebots> tags.  The botname is the bridge bot's nick name in the channel.
+The bot regex, meanwhile, is the pattern the bridge bot will print when a user on the service is bridges
+says something.  For example, in the above example, telegrambot will print out "userName: message" when
+a user in the bridged service says something. So the regex you'll have to give it is
+(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+).  You MUST specify these two groups (bridgeUser and bridgeMessage)
+somewhere inside the botregex for the thing to work.  The bridge user is the username of the person on the
+bridge.  The bridgeMessage is the message they sent.  Chaskis, under the hood, will treat the bridgeUser
+as the nick and the bridgeMessage as the message when processing privmsg events.
+
 -->
 <ircbotconfig>
 	<server>irc.testdomain.com</server>
@@ -20,4 +36,10 @@ Password is optional.
 	<nick>testbot</nick>
 	<realname>test bot</realname>
 	<password>apassword</password>
+    <!--
+    <bridgebots>
+        <bridgebot botname="telegrambot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
+        <bridgebot botname="slackbot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
+    </bridgebots>
+    -->
 </ircbotconfig>
