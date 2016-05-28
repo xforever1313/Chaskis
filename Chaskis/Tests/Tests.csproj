@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IrcConfigTest.cs" />
+    <Compile Include="MessageHandlerTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
     <Compile Include="JoinHandlerTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />

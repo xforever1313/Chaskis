@@ -25,7 +25,8 @@ a user in the bridged service says something. So the regex you'll have to give i
 (?<bridgeUser>\w+):\s+(?<bridgeMessage>.+).  You MUST specify these two groups (bridgeUser and bridgeMessage)
 somewhere inside the botregex for the thing to work.  The bridge user is the username of the person on the
 bridge.  The bridgeMessage is the message they sent.  Chaskis, under the hood, will treat the bridgeUser
-as the nick and the bridgeMessage as the message when processing privmsg events.
+as the nick and the bridgeMessage as the message when processing privmsg events.  Note, if the regex fails
+to match Chaskis will treat the bridge bot as a regular user.
 
 -->
 <ircbotconfig>

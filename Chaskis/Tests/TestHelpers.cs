@@ -23,6 +23,11 @@ namespace Tests
         );
 
         /// <summary>
+        /// A bridge bot that is in the channel.
+        /// </summary>
+        public const string BridgeBotUser = "telegrambot";
+
+        /// <summary>
         /// Path to the TestFiles directory of the Tests directory.
         /// </summary>
         public static readonly string TestFilesDir = Path.Combine(
@@ -39,7 +44,7 @@ namespace Tests
             ircConfig.Nick = "SomeNick";
             ircConfig.RealName = "Some Real Name";
             ircConfig.Password = "Password";
-            ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
+            ircConfig.BridgeBots[BridgeBotUser] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
 
             return ircConfig;
         }

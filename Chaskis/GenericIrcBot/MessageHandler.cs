@@ -20,10 +20,15 @@ namespace GenericIrcBot
         /// </summary>
         public const string IrcCommand = "PRIVMSG";
 
+
+        // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
         /// The pattern to search for when a line comes in.
         /// </summary>
-        private readonly Regex pattern;
+        private static readonly Regex pattern = new Regex(
+            @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<theIrcMessage>.+)",
+            RegexOptions.Compiled
+        );
 
         /// <summary>
         /// Constructor.
@@ -57,12 +62,6 @@ namespace GenericIrcBot
             this.RespondToSelf = respondToSelf;
             this.ResponseOption = responseOption;
             this.LastEvent = DateTime.MinValue;
-
-            // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
-            this.pattern = new Regex(
-                @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<msg>" + lineRegex + ")",
-                RegexOptions.Compiled
-            );
         }
 
         // -------- Properties --------
@@ -112,14 +111,48 @@ namespace GenericIrcBot
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
             ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
 
-            Match match = this.pattern.Match( line );
+            Match match = pattern.Match( line );
             if( match.Success )
             {
+                string nick = match.Groups["nick"].Value;
+                string channel = match.Groups["channel"].Value;
+                string message = match.Groups["theIrcMessage"].Value;
+
+                // If we are a bridge bot, we need to change
+                // the nick and the channel 
+                if ( ircConfig.BridgeBots.ContainsKey( nick ) )
+                {
+                    Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[nick] );
+
+                    // If the regex matches, then we'll update the nick and message
+                    // to be whatever came from the bridge.
+                    if ( bridgeBotMatch.Success )
+                    {
+                        string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
+                        string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
+
+                        // Only change the nick anme and the message if the nick and the message aren't empty.
+                        if ( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
+                        {
+                            nick = newNick;
+                            message = newMessage;
+                        }
+                    }
+                }
+
+                // Take the message from the PRIVMSG and see if it matches the regex this class is watching.
+                // If not, return and do nothing.
+                Match messageMatch = Regex.Match( message, this.LineRegex );
+                if ( messageMatch.Success == false )
+                {
+                    return;
+                }
+
                 IrcResponse response = new IrcResponse(
-                                           match.Groups["nick"].Value,
-                                           match.Groups["channel"].Value,
-                                           match.Groups["msg"].Value
-                                       );
+                    nick,
+                    channel,
+                    message
+                );
 
                 // Return right away if the nick name from the remote user is our own.
                 if( ( this.RespondToSelf == false ) && ( response.RemoteUser.ToUpper() == ircConfig.Nick.ToUpper() ) )
