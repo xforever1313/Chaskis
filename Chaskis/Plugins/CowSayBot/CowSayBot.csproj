@@ -65,4 +65,7 @@
   <ItemGroup>
     <Content Include="Config\SampleCowSayBotConfig.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md" />
+  </ItemGroup>
 </Project>
