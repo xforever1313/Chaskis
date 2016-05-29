@@ -54,6 +54,7 @@
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
+    <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />
@@ -75,6 +76,10 @@
       <Project>{c82ec85e-1885-4f71-ba54-81ef08d169f6}</Project>
       <Name>CowSayBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\WeatherBot\WeatherBot.csproj">
+      <Project>{0fb1c4e1-91c0-4988-bf4a-a9a1624df5a8}</Project>
+      <Name>WeatherBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -82,6 +87,11 @@
   <ItemGroup>
     <None Include="Plugins\CowSayBot\TestFiles\cowsay" />
     <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\BadReport.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\SampleError.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\SampleReport.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\InvalidLatLon.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\SampleZipCodeResponse.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />

@@ -1,0 +1,12 @@
+﻿<error>
+    <h2>SOAP ERROR</h2>
+    <pre>
+        Array
+        (
+        [faultcode] => SERVER
+        [faultactor] =>
+        [faultstring] => Error with one or more zip codes:
+        [detail] => <error>Error: Zip code "123" is not a valid US zip code</error>
+        )
+    </pre>
+</error>
