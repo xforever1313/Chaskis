@@ -89,6 +89,8 @@
     <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\BadReport.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\SampleError.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\InvalidZipCode.xml" />
+    <Content Include="Plugins\WeatherBot\TestFiles\SampleZipError.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\SampleReport.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\InvalidLatLon.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\SampleZipCodeResponse.xml" />

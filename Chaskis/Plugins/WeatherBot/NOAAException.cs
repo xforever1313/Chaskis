@@ -34,7 +34,12 @@ namespace Chaskis.Plugins.WeatherBot
         /// Invalid lat/long string when getting the coordinates
         /// of a zip code.
         /// </summary>
-        InvalidLatLon
+        InvalidLatLon,
+
+        /// <summary>
+        /// Invalid ZIP code.
+        /// </summary>
+        InvalidZip
     }
 
     /// <summary>

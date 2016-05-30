@@ -79,7 +79,32 @@ namespace Tests.Plugins.WeatherBot
         /// Tests to make sure we can handle a SOAP error from NOAA properly.
         /// </summary>
         [Test]
-        public void TestErrorResponse()
+        public void TestZipErrorResponse()
+        {
+            string xml = ReadFile( Path.Combine( testFilesLocation, "SampleZipError.xml" ) );
+
+            {
+                NOAAException error = Assert.Throws<NOAAException>( () =>
+                    XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
+                );
+
+                Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
+            }
+
+            {
+                NOAAException error = Assert.Throws<NOAAException>( () =>
+                    XmlLoader.ParseWeatherReport( xml, defaultZip )
+                );
+
+                Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
+            }
+        }
+
+        /// <summary>
+        /// Tests to make sure we can handle a generic SOAP error from NOAA properly.
+        /// </summary>
+        [Test]
+        public void TestGenericErrorResponse()
         {
             string xml = ReadFile( Path.Combine( testFilesLocation, "SampleError.xml" ) );
 
@@ -98,6 +123,20 @@ namespace Tests.Plugins.WeatherBot
 
                 Assert.AreEqual( NOAAErrors.SOAPError, error.ErrorCode );
             }
+        }
+
+        /// <summary>
+        /// Tests to make sure we can handle when NOAA returns a bad zip code.
+        /// </summary>
+        [Test]
+        public void TestBadZipCode()
+        {
+            string xml = ReadFile( Path.Combine( testFilesLocation, "InvalidZipCode.xml" ) );
+            NOAAException error = Assert.Throws<NOAAException>( () =>
+                XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
+            );
+
+            Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
         }
 
         /// <summary>

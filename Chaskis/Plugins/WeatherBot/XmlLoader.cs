@@ -118,7 +118,17 @@ namespace Chaskis.Plugins.WeatherBot
 
             }
 
-            string[] latLongString = zipcodeNodes[0].InnerText.Split( ',' );
+            string response = zipcodeNodes[0].InnerText;
+            // If response is just a comma, the zip is invalid.
+            if ( response == "," )
+            {
+                throw new NOAAException(
+                    NOAAErrors.InvalidZip,
+                    "Error with one or more zip codes: Error: Zip code \"" + zipCode + "\" is not a valid US zip code"
+                );
+            }
+
+            string[] latLongString = response.Split( ',' );
 
             if ( latLongString.Count() != 2 )
             {
@@ -141,9 +151,19 @@ namespace Chaskis.Plugins.WeatherBot
             Match errorMatch = errorRegex.Match( noaaXml );
             if ( errorMatch.Success )
             {
+                NOAAErrors error;
+                if ( errorMatch.Groups["errorStr"].Value.Contains( "not a valid US zip code" ) )
+                {
+                    error = NOAAErrors.InvalidZip;
+                }
+                else
+                {
+                    error = NOAAErrors.SOAPError;
+                }
+
                 // Throw an application exception, though from the error message from NOAA.
                 throw new NOAAException(
-                    NOAAErrors.SOAPError,
+                    error,
                     errorMatch.Groups["fault"].Value + " " + errorMatch.Groups["errorStr"].Value
                 );
             }

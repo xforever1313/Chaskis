@@ -4,6 +4,8 @@
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+using System;
+
 namespace Chaskis.Plugins.WeatherBot
 {
     /// <summary>
@@ -25,6 +27,8 @@ namespace Chaskis.Plugins.WeatherBot
             this.ApparentTemp = "??";
             this.CurrentConditions = "Unknown Conditions";
             this.ChanceOfPrecipitation = "??";
+
+            this.ConstructionTime = DateTime.UtcNow;
         }
 
         // -------- Properties --------
@@ -64,6 +68,11 @@ namespace Chaskis.Plugins.WeatherBot
         /// The chance of precipitation (e.g. rain or snow).
         /// </summary>
         public string ChanceOfPrecipitation { get; set; }
+
+        /// <summary>
+        /// Timestamp of when this object was constructed (UTC).
+        /// </summary>
+        public DateTime ConstructionTime { get; private set; }
         
         // -------- Functions --------
 

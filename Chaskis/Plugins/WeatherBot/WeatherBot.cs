@@ -73,6 +73,13 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         private const int cooldown = 15;
 
+        /// <summary>
+        /// NOAA requests that we do not query the SOAP service more than an hour
+        /// at a time.  We will cache our results for an hour in this dictionary.
+        /// Key is the zip code, value is the weather report.
+        /// </summary>
+        private static Dictionary<string, WeatherReport> reportCache;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -81,6 +88,7 @@ namespace Chaskis.Plugins.WeatherBot
         public WeatherBot()
         {
             this.handlers = new List<IIrcHandler>();
+            reportCache = new Dictionary<string, WeatherReport>();
         }
 
         // -------- Functions --------
@@ -117,17 +125,58 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private static async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
         {
+            string zip = string.Empty;
             try
             {
                 Match match = Regex.Match( response.Message, weatherCommand );
                 if ( match.Success )
                 {
-                    string zip = match.Groups["zipCode"].Value;
+                    zip = match.Groups["zipCode"].Value;
 
-                    // Run in background.
-                    WeatherReport report = await QueryNOAA( zip );
-                    writer.SendCommand( report.ToString() );
+                    if ( reportCache.ContainsKey( zip ) )
+                    {
+                        // If our cache reports a null, its an invalid zip code.  Print error message.
+                        if ( reportCache[zip] == null )
+                        {
+                            Console.WriteLine( "WeatherBot: Zip is invalid, printing error." );
+                            writer.SendCommand(
+                                "Error with one or more zip codes: Error: Zip code \"" + zip + "\" is not a valid US zip code"
+                            );
+                        }
+                        // Otherwise, if the value in our cache is old, get updated info.
+                        else if ( ( DateTime.UtcNow - reportCache[zip].ConstructionTime ).TotalHours >= 1 )
+                        {
+                            // Get the weather report in the background.
+                            Console.WriteLine( "WeatherBot: Value in cache is old, getting new value." );
+                            WeatherReport report = await QueryNOAA( zip );
+                            writer.SendCommand( report.ToString() );
+                            reportCache[zip] = report;
+                        }
+                        // Otherwise, our cache is still new, do not query NOAA, just return our cache.
+                        else
+                        {
+                            Console.WriteLine( "WeatherBot: Value in cache is new, sending cached value." );
+                            writer.SendCommand( reportCache[zip].ToString() );
+                        }
+                    }
+                    else
+                    {
+                        // Get the weather report in the background.
+                        Console.WriteLine( "WeatherBot: Value not in cache, querying NOAA." );
+                        WeatherReport report = await QueryNOAA( zip );
+                        writer.SendCommand( report.ToString() );
+                        reportCache[zip] = report;
+                    }
                 }
+            }
+            catch ( NOAAException err )
+            {
+                if ( err.ErrorCode == NOAAErrors.InvalidZip )
+                {
+                    reportCache[zip] = null; // Invalid zip, no sense wasting our time querying the SOAP service next time around.
+                }
+
+                writer.SendCommand( err.Message );
             }
             catch ( Exception err )
             {
@@ -156,7 +205,7 @@ namespace Chaskis.Plugins.WeatherBot
                         latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
                     }
 
-                    WeatherReport report = new WeatherReport();
+                    WeatherReport report = null;
                     using ( WebClient client = new WebClient() )
                     {
                         client.QueryString.Add( "whichClient", "GmlLatLonList" );

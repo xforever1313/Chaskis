@@ -5,8 +5,8 @@
         (
         [faultcode] => SERVER
         [faultactor] =>
-        [faultstring] => Error with something:
-        [detail] => <error>This is a generic SOAP error.</error>
+        [faultstring] => Error with one or more zip codes:
+        [detail] => <error>Error: Zip code "123" is not a valid US zip code</error>
         )
     </pre>
 </error>
