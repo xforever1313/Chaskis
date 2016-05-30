@@ -6,9 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GenericIrcBot;
@@ -106,7 +104,28 @@ namespace Chaskis.Plugins.WeatherBot
                 cooldown
             );
 
+            MessageHandler helpHandler = new MessageHandler(
+                @"!weather\s+help",
+                HandleHelpCommand,
+                cooldown
+            );
+
+            MessageHandler aboutHandler = new MessageHandler(
+                @"!weather\s+about",
+                HandleAboutCommand,
+                cooldown
+            );
+
+            MessageHandler sourceCodeHandler = new MessageHandler(
+                @"!weather\s+sourcecode",
+                HandleSourceCodeCommand,
+                cooldown
+            );
+
             this.handlers.Add( weatherHandler );
+            this.handlers.Add( helpHandler );
+            this.handlers.Add( aboutHandler );
+            this.handlers.Add( sourceCodeHandler );
         }
 
         /// <summary>
@@ -116,6 +135,44 @@ namespace Chaskis.Plugins.WeatherBot
         public IList<IIrcHandler> GetHandlers()
         {
             return this.handlers.AsReadOnly();
+        }
+
+        // ---- Handlers ----
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
+        {
+            writer.SendCommand(
+                "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown."
+            );
+        }
+
+        /// <summary>
+        /// Handles the about command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private static void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
+        {
+            writer.SendCommand(
+                "I am weather bot. I am a plugin for the Chaskis IRC bot framework. I pull data from NOAA's XML SOAP service."
+            );
+        }
+
+        /// <summary>
+        /// Handles the source code command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private static void HandleSourceCodeCommand( IIrcWriter writer, IrcResponse response )
+        {
+            writer.SendCommand(
+                "My source code is here: https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/WeatherBot"
+            );
         }
 
         /// <summary>
@@ -194,6 +251,7 @@ namespace Chaskis.Plugins.WeatherBot
             return Task.Run(
                 delegate ()
                 {
+                    // First, get the Lat/Long of the zip code.
                     Tuple<string, string> latLon;
                     using ( WebClient client = new WebClient() )
                     {
@@ -205,6 +263,7 @@ namespace Chaskis.Plugins.WeatherBot
                         latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
                     }
 
+                    // Next, get the weather report.
                     WeatherReport report = null;
                     using ( WebClient client = new WebClient() )
                     {
