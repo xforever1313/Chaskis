@@ -75,7 +75,7 @@ namespace Chaskis.Plugins.WeatherBot
         public override string ToString()
         {
             return string.Format(
-                "Weather for {0} - Currently {1}, {2}F (feels like {3}F).  High: {4}F. Low: {5}F. Chance of Precipitation: {6}%.",
+                "Weather for {0} - {1}, {2}F (feels like {3}F).  High: {4}F. Low: {5}F. Chance of Precipitation: {6}%.",
                 this.ZipCode,
                 this.CurrentConditions,
                 this.CurrentTemp,

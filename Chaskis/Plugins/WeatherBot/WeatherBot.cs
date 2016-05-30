@@ -7,7 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GenericIrcBot;
 
@@ -56,7 +58,20 @@ namespace Chaskis.Plugins.WeatherBot
     {
         // -------- Fields --------
 
+        /// <summary>
+        /// The command to trigger the weather bot.
+        /// </summary>
+        private const string weatherCommand = @"!weather\s+(?<zipCode>\d{5})";
+
+        /// <summary>
+        /// List of handlers.
+        /// </summary>
         private List<IIrcHandler> handlers;
+
+        /// <summary>
+        /// The cooldown for the bot.
+        /// </summary>
+        private const int cooldown = 15;
 
         // -------- Constructor --------
 
@@ -77,7 +92,13 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="ircConfig">The IRC config being used.</param>
         public void Init( string pluginPath, IIrcConfig ircConfig )
         {
+            MessageHandler weatherHandler = new MessageHandler(
+                weatherCommand,
+                HandleWeatherCommand,
+                cooldown
+            );
 
+            this.handlers.Add( weatherHandler );
         }
 
         /// <summary>
@@ -87,6 +108,76 @@ namespace Chaskis.Plugins.WeatherBot
         public IList<IIrcHandler> GetHandlers()
         {
             return this.handlers.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Handles the weather command by doing a GET request to NOAA's API
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private static async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
+        {
+            try
+            {
+                Match match = Regex.Match( response.Message, weatherCommand );
+                if ( match.Success )
+                {
+                    string zip = match.Groups["zipCode"].Value;
+
+                    // Run in background.
+                    WeatherReport report = await QueryNOAA( zip );
+                    writer.SendCommand( report.ToString() );
+                }
+            }
+            catch ( Exception err )
+            {
+                writer.SendCommand( err.Message );
+            }
+        }
+
+        /// <summary>
+        /// Queries NOAA in the backgroud.
+        /// </summary>
+        /// <param name="zip">The ZIP code to get weather information from.</param>
+        /// <returns>The weather report from NOAA.</returns>
+        private static Task<WeatherReport> QueryNOAA( string zip )
+        {
+            return Task.Run(
+                delegate ()
+                {
+                    Tuple<string, string> latLon;
+                    using ( WebClient client = new WebClient() )
+                    {
+                        client.QueryString.Add( "whichClient", "LatLonListZipCode" );
+                        client.QueryString.Add( "listZipCodeList", zip );
+                        client.QueryString.Add( "Submit", "Submit" );
+                        
+                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
+                        latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
+                    }
+
+                    WeatherReport report = new WeatherReport();
+                    using ( WebClient client = new WebClient() )
+                    {
+                        client.QueryString.Add( "whichClient", "GmlLatLonList" );
+                        client.QueryString.Add( "gmlListLatLon", Uri.EscapeDataString( latLon.Item1 + "," + latLon.Item2 ) );
+                        client.QueryString.Add( "featureType", "Forecast_Gml2Point" );
+                        client.QueryString.Add( "product", "glance" );
+                        client.QueryString.Add( "Unit", "e" );
+                        client.QueryString.Add( "maxt", "maxt" ); // High Temp
+                        client.QueryString.Add( "mint", "mint" ); // Low Temp
+                        client.QueryString.Add( "pop12", "pop12" ); // Precipitation chance
+                        client.QueryString.Add( "wx", "wx" ); // Current Conditations
+                        client.QueryString.Add( "appt", "appt" ); // Apparent Temp
+                        client.QueryString.Add( "temp", "temp" ); // Current Temp
+                        client.QueryString.Add( "Submit", "Submit" );
+
+                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
+                        report = XmlLoader.ParseWeatherReport( response, zip );
+                    }
+                    return report;
+                }
+            );
         }
     }
 }

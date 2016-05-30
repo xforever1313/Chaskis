@@ -5,11 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chaskis.Plugins.WeatherBot;
 using NUnit.Framework;
 
