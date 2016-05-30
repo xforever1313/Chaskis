@@ -54,7 +54,9 @@
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
+    <Compile Include="Plugins\WeatherBot\Mocks\MockWeatherQuery.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
+    <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />

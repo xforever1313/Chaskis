@@ -55,11 +55,11 @@ namespace Tests.Plugins.WeatherBot
         public void TestBadWeatherReport()
         {
             string xml = ReadFile( Path.Combine( testFilesLocation, "BadReport.xml" ) );
-            NOAAException error = Assert.Throws<NOAAException>( () =>
+            QueryException error = Assert.Throws<QueryException>( () =>
                 XmlLoader.ParseWeatherReport( xml, defaultZip )
             );
 
-            Assert.AreEqual( NOAAErrors.MissingForecast, error.ErrorCode );
+            Assert.AreEqual( QueryErrors.MissingForecast, error.ErrorCode );
         }
 
         /// <summary>
@@ -84,19 +84,19 @@ namespace Tests.Plugins.WeatherBot
             string xml = ReadFile( Path.Combine( testFilesLocation, "SampleZipError.xml" ) );
 
             {
-                NOAAException error = Assert.Throws<NOAAException>( () =>
+                QueryException error = Assert.Throws<QueryException>( () =>
                     XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
                 );
 
-                Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
+                Assert.AreEqual( QueryErrors.InvalidZip, error.ErrorCode );
             }
 
             {
-                NOAAException error = Assert.Throws<NOAAException>( () =>
+                QueryException error = Assert.Throws<QueryException>( () =>
                     XmlLoader.ParseWeatherReport( xml, defaultZip )
                 );
 
-                Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
+                Assert.AreEqual( QueryErrors.InvalidZip, error.ErrorCode );
             }
         }
 
@@ -109,19 +109,19 @@ namespace Tests.Plugins.WeatherBot
             string xml = ReadFile( Path.Combine( testFilesLocation, "SampleError.xml" ) );
 
             {
-                NOAAException error = Assert.Throws<NOAAException>( () =>
+                QueryException error = Assert.Throws<QueryException>( () =>
                     XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
                 );
 
-                Assert.AreEqual( NOAAErrors.SOAPError, error.ErrorCode );
+                Assert.AreEqual( QueryErrors.ServerError, error.ErrorCode );
             }
 
             {
-                NOAAException error = Assert.Throws<NOAAException>( () =>
+                QueryException error = Assert.Throws<QueryException>( () =>
                     XmlLoader.ParseWeatherReport( xml, defaultZip )
                 );
 
-                Assert.AreEqual( NOAAErrors.SOAPError, error.ErrorCode );
+                Assert.AreEqual( QueryErrors.ServerError, error.ErrorCode );
             }
         }
 
@@ -132,11 +132,11 @@ namespace Tests.Plugins.WeatherBot
         public void TestBadZipCode()
         {
             string xml = ReadFile( Path.Combine( testFilesLocation, "InvalidZipCode.xml" ) );
-            NOAAException error = Assert.Throws<NOAAException>( () =>
+            QueryException error = Assert.Throws<QueryException>( () =>
                 XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
             );
 
-            Assert.AreEqual( NOAAErrors.InvalidZip, error.ErrorCode );
+            Assert.AreEqual( QueryErrors.InvalidZip, error.ErrorCode );
         }
 
         /// <summary>
@@ -148,11 +148,11 @@ namespace Tests.Plugins.WeatherBot
         {
             string xml = ReadFile( Path.Combine( testFilesLocation, "InvalidLatLon.xml" ) );
 
-            NOAAException error = Assert.Throws<NOAAException>(
+            QueryException error = Assert.Throws<QueryException>(
                 () => XmlLoader.ParseLatitudeLongitude( xml, defaultZip )
             );
 
-            Assert.AreEqual( NOAAErrors.InvalidLatLon, error.ErrorCode );
+            Assert.AreEqual( QueryErrors.InvalidLatLon, error.ErrorCode );
         }
 
         // -------- Test Helpers --------

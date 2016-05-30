@@ -42,8 +42,8 @@ namespace Chaskis.Plugins.WeatherBot
             {
                 CheckForErrorResponse( noaaXml );
 
-                throw new NOAAException(
-                    NOAAErrors.MissingForecast,
+                throw new QueryException(
+                    QueryErrors.MissingForecast,
                     "Got invalid XML from NOAA.  Could not get weather report from zip code " + zipCode
                 );
             }
@@ -111,8 +111,8 @@ namespace Chaskis.Plugins.WeatherBot
                 CheckForErrorResponse( noaaXml );
 
                 // If there is no error, throw an Exception.  We got something invalid from NOAA.
-                throw new NOAAException(
-                    NOAAErrors.MissingLatLon,
+                throw new QueryException(
+                    QueryErrors.MissingLatLon,
                     "Got invalid XML from NOAA.  Missing coordinates from zipcode " + zipCode
                 );
 
@@ -122,8 +122,8 @@ namespace Chaskis.Plugins.WeatherBot
             // If response is just a comma, the zip is invalid.
             if ( response == "," )
             {
-                throw new NOAAException(
-                    NOAAErrors.InvalidZip,
+                throw new QueryException(
+                    QueryErrors.InvalidZip,
                     "Error with one or more zip codes: Error: Zip code \"" + zipCode + "\" is not a valid US zip code"
                 );
             }
@@ -133,8 +133,8 @@ namespace Chaskis.Plugins.WeatherBot
             if ( latLongString.Count() != 2 )
             {
                 // If there is no error, throw an Application Exception.  We got something invalid from NOAA.
-                throw new NOAAException(
-                    NOAAErrors.InvalidLatLon,
+                throw new QueryException(
+                    QueryErrors.InvalidLatLon,
                     "Got invalid Lat/Long from NOAA.  Coordinates from zipcode " + zipCode
                 );
             }
@@ -151,18 +151,18 @@ namespace Chaskis.Plugins.WeatherBot
             Match errorMatch = errorRegex.Match( noaaXml );
             if ( errorMatch.Success )
             {
-                NOAAErrors error;
+                QueryErrors error;
                 if ( errorMatch.Groups["errorStr"].Value.Contains( "not a valid US zip code" ) )
                 {
-                    error = NOAAErrors.InvalidZip;
+                    error = QueryErrors.InvalidZip;
                 }
                 else
                 {
-                    error = NOAAErrors.SOAPError;
+                    error = QueryErrors.ServerError;
                 }
 
                 // Throw an application exception, though from the error message from NOAA.
-                throw new NOAAException(
+                throw new QueryException(
                     error,
                     errorMatch.Groups["fault"].Value + " " + errorMatch.Groups["errorStr"].Value
                 );

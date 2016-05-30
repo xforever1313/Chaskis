@@ -41,10 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NOAAException.cs" />
+    <Compile Include="IWeatherQuery.cs" />
+    <Compile Include="QueryException.cs" />
+    <Compile Include="NOAAWeatherQuery.cs" />
     <Compile Include="WeatherBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WeatherReport.cs" />
+    <Compile Include="WeatherReporter.cs" />
     <Compile Include="XmlLoader.cs" />
   </ItemGroup>
   <ItemGroup>

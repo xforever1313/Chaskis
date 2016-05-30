@@ -5,24 +5,20 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chaskis.Plugins.WeatherBot
 {
-    public enum NOAAErrors
+    public enum QueryErrors
     {
         /// <summary>
-        /// When the forecast tag is missing from the XML.
+        /// When the forecast tag is missing from the query.
         /// </summary>
         MissingForecast,
 
         /// <summary>
-        /// Error from NOAA's SOAP service.
+        /// Error from the query's service.
         /// </summary>
-        SOAPError,
+        ServerError,
 
         /// <summary>
         /// Error when there's something from with the lat/long
@@ -43,16 +39,16 @@ namespace Chaskis.Plugins.WeatherBot
     }
 
     /// <summary>
-    /// Errors that occur when talking to NOAA's SOAP service.
+    /// Errors that occur when talking to the weather query's service.
     /// </summary>
-    public class NOAAException : ApplicationException
+    public class QueryException : ApplicationException
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="error">The error that triggered the exception.</param>
         /// <param name="message">The message of what triggered the exception.</param>
-        public NOAAException( NOAAErrors error, string message ) :
+        public QueryException( QueryErrors error, string message ) :
             base( message )
         {
             this.ErrorCode = error;
@@ -61,6 +57,6 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// The error that triggered the exception.
         /// </summary>
-        public NOAAErrors ErrorCode { get; private set; }
+        public QueryErrors ErrorCode { get; private set; }
     }
 }

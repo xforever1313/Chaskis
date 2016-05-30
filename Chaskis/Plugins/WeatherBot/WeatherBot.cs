@@ -4,11 +4,8 @@
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using GenericIrcBot;
 
 namespace Chaskis.Plugins.WeatherBot
@@ -72,11 +69,9 @@ namespace Chaskis.Plugins.WeatherBot
         private const int cooldown = 15;
 
         /// <summary>
-        /// NOAA requests that we do not query the SOAP service more than an hour
-        /// at a time.  We will cache our results for an hour in this dictionary.
-        /// Key is the zip code, value is the weather report.
+        /// Queries for the weather report.
         /// </summary>
-        private static Dictionary<string, WeatherReport> reportCache;
+        private WeatherReporter reporter;
 
         // -------- Constructor --------
 
@@ -86,7 +81,7 @@ namespace Chaskis.Plugins.WeatherBot
         public WeatherBot()
         {
             this.handlers = new List<IIrcHandler>();
-            reportCache = new Dictionary<string, WeatherReport>();
+            this.reporter = new WeatherReporter( new NOAAWeatherQuery() );
         }
 
         // -------- Functions --------
@@ -180,112 +175,15 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
         {
-            string zip = string.Empty;
-            try
+            Match match = Regex.Match( response.Message, weatherCommand );
+            if ( match.Success )
             {
-                Match match = Regex.Match( response.Message, weatherCommand );
-                if ( match.Success )
-                {
-                    zip = match.Groups["zipCode"].Value;
-
-                    if ( reportCache.ContainsKey( zip ) )
-                    {
-                        // If our cache reports a null, its an invalid zip code.  Print error message.
-                        if ( reportCache[zip] == null )
-                        {
-                            Console.WriteLine( "WeatherBot: Zip is invalid, printing error." );
-                            writer.SendCommand(
-                                "Error with one or more zip codes: Error: Zip code \"" + zip + "\" is not a valid US zip code"
-                            );
-                        }
-                        // Otherwise, if the value in our cache is old, get updated info.
-                        else if ( ( DateTime.UtcNow - reportCache[zip].ConstructionTime ).TotalHours >= 1 )
-                        {
-                            // Get the weather report in the background.
-                            Console.WriteLine( "WeatherBot: Value in cache is old, getting new value." );
-                            WeatherReport report = await QueryNOAA( zip );
-                            writer.SendCommand( report.ToString() );
-                            reportCache[zip] = report;
-                        }
-                        // Otherwise, our cache is still new, do not query NOAA, just return our cache.
-                        else
-                        {
-                            Console.WriteLine( "WeatherBot: Value in cache is new, sending cached value." );
-                            writer.SendCommand( reportCache[zip].ToString() );
-                        }
-                    }
-                    else
-                    {
-                        // Get the weather report in the background.
-                        Console.WriteLine( "WeatherBot: Value not in cache, querying NOAA." );
-                        WeatherReport report = await QueryNOAA( zip );
-                        writer.SendCommand( report.ToString() );
-                        reportCache[zip] = report;
-                    }
-                }
+                string zip = match.Groups["zipCode"].Value;
+                string strToWrite = await this.reporter.QueryWeather( zip );
+                writer.SendCommand( strToWrite );
             }
-            catch ( NOAAException err )
-            {
-                if ( err.ErrorCode == NOAAErrors.InvalidZip )
-                {
-                    reportCache[zip] = null; // Invalid zip, no sense wasting our time querying the SOAP service next time around.
-                }
-
-                writer.SendCommand( err.Message );
-            }
-            catch ( Exception err )
-            {
-                writer.SendCommand( err.Message );
-            }
-        }
-
-        /// <summary>
-        /// Queries NOAA in the backgroud.
-        /// </summary>
-        /// <param name="zip">The ZIP code to get weather information from.</param>
-        /// <returns>The weather report from NOAA.</returns>
-        private static Task<WeatherReport> QueryNOAA( string zip )
-        {
-            return Task.Run(
-                delegate ()
-                {
-                    // First, get the Lat/Long of the zip code.
-                    Tuple<string, string> latLon;
-                    using ( WebClient client = new WebClient() )
-                    {
-                        client.QueryString.Add( "whichClient", "LatLonListZipCode" );
-                        client.QueryString.Add( "listZipCodeList", zip );
-                        client.QueryString.Add( "Submit", "Submit" );
-                        
-                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
-                        latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
-                    }
-
-                    // Next, get the weather report.
-                    WeatherReport report = null;
-                    using ( WebClient client = new WebClient() )
-                    {
-                        client.QueryString.Add( "whichClient", "GmlLatLonList" );
-                        client.QueryString.Add( "gmlListLatLon", Uri.EscapeDataString( latLon.Item1 + "," + latLon.Item2 ) );
-                        client.QueryString.Add( "featureType", "Forecast_Gml2Point" );
-                        client.QueryString.Add( "product", "glance" );
-                        client.QueryString.Add( "Unit", "e" );
-                        client.QueryString.Add( "maxt", "maxt" ); // High Temp
-                        client.QueryString.Add( "mint", "mint" ); // Low Temp
-                        client.QueryString.Add( "pop12", "pop12" ); // Precipitation chance
-                        client.QueryString.Add( "wx", "wx" ); // Current Conditations
-                        client.QueryString.Add( "appt", "appt" ); // Apparent Temp
-                        client.QueryString.Add( "temp", "temp" ); // Current Temp
-                        client.QueryString.Add( "Submit", "Submit" );
-
-                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
-                        report = XmlLoader.ParseWeatherReport( response, zip );
-                    }
-                    return report;
-                }
-            );
         }
     }
 }
