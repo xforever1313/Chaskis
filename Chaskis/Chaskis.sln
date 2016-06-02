@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerDiagnostics", "Plugin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherBot", "Plugins\WeatherBot\WeatherBot.csproj", "{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarmaBot", "Plugins\KarmaBot\KarmaBot.csproj", "{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCSMono.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -106,6 +108,14 @@ Global
 		{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +125,7 @@ Global
 		{C82EC85E-1885-4F71-BA54-81EF08D169F6} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{13694108-DD59-4147-8AE0-8573414372B1} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
