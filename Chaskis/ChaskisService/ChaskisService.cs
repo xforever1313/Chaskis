@@ -1,4 +1,10 @@
-﻿using System;
+﻿
+//          Copyright Seth Hendrick 2016.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +20,8 @@ namespace ChaskisService
 
         private IrcBot bot = null;
 
+        private List<IPlugin> plugins;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -22,6 +30,7 @@ namespace ChaskisService
         public ChaskisService()
         {
             InitializeComponent();
+            this.plugins = new List<IPlugin>();
         }
 
         /// <summary>
@@ -44,29 +53,28 @@ namespace ChaskisService
                 // Load Plugins.
                 {
                     IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( Path.Combine( rootDir, "PluginConfig.xml" ) );
+                    PluginManager manager = new PluginManager();
+
                     using ( StringWriter strWriter = new StringWriter() )
                     {
-                        PluginManager manager = new PluginManager( strWriter );
+                        bool loaded = manager.LoadPlugins( pluginList, ircConfig, strWriter );
 
-                        foreach ( AssemblyConfig pluginInfo in pluginList )
+                        if ( ( loaded == false ) )
                         {
-                            bool success = manager.LoadAssembly(
-                                Path.GetFullPath( pluginInfo.AssemblyPath ),
-                                pluginInfo.ClassName,
-                                ircConfig
+                            this.ExitCode = 1;
+                            this.ChaskisEventLog.WriteEntry(
+                                "Error loading plugins: " + Environment.NewLine + strWriter.ToString(),
+                                EventLogEntryType.Error
                             );
-                            if ( ( success == false ) )
-                            {
-                                this.ExitCode = 1;
-                                this.ChaskisEventLog.WriteEntry(
-                                    "Error loading assembly " + pluginInfo.AssemblyPath + Environment.NewLine + strWriter.ToString(),
-                                    EventLogEntryType.Error
-                                );
-                                Stop();
-                            }
+                            Stop();
                         }
-                        configs.AddRange( manager.Handlers );
                     }
+                    this.plugins.AddRange( manager.Plugins );
+                }
+
+                foreach ( IPlugin plugin in this.plugins )
+                {
+                    configs.AddRange( plugin.GetHandlers() );
                 }
 
                 // Must always check for pings.
@@ -90,7 +98,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnStop()
         {
-            this.bot?.Dispose();
+            Teardown();
         }
 
         /// <summary>
@@ -98,7 +106,33 @@ namespace ChaskisService
         /// </summary>
         protected override void OnShutdown()
         {
-            this.bot?.Dispose();
+            Teardown();
+        }
+
+        /// <summary>
+        /// Tears down this service.
+        /// </summary>
+        private void Teardown()
+        {
+            if ( bot != null )
+            {
+                foreach ( IPlugin plugin in plugins )
+                {
+                    try
+                    {
+                        plugin.Teardown();
+                    }
+                    catch ( Exception err )
+                    {
+                        this.ChaskisEventLog.WriteEntry(
+                            "Error when tearing down plugin:" + Environment.NewLine + err.ToString(),
+                            EventLogEntryType.Error
+                        );
+                    }
+                }
+
+                bot.Dispose();
+            }
         }
     }
 }

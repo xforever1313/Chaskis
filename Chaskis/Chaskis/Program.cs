@@ -18,9 +18,9 @@ namespace Chaskis
             try
             {
                 string rootDir = Path.Combine(
-                                     Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                                     "Chaskis"
-                                 );
+                    Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
+                    "Chaskis"
+                );
 
                 ArgumentParser parser = new ArgumentParser( args, rootDir );
 
@@ -44,6 +44,7 @@ namespace Chaskis
                 IIrcConfig ircConfig = XmlLoader.ParseIrcConfig( parser.IrcConfigLocation );
 
                 List<IIrcHandler> configs = new List<IIrcHandler>();
+                List<IPlugin> plugins = new List<IPlugin>();
 
                 // Load Plugins.
                 {
@@ -52,27 +53,21 @@ namespace Chaskis
                     {
                         Console.WriteLine( "WARNING: No plugins loaded." );
                     }
-                    PluginManager manager = new PluginManager();
 
-                    foreach ( AssemblyConfig pluginInfo in pluginList )
+                    PluginManager manager = new PluginManager();
+                    bool loaded = manager.LoadPlugins( pluginList, ircConfig );
+                    if ( ( loaded == false ) && parser.FailOnPluginFailure )
                     {
-                        bool success = manager.LoadAssembly(
-                            Path.GetFullPath( pluginInfo.AssemblyPath ),
-                            pluginInfo.ClassName,
-                            ircConfig
-                        );
-                        if ( ( success == false ) && parser.FailOnPluginFailure )
-                        {
-                            Console.WriteLine( "Fail on assembly was enable.  Terminating." );
-                            return 2;
-                        }
-                        else if ( success )
-                        {
-                            Console.WriteLine( "Successfully loaded plugin " + pluginInfo.ClassName );
-                        }
+                        Console.WriteLine( "Fail on assembly was enable.  Terminating." );
+                        return 2;
                     }
 
-                    configs.AddRange( manager.Handlers );
+                    plugins.AddRange( manager.Plugins );
+                }
+
+                foreach ( IPlugin plugin in plugins )
+                {
+                    configs.AddRange( plugin.GetHandlers() );
                 }
 
                 // Must always check for pings.
@@ -83,6 +78,21 @@ namespace Chaskis
                 {
                     bot.Start();
                     Console.ReadKey();
+                    foreach ( IPlugin plugin in plugins )
+                    {
+                        try
+                        {
+                            plugin.Teardown();
+                        }
+                        catch ( Exception err )
+                        {
+                            Console.WriteLine( "*************" );
+                            Console.WriteLine( "Error when tearing down plugin:" + Environment.NewLine );
+                            Console.WriteLine( err.Message );
+                            Console.WriteLine( err.StackTrace );
+                            Console.WriteLine( "*************" );
+                        }
+                    }
                 }
             }
             catch ( Exception err )

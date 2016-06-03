@@ -20,14 +20,9 @@ namespace Chaskis
         // -------- Fields --------
 
         /// <summary>
-        /// Where to log errors to.
+        /// The plugins loaded thus far.
         /// </summary>
-        private TextWriter logger;
-
-        /// <summary>
-        /// The handlers from the assembly.
-        /// </summary>
-        private List<IIrcHandler> handlers;
+        private List<IPlugin> plugins;
 
         // -------- Constructor --------
 
@@ -35,76 +30,75 @@ namespace Chaskis
         /// Constructor.
         /// </summary>
         /// <param name="logger">Where to log to.  Null for Console.out</param>
-        public PluginManager( TextWriter logger = null )
+        public PluginManager()
         {
-            if( logger == null )
-            {
-                this.logger = Console.Out;
-            }
-            else
-            {
-                this.logger = logger;
-            }
-
-            this.handlers = new List<IIrcHandler>();
-            this.Handlers = this.handlers.AsReadOnly();
+            this.plugins = new List<IPlugin>();
+            this.Plugins = this.plugins.AsReadOnly();
         }
 
         // -------- Properties --------
 
         /// <summary>
-        /// Any handlers found when calling LoadAssembly are appended to this list.
+        /// List of plugins loaded.
         /// Its recommended that this is not called unless you are done loading plugins.
         /// </summary>
-        public IList<IIrcHandler> Handlers{ get; private set; }
+        public IList<IPlugin> Plugins { get; private set; }
 
         // -------- Functions --------
 
         /// <summary>
-        /// Loads te given assembly.
-        /// Any handlers are appended to this.Handlers.
+        /// Loads the given list of plugins.
         /// Any errors are logged to the passed in logger.
         /// </summary>
-        /// <param name="absPath">Absolute Path to the assembly to load.</param>
-        /// <param name="className">Class name to load (including namespaces)</param>
         /// <param name="ircConfig">The irc config we are using.</param>
-        public bool LoadAssembly( string absPath, string className, IIrcConfig ircConfig )
+        /// <param name="errorLog">Where to log the errors.  Default to Console.Out.</param>
+        public bool LoadPlugins( IList<AssemblyConfig> pluginList, IIrcConfig ircConfig, TextWriter errorLog = null )
         {
-            try
+            if ( errorLog == null )
             {
-                Assembly dll = Assembly.LoadFile( absPath );
-                Type type = dll.GetType( className );
-
-                MethodInfo initFunction = type.GetMethod( "Init" );
-                MethodInfo getHandlerFunction = type.GetMethod( "GetHandlers" );
-
-                // Make instance
-                object instance = Activator.CreateInstance( type );
-                initFunction.Invoke( instance, new object[]{ absPath, ircConfig } );
- 
-                IList<IIrcHandler> handlersToAdd = ( IList<IIrcHandler> )getHandlerFunction.Invoke( instance, new Object[]{ } );
-                this.handlers.AddRange( handlersToAdd );
+                errorLog = Console.Out;
             }
-            catch( Exception e )
+
+            bool success = true;
+            foreach ( AssemblyConfig pluginConfig in pluginList )
             {
-                this.logger.WriteLine( "*************" );
-                this.logger.WriteLine( "Warning! Error when loading assembly " + className + ":" );
-                this.logger.WriteLine( e.Message );
-                this.logger.WriteLine();
-                this.logger.WriteLine( e.StackTrace );
-                this.logger.WriteLine();
-                if ( e.InnerException != null )
+                try
                 {
-                    this.logger.WriteLine( "Inner Exception:" );
-                    this.logger.WriteLine( e.InnerException.Message );
-                    this.logger.WriteLine( e.InnerException.StackTrace );
-                }
-                this.logger.WriteLine( "*************" );
+                    Assembly dll = Assembly.LoadFile( pluginConfig.AssemblyPath );
+                    Type type = dll.GetType( pluginConfig.ClassName );
 
-                return false;
+                    MethodInfo initFunction = type.GetMethod( "Init" );
+
+                    // Make instance
+                    object instance = Activator.CreateInstance( type );
+                    initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
+
+                    IPlugin plugin = ( IPlugin ) instance;
+                    this.plugins.Add( plugin );
+
+                    errorLog.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
+                }
+                catch ( Exception e )
+                {
+                    errorLog.WriteLine( "*************" );
+                    errorLog.WriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
+                    errorLog.WriteLine( e.Message );
+                    errorLog.WriteLine();
+                    errorLog.WriteLine( e.StackTrace );
+                    errorLog.WriteLine();
+                    if ( e.InnerException != null )
+                    {
+                        errorLog.WriteLine( "Inner Exception:" );
+                        errorLog.WriteLine( e.InnerException.Message );
+                        errorLog.WriteLine( e.InnerException.StackTrace );
+                    }
+                    errorLog.WriteLine( "*************" );
+
+                    success = false;
+                }
             }
 
-            return true;
+            return success;
         }
     }
 }

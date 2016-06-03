@@ -74,6 +74,14 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
             return this.handlers.AsReadOnly();
         }
 
+        /// <summary>
+        /// Tears down this plugin.
+        /// </summary>
+        public void Teardown()
+        {
+
+        }
+
         // ---- Handlers ----
 
         /// <summary>

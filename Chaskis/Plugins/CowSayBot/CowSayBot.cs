@@ -122,6 +122,14 @@ namespace Chaskis.Plugins.CowSayBot
         }
 
         /// <summary>
+        /// Tears down this plugin.  No-Op.
+        /// </summary>
+        public void Teardown()
+        {
+            // No-op.
+        }
+
+        /// <summary>
         /// Constructs the regex the that calls the Cow Say Handler.
         /// </summary>
         /// <param name="config">The cowsay bot config to use.</param>

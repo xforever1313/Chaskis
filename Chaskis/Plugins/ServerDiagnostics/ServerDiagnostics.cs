@@ -111,6 +111,13 @@ namespace Chaskis.Plugins.ServerDiagnostics
             return this.handlerList.AsReadOnly();
         }
 
+        /// <summary>
+        /// Tears down this plugin.
+        /// </summary>
+        public void Teardown()
+        {
+        }
+
         // ---- Handlers ----
 
 

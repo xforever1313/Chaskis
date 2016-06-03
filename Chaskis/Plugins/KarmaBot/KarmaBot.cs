@@ -86,6 +86,14 @@ namespace Chaskis.Plugins.KarmaBot
             return this.handlers.AsReadOnly();
         }
 
+        /// <summary>
+        /// Tearsdown this plugin.
+        /// </summary>
+        public void Teardown()
+        {
+
+        }
+
         // ---- Handlers ----
 
         /// <summary>

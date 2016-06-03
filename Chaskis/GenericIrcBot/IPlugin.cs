@@ -35,6 +35,11 @@ namespace GenericIrcBot
         /// </summary>
         /// <returns>The list of handlers to awtch.</returns>
         IList<IIrcHandler> GetHandlers();
+
+        /// <summary>
+        /// Tears down the plugin.
+        /// </summary>
+        void Teardown();
     }
 }
 

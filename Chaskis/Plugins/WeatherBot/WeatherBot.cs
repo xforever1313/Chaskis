@@ -132,6 +132,14 @@ namespace Chaskis.Plugins.WeatherBot
             return this.handlers.AsReadOnly();
         }
 
+        /// <summary>
+        /// Tears down this plugin.
+        /// </summary>
+        public void Teardown()
+        {
+
+        }
+
         // ---- Handlers ----
 
         /// <summary>
