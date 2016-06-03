@@ -14,8 +14,8 @@ Settings for the karma bot.
                 This MUST contain the regex group "name", or this isn't going to work.
                 Default is !karma name.
 -->
-<karmabot>
+<karmabotconfig>
     <increasecmd><![CDATA[^((\+\+(?<name>\S+))|((?<name>\S+)\+\+))]]></increasecmd>
     <decreasecmd><![CDATA[^((--(?<name>\S+))|((?<name>\S+)--))]]></decreasecmd>
     <querycmd><![CDATA[^!karma\s+(?<name>\S+)]]></querycmd>
-</karmabot>
+</karmabotconfig>

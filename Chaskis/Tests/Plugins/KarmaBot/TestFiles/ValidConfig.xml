@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<karmabotconfig>
+    <increasecmd><![CDATA[^(\^\^(?<name>\S+)]]></increasecmd>
+    <decreasecmd><![CDATA[^VV(?<name>\S+)]]></decreasecmd>
+    <querycmd><![CDATA[^!points\s+(?<name>\S+)]]></querycmd>
+</karmabotconfig>

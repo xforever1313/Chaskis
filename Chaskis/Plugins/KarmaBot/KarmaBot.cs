@@ -4,11 +4,8 @@
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using GenericIrcBot;
 
 namespace Chaskis.Plugins.KarmaBot
@@ -21,6 +18,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// List of handlers.
         /// </summary>
         private List<IIrcHandler> handlers;
+
+        /// <summary>
+        /// The Karmabot config to use.
+        /// </summary>
+        private KarmaBotConfig config;
 
         // -------- Constructor --------
 
@@ -41,6 +43,38 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="ircConfig">The IRC config being used.</param>
         public void Init( string pluginPath, IIrcConfig ircConfig )
         {
+            string configPath = Path.Combine(
+                Path.GetDirectoryName( pluginPath ),
+                "KarmaBotConfig.xml"
+            );
+
+            if ( File.Exists( configPath ) == false )
+            {
+                throw new FileNotFoundException(
+                    "Can not open " + configPath
+                );
+            }
+
+            this.config = XmlLoader.LoadKarmaBotConfig( configPath );
+
+            MessageHandler increaseHandler = new MessageHandler(
+                this.config.IncreaseCommandRegex,
+                HandleIncreaseCommand
+            );
+
+            MessageHandler decreaseCommand = new MessageHandler(
+                this.config.DecreaseCommandRegex,
+                HandleDecreaseCommand
+            );
+
+            MessageHandler queryCommand = new MessageHandler(
+                this.config.DecreaseCommandRegex,
+                HandleQueryCommand
+            );
+
+            this.handlers.Add( increaseHandler );
+            this.handlers.Add( decreaseCommand );
+            this.handlers.Add( queryCommand );
         }
 
         /// <summary>
@@ -50,6 +84,35 @@ namespace Chaskis.Plugins.KarmaBot
         public IList<IIrcHandler> GetHandlers()
         {
             return this.handlers.AsReadOnly();
+        }
+
+        // ---- Handlers ----
+
+        /// <summary>
+        /// Handles the increase command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
+        {
+        }
+
+        /// <summary>
+        /// Handles the decrease command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
+        {
+        }
+
+        /// <summary>
+        /// Handles the query command.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
+        {
         }
     }
 }
