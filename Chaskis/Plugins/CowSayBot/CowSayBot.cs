@@ -64,6 +64,19 @@ namespace Chaskis.Plugins.CowSayBot
             this.handlers = new List<IIrcHandler>();
         }
 
+        // -------- Properties --------
+
+        /// <summary>
+        /// Returns the source code location of this plugin.
+        /// </summary>
+        public string SourceCodeLocation
+        {
+            get
+            {
+                return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/CowSayBot";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>

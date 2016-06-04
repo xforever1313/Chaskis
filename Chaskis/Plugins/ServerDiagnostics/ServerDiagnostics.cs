@@ -42,6 +42,17 @@ namespace Chaskis.Plugins.ServerDiagnostics
             startTime = DateTime.UtcNow;
         }
 
+        /// <summary>
+        /// Returns the source code location of this plugin.
+        /// </summary>
+        public string SourceCodeLocation
+        {
+            get
+            {
+                return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/ServerDiagnostics";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>

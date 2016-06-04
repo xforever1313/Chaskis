@@ -9,6 +9,7 @@ using System.Reflection;
 using System.IO;
 using GenericIrcBot;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Chaskis
 {
@@ -22,7 +23,7 @@ namespace Chaskis
         /// <summary>
         /// The plugins loaded thus far.
         /// </summary>
-        private List<IPlugin> plugins;
+        private Dictionary<string, IPlugin> plugins;
 
         // -------- Constructor --------
 
@@ -32,17 +33,18 @@ namespace Chaskis
         /// <param name="logger">Where to log to.  Null for Console.out</param>
         public PluginManager()
         {
-            this.plugins = new List<IPlugin>();
-            this.Plugins = this.plugins.AsReadOnly();
+            this.plugins = new Dictionary<string, IPlugin>();
+            this.Plugins = new ReadOnlyDictionary<string, IPlugin>( this.plugins );
         }
 
         // -------- Properties --------
 
         /// <summary>
-        /// List of plugins loaded.
+        /// Dictionary of all the loaded plugins.
+        /// String is the plugin name in all lower case, value is the IPlugin object.
         /// Its recommended that this is not called unless you are done loading plugins.
         /// </summary>
-        public IList<IPlugin> Plugins { get; private set; }
+        public IDictionary<string, IPlugin> Plugins { get; private set; }
 
         // -------- Functions --------
 
@@ -52,49 +54,59 @@ namespace Chaskis
         /// </summary>
         /// <param name="ircConfig">The irc config we are using.</param>
         /// <param name="errorLog">Where to log the errors.  Default to Console.Out.</param>
-        public bool LoadPlugins( IList<AssemblyConfig> pluginList, IIrcConfig ircConfig, TextWriter errorLog = null )
+        /// <param name="logFunction">
+        /// Action to take when we want to log something.
+        /// Argument to action is the string to log.
+        /// </param>
+        public bool LoadPlugins( IList<AssemblyConfig> pluginList, IIrcConfig ircConfig, Action<string> logFunction = null )
         {
-            if ( errorLog == null )
-            {
-                errorLog = Console.Out;
-            }
-
             bool success = true;
-            foreach ( AssemblyConfig pluginConfig in pluginList )
+
+            using ( StringWriter errorLog = new StringWriter() )
             {
-                try
+                foreach ( AssemblyConfig pluginConfig in pluginList )
                 {
-                    Assembly dll = Assembly.LoadFile( pluginConfig.AssemblyPath );
-                    Type type = dll.GetType( pluginConfig.ClassName );
-
-                    MethodInfo initFunction = type.GetMethod( "Init" );
-
-                    // Make instance
-                    object instance = Activator.CreateInstance( type );
-                    initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
-
-                    IPlugin plugin = ( IPlugin ) instance;
-                    this.plugins.Add( plugin );
-
-                    errorLog.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
-                }
-                catch ( Exception e )
-                {
-                    errorLog.WriteLine( "*************" );
-                    errorLog.WriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
-                    errorLog.WriteLine( e.Message );
-                    errorLog.WriteLine();
-                    errorLog.WriteLine( e.StackTrace );
-                    errorLog.WriteLine();
-                    if ( e.InnerException != null )
+                    try
                     {
-                        errorLog.WriteLine( "Inner Exception:" );
-                        errorLog.WriteLine( e.InnerException.Message );
-                        errorLog.WriteLine( e.InnerException.StackTrace );
-                    }
-                    errorLog.WriteLine( "*************" );
+                        Assembly dll = Assembly.LoadFile( pluginConfig.AssemblyPath );
+                        Type type = dll.GetType( pluginConfig.ClassName );
 
-                    success = false;
+                        MethodInfo initFunction = type.GetMethod( "Init" );
+
+                        // Make instance
+                        object instance = Activator.CreateInstance( type );
+                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
+
+                        IPlugin plugin = ( IPlugin ) instance;
+
+                        string name = pluginConfig.ClassName.Substring( pluginConfig.ClassName.LastIndexOf( '.' ) ).ToLower();
+                        this.plugins.Add( name, plugin );
+
+                        errorLog.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
+                    }
+                    catch ( Exception e )
+                    {
+                        errorLog.WriteLine( "*************" );
+                        errorLog.WriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
+                        errorLog.WriteLine( e.Message );
+                        errorLog.WriteLine();
+                        errorLog.WriteLine( e.StackTrace );
+                        errorLog.WriteLine();
+                        if ( e.InnerException != null )
+                        {
+                            errorLog.WriteLine( "Inner Exception:" );
+                            errorLog.WriteLine( e.InnerException.Message );
+                            errorLog.WriteLine( e.InnerException.StackTrace );
+                        }
+                        errorLog.WriteLine( "*************" );
+
+                        success = false;
+                    }
+                }
+
+                if ( logFunction != null )
+                {
+                    logFunction( errorLog.ToString() );
                 }
             }
 

@@ -5,12 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
-using Chaskis;
-using GenericIrcBot;
 
 namespace ChaskisService
 {
@@ -18,9 +15,10 @@ namespace ChaskisService
     {
         // -------- Fields --------
 
-        private IrcBot bot = null;
-
-        private List<IPlugin> plugins;
+        /// <summary>
+        /// The instance of chaskis.
+        /// </summary>
+        Chaskis.Chaskis chaskis;
 
         // -------- Constructor --------
 
@@ -30,7 +28,15 @@ namespace ChaskisService
         public ChaskisService()
         {
             InitializeComponent();
-            this.plugins = new List<IPlugin>();
+            this.chaskis = new Chaskis.Chaskis(
+                delegate( string msg )
+                {
+                    this.ChaskisEventLog.WriteEntry(
+                        msg + Environment.NewLine,
+                        EventLogEntryType.Information
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -46,42 +52,18 @@ namespace ChaskisService
                     "Chaskis"
                 );
 
-                IIrcConfig ircConfig = XmlLoader.ParseIrcConfig( Path.Combine( rootDir, "IrcConfig.xml" ) );
-
-                List<IIrcHandler> configs = new List<IIrcHandler>();
+                chaskis.InitState1_LoadIrcConfig( Path.Combine( rootDir, "IrcConfig.xml" ) );
 
                 // Load Plugins.
+                bool loaded = chaskis.InitStage2_LoadPlugins( Path.Combine( rootDir, "PluginConfig.xml" ) );
+                if ( ( loaded == false ) )
                 {
-                    IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( Path.Combine( rootDir, "PluginConfig.xml" ) );
-                    PluginManager manager = new PluginManager();
-
-                    using ( StringWriter strWriter = new StringWriter() )
-                    {
-                        bool loaded = manager.LoadPlugins( pluginList, ircConfig, strWriter );
-
-                        if ( ( loaded == false ) )
-                        {
-                            this.ExitCode = 1;
-                            this.ChaskisEventLog.WriteEntry(
-                                "Error loading plugins: " + Environment.NewLine + strWriter.ToString(),
-                                EventLogEntryType.Error
-                            );
-                            Stop();
-                        }
-                    }
-                    this.plugins.AddRange( manager.Plugins );
+                    this.ExitCode = 1;
+                    Stop();
                 }
 
-                foreach ( IPlugin plugin in this.plugins )
-                {
-                    configs.AddRange( plugin.GetHandlers() );
-                }
-
-                // Must always check for pings.
-                configs.Add( new PingHandler() );
-
-                bot = new IrcBot( ircConfig, configs );
-                bot.Start();
+                chaskis.InitStage3_DefaultHandlers();
+                chaskis.InitStage4_OpenConnection();
             }
             catch ( Exception err )
             {
@@ -114,25 +96,7 @@ namespace ChaskisService
         /// </summary>
         private void Teardown()
         {
-            if ( bot != null )
-            {
-                foreach ( IPlugin plugin in plugins )
-                {
-                    try
-                    {
-                        plugin.Teardown();
-                    }
-                    catch ( Exception err )
-                    {
-                        this.ChaskisEventLog.WriteEntry(
-                            "Error when tearing down plugin:" + Environment.NewLine + err.ToString(),
-                            EventLogEntryType.Error
-                        );
-                    }
-                }
-
-                bot.Dispose();
-            }
+            this.chaskis?.Dispose();
         }
     }
 }

@@ -5,9 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
-using GenericIrcBot;
 using System.IO;
+using GenericIrcBot;
 
 namespace Chaskis
 {
@@ -41,58 +40,20 @@ namespace Chaskis
                     return 0;
                 }
 
-                IIrcConfig ircConfig = XmlLoader.ParseIrcConfig( parser.IrcConfigLocation );
-
-                List<IIrcHandler> configs = new List<IIrcHandler>();
-                List<IPlugin> plugins = new List<IPlugin>();
-
-                // Load Plugins.
+                using ( Chaskis chaskis = new Chaskis(( string s ) => Console.Write( s ) ) )
                 {
-                    IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( parser.IrcPluginConfigLocation );
-                    if ( pluginList.Count == 0 )
-                    {
-                        Console.WriteLine( "WARNING: No plugins loaded." );
-                    }
-
-                    PluginManager manager = new PluginManager();
-                    bool loaded = manager.LoadPlugins( pluginList, ircConfig );
-                    if ( ( loaded == false ) && parser.FailOnPluginFailure )
+                    chaskis.InitState1_LoadIrcConfig( parser.IrcConfigLocation );
+                    bool pluginLoaded = chaskis.InitStage2_LoadPlugins( parser.IrcPluginConfigLocation );
+                    if ( ( pluginLoaded == false ) && parser.FailOnPluginFailure )
                     {
                         Console.WriteLine( "Fail on assembly was enable.  Terminating." );
                         return 2;
                     }
+                    chaskis.InitStage3_DefaultHandlers();
+                    chaskis.InitStage4_OpenConnection();
 
-                    plugins.AddRange( manager.Plugins );
-                }
-
-                foreach ( IPlugin plugin in plugins )
-                {
-                    configs.AddRange( plugin.GetHandlers() );
-                }
-
-                // Must always check for pings.
-                configs.Add( new PingHandler() );
-
-                Console.WriteLine();
-                using ( IrcBot bot = new IrcBot( ircConfig, configs ) )
-                {
-                    bot.Start();
+                    Console.WriteLine();
                     Console.ReadKey();
-                    foreach ( IPlugin plugin in plugins )
-                    {
-                        try
-                        {
-                            plugin.Teardown();
-                        }
-                        catch ( Exception err )
-                        {
-                            Console.WriteLine( "*************" );
-                            Console.WriteLine( "Error when tearing down plugin:" + Environment.NewLine );
-                            Console.WriteLine( err.Message );
-                            Console.WriteLine( err.StackTrace );
-                            Console.WriteLine( "*************" );
-                        }
-                    }
                 }
             }
             catch ( Exception err )

@@ -34,6 +34,17 @@ namespace Chaskis.Plugins.KarmaBot
             this.handlers = new List<IIrcHandler>();
         }
 
+        /// <summary>
+        /// Returns the source code location of this plugin.
+        /// </summary>
+        public string SourceCodeLocation
+        {
+            get
+            {
+                return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/KarmaBot";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>

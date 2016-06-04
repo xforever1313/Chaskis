@@ -13,6 +13,13 @@ namespace GenericIrcBot
     /// </summary>
     public interface IPlugin
     {
+        // -------- Properties --------
+
+        /// <summary>
+        /// The location of the source code.
+        /// </summary>
+        string SourceCodeLocation { get; }
+
         // -------- Functions --------
 
         /// <summary>

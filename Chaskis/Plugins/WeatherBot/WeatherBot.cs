@@ -84,6 +84,17 @@ namespace Chaskis.Plugins.WeatherBot
             this.reporter = new WeatherReporter( new NOAAWeatherQuery() );
         }
 
+        /// <summary>
+        /// Returns the source code location of this plugin.
+        /// </summary>
+        public string SourceCodeLocation
+        {
+            get
+            {
+                return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/WeatherBot";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
