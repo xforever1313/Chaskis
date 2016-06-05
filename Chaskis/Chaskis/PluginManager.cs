@@ -79,7 +79,10 @@ namespace Chaskis
 
                         IPlugin plugin = ( IPlugin ) instance;
 
-                        string name = pluginConfig.ClassName.Substring( pluginConfig.ClassName.LastIndexOf( '.' ) ).ToLower();
+                        // Use string.split, there's less bugs and edge-cases when trying to parse it out.
+                        string[] splitString = pluginConfig.ClassName.Split( '.' );
+
+                        string name = splitString[splitString.Length - 1].ToLower();
                         this.plugins.Add( name, plugin );
 
                         errorLog.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
