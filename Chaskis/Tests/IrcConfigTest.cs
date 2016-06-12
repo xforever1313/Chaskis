@@ -129,7 +129,7 @@ namespace Tests
                         roConfig.Server = "NewServer";
                     }
                 );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Server ) ) );
+            Assert.IsTrue( ex.Message.Contains( "Server" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -137,7 +137,7 @@ namespace Tests
                     roConfig.Channel = "#NewChannel";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Channel ) ) );
+            Assert.IsTrue( ex.Message.Contains( "Channel" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -145,7 +145,7 @@ namespace Tests
                     roConfig.Port = 4;
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Port ) ) );
+            Assert.IsTrue( ex.Message.Contains( "Port" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -153,7 +153,7 @@ namespace Tests
                     roConfig.UserName = "NewName";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.UserName ) ) );
+            Assert.IsTrue( ex.Message.Contains( "UserName" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -161,7 +161,7 @@ namespace Tests
                     roConfig.Nick = "NewNick";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Nick ) ) );
+            Assert.IsTrue( ex.Message.Contains( "Nick" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -169,7 +169,7 @@ namespace Tests
                     roConfig.RealName = "NewRName";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.RealName ) ) );
+            Assert.IsTrue( ex.Message.Contains( "RealName" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -177,7 +177,7 @@ namespace Tests
                     roConfig.Password = "NewPass";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( nameof( roConfig.Password ) ) );
+            Assert.IsTrue( ex.Message.Contains( "Password" ) );
         }
 
         [Test]
