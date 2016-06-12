@@ -97,7 +97,7 @@ namespace Chaskis
         public void InitState1_LoadIrcConfig( string xmlFilePath )
         {
             this.ircConfig = XmlLoader.ParseIrcConfig( xmlFilePath );
-            this.sourceCommand = "^@" + this.ircConfig.Nick + @":?\s+source\s+(?<pluginName>\w+)";
+            this.sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source\s+(?<pluginName>\w+)";
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Chaskis
                 }
 
                 MessageHandler pluginListHandler = new MessageHandler(
-                    "^@" + this.ircConfig.Nick + @":?\s+plugins",
+                    "^[!@]" + this.ircConfig.Nick + @":?\s+plugins",
                     HandlePluginListCommand,
                     30
                 );

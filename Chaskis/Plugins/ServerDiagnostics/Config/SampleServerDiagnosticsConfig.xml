@@ -11,8 +11,8 @@ to respond to a command, either leave it blank or delete the line completely.
 {%nick%} is replaced with the bot's name
 -->
 <serverdiagnostics>
-    <utimecmd>@{%nick%}:?\s+utime</utimecmd>
-    <osverscmd>@{%nick%}:?\s+osversion</osverscmd>
-    <proccountcmd>@{%nick%}:?\s+processorcount</proccountcmd>
-    <timecmd>@{%nick%}:?\s+time</timecmd>
+    <utimecmd>^[!@]{%nick%}:?\s+utime</utimecmd>
+    <osverscmd>^[!@]{%nick%}:?\s+osversion</osverscmd>
+    <proccountcmd>^[!@]{%nick%}:?\s+processorcount</proccountcmd>
+    <timecmd>^[!@]{%nick%}:?\s+time</timecmd>
 </serverdiagnostics>
