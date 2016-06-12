@@ -20,9 +20,14 @@ namespace Chaskis
         // -------- Fields --------
 
         /// <summary>
+        /// The action to take when we want to report info, where the argument is the info string.
+        /// </summary>
+        private Action<string> infoLogFunction;
+
+        /// <summary>
         /// The action to take on an error where the argument is the error string.
         /// </summary>
-        private Action<string> logFunction;
+        private Action<string> errorLogFunction;
 
         /// <summary>
         /// The IRC Bot.
@@ -64,14 +69,20 @@ namespace Chaskis
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="logFunction">
-        /// Action to take when we want to log something.
+        /// <param name="infoLogFunction">
+        /// Action to take when we want to log information.
         /// Argument to action is the string to log.
         /// </param>
-        public Chaskis( Action<string> logFunction )
+        /// <param name="errorLogFunction">
+        /// Action to take when we want to log an error.
+        /// Argument to action is the string to log.
+        /// </param>
+        public Chaskis( Action<string> infoLogFunction, Action<string> errorLogFunction )
         {
-            ArgumentChecker.IsNotNull( logFunction, nameof( logFunction ) );
-            this.logFunction = logFunction;
+            ArgumentChecker.IsNotNull( errorLogFunction, nameof( errorLogFunction ) );
+            ArgumentChecker.IsNotNull( infoLogFunction, nameof( infoLogFunction ) );
+            this.infoLogFunction = infoLogFunction;
+            this.errorLogFunction = errorLogFunction;
             this.plugins = null;
             this.handlers = new List<IIrcHandler>();
             this.fullyLoaded = false;
@@ -117,7 +128,7 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if ( manager.LoadPlugins( pluginList, this.ircConfig, this.logFunction ) )
+            if ( manager.LoadPlugins( pluginList, this.ircConfig, this.errorLogFunction ) )
             {
                 this.plugins = manager.Plugins;
                 foreach ( IPlugin plugin in this.plugins.Values )
@@ -197,7 +208,7 @@ namespace Chaskis
                 );
             }
 
-            this.ircBot = new IrcBot( this.ircConfig, this.handlers );
+            this.ircBot = new IrcBot( this.ircConfig, this.handlers, this.infoLogFunction, this.errorLogFunction );
             this.ircBot.Start();
             this.fullyLoaded = true;
         }
@@ -217,7 +228,7 @@ namespace Chaskis
                     }
                     catch ( Exception err )
                     {
-                        this.logFunction( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
+                        this.errorLogFunction( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
                     }
                 }
                 this.ircBot.Dispose();

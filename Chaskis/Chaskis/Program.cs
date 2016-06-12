@@ -40,7 +40,10 @@ namespace Chaskis
                     return 0;
                 }
 
-                using ( Chaskis chaskis = new Chaskis(( string s ) => Console.Write( s ) ) )
+                using ( Chaskis chaskis = new Chaskis(
+                    ( string s ) => Console.WriteLine( s ),
+                    ( string s ) => Console.Error.WriteLine( s ) )
+                )
                 {
                     chaskis.InitState1_LoadIrcConfig( parser.IrcConfigLocation );
                     bool pluginLoaded = chaskis.InitStage2_LoadPlugins( parser.IrcPluginConfigLocation );

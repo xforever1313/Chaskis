@@ -29,11 +29,18 @@ namespace ChaskisService
         {
             InitializeComponent();
             this.chaskis = new Chaskis.Chaskis(
-                delegate( string msg )
+                delegate ( string infoMsg )
                 {
                     this.ChaskisEventLog.WriteEntry(
-                        msg + Environment.NewLine,
+                        infoMsg + Environment.NewLine,
                         EventLogEntryType.Information
+                    );
+                },
+                delegate ( string errorMsg )
+                {
+                    this.ChaskisEventLog.WriteEntry(
+                        errorMsg + Environment.NewLine,
+                        EventLogEntryType.Error
                     );
                 }
             );
