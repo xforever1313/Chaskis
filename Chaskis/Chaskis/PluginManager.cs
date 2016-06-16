@@ -68,7 +68,7 @@ namespace Chaskis
                 {
                     try
                     {
-                        Assembly dll = Assembly.LoadFile( pluginConfig.AssemblyPath );
+                        Assembly dll = Assembly.LoadFrom( pluginConfig.AssemblyPath );
                         Type type = dll.GetType( pluginConfig.ClassName );
 
                         MethodInfo initFunction = type.GetMethod( "Init" );

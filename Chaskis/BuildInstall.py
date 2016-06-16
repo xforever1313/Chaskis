@@ -94,6 +94,12 @@ for localPluginDir in os.listdir("Plugins"):
             if (binaryFile.endswith(".dll") and binaryFile != "GenericIrcBot.dll"):
                 Copy(os.path.join(localBinDir, binaryFile), installPluginDir)
 
+            elif (binaryFile.endswith("x86") or binaryFile.endswith("x64")):
+                CreateDirIfNotExist(os.path.join(installPluginDir, binaryFile))
+                for innerBinaryFile in os.listdir(os.path.join(localBinDir, binaryFile)):
+                    if (innerBinaryFile.endswith(".dll")):
+                        Copy(os.path.join(localBinDir, binaryFile, innerBinaryFile), os.path.join(installPluginDir, binaryFile, innerBinaryFile))
+
         # Copy Config (if any)
         localConfigDir = os.path.join(localPluginDir, "Config")
         if (os.path.exists(localConfigDir)):

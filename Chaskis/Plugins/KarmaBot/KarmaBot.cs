@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using GenericIrcBot;
 
 namespace Chaskis.Plugins.KarmaBot
@@ -23,6 +24,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// The Karmabot config to use.
         /// </summary>
         private KarmaBotConfig config;
+
+        /// <summary>
+        /// The database to talk to.
+        /// </summary>
+        private KarmaBotDatabase dataBase;
 
         // -------- Constructor --------
 
@@ -54,6 +60,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="ircConfig">The IRC config being used.</param>
         public void Init( string pluginPath, IIrcConfig ircConfig )
         {
+            string dbPath = Path.Combine(
+                Path.GetDirectoryName( pluginPath ),
+                "karmabot.db"
+            );
+
             string configPath = Path.Combine(
                 Path.GetDirectoryName( pluginPath ),
                 "KarmaBotConfig.xml"
@@ -67,6 +78,7 @@ namespace Chaskis.Plugins.KarmaBot
             }
 
             this.config = XmlLoader.LoadKarmaBotConfig( configPath );
+            this.dataBase = new KarmaBotDatabase( dbPath );
 
             MessageHandler increaseHandler = new MessageHandler(
                 this.config.IncreaseCommandRegex,
@@ -79,7 +91,7 @@ namespace Chaskis.Plugins.KarmaBot
             );
 
             MessageHandler queryCommand = new MessageHandler(
-                this.config.DecreaseCommandRegex,
+                this.config.QueryCommand,
                 HandleQueryCommand
             );
 
@@ -102,7 +114,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         public void Teardown()
         {
-
+            this.dataBase?.Dispose();
         }
 
         // ---- Handlers ----
@@ -112,8 +124,16 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
         {
+            Match match = Regex.Match( response.Message, this.config.IncreaseCommandRegex );
+            if ( match.Success )
+            {
+                string userName = match.Groups["name"].Value;
+                int karma = await this.dataBase.IncreaseKarma( userName );
+
+                writer.SendMessageToUser( userName + " has had their karma increased to " + karma, response.Channel );
+            }
         }
 
         /// <summary>
@@ -121,8 +141,16 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
         {
+            Match match = Regex.Match( response.Message, this.config.DecreaseCommandRegex );
+            if ( match.Success )
+            {
+                string userName = match.Groups["name"].Value;
+                int karma = await this.dataBase.DecreaseKarma( userName );
+
+                writer.SendMessageToUser( userName + " has had their karma decreased to " + karma, response.Channel );
+            }
         }
 
         /// <summary>
@@ -130,8 +158,16 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
         {
+            Match match = Regex.Match( response.Message, this.config.QueryCommand );
+            if ( match.Success )
+            {
+                string userName = match.Groups["name"].Value;
+                int karma = await this.dataBase.QueryKarma( userName );
+
+                writer.SendMessageToUser( userName + " has " + karma + " karma.", response.Channel );
+            }
         }
     }
 }
