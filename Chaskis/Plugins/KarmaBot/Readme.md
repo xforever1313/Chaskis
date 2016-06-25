@@ -3,10 +3,10 @@
 
 Karmabot keeps track of Karma users (or other things) have.  Karma is points earned when a user or thing does something positive, and taken away when a user or thing does something bad.
 
-By default, to give karma to something or someone, type
-
 Instructions
 -------
+
+By default, to give karma to something or someone, type
 
 ```
 ++userName or userName++ 
@@ -63,6 +63,8 @@ KarmaBot is included as a default Chaskis plugin.  To enable, open PluginConfig.
 ```XML
 <assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/KarmaBot/KarmaBot.dll" classname="Chaskis.Plugins.KarmaBot.KarmaBot" />
 ```
+
+Note, you'll need SQLite installed.  It does get installed with NuGet when you restore the packages during building.
 
 Sample Output
 --------
