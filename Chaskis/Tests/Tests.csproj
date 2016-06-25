@@ -71,6 +71,7 @@
     <None Include="TestFiles\InvalidPluginConfigEmptyClass.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllHandlerTest.cs" />
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="MessageHandlerTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
