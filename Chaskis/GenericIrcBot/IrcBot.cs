@@ -62,7 +62,6 @@ namespace GenericIrcBot
             IrcConnection connection = new IrcConnection( ircConfig );
             connection.ReadEvent = delegate( string line )
             {
-                Console.WriteLine( line );
                 foreach( IIrcHandler config in this.ircHandlers )
                 {
                     config.HandleEvent( line, this.ircConfig, connection );

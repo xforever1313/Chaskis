@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericIrcBot", "GenericIrcBot\GenericIrcBot.csproj", "{501708E7-AC43-4DF4-B7BC-6A31074E30D1}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherBot", "Plugins\WeatherBot\WeatherBot.csproj", "{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarmaBot", "Plugins\KarmaBot\KarmaBot.csproj", "{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleOut", "Plugins\ConsoleOut\ConsoleOut.csproj", "{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -116,6 +118,14 @@ Global
 		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +136,7 @@ Global
 		{13694108-DD59-4147-8AE0-8573414372B1} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{0FB1C4E1-91C0-4988-BF4A-A9A1624DF5A8} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
