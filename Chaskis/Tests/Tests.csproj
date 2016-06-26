@@ -82,6 +82,7 @@
     <Compile Include="Plugins\KarmaBot\KaramaBotDatabaseTests.cs" />
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
+    <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
     <Compile Include="Plugins\WeatherBot\Mocks\MockWeatherQuery.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
@@ -109,6 +110,10 @@
     <ProjectReference Include="..\Plugins\KarmaBot\KarmaBot.csproj">
       <Project>{adfa8d13-b83b-4ed4-8c23-f85fdba8fc6e}</Project>
       <Name>KarmaBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\MathBot\MathBot.csproj">
+      <Project>{b5c2b6b5-35a6-4ef8-ab4f-3bf5da743878}</Project>
+      <Name>MathBot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Plugins\WeatherBot\WeatherBot.csproj">
       <Project>{0fb1c4e1-91c0-4988-bf4a-a9a1624df5a8}</Project>
