@@ -79,6 +79,8 @@
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
+    <Compile Include="Plugins\IrcLogger\IrcLoggerConfigTest.cs" />
+    <Compile Include="Plugins\IrcLogger\IrcLoggerXmlLoaderTest.cs" />
     <Compile Include="Plugins\KarmaBot\KaramaBotDatabaseTests.cs" />
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
@@ -107,6 +109,10 @@
       <Project>{c82ec85e-1885-4f71-ba54-81ef08d169f6}</Project>
       <Name>CowSayBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\IrcLogger\IrcLogger.csproj">
+      <Project>{60dfa3f8-e518-482c-a620-e947d13a72e6}</Project>
+      <Name>IrcLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\KarmaBot\KarmaBot.csproj">
       <Project>{adfa8d13-b83b-4ed4-8c23-f85fdba8fc6e}</Project>
       <Name>KarmaBot</Name>
@@ -126,6 +132,8 @@
   <ItemGroup>
     <None Include="Plugins\CowSayBot\TestFiles\cowsay" />
     <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
+    <Content Include="Plugins\IrcLogger\TestFiles\GoodDefault.xml" />
+    <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\ValidConfig.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\BadReport.xml" />

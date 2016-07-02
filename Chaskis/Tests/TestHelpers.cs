@@ -18,8 +18,25 @@ namespace Tests
         /// <summary>
         /// Path to the base directory of the Tests directory.
         /// </summary>
-        public static readonly string BaseDir = Path.Combine(
-            "..", ".."
+        public static readonly string TestsBaseDir = Path.Combine(
+            "..",
+            ".."
+        );
+
+        /// <summary>
+        /// The path to the root of the project.
+        /// </summary>
+        public static readonly string ProjectRoot = Path.Combine(
+            TestsBaseDir,
+            ".."
+        );
+
+        /// <summary>
+        /// The path to the plugins folder.
+        /// </summary>
+        public static readonly string PluginDir = Path.Combine(
+            ProjectRoot,
+            "Plugins"
         );
 
         /// <summary>
@@ -31,7 +48,7 @@ namespace Tests
         /// Path to the TestFiles directory of the Tests directory.
         /// </summary>
         public static readonly string TestFilesDir = Path.Combine(
-            BaseDir, "TestFiles"
+            TestsBaseDir, "TestFiles"
         );
 
         public static IrcConfig GetTestIrcConfig()

@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleOut", "Plugins\Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathBot", "Plugins\MathBot\MathBot.csproj", "{B5C2B6B5-35A6-4EF8-AB4F-3BF5DA743878}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrcLogger", "Plugins\IrcLogger\IrcLogger.csproj", "{60DFA3F8-E518-482C-A620-E947D13A72E6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCSMono.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -136,6 +138,14 @@ Global
 		{B5C2B6B5-35A6-4EF8-AB4F-3BF5DA743878}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{B5C2B6B5-35A6-4EF8-AB4F-3BF5DA743878}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5C2B6B5-35A6-4EF8-AB4F-3BF5DA743878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60DFA3F8-E518-482C-A620-E947D13A72E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +158,7 @@ Global
 		{ADFA8D13-B83B-4ED4-8C23-F85FDBA8FC6E} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{2D639F2A-0AD9-45B9-9FC1-17EE4EBAA529} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{B5C2B6B5-35A6-4EF8-AB4F-3BF5DA743878} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{60DFA3F8-E518-482C-A620-E947D13A72E6} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

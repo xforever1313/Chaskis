@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ircloggerconfig>
+    <logfilelocation>/home/me/logs/ChaskisLogs</logfilelocation>
+    <maxnumbermessagesperlog>90</maxnumbermessagesperlog>
+    <logname>chaskis</logname>
+</ircloggerconfig>

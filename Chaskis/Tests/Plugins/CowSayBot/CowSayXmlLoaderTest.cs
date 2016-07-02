@@ -19,7 +19,7 @@ namespace Tests.Plugins.CowSayBot
         /// Path to the xml directory with the xml cowsay configs are.
         /// </summary>
         private static readonly string TestFilesPath = Path.Combine(
-            TestHelpers.BaseDir, "Plugins", "CowSayBot", "TestFiles"
+            TestHelpers.TestsBaseDir, "Plugins", "CowSayBot", "TestFiles"
         );
 
         // -------- Tests --------

@@ -83,11 +83,18 @@ namespace GenericIrcBot
                 true,
                 delegate( Exception err )
                 {
-                    Console.WriteLine( "***************" );
-                    Console.WriteLine( "Caught Exception in Event Queue Thread:" );
-                    Console.WriteLine( err.Message );
-                    Console.WriteLine( err.StackTrace );
-                    Console.WriteLine( "***************" );
+                    if ( this.ErrorLogEvent != null )
+                    {
+                        StringWriter errorMessage = new StringWriter();
+
+                        errorMessage.WriteLine( "***************" );
+                        errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
+                        errorMessage.WriteLine( err.Message );
+                        errorMessage.WriteLine( err.StackTrace );
+                        errorMessage.WriteLine( "***************" );
+
+                        this.ErrorLogEvent.Invoke( errorMessage.ToString() );
+                    }
                 }
             );
 

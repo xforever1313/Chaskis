@@ -18,7 +18,7 @@ namespace Tests.Plugins.CowSayBot
         /// Path to the fake cowsay executable.
         /// </summary>
         private static readonly string FakeExe = Path.Combine(
-            TestHelpers.BaseDir, "Plugins", "CowSayBot", "TestFiles", "cowsay"
+            TestHelpers.TestsBaseDir, "Plugins", "CowSayBot", "TestFiles", "cowsay"
         );
 
         /// <summary>
