@@ -4,12 +4,8 @@
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GenericIrcBot;
 
 namespace Chaskis.Plugins.IrcLogger
@@ -26,6 +22,11 @@ namespace Chaskis.Plugins.IrcLogger
         /// The handlers for this plugin.
         /// </summary>
         private readonly List<IIrcHandler> handlers;
+
+        /// <summary>
+        /// The thing that managers the logs.
+        /// </summary>
+        private LogManager logManager;
 
         // -------- Constructor ---------
 
@@ -62,10 +63,25 @@ namespace Chaskis.Plugins.IrcLogger
             string pluginDir = Path.GetDirectoryName( pluginPath );
 
             IrcLoggerConfig config = XmlLoader.LoadIrcLoggerConfig(
-                Path.Combine( "pluginDir", "IrcLoggerConfig.xml" )
+                Path.Combine( pluginDir, "IrcLoggerConfig.xml" )
             );
 
-            // TODO: Things with the config.
+            if ( string.IsNullOrEmpty( config.LogFileLocation ) )
+            {
+                config.LogFileLocation = Path.Combine( pluginDir, "Logs" );
+            }
+            if ( string.IsNullOrEmpty( config.LogName ) )
+            {
+                config.LogName = "irclog";
+            }
+
+            this.logManager = new LogManager( config );
+
+            AllHandler handler = new AllHandler(
+                this.HandleLogEvent
+            );
+
+            this.handlers.Add( handler );
         }
 
         /// <summary>
@@ -82,6 +98,17 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         public void Teardown()
         {
+            this.logManager?.Dispose();
+        }
+
+        /// <summary>
+        /// Handles writing an event to the log.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleLogEvent( IIrcWriter writer, IrcResponse response )
+        {
+            this.logManager.LogToFile( response.Message );
         }
     }
 }
