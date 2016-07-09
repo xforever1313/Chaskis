@@ -81,6 +81,7 @@
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
     <Compile Include="Plugins\IrcLogger\IrcLoggerConfigTest.cs" />
     <Compile Include="Plugins\IrcLogger\IrcLoggerXmlLoaderTest.cs" />
+    <Compile Include="Plugins\IrcLogger\LogManagerTest.cs" />
     <Compile Include="Plugins\KarmaBot\KaramaBotDatabaseTests.cs" />
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />

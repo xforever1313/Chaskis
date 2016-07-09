@@ -150,10 +150,24 @@ namespace Chaskis.Plugins.IrcLogger
         /// <param name="timeStamp">The timestamp from calling this.LogToFile()</param>
         private void CreateNewFile( DateTime timeStamp )
         {
-            this.CurrentFileName = GenerateFileName( timeStamp );
+            bool isNewFile = false;
+            string newFileName = string.Empty;
+
+            // Keep generating file names until we get one that does not exist.
+            // its possible that our computer is small enough and our log file sizes are
+            // small enough that it can screw with the file size.
+            while ( isNewFile == false )
+            {
+                this.CurrentFileName = GenerateFileName( timeStamp );
+                newFileName = Path.Combine( this.config.LogFileLocation, this.CurrentFileName );
+                if ( File.Exists( newFileName ) == false )
+                {
+                    isNewFile = true;
+                }
+            }
 
             this.outFile = new FileStream(
-                Path.Combine( this.config.LogFileLocation, this.CurrentFileName ),
+                newFileName,
                 FileMode.Create,
                 FileAccess.Write
             );
@@ -170,7 +184,7 @@ namespace Chaskis.Plugins.IrcLogger
             return string.Format(
                 "{0}.{1}.log",
                 this.config.LogName,
-                timeStamp.ToString( "yyyy-MM-dd_HH-mm-ss-ff" )
+                timeStamp.ToString( "yyyy-MM-dd_HH-mm-ss-ffff" )
             );
         }
 
