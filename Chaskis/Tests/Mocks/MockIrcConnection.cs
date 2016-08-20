@@ -41,7 +41,7 @@ namespace Tests.Mocks
         public bool IsConnected { get; set; }
 
         /// <summary>
-        /// Dictionary of messages sent using SendCommand
+        /// Dictionary of messages sent using SendCommandToChannel
         /// </summary>
         public IReadOnlyDictionary<string, IList<string>> MessagesSent { get; set; }
 
@@ -69,7 +69,7 @@ namespace Tests.Mocks
         /// Sends the given command to the testChannel specified in the config.
         /// </summary>
         /// <param name="msg">The message to send.</param>
-        public void SendCommand( string msg )
+        public void SendCommandToChannel( string msg )
         {
             if( messagesSend.ContainsKey( this.Config.Channel ) == false )
             {

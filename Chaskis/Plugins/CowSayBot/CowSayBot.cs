@@ -227,7 +227,7 @@ namespace Chaskis.Plugins.CowSayBot
 
                     if ( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                     {
-                        writer.SendCommand( cowSayedMessage );
+                        writer.SendCommandToChannel( cowSayedMessage );
                     }
                     else if ( exitCode != 0 )
                     {

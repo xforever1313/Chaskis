@@ -160,7 +160,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown."
             );
         }
@@ -172,7 +172,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private static void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "I am weather bot. I am a plugin for the Chaskis IRC bot framework. I pull data from NOAA's XML SOAP service."
             );
         }
@@ -184,7 +184,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private static void HandleSourceCodeCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "My source code is here: https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/WeatherBot"
             );
         }
@@ -201,7 +201,7 @@ namespace Chaskis.Plugins.WeatherBot
             {
                 string zip = match.Groups["zipCode"].Value;
                 string strToWrite = await this.reporter.QueryWeather( zip );
-                writer.SendCommand( strToWrite );
+                writer.SendCommandToChannel( strToWrite );
             }
         }
     }

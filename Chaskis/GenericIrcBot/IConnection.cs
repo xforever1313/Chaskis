@@ -30,7 +30,7 @@ namespace GenericIrcBot
         /// Sends the given command to the channel.
         /// </summary>
         /// <param name="msg">The message to send.</param>
-        void SendCommand( string msg );
+        void SendCommandToChannel( string msg );
 
         /// <summary>
         /// Sends the given command to the user.  Also works for sending messages

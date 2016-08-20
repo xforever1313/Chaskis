@@ -106,7 +106,7 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
                 "Greetings " + response.RemoteUser + ", welcome to " + response.Channel + "!",
                 response.RemoteUser
             );
-            writer.SendCommand( response.RemoteUser + " has joined " + response.Channel );
+            writer.SendCommandToChannel( response.RemoteUser + " has joined " + response.Channel );
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
                 "Thanks for visiting " + response.Channel + "!  Please come back soon!",
                 response.RemoteUser
             );
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 response.RemoteUser + " has left " + response.Channel
             );
         }

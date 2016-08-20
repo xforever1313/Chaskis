@@ -217,7 +217,7 @@ namespace GenericIrcBot
         /// Throws InvalidOperationException if not connected.
         /// </summary>
         /// <param name="msg">The message to send.</param>
-        public void SendCommand( string msg )
+        public void SendCommandToChannel( string msg )
         {
             SendMessageToUser( msg, this.Config.Channel );
         }

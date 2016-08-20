@@ -149,7 +149,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 span.Seconds
             );
 
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 str
             );
         }
@@ -161,7 +161,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <param name="response">The response from the channel.</param>
         private static void HandleOsVersionCmd( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "My system is " + Environment.OSVersion.ToString() + "."
             );
         }
@@ -173,7 +173,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <param name="response">The response from the channel.</param>
         private static void HandleProcessorCountCmd( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "My system has " + Environment.ProcessorCount + " processors."
             );
         }
@@ -186,7 +186,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         private static void HandleTimeCmd( IIrcWriter writer, IrcResponse response )
         {
             DateTime time = DateTime.UtcNow;
-            writer.SendCommand(
+            writer.SendCommandToChannel(
                 "My time is " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC."
             );
         }
