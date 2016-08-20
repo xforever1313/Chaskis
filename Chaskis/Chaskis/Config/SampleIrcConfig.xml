@@ -8,8 +8,8 @@ Notice the password in this field.  Don't be dumb and commit this file to a sens
 Copy/Paste this elsewhere if needed. Chaskis has command line arguments you can use to point
 to that pasted file instead of having to use the one located in ApplicationData
 
-The server and channel are required.  No field can be an empty string.  Port can not be negative.
-Password is optional.
+The server and channel are required.  No field can be an empty string (except for optional fields).  Port can not be negative.
+Password is optional.  quitmesssage is optional.
 
 Bridge bots, meanwhile, are IRC bots that bridge other services such as telegram or slack.
 Typically in a channel, bridge bots like this:
@@ -37,6 +37,7 @@ to match Chaskis will treat the bridge bot as a regular user.
 	<nick>testbot</nick>
 	<realname>test bot</realname>
 	<password>apassword</password>
+    <quitmessage>I am being shut down!</quitmessage>
     <!--
     <bridgebots>
         <bridgebot botname="telegrambot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />

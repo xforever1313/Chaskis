@@ -45,6 +45,7 @@ namespace Tests
             this.ircConfig.UserName = "testbot";
             this.ircConfig.RealName = "test bot";
             this.ircConfig.Password = "apassword";
+            this.ircConfig.QuitMessage = "I am being shut down!";
         }
 
         // -------- Tests --------

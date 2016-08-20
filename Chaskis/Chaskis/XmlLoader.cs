@@ -84,6 +84,10 @@ namespace Chaskis
                         config.RealName = childNode.InnerText;
                         break;
 
+                    case "quitmessage":
+                        config.QuitMessage = childNode.InnerText;
+                        break;
+
                     case "bridgebots":
                         foreach ( XmlNode bridgeBotNode in childNode.ChildNodes )
                         {

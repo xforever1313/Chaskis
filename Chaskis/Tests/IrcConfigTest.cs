@@ -87,6 +87,10 @@ namespace Tests
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
+            this.ircConfig.QuitMessage = "A quit message";
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
             // Add an additional bot.
             this.ircConfig.BridgeBots["slackBridge"] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
@@ -114,6 +118,7 @@ namespace Tests
             Assert.AreEqual( this.ircConfig.Nick, config.Nick );
             Assert.AreEqual( this.ircConfig.RealName, config.RealName );
             Assert.AreEqual( this.ircConfig.Password, config.Password );
+            Assert.AreEqual( this.ircConfig.QuitMessage, config.QuitMessage );
             Assert.AreNotSame( this.ircConfig.BridgeBots, config.BridgeBots ); // Should not be same reference.
 
             // Next, ensure trying to convert to an IRCConfig results in a null (someone's going to do this).
@@ -178,6 +183,14 @@ namespace Tests
                 }
             );
             Assert.IsTrue( ex.Message.Contains( "Password" ) );
+
+            ex = Assert.Throws<ReadOnlyException>(
+                delegate ()
+                {
+                    roConfig.QuitMessage = "I am quitting";
+                }
+            );
+            Assert.IsTrue( ex.Message.Contains( "QuitMessage" ) );
         }
 
         [Test]
@@ -196,6 +209,12 @@ namespace Tests
 
             // Empty password should validate
             this.ircConfig.Password = string.Empty;
+            Assert.DoesNotThrow( () => this.ircConfig.Validate() );
+            Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
+            Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
+
+            // 160 characters on quit message is okay.
+            this.ircConfig.QuitMessage = "1234567891123456789212345678931234567894123456789512345678961234567897123456789812345678991234567890123456789112345678921234567893123456789412345678951234567896";
             Assert.DoesNotThrow( () => this.ircConfig.Validate() );
             Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
             Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
@@ -225,6 +244,16 @@ namespace Tests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
             this.ircConfig.RealName = string.Empty;
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Quit message more than 160 characters:
+            this.ircConfig.QuitMessage = "12345678911234567892123456789312345678941234567895123456789612345678971234567898123456789912345678901234567891123456789212345678931234567894123456789512345678961";
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Quit message can not be null.
+            this.ircConfig.QuitMessage = null;
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 

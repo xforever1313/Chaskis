@@ -53,6 +53,12 @@ namespace GenericIrcBot
         string Password { get; }
 
         /// <summary>
+        /// The quit message when the bot is leaving.
+        /// Must be less than 160 characters and contain no new lines.
+        /// </summary>
+        string QuitMessage { get; }
+
+        /// <summary>
         /// Dictionary of bots that act as bridges to other clients (e.g. telegram).
         /// Key is the bridge's user name
         /// Value a regex.  Must include (?<bridgeUser>) and (<bridgeMessage>) regex groups.
@@ -111,6 +117,7 @@ namespace GenericIrcBot
             this.RealName = "Some IRC Bot";
             this.Password = string.Empty;
             this.BridgeBots = new Dictionary<string, string>();
+            this.QuitMessage = string.Empty;
         }
 
         // -------- Properties --------
@@ -152,6 +159,12 @@ namespace GenericIrcBot
         public string Password { get; set; }
 
         /// <summary>
+        /// The quit message when the bot is leaving.
+        /// Must be less than 160 characters and contain no new lines.
+        /// </summary>
+        public string QuitMessage { get; set; }
+
+        /// <summary>
         /// Mutable Dictionary of bots that act as bridges to other clients (e.g. telegram).
         /// Key is the bridge's user name
         /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
@@ -187,7 +200,7 @@ namespace GenericIrcBot
         /// <returns>The base object's hash code.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return IrcConfigHelpers.GetHashCode( this );
         }
 
         /// <summary>
@@ -338,6 +351,22 @@ namespace GenericIrcBot
         }
 
         /// <summary>
+        /// The quit message when the bot is leaving.
+        /// Must be less than 160 characters and contain no new lines.
+        /// </summary>
+        public string QuitMessage
+        {
+            get
+            {
+                return this.wrappedConfig.QuitMessage;
+            }
+            set
+            {
+                ThrowException( nameof( this.QuitMessage ) );
+            }
+        }
+
+        /// <summary>
         /// Read-only Dictionary of bots that act as bridges to other clients (e.g. telegram).
         /// Key is the bridge's user name
         /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
@@ -371,7 +400,7 @@ namespace GenericIrcBot
         /// <returns>The base object's hash code.</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return IrcConfigHelpers.GetHashCode( this );
         }
 
         /// <summary>
@@ -441,6 +470,25 @@ namespace GenericIrcBot
                 errorString += "RealName can not be null or empty" + Environment.NewLine;
                 success = false;
             }
+            if ( config.QuitMessage == null )
+            {
+                errorString += "Quit Message can not be null" + Environment.NewLine;
+                success = false;
+            }
+            // Per this website, quit messages can not contain new lines:
+            // http://www.user-com.undernet.org/documents/quitmsg.php
+            else if ( config.QuitMessage.Contains( Environment.NewLine ) )
+            {
+                errorString += "Quit Message can not contain new lines" + Environment.NewLine;
+                success = false;
+            }
+            // Per this website, quit messages can not contain more than 160 characters.
+            // http://www.user-com.undernet.org/documents/quitmsg.php
+            else if ( config.QuitMessage.Length > 160 )
+            {
+                errorString += "Quit Message can not contain more than 160 characters" + Environment.NewLine;
+                success = false;
+            }
             // Bridge bots MAY be empty, but can not be null.
             if ( config.BridgeBots == null )
             {
@@ -486,6 +534,25 @@ namespace GenericIrcBot
         }
 
         /// <summary>
+        /// Gets the hash code of the IRC config object.
+        /// </summary>
+        /// <param name="config">The config to get the hash code of.</param>
+        /// <returns>The hash code of the IRC config object.</returns>
+        internal static int GetHashCode( IIrcConfig config )
+        {
+            return
+                config.Server.GetHashCode() +
+                config.Channel.GetHashCode() +
+                config.Port.GetHashCode() +
+                config.UserName.GetHashCode() +
+                config.Nick.GetHashCode() +
+                config.RealName.GetHashCode() +
+                config.Password.GetHashCode() +
+                config.QuitMessage.GetHashCode() +
+                config.BridgeBots.GetHashCode();
+        }
+
+        /// <summary>
         /// Checks to see if the given IIrcConfig object is the same
         /// as the given object.
         /// </summary>
@@ -504,6 +571,7 @@ namespace GenericIrcBot
                 ( config1.Nick == other.Nick ) &&
                 ( config1.RealName == other.RealName ) &&
                 ( config1.Password == other.Password ) &&
+                ( config1.QuitMessage == other.QuitMessage ) &&
                 ( config1.BridgeBots.Count == other.BridgeBots.Count );
 
             if ( isEqual )
