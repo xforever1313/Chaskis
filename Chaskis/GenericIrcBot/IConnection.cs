@@ -47,6 +47,14 @@ namespace GenericIrcBot
         void SendPong( string response );
 
         /// <summary>
+        /// Sends a part to the current channel we are on.
+        /// Note, this will make the bot LEAVE the channel.  Only use
+        /// if you know what you are doing.
+        /// </summary>
+        /// <param name="reason">The reason for parting.</param>
+        void SendPart( string reason );
+
+        /// <summary>
         /// Disconnects the connection.
         /// </summary>
         void Disconnect();

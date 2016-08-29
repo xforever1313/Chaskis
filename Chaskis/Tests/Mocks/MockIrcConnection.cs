@@ -55,6 +55,11 @@ namespace Tests.Mocks
         /// </summary>
         public string PongResponse { get; private set; }
 
+        /// <summary>
+        /// The reason we parted from the channel.
+        /// </summary>
+        public string PartReason { get; private set; }
+
         // -------- Functions --------
 
         /// <summary>
@@ -96,13 +101,23 @@ namespace Tests.Mocks
         }
 
         /// <summary>
-        /// Sends the pong to the give url.
+        /// Sends the pong to the given url.
         /// Actually saves it to this.PongUrl.
         /// </summary>
         /// <param name="response">The response to we send with the pong.</param>
         public void SendPong( string response )
         {
             this.PongResponse = response;
+        }
+
+        /// <summary>
+        /// Sends the part to the channel.
+        /// Actually saves it to this.PartReason.
+        /// </summary>
+        /// <param name="reason">The reason we are parting.</param>
+        public void SendPart( string reason )
+        {
+            this.PartReason = reason;
         }
 
         /// <summary>
@@ -123,6 +138,7 @@ namespace Tests.Mocks
             this.MessagesSent = messagesSend;
             this.IsConnected = false;
             this.PongResponse = string.Empty;
+            this.PartReason = string.Empty;
         }
     }
 }

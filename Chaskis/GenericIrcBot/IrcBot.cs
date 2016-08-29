@@ -100,7 +100,14 @@ namespace GenericIrcBot
         {
             if( this.ircConnection.IsConnected )
             {
-                this.ircConnection.Disconnect();
+                try
+                {
+                    this.ircConnection.SendPart( this.IrcConfig.QuitMessage );
+                }
+                finally
+                {
+                    this.ircConnection.Disconnect();
+                }
             }
         }
     }

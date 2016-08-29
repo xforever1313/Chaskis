@@ -293,6 +293,27 @@ namespace GenericIrcBot
         }
 
         /// <summary>
+        /// Sends a part to the current channel we are on.
+        /// Note, this will make the bot LEAVE the channel.  Only use
+        /// if you know what you are doing.
+        /// </summary>
+        /// <param name="reason">The reason for parting.</param>
+        public void SendPart( string reason )
+        {
+            lock ( this.ircWriterLock )
+            {
+                if ( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                {
+                    return;
+                }
+
+                // PART :reason
+                this.ircWriter.WriteLine( "PART {0} :{1}", this.Config.Channel, this.Config.QuitMessage );
+                this.ircWriter.Flush();
+            }
+        }
+
+        /// <summary>
         /// Disconnected.
         /// No-Op if already disconnected.
         /// </summary>
