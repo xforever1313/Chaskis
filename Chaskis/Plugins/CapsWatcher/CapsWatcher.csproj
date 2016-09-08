@@ -7,7 +7,7 @@
     <ProjectGuid>{A5300647-4B0A-4C23-B714-5350070991FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CapsWatcher</RootNamespace>
+    <RootNamespace>Chaskis.Plugins.CapsWatcher</RootNamespace>
     <AssemblyName>CapsWatcher</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

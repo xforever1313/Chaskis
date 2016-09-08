@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
-using CapsWatcher;
+using Chaskis.Plugins.CapsWatcher;
 using NUnit.Framework;
 
 namespace Tests.Plugins.CapsWatcher

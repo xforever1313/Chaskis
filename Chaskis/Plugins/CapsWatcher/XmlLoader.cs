@@ -7,7 +7,7 @@
 using System.IO;
 using System.Xml;
 
-namespace CapsWatcher
+namespace Chaskis.Plugins.CapsWatcher
 {
     public static class XmlLoader
     {

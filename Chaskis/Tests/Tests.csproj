@@ -77,6 +77,7 @@
     <Compile Include="Mocks\MockIrcConnection.cs" />
     <Compile Include="JoinHandlerTest.cs" />
     <Compile Include="Plugins\CapsWatcher\CapsWatcherConfigTest.cs" />
+    <Compile Include="Plugins\CapsWatcher\CapsWatcherTest.cs" />
     <Compile Include="Plugins\CapsWatcher\CapsWatcherXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
