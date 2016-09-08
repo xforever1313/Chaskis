@@ -76,6 +76,8 @@
     <Compile Include="MessageHandlerTest.cs" />
     <Compile Include="Mocks\MockIrcConnection.cs" />
     <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="Plugins\CapsWatcher\CapsWatcherConfigTest.cs" />
+    <Compile Include="Plugins\CapsWatcher\CapsWatcherXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
@@ -98,6 +100,10 @@
     <Compile Include="AssemblyConfigTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Plugins\CapsWatcher\CapsWatcher.csproj">
+      <Project>{a5300647-4b0a-4c23-b714-5350070991fd}</Project>
+      <Name>CapsWatcher</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenericIrcBot\GenericIrcBot.csproj">
       <Project>{501708E7-AC43-4DF4-B7BC-6A31074E30D1}</Project>
       <Name>GenericIrcBot</Name>
@@ -132,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Plugins\CowSayBot\TestFiles\cowsay" />
+    <Content Include="Plugins\CapsWatcher\TestFiles\BadRoot.xml" />
+    <Content Include="Plugins\CapsWatcher\TestFiles\EmptyMessage.xml" />
+    <Content Include="Plugins\CapsWatcher\TestFiles\NoMessages.xml" />
     <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
     <Content Include="Plugins\IrcLogger\TestFiles\GoodDefault.xml" />
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
