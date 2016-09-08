@@ -9,7 +9,7 @@ The messages are
 
 Configuration
 =====
-The only configuration file is what message you wish to send to an offending user.  To include the offending user's name in the message, add {%user%} somewhere in the message.
+The only configuration file is what message you wish to send to an offending user.  To include the offending user's name in the message, add \{%user%\} somewhere in the message.
 
 The configuration file lives in /home/chaskis/.config/Chaskis/Plugins/CapsWatcher/CapsWatcherConfig.xml
 
@@ -44,7 +44,9 @@ Installing
 
 CapsWatcher comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/CapsWatcher.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
-&lt;assembly path="/home/chaskis/.config/Chaskis/Plugins/CapsWatcher/CapsWatcher.dll" classname="Chaskis.Plugins.CapsWatcher.CapsWatcher" /&gt;
+```XML
+<assembly path="/home/chaskis/.config/Chaskis/Plugins/CapsWatcher/CapsWatcher.dll" classname="Chaskis.Plugins.CapsWatcher.CapsWatcher" />;
+```
 
 Sample Output:
 ======
