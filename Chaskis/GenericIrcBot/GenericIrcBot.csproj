@@ -50,6 +50,6 @@
     <Compile Include="PingHandler.cs" />
     <Compile Include="IPlugin.cs" />
   </ItemGroup>
-  <Import Project="..\..\SethCS\SethCS\SethCSMono.projitems" Label="Shared" Condition="Exists('..\..\SethCS\SethCS\SethCSMono.projitems')" />
+  <Import Project="..\..\SethCS\SethCS\SethCS.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

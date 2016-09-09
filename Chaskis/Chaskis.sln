@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericIrcBot", "GenericIrc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis", "Chaskis\Chaskis.csproj", "{0A5E0053-5976-4E2C-A41B-8BAA8F112563}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\SethCS\SethCS\SethCSMono.shproj", "{9406B11B-3C52-4266-91F6-B6C176593B01}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CDE29556-87E8-4F1F-972A-33A9C849D390}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "Plugins\WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
@@ -40,10 +38,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrcLogger", "Plugins\IrcLog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapsWatcher", "Plugins\CapsWatcher\CapsWatcher.csproj", "{A5300647-4B0A-4C23-B714-5350070991FD}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\SethCS\SethCS\SethCSMono.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
-		..\SethCS\SethCS\SethCSMono.projitems*{9406b11b-3c52-4266-91f6-b6c176593b01}*SharedItemsImports = 13
+		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
+		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|Any CPU = Debug Linux|Any CPU
