@@ -44,6 +44,7 @@ namespace GenericIrcBot
             ArgumentChecker.IsNotNull( response, nameof( response ) );
 
             this.JoinAction = response;
+            this.KeepHandling = true;
         }
 
         // -------- Properties --------
@@ -52,6 +53,23 @@ namespace GenericIrcBot
         /// The action that gets triggered when a user joins.
         /// </summary>
         public Action<IIrcWriter, IrcResponse> JoinAction { get; private set; }
+
+        /// <summary>
+        /// Whether or not the handler should keep handling or not.
+        /// Set to true to keep handling the event when it appears in the chat.
+        /// Set to false so when the current IRC message is finished processing being,
+        /// it leaves the event queue and never
+        /// happens again.   Useful for events that only need to happen once.
+        /// 
+        /// This is a public get/set.  Either classes outside of the handler can
+        /// tell the handler to cancel the event, or it can cancel itself.
+        /// 
+        /// Note: when this is set to false, there must be one more IRC message that appears
+        /// before it is removed from the queue.
+        /// 
+        /// Defaulted to true.
+        /// </summary>
+        public bool KeepHandling { get; set; }
 
         // -------- Functions --------
 

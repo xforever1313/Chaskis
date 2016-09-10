@@ -54,6 +54,21 @@ namespace Tests
         // -------- Tests --------
 
         /// <summary>
+        /// Ensures that the class is created correctly.
+        /// </summary>
+        [Test]
+        public void ConstructionTest()
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                MessageFunction
+            );
+
+            // Keep Handling should be true by default.
+            Assert.IsTrue( uut.KeepHandling );
+        }
+
+        /// <summary>
         /// Ensures a good message goes through.
         /// </summary>
         [Test]

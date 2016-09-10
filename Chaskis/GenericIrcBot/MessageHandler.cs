@@ -15,11 +15,12 @@ namespace GenericIrcBot
     /// </summary>
     public class MessageHandler : IIrcHandler
     {
+        // -------- Fields --------
+
         /// <summary>
         /// The irc command that will appear from the server.
         /// </summary>
         public const string IrcCommand = "PRIVMSG";
-
 
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
@@ -29,6 +30,8 @@ namespace GenericIrcBot
             @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<theIrcMessage>.+)",
             RegexOptions.Compiled
         );
+
+        // -------- Constructor --------
 
         /// <summary>
         /// Constructor.
@@ -62,6 +65,7 @@ namespace GenericIrcBot
             this.RespondToSelf = respondToSelf;
             this.ResponseOption = responseOption;
             this.LastEvent = DateTime.MinValue;
+            this.KeepHandling = true;
         }
 
         // -------- Properties --------
@@ -96,6 +100,23 @@ namespace GenericIrcBot
         /// The last time this event was triggered.
         /// </summary>
         public DateTime LastEvent { get; private set; }
+
+        /// <summary>
+        /// Whether or not the handler should keep handling or not.
+        /// Set to true to keep handling the event when it appears in the chat.
+        /// Set to false so when the current IRC message is finished processing being,
+        /// it leaves the event queue and never
+        /// happens again.   Useful for events that only need to happen once.
+        /// 
+        /// This is a public get/set.  Either classes outside of the handler can
+        /// tell the handler to cancel the event, or it can cancel itself.
+        /// 
+        /// Note: when this is set to false, there must be one more IRC message that appears
+        /// before it is removed from the queue.
+        /// 
+        /// Defaulted to true.
+        /// </summary>
+        public bool KeepHandling { get; set; }
 
         // -------- Function --------
 

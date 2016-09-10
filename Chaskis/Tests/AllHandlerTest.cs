@@ -55,6 +55,16 @@ namespace Tests
         // -------- Tests --------
 
         /// <summary>
+        /// Ensures that the class is created correctly.
+        /// </summary>
+        [Test]
+        public void ConstructionTest()
+        {
+            // Keep Handling should be true by default.
+            Assert.IsTrue( this.uut.KeepHandling );
+        }
+
+        /// <summary>
         /// Ensurs everything that needs to throw argument null
         /// exceptions does.
         /// </summary>
