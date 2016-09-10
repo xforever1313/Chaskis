@@ -128,7 +128,7 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if ( manager.LoadPlugins( pluginList, this.ircConfig, this.errorLogFunction ) )
+            if ( manager.LoadPlugins( pluginList, this.ircConfig, this.infoLogFunction, this.errorLogFunction ) )
             {
                 this.plugins = manager.Plugins;
                 foreach ( IPlugin plugin in this.plugins.Values )

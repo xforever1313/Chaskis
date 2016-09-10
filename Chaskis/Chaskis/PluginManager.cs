@@ -58,58 +58,55 @@ namespace Chaskis
         /// Action to take when we want to log something.
         /// Argument to action is the string to log.
         /// </param>
-        public bool LoadPlugins( IList<AssemblyConfig> pluginList, IIrcConfig ircConfig, Action<string> logFunction = null )
+        public bool LoadPlugins(
+            IList<AssemblyConfig> pluginList,
+            IIrcConfig ircConfig,
+            Action<string> infoLogFunction = null,
+            Action<string> errorLogFunction = null
+        )
         {
             bool success = true;
 
-            using ( StringWriter errorLog = new StringWriter() )
+            foreach ( AssemblyConfig pluginConfig in pluginList )
             {
-                foreach ( AssemblyConfig pluginConfig in pluginList )
+                try
                 {
-                    try
-                    {
-                        Assembly dll = Assembly.LoadFrom( pluginConfig.AssemblyPath );
-                        Type type = dll.GetType( pluginConfig.ClassName );
+                    Assembly dll = Assembly.LoadFrom( pluginConfig.AssemblyPath );
+                    Type type = dll.GetType( pluginConfig.ClassName );
 
-                        MethodInfo initFunction = type.GetMethod( "Init" );
+                    MethodInfo initFunction = type.GetMethod( "Init" );
 
-                        // Make instance
-                        object instance = Activator.CreateInstance( type );
-                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
+                    // Make instance
+                    object instance = Activator.CreateInstance( type );
+                    initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
 
-                        IPlugin plugin = ( IPlugin ) instance;
+                    IPlugin plugin = ( IPlugin ) instance;
 
-                        // Use string.split, there's less bugs and edge-cases when trying to parse it out.
-                        string[] splitString = pluginConfig.ClassName.Split( '.' );
+                    // Use string.split, there's less bugs and edge-cases when trying to parse it out.
+                    string[] splitString = pluginConfig.ClassName.Split( '.' );
 
-                        string name = splitString[splitString.Length - 1].ToLower();
-                        this.plugins.Add( name, plugin );
+                    string name = splitString[splitString.Length - 1].ToLower();
+                    this.plugins.Add( name, plugin );
 
-                        errorLog.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
-                    }
-                    catch ( Exception e )
-                    {
-                        errorLog.WriteLine( "*************" );
-                        errorLog.WriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
-                        errorLog.WriteLine( e.Message );
-                        errorLog.WriteLine();
-                        errorLog.WriteLine( e.StackTrace );
-                        errorLog.WriteLine();
-                        if ( e.InnerException != null )
-                        {
-                            errorLog.WriteLine( "Inner Exception:" );
-                            errorLog.WriteLine( e.InnerException.Message );
-                            errorLog.WriteLine( e.InnerException.StackTrace );
-                        }
-                        errorLog.WriteLine( "*************" );
-
-                        success = false;
-                    }
+                    infoLogFunction?.Invoke( "Successfully loaded plugin: " + pluginConfig.ClassName );
                 }
-
-                if ( logFunction != null )
+                catch ( Exception e )
                 {
-                    logFunction( errorLog.ToString() );
+                    errorLogFunction?.Invoke( "*************" );
+                    errorLogFunction?.Invoke( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
+                    errorLogFunction?.Invoke( e.Message );
+                    errorLogFunction?.Invoke( string.Empty );
+                    errorLogFunction?.Invoke( e.StackTrace );
+                    errorLogFunction?.Invoke( string.Empty );
+                    if ( e.InnerException != null )
+                    {
+                        errorLogFunction?.Invoke( "Inner Exception:" );
+                        errorLogFunction?.Invoke( e.InnerException.Message );
+                        errorLogFunction?.Invoke( e.InnerException.StackTrace );
+                    }
+                    errorLogFunction?.Invoke( "*************" );
+
+                    success = false;
                 }
             }
 

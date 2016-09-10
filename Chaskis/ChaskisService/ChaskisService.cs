@@ -18,7 +18,13 @@ namespace ChaskisService
         /// <summary>
         /// The instance of chaskis.
         /// </summary>
-        Chaskis.Chaskis chaskis;
+        private Chaskis.Chaskis chaskis;
+
+        private FileStream logFile;
+        private StreamWriter logWriter;
+
+        private Action<string> infoLogAction;
+        private Action<string> errorLogAction;
 
         // -------- Constructor --------
 
@@ -28,21 +34,21 @@ namespace ChaskisService
         public ChaskisService()
         {
             InitializeComponent();
+
+            if ( Environment.OSVersion.Platform == PlatformID.Unix )
+            {
+                infoLogAction = this.LinuxLogInfo;
+                errorLogAction = this.LinuxLogError;
+            }
+            else
+            {
+                infoLogAction = this.WindowsLogInfo;
+                errorLogAction = this.WindowsLogError;
+            }
+
             this.chaskis = new Chaskis.Chaskis(
-                delegate ( string infoMsg )
-                {
-                    this.ChaskisEventLog.WriteEntry(
-                        infoMsg + Environment.NewLine,
-                        EventLogEntryType.Information
-                    );
-                },
-                delegate ( string errorMsg )
-                {
-                    this.ChaskisEventLog.WriteEntry(
-                        errorMsg + Environment.NewLine,
-                        EventLogEntryType.Error
-                    );
-                }
+                infoLogAction,
+                errorLogAction
             );
         }
 
@@ -59,6 +65,13 @@ namespace ChaskisService
                     "Chaskis"
                 );
 
+                if ( Environment.OSVersion.Platform == PlatformID.Unix )
+                {
+                    string filePath = Path.Combine( rootDir, "Chaskis." + DateTime.Now.ToString( "yyyy-MM-dd_HH-mm-ss-ffff" ) + ".Log" );
+                    this.logFile = new FileStream( filePath, FileMode.Create, FileAccess.Write );
+                    this.logWriter = new StreamWriter( this.logFile );
+                }
+
                 chaskis.InitState1_LoadIrcConfig( Path.Combine( rootDir, "IrcConfig.xml" ) );
 
                 // Load Plugins.
@@ -74,9 +87,8 @@ namespace ChaskisService
             }
             catch ( Exception err )
             {
-                this.ChaskisEventLog.WriteEntry(
-                    "FATAL ERROR:" + Environment.NewLine + err.Message + Environment.NewLine + err.StackTrace,
-                    EventLogEntryType.Error
+                this.errorLogAction(
+                    "FATAL ERROR:" + Environment.NewLine + err.Message + Environment.NewLine + err.StackTrace
                 );
                 this.Stop();
             }
@@ -87,6 +99,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnStop()
         {
+            this.infoLogAction( "Stopping." );
             Teardown();
         }
 
@@ -95,6 +108,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnShutdown()
         {
+            this.infoLogAction( "Shutting down." );
             Teardown();
         }
 
@@ -104,6 +118,51 @@ namespace ChaskisService
         private void Teardown()
         {
             this.chaskis?.Dispose();
+            this.logWriter?.Dispose(); // Also disposes the file stream.
+        }
+
+        /// <summary>
+        /// How to log info on windows.
+        /// </summary>
+        /// <param name="msg">The message to log.</param>
+        private void WindowsLogInfo( string msg )
+        {
+            this.ChaskisEventLog.WriteEntry(
+                msg + Environment.NewLine,
+                EventLogEntryType.Information
+            );
+        }
+
+        /// <summary>
+        /// How to log info on Linux.
+        /// </summary>
+        /// <param name="msg">The message to log.</param>
+        private void LinuxLogInfo( string msg )
+        {
+            DateTime timeStamp = DateTime.Now;
+            this.logWriter.WriteLine( timeStamp.ToString( "o" ) + "  MSG>    " + msg );
+        }
+
+        /// <summary>
+        /// How to log error on windows.
+        /// </summary>
+        /// <param name="msg">The error message to log.</param>
+        private void WindowsLogError( string msg )
+        {
+            this.ChaskisEventLog.WriteEntry(
+                msg + Environment.NewLine,
+                EventLogEntryType.Error
+            );
+        }
+
+        /// <summary>
+        /// How to log error on linux.
+        /// </summary>
+        /// <param name="msg">The error message to log.</param>
+        private void LinuxLogError( string msg )
+        {
+            DateTime timeStamp = DateTime.Now;
+            this.logWriter.WriteLine( timeStamp.ToString( "o" ) + "  ERROR>    " + msg );
         }
     }
 }
