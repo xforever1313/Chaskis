@@ -60,6 +60,11 @@ namespace Tests.Mocks
         /// </summary>
         public string PartReason { get; private set; }
 
+        /// <summary>
+        /// The raw message we sent
+        /// </summary>
+        public string RawMessage { get; private set; }
+
         // -------- Functions --------
 
         /// <summary>
@@ -121,6 +126,16 @@ namespace Tests.Mocks
         }
 
         /// <summary>
+        /// Sends the raw message to the server.
+        /// Actually saves it to this.RawMessage
+        /// </summary>
+        /// <param name="cmd">The raw command we are sending.</param>
+        public void SendRawCmd( string cmd )
+        {
+            this.RawMessage = cmd;
+        }
+
+        /// <summary>
         /// Disconnects the "connection".
         /// </summary>
         public void Disconnect()
@@ -139,6 +154,7 @@ namespace Tests.Mocks
             this.IsConnected = false;
             this.PongResponse = string.Empty;
             this.PartReason = string.Empty;
+            this.RawMessage = string.Empty;
         }
     }
 }

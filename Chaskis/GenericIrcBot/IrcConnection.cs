@@ -314,6 +314,24 @@ namespace GenericIrcBot
         }
 
         /// <summary>
+        /// Sends a raw command to the server.
+        /// Only use if you REALLY know what you are doing.
+        /// </summary>
+        /// <param name="cmd">The IRC command to send.</param>
+        public void SendRawCmd( string cmd )
+        {
+            lock ( this.ircWriterLock )
+            {
+                if ( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                {
+                    return;
+                }
+            }
+            this.ircWriter.WriteLine( cmd );
+            this.ircWriter.Flush();
+        }
+
+        /// <summary>
         /// Disconnected.
         /// No-Op if already disconnected.
         /// </summary>

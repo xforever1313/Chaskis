@@ -27,5 +27,12 @@ namespace GenericIrcBot
         /// </summary>
         /// <param name="response">The response we need to send.</param>
         void SendPong( string response );
+
+        /// <summary>
+        /// Sends a raw command to the server.
+        /// Only use if you REALLY know what you are doing.
+        /// </summary>
+        /// <param name="cmd">The IRC command to send.</param>
+        void SendRawCmd( string command );
     }
 }

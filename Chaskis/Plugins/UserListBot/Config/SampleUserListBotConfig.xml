@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+This is the config for the user list bot.
+
+    comamnd - The command that when a user triggers it in IRC  {%nick%} gets replaced with the bot's name.
+    
+    cooldown - Time in seconds before the bot responds to the command again.  If the time since the last command
+               is less than this value, the command is ignored.
+               Can be 0.  Can not be negative.
+-->
+<userlistconfig>
+    <command>!userlist</command>
+    <cooldown>60</cooldown>
+</userlistconfig>

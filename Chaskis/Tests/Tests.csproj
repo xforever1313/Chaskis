@@ -89,6 +89,8 @@
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
+    <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
+    <Compile Include="Plugins\UserListBot\UserListXmlLoaderTest.cs" />
     <Compile Include="Plugins\WeatherBot\Mocks\MockWeatherQuery.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
@@ -129,6 +131,10 @@
       <Project>{b5c2b6b5-35a6-4ef8-ab4f-3bf5da743878}</Project>
       <Name>MathBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\UserListBot\UserListBot.csproj">
+      <Project>{3fa4494d-50ce-47de-96b2-ace032fa830a}</Project>
+      <Name>UserListBot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\WeatherBot\WeatherBot.csproj">
       <Project>{0fb1c4e1-91c0-4988-bf4a-a9a1624df5a8}</Project>
       <Name>WeatherBot</Name>
@@ -147,6 +153,8 @@
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\ValidConfig.xml" />
+    <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />
+    <Content Include="Plugins\UserListBot\TestFiles\GoodConfig.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\BadReport.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\SampleError.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\InvalidZipCode.xml" />
