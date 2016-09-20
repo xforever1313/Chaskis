@@ -4,6 +4,6 @@
 	append = false
 	number = true
 	warnifnoissue = false
-	logregex = \\*\\s+Issue:\\s+#\\d+\n\\d+
+	logregex = \\*\\s+Issue:\\s+\\d+\n\\d+
 [bugtraq]
-	message = Issue: #%BUGID%
+	message = Issue: %BUGID%
