@@ -7,9 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GenericIrcBot;
 
 namespace Chaskis.Plugins.UserListBot
@@ -36,6 +33,19 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         private UserListBotConfig userListConfig;
 
+        /// <summary>
+        /// The user list.
+        /// </summary>
+        private UserList userList;
+
+        /// <summary>
+        /// Whether or not a user queried to for the userlist.
+        /// When this is false, we will not send anything 
+        /// Key is the channel the query came from,
+        /// Value whether or not that channel queried or not.
+        /// </summary>
+        private Dictionary<string, bool> isQueried;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -44,6 +54,8 @@ namespace Chaskis.Plugins.UserListBot
         public UserListBot()
         {
             this.handlers = new List<IIrcHandler>();
+            this.userList = new UserList();
+            this.isQueried = new Dictionary<string, bool>();
         }
 
         // -------- Properties --------
@@ -101,6 +113,15 @@ namespace Chaskis.Plugins.UserListBot
 
                 this.handlers.Add( userQueryHandler );
             }
+            {
+                AllHandler nameResponseHandler = new AllHandler( HandleNamesResponse );
+                this.handlers.Add( nameResponseHandler );
+            }
+
+            {
+                AllHandler endOfNamesHandler = new AllHandler( HandleEndOfNamesResponse );
+                this.handlers.Add( endOfNamesHandler );
+            }
         }
 
         /// <summary>
@@ -128,6 +149,38 @@ namespace Chaskis.Plugins.UserListBot
         private void HandleGetUsersCommand( IIrcWriter writer, IrcResponse response )
         {
             writer.SendRawCmd( "NAMES " + this.ircConfig.Channel );
+            this.isQueried[response.Channel] = true;
+        }
+
+        /// <summary>
+        /// Handles the names response from the server.
+        /// Adds the names to the list.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleNamesResponse( IIrcWriter writer, IrcResponse response )
+        {
+            this.userList.ParseNameResponse( response.Message );
+        }
+
+        /// <summary>
+        /// Handles the end-of-names response from the server.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleEndOfNamesResponse(IIrcWriter writer, IrcResponse response)
+        {
+            Tuple<string, string> userList = this.userList.CheckAndHandleEndMessage( response.Message );
+            if ( userList != null )
+            {
+                if ( this.isQueried.ContainsKey( userList.Item1 ) && this.isQueried[userList.Item1] )
+                {
+                    writer.SendMessageToUser(
+                        string.Format( "Users in {0}: {1}", userList.Item1, userList.Item2 ),
+                        userList.Item1
+                    );
+                }
+            }
         }
     }
 }

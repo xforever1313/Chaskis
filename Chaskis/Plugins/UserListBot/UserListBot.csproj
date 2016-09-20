@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserList.cs" />
     <Compile Include="UserListBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserListBotConfig.cs" />

@@ -90,6 +90,7 @@
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
+    <Compile Include="Plugins\UserListBot\UserListTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListXmlLoaderTest.cs" />
     <Compile Include="Plugins\WeatherBot\Mocks\MockWeatherQuery.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
