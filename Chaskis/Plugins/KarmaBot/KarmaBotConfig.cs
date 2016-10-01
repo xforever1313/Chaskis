@@ -1,14 +1,9 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chaskis.Plugins.KarmaBot
 {
@@ -61,40 +56,40 @@ namespace Chaskis.Plugins.KarmaBot
             string errors = "Can not validate this KarmaBotConfig object:" + Environment.NewLine;
             bool success = true;
 
-            if ( string.IsNullOrEmpty( this.IncreaseCommandRegex ) )
+            if( string.IsNullOrEmpty( this.IncreaseCommandRegex ) )
             {
                 errors += "Increase command can not be null or empty." + Environment.NewLine;
                 success = false;
             }
-            else if ( this.IncreaseCommandRegex.Contains( "<name>" ) == false )
+            else if( this.IncreaseCommandRegex.Contains( "<name>" ) == false )
             {
                 errors += "Increase command must contain the regex group 'name'.  Got: " + this.IncreaseCommandRegex + Environment.NewLine;
                 success = false;
             }
 
-            if ( string.IsNullOrEmpty( this.DecreaseCommandRegex ) )
+            if( string.IsNullOrEmpty( this.DecreaseCommandRegex ) )
             {
                 errors += "Decrease command can not be null or empty." + Environment.NewLine;
                 success = false;
             }
-            else if ( this.DecreaseCommandRegex.Contains( "<name>" ) == false )
+            else if( this.DecreaseCommandRegex.Contains( "<name>" ) == false )
             {
                 errors += "Decrease command must contain the regex group 'name'.  Got: " + this.IncreaseCommandRegex + Environment.NewLine;
                 success = false;
             }
 
-            if ( string.IsNullOrEmpty( this.QueryCommand ) )
+            if( string.IsNullOrEmpty( this.QueryCommand ) )
             {
                 errors += "Query command can not be null or empty." + Environment.NewLine;
                 success = false;
             }
-            else if ( this.QueryCommand.Contains( "<name>" ) == false )
+            else if( this.QueryCommand.Contains( "<name>" ) == false )
             {
                 errors += "Query command must contain the regex group 'name'.  Got: " + this.IncreaseCommandRegex + Environment.NewLine;
                 success = false;
             }
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new InvalidOperationException( errors );
             }

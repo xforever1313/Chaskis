@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -52,7 +51,7 @@ namespace Chaskis.Plugins.IrcLogger
             this.CurrentFileName = string.Empty;
             this.LastFileName = string.Empty;
 
-            if ( Directory.Exists( config.LogFileLocation ) == false )
+            if( Directory.Exists( config.LogFileLocation ) == false )
             {
                 Directory.CreateDirectory( config.LogFileLocation );
             }
@@ -83,7 +82,7 @@ namespace Chaskis.Plugins.IrcLogger
             DateTime timeStamp = DateTime.UtcNow;
 
             // If this is the first line we are writting to, we need to create the file.
-            if ( string.IsNullOrEmpty( this.CurrentFileName ) )
+            if( string.IsNullOrEmpty( this.CurrentFileName ) )
             {
                 this.CreateNewFile( timeStamp );
                 this.outFileWriter.WriteLine( "############################################################" );
@@ -93,10 +92,10 @@ namespace Chaskis.Plugins.IrcLogger
 
             // In case we are writing multiple lines, go line by line through the message
             // so we have timestamps for each line.
-            using ( StringReader reader = new StringReader( message ) )
+            using( StringReader reader = new StringReader( message ) )
             {
                 string line = reader.ReadLine();
-                while ( line != null )
+                while( line != null )
                 {
                     this.outFileWriter.WriteLine( timeStamp.ToString( "o" ) + "  " + line );
                     line = reader.ReadLine();
@@ -107,9 +106,9 @@ namespace Chaskis.Plugins.IrcLogger
 
             // If we reached the maximum log size, time to rotate, but
             // only if the user didn't tell us to rotate (set the message count to 0).
-            if ( this.config.MaxNumberMessagesPerLog > 0 )
+            if( this.config.MaxNumberMessagesPerLog > 0 )
             {
-                if ( this.currentLineCount >= this.config.MaxNumberMessagesPerLog )
+                if( this.currentLineCount >= this.config.MaxNumberMessagesPerLog )
                 {
                     timeStamp = DateTime.UtcNow;
 
@@ -156,11 +155,11 @@ namespace Chaskis.Plugins.IrcLogger
             // Keep generating file names until we get one that does not exist.
             // its possible that our computer is small enough and our log file sizes are
             // small enough that it can screw with the file size.
-            while ( isNewFile == false )
+            while( isNewFile == false )
             {
                 this.CurrentFileName = GenerateFileName( timeStamp );
                 newFileName = Path.Combine( this.config.LogFileLocation, this.CurrentFileName );
-                if ( File.Exists( newFileName ) == false )
+                if( File.Exists( newFileName ) == false )
                 {
                     isNewFile = true;
                 }

@@ -1,14 +1,10 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chaskis.Plugins.CapsWatcher
 {
@@ -43,26 +39,25 @@ namespace Chaskis.Plugins.CapsWatcher
             bool success = true;
             string errorMessage = "Error validating Caps Watcher Config:" + Environment.NewLine;
 
-            if ( this.Messages.Count == 0 )
+            if( this.Messages.Count == 0 )
             {
                 success = false;
                 errorMessage += "\tMessage list can not be empty." + Environment.NewLine;
             }
 
-            foreach ( string msg in this.Messages )
+            foreach( string msg in this.Messages )
             {
-                if ( string.IsNullOrEmpty( msg ) )
+                if( string.IsNullOrEmpty( msg ) )
                 {
                     success = false;
                     errorMessage += "\tFound a null or empty message in the message list." + Environment.NewLine;
                 }
             }
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new InvalidOperationException( errorMessage );
             }
         }
-            
     }
 }

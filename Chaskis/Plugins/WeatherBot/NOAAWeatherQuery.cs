@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -19,7 +18,6 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         public NOAAWeatherQuery()
         {
-
         }
 
         // -------- Properties -------
@@ -51,7 +49,7 @@ namespace Chaskis.Plugins.WeatherBot
                 {
                     // First, get the Lat/Long of the zip code.
                     Tuple<string, string> latLon;
-                    using ( WebClient client = new WebClient() )
+                    using( WebClient client = new WebClient() )
                     {
                         client.QueryString.Add( "whichClient", "LatLonListZipCode" );
                         client.QueryString.Add( "listZipCodeList", zip );
@@ -63,7 +61,7 @@ namespace Chaskis.Plugins.WeatherBot
 
                     // Next, get the weather report.
                     WeatherReport report = null;
-                    using ( WebClient client = new WebClient() )
+                    using( WebClient client = new WebClient() )
                     {
                         client.QueryString.Add( "whichClient", "GmlLatLonList" );
                         client.QueryString.Add( "gmlListLatLon", Uri.EscapeDataString( latLon.Item1 + "," + latLon.Item2 ) );

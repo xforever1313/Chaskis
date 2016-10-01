@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -23,7 +22,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// <returns>A karma bot config object from the given xml file.</returns>
         public static KarmaBotConfig LoadKarmaBotConfig( string xmlFilePath )
         {
-            if ( File.Exists( xmlFilePath ) == false )
+            if( File.Exists( xmlFilePath ) == false )
             {
                 throw new FileNotFoundException( "Could not find karma bot plugin config file " + xmlFilePath );
             }
@@ -33,7 +32,7 @@ namespace Chaskis.Plugins.KarmaBot
             doc.Load( xmlFilePath );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != karmaBotConfigRootNode )
+            if( rootNode.Name != karmaBotConfigRootNode )
             {
                 throw new XmlException(
                     "Root XML node should be named \"" + karmaBotConfigRootNode + "\".  Got: " + rootNode.Name
@@ -42,9 +41,9 @@ namespace Chaskis.Plugins.KarmaBot
 
             KarmaBotConfig config = new KarmaBotConfig();
 
-            foreach ( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "increasecmd":
                         config.IncreaseCommandRegex = childNode.InnerText;
@@ -58,7 +57,6 @@ namespace Chaskis.Plugins.KarmaBot
                         config.QueryCommand = childNode.InnerText;
                         break;
                 }
-
             }
             config.Validate();
             return config;

@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -38,7 +37,7 @@ namespace Chaskis.Plugins.WeatherBot
             doc.LoadXml( noaaXml );
 
             XmlNodeList forecastNodes = doc.GetElementsByTagName( "app:Forecast_Gml2Point" );
-            if ( forecastNodes.Count == 0 )
+            if( forecastNodes.Count == 0 )
             {
                 CheckForErrorResponse( noaaXml );
 
@@ -52,9 +51,9 @@ namespace Chaskis.Plugins.WeatherBot
             report.ZipCode = zipCode;
 
             XmlNode forecastNode = forecastNodes[0];
-            foreach ( XmlNode childNode in forecastNode.ChildNodes )
+            foreach( XmlNode childNode in forecastNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     // High Temperature:
                     case "app:maximumTemperature":
@@ -70,17 +69,17 @@ namespace Chaskis.Plugins.WeatherBot
                     case "app:temperature":
                         report.CurrentTemp = childNode.InnerText;
                         break;
-                    
+
                     // Apparent Temperature:
                     case "app:apparentTemperature":
                         report.ApparentTemp = childNode.InnerText;
                         break;
-                    
+
                     // Chance of Precipitation:
                     case "app:probOfPrecip12hourly":
                         report.ChanceOfPrecipitation = childNode.InnerText;
                         break;
-                    
+
                     // Current Conditions:
                     case "app:weatherPhrase":
                         report.CurrentConditions = childNode.InnerText;
@@ -104,7 +103,7 @@ namespace Chaskis.Plugins.WeatherBot
             doc.LoadXml( noaaXml );
 
             XmlNodeList zipcodeNodes = doc.GetElementsByTagName( "latLonList" );
-            if ( zipcodeNodes.Count == 0 )
+            if( zipcodeNodes.Count == 0 )
             {
                 // If we can't find latLonList, search for an error.  Its possible we got an invalid zip code
                 // from the user.  Search for it.
@@ -115,12 +114,11 @@ namespace Chaskis.Plugins.WeatherBot
                     QueryErrors.MissingLatLon,
                     "Got invalid XML from NOAA.  Missing coordinates from zipcode " + zipCode
                 );
-
             }
 
             string response = zipcodeNodes[0].InnerText;
             // If response is just a comma, the zip is invalid.
-            if ( response == "," )
+            if( response == "," )
             {
                 throw new QueryException(
                     QueryErrors.InvalidZip,
@@ -130,7 +128,7 @@ namespace Chaskis.Plugins.WeatherBot
 
             string[] latLongString = response.Split( ',' );
 
-            if ( latLongString.Count() != 2 )
+            if( latLongString.Count() != 2 )
             {
                 // If there is no error, throw an Application Exception.  We got something invalid from NOAA.
                 throw new QueryException(
@@ -149,10 +147,10 @@ namespace Chaskis.Plugins.WeatherBot
         private static void CheckForErrorResponse( string noaaXml )
         {
             Match errorMatch = errorRegex.Match( noaaXml );
-            if ( errorMatch.Success )
+            if( errorMatch.Success )
             {
                 QueryErrors error;
-                if ( errorMatch.Groups["errorStr"].Value.Contains( "not a valid US zip code" ) )
+                if( errorMatch.Groups["errorStr"].Value.Contains( "not a valid US zip code" ) )
                 {
                     error = QueryErrors.InvalidZip;
                 }

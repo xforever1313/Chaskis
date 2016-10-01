@@ -4,18 +4,18 @@
     The config for caps watcher is very simple.  Each tag is something
     you want the bot to randomly say when someone says something that is in all caps.
     {%user%} is replaced with the offending user's nickname.
-    
+
     If no config is specified, the plugin will not validate and abort, and not work.
     Ditto if there's an empty string (<message></message>).
-    
+
     Remember to use <![CDATA[Your message]]> inside of the <message> tags if your message
     contains XML stuff.
-    
+
     Rules for triggering the bot:
         - Message must contain at least one letter
         - All letters must be in all caps.  If not, the bot is not triggered.
         - The message must be at least 3 characters long.
--->    
+-->
 <capswatcherconfig>
     <message>LOUD NOISES!</message>
     <message>@{%user%}: shhhhhhhhhh!</message>

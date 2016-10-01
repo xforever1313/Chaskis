@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -19,7 +18,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// List of IRC handlers.
         /// </summary>
-        List<IIrcHandler> handlerList;
+        private List<IIrcHandler> handlerList;
 
         /// <summary>
         /// The cool down for the bot for each command.
@@ -72,7 +71,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
 
             ServerDiagnosticsConfig config = XmlLoader.LoadConfig( configPath );
 
-            if ( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
+            if( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
             {
                 MessageHandler utimeHandler = new MessageHandler(
                     config.UpTimeCmd.Replace( "{%nick%}", ircConfig.Nick ),
@@ -82,7 +81,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 this.handlerList.Add( utimeHandler );
             }
 
-            if ( string.IsNullOrEmpty( config.OsVersionCmd ) == false )
+            if( string.IsNullOrEmpty( config.OsVersionCmd ) == false )
             {
                 MessageHandler osHandler = new MessageHandler(
                     config.OsVersionCmd.Replace( "{%nick%}", ircConfig.Nick ),
@@ -92,7 +91,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 this.handlerList.Add( osHandler );
             }
 
-            if ( string.IsNullOrEmpty( config.ProcessorCountCmd ) == false )
+            if( string.IsNullOrEmpty( config.ProcessorCountCmd ) == false )
             {
                 MessageHandler procCoundHandler = new MessageHandler(
                     config.ProcessorCountCmd.Replace( "{%nick%}", ircConfig.Nick ),
@@ -102,7 +101,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 this.handlerList.Add( procCoundHandler );
             }
 
-            if ( string.IsNullOrEmpty( config.TimeCmd ) == false )
+            if( string.IsNullOrEmpty( config.TimeCmd ) == false )
             {
                 MessageHandler timeHandler = new MessageHandler(
                     config.TimeCmd.Replace( "{%nick%}", ircConfig.Nick ),
@@ -130,7 +129,6 @@ namespace Chaskis.Plugins.ServerDiagnostics
         }
 
         // ---- Handlers ----
-
 
         /// <summary>
         /// Handles the up time command.

@@ -1,15 +1,11 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chaskis.Plugins.IrcLogger;
 using NUnit.Framework;
 
@@ -47,10 +43,10 @@ namespace Tests.Plugins.IrcLogger
         {
             this.uut?.Dispose();
 
-            if ( Directory.Exists( testLogDirectory ) )
+            if( Directory.Exists( testLogDirectory ) )
             {
                 string[] files = Directory.GetFiles( testLogDirectory );
-                foreach ( string file in files )
+                foreach( string file in files )
                 {
                     File.Delete( file );
                 }
@@ -70,7 +66,7 @@ namespace Tests.Plugins.IrcLogger
         }
 
         /// <summary>
-        /// Ensures setting the file count to 0 results in no file changes. 
+        /// Ensures setting the file count to 0 results in no file changes.
         /// </summary>
         [Test]
         public void SingleFileTest()
@@ -94,7 +90,7 @@ namespace Tests.Plugins.IrcLogger
             Assert.AreEqual( this.uut.CurrentFileName, Path.GetFileName( files[0] ) );
 
             // Log 2000 more times.  There should still be only 1 file at the end.
-            for ( int i = 0; i < 2000; ++i )
+            for( int i = 0; i < 2000; ++i )
             {
                 this.uut.LogToFile( "Test " + i );
             }
@@ -135,7 +131,7 @@ namespace Tests.Plugins.IrcLogger
             string currentFileName = uut.CurrentFileName;
 
             // Log more times more times.  There should still be only 1 file at the end.
-            for ( int i = 0; i < maxMessages; ++i )
+            for( int i = 0; i < maxMessages; ++i )
             {
                 this.uut.LogToFile( "Test " + i );
             }
@@ -147,15 +143,15 @@ namespace Tests.Plugins.IrcLogger
             Assert.IsTrue( files[1].Contains( this.testConfig.LogName ) );
             Assert.IsNotNull( files.First( f => Path.GetFileName( f ) == this.uut.CurrentFileName ) );
             Assert.IsNotNull( files.First( f => Path.GetFileName( f ) == this.uut.LastFileName ) );
-            
+
             // Current file name should become last.
             Assert.AreEqual( currentFileName, this.uut.LastFileName );
 
             // Do it again, should have three files.
-             currentFileName = uut.CurrentFileName;
+            currentFileName = uut.CurrentFileName;
 
             // Log more times more times.  There should still be only 1 file at the end.
-            for ( int i = 0; i < maxMessages; ++i )
+            for( int i = 0; i < maxMessages; ++i )
             {
                 this.uut.LogToFile( "Test " + i );
             }

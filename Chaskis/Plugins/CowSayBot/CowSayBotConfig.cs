@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -35,7 +34,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// {%nick%} is replaced with the bot's nick name
         /// {%saycmd%} is replaced with all the valid say commands that trigger cowsay
         /// bot to respond (e.g. coway, tuxsay, etc).
-        /// 
+        ///
         /// Defaulted to ^!{%saycmd%} (?<msg>.+).  msg MUST be a group, or this will not validate.
         /// </summary>
         public string ListenRegex { get; set; }
@@ -71,23 +70,23 @@ namespace Chaskis.Plugins.CowSayBot
             string errors = "Can not validate this CowSayBotConfig object:" + Environment.NewLine;
             bool success = true;
 
-            if ( string.IsNullOrEmpty( this.ListenRegex ) || string.IsNullOrWhiteSpace( this.ListenRegex ) )
+            if( string.IsNullOrEmpty( this.ListenRegex ) || string.IsNullOrWhiteSpace( this.ListenRegex ) )
             {
                 errors += nameof( this.ListenRegex ) + " can not be empty or null" + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( this.ExeCommand ) || string.IsNullOrWhiteSpace( this.ExeCommand ) )
+            if( string.IsNullOrEmpty( this.ExeCommand ) || string.IsNullOrWhiteSpace( this.ExeCommand ) )
             {
                 errors += nameof( this.ExeCommand ) + " can not be empty or null" + Environment.NewLine;
                 success = false;
             }
-            else if ( File.Exists( this.ExeCommand ) == false )
+            else if( File.Exists( this.ExeCommand ) == false )
             {
                 errors += nameof( this.ExeCommand ) + " does not exist!" + Environment.NewLine;
                 success = false;
             }
 
-            if ( this.CowFileInfoList == null )
+            if( this.CowFileInfoList == null )
             {
                 errors += nameof( this.CowFileInfoList ) + " can not be null" + Environment.NewLine;
                 success = false;
@@ -98,14 +97,14 @@ namespace Chaskis.Plugins.CowSayBot
                 {
                     this.CowFileInfoList.Validate();
                 }
-                catch ( Exception err )
+                catch( Exception err )
                 {
                     success = false;
                     errors += err.Message + Environment.NewLine;
                 }
             }
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new InvalidOperationException( errors );
             }
@@ -117,7 +116,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// <returns>A deep copy of this object.</returns>
         public CowSayBotConfig Clone()
         {
-            CowSayBotConfig clone = ( CowSayBotConfig ) this.MemberwiseClone();
+            CowSayBotConfig clone = (CowSayBotConfig)this.MemberwiseClone();
             clone.CowFileInfoList = this.CowFileInfoList.Clone();
             return clone;
         }

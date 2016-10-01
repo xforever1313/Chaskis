@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -27,7 +26,7 @@ namespace GenericIrcBot
         /// <summary>
         /// The pattern the search for when a line comes in.
         /// </summary>
-        private static readonly Regex pattern = 
+        private static readonly Regex pattern =
             new Regex(
                 @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)",
                 RegexOptions.Compiled
@@ -60,13 +59,13 @@ namespace GenericIrcBot
         /// Set to false so when the current IRC message is finished processing being,
         /// it leaves the event queue and never
         /// happens again.   Useful for events that only need to happen once.
-        /// 
+        ///
         /// This is a public get/set.  Either classes outside of the handler can
         /// tell the handler to cancel the event, or it can cancel itself.
-        /// 
+        ///
         /// Note: when this is set to false, there must be one more IRC message that appears
         /// before it is removed from the queue.
-        /// 
+        ///
         /// Defaulted to true.
         /// </summary>
         public bool KeepHandling { get; set; }
@@ -96,7 +95,7 @@ namespace GenericIrcBot
                     return;
                 }
 
-                IrcResponse response = 
+                IrcResponse response =
                     new IrcResponse(
                         remoteUser,
                         match.Groups["channel"].Value,

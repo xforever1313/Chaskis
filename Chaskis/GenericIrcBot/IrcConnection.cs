@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -83,7 +82,7 @@ namespace GenericIrcBot
                 true,
                 delegate( Exception err )
                 {
-                    if ( this.ErrorLogEvent != null )
+                    if( this.ErrorLogEvent != null )
                     {
                         StringWriter errorMessage = new StringWriter();
 
@@ -155,8 +154,7 @@ namespace GenericIrcBot
         /// <summary>
         /// Read-only reference to the IRC Config to use.
         /// </summary>
-        public IIrcConfig Config{ get; private set; }
-
+        public IIrcConfig Config { get; private set; }
 
         // -------- Functions --------
 
@@ -184,9 +182,9 @@ namespace GenericIrcBot
             this.readerThread.Start();
 
             // USER <user> <mode> <unused> <realname>
-            // This command is used at the beginning of a connection to specify the username, 
+            // This command is used at the beginning of a connection to specify the username,
             // real name and initial user modes of the connecting client.
-            // <realname> may contain spaces, and thus must be prefixed with a colon. 
+            // <realname> may contain spaces, and thus must be prefixed with a colon.
             this.ircWriter.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
             this.ircWriter.Flush();
 
@@ -232,30 +230,30 @@ namespace GenericIrcBot
         /// <param name="userNick">The user (or #channel) to send the message to.</param>
         public void SendMessageToUser( string msg, string userNick )
         {
-            if ( this.IsConnected == false )
+            if( this.IsConnected == false )
             {
                 throw new InvalidOperationException(
                     "Not connected, can not send command."
                 );
             }
 
-            lock ( this.ircWriterLock )
+            lock( this.ircWriterLock )
             {
                 // This should be in the lock.  If this is before the lock,
                 // CanWrite can return true, this thread can be preempted,
                 // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
                 // to a socket that is closed which is a problem.
-                if ( ( this.connection == null )|| ( this.connection.GetStream().CanWrite == false ) )
+                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                 {
                     return;
                 }
 
-                using ( StringReader reader = new StringReader( msg ) )
+                using( StringReader reader = new StringReader( msg ) )
                 {
                     string line;
-                    while ( ( line = reader.ReadLine() ) != null )
+                    while( ( line = reader.ReadLine() ) != null )
                     {
-                        if ( string.IsNullOrEmpty( line ) == false )
+                        if( string.IsNullOrEmpty( line ) == false )
                         {
                             // PRIVMSG < msgtarget > < message >
                             this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", userNick, line );
@@ -272,16 +270,16 @@ namespace GenericIrcBot
         /// <param name="response">The response we need to send.</param>
         public void SendPong( string response )
         {
-            if ( this.IsConnected == false )
+            if( this.IsConnected == false )
             {
                 throw new InvalidOperationException(
                     "Not connected, can not send PONG."
                 );
             }
 
-            lock ( this.ircWriterLock )
+            lock( this.ircWriterLock )
             {
-                if ( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                 {
                     return;
                 }
@@ -300,9 +298,9 @@ namespace GenericIrcBot
         /// <param name="reason">The reason for parting.</param>
         public void SendPart( string reason )
         {
-            lock ( this.ircWriterLock )
+            lock( this.ircWriterLock )
             {
-                if ( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                 {
                     return;
                 }
@@ -320,9 +318,9 @@ namespace GenericIrcBot
         /// <param name="cmd">The IRC command to send.</param>
         public void SendRawCmd( string cmd )
         {
-            lock ( this.ircWriterLock )
+            lock( this.ircWriterLock )
             {
-                if ( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                 {
                     return;
                 }
@@ -363,7 +361,7 @@ namespace GenericIrcBot
                 //
                 //    We also must lock on the writer lock.  We don't want to close the stream
                 //    while the writer is writing.
-                lock ( this.ircWriterLock )
+                lock( this.ircWriterLock )
                 {
                     this.ircReader.Close();
                 }
@@ -415,25 +413,24 @@ namespace GenericIrcBot
         {
             try
             {
-                while ( this.KeepReading )
+                while( this.KeepReading )
                 {
                     try
                     {
                         // ReadLine blocks until we call Close() on the underlying stream.
                         string s = this.ircReader.ReadLine();
-                        if ( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
+                        if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                         {
-                            if ( this.ReadEvent != null )
+                            if( this.ReadEvent != null )
                             {
                                 this.eventQueue.AddEvent( () => ReadEvent( s ) );
                             }
-
                         }
                     }
-                    catch ( SocketException err )
+                    catch( SocketException err )
                     {
                         this.InfoLogEvent?.Invoke( "IRC Connection closed: " + err.Message );
-                        if ( this.KeepReading )
+                        if( this.KeepReading )
                         {
                             this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
                             AttemptReconnect();
@@ -445,10 +442,10 @@ namespace GenericIrcBot
                             return;
                         }
                     }
-                    catch ( IOException err )
+                    catch( IOException err )
                     {
                         this.InfoLogEvent?.Invoke( "IRC Connection closed: " + err.Message );
-                        if ( this.KeepReading )
+                        if( this.KeepReading )
                         {
                             this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
                             AttemptReconnect();
@@ -460,7 +457,7 @@ namespace GenericIrcBot
                             return;
                         }
                     }
-                    catch ( Exception err )
+                    catch( Exception err )
                     {
                         // Unexpected exception occurred.  The connection probably dropped.
                         // Nothing we can do now except to attempt to try again.
@@ -472,7 +469,7 @@ namespace GenericIrcBot
                     }
                 } // End While
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
                 // Fatal Unexpected exception occurred.
                 this.ErrorLogEvent?.Invoke(
@@ -488,7 +485,7 @@ namespace GenericIrcBot
         {
             // First, acquire the lock for the IRC writer before closing the connection.
             // We don't want any events to run and try to write to a closed connection.
-            lock ( this.ircWriterLock )
+            lock( this.ircWriterLock )
             {
                 this.ircReader.Close(); // Close the IRC Stream.  This also closes the writer as well.
                 DisconnectHelper();
@@ -502,7 +499,7 @@ namespace GenericIrcBot
             // Keep trying to connect until either we are connected again,
             // or the program is terminating (KeepReading goes to false).
             int timeoutMinutes = 1;
-            while ( ( this.IsConnected == false ) && this.KeepReading )
+            while( ( this.IsConnected == false ) && this.KeepReading )
             {
                 try
                 {
@@ -514,7 +511,7 @@ namespace GenericIrcBot
 
                     // Sleep the thread.  If we get the signal that we want
                     // to close the program, return, and we won't attempt to reconnect.
-                    if ( this.reconnectAbortEvent.WaitOne( timeout ) )
+                    if( this.reconnectAbortEvent.WaitOne( timeout ) )
                     {
                         this.InfoLogEvent?.Invoke(
                             "Terminate signal detected, aborting reconnect..."
@@ -523,7 +520,7 @@ namespace GenericIrcBot
                     }
 
                     // Increase the timeout.  No sense wasting CPU.
-                    if ( timeoutMinutes < 10 )
+                    if( timeoutMinutes < 10 )
                     {
                         timeoutMinutes++;
                     }
@@ -535,7 +532,7 @@ namespace GenericIrcBot
                     // Try connecting.
                     Connect();
 
-                    if ( this.IsConnected )
+                    if( this.IsConnected )
                     {
                         this.InfoLogEvent?.Invoke(
                             "We have restablished connection!"
@@ -548,10 +545,10 @@ namespace GenericIrcBot
                         );
                     }
                 }
-                catch ( SocketException err )
+                catch( SocketException err )
                 {
                     this.InfoLogEvent?.Invoke( "IRC Connection closed during reconnection: " + err.Message );
-                    if ( this.KeepReading )
+                    if( this.KeepReading )
                     {
                         this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect again..." );
                     }
@@ -562,7 +559,7 @@ namespace GenericIrcBot
                         return;
                     }
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     this.ErrorLogEvent?.Invoke(
                         "Reconnect failed, got exception trying again." + Environment.NewLine + e.ToString()

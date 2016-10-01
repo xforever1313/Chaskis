@@ -85,11 +85,10 @@ namespace Tests.Plugins.MathBot
                 Assert.Fail( "Did not get expected exception for expression " + expression );
             }
             // We don't care what exception occurrs, as long as one happens.
-            catch ( Exception )
+            catch( Exception )
             {
                 Assert.Pass();
             }
         }
-            
     }
 }

@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -30,7 +29,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// <returns>A cowsay bot config based on the given XML.</returns>
         public static CowSayBotConfig LoadCowSayBotConfig( string xmlFilePath )
         {
-            if ( File.Exists( xmlFilePath ) == false )
+            if( File.Exists( xmlFilePath ) == false )
             {
                 throw new FileNotFoundException( "Could not find cowsay bot config Config file " + xmlFilePath );
             }
@@ -40,7 +39,7 @@ namespace Chaskis.Plugins.CowSayBot
             doc.Load( xmlFilePath );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != cowSayConfigRootNodeName )
+            if( rootNode.Name != cowSayConfigRootNodeName )
             {
                 throw new XmlException(
                     "Root XML node should be named \"" + cowSayConfigRootNodeName + "\".  Got: " + rootNode.Name
@@ -49,9 +48,9 @@ namespace Chaskis.Plugins.CowSayBot
 
             CowSayBotConfig config = new CowSayBotConfig();
 
-            foreach ( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "command":
                         config.ListenRegex = childNode.InnerText;
@@ -66,16 +65,16 @@ namespace Chaskis.Plugins.CowSayBot
                         break;
 
                     case "cowfiles":
-                        foreach ( XmlNode cowFileNode in childNode.ChildNodes )
+                        foreach( XmlNode cowFileNode in childNode.ChildNodes )
                         {
-                            if ( cowFileNode.Name == "cowfile" )
+                            if( cowFileNode.Name == "cowfile" )
                             {
                                 string name = string.Empty;
                                 string command = string.Empty;
 
-                                foreach ( XmlAttribute attribute in cowFileNode.Attributes )
+                                foreach( XmlAttribute attribute in cowFileNode.Attributes )
                                 {
-                                    switch ( attribute.Name )
+                                    switch( attribute.Name )
                                     {
                                         case "name":
                                             name = attribute.Value;

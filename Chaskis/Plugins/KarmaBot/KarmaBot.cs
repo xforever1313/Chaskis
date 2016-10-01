@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -70,7 +69,7 @@ namespace Chaskis.Plugins.KarmaBot
                 "KarmaBotConfig.xml"
             );
 
-            if ( File.Exists( configPath ) == false )
+            if( File.Exists( configPath ) == false )
             {
                 throw new FileNotFoundException(
                     "Can not open " + configPath
@@ -127,7 +126,7 @@ namespace Chaskis.Plugins.KarmaBot
         private async void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
         {
             Match match = Regex.Match( response.Message, this.config.IncreaseCommandRegex );
-            if ( match.Success )
+            if( match.Success )
             {
                 string userName = match.Groups["name"].Value;
                 int karma = await this.dataBase.IncreaseKarma( userName );
@@ -144,7 +143,7 @@ namespace Chaskis.Plugins.KarmaBot
         private async void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
         {
             Match match = Regex.Match( response.Message, this.config.DecreaseCommandRegex );
-            if ( match.Success )
+            if( match.Success )
             {
                 string userName = match.Groups["name"].Value;
                 int karma = await this.dataBase.DecreaseKarma( userName );
@@ -161,7 +160,7 @@ namespace Chaskis.Plugins.KarmaBot
         private async void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
         {
             Match match = Regex.Match( response.Message, this.config.QueryCommand );
-            if ( match.Success )
+            if( match.Success )
             {
                 string userName = match.Groups["name"].Value;
                 int karma = await this.dataBase.QueryKarma( userName );

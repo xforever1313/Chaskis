@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -22,7 +21,7 @@ namespace Tests
         /// <summary>
         /// Where the test xml files are located.
         /// </summary>
-        private static readonly string testXmlFiles = 
+        private static readonly string testXmlFiles =
             Path.Combine(
                 "..", "..", "TestFiles"
             );
@@ -225,7 +224,7 @@ namespace Tests
         public void TestValidPluginConfigNoPlugins()
         {
             IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "ValidPluginConfigEmpty.xml" ) );
-            Assert.AreEqual( 0, configs.Count ); 
+            Assert.AreEqual( 0, configs.Count );
         }
 
         /// <summary>

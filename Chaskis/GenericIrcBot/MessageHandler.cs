@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -43,7 +42,7 @@ namespace GenericIrcBot
         /// <param name="lineAction">The action to perform based on the line.</param>
         /// <param name="coolDown">How long to wait between firing the line action in seconds.  0 for no cooldown.</param>
         /// <param name="responseOption">Whether or not to respond to PMs, only channels, or both.</param>
-        /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param> 
+        /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param>
         public MessageHandler(
             string lineRegex,
             Action<IIrcWriter, IrcResponse> lineAction,
@@ -83,7 +82,7 @@ namespace GenericIrcBot
         /// <summary>
         /// How long to wait in seconds between firing events. 0 for no cool down.
         /// </summary>
-        public int CoolDown{ get; private set; }
+        public int CoolDown { get; private set; }
 
         /// <summary>
         /// Whether or not this bot will respond to private messages or not.
@@ -94,7 +93,7 @@ namespace GenericIrcBot
         /// Whether or not the action will be triggered if the person
         /// who sent the message was this bot.
         /// </summary>
-        public bool RespondToSelf{ get; private set; }
+        public bool RespondToSelf { get; private set; }
 
         /// <summary>
         /// The last time this event was triggered.
@@ -107,13 +106,13 @@ namespace GenericIrcBot
         /// Set to false so when the current IRC message is finished processing being,
         /// it leaves the event queue and never
         /// happens again.   Useful for events that only need to happen once.
-        /// 
+        ///
         /// This is a public get/set.  Either classes outside of the handler can
         /// tell the handler to cancel the event, or it can cancel itself.
-        /// 
+        ///
         /// Note: when this is set to false, there must be one more IRC message that appears
         /// before it is removed from the queue.
-        /// 
+        ///
         /// Defaulted to true.
         /// </summary>
         public bool KeepHandling { get; set; }
@@ -140,20 +139,20 @@ namespace GenericIrcBot
                 string message = match.Groups["theIrcMessage"].Value;
 
                 // If we are a bridge bot, we need to change
-                // the nick and the channel 
-                if ( ircConfig.BridgeBots.ContainsKey( nick ) )
+                // the nick and the channel
+                if( ircConfig.BridgeBots.ContainsKey( nick ) )
                 {
                     Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[nick] );
 
                     // If the regex matches, then we'll update the nick and message
                     // to be whatever came from the bridge.
-                    if ( bridgeBotMatch.Success )
+                    if( bridgeBotMatch.Success )
                     {
                         string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
                         string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
 
                         // Only change the nick anme and the message if the nick and the message aren't empty.
-                        if ( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
+                        if( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
                         {
                             nick = newNick;
                             message = newMessage;
@@ -164,7 +163,7 @@ namespace GenericIrcBot
                 // Take the message from the PRIVMSG and see if it matches the regex this class is watching.
                 // If not, return and do nothing.
                 Match messageMatch = Regex.Match( message, this.LineRegex );
-                if ( messageMatch.Success == false )
+                if( messageMatch.Success == false )
                 {
                     return;
                 }

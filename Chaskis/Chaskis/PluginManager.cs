@@ -1,15 +1,13 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Reflection;
-using System.IO;
-using GenericIrcBot;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
+using GenericIrcBot;
 
 namespace Chaskis
 {
@@ -67,7 +65,7 @@ namespace Chaskis
         {
             bool success = true;
 
-            foreach ( AssemblyConfig pluginConfig in pluginList )
+            foreach( AssemblyConfig pluginConfig in pluginList )
             {
                 try
                 {
@@ -80,7 +78,7 @@ namespace Chaskis
                     object instance = Activator.CreateInstance( type );
                     initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
 
-                    IPlugin plugin = ( IPlugin ) instance;
+                    IPlugin plugin = (IPlugin)instance;
 
                     // Use string.split, there's less bugs and edge-cases when trying to parse it out.
                     string[] splitString = pluginConfig.ClassName.Split( '.' );
@@ -90,7 +88,7 @@ namespace Chaskis
 
                     infoLogFunction?.Invoke( "Successfully loaded plugin: " + pluginConfig.ClassName );
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     errorLogFunction?.Invoke( "*************" );
                     errorLogFunction?.Invoke( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
@@ -98,7 +96,7 @@ namespace Chaskis
                     errorLogFunction?.Invoke( string.Empty );
                     errorLogFunction?.Invoke( e.StackTrace );
                     errorLogFunction?.Invoke( string.Empty );
-                    if ( e.InnerException != null )
+                    if( e.InnerException != null )
                     {
                         errorLogFunction?.Invoke( "Inner Exception:" );
                         errorLogFunction?.Invoke( e.InnerException.Message );

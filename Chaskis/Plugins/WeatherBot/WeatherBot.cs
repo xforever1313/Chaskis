@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -12,14 +11,14 @@ namespace Chaskis.Plugins.WeatherBot
 {
     // Weather bot uses the NOAA XML SOAP service located here: http://graphical.weather.gov/xml/
     // They ask the following:
-    // "The NDFD is updated no more than hourly. 
+    // "The NDFD is updated no more than hourly.
     // We request developers using this SOAP service for local
-    // applications only make a request for a specific point no more 
+    // applications only make a request for a specific point no more
     // than once an hour. The database is currently updated by 45 minutes after the hour."
     // Therfore, we must cache any requests for an hour before going out to the SOAP service.
     //
     // Since we use NOAA, this means we can only get the weather in the US.
-    // 
+    //
     // When a user triggers the bot, we need to take the ZIP code and first get the lat/lon of that zip code.
     // We can do that using NOAA's "Grid Points For A Zip Code" engine by making a get request to:
     // http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php?whichClient=LatLonListZipCode&listZipCodeList=XXXXX&Submit=Submit
@@ -30,7 +29,7 @@ namespace Chaskis.Plugins.WeatherBot
     // http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php?whichClient=GmlLatLonList&gmlListLatLon=XX.XXXX%2C-YY.YYYY&featureType=Forecast_Gml2Point&product=glance&Unit=e&maxt=maxt&mint=mint&pop12=pop12&wx=wx&appt=appt&temp=temp&Submit=Submit
     // where XX.XXXX is the Latitude, YY.YYYY is the longitude.  By specifying the above URL, we get the following information in the form of an XML tag:
     // | Get Request | What it returns             | XML Tag                    |
-    // | ----------- | :-------------------------: | :-----------------------:  | 
+    // | ----------- | :-------------------------: | :-----------------------:  |
     // | Unit=e      | Units are emprical          | None                       |
     // | maxt=maxt   | The high temp               | <app:maximumTemperature>   |
     // | mint=mint   | The low temp                | <app:minimumTemperature>   |
@@ -148,7 +147,6 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         public void Teardown()
         {
-
         }
 
         // ---- Handlers ----
@@ -197,7 +195,7 @@ namespace Chaskis.Plugins.WeatherBot
         private async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
         {
             Match match = Regex.Match( response.Message, weatherCommand );
-            if ( match.Success )
+            if( match.Success )
             {
                 string zip = match.Groups["zipCode"].Value;
                 string strToWrite = await this.reporter.QueryWeather( zip );

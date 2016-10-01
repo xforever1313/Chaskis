@@ -1,14 +1,11 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SQLite.Net;
 using SQLite.Net.Interop;
@@ -42,7 +39,7 @@ namespace Chaskis.Plugins.KarmaBot
         public KarmaBotDatabase( string databaseLocation )
         {
             ISQLitePlatform platform;
-            if ( Environment.OSVersion.Platform.Equals( PlatformID.Win32NT ) )
+            if( Environment.OSVersion.Platform.Equals( PlatformID.Win32NT ) )
             {
                 Console.WriteLine( "KarmaBot> Using Win32 Sqlite Platform" );
                 platform = new SQLite.Net.Platform.Win32.SQLitePlatformWin32();
@@ -78,20 +75,20 @@ namespace Chaskis.Plugins.KarmaBot
             userName = userName.ToLower();
 
             IrcUser user = null;
-            if ( ( this.ircUserCache.ContainsKey( userName ) == false ) || ( this.ircUserCache[userName].Id == -1 ) )
+            if( ( this.ircUserCache.ContainsKey( userName ) == false ) || ( this.ircUserCache[userName].Id == -1 ) )
             {
                 // If our cache does not have the user, or the cache has an invalid ID for the user,
                 // we need to query it so we have the latest information.
                 user = await QueryUserAsync( userName );
             }
             // Otherwise, if our cache has the user, grab it.
-            else if ( this.ircUserCache.ContainsKey( userName ) )
+            else if( this.ircUserCache.ContainsKey( userName ) )
             {
                 user = this.ircUserCache[userName];
             }
 
             // If the user is null, it means it doesn't exist in the database yet; create a new one
-            if ( user == null )
+            if( user == null )
             {
                 user = new IrcUser();
                 user.KarmaCount = 0;
@@ -99,7 +96,7 @@ namespace Chaskis.Plugins.KarmaBot
             }
 
             // Decrease the karma of the user, but only if it doesn't cause an underflow, otherwise, leave it alone.
-            if ( user.KarmaCount != int.MaxValue )
+            if( user.KarmaCount != int.MaxValue )
             {
                 ++user.KarmaCount;
             }
@@ -121,20 +118,20 @@ namespace Chaskis.Plugins.KarmaBot
             userName = userName.ToLower();
 
             IrcUser user = null;
-            if ( ( this.ircUserCache.ContainsKey( userName ) == false ) || ( this.ircUserCache[userName].Id == -1 ) )
+            if( ( this.ircUserCache.ContainsKey( userName ) == false ) || ( this.ircUserCache[userName].Id == -1 ) )
             {
                 // If our cache does not have the user, or the cache has an invalid ID for the user,
                 // we need to query it so we have the latest information.
                 user = await QueryUserAsync( userName );
             }
             // Otherwise, if our cache has the user, grab it.
-            else if ( this.ircUserCache.ContainsKey( userName ) )
+            else if( this.ircUserCache.ContainsKey( userName ) )
             {
                 user = this.ircUserCache[userName];
             }
 
             // If the user is null, it means it doesn't exist in the database yet; create a new one
-            if ( user == null )
+            if( user == null )
             {
                 user = new IrcUser();
                 user.KarmaCount = 0;
@@ -142,7 +139,7 @@ namespace Chaskis.Plugins.KarmaBot
             }
 
             // Decrease the karma of the user, but only if it doesn't cause an underflow, otherwise, leave it alone.
-            if ( user.KarmaCount != int.MinValue )
+            if( user.KarmaCount != int.MinValue )
             {
                 --user.KarmaCount;
             }
@@ -165,14 +162,14 @@ namespace Chaskis.Plugins.KarmaBot
             userName = userName.ToLower();
 
             // If the user is in our cache, return the information.
-            if ( this.ircUserCache.ContainsKey( userName ) )
+            if( this.ircUserCache.ContainsKey( userName ) )
             {
                 return this.ircUserCache[userName].KarmaCount;
             }
             else
             {
                 IrcUser user = await QueryUserAsync( userName );
-                if ( user == null )
+                if( user == null )
                 {
                     // If no karma exists for this user, return 0.  But first, add it to the cache so
                     // we don't waste time querying things.
@@ -198,7 +195,7 @@ namespace Chaskis.Plugins.KarmaBot
         private IrcUser QueryUser( string userName )
         {
             TableQuery<IrcUser> userQuery;
-            lock ( this.sqlite )
+            lock( this.sqlite )
             {
                 userQuery =
                    from u in this.sqlite.Table<IrcUser>() where u.UserName.Equals( userName ) select u;
@@ -233,7 +230,7 @@ namespace Chaskis.Plugins.KarmaBot
             return Task.Run(
                 delegate ()
                 {
-                    lock ( this.sqlite )
+                    lock( this.sqlite )
                     {
                         this.sqlite.InsertOrReplace( userToSave );
                         this.sqlite.Commit();
@@ -241,7 +238,6 @@ namespace Chaskis.Plugins.KarmaBot
                 }
             );
         }
-
 
         /// <summary>
         /// Closes the database and cleans up this class.

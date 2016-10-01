@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -63,7 +62,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.  Allowed to throw Exceptions.
-        /// 
+        ///
         /// This function should be used to validates that the environment is good for the plugin.
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
@@ -80,7 +79,7 @@ namespace Chaskis.Plugins.CapsWatcher
                 "CapsWatcherConfig.xml"
             );
 
-            if ( File.Exists( configPath ) == false )
+            if( File.Exists( configPath ) == false )
             {
                 throw new FileNotFoundException(
                     "Can not open " + configPath
@@ -111,7 +110,6 @@ namespace Chaskis.Plugins.CapsWatcher
         /// </summary>
         public void Teardown()
         {
-
         }
 
         /// <summary>
@@ -135,17 +133,17 @@ namespace Chaskis.Plugins.CapsWatcher
         public static bool CheckForCaps( string message )
         {
             // First check, make sure the message is at least 3 characters.
-            if ( string.IsNullOrEmpty( message ) || string.IsNullOrWhiteSpace( message ) )
+            if( string.IsNullOrEmpty( message ) || string.IsNullOrWhiteSpace( message ) )
             {
                 return false;
             }
-            else if ( message.Length < 3 )
+            else if( message.Length < 3 )
             {
                 return false;
             }
 
             // Find letter.  Return if can't find it.
-            else if ( message.FirstOrDefault( ch => char.IsLetter( ch ) ) == '\0')
+            else if( message.FirstOrDefault( ch => char.IsLetter( ch ) ) == '\0' )
             {
                 return false;
             }
@@ -162,7 +160,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <param name="response">The response from the channel.</param>
         private void HandleMessage( IIrcWriter writer, IrcResponse response )
         {
-            if ( CheckForCaps( response.Message ) )
+            if( CheckForCaps( response.Message ) )
             {
                 string msgToSend = SelectMessage().Replace( "{%user%}", response.RemoteUser );
                 writer.SendCommandToChannel( msgToSend );

@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -39,7 +38,7 @@ namespace Tests
         {
             IIrcConfig interfaceIrcConfig = this.ircConfig.Clone();
             ReadOnlyIrcConfig roIrcConfig = new ReadOnlyIrcConfig( this.ircConfig.Clone() );
-            
+
             // Ensure both the interface and the RO config are equal, but not the same reference.
             Assert.AreNotSame( interfaceIrcConfig, this.ircConfig );
             Assert.AreNotSame( roIrcConfig, this.ircConfig );
@@ -75,7 +74,7 @@ namespace Tests
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
-            this.ircConfig.Nick= "Nate";
+            this.ircConfig.Nick = "Nate";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 

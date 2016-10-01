@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -42,29 +41,29 @@ namespace Chaskis.Plugins.CowSayBot
             string errors = "Can not validate this CowFileInfo object:" + Environment.NewLine;
             bool success = true;
 
-            if ( CommandList.Count == 0 )
+            if( CommandList.Count == 0 )
             {
                 errors += nameof( this.CommandList ) + " can not be empty." + Environment.NewLine;
                 success = false;
             }
             else
             {
-                foreach ( KeyValuePair<string, string> command in this.CommandList )
+                foreach( KeyValuePair<string, string> command in this.CommandList )
                 {
-                    if ( string.IsNullOrEmpty( command.Key ) || string.IsNullOrWhiteSpace( command.Key ) )
+                    if( string.IsNullOrEmpty( command.Key ) || string.IsNullOrWhiteSpace( command.Key ) )
                     {
                         errors += "Can not have empty or null command in " + nameof( this.CommandList ) + Environment.NewLine;
                         success = false;
                     }
-                    if ( string.IsNullOrEmpty( command.Value ) || string.IsNullOrWhiteSpace( command.Value ) )
+                    if( string.IsNullOrEmpty( command.Value ) || string.IsNullOrWhiteSpace( command.Value ) )
                     {
                         errors += "Can not have empty or null cowfile in " + nameof( this.CommandList ) + Environment.NewLine;
                         success = false;
                     }
-                }  
+                }
             }
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new InvalidOperationException( errors );
             }
@@ -76,7 +75,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// <returns>A copy of this object.</returns>
         public CowFileInfo Clone()
         {
-            CowFileInfo clone = ( CowFileInfo ) this.MemberwiseClone();
+            CowFileInfo clone = (CowFileInfo)this.MemberwiseClone();
             clone.CommandList = new Dictionary<string, string>( clone.CommandList );
             return clone;
         }

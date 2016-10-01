@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -25,7 +24,7 @@ namespace GenericIrcBot
         /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.  Allowed to throw Exceptions.
-        /// 
+        ///
         /// This function should be used to validates that the environment is good for the plugin.
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
@@ -49,4 +48,3 @@ namespace GenericIrcBot
         void Teardown();
     }
 }
-

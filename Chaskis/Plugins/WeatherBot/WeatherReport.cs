@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +31,7 @@ namespace Chaskis.Plugins.WeatherBot
         }
 
         // -------- Properties --------
-   
+
         /// <summary>
         /// The zip code of the weather report.
         /// </summary>
@@ -73,7 +72,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// Timestamp of when this object was constructed (UTC).
         /// </summary>
         public DateTime ConstructionTime { get; private set; }
-        
+
         // -------- Functions --------
 
         /// <summary>

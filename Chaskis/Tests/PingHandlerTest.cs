@@ -1,12 +1,11 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using NUnit.Framework;
 using GenericIrcBot;
+using NUnit.Framework;
 using Tests.Mocks;
 
 namespace Tests
@@ -116,7 +115,7 @@ namespace Tests
         [Test]
         public void MessageCommandAppears()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     MessageHandler.IrcCommand,
@@ -137,7 +136,7 @@ namespace Tests
         [Test]
         public void PartCommandAppears()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     PartHandler.IrcCommand,
@@ -158,7 +157,7 @@ namespace Tests
         [Test]
         public void JoinCommandAppears()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     JoinHandler.IrcCommand,
@@ -173,4 +172,3 @@ namespace Tests
         }
     }
 }
-

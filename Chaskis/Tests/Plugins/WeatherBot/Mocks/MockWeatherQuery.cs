@@ -47,11 +47,11 @@ namespace Tests.Plugins.WeatherBot.Mocks
         public Task<WeatherReport> QueryForWeather( string zip )
         {
             return Task.Run(
-                delegate()
+                delegate ()
                 {
                     this.WasQueried = true;
 
-                    if ( this.ExceptionToThrowDuringQuery != null )
+                    if( this.ExceptionToThrowDuringQuery != null )
                     {
                         throw this.ExceptionToThrowDuringQuery;
                     }

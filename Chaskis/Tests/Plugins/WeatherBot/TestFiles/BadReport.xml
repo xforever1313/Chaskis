@@ -17,5 +17,4 @@ xsi:schemaLocation="http://www.weather.gov/forecasts/xml/OGC_services http://www
     </gml:boundedBy>
     <gml:featureMember>
     </gml:featureMember>
-
 </app:NdfdForecastCollection>

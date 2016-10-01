@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -51,18 +50,18 @@ namespace Chaskis.Plugins.UserListBot
             string errorMessage = "Can not validate this " + nameof( UserListBotConfig ) + " object:" + Environment.NewLine;
             bool success = true;
 
-            if ( string.IsNullOrEmpty( this.Command ) || ( string.IsNullOrWhiteSpace( this.Command ) ) )
+            if( string.IsNullOrEmpty( this.Command ) || ( string.IsNullOrWhiteSpace( this.Command ) ) )
             {
                 errorMessage += "\t- " + nameof( this.Command ) + " can not be null or empty." + Environment.NewLine;
                 success = false;
             }
-            if ( this.Cooldown < 0 )
+            if( this.Cooldown < 0 )
             {
                 errorMessage += "\t- " + nameof( this.Cooldown ) + " can not be less than zero." + Environment.NewLine;
                 success = false;
             }
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new InvalidOperationException( errorMessage );
             }

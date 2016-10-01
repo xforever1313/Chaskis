@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -23,7 +22,7 @@ namespace Chaskis.Plugins.IrcLogger
         /// <returns>An Irc Logger config object from the given xml file.</returns>
         public static IrcLoggerConfig LoadIrcLoggerConfig( string xmlFilePath )
         {
-            if ( File.Exists( xmlFilePath ) == false )
+            if( File.Exists( xmlFilePath ) == false )
             {
                 throw new FileNotFoundException( "Could not find irc logger plugin config file " + xmlFilePath );
             }
@@ -33,7 +32,7 @@ namespace Chaskis.Plugins.IrcLogger
             doc.Load( xmlFilePath );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != ircloggerRootNodeName )
+            if( rootNode.Name != ircloggerRootNodeName )
             {
                 throw new XmlException(
                     "Root XML node should be named \"" + ircloggerRootNodeName + "\".  Got: " + rootNode.Name
@@ -42,16 +41,16 @@ namespace Chaskis.Plugins.IrcLogger
 
             IrcLoggerConfig config = new IrcLoggerConfig();
 
-            foreach ( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "logfilelocation":
                         config.LogFileLocation = childNode.InnerText;
                         break;
 
                     case "maxnumbermessagesperlog":
-                        if ( string.IsNullOrEmpty( childNode.InnerText ) == false )
+                        if( string.IsNullOrEmpty( childNode.InnerText ) == false )
                         {
                             config.MaxNumberMessagesPerLog = uint.Parse( childNode.InnerText );
                         }

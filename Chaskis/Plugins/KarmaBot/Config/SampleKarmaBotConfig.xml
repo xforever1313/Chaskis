@@ -5,11 +5,11 @@ Settings for the karma bot.
     increasecmd - The command to increase karma of the given name.
                   This MUST contain the regex group "name", or this isn't going to work.
                   Default is ++name or name++
-                  
+
      decreasecmd - The command to decrease karma of the given name.
                    This MUST contain the regex group "name", or this isn't going to work.
                    Default is \-\-name or name\-\- (dash, dash, need to escape two dashes in XML)
-                    
+
      querycmd - The command to query how much karma something has.
                 This MUST contain the regex group "name", or this isn't going to work.
                 Default is !karma name.

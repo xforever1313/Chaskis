@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -16,7 +15,7 @@ namespace Tests.Plugins.WeatherBot
     {
         // -------- Fields --------
 
-        const string defaultZip = "12345";
+        private const string defaultZip = "12345";
 
         /// <summary>
         /// Location of the weather bot test files.
@@ -164,9 +163,9 @@ namespace Tests.Plugins.WeatherBot
         private string ReadFile( string fileLoaction )
         {
             string fileContents;
-            using ( FileStream infile = new FileStream( fileLoaction, FileMode.Open, FileAccess.Read ) )
+            using( FileStream infile = new FileStream( fileLoaction, FileMode.Open, FileAccess.Read ) )
             {
-                using ( StreamReader reader = new StreamReader( infile ) )
+                using( StreamReader reader = new StreamReader( infile ) )
                 {
                     fileContents = reader.ReadToEnd();
                 }

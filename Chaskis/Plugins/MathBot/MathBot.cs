@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -95,7 +94,7 @@ namespace Chaskis.Plugins.MathBot
             Match match = Regex.Match( response.Message, handlerRegex );
             string expression = match.Groups["expression"].Value;
 
-            if ( match.Success )
+            if( match.Success )
             {
                 try
                 {
@@ -105,7 +104,7 @@ namespace Chaskis.Plugins.MathBot
                         response.Channel
                     );
                 }
-                catch ( Exception )
+                catch( Exception )
                 {
                     writer.SendMessageToUser(
                         "'" + expression + "' is not something I can calculate :(",

@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -92,7 +91,7 @@ namespace Chaskis.Plugins.CowSayBot
                 "CowSayBotConfig.xml"
             );
 
-            if ( File.Exists( configPath ) == false )
+            if( File.Exists( configPath ) == false )
             {
                 throw new FileNotFoundException(
                     "Can not open " + configPath
@@ -103,7 +102,7 @@ namespace Chaskis.Plugins.CowSayBot
 
             this.cowSayConfig = XmlLoader.LoadCowSayBotConfig( configPath );
 
-            if ( File.Exists( cowSayConfig.ExeCommand ) == false )
+            if( File.Exists( cowSayConfig.ExeCommand ) == false )
             {
                 throw new InvalidOperationException( "Can not load cowsay program from " + cowSayConfig.ExeCommand );
             }
@@ -116,7 +115,7 @@ namespace Chaskis.Plugins.CowSayBot
             IIrcHandler cowSayHandler = new MessageHandler(
                 this.cowsayRegex,
                 HandleCowsayCommand,
-                ( int ) cowSayConfig.CoolDownTimeSeconds,
+                (int)cowSayConfig.CoolDownTimeSeconds,
                 ResponseOptions.RespondOnlyToChannel
             );
 
@@ -150,7 +149,7 @@ namespace Chaskis.Plugins.CowSayBot
         private string ConstructRegex( CowSayBotConfig config )
         {
             string commandRegex = @"(?<command>(";
-            foreach ( string command in config.CowFileInfoList.CommandList.Keys )
+            foreach( string command in config.CowFileInfoList.CommandList.Keys )
             {
                 commandRegex += command + ")|(";
             }
@@ -174,17 +173,17 @@ namespace Chaskis.Plugins.CowSayBot
         private int LaunchCowsay( string messageToCowsay, out string processOutput, string cowFile = null )
         {
             this.cowSayInfo.Arguments = string.Empty;
-            if ( string.IsNullOrEmpty( cowFile ) == false )
+            if( string.IsNullOrEmpty( cowFile ) == false )
             {
                 this.cowSayInfo.Arguments = "-f " + cowFile;
             }
 
             int exitCode = -1;
-            using ( Process cowsayProc = Process.Start( cowSayInfo ) )
+            using( Process cowsayProc = Process.Start( cowSayInfo ) )
             {
-                using ( StreamReader stdout = cowsayProc.StandardOutput )
+                using( StreamReader stdout = cowsayProc.StandardOutput )
                 {
-                    using ( StreamWriter stdin = cowsayProc.StandardInput )
+                    using( StreamWriter stdin = cowsayProc.StandardInput )
                     {
                         stdin.Write( messageToCowsay );
                         stdin.Flush();
@@ -194,7 +193,7 @@ namespace Chaskis.Plugins.CowSayBot
                 }
 
                 // If we hang for more than 15 seconds, abort.
-                if ( cowsayProc.WaitForExit( 15 * 1000 ) == false )
+                if( cowsayProc.WaitForExit( 15 * 1000 ) == false )
                 {
                     cowsayProc.Kill();
                 }
@@ -217,7 +216,7 @@ namespace Chaskis.Plugins.CowSayBot
                 if( cowMatch.Success )
                 {
                     string cowFile = this.cowSayConfig.CowFileInfoList.CommandList[cowMatch.Groups["command"].Value];
-                    if ( cowFile == "DEFAULT" )
+                    if( cowFile == "DEFAULT" )
                     {
                         cowFile = null;
                     }
@@ -225,15 +224,15 @@ namespace Chaskis.Plugins.CowSayBot
                     string cowSayedMessage;
                     int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out cowSayedMessage, cowFile );
 
-                    if ( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
+                    if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                     {
                         writer.SendCommandToChannel( cowSayedMessage );
                     }
-                    else if ( exitCode != 0 )
+                    else if( exitCode != 0 )
                     {
-                        Console.Error.WriteLine( "CowSayBot: Exit code not 0.  Got: " +  exitCode );
+                        Console.Error.WriteLine( "CowSayBot: Exit code not 0.  Got: " + exitCode );
                     }
-                    else if ( string.IsNullOrEmpty( cowSayedMessage ) )
+                    else if( string.IsNullOrEmpty( cowSayedMessage ) )
                     {
                         Console.Error.WriteLine( "CowSayBot: Nothing returned from cowsay process." );
                     }
@@ -254,4 +253,3 @@ namespace Chaskis.Plugins.CowSayBot
         }
     }
 }
-

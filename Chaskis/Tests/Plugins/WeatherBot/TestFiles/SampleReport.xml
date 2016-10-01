@@ -31,5 +31,4 @@ xsi:schemaLocation="http://www.weather.gov/forecasts/xml/OGC_services http://www
             <app:weatherPhrase>Mostly Clear</app:weatherPhrase>
         </app:Forecast_Gml2Point>
     </gml:featureMember>
-
 </app:NdfdForecastCollection>

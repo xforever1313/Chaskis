@@ -40,7 +40,7 @@ namespace Chaskis.Plugins.MathBot
         public static string Calculate( string expression )
         {
             Match match = calculatorRegex.Match( expression );
-            if ( match.Success == false )
+            if( match.Success == false )
             {
                 throw new ArgumentException(
                     expression + " is not a valid expression for MathBot.  Syntax Error."

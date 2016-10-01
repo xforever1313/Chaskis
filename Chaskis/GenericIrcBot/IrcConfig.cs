@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -64,12 +63,12 @@ namespace GenericIrcBot
         /// Value a regex.  Must include (?<bridgeUser>) and (<bridgeMessage>) regex groups.
         /// somewhere in it so we can tell who the user name from the bridged service and what the
         /// message was.
-        /// 
+        ///
         /// For example, if your bridge bot will output message in the form of:
         /// bridgeUser: This is the user's message from the bridge
         /// then your regex should be:
         /// (?<bridgeUser>\w+:)\s+(?<bridgeMessage>.+)
-        /// 
+        ///
         /// If you have no bridges to watch in your channel, leave this blank.
         /// </summary>
         IDictionary<string, string> BridgeBots { get; }
@@ -178,7 +177,7 @@ namespace GenericIrcBot
         /// </summary>
         public IIrcConfig Clone()
         {
-            IrcConfig clone = ( IrcConfig ) this.MemberwiseClone();
+            IrcConfig clone = (IrcConfig)this.MemberwiseClone();
             clone.BridgeBots = new Dictionary<string, string>( clone.BridgeBots );
             return clone;
         }
@@ -272,7 +271,6 @@ namespace GenericIrcBot
                 ThrowException( nameof( this.Channel ) );
             }
         }
-
 
         /// <summary>
         /// The port to connect to.
@@ -440,83 +438,83 @@ namespace GenericIrcBot
             bool success = true;
             string errorString = "The following errors are wrong with the IrcConfig:" + Environment.NewLine;
 
-            if ( string.IsNullOrEmpty( config.Server ) )
+            if( string.IsNullOrEmpty( config.Server ) )
             {
                 errorString += "Server can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( config.Channel ) )
+            if( string.IsNullOrEmpty( config.Channel ) )
             {
                 errorString += "Channel can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( config.Port < 0 )
+            if( config.Port < 0 )
             {
                 errorString += "Port can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( config.UserName ) )
+            if( string.IsNullOrEmpty( config.UserName ) )
             {
                 errorString += "UserName can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( config.Nick ) )
+            if( string.IsNullOrEmpty( config.Nick ) )
             {
                 errorString += "Nick can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( string.IsNullOrEmpty( config.RealName ) )
+            if( string.IsNullOrEmpty( config.RealName ) )
             {
                 errorString += "RealName can not be null or empty" + Environment.NewLine;
                 success = false;
             }
-            if ( config.QuitMessage == null )
+            if( config.QuitMessage == null )
             {
                 errorString += "Quit Message can not be null" + Environment.NewLine;
                 success = false;
             }
             // Per this website, quit messages can not contain new lines:
             // http://www.user-com.undernet.org/documents/quitmsg.php
-            else if ( config.QuitMessage.Contains( Environment.NewLine ) )
+            else if( config.QuitMessage.Contains( Environment.NewLine ) )
             {
                 errorString += "Quit Message can not contain new lines" + Environment.NewLine;
                 success = false;
             }
             // Per this website, quit messages can not contain more than 160 characters.
             // http://www.user-com.undernet.org/documents/quitmsg.php
-            else if ( config.QuitMessage.Length > 160 )
+            else if( config.QuitMessage.Length > 160 )
             {
                 errorString += "Quit Message can not contain more than 160 characters" + Environment.NewLine;
                 success = false;
             }
             // Bridge bots MAY be empty, but can not be null.
-            if ( config.BridgeBots == null )
+            if( config.BridgeBots == null )
             {
                 errorString += "BridgeBots can not be null" + Environment.NewLine;
                 success = false;
             }
             else
             {
-                foreach ( KeyValuePair<string, string> bridgeBot in config.BridgeBots )
+                foreach( KeyValuePair<string, string> bridgeBot in config.BridgeBots )
                 {
-                    if ( string.IsNullOrEmpty( bridgeBot.Key ) )
+                    if( string.IsNullOrEmpty( bridgeBot.Key ) )
                     {
                         errorString += "BrideBots can not have empty or null Key" + Environment.NewLine;
                         success = false;
                     }
-                    if ( string.IsNullOrEmpty( bridgeBot.Value ) )
+                    if( string.IsNullOrEmpty( bridgeBot.Value ) )
                     {
                         errorString += "BrideBots " + bridgeBot.Key + " can not have empty or null Value" + Environment.NewLine;
                         success = false;
                     }
                     else
                     {
-                        if ( bridgeBot.Value.Contains( @"?<bridgeUser>" ) == false )
+                        if( bridgeBot.Value.Contains( @"?<bridgeUser>" ) == false )
                         {
                             errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeUser' in it" + Environment.NewLine;
                             success = false;
                         }
-                        if ( bridgeBot.Value.Contains( @"?<bridgeMessage>" ) == false )
+                        if( bridgeBot.Value.Contains( @"?<bridgeMessage>" ) == false )
                         {
                             errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeMessage' in it" + Environment.NewLine;
                             success = false;
@@ -527,7 +525,7 @@ namespace GenericIrcBot
 
             // Password can be empty, its optional on servers.
 
-            if ( success == false )
+            if( success == false )
             {
                 throw new ApplicationException( errorString );
             }
@@ -574,13 +572,13 @@ namespace GenericIrcBot
                 ( config1.QuitMessage == other.QuitMessage ) &&
                 ( config1.BridgeBots.Count == other.BridgeBots.Count );
 
-            if ( isEqual )
+            if( isEqual )
             {
-                foreach ( KeyValuePair<string, string> bridgeBot in config1.BridgeBots )
+                foreach( KeyValuePair<string, string> bridgeBot in config1.BridgeBots )
                 {
-                    if ( other.BridgeBots.ContainsKey( bridgeBot.Key ) )
+                    if( other.BridgeBots.ContainsKey( bridgeBot.Key ) )
                     {
-                        if ( bridgeBot.Value != other.BridgeBots[bridgeBot.Key] )
+                        if( bridgeBot.Value != other.BridgeBots[bridgeBot.Key] )
                         {
                             isEqual = false;
                             break;

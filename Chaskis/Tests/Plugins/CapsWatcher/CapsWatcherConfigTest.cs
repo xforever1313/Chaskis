@@ -9,7 +9,7 @@ namespace Tests.Plugins.CapsWatcher
     {
         // -------- Fields --------
 
-        CapsWatcherConfig uut;
+        private CapsWatcherConfig uut;
 
         // -------- Setup / Teardown --------
 
@@ -22,7 +22,6 @@ namespace Tests.Plugins.CapsWatcher
         [TearDown]
         public void Teardown()
         {
-
         }
 
         // -------- Tests --------

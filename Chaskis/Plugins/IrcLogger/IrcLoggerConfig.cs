@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -37,7 +36,7 @@ namespace Chaskis.Plugins.IrcLogger
 
         /// <summary>
         /// The number of messages received from the channel that
-        /// go into a log before creating a new log.  Set to 0 for 
+        /// go into a log before creating a new log.  Set to 0 for
         /// no limit.  Defaulted to 1000
         /// </summary>
         public uint MaxNumberMessagesPerLog { get; set; }

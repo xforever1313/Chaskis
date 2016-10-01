@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -40,7 +39,7 @@ namespace Chaskis.Plugins.UserListBot
 
         /// <summary>
         /// Whether or not a user queried to for the userlist.
-        /// When this is false, we will not send anything 
+        /// When this is false, we will not send anything
         /// Key is the channel the query came from,
         /// Value whether or not that channel queried or not.
         /// </summary>
@@ -76,7 +75,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.  Allowed to throw Exceptions.
-        /// 
+        ///
         /// This function should be used to validates that the environment is good for the plugin.
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
@@ -93,7 +92,7 @@ namespace Chaskis.Plugins.UserListBot
                 "UserListBotConfig.xml"
             );
 
-            if ( File.Exists( configPath ) == false )
+            if( File.Exists( configPath ) == false )
             {
                 throw new FileNotFoundException(
                     "Can not open " + configPath
@@ -168,12 +167,12 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleEndOfNamesResponse(IIrcWriter writer, IrcResponse response)
+        private void HandleEndOfNamesResponse( IIrcWriter writer, IrcResponse response )
         {
             Tuple<string, string> userList = this.userList.CheckAndHandleEndMessage( response.Message );
-            if ( userList != null )
+            if( userList != null )
             {
-                if ( this.isQueried.ContainsKey( userList.Item1 ) && this.isQueried[userList.Item1] )
+                if( this.isQueried.ContainsKey( userList.Item1 ) && this.isQueried[userList.Item1] )
                 {
                     writer.SendMessageToUser(
                         string.Format( "Users in {0}: {1}", userList.Item1, userList.Item2 ),

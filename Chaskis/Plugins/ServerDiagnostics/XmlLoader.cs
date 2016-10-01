@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +31,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <returns>The server diagnostics config from the XML file.</returns>
         public static ServerDiagnosticsConfig LoadConfig( string xmlFilePath )
         {
-            if ( File.Exists( xmlFilePath ) == false )
+            if( File.Exists( xmlFilePath ) == false )
             {
                 throw new FileNotFoundException( "Could not find server diagnostics plugin config file " + xmlFilePath );
             }
@@ -42,7 +41,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
             doc.Load( xmlFilePath );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != rootNodeName )
+            if( rootNode.Name != rootNodeName )
             {
                 throw new XmlException(
                     "Root XML node should be named \"" + rootNodeName + "\".  Got: " + rootNode.Name
@@ -51,9 +50,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
 
             ServerDiagnosticsConfig config = new ServerDiagnosticsConfig();
 
-            foreach ( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "utimecmd":
                         config.UpTimeCmd = childNode.InnerText;

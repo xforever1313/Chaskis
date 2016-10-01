@@ -1,13 +1,11 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-using System;
-using SethCS.Exceptions;
 using System.IO;
 using System.Text.RegularExpressions;
+using SethCS.Exceptions;
 
 namespace Chaskis
 {
@@ -147,23 +145,23 @@ namespace Chaskis
         /// Where the irc config XML file is located.
         /// Defaulted to rootDir\IrcConfig.xml.
         /// </summary>
-        public string IrcConfigLocation{ get; private set; }
+        public string IrcConfigLocation { get; private set; }
 
         /// <summary>
         /// Where the irc plugin XML file is located.
         /// Defaulted to rootDir\PluginConfig.xml.
         /// </summary>
-        public string IrcPluginConfigLocation{ get; private set; }
+        public string IrcPluginConfigLocation { get; private set; }
 
         /// <summary>
         /// Whether or not to print the help.
         /// </summary>
-        public bool PrintHelp{ get; private set; }
+        public bool PrintHelp { get; private set; }
 
         /// <summary>
         /// Whether or not to print the version information.
         /// </summary>
-        public bool PrintVersion{ get; private set; }
+        public bool PrintVersion { get; private set; }
 
         /// <summary>
         /// Whether or not to fail if the a plug loads, or attempt to continue.
@@ -174,7 +172,6 @@ namespace Chaskis
         /// <summary>
         /// Whether or not the args were parsed correctly.
         /// </summary>
-        public bool IsValid{ get; private set; }
+        public bool IsValid { get; private set; }
     }
 }
-

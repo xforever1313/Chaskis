@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -30,7 +29,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <returns>A cowsay bot config based on the given XML.</returns>
         public static CapsWatcherConfig LoadCapsWatcherConfig( string xmlFilePath )
         {
-            if ( File.Exists( xmlFilePath ) == false )
+            if( File.Exists( xmlFilePath ) == false )
             {
                 throw new FileNotFoundException( "Could not find caps watcher bot config Config file " + xmlFilePath );
             }
@@ -40,7 +39,7 @@ namespace Chaskis.Plugins.CapsWatcher
             doc.Load( xmlFilePath );
 
             XmlElement rootNode = doc.DocumentElement;
-            if ( rootNode.Name != capsWatcherConfigRootNodeName )
+            if( rootNode.Name != capsWatcherConfigRootNodeName )
             {
                 throw new XmlException(
                     "Root XML node should be named \"" + capsWatcherConfigRootNodeName + "\".  Got: " + rootNode.Name
@@ -49,9 +48,9 @@ namespace Chaskis.Plugins.CapsWatcher
 
             CapsWatcherConfig config = new CapsWatcherConfig();
 
-            foreach ( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch ( childNode.Name )
+                switch( childNode.Name )
                 {
                     case "message":
                         config.Messages.Add( childNode.InnerText );

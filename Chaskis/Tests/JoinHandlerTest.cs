@@ -1,12 +1,11 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using NUnit.Framework;
 using GenericIrcBot;
+using NUnit.Framework;
 using Tests.Mocks;
 
 namespace Tests
@@ -53,7 +52,7 @@ namespace Tests
         }
 
         // -------- Tests --------
-        
+
         /// <summary>
         /// Ensures that the class is created correctly.
         /// </summary>
@@ -102,7 +101,7 @@ namespace Tests
         [Test]
         public void JoinSuccess()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     JoinHandler.IrcCommand,
@@ -130,7 +129,7 @@ namespace Tests
         [Test]
         public void BotJoins()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     ircConfig.Nick,
                     JoinHandler.IrcCommand,
@@ -150,7 +149,7 @@ namespace Tests
         [Test]
         public void MessageCommandAppears()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     MessageHandler.IrcCommand,
@@ -170,7 +169,7 @@ namespace Tests
         [Test]
         public void PartCommandAppears()
         {
-            string ircString = 
+            string ircString =
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     PartHandler.IrcCommand,
@@ -201,7 +200,7 @@ namespace Tests
         // -------- Test Helpers --------
 
         /// <summary>
-        /// The function that is called 
+        /// The function that is called
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
@@ -212,4 +211,3 @@ namespace Tests
         }
     }
 }
-

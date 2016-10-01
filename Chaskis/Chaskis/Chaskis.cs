@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -119,7 +118,7 @@ namespace Chaskis
         /// <returns>True if load was successful, else false.</returns>
         public bool InitStage2_LoadPlugins( IList<AssemblyConfig> pluginList )
         {
-            if ( this.ircConfig == null )
+            if( this.ircConfig == null )
             {
                 throw new InvalidOperationException(
                     nameof( this.ircConfig ) + " is null.  Ensure " + nameof( this.InitState1_LoadIrcConfig ) + " was call prior to this function."
@@ -128,10 +127,10 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if ( manager.LoadPlugins( pluginList, this.ircConfig, this.infoLogFunction, this.errorLogFunction ) )
+            if( manager.LoadPlugins( pluginList, this.ircConfig, this.infoLogFunction, this.errorLogFunction ) )
             {
                 this.plugins = manager.Plugins;
-                foreach ( IPlugin plugin in this.plugins.Values )
+                foreach( IPlugin plugin in this.plugins.Values )
                 {
                     this.handlers.AddRange( plugin.GetHandlers() );
                 }
@@ -149,7 +148,7 @@ namespace Chaskis
         /// </summary>
         public void InitStage3_DefaultHandlers()
         {
-            if ( this.plugins == null )
+            if( this.plugins == null )
             {
                 throw new InvalidOperationException(
                     nameof( this.plugins ) + " is null.  Ensure " + nameof( this.InitStage2_LoadPlugins ) + " was call prior to this function."
@@ -159,7 +158,7 @@ namespace Chaskis
             // Plugin List:
             {
                 this.pluginListResponse = "List of plugins I am running: ";
-                foreach ( string pluginName in this.plugins.Keys )
+                foreach( string pluginName in this.plugins.Keys )
                 {
                     this.pluginListResponse += pluginName.ToLower() + " ";
                 }
@@ -193,18 +192,18 @@ namespace Chaskis
         /// </summary>
         public void InitStage4_OpenConnection()
         {
-            if ( this.ircConfig == null )
+            if( this.ircConfig == null )
             {
                 throw new InvalidOperationException(
                     nameof( this.ircConfig ) + " is null.  Ensure " + nameof( this.InitState1_LoadIrcConfig ) + " was call prior to this function."
                 );
             }
-            else if ( this.handlers.Count == 0 )
+            else if( this.handlers.Count == 0 )
             {
                 throw new InvalidOperationException(
-                    nameof( this.handlers ) + " is empty.  Ensure " + 
-                    nameof( this.InitStage3_DefaultHandlers ) + " and/or " + 
-                    nameof(this.InitStage2_LoadPlugins) + " was call prior to this function."
+                    nameof( this.handlers ) + " is empty.  Ensure " +
+                    nameof( this.InitStage3_DefaultHandlers ) + " and/or " +
+                    nameof( this.InitStage2_LoadPlugins ) + " was call prior to this function."
                 );
             }
 
@@ -218,15 +217,15 @@ namespace Chaskis
         /// </summary>
         public void Dispose()
         {
-            if ( this.fullyLoaded )
+            if( this.fullyLoaded )
             {
-                foreach ( IPlugin plugin in plugins.Values )
+                foreach( IPlugin plugin in plugins.Values )
                 {
                     try
                     {
                         plugin.Teardown();
                     }
-                    catch ( Exception err )
+                    catch( Exception err )
                     {
                         this.errorLogFunction( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
                     }
@@ -255,15 +254,15 @@ namespace Chaskis
         private void HandleSourceCommand( IIrcWriter writer, IrcResponse response )
         {
             Match match = Regex.Match( response.Message, this.sourceCommand, RegexOptions.IgnoreCase );
-            if ( match.Success )
+            if( match.Success )
             {
                 string pluginName = match.Groups["pluginName"].Value.ToLower();
-                if ( this.plugins.ContainsKey( pluginName ) )
+                if( this.plugins.ContainsKey( pluginName ) )
                 {
                     string msg = "Source of the plugin " + pluginName + ": " + this.plugins[pluginName].SourceCodeLocation;
                     writer.SendMessageToUser( msg, response.Channel );
                 }
-                else if ( pluginName == "chaskis" )
+                else if( pluginName == "chaskis" )
                 {
                     string msg = "My source code is located: https://github.com/xforever1313/Chaskis";
                     writer.SendMessageToUser( msg, response.Channel );

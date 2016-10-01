@@ -1,5 +1,4 @@
-﻿
-//          Copyright Seth Hendrick 2016.
+﻿//          Copyright Seth Hendrick 2016.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -35,7 +34,7 @@ namespace ChaskisService
         {
             InitializeComponent();
 
-            if ( Environment.OSVersion.Platform == PlatformID.Unix )
+            if( Environment.OSVersion.Platform == PlatformID.Unix )
             {
                 infoLogAction = this.LinuxLogInfo;
                 errorLogAction = this.LinuxLogError;
@@ -65,7 +64,7 @@ namespace ChaskisService
                     "Chaskis"
                 );
 
-                if ( Environment.OSVersion.Platform == PlatformID.Unix )
+                if( Environment.OSVersion.Platform == PlatformID.Unix )
                 {
                     string filePath = Path.Combine( rootDir, "Chaskis." + DateTime.Now.ToString( "yyyy-MM-dd_HH-mm-ss-ffff" ) + ".Log" );
                     this.logFile = new FileStream( filePath, FileMode.Create, FileAccess.Write );
@@ -76,7 +75,7 @@ namespace ChaskisService
 
                 // Load Plugins.
                 bool loaded = chaskis.InitStage2_LoadPlugins( Path.Combine( rootDir, "PluginConfig.xml" ) );
-                if ( ( loaded == false ) )
+                if( ( loaded == false ) )
                 {
                     this.ExitCode = 1;
                     Stop();
@@ -85,7 +84,7 @@ namespace ChaskisService
                 chaskis.InitStage3_DefaultHandlers();
                 chaskis.InitStage4_OpenConnection();
             }
-            catch ( Exception err )
+            catch( Exception err )
             {
                 this.errorLogAction(
                     "FATAL ERROR:" + Environment.NewLine + err.Message + Environment.NewLine + err.StackTrace
