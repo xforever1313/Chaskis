@@ -141,6 +141,7 @@ namespace ChaskisService
         {
             DateTime timeStamp = DateTime.Now;
             this.logWriter.WriteLine( timeStamp.ToString( "o" ) + "  MSG>    " + msg );
+            this.logWriter.Flush();
         }
 
         /// <summary>
@@ -163,6 +164,7 @@ namespace ChaskisService
         {
             DateTime timeStamp = DateTime.Now;
             this.logWriter.WriteLine( timeStamp.ToString( "o" ) + "  ERROR>    " + msg );
+            this.logWriter.Flush();
         }
     }
 }
