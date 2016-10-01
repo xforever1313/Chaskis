@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.UserListBot
 {

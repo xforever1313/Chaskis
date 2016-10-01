@@ -72,7 +72,7 @@ mainBinDir = os.path.join("ChaskisService", "bin", "Release")
 
 Copy(os.path.join(mainBinDir, "Chaskis.exe"), binDir)
 Copy(os.path.join(mainBinDir, "ChaskisService.exe"), binDir)
-Copy(os.path.join(mainBinDir, "GenericIrcBot.dll"), binDir)
+Copy(os.path.join(mainBinDir, "ChaskisCore.dll"), binDir)
 
 # Copy Config
 configDir = os.path.join("Chaskis", "Config")
@@ -91,7 +91,7 @@ for localPluginDir in os.listdir("Plugins"):
         # Copy binaries.
         localBinDir = os.path.join(localPluginDir, "bin", "Release")
         for binaryFile in os.listdir(localBinDir):
-            if (binaryFile.endswith(".dll") and binaryFile != "GenericIrcBot.dll"):
+            if (binaryFile.endswith(".dll") and binaryFile != "ChaskisCore.dll"):
                 Copy(os.path.join(localBinDir, binaryFile), installPluginDir)
 
             elif (binaryFile.endswith("x86") or binaryFile.endswith("x64")):

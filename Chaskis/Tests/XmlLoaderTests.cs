@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Chaskis;
-using GenericIrcBot;
+using ChaskisCore;
 using NUnit.Framework;
 
 namespace Tests

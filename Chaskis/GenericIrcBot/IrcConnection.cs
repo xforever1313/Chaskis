@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Threading;
 using SethCS.Basic;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     public class IrcConnection : IDisposable, IConnection, IIrcWriter
     {

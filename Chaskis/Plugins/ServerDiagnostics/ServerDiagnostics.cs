@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GenericIrcBot;
+using ChaskisCore;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.ServerDiagnostics

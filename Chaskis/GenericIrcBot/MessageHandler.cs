@@ -7,7 +7,7 @@ using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// Configuration for responding to a message received from IRC.

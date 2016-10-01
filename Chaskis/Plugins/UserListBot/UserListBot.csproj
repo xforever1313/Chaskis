@@ -51,9 +51,9 @@
     <Content Include="Config\SampleUserListBotConfig.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GenericIrcBot\GenericIrcBot.csproj">
+    <ProjectReference Include="..\..\GenericIrcBot\ChaskisCore.csproj">
       <Project>{501708e7-ac43-4df4-b7bc-6a31074e30d1}</Project>
-      <Name>GenericIrcBot</Name>
+      <Name>ChaskisCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

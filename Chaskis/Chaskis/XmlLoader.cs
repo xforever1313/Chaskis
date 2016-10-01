@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis
 {

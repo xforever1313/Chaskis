@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.CowSayBot
 {

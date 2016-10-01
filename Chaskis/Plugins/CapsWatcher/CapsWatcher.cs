@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.CapsWatcher
 {

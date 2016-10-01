@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{501708E7-AC43-4DF4-B7BC-6A31074E30D1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>GenericIrcBot</RootNamespace>
-    <AssemblyName>GenericIrcBot</AssemblyName>
+    <RootNamespace>ChaskisCore</RootNamespace>
+    <AssemblyName>ChaskisCore</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

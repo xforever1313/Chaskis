@@ -4,7 +4,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
-using GenericIrcBot;
+using ChaskisCore;
 using NUnit.Framework;
 using Tests.Mocks;
 

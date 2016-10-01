@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.ConsoleOut
 {

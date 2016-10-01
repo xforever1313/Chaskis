@@ -7,7 +7,7 @@ using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// Handles when a user parts.  That is, leaves the channel and logs off.

@@ -5,7 +5,7 @@
 
 using System;
 using System.IO;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis
 {

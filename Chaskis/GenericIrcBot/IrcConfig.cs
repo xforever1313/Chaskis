@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// Interface for an IrcConfig object.

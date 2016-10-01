@@ -7,7 +7,7 @@ using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// Handles the event where someone joins the watched channel.

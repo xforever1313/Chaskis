@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using GenericIrcBot;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.MathBot
 {

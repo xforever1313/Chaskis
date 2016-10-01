@@ -6,7 +6,7 @@
 using System;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// This class will fire for ALL IRC messages and pass in the raw

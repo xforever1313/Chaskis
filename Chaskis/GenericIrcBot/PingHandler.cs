@@ -6,7 +6,7 @@
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     /// <summary>
     /// Most servers will ping the bot using PING

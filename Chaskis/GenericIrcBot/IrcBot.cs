@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using SethCS.Basic;
 using SethCS.Exceptions;
 
-namespace GenericIrcBot
+namespace ChaskisCore
 {
     public class IrcBot : IDisposable
     {
