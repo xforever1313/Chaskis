@@ -140,22 +140,28 @@ namespace ChaskisCore
 
                 // If we are a bridge bot, we need to change
                 // the nick and the channel
-                if( ircConfig.BridgeBots.ContainsKey( nick ) )
+                foreach( string bridgeBotRegex in ircConfig.BridgeBots.Keys )
                 {
-                    Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[nick] );
-
-                    // If the regex matches, then we'll update the nick and message
-                    // to be whatever came from the bridge.
-                    if( bridgeBotMatch.Success )
+                    Match nameMatch = Regex.Match( nick, bridgeBotRegex );
+                    if( match.Success )
                     {
-                        string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
-                        string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
+                        Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[bridgeBotRegex] );
 
-                        // Only change the nick anme and the message if the nick and the message aren't empty.
-                        if( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
+                        // If the regex matches, then we'll update the nick and message
+                        // to be whatever came from the bridge.
+                        if( bridgeBotMatch.Success )
                         {
-                            nick = newNick;
-                            message = newMessage;
+                            string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
+                            string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
+
+                            // Only change the nick anme and the message if the nick and the message aren't empty.
+                            if( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
+                            {
+                                nick = newNick;
+                                message = newMessage;
+                            }
+
+                            break;  // We have our message, break out of the loop.
                         }
                     }
                 }

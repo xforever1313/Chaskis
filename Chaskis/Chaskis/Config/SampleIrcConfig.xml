@@ -18,7 +18,8 @@ Typically in a channel, bridge bots like this:
 <ircUser> Hello telegramUser!
 
 If the channel has bridge bots that you want Chaskis to interact with, you'll need to configure
-those in the commented out <bridgebots> tags.  The botname is the bridge bot's nick name in the channel.
+those in the commented out <bridgebots> tags.  The botname is the bridge bot's nick name in the channel.   Regexes are allowed
+in the bot name in case the bot disconnects and rejoins and gets a number appended to it for some reason.
 The bot regex, meanwhile, is the pattern the bridge bot will print when a user on the service is bridges
 says something.  For example, in the above example, telegrambot will print out "userName: message" when
 a user in the bridged service says something. So the regex you'll have to give it is
@@ -40,7 +41,7 @@ to match Chaskis will treat the bridge bot as a regular user.
     <quitmessage>I am being shut down!</quitmessage>
     <!--
     <bridgebots>
-        <bridgebot botname="telegrambot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
+        <bridgebot botname="telegrambot\d*" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
         <bridgebot botname="slackbot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
     </bridgebots>
     -->

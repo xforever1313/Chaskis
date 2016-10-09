@@ -59,7 +59,7 @@ namespace ChaskisCore
 
         /// <summary>
         /// Dictionary of bots that act as bridges to other clients (e.g. telegram).
-        /// Key is the bridge's user name
+        /// Key is the bridge's user name.  Regexes are allowed in case of rejoinings (e.g. bridgeBot1, bridgeBot2, bridgeBot).
         /// Value a regex.  Must include (?<bridgeUser>) and (<bridgeMessage>) regex groups.
         /// somewhere in it so we can tell who the user name from the bridged service and what the
         /// message was.

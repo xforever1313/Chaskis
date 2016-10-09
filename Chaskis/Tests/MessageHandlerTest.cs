@@ -207,6 +207,47 @@ namespace Tests
         }
 
         /// <summary>
+        /// Tests to make sure bridge bots work with regexes.
+        /// Useful if the bridge bot leaves and rejoins with a number tacked on the end.
+        /// </summary>
+        [Test]
+        public void TestBridgeUserRegex()
+        {
+            const string expectedMessage = "!bot help";
+
+            this.ircConfig.BridgeBots.Remove( TestHelpers.BridgeBotUser );
+            this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser + @"\d*", @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                MessageFunction
+            );
+
+            for( int i = 0; i < 5; ++i )
+            {
+                string bridgeBotNick;
+                if( i == 0 )
+                {
+                    bridgeBotNick = TestHelpers.BridgeBotUser;
+                }
+                else
+                {
+                    bridgeBotNick = TestHelpers.BridgeBotUser + ( 10 * i );
+                }
+
+                uut.HandleEvent(
+                    GenerateMessage( bridgeBotNick, this.ircConfig.Channel, remoteUser + ": " + expectedMessage ),
+                    this.ircConfig,
+                    ircConnection
+                );
+
+                Assert.AreEqual( this.ircConfig.Channel, responseReceived.Channel );
+                Assert.AreEqual( remoteUser, responseReceived.RemoteUser );
+                Assert.AreEqual( expectedMessage, responseReceived.Message );
+            }
+        }
+
+        /// <summary>
         /// Tests to make sure the bridge bots work if
         /// the message matches the bridge bot user.
         /// </summary>
