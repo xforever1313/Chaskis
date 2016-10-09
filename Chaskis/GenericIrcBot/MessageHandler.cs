@@ -143,7 +143,7 @@ namespace ChaskisCore
                 foreach( string bridgeBotRegex in ircConfig.BridgeBots.Keys )
                 {
                     Match nameMatch = Regex.Match( nick, bridgeBotRegex );
-                    if( match.Success )
+                    if( nameMatch.Success )
                     {
                         Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[bridgeBotRegex] );
 
