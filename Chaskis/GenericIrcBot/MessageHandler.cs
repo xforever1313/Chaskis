@@ -200,8 +200,10 @@ namespace ChaskisCore
                     DateTime currentTime = DateTime.UtcNow;
                     TimeSpan timeSpan = currentTime - this.LastEvent;
 
-                    // Only fire if our cooldown was long enough.
-                    if( timeSpan.TotalSeconds > this.CoolDown )
+                    // Only fire if our cooldown was long enough. Cooldown of zero means always fire.
+                    // Need to explictly say Cooldown == 0 since DateTime.UtcNow has a innacurracy of +/- 15ms.  Therefore,
+                    // if the action happens too quickly, it can incorrectly not be triggered.
+                    if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
                     {
                         this.LineAction( ircWriter, response );
                         this.LastEvent = currentTime;

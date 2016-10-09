@@ -216,7 +216,7 @@ namespace Tests
             const string expectedMessage = "!bot help";
 
             this.ircConfig.BridgeBots.Remove( TestHelpers.BridgeBotUser );
-            this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser + @"\d*", @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
+            this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser + @"\d*", @"(?<bridgeUser>[\w\d]+):\s+(?<bridgeMessage>.+)" );
 
             MessageHandler uut = new MessageHandler(
                 @"!bot\s+help",
@@ -244,6 +244,69 @@ namespace Tests
                 Assert.AreEqual( this.ircConfig.Channel, responseReceived.Channel );
                 Assert.AreEqual( remoteUser, responseReceived.RemoteUser );
                 Assert.AreEqual( expectedMessage, responseReceived.Message );
+            }
+        }
+
+        /// <summary>
+        /// Tests to make sure bridge bots work with regexes with multiple bridge bots.
+        /// </summary>
+        [Test]
+        public void TestBridgeUserRegexMultipleBridgeBots()
+        {
+            const string expectedMessage = "!bot help";
+            const string bridgeBotUser2 = "slackbot";
+
+            this.ircConfig.BridgeBots.Remove( TestHelpers.BridgeBotUser );
+            this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser, @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
+            this.ircConfig.BridgeBots.Add( bridgeBotUser2 + @"\d*", @"\<(?<bridgeUser>[\w\d]+)\>\s+(?<bridgeMessage>.+)" );
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                MessageFunction
+            );
+
+            for( int i = 0; i < 5; ++i )
+            {
+                string bridgeBotNick;
+                if( i == 0 )
+                {
+                    bridgeBotNick = bridgeBotUser2;
+                }
+                else
+                {
+                    bridgeBotNick = bridgeBotUser2 + i;
+                }
+
+                // This is the wrong regex, ensure the remote user is set to the bot, not the bridged user.
+                {
+                    string expectedReceivedMessage = remoteUser + ": " + expectedMessage;
+                    uut.HandleEvent(
+                        GenerateMessage( bridgeBotNick, this.ircConfig.Channel, expectedReceivedMessage ),
+                        this.ircConfig,
+                        ircConnection
+                    );
+
+                    Assert.AreEqual( this.ircConfig.Channel, responseReceived.Channel );
+                    Assert.AreEqual( bridgeBotNick, responseReceived.RemoteUser );
+                    Assert.AreEqual( expectedReceivedMessage, responseReceived.Message );
+
+                    responseReceived = null;
+                }
+
+                // Next, use the right regex.
+                {
+                    uut.HandleEvent(
+                        GenerateMessage( bridgeBotNick, this.ircConfig.Channel, "<" + remoteUser + "> " + expectedMessage ),
+                        this.ircConfig,
+                        ircConnection
+                    );
+
+                    Assert.AreEqual( this.ircConfig.Channel, responseReceived.Channel );
+                    Assert.AreEqual( remoteUser, responseReceived.RemoteUser );
+                    Assert.AreEqual( expectedMessage, responseReceived.Message );
+
+                    responseReceived = null;
+                }
             }
         }
 
