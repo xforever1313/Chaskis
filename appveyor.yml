@@ -1,2 +1,45 @@
+# We only care about master for now.
+branches:
+    only:
+        - master
+
+# Do not build tags
+skip_tags: true
+
+#--------------------#
+# Environment Config #
+#--------------------#
+
+matrix:
+    fast_finish: true # Fail right away if something goes wrong.
+
+#--------------#
+# Build Config #
+#--------------#
+
+platform: Any CPU
+
+configuration: Release
+
 before_build:
     git submodule update --init SethCS
+    nuget restore Chaskis/Chaskis.sln
+
+build:
+    parallel: true
+    project: Chaskis/Chaskis.sln
+
+#-------------#
+# Test Config #
+#-------------#
+
+test:
+    assemblies:
+        Tests.dll
+
+notifications:
+    - provider: Email
+      to:
+          -seth@shendrick.net
+      subject: 'Chaskis Build {{status}}'
+
