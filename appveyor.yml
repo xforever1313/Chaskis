@@ -1,2 +1,2 @@
 before_build:
-    git submodule update --init sethcs
+    git submodule update --init SethCS
