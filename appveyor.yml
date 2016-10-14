@@ -1,0 +1,2 @@
+before_build:
+    git submodule update --init sethcs
