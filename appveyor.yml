@@ -22,8 +22,8 @@ platform: Any CPU
 configuration: Release
 
 before_build:
-    git submodule update --init SethCS
-    nuget restore Chaskis/Chaskis.sln
+    - git submodule update --init SethCS
+    - nuget restore Chaskis/Chaskis.sln
 
 build:
     parallel: true
@@ -40,6 +40,6 @@ test:
 notifications:
     - provider: Email
       to:
-          -seth@shendrick.net
+          - seth@shendrick.net
       subject: 'Chaskis Build {{status}}'
 
