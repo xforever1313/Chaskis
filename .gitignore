@@ -36,5 +36,6 @@ Thumbs.db
 *_Resharper.*
 *.Resharper
 
-#dotCover
-*.dotCover
+#CodeCoverage
+CodeCoverage/
+OpenCover/
