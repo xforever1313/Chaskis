@@ -5,9 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 using System;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace Chaskis.Plugins.UrlBot
 {
@@ -15,7 +15,7 @@ namespace Chaskis.Plugins.UrlBot
     /// This class is the class that reads the URL,
     /// parses the html for the description meta tag,
     /// and then returns the description as a string.
-    /// 
+    ///
     /// Maybe someday we'll add cacheing too...
     /// </summary>
     public class UrlReader
@@ -37,7 +37,7 @@ namespace Chaskis.Plugins.UrlBot
         /// At some point we should use an HTML parser, but we'll see what happens...
         /// The less depencencies the better.
         /// </summary>
-        public const string MetaDescriptionRegex = 
+        public const string MetaDescriptionRegex =
             @"\<\s*meta\s+name\s*=\s*""description""\s+content\s*=\s*""(?<description>[^\<\>]+)""\s*/?>";
 
         private static readonly Regex metaRegex = new Regex( MetaDescriptionRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline );
@@ -93,7 +93,7 @@ namespace Chaskis.Plugins.UrlBot
                         }
 
                         Match match = metaRegex.Match( webResponse );
-                        if ( match.Success )
+                        if( match.Success )
                         {
                             return match.Groups["description"].Value;
                         }
@@ -109,4 +109,3 @@ namespace Chaskis.Plugins.UrlBot
         }
     }
 }
-

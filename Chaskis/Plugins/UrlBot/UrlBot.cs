@@ -4,10 +4,9 @@
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
-using System;
-using ChaskisCore;
 using System.Collections.Generic;
 using System.Text;
+using ChaskisCore;
 
 namespace Chaskis.Plugins.UrlBot
 {
@@ -113,4 +112,3 @@ namespace Chaskis.Plugins.UrlBot
         }
     }
 }
-
