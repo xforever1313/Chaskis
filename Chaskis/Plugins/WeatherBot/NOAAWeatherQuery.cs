@@ -11,6 +11,10 @@ namespace Chaskis.Plugins.WeatherBot
 {
     public class NOAAWeatherQuery : IWeatherQuery
     {
+        // -------- Fields --------
+
+        private static readonly string userAgent = "Chaskis IRC WeatherBot";
+
         // -------- Constructor --------
 
         /// <summary>
@@ -55,7 +59,12 @@ namespace Chaskis.Plugins.WeatherBot
                         client.QueryString.Add( "listZipCodeList", zip );
                         client.QueryString.Add( "Submit", "Submit" );
 
-                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
+                        // Per http://stackoverflow.com/questions/32641072/current-observation-feed-from-weather-gov-forbidden-403,
+                        // Weather.gov now requires a user agent when querying their API.
+
+                        client.Headers.Add( "user-agent", "userAgent" );
+
+                        string response = client.DownloadString( "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
                         latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
                     }
 
@@ -76,7 +85,9 @@ namespace Chaskis.Plugins.WeatherBot
                         client.QueryString.Add( "temp", "temp" ); // Current Temp
                         client.QueryString.Add( "Submit", "Submit" );
 
-                        string response = client.DownloadString( "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
+                        client.Headers.Add( "user-agent", "userAgent" );
+
+                        string response = client.DownloadString( "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
                         report = XmlLoader.ParseWeatherReport( response, zip );
                     }
                     return report;
