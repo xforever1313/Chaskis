@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis
 {
@@ -51,16 +52,9 @@ namespace Chaskis
         /// Any errors are logged to the passed in logger.
         /// </summary>
         /// <param name="ircConfig">The irc config we are using.</param>
-        /// <param name="errorLog">Where to log the errors.  Default to Console.Out.</param>
-        /// <param name="logFunction">
-        /// Action to take when we want to log something.
-        /// Argument to action is the string to log.
-        /// </param>
         public bool LoadPlugins(
             IList<AssemblyConfig> pluginList,
-            IIrcConfig ircConfig,
-            Action<string> infoLogFunction = null,
-            Action<string> errorLogFunction = null
+            IIrcConfig ircConfig
         )
         {
             bool success = true;
@@ -86,23 +80,23 @@ namespace Chaskis
                     string name = splitString[splitString.Length - 1].ToLower();
                     this.plugins.Add( name, plugin );
 
-                    infoLogFunction?.Invoke( "Successfully loaded plugin: " + pluginConfig.ClassName );
+                    StaticLogger.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
                 }
                 catch( Exception e )
                 {
-                    errorLogFunction?.Invoke( "*************" );
-                    errorLogFunction?.Invoke( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
-                    errorLogFunction?.Invoke( e.Message );
-                    errorLogFunction?.Invoke( string.Empty );
-                    errorLogFunction?.Invoke( e.StackTrace );
-                    errorLogFunction?.Invoke( string.Empty );
+                    StaticLogger.ErrorWriteLine( "*************" );
+                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
+                    StaticLogger.ErrorWriteLine( e.Message );
+                    StaticLogger.ErrorWriteLine();
+                    StaticLogger.ErrorWriteLine( e.StackTrace );
+                    StaticLogger.ErrorWriteLine();
                     if( e.InnerException != null )
                     {
-                        errorLogFunction?.Invoke( "Inner Exception:" );
-                        errorLogFunction?.Invoke( e.InnerException.Message );
-                        errorLogFunction?.Invoke( e.InnerException.StackTrace );
+                        StaticLogger.ErrorWriteLine( "Inner Exception:" );
+                        StaticLogger.ErrorWriteLine( e.InnerException.Message );
+                        StaticLogger.ErrorWriteLine( e.InnerException.StackTrace );
                     }
-                    errorLogFunction?.Invoke( "*************" );
+                    StaticLogger.ErrorWriteLine( "*************" );
 
                     success = false;
                 }

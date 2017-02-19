@@ -48,7 +48,7 @@ namespace ChaskisCore
         /// <param name="ircHandlers">The line configs to be used in this bot.</param>
         /// <param name="infoLogEvent">The event to do if we want to log information.</param>
         /// <param name="errorLogEvent">The event to do if an error occurrs.</param>
-        public IrcBot( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers, Action<string> infoLogEvent, Action<string> errorLogEvent )
+        public IrcBot( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
             ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
@@ -66,8 +66,6 @@ namespace ChaskisCore
                     config.HandleEvent( line, this.ircConfig, connection );
                 }
             };
-            connection.InfoLogEvent = infoLogEvent;
-            connection.ErrorLogEvent = errorLogEvent;
 
             this.ircConnection = connection;
         }

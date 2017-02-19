@@ -82,18 +82,15 @@ namespace ChaskisCore
                 true,
                 delegate( Exception err )
                 {
-                    if( this.ErrorLogEvent != null )
-                    {
-                        StringWriter errorMessage = new StringWriter();
+                    StringWriter errorMessage = new StringWriter();
 
-                        errorMessage.WriteLine( "***************" );
-                        errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
-                        errorMessage.WriteLine( err.Message );
-                        errorMessage.WriteLine( err.StackTrace );
-                        errorMessage.WriteLine( "***************" );
+                    errorMessage.WriteLine( "***************" );
+                    errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
+                    errorMessage.WriteLine( err.Message );
+                    errorMessage.WriteLine( err.StackTrace );
+                    errorMessage.WriteLine( "***************" );
 
-                        this.ErrorLogEvent.Invoke( errorMessage.ToString() );
-                    }
+                    StaticLogger.ErrorWriteLine( errorMessage.ToString() );
                 }
             );
 
@@ -116,18 +113,6 @@ namespace ChaskisCore
         /// The parameter is the line from the connection.
         /// </summary>
         public Action<string> ReadEvent { get; set; }
-
-        /// <summary>
-        /// Called when a status needs to be logged.
-        /// The parameter is the message to be logged.
-        /// </summary>
-        public Action<string> InfoLogEvent { get; set; }
-
-        /// <summary>
-        /// Called when an error needs to be logged.
-        /// The parameter is the error message.
-        /// </summary>
-        public Action<string> ErrorLogEvent { get; set; }
 
         /// <summary>
         /// Whether or not to keep reading.
@@ -206,7 +191,7 @@ namespace ChaskisCore
 
             this.IsConnected = true;
 
-            this.InfoLogEvent?.Invoke( "Connection made!" );
+            StaticLogger.WriteLine( "Connection made!" );
         }
 
         /// <summary>
@@ -337,7 +322,7 @@ namespace ChaskisCore
         {
             if( IsConnected != false )
             {
-                this.InfoLogEvent?.Invoke( "Disconnecting..." );
+                StaticLogger.WriteLine( "Disconnecting..." );
 
                 // Stop the reader thread.  This prevents any more events from
                 // being queued.
@@ -376,7 +361,7 @@ namespace ChaskisCore
                 // Finish disconnecting by closing the connection.
                 DisconnectHelper();
 
-                this.InfoLogEvent?.Invoke( "Disconnect Complete." );
+                StaticLogger.WriteLine( "Disconnect Complete." );
             }
         }
 
@@ -429,10 +414,10 @@ namespace ChaskisCore
                     }
                     catch( SocketException err )
                     {
-                        this.InfoLogEvent?.Invoke( "IRC Connection closed: " + err.Message );
+                        StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
+                            StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
                             AttemptReconnect();
                         }
                         else
@@ -444,10 +429,10 @@ namespace ChaskisCore
                     }
                     catch( IOException err )
                     {
-                        this.InfoLogEvent?.Invoke( "IRC Connection closed: " + err.Message );
+                        StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
+                            StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
                             AttemptReconnect();
                         }
                         else
@@ -461,7 +446,7 @@ namespace ChaskisCore
                     {
                         // Unexpected exception occurred.  The connection probably dropped.
                         // Nothing we can do now except to attempt to try again.
-                        this.ErrorLogEvent?.Invoke(
+                        StaticLogger.ErrorWriteLine(
                             "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err.ToString() + Environment.NewLine + "Attempting to reconnect..."
                         );
 
@@ -472,7 +457,7 @@ namespace ChaskisCore
             catch( Exception err )
             {
                 // Fatal Unexpected exception occurred.
-                this.ErrorLogEvent?.Invoke(
+                StaticLogger.ErrorWriteLine(
                     "FATAL ERROR: IRC Reader Thread caught unexpected exception and can not reconnect:" + Environment.NewLine + err.ToString()
                 );
             }
@@ -503,7 +488,7 @@ namespace ChaskisCore
             {
                 try
                 {
-                    this.InfoLogEvent?.Invoke(
+                    StaticLogger.WriteLine(
                         "Waiting " + timeoutMinutes + " minutes, then attempting reconnect..."
                     );
 
@@ -513,7 +498,7 @@ namespace ChaskisCore
                     // to close the program, return, and we won't attempt to reconnect.
                     if( this.reconnectAbortEvent.WaitOne( timeout ) )
                     {
-                        this.InfoLogEvent?.Invoke(
+                        StaticLogger.WriteLine(
                             "Terminate signal detected, aborting reconnect..."
                         );
                         return;
@@ -525,7 +510,7 @@ namespace ChaskisCore
                         timeoutMinutes++;
                     }
 
-                    this.InfoLogEvent?.Invoke(
+                    StaticLogger.WriteLine(
                         "Attempting reconnect..."
                     );
 
@@ -534,23 +519,23 @@ namespace ChaskisCore
 
                     if( this.IsConnected )
                     {
-                        this.InfoLogEvent?.Invoke(
+                        StaticLogger.WriteLine(
                             "We have restablished connection!"
                         );
                     }
                     else
                     {
-                        this.InfoLogEvent?.Invoke(
+                        StaticLogger.WriteLine(
                             "Reconnect failed, trying again."
                         );
                     }
                 }
                 catch( SocketException err )
                 {
-                    this.InfoLogEvent?.Invoke( "IRC Connection closed during reconnection: " + err.Message );
+                    StaticLogger.WriteLine( "IRC Connection closed during reconnection: " + err.Message );
                     if( this.KeepReading )
                     {
-                        this.ErrorLogEvent?.Invoke( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect again..." );
+                        StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect again..." );
                     }
                     else
                     {
@@ -561,7 +546,7 @@ namespace ChaskisCore
                 }
                 catch( Exception e )
                 {
-                    this.ErrorLogEvent?.Invoke(
+                    StaticLogger.ErrorWriteLine(
                         "Reconnect failed, got exception trying again." + Environment.NewLine + e.ToString()
                     );
                 }

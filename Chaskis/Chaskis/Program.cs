@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis
 {
@@ -39,10 +40,13 @@ namespace Chaskis
                     return 0;
                 }
 
-                using( Chaskis chaskis = new Chaskis(
-                    ( string s ) => Console.WriteLine( s ),
-                    ( string s ) => Console.Error.WriteLine( s ) )
-                )
+                StaticLogger.OnWriteLine -= StaticLogger_OnWriteLine;
+                StaticLogger.OnWriteLine += StaticLogger_OnWriteLine;
+
+                StaticLogger.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
+                StaticLogger.OnErrorWriteLine += StaticLogger_OnErrorWriteLine;
+
+                using( Chaskis chaskis = new Chaskis() )
                 {
                     chaskis.InitState1_LoadIrcConfig( parser.IrcConfigLocation );
                     bool pluginLoaded = chaskis.InitStage2_LoadPlugins( parser.IrcPluginConfigLocation );
@@ -63,8 +67,25 @@ namespace Chaskis
                 Console.WriteLine( "FATAL ERROR:" + Environment.NewLine + err.Message );
                 return -1;
             }
+            finally
+            {
+                StaticLogger.OnWriteLine -= StaticLogger_OnWriteLine;
+                StaticLogger.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
+            }
 
             return 0;
+        }
+
+        private static void StaticLogger_OnWriteLine( string str )
+        {
+            Console.Write( str );
+            Console.Out.Flush();
+        }
+
+        private static void StaticLogger_OnErrorWriteLine( string str )
+        {
+            Console.Error.Write( str );
+            Console.Error.Flush();
         }
 
         /// <summary>

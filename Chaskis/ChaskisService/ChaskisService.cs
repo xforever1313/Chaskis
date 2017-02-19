@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
+using SethCS.Basic;
 
 namespace ChaskisService
 {
@@ -22,9 +23,6 @@ namespace ChaskisService
         private FileStream logFile;
         private StreamWriter logWriter;
 
-        private Action<string> infoLogAction;
-        private Action<string> errorLogAction;
-
         // -------- Constructor --------
 
         /// <summary>
@@ -36,19 +34,22 @@ namespace ChaskisService
 
             if( Environment.OSVersion.Platform == PlatformID.Unix )
             {
-                infoLogAction = this.LinuxLogInfo;
-                errorLogAction = this.LinuxLogError;
+                StaticLogger.OnWriteLine -= this.LinuxLogInfo;
+                StaticLogger.OnWriteLine += this.LinuxLogInfo;
+
+                StaticLogger.OnErrorWriteLine -= this.LinuxLogError;
+                StaticLogger.OnErrorWriteLine += this.LinuxLogError;
             }
             else
             {
-                infoLogAction = this.WindowsLogInfo;
-                errorLogAction = this.WindowsLogError;
+                StaticLogger.OnWriteLine -= this.WindowsLogInfo;
+                StaticLogger.OnWriteLine += this.WindowsLogInfo;
+
+                StaticLogger.OnErrorWriteLine -= this.WindowsLogError;
+                StaticLogger.OnErrorWriteLine += this.WindowsLogError;
             }
 
-            this.chaskis = new Chaskis.Chaskis(
-                infoLogAction,
-                errorLogAction
-            );
+            this.chaskis = new Chaskis.Chaskis();
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace ChaskisService
             }
             catch( Exception err )
             {
-                this.errorLogAction(
+                StaticLogger.ErrorWriteLine(
                     "FATAL ERROR:" + Environment.NewLine + err.Message + Environment.NewLine + err.StackTrace
                 );
                 this.Stop();
@@ -98,7 +99,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnStop()
         {
-            this.infoLogAction( "Stopping." );
+            StaticLogger.WriteLine( "Stopping." );
             Teardown();
         }
 
@@ -107,7 +108,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnShutdown()
         {
-            this.infoLogAction( "Shutting down." );
+            StaticLogger.WriteLine( "Shutting down." );
             Teardown();
         }
 
@@ -118,6 +119,17 @@ namespace ChaskisService
         {
             this.chaskis?.Dispose();
             this.logWriter?.Dispose(); // Also disposes the file stream.
+
+            if( Environment.OSVersion.Platform == PlatformID.Unix )
+            {
+                StaticLogger.OnWriteLine -= this.LinuxLogInfo;
+                StaticLogger.OnErrorWriteLine -= this.LinuxLogError;
+            }
+            else
+            {
+                StaticLogger.OnWriteLine -= this.WindowsLogInfo;
+                StaticLogger.OnErrorWriteLine -= this.WindowsLogError;
+            }
         }
 
         /// <summary>
