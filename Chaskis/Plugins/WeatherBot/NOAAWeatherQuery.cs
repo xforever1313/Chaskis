@@ -62,7 +62,7 @@ namespace Chaskis.Plugins.WeatherBot
                         // Per http://stackoverflow.com/questions/32641072/current-observation-feed-from-weather-gov-forbidden-403,
                         // Weather.gov now requires a user agent when querying their API.
 
-                        client.Headers.Add( "user-agent", "userAgent" );
+                        client.Headers.Add( "user-agent", userAgent );
 
                         string response = client.DownloadString( "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
                         latLon = XmlLoader.ParseLatitudeLongitude( response, zip );
@@ -85,7 +85,7 @@ namespace Chaskis.Plugins.WeatherBot
                         client.QueryString.Add( "temp", "temp" ); // Current Temp
                         client.QueryString.Add( "Submit", "Submit" );
 
-                        client.Headers.Add( "user-agent", "userAgent" );
+                        client.Headers.Add( "user-agent", userAgent );
 
                         string response = client.DownloadString( "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php" );
                         report = XmlLoader.ParseWeatherReport( response, zip );
