@@ -8,7 +8,7 @@ using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using mshtml;
+using HtmlAgilityPack;
 using SethCS.Basic;
 
 namespace Chaskis.Plugins.UrlBot
@@ -117,10 +117,14 @@ namespace Chaskis.Plugins.UrlBot
                             webResponse = str.Result;
                         }
 
-                        IHTMLDocument2 doc = ( IHTMLDocument2 ) new HTMLDocument();
-                        doc.write( webResponse );
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.LoadHtml( webResponse );
 
-                        response.Title = doc.title;
+                        HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
+                        if( node != null )
+                        {
+                            response.Title = node.InnerText;
+                        }
                     }
                     catch( Exception e )
                     {
