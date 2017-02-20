@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 using System.Collections.Generic;
-using System.Text;
 using ChaskisCore;
 
 namespace Chaskis.Plugins.UrlBot
@@ -100,14 +99,15 @@ namespace Chaskis.Plugins.UrlBot
             string url;
             if( UrlReader.TryParseUrl( response.Message, out url ) )
             {
-                StringBuilder builder = new StringBuilder();
-                builder.AppendFormat( "@{0}: Here's a description of that URL: ", response.RemoteUser );
-                builder.Append( await this.urlReader.GetDescription( url ) );
+                UrlResponse urlResponse = await this.urlReader.GetDescription( url );
 
-                writer.SendMessageToUser(
-                    builder.ToString(),
-                    response.Channel
-                );
+                if( urlResponse.IsValid )
+                {
+                    writer.SendMessageToUser(
+                        string.Format( "Title: {0}", urlResponse.TitleShortened ),
+                        response.Channel
+                    );
+                }
             }
         }
     }

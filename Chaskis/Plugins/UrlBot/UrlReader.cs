@@ -1,13 +1,15 @@
-﻿//
-//          Copyright Seth Hendrick 2016.
+﻿
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-//
+
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using mshtml;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.UrlBot
 {
@@ -41,6 +43,13 @@ namespace Chaskis.Plugins.UrlBot
             @"\<\s*meta\s+name\s*=\s*""description""\s+content\s*=\s*""(?<description>[^\<\>]+)""\s*/?>";
 
         private static readonly Regex metaRegex = new Regex( MetaDescriptionRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline );
+
+        /// <summary>
+        /// Max size is 1MB.
+        /// </summary>
+        private const int maxFileSize = 1 * 1000 * 1000;
+
+        const string userAgent = "Chakis IRC Bot URL Plugin";
 
         // -------- Constructor --------
 
@@ -79,31 +88,46 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         /// <param name="url">URL to grab.</param>
         /// <returns>The description from the website's meta tag.</returns>
-        public Task<string> GetDescription( string url )
+        public Task<UrlResponse> GetDescription( string url )
         {
-            return Task<string>.Run(
+            return Task<UrlResponse>.Run(
                 delegate()
                 {
+                    UrlResponse response = new UrlResponse();
+
                     try
                     {
                         string webResponse;
                         using( WebClient client = new WebClient() )
                         {
-                            webResponse = client.DownloadString( url );
+                            client.Headers.Add( "user-agent", userAgent );
+                            client.DownloadProgressChanged += delegate ( object sender, DownloadProgressChangedEventArgs e )
+                            {
+                                if( e.TotalBytesToReceive >= maxFileSize )
+                                {
+                                    client.CancelAsync();
+                                    StaticLogger.WriteLine( "UrlReader> Request Cancelled due to size of {0}", e.TotalBytesToReceive );
+                                }
+                            };
+
+                            Task<string> str = client.DownloadStringTaskAsync( url );
+
+                            str.Wait();
+
+                            webResponse = str.Result;
                         }
 
-                        Match match = metaRegex.Match( webResponse );
-                        if( match.Success )
-                        {
-                            return match.Groups["description"].Value;
-                        }
+                        IHTMLDocument2 doc = ( IHTMLDocument2 ) new HTMLDocument();
+                        doc.write( webResponse );
 
-                        return "Can not find description tag :(";
+                        response.Title = doc.title;
                     }
                     catch( Exception e )
                     {
-                        return "Error getting site information: " + e.Message;
+                        StaticLogger.ErrorWriteLine( "UrlReader> Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
                     }
+
+                    return response;
                 }
             );
         }

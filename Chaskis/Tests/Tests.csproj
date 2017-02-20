@@ -89,6 +89,8 @@
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
+    <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
+    <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListXmlLoaderTest.cs" />
@@ -133,6 +135,10 @@
       <Project>{b5c2b6b5-35a6-4ef8-ab4f-3bf5da743878}</Project>
       <Name>MathBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\UrlBot\UrlBot.csproj">
+      <Project>{656faffb-0112-4f43-b98e-62c8d89188db}</Project>
+      <Name>UrlBot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\UserListBot\UserListBot.csproj">
       <Project>{3fa4494d-50ce-47de-96b2-ace032fa830a}</Project>
       <Name>UserListBot</Name>
@@ -155,6 +161,8 @@
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\ValidConfig.xml" />
+    <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />
+    <Content Include="Plugins\UrlBot\TestFiles\GoodSize.html" />
     <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />
     <Content Include="Plugins\UserListBot\TestFiles\GoodConfig.xml" />
     <Content Include="Plugins\WeatherBot\TestFiles\BadReport.xml" />
