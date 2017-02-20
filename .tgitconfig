@@ -1,9 +1,9 @@
 [bugtraq]
 	url = https://github.com/xforever1313/Chaskis/issues/%BUGID%
-	label = Issue ID:
+	label = "Issue ID: #"
 	append = false
 	number = true
 	warnifnoissue = false
-	logregex = \\*\\s+Issue:\\s+\\d+\n\\d+
-[bugtraq]
-	message = Issue: %BUGID%
+	logregex = "\\*\\s+Issue: #?\\d+\n\\d+"
+	message = "Issue: #%BUGID%"
+

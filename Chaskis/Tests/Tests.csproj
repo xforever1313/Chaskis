@@ -95,6 +95,7 @@
     <Compile Include="Plugins\WeatherBot\Mocks\MockWeatherQuery.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
+    <Compile Include="PongHandlerTest.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />

@@ -164,6 +164,9 @@ namespace Chaskis
 
             // Must always check for pings.
             this.handlers.Add( new PingHandler() );
+
+            // Must always handle pongs.
+            this.handlers.Add( new PongHandler() );
         }
 
         /// <summary>

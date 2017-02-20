@@ -40,7 +40,19 @@ namespace ChaskisCore
         void SendMessageToUser( string msg, string userNick );
 
         /// <summary>
-        /// Sends a pong to the given url.
+        /// Sends a ping to the server so if we are still connected.
+        /// </summary>
+        /// <param name="msg">The message to send while pinging.</param>
+        void SendPing( string msg );
+
+        /// <summary>
+        /// Call when we receive a pong from the server.
+        /// </summary>
+        /// <param name="response">The response from the server (after the :)</param>
+        void ReceivedPong( string response );
+
+        /// <summary>
+        /// Sends a pong to the server with the given response.
         /// </summary>
         /// <param name="response">The response to send.</param>
         void SendPong( string response );

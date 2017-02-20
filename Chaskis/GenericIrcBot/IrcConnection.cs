@@ -60,6 +60,19 @@ namespace ChaskisCore
         /// </summary>
         private ManualResetEvent reconnectAbortEvent;
 
+        /// <summary>
+        /// Connection watch dog: Restarts the connection if
+        /// we can't talk to the server.
+        /// </summary>
+        private Thread connectionWatchDog;
+
+        private ManualResetEvent connectionWatchDogKeepGoing;
+
+        /// <summary>
+        /// Event that gets triggered when we get a pong.
+        /// </summary>
+        private AutoResetEvent connectionWatchDogPongEvent;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -80,7 +93,7 @@ namespace ChaskisCore
 
             this.eventQueue = new EventExecutor(
                 true,
-                delegate( Exception err )
+                delegate ( Exception err )
                 {
                     StringWriter errorMessage = new StringWriter();
 
@@ -99,6 +112,11 @@ namespace ChaskisCore
 
             // Start Executing
             this.eventQueue.Start();
+
+            this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
+            this.connectionWatchDogKeepGoing = new ManualResetEvent( false );
+            this.connectionWatchDogPongEvent = new AutoResetEvent( false );
+            this.connectionWatchDog.Start();
         }
 
         // -------- Properties --------
@@ -250,29 +268,41 @@ namespace ChaskisCore
         }
 
         /// <summary>
-        /// Sends a pong to the given url.
+        /// Sends a ping to the server so if we are still connected.
+        /// </summary>
+        /// <param name="msg">The message to ping the server with.</param>
+        public void SendPing( string msg )
+        {
+            // TODO: Maybe add verbose output?
+            // StaticLogger.WriteLine( "Sending Ping to server with message '{0}'...", msg );
+
+            string pingString = string.Format( "PING {0}", msg );
+
+            this.SendRawCmd( pingString );
+        }
+
+        /// <summary>
+        /// Call when we receive a pong from the server.
+        /// </summary>
+        /// <param name="response">The response from the server.</param>
+        public void ReceivedPong( string response )
+        {
+            if( response == "watchdog" )
+            {
+                // TODO: Maybe add verbose output?
+                // StaticLogger.WriteLine( "Received Watchdog Pong!" );
+                this.connectionWatchDogPongEvent.Set();
+            }
+        }
+
+        /// <summary>
+        /// Sends a pong to the server with the given response.
         /// </summary>
         /// <param name="response">The response we need to send.</param>
         public void SendPong( string response )
         {
-            if( this.IsConnected == false )
-            {
-                throw new InvalidOperationException(
-                    "Not connected, can not send PONG."
-                );
-            }
-
-            lock( this.ircWriterLock )
-            {
-                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
-                {
-                    return;
-                }
-
-                // PONG :response
-                this.ircWriter.WriteLine( "PONG :{0}", response );
-                this.ircWriter.Flush();
-            }
+            string pongString = string.Format( "PONG :{0}", response );
+            this.SendRawCmd( pongString );
         }
 
         /// <summary>
@@ -283,17 +313,8 @@ namespace ChaskisCore
         /// <param name="reason">The reason for parting.</param>
         public void SendPart( string reason )
         {
-            lock( this.ircWriterLock )
-            {
-                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
-                {
-                    return;
-                }
-
-                // PART :reason
-                this.ircWriter.WriteLine( "PART {0} :{1}", this.Config.Channel, this.Config.QuitMessage );
-                this.ircWriter.Flush();
-            }
+            string partString = string.Format( "PART {0} :{1}", this.Config.Channel, this.Config.QuitMessage );
+            this.SendRawCmd( partString );
         }
 
         /// <summary>
@@ -303,15 +324,23 @@ namespace ChaskisCore
         /// <param name="cmd">The IRC command to send.</param>
         public void SendRawCmd( string cmd )
         {
+            if( this.IsConnected == false )
+            {
+                throw new InvalidOperationException(
+                    "Not connected, can not send command."
+                );
+            }
+
             lock( this.ircWriterLock )
             {
                 if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                 {
                     return;
                 }
+
+                this.ircWriter.WriteLine( cmd );
+                this.ircWriter.Flush();
             }
-            this.ircWriter.WriteLine( cmd );
-            this.ircWriter.Flush();
         }
 
         /// <summary>
@@ -360,6 +389,13 @@ namespace ChaskisCore
 
                 // Finish disconnecting by closing the connection.
                 DisconnectHelper();
+
+                this.connectionWatchDogKeepGoing.Set();
+                this.connectionWatchDogPongEvent.Set();
+                this.connectionWatchDog.Interrupt();
+                this.connectionWatchDog.Join();
+                this.connectionWatchDogKeepGoing.Dispose();
+                this.connectionWatchDogPongEvent.Dispose();
 
                 StaticLogger.WriteLine( "Disconnect Complete." );
             }
@@ -417,8 +453,10 @@ namespace ChaskisCore
                         StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
-                            AttemptReconnect();
+                            StaticLogger.ErrorWriteLine(
+                                "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
+                            );
+                            return;
                         }
                         else
                         {
@@ -432,8 +470,10 @@ namespace ChaskisCore
                         StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect..." );
-                            AttemptReconnect();
+                            StaticLogger.ErrorWriteLine(
+                                "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
+                            );
+                            return;
                         }
                         else
                         {
@@ -447,10 +487,8 @@ namespace ChaskisCore
                         // Unexpected exception occurred.  The connection probably dropped.
                         // Nothing we can do now except to attempt to try again.
                         StaticLogger.ErrorWriteLine(
-                            "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err.ToString() + Environment.NewLine + "Attempting to reconnect..."
+                            "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err.ToString() + Environment.NewLine + "Wait for watchdog to reconnect..."
                         );
-
-                        AttemptReconnect();
                     }
                 } // End While
             }
@@ -458,9 +496,46 @@ namespace ChaskisCore
             {
                 // Fatal Unexpected exception occurred.
                 StaticLogger.ErrorWriteLine(
-                    "FATAL ERROR: IRC Reader Thread caught unexpected exception and can not reconnect:" + Environment.NewLine + err.ToString()
+                    "FATAL ERROR: IRC Reader Thread caught unexpected exception!" + Environment.NewLine + err.ToString()
+                );
+                StaticLogger.ErrorWriteLine(
+                    "If this was because of a watchdog timeout, stand by..."
                 );
             }
+        }
+
+        private void ConnectionWatchDogEntry()
+        {
+            StaticLogger.WriteLine( "Connection Watchdog Started." );
+            bool keepGoing = true;
+            while( keepGoing )
+            {
+                try
+                {
+                    if( this.connectionWatchDogKeepGoing.WaitOne( 60 * 1000 ) == false )
+                    {
+                        // If we timeout, send a ping.  If we do NOT timeout, then we want to wait for a ping.
+                        this.SendPing( "watchdog" );
+                        if( this.connectionWatchDogPongEvent.WaitOne( 60 * 1000 ) == false )
+                        {
+                            StaticLogger.WriteLine(
+                                "Watch Dog has failed to receive a PONG within 60 seconds, attempting reconnect"
+                            );
+                            this.AttemptReconnect();
+                        }
+                    }
+                    else
+                    {
+                        keepGoing = false;
+                    }
+                }
+                catch( Exception e )
+                {
+                    StaticLogger.ErrorWriteLine( "Connection Watch Dog had an exception:" );
+                    StaticLogger.ErrorWriteLine( e.ToString() );
+                }
+            }
+            StaticLogger.WriteLine( "Connection Watchdog Exiting." );
         }
 
         /// <summary>

@@ -28,6 +28,18 @@ namespace ChaskisCore
         void SendPong( string response );
 
         /// <summary>
+        /// Sends a ping to the server so if we are still connected.
+        /// </summary>
+        /// <param name="msg">The message to ping the server with.</param>
+        void SendPing( string msg );
+
+        /// <summary>
+        /// Call when we receive a pong from the server.
+        /// </summary>
+        /// <param name="response">The response from the server.</param>
+        void ReceivedPong( string response );
+
+        /// <summary>
         /// Sends a raw command to the server.
         /// Only use if you REALLY know what you are doing.
         /// </summary>

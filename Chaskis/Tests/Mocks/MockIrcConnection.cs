@@ -50,6 +50,16 @@ namespace Tests.Mocks
         public IIrcConfig Config { get; set; }
 
         /// <summary>
+        /// What is passed into <see cref="SendPing(string)"/>
+        /// </summary>
+        public string PingMessage { get; private set; }
+
+        /// <summary>
+        /// What is passed into <see cref="ReceivedPong"/>
+        /// </summary>
+        public string PingResponse { get; private set; }
+
+        /// <summary>
         /// The pong response from SendPong().
         /// </summary>
         public string PongResponse { get; private set; }
@@ -105,8 +115,31 @@ namespace Tests.Mocks
         }
 
         /// <summary>
+        /// Sends a ping.
+        /// </summary>
+        /// <param name="msg">Saved to <see cref="PingMessage"/></param>
+        public void SendPing( string msg )
+        {
+            this.PingMessage = msg;
+        }
+
+        /// <summary>
+        /// Call when we receive a pong from the server.
+        /// 
+        /// No-Op right now.
+        /// </summary>
+        /// <param name="response">
+        /// The response from the server (after the :)
+        /// Saved to <see cref="PingResponse"/>
+        /// </param>
+        public void ReceivedPong( string response )
+        {
+            this.PingResponse = response;
+        }
+
+        /// <summary>
         /// Sends the pong to the given url.
-        /// Actually saves it to this.PongUrl.
+        /// Actually saves it to <see cref="PongResponse"/>
         /// </summary>
         /// <param name="response">The response to we send with the pong.</param>
         public void SendPong( string response )
@@ -116,7 +149,7 @@ namespace Tests.Mocks
 
         /// <summary>
         /// Sends the part to the channel.
-        /// Actually saves it to this.PartReason.
+        /// Actually saves it to <see cref="PartReason"/>
         /// </summary>
         /// <param name="reason">The reason we are parting.</param>
         public void SendPart( string reason )
@@ -126,7 +159,7 @@ namespace Tests.Mocks
 
         /// <summary>
         /// Sends the raw message to the server.
-        /// Actually saves it to this.RawMessage
+        /// Actually saves it to <see cref="RawMessage"/> 
         /// </summary>
         /// <param name="cmd">The raw command we are sending.</param>
         public void SendRawCmd( string cmd )
@@ -151,6 +184,8 @@ namespace Tests.Mocks
             messagesSend = new Dictionary<string, IList<string>>();
             this.MessagesSent = messagesSend;
             this.IsConnected = false;
+            this.PingMessage = string.Empty;
+            this.PingResponse = string.Empty;
             this.PongResponse = string.Empty;
             this.PartReason = string.Empty;
             this.RawMessage = string.Empty;

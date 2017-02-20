@@ -90,6 +90,20 @@ namespace Tests
         }
 
         /// <summary>
+        /// Constructs a PONG String from the server.
+        /// </summary>
+        /// <param name="server">The server URL</param>
+        /// <param name="msg">The message that we ponged back.</param>
+        /// <returns>A PONG response from the server.</returns>
+        public static string ConstringPongString(
+            string server,
+            string msg
+        )
+        {
+            return ":" + server + " PONG " + server + " :" + msg;
+        }
+
+        /// <summary>
         /// Constructs an IRC PING sent from a server.
         /// </summary>
         /// <param name="response">What the bot must respond.</param>
