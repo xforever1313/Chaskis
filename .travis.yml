@@ -1,5 +1,10 @@
 language: csharp
+
 solution: ./Chaskis/Chaskis.sln
+
+before_install:
+    - apt-get update
+
 install:
   - nuget restore Chaskis/Chaskis.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
