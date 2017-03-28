@@ -157,7 +157,6 @@ namespace Chaskis
                 if( childNode.Name == "assembly" )
                 {
                     string path = string.Empty;
-                    string className = string.Empty;
                     foreach( XmlAttribute attribute in childNode.Attributes )
                     {
                         switch( attribute.Name )
