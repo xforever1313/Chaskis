@@ -14,6 +14,7 @@ namespace Chaskis.Plugins.MathBot
     /// This plugin gets a math equation or boolean equation from IRC
     /// and calculates the result and reports it back.
     /// </summary>
+    [ChaskisPlugin( "mathbot" )]
     public class MathBot : IPlugin
     {
         // -------- Fields --------

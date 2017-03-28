@@ -13,6 +13,7 @@ namespace Chaskis.Plugins.IrcLogger
     /// IRC Logger logs all messages from the IRC channel to
     /// the log file.
     /// </summary>
+    [ChaskisPlugin( "irclogger" )]
     public class IrcLogger : IPlugin
     {
         // -------- Fields --------

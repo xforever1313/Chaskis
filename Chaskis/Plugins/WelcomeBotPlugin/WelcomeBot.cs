@@ -13,6 +13,7 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
     /// <summary>
     /// This plugin welcomes a user to the channel when he or she joins.
     /// </summary>
+    [ChaskisPlugin( "welcomebot" )]
     public class WelcomeBot : IPlugin
     {
         // -------- Fields --------

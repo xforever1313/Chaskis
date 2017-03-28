@@ -13,6 +13,7 @@ namespace Chaskis.Plugins.UrlBot
     /// This class takes a URL from the channel, reads the HTML From it, finds
     /// the description meta tag, and then prints the description to the channel.
     /// </summary>
+    [ChaskisPlugin( "urlbot" )]
     public class UrlBot : IPlugin
     {
         // -------- Fields --------

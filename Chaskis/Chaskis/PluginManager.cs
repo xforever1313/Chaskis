@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using ChaskisCore;
 using SethCS.Basic;
@@ -64,28 +65,43 @@ namespace Chaskis
                 try
                 {
                     Assembly dll = Assembly.LoadFrom( pluginConfig.AssemblyPath );
-                    Type type = dll.GetType( pluginConfig.ClassName );
 
-                    MethodInfo initFunction = type.GetMethod( "Init" );
+                    // Grab all the plugins, which have the ChaskisPlugin Attribute attached to them.
+                    var types = from type in dll.GetTypes()
+                                where type.IsDefined( typeof( ChaskisPlugin ), false )
+                                select type;
 
-                    // Make instance
-                    object instance = Activator.CreateInstance( type );
-                    initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
+                    foreach( Type type in types )
+                    {
+                        MethodInfo initFunction = type.GetMethod( "Init" );
 
-                    IPlugin plugin = (IPlugin)instance;
+                        // Make instance
+                        object instance = Activator.CreateInstance( type );
+                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
 
-                    // Use string.split, there's less bugs and edge-cases when trying to parse it out.
-                    string[] splitString = pluginConfig.ClassName.Split( '.' );
+                        IPlugin plugin = instance as IPlugin;
+                        if( plugin == null )
+                        {
+                            string errorString = string.Format(
+                                "Can not cast {0} to {1}, make sure your {0} class implements {1}",
+                                type.Name,
+                                nameof( IPlugin )
+                            );
 
-                    string name = splitString[splitString.Length - 1].ToLower();
-                    this.plugins.Add( name, plugin );
+                            throw new InvalidCastException( errorString );
+                        }
 
-                    StaticLogger.WriteLine( "Successfully loaded plugin: " + pluginConfig.ClassName );
+                        ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
+
+                        this.plugins.Add( chaskisPlugin.PluginName, plugin );
+
+                        StaticLogger.WriteLine( "Successfully loaded plugin: " + chaskisPlugin.PluginName );
+                    }
                 }
                 catch( Exception e )
                 {
                     StaticLogger.ErrorWriteLine( "*************" );
-                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + pluginConfig.ClassName + ":" );
+                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + pluginConfig.AssemblyPath + ":" );
                     StaticLogger.ErrorWriteLine( e.Message );
                     StaticLogger.ErrorWriteLine();
                     StaticLogger.ErrorWriteLine( e.StackTrace );

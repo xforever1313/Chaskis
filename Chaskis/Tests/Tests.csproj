@@ -68,7 +68,6 @@
     <None Include="TestFiles\ValidPluginConfigEmpty.xml" />
     <None Include="TestFiles\InvalidPluginConfigBadRootNode.xml" />
     <None Include="TestFiles\InvalidPluginConfigEmptyPath.xml" />
-    <None Include="TestFiles\InvalidPluginConfigEmptyClass.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllHandlerTest.cs" />

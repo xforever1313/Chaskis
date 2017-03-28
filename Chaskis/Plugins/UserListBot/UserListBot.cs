@@ -13,6 +13,7 @@ namespace Chaskis.Plugins.UserListBot
     /// <summary>
     /// Allows users to query for the users in a channel.
     /// </summary>
+    [ChaskisPlugin( "userlistbot" )]
     public class UserListBot : IPlugin
     {
         // -------- Fields --------

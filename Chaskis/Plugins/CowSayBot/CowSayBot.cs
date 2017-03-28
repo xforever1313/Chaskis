@@ -12,6 +12,7 @@ using ChaskisCore;
 
 namespace Chaskis.Plugins.CowSayBot
 {
+    [ChaskisPlugin( "cowsaybot" )]
     public class CowSayBot : IPlugin
     {
         // -------- Fields --------

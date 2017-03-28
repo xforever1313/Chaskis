@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Sample plugin config.  This includes the absolute path
-to the plugin to use.  It also asks for the single class in
-the assembly that implements IPlugin.  When Chaskis runs, it will
+to the plugin to use.  When Chaskis runs, it will
 load in those plugins.  Note, if failOnBadPlugin=yes is passed into the program,
 the program will terminate on a bad load, so make sure your path and class name are correct!
 
 Typically plugins live in ApplicationData/Chaskis/plugins.
 
-GenericIrcBot.dll is loaded automatically.
+ChaskisCore.dll is loaded automatically.
 -->
 <pluginconfig>
-	<assembly path="/home/me/.config/Chaskis/plugins/WelcomeBotPlugin/WelcomeBotPlugin.dll" classname="WelcomeBotPlugin.WelcomeBot" />
+	<assembly path="/home/me/.config/Chaskis/plugins/WelcomeBotPlugin/WelcomeBotPlugin.dll" />
 </pluginconfig>

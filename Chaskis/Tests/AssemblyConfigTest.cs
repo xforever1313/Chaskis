@@ -21,19 +21,15 @@ namespace Tests
         public void InvalidArgumentTest()
         {
             Assert.Throws<ArgumentNullException>( () =>
-                new AssemblyConfig( null, "TestAssembly.Class" )
+                new AssemblyConfig( null )
             );
 
             Assert.Throws<ArgumentNullException>( () =>
-                new AssemblyConfig( string.Empty, "TestAssembly.Class" )
+                new AssemblyConfig( string.Empty )
             );
 
-            Assert.Throws<ArgumentNullException>( () =>
-                new AssemblyConfig( "myPath", null )
-            );
-
-            Assert.Throws<ArgumentNullException>( () =>
-                new AssemblyConfig( "myPath", string.Empty )
+            Assert.DoesNotThrow( () =>
+                new AssemblyConfig( "myPath" )
             );
         }
     }

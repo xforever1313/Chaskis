@@ -12,8 +12,9 @@ namespace Chaskis.Plugins.ConsoleOut
     /// <summary>
     /// This plugin takes everything it gets from IRC and
     /// prints it to Console.Out. Only really useful using the Console Program and
-    /// for debuggin purposes.
+    /// for debugging purposes.
     /// </summary>
+    [ChaskisPlugin( "consoleout" )]
     public class ConsoleOut : IPlugin
     {
         // -------- Fields --------

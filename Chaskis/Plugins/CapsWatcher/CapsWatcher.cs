@@ -14,6 +14,7 @@ namespace Chaskis.Plugins.CapsWatcher
     /// <summary>
     /// Caps watcher yells at uses who use all caps.
     /// </summary>
+    [ChaskisPlugin( "capswatcher" )]
     public class CapsWatcher : IPlugin
     {
         // -------- Fields --------

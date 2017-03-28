@@ -211,10 +211,7 @@ namespace Tests
             Assert.AreEqual( 2, configs.Count );
 
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll", configs[0].AssemblyPath );
-            Assert.AreEqual( "TestPlugin.TestClass", configs[0].ClassName );
-
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll", configs[1].AssemblyPath );
-            Assert.AreEqual( "TestPlugin2.TestClass", configs[1].ClassName );
         }
 
         /// <summary>
@@ -246,17 +243,6 @@ namespace Tests
         {
             Assert.Throws<ArgumentNullException>( () =>
                 XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyPath.xml" ) )
-            );
-        }
-
-        /// <summary>
-        /// Ensures an empty class in the XML resutls in an exception.
-        /// </summary>
-        [Test]
-        public void TestInvalidPluginConfigNoClass()
-        {
-            Assert.Throws<ArgumentNullException>( () =>
-                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyClass.xml" ) )
             );
         }
     }

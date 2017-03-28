@@ -165,14 +165,10 @@ namespace Chaskis
                             case "path":
                                 path = attribute.Value;
                                 break;
-
-                            case "classname":
-                                className = attribute.Value;
-                                break;
                         }
                     }
 
-                    plugins.Add( new AssemblyConfig( path, className ) );
+                    plugins.Add( new AssemblyConfig( path ) );
                 }
             }
 

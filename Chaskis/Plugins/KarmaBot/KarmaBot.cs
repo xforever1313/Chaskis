@@ -10,6 +10,7 @@ using ChaskisCore;
 
 namespace Chaskis.Plugins.KarmaBot
 {
+    [ChaskisPlugin( "karmabot" )]
     public class KarmaBot : IPlugin
     {
         // -------- Fields --------

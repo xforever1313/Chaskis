@@ -11,6 +11,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.ServerDiagnostics
 {
+    [ChaskisPlugin( "serverdiagnostics" )]
     public class ServerDiagnostics : IPlugin
     {
         // -------- Fields --------

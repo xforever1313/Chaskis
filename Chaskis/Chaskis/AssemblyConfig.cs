@@ -16,15 +16,12 @@ namespace Chaskis
         /// Constructor.
         /// </summary>
         /// <param name="path">Absolute Path to the assembly</param>
-        /// <param name="className">The class name inside the assembly to call to get the IRC handlers.</param>
-        public AssemblyConfig( string path, string className )
+        public AssemblyConfig( string path )
             : this()
         {
             ArgumentChecker.StringIsNotNullOrEmpty( path, nameof( path ) );
-            ArgumentChecker.StringIsNotNullOrEmpty( className, nameof( className ) );
 
             this.AssemblyPath = path;
-            this.ClassName = className;
         }
 
         // -------- Properties --------
@@ -33,11 +30,5 @@ namespace Chaskis
         /// Absolute Path to the assembly.
         /// </summary>
         public string AssemblyPath { get; set; }
-
-        /// <summary>
-        /// The class name inside the assembly to call
-        /// to get the IRC handlers.
-        /// </summary>
-        public string ClassName { get; set; }
     }
 }

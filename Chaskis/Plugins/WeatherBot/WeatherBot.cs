@@ -48,6 +48,7 @@ namespace Chaskis.Plugins.WeatherBot
     //
     // We will also have a 15 second cooldown.  We don't want to spam NOAA's API.
 
+    [ChaskisPlugin( "weatherbot" )]
     public class WeatherBot : IPlugin
     {
         // -------- Fields --------
