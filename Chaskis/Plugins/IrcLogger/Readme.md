@@ -46,7 +46,7 @@ Installation
 IrcLogger is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
 ```XML
-<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/IrcLogger/IrcLogger.dll" classname="Chaskis.Plugins.IrcLogger.IrcLogger" />
+<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/IrcLogger/IrcLogger.dll" />
 ```
 
 Sample Output

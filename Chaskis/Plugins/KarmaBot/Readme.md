@@ -61,7 +61,7 @@ Installation
 KarmaBot is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
 ```XML
-<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/KarmaBot/KarmaBot.dll" classname="Chaskis.Plugins.KarmaBot.KarmaBot" />
+<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/KarmaBot/KarmaBot.dll" />
 ```
 
 Note, you'll need SQLite installed.  It does get installed with NuGet when you restore the packages during building.

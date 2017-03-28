@@ -37,7 +37,7 @@ Installing
 UserListBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/UserListBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/UserListBot/UserListBot.dll" classname="Chaskis.Plugins.UserListBot.UserListBot" />;
+<assembly path="/home/chaskis/.config/Chaskis/Plugins/UserListBot/UserListBot.dll" />;
 ```
 
 Sample Output:

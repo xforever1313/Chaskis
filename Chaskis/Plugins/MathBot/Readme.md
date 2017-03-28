@@ -23,7 +23,7 @@ Installation
 Math Bot is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
 ```XML
-<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/MathBot/MathBot.dll" classname="Chaskis.Plugins.MathBot.MathBot" />
+<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/MathBot/MathBot.dll" />
 ```
 
 Sample Output

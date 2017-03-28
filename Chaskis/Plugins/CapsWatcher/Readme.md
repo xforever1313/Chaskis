@@ -45,7 +45,7 @@ Installing
 CapsWatcher comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/CapsWatcher.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/CapsWatcher/CapsWatcher.dll" classname="Chaskis.Plugins.CapsWatcher.CapsWatcher" />;
+<assembly path="/home/chaskis/.config/Chaskis/Plugins/CapsWatcher/CapsWatcher.dll" />;
 ```
 
 Sample Output:
