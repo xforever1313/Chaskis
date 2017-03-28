@@ -5,10 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using ChaskisCore;
 using SethCS.Basic;
-using SethCS.Exceptions;
 
 namespace Chaskis
 {
@@ -39,20 +37,12 @@ namespace Chaskis
         /// </summary>
         private List<IIrcHandler> handlers;
 
+        private DefaultHandlers defaultHandlers;
+
         /// <summary>
         /// Whether or not this class was fully initialized or not.
         /// </summary>
         private bool fullyLoaded;
-
-        /// <summary>
-        /// The response when a user asks for the plugin list.
-        /// </summary>
-        private string pluginListResponse;
-
-        /// <summary>
-        /// The command for getting the source of a plugin.
-        /// </summary>
-        private string sourceCommand;
 
         // -------- Constructor --------
 
@@ -62,6 +52,7 @@ namespace Chaskis
         public Chaskis()
         {
             this.plugins = null;
+            this.defaultHandlers = null;
             this.handlers = new List<IIrcHandler>();
             this.fullyLoaded = false;
         }
@@ -75,7 +66,6 @@ namespace Chaskis
         public void InitState1_LoadIrcConfig( string xmlFilePath )
         {
             this.ircConfig = XmlLoader.ParseIrcConfig( xmlFilePath );
-            this.sourceCommand = "[!@]" + this.ircConfig.Nick + @":?\s+source\s+(?<pluginName>\w+)";
         }
 
         /// <summary>
@@ -134,39 +124,10 @@ namespace Chaskis
                 );
             }
 
-            // Plugin List:
-            {
-                this.pluginListResponse = "List of plugins I am running: ";
-                foreach( string pluginName in this.plugins.Keys )
-                {
-                    this.pluginListResponse += pluginName.ToLower() + " ";
-                }
+            this.defaultHandlers = new DefaultHandlers( this.ircConfig, this.plugins );
+            this.defaultHandlers.Init();
 
-                MessageHandler pluginListHandler = new MessageHandler(
-                    "[!@]" + this.ircConfig.Nick + @":?\s+plugins",
-                    HandlePluginListCommand,
-                    30
-                );
-
-                this.handlers.Add( pluginListHandler );
-            }
-
-            // Plugin Source command:
-            {
-                MessageHandler sourceHandler = new MessageHandler(
-                    this.sourceCommand,
-                    this.HandleSourceCommand,
-                    3
-                );
-
-                this.handlers.Add( sourceHandler );
-            }
-
-            // Must always check for pings.
-            this.handlers.Add( new PingHandler() );
-
-            // Must always handle pongs.
-            this.handlers.Add( new PongHandler() );
+            this.handlers.AddRange( this.defaultHandlers.Handlers );
         }
 
         /// <summary>
@@ -213,46 +174,6 @@ namespace Chaskis
                     }
                 }
                 this.ircBot.Dispose();
-            }
-        }
-
-        // -------- Default Handlers --------
-
-        /// <summary>
-        /// Handles the "list plugin" command.
-        /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandlePluginListCommand( IIrcWriter writer, IrcResponse response )
-        {
-            writer.SendMessageToUser( this.pluginListResponse, response.Channel );
-        }
-
-        /// <summary>
-        /// Handles the source command, which returns the source code of the plugin.
-        /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleSourceCommand( IIrcWriter writer, IrcResponse response )
-        {
-            Match match = Regex.Match( response.Message, this.sourceCommand, RegexOptions.IgnoreCase );
-            if( match.Success )
-            {
-                string pluginName = match.Groups["pluginName"].Value.ToLower();
-                if( this.plugins.ContainsKey( pluginName ) )
-                {
-                    string msg = "Source of the plugin " + pluginName + ": " + this.plugins[pluginName].SourceCodeLocation;
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else if( pluginName == "chaskis" )
-                {
-                    string msg = "My source code is located: https://github.com/xforever1313/Chaskis";
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else
-                {
-                    writer.SendMessageToUser( pluginName + " is not a plugin I have loaded...", response.Channel );
-                }
             }
         }
     }
