@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using ChaskisCore;
 
@@ -16,6 +17,8 @@ namespace Chaskis.Plugins.CowSayBot
     public class CowSayBot : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "1.0.0";
 
         /// <summary>
         /// Process Start info
@@ -77,6 +80,28 @@ namespace Chaskis.Plugins.CowSayBot
             }
         }
 
+        /// <summary>
+        /// The version of this plugin.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// What I do.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I echo back messages in the form of a cow saying something";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -122,6 +147,30 @@ namespace Chaskis.Plugins.CowSayBot
 
             this.handlers.Add(
                 cowSayHandler
+            );
+        }
+
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append( "My avaiable commands are: " );
+            foreach( string command in this.cowSayConfig.CowFileInfoList.CommandList.Keys )
+            {
+                builder.Append( command + ", " );
+            }
+
+            // Remove ',' and space.
+            builder.Remove( builder.Length - 2, builder.Length - 2 );
+
+            // Limit our help message.
+            if( builder.Length >= 451 )
+            {
+                builder.Remove( 450, builder.Length );
+            }
+
+            writer.SendMessageToUser(
+                builder.ToString(),
+                response.Channel
             );
         }
 

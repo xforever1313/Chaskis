@@ -77,8 +77,6 @@ namespace Chaskis
 
                         // Make instance
                         object instance = Activator.CreateInstance( type );
-                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
-
                         IPlugin plugin = instance as IPlugin;
                         if( plugin == null )
                         {
@@ -91,6 +89,7 @@ namespace Chaskis
                             throw new InvalidCastException( errorString );
                         }
 
+                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
 
                         this.plugins.Add( chaskisPlugin.PluginName, plugin );

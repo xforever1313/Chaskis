@@ -18,6 +18,8 @@ namespace Chaskis.Plugins.UrlBot
     {
         // -------- Fields --------
 
+        public const string VersionStr = "0.1.0";
+
         /// <summary>
         /// The handlers for this plugin.
         /// </summary>
@@ -49,6 +51,28 @@ namespace Chaskis.Plugins.UrlBot
             }
         }
 
+        /// <summary>
+        /// This plugin's version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// About this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "When someone posts a URL, I will go to the URL and print its title information. I will ignore sites that do not have a title tag or are over 1Mb large.";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -72,6 +96,17 @@ namespace Chaskis.Plugins.UrlBot
             );
 
             this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser(
+                this.About,
+                response.Channel
+            );
         }
 
         /// <summary>

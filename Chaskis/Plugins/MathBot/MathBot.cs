@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,8 @@ namespace Chaskis.Plugins.MathBot
     public class MathBot : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "1.0.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -52,6 +56,28 @@ namespace Chaskis.Plugins.MathBot
             }
         }
 
+        /// <summary>
+        /// This plugin's version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// About this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I can calculate math problems for you!  Addition, subtraction, multiplication, division, modulo, or even boolean logic!";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -67,6 +93,17 @@ namespace Chaskis.Plugins.MathBot
             );
 
             this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles the help message.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser(
+                "Usage: !calc " + MathBotCalculator.calculatorRegex,
+                response.Channel
+            );
         }
 
         /// <summary>

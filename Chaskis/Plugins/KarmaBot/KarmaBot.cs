@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +16,8 @@ namespace Chaskis.Plugins.KarmaBot
     public class KarmaBot : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "0.1.0";
 
         /// <summary>
         /// List of handlers.
@@ -48,6 +52,28 @@ namespace Chaskis.Plugins.KarmaBot
             get
             {
                 return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/KarmaBot";
+            }
+        }
+
+        /// <summary>
+        /// The version of this plugin.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// About this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I keep track of the karma of users and/or things.  Users of the channel can increase/decrease karma once per message.";
             }
         }
 
@@ -98,6 +124,39 @@ namespace Chaskis.Plugins.KarmaBot
             this.handlers.Add( increaseHandler );
             this.handlers.Add( decreaseCommand );
             this.handlers.Add( queryCommand );
+        }
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            string message = "@" + response.RemoteUser + ": ";
+            if( args.Length == 0 )
+            {
+                message += "Append 'increase', 'decrease', or 'query' to the help message you just sent to get more information about each command.";
+            }
+            else if( args[0] == "increase" )
+            {
+                message += "To increase a user's karma, you must match this regex: " + this.config.IncreaseCommandRegex;
+            }
+            else if( args[0] == "decrease" )
+            {
+                message += "To decrease a user's karma, you must match this regex: " + this.config.DecreaseCommandRegex;
+            }
+            else if( args[0] == "query" )
+            {
+                message += "To query a user's karma, you must match this regex: " + this.config.QueryCommand;
+            }
+            else
+            {
+                message += "that is not a valid help command.  I can do 'increase', 'decrease', or 'query'";
+            }
+
+            writer.SendMessageToUser(
+                message,
+                response.Channel
+            );
         }
 
         /// <summary>

@@ -18,6 +18,8 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
     {
         // -------- Fields --------
 
+        public const string VersionStr = "0.1.0";
+
         /// <summary>
         /// Whether or not the plugin is loaded an ready to go.
         /// </summary>
@@ -50,6 +52,28 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
             }
         }
 
+        /// <summary>
+        /// The version of this plugin.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// What this plugin does.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I welcome people to our channel when they join!";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -66,6 +90,17 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
                 this.handlers.Add( new PartHandler( PartMessage ) );
                 this.isLoaded = true;
             }
+        }
+
+        /// <summary>
+        /// Handles the help message.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser(
+                this.About,
+                response.Channel
+            );
         }
 
         /// <summary>

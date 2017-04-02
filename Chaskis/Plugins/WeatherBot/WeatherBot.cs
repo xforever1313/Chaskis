@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -53,6 +55,8 @@ namespace Chaskis.Plugins.WeatherBot
     {
         // -------- Fields --------
 
+        public const string VersionStr = "0.1.0";
+
         /// <summary>
         /// The command to trigger the weather bot.
         /// </summary>
@@ -95,6 +99,28 @@ namespace Chaskis.Plugins.WeatherBot
             }
         }
 
+        /// <summary>
+        /// The version of this plugin.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// About this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I print the weather of the given US zip code.";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -110,28 +136,24 @@ namespace Chaskis.Plugins.WeatherBot
                 cooldown
             );
 
-            MessageHandler helpHandler = new MessageHandler(
-                @"!weather\s+help",
-                HandleHelpCommand,
-                cooldown
-            );
-
-            MessageHandler aboutHandler = new MessageHandler(
-                @"!weather\s+about",
-                HandleAboutCommand,
-                cooldown
-            );
-
-            MessageHandler sourceCodeHandler = new MessageHandler(
-                @"!weather\s+sourcecode",
-                HandleSourceCodeCommand,
-                cooldown
-            );
-
             this.handlers.Add( weatherHandler );
-            this.handlers.Add( helpHandler );
-            this.handlers.Add( aboutHandler );
-            this.handlers.Add( sourceCodeHandler );
+        }
+
+        /// <summary>
+        /// Handle help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            string message = string.Format(
+                "Usage: '{0} zipCode'.  Note I have a cooldown of {1} seconds and only work with US zip codes.",
+                "!weather",
+                cooldown
+            );
+
+            writer.SendMessageToUser(
+                message,
+                response.Channel
+            );
         }
 
         /// <summary>
@@ -161,30 +183,6 @@ namespace Chaskis.Plugins.WeatherBot
         {
             writer.SendCommandToChannel(
                 "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown."
-            );
-        }
-
-        /// <summary>
-        /// Handles the about command.
-        /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private static void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
-        {
-            writer.SendCommandToChannel(
-                "I am weather bot. I am a plugin for the Chaskis IRC bot framework. I pull data from NOAA's XML SOAP service."
-            );
-        }
-
-        /// <summary>
-        /// Handles the source code command.
-        /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private static void HandleSourceCodeCommand( IIrcWriter writer, IrcResponse response )
-        {
-            writer.SendCommandToChannel(
-                "My source code is here: https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/WeatherBot"
             );
         }
 

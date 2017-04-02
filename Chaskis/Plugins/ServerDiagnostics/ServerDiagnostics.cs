@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -16,10 +18,16 @@ namespace Chaskis.Plugins.ServerDiagnostics
     {
         // -------- Fields --------
 
+        public const string VersionStr = "1.0.0";
+
         /// <summary>
         /// List of IRC handlers.
         /// </summary>
         private List<IIrcHandler> handlerList;
+
+        private ServerDiagnosticsConfig config;
+
+        private IIrcConfig ircConfig;
 
         /// <summary>
         /// The cool down for the bot for each command.
@@ -53,6 +61,28 @@ namespace Chaskis.Plugins.ServerDiagnostics
             }
         }
 
+        /// <summary>
+        /// This plugin's version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// Info about this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "Get information about the server I'm running on such as uptime, operating system, number of processors, and time.";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -70,7 +100,8 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 "ServerDiagnosticsConfig.xml"
             );
 
-            ServerDiagnosticsConfig config = XmlLoader.LoadConfig( configPath );
+            this.config = XmlLoader.LoadConfig( configPath );
+            this.ircConfig = ircConfig;
 
             if( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
             {
@@ -111,6 +142,43 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 );
                 this.handlerList.Add( timeHandler );
             }
+        }
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            string message = "@" + response.RemoteUser + ": ";
+            if( args.Length == 0 )
+            {
+                message += "Append 'uptime', 'os', 'processors', or 'time' to the help message you just sent to get more information about each command.";
+            }
+            else if( args[0] == "uptime" )
+            {
+                message += "To how long I've been running for, you must match this regex: " + this.config.UpTimeCmd.Replace( "{%nick%}", this.ircConfig.Nick );
+            }
+            else if( args[0] == "os" )
+            {
+                message += "To see what os I'm running, you must match this regex: " + this.config.OsVersionCmd.Replace( "{%nick%}", this.ircConfig.Nick );
+            }
+            else if( args[0] == "processors" )
+            {
+                message += "To see how many processors I'm running, you must match this regex: " + this.config.ProcessorCountCmd.Replace( "{%nick%}", this.ircConfig.Nick );
+            }
+            else if( args[0] == "time" )
+            {
+                message += "To see the time of my server, you must match this regex: " + this.config.ProcessorCountCmd.Replace( "{%nick%}", this.ircConfig.Nick );
+            }
+            else
+            {
+                message += "that is not a valid help command.  I can do 'uptime', 'os', 'processors', or 'time'";
+            }
+
+            writer.SendMessageToUser(
+                message,
+                response.Channel
+            );
         }
 
         /// <summary>

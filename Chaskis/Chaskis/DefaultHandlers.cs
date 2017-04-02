@@ -1,14 +1,14 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ChaskisCore;
 
 namespace Chaskis
@@ -42,6 +42,21 @@ namespace Chaskis
         /// </summary>
         private string sourceCommand;
 
+        /// <summary>
+        /// The command for getting the version of a plugin.
+        /// </summary>
+        private string versionCommand;
+
+        /// <summary>
+        /// The command for getting information about a help command.
+        /// </summary>
+        private string aboutCommand;
+
+        /// <summary>
+        /// The command for getting help.
+        /// </summary>
+        private string helpCommand;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -68,6 +83,9 @@ namespace Chaskis
         {
             this.AddPluginListHandler();
             this.AddSourceHandler();
+            this.AddVersionHandler();
+            this.AddAboutHandler();
+            this.AddHelpHandler();
 
             // Must always check for pings.
             this.handlers.Add( new PingHandler() );
@@ -89,7 +107,7 @@ namespace Chaskis
             }
 
             MessageHandler pluginListHandler = new MessageHandler(
-                "[!@]" + this.ircConfig.Nick + @":?\s+plugins",
+                "[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|list)",
                 HandlePluginListCommand,
                 30
             );
@@ -145,6 +163,178 @@ namespace Chaskis
                 else
                 {
                     writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                }
+            }
+        }
+
+        // ---- Version Command Handler ----
+
+        private void AddVersionHandler()
+        {
+            this.versionCommand = "[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
+            MessageHandler versionHandler = new MessageHandler(
+                this.versionCommand,
+                this.HandleVersionCommand,
+                3
+            );
+
+            this.handlers.Add( versionHandler );
+        }
+
+        /// <summary>
+        /// Handles the version command, which returns the source code of the plugin.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleVersionCommand( IIrcWriter writer, IrcResponse response )
+        {
+            Match match = Regex.Match( response.Message, this.versionCommand, RegexOptions.IgnoreCase );
+            if( match.Success )
+            {
+                string pluginName = match.Groups["pluginName"].Value.ToLower();
+                if( this.plugins.ContainsKey( pluginName ) )
+                {
+                    string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Version;
+                    writer.SendMessageToUser( msg, response.Channel );
+                }
+                else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
+                {
+                    string msg = "I am running version Chaskis " + Chaskis.VersionStr;
+                    writer.SendMessageToUser( msg, response.Channel );
+                }
+                else
+                {
+                    writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                }
+            }
+        }
+
+        // ---- About Command Handler ----
+
+        private void AddAboutHandler()
+        {
+            this.aboutCommand = "[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
+            MessageHandler aboutHandler = new MessageHandler(
+                this.aboutCommand,
+                this.HandleAboutCommand,
+                3
+            );
+
+            this.handlers.Add( aboutHandler );
+        }
+
+        /// <summary>
+        /// Handles the version command, which returns the source code of the plugin.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
+        {
+            Match match = Regex.Match( response.Message, this.aboutCommand, RegexOptions.IgnoreCase );
+            if( match.Success )
+            {
+                string pluginName = match.Groups["pluginName"].Value.ToLower();
+                if( this.plugins.ContainsKey( pluginName ) )
+                {
+                    string msg = "About '" + pluginName + "': " + this.plugins[pluginName].About;
+                    writer.SendMessageToUser( msg, response.Channel );
+                }
+                else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
+                {
+                    string msg = "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
+                    writer.SendMessageToUser( msg, response.Channel );
+                }
+                else
+                {
+                    writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                }
+            }
+        }
+
+        // ---- Help Command Handler ----
+
+        private void AddHelpHandler()
+        {
+            this.helpCommand = "[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
+            MessageHandler helpHandler = new MessageHandler(
+                this.helpCommand,
+                this.HandleHelpCommand,
+                0
+            );
+
+            this.handlers.Add( helpHandler );
+        }
+
+        /// <summary>
+        /// Handles the version command, which returns the source code of the plugin.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
+        {
+            const string defaultMessage = "Default Commands: 'plugins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
+
+            Match match = Regex.Match( response.Message, this.helpCommand, RegexOptions.IgnoreCase );
+            if( match.Success )
+            {
+                string argsStr = match.Groups["args"].Value.ToLower();
+
+                if( string.IsNullOrEmpty( argsStr ) )
+                {
+                    // Print default message and return.
+                    writer.SendMessageToUser(
+                        defaultMessage,
+                        response.Channel
+                    );
+                    return;
+                }
+
+                argsStr = Regex.Replace( argsStr, @"\s+", " " ); // Strip multiple white spaces.
+                List<string> args = argsStr.Split( ' ' ).ToList();
+
+                if( this.plugins.ContainsKey( args[0] ) )
+                {
+                    string pluginName = args[0];
+                    args.RemoveAt( 0 );
+
+                    // Handle the help command for the plugin
+                    this.plugins[pluginName].HandleHelp( writer, response, args.ToArray() );
+                }
+                else
+                {
+                    string message;
+                    switch( args[0] )
+                    {
+                        case "plugins":
+                        case "pluginlist":
+                            message = "Gets the list of plugins running.";
+                            break;
+
+                        case "source":
+                            message = "Gets the source code URL of the given plugin.";
+                            break;
+
+                        case "version":
+                            message = "Gets the version of the given plugin.";
+                            break;
+
+                        case "about":
+                            message = "Gets information about the given plugin.";
+                            break;
+
+                        case "help":
+                            message = "Gets help information about the given plugin.";
+                            break;
+
+                        default:
+                            message = "Invalid default command. " + defaultMessage;
+                            break;
+                    }
+
+                    writer.SendMessageToUser(
+                        message,
+                        response.Channel
+                    );
                 }
             }
         }

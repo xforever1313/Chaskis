@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,8 @@ namespace Chaskis.Plugins.ConsoleOut
     public class ConsoleOut : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "1.0.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -47,6 +51,28 @@ namespace Chaskis.Plugins.ConsoleOut
             }
         }
 
+        /// <summary>
+        /// This plugin's version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// What this plugin does.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I only print stuff to Console Out on my server. I'm really only good for debugging. I'm not sure why I'm turned on to be honest...";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -65,6 +91,14 @@ namespace Chaskis.Plugins.ConsoleOut
             );
 
             this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles help message.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser( this.About, response.Channel );
         }
 
         /// <summary>

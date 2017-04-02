@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,8 @@ namespace Chaskis.Plugins.CapsWatcher
     public class CapsWatcher : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "0.1.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -58,6 +62,28 @@ namespace Chaskis.Plugins.CapsWatcher
             }
         }
 
+        /// <summary>
+        /// This plugin's current Version in the form of a string.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// What this plugin does.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "This plugin will yell at users who POST IN ALL CAPS!";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -95,6 +121,17 @@ namespace Chaskis.Plugins.CapsWatcher
             );
 
             this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles what happens if a user requests help for the plugin/
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser(
+                "Type in all caps to see what happens. Go ahead, I DARE YOU! Messages must contain at least 3 characters and 1 letter for a response.",
+                response.Channel
+            );
         }
 
         /// <summary>

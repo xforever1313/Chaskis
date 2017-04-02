@@ -15,7 +15,9 @@ namespace Chaskis
     /// </summary>
     public class Chaskis : IDisposable
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
+
+        public const string VersionStr = "0.1.0";
 
         /// <summary>
         /// The IRC Bot.
@@ -44,7 +46,7 @@ namespace Chaskis
         /// </summary>
         private bool fullyLoaded;
 
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor
@@ -57,7 +59,7 @@ namespace Chaskis
             this.fullyLoaded = false;
         }
 
-        // -------- Functions --------
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Loads the IRC config from the given XML path.

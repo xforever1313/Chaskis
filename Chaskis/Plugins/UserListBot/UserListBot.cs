@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ namespace Chaskis.Plugins.UserListBot
     public class UserListBot : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "1.0.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -71,6 +75,28 @@ namespace Chaskis.Plugins.UserListBot
             }
         }
 
+        /// <summary>
+        /// The version of this plugin.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// About this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I print a list of users currently in the IRC channel.";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -122,6 +148,23 @@ namespace Chaskis.Plugins.UserListBot
                 AllHandler endOfNamesHandler = new AllHandler( HandleEndOfNamesResponse );
                 this.handlers.Add( endOfNamesHandler );
             }
+        }
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            string message = string.Format(
+                "Usage: '{0}'.  Note I have a cooldown time of {1} seconds.",
+                this.userListConfig.Command,
+                this.userListConfig.Cooldown.ToString()
+            );
+
+            writer.SendMessageToUser(
+                message,
+                response.Channel
+            );
         }
 
         /// <summary>

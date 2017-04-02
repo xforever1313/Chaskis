@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +19,8 @@ namespace Chaskis.Plugins.IrcLogger
     public class IrcLogger : IPlugin
     {
         // -------- Fields --------
+
+        public const string VersionStr = "1.0.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -51,6 +55,28 @@ namespace Chaskis.Plugins.IrcLogger
             }
         }
 
+        /// <summary>
+        /// This plugin's version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return VersionStr;
+            }
+        }
+
+        /// <summary>
+        /// A description of this plugin.
+        /// </summary>
+        public string About
+        {
+            get
+            {
+                return "I log the IRC chat to the server.  That's all.  I have no commands you can use.";
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -82,6 +108,17 @@ namespace Chaskis.Plugins.IrcLogger
             );
 
             this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles the help command.
+        /// </summary>
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            writer.SendMessageToUser(
+                this.About,
+                response.Channel
+            );
         }
 
         /// <summary>
