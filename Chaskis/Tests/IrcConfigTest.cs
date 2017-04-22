@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using ChaskisCore;
@@ -57,6 +59,11 @@ namespace Tests
             Assert.AreNotSame( roIrcConfig, this.ircConfig.BridgeBots );
             Assert.AreNotSame( interfaceIrcConfig.BridgeBots, roIrcConfig.BridgeBots );
 
+            // Admins should not be same reference
+            Assert.AreNotSame( interfaceIrcConfig.Admins, this.ircConfig.Admins );
+            Assert.AreNotSame( roIrcConfig.Admins, this.ircConfig.Admins );
+            Assert.AreNotSame( interfaceIrcConfig.Admins, roIrcConfig.Admins );
+
             // Next, start changing things.  Everything should become false.
             this.ircConfig.Server = "irc.somewhere.net";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
@@ -99,6 +106,11 @@ namespace Tests
             this.ircConfig.BridgeBots["telegrambot"] = @"(?<bridgeUser>\w+)-\s+(?<bridgeMessage>.+)";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Add an addtional Admin
+            this.ircConfig.Admins.Add( "person3" );
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
 
         /// <summary>
@@ -119,6 +131,7 @@ namespace Tests
             Assert.AreEqual( this.ircConfig.Password, config.Password );
             Assert.AreEqual( this.ircConfig.QuitMessage, config.QuitMessage );
             Assert.AreNotSame( this.ircConfig.BridgeBots, config.BridgeBots ); // Should not be same reference.
+            Assert.AreNotSame( this.ircConfig.Admins, config.Admins ); // Should not be same reference.
 
             // Next, ensure trying to convert to an IRCConfig results in a null (someone's going to do this).
             Assert.IsNull( config as IrcConfig );
@@ -278,6 +291,16 @@ namespace Tests
 
             // Empty key
             this.ircConfig.BridgeBots[string.Empty] = @"(?<bridgeUser>\w+)-\s+(?<bridgeMessage>.+)";
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Empty Admin
+            this.ircConfig.Admins.Add( string.Empty );
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Null Admin
+            this.ircConfig.Admins.Add( null );
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
         }

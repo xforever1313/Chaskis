@@ -11,6 +11,12 @@ to that pasted file instead of having to use the one located in ApplicationData
 The server and channel are required.  No field can be an empty string (except for optional fields).  Port can not be negative.
 Password is optional.  quitmesssage is optional.
 
+Admins are optional.
+These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
+**IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
+The value passed in is the IRC user name.
+Note that casing is ignored.  The config gets read in and set to lowercase.
+
 Bridge bots, meanwhile, are IRC bots that bridge other services such as telegram or slack.
 Typically in a channel, bridge bots like this:
 
@@ -39,6 +45,10 @@ to match Chaskis will treat the bridge bot as a regular user.
 	<realname>test bot</realname>
 	<password>apassword</password>
     <quitmessage>I am being shut down!</quitmessage>
+    <admins>
+        <admin>person1</admin>
+        <admin>person2</admin>
+    </admins>
     <!--
     <bridgebots>
         <bridgebot botname="telegrambot\d*" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />

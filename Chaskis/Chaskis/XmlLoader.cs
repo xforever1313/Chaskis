@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.Collections.Generic;
 using System.IO;
@@ -87,7 +89,7 @@ namespace Chaskis
                         break;
 
                     case "bridgebots":
-                        foreach( XmlNode bridgeBotNode in childNode.ChildNodes )
+                        foreach( XmlElement bridgeBotNode in childNode.ChildNodes )
                         {
                             if( bridgeBotNode.Name == "bridgebot" )
                             {
@@ -108,6 +110,16 @@ namespace Chaskis
                                     }
                                 }
                                 config.BridgeBots.Add( botName, botRegex );
+                            }
+                        }
+                        break;
+
+                    case "admins":
+                        foreach( XmlElement adminNode in childNode.ChildNodes )
+                        {
+                            if( adminNode.Name == "admin" )
+                            {
+                                config.Admins.Add( adminNode.InnerText.ToLower() );
                             }
                         }
                         break;

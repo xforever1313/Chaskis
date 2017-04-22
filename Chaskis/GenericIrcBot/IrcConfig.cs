@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -73,6 +75,13 @@ namespace ChaskisCore
         /// </summary>
         IDictionary<string, string> BridgeBots { get; }
 
+        /// <summary>
+        /// Admins who control the bot.
+        /// Plugins can use this to see who has elevated permissions and can
+        /// do things such as delete entries, etc.
+        /// </summary>
+        IList<string> Admins { get; }
+
         // -------- Functions ---------
 
         /// <summary>
@@ -116,6 +125,7 @@ namespace ChaskisCore
             this.RealName = "Some IRC Bot";
             this.Password = string.Empty;
             this.BridgeBots = new Dictionary<string, string>();
+            this.Admins = new List<string>();
             this.QuitMessage = string.Empty;
         }
 
@@ -170,6 +180,13 @@ namespace ChaskisCore
         /// </summary>
         public IDictionary<string, string> BridgeBots { get; private set; }
 
+        /// <summary>
+        /// Admins who control the bot.
+        /// Plugins can use this to see who has elevated permissions and can
+        /// do things such as delete entries, etc.
+        /// </summary>
+        public IList<string> Admins { get; private set; }
+
         // --------- Functions --------
 
         /// <summary>
@@ -179,6 +196,7 @@ namespace ChaskisCore
         {
             IrcConfig clone = (IrcConfig)this.MemberwiseClone();
             clone.BridgeBots = new Dictionary<string, string>( clone.BridgeBots );
+            clone.Admins = new List<string>( clone.Admins );
             return clone;
         }
 
@@ -238,6 +256,7 @@ namespace ChaskisCore
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             this.wrappedConfig = config;
             this.BridgeBots = new ReadOnlyDictionary<string, string>( config.BridgeBots );
+            this.Admins = new List<string>( config.Admins ).AsReadOnly();
         }
 
         // -------- Properties --------
@@ -370,6 +389,15 @@ namespace ChaskisCore
         /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
         /// </summary>
         public IDictionary<string, string> BridgeBots { get; private set; }
+
+        /// <summary>
+        /// Admins who control the bot.
+        /// Plugins can use this to see who has elevated permissions and can
+        /// do things such as delete entries, etc.
+        /// 
+        /// Read-only list.
+        /// </summary>
+        public IList<string> Admins { get; private set; }
 
         // -------- Functions --------
 
@@ -523,6 +551,23 @@ namespace ChaskisCore
                 }
             }
 
+            if( config.Admins == null )
+            {
+                errorString += "Admins can not be null." + Environment.NewLine;
+                success = false;
+            }
+            else
+            {
+                foreach( string admin in config.Admins )
+                {
+                    if( string.IsNullOrEmpty( admin ) || string.IsNullOrWhiteSpace( admin ) )
+                    {
+                        errorString += "Admin can not be null, empty, or whitespace.";
+                        success = false;
+                    }
+                }
+            }
+
             // Password can be empty, its optional on servers.
 
             if( success == false )
@@ -570,7 +615,8 @@ namespace ChaskisCore
                 ( config1.RealName == other.RealName ) &&
                 ( config1.Password == other.Password ) &&
                 ( config1.QuitMessage == other.QuitMessage ) &&
-                ( config1.BridgeBots.Count == other.BridgeBots.Count );
+                ( config1.BridgeBots.Count == other.BridgeBots.Count ) &&
+                ( config1.Admins.Count == other.Admins.Count );
 
             if( isEqual )
             {
@@ -585,6 +631,18 @@ namespace ChaskisCore
                         }
                     }
                     else
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            if( isEqual )
+            {
+                foreach( string admin in config1.Admins )
+                {
+                    if( other.Admins.Contains( admin ) == false )
                     {
                         isEqual = false;
                         break;

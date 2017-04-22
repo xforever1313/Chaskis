@@ -173,6 +173,8 @@
     <Content Include="Plugins\WeatherBot\TestFiles\SampleZipCodeResponse.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
     <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />

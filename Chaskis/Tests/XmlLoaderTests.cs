@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
-//          http://www.boost.org/LICENSE_1_0.txt)
+// http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -72,6 +74,22 @@ namespace Tests
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )
+            );
+            Assert.AreEqual( this.ircConfig, config );
+        }
+
+
+        /// <summary>
+        /// Tests an XML file that is valid and admins
+        /// </summary>
+        [Test]
+        public void TestValidXmlWithAdmins()
+        {
+            this.ircConfig.Admins.Add( "person1" );
+            this.ircConfig.Admins.Add( "person2" );
+
+            IIrcConfig config = XmlLoader.ParseIrcConfig(
+                Path.Combine( testXmlFiles, "ValidIrcConfigWithAdmins.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
         }
@@ -185,6 +203,17 @@ namespace Tests
         {
             Assert.Throws<ApplicationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
+            );
+        }
+
+        /// <summary>
+        /// Tests an XML file that is invalid since it has an empty admin
+        /// </summary>
+        [Test]
+        public void TestInvalidXmlEmptyAdmin()
+        {
+            Assert.Throws<ApplicationException>( () =>
+                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyAdmins.xml" ) )
             );
         }
 
