@@ -34,17 +34,6 @@ namespace Chaskis.Plugins.UrlBot
         private static readonly Regex urlRegex = new Regex( UrlRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled );
 
         /// <summary>
-        /// Regex for finding the description meta tag.
-        /// Yeah, Yeah, using a regex for HTML is bad, blah, blah blah.
-        /// At some point we should use an HTML parser, but we'll see what happens...
-        /// The less depencencies the better.
-        /// </summary>
-        public const string MetaDescriptionRegex =
-            @"\<\s*meta\s+name\s*=\s*""description""\s+content\s*=\s*""(?<description>[^\<\>]+)""\s*/?>";
-
-        private static readonly Regex metaRegex = new Regex( MetaDescriptionRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline );
-
-        /// <summary>
         /// Max size is 1MB.
         /// </summary>
         private const int maxFileSize = 1 * 1000 * 1000;

@@ -4,6 +4,7 @@
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+using System;
 using System.IO;
 using Chaskis.Plugins.UrlBot;
 using NUnit.Framework;
@@ -57,7 +58,17 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public async void GoodFileTest()
         {
-            string url = string.Format( "file:///{0}", this.goodSizeFile.Replace( "\\", "/" ) );
+            string url;
+
+            // On UNIX systems, need to strip out one '/' since it adds one as the root directory.
+            if ( Environment.OSVersion.Platform == PlatformID.Unix )
+            {
+                url = string.Format( "file://{0}", this.goodSizeFile.Replace( "\\", "/" ) );
+            }
+            else
+            {
+                url = string.Format( "file:///{0}", this.goodSizeFile.Replace( "\\", "/" ) );
+            }
 
             UrlResponse response = await this.reader.GetDescription( url );
 
@@ -69,7 +80,17 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public async void BigFileTest()
         {
-            string url = string.Format( "file:///{0}", this.bigSizeFile.Replace( "\\", "/" ) );
+            string url;
+
+            // On UNIX systems, need to strip out one '/' since it adds one as the root directory.
+            if ( Environment.OSVersion.Platform == PlatformID.Unix )
+            {
+                url = string.Format( "file://{0}", this.bigSizeFile.Replace( "\\", "/" ) );
+            }
+            else
+            {
+                url = string.Format( "file:///{0}", this.bigSizeFile.Replace( "\\", "/" ) );
+            }
 
             UrlResponse response = await this.reader.GetDescription( url );
 
