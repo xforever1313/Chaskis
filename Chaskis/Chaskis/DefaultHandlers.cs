@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using ChaskisCore;
 
@@ -56,6 +57,11 @@ namespace Chaskis
         /// </summary>
         private string helpCommand;
 
+        /// <summary>
+        /// The command for getting info on who are admins.
+        /// </summary>
+        private string adminCommand;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -85,6 +91,7 @@ namespace Chaskis
             this.AddVersionHandler();
             this.AddAboutHandler();
             this.AddHelpHandler();
+            this.AddAdminHandler();
 
             // Must always check for pings.
             this.handlers.Add( new PingHandler() );
@@ -250,6 +257,41 @@ namespace Chaskis
             }
         }
 
+        // ---- Admin Command Handler ----
+        private void AddAdminHandler()
+        {
+            this.adminCommand = "[!@]" + this.ircConfig.Nick + @":?\s+admins";
+
+            MessageHandler helpHandler = new MessageHandler(
+                this.adminCommand,
+                this.HandleAdminCommand,
+                0
+            );
+
+            this.handlers.Add( helpHandler );
+        }
+
+        /// <summary>
+        /// Handles the version command, which returns the source code of the plugin.
+        /// </summary>
+        /// <param name="writer">The IRC Writer to write to.</param>
+        /// <param name="response">The response from the channel.</param>
+        private void HandleAdminCommand( IIrcWriter writer, IrcResponse response )
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append( "People who are admins for me: " );
+
+            foreach( string name in this.ircConfig.Admins )
+            {
+                builder.Append( name + " " );
+            }
+
+            writer.SendMessageToUser(
+                builder.ToString(),
+                response.Channel
+            );
+        }
+
         // ---- Help Command Handler ----
 
         private void AddHelpHandler()
@@ -271,7 +313,7 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
         {
-            const string defaultMessage = "Default Commands: 'plugins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
+            const string defaultMessage = "Default Commands: 'plugins', 'admins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
 
             Match match = Regex.Match( response.Message, this.helpCommand, RegexOptions.IgnoreCase );
             if( match.Success )
@@ -325,6 +367,10 @@ namespace Chaskis
                             message = "Gets help information about the given plugin.";
                             break;
 
+                        case "admins":
+                            message = "Shows the list of people who are consided admins.";
+                            break;
+                        
                         default:
                             message = "Invalid default command. " + defaultMessage;
                             break;
