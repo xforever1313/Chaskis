@@ -6,6 +6,7 @@
 //
 
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using ChaskisCore;
 
@@ -26,6 +27,10 @@ namespace Chaskis.Plugins.QuoteBot
         /// The handlers for this plugin.
         /// </summary>
         private readonly List<IIrcHandler> handlers;
+
+        private IIrcConfig ircConfig;
+
+        private QuoteBotConfig quoteBotConfig;
 
         // ---------------- Constructor ----------------
 
@@ -81,6 +86,21 @@ namespace Chaskis.Plugins.QuoteBot
         /// <param name="ircConfig">The IRC config we are using.</param>
         public void Init( string pluginPath, IIrcConfig ircConfig )
         {
+            string configPath = Path.Combine(
+                Path.GetDirectoryName( pluginPath ),
+                "QuoteBotConfig.xml"
+            );
+
+            if( File.Exists( configPath ) == false )
+            {
+                throw new FileNotFoundException(
+                    "Can not open " + configPath
+                );
+            }
+
+            this.ircConfig = ircConfig;
+
+            this.quoteBotConfig = XmlLoader.LoadConfig( configPath );
         }
 
         /// <summary>
@@ -98,19 +118,19 @@ namespace Chaskis.Plugins.QuoteBot
             }
             else if( args[0] == "add" )
             {
-                builder.Append( "Adds a quote to the database.  Usage: TODO " );
+                builder.Append( "Adds a quote to the database. Command regex: " + this.quoteBotConfig.AddCommand );
             }
             else if( args[0] == "delete" )
             {
-                builder.Append( "Deletes a quote from the database. Must be a bot admin. Usage: TODO " );
+                builder.Append( "Deletes a quote from the database. Must be a bot admin. Command regex: " + this.quoteBotConfig.DeleteCommand );
             }
             else if( args[0] == "random" )
             {
-                builder.Append( "Posts a random quote from the database. Usage:" );
+                builder.Append( "Posts a random quote from the database. Command regex: " + this.quoteBotConfig.RandomCommand );
             }
             else if( args[0] == "get" )
             {
-                builder.Append( "Posts the given quote from the database. Usage:" );
+                builder.Append( "Posts the given quote from the database. Command regex: " + this.quoteBotConfig.GetCommand );
             }
 
             writer.SendMessageToUser(

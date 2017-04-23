@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Use @ instead of ! so we know there's a difference between
+our default config and this one.  This way we're not getting false
+positives and having the default constructor of QuoteBotConfig
+returning the same regex that would be in this file.
+-->
+<quotebotconfig>
+    <addcommand><![CDATA[@quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)]]></addcommand>
+    <deletecommand><![CDATA[@quote\s+delete\s+(?<id>\d+)]]></deletecommand>
+    <randomcommand><![CDATA[@quote\s+random]]></randomcommand>
+    <getcommand><![CDATA[@quote\s+(get)?\s*(?<id>\d+)]]></getcommand>
+</quotebotconfig>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+All empty!
+-->
+<quotebotconfig>
+    <addcommand></addcommand>
+    <deletecommand></deletecommand>
+    <randomcommand></randomcommand>
+    <getcommand></getcommand>
+</quotebotconfig>

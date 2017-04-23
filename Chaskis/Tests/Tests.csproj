@@ -89,6 +89,7 @@
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteBotConfigTest.cs" />
+    <Compile Include="Plugins\QuoteBot\XmlLoaderTests.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
@@ -165,6 +166,9 @@
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\ValidConfig.xml" />
+    <Content Include="Plugins\QuoteBot\TestFiles\EmptyStringConfig.xml" />
+    <Content Include="Plugins\QuoteBot\TestFiles\BadRootConfig.xml" />
+    <Content Include="Plugins\QuoteBot\TestFiles\GoodConfig.xml" />
     <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />
     <Content Include="Plugins\UrlBot\TestFiles\GoodSize.html" />
     <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />

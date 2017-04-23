@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Bad root xml element.
+-->
+<derp>
+    <addcommand><![CDATA[@quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)]]></addcommand>
+    <deletecommand><![CDATA[@quote\s+delete\s+(?<id>\d+)]]></deletecommand>
+    <randomcommand><![CDATA[@quote\s+random]]></randomcommand>
+    <getcommand><![CDATA[@quote\s+(get)?\s*(?<id>\d+)]]></getcommand>
+</derp>
