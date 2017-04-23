@@ -89,6 +89,8 @@
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteBotConfigTest.cs" />
+    <Compile Include="Plugins\QuoteBot\QuoteBotParserTest.cs" />
+    <Compile Include="Plugins\QuoteBot\QuoteTest.cs" />
     <Compile Include="Plugins\QuoteBot\XmlLoaderTests.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
