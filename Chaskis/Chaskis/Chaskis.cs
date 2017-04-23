@@ -168,7 +168,7 @@ namespace Chaskis
                 {
                     try
                     {
-                        plugin.Teardown();
+                        plugin.Dispose();
                     }
                     catch( Exception err )
                     {

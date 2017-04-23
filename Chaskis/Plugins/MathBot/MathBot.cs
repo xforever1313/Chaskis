@@ -118,7 +118,7 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
 

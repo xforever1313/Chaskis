@@ -121,7 +121,7 @@ namespace Chaskis.Plugins.UrlBot
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
 

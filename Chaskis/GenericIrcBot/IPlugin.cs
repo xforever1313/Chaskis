@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 
 namespace ChaskisCore
@@ -12,7 +13,7 @@ namespace ChaskisCore
     /// <summary>
     /// Implement this interface to create plugins for the Generic IRC bot.
     /// </summary>
-    public interface IPlugin
+    public interface IPlugin : IDisposable
     {
         // -------- Properties --------
 
@@ -80,10 +81,5 @@ namespace ChaskisCore
         /// </summary>
         /// <returns>The list of handlers to awtch.</returns>
         IList<IIrcHandler> GetHandlers();
-
-        /// <summary>
-        /// Tears down the plugin.
-        /// </summary>
-        void Teardown();
     }
 }

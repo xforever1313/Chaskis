@@ -179,7 +179,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
             // Nothing to teardown.
         }

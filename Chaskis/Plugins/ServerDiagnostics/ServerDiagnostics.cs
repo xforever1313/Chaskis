@@ -193,7 +193,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// Tears down this plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
 

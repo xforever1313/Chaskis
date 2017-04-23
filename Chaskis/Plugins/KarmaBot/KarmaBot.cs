@@ -171,7 +171,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// Tearsdown this plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
             this.dataBase?.Dispose();
         }

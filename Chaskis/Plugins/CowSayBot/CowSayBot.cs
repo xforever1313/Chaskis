@@ -186,7 +186,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// <summary>
         /// Tears down this plugin.  No-Op.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
             // No-op.
         }

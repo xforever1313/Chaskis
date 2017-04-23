@@ -168,7 +168,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Tears down this plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
 

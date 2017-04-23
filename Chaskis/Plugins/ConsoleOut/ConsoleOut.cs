@@ -113,7 +113,7 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
     }

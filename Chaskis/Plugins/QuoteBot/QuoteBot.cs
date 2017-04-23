@@ -131,7 +131,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
     }

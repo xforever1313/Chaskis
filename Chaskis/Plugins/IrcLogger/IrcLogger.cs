@@ -133,7 +133,7 @@ namespace Chaskis.Plugins.IrcLogger
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
             this.logManager?.Dispose();
         }

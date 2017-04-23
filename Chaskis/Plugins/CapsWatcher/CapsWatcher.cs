@@ -146,7 +146,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <summary>
         /// Tears down the plugin.
         /// </summary>
-        public void Teardown()
+        public void Dispose()
         {
         }
 
