@@ -1,11 +1,13 @@
-﻿
+﻿//
 //          Copyright Seth Hendrick 2017.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file ../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Chaskis.Plugins.UrlBot;
 using NUnit.Framework;
 
@@ -56,7 +58,7 @@ namespace Tests.Plugins.UrlBot
         // ---------------- Tests ----------------
 
         [Test]
-        public async void GoodFileTest()
+        public void GoodFileTest()
         {
             string url;
 
@@ -70,15 +72,16 @@ namespace Tests.Plugins.UrlBot
                 url = string.Format( "file:///{0}", this.goodSizeFile.Replace( "\\", "/" ) );
             }
 
-            UrlResponse response = await this.reader.GetDescription( url );
+            Task<UrlResponse> response = this.reader.GetDescription( url );
+            response.Wait();
 
-            Assert.IsTrue( response.IsValid );
-            Assert.AreEqual( "My Title", response.Title );
-            Assert.AreEqual( "My Title", response.TitleShortened );
+            Assert.IsTrue( response.Result.IsValid );
+            Assert.AreEqual( "My Title", response.Result.Title );
+            Assert.AreEqual( "My Title", response.Result.TitleShortened );
         }
 
         [Test]
-        public async void BigFileTest()
+        public void BigFileTest()
         {
             string url;
 
@@ -92,9 +95,9 @@ namespace Tests.Plugins.UrlBot
                 url = string.Format( "file:///{0}", this.bigSizeFile.Replace( "\\", "/" ) );
             }
 
-            UrlResponse response = await this.reader.GetDescription( url );
-
-            Assert.IsFalse( response.IsValid );
+            Task<UrlResponse> response = this.reader.GetDescription( url );
+            response.Wait();
+            Assert.IsFalse( response.Result.IsValid );
         }
     }
 }
