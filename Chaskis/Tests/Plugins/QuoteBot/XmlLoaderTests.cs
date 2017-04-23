@@ -16,11 +16,27 @@ namespace Tests.Plugins.QuoteBot
     [TestFixture]
     public class QuoteBotXmlLoaderTests
     {
+        // ---------------- Fields ----------------
+
         private static readonly string quoteBotPluginDir =
             Path.Combine( TestHelpers.PluginDir, "QuoteBot" );
 
         private static readonly string quoteBotTestDir =
             Path.Combine( TestHelpers.TestsBaseDir, "Plugins", "QuoteBot" );
+
+        // ---------------- Tests ----------------
+
+        /// <summary>
+        /// Ensures we get a FileNotFoundException when we pass in a file
+        /// that does not exist.
+        /// </summary>
+        [Test]
+        public void FileNotFoundTest()
+        {
+            Assert.Throws<FileNotFoundException>(
+                () => XmlLoader.LoadConfig( "Derp.xml" )
+            );
+        }
 
         /// <summary>
         /// Ensures that our sample config matches
