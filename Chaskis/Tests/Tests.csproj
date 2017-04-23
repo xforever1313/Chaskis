@@ -88,6 +88,7 @@
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
+    <Compile Include="Plugins\QuoteBot\QuoteBotConfigTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
@@ -146,6 +147,10 @@
       <Project>{0fb1c4e1-91c0-4988-bf4a-a9a1624df5a8}</Project>
       <Name>WeatherBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\QuoteBot\QuoteBot.csproj">
+      <Project>{43bf7896-1a47-4f7a-8ff8-0103180c3794}</Project>
+      <Name>QuoteBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -186,6 +191,7 @@
     <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
     <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.101.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteBot", "Plugins\QuoteBot\QuoteBot.csproj", "{43BF7896-1A47-4F7A-8FF8-0103180C3794}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -177,6 +179,14 @@ Global
 		{656FAFFB-0112-4F43-B98E-62C8D89188DB}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{656FAFFB-0112-4F43-B98E-62C8D89188DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656FAFFB-0112-4F43-B98E-62C8D89188DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +203,7 @@ Global
 		{A5300647-4B0A-4C23-B714-5350070991FD} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{3FA4494D-50CE-47DE-96B2-ACE032FA830A} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{656FAFFB-0112-4F43-B98E-62C8D89188DB} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{43BF7896-1A47-4F7A-8FF8-0103180C3794} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
