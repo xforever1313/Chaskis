@@ -203,7 +203,7 @@ namespace Chaskis.Plugins.QuoteBot
                 {
                     long id = await this.db.AddQuoteAsync( quote );
                     writer.SendMessageToUser(
-                        string.Format( "Quote by {0} added.  Its ID is {1}", quote.Author, quote.Id.Value ),
+                        string.Format( "Quote by {0} added.  Its ID is {1}", quote.Author, id ),
                         response.Channel
                     );
                 }
