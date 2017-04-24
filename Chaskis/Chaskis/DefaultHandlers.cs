@@ -37,6 +37,10 @@ namespace Chaskis
         /// </summary>
         private string pluginListResponse;
 
+        // *** IMPORTANT ***
+        // Make sure all the commands start with '^' for the regex.  Otherwise,
+        // someone can do "hello world !mybot plugins" and we will print the plugins.
+
         /// <summary>
         /// The command for getting the source of a plugin.
         /// </summary>
@@ -113,7 +117,7 @@ namespace Chaskis
             }
 
             MessageHandler pluginListHandler = new MessageHandler(
-                "[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|list)",
+                "^[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|list)",
                 HandlePluginListCommand,
                 30
             );
@@ -135,7 +139,7 @@ namespace Chaskis
 
         private void AddSourceHandler()
         {
-            this.sourceCommand = "[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
+            this.sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
             MessageHandler sourceHandler = new MessageHandler(
                 this.sourceCommand,
                 this.HandleSourceCommand,
@@ -177,7 +181,7 @@ namespace Chaskis
 
         private void AddVersionHandler()
         {
-            this.versionCommand = "[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
+            this.versionCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
             MessageHandler versionHandler = new MessageHandler(
                 this.versionCommand,
                 this.HandleVersionCommand,
@@ -219,7 +223,7 @@ namespace Chaskis
 
         private void AddAboutHandler()
         {
-            this.aboutCommand = "[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
+            this.aboutCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
             MessageHandler aboutHandler = new MessageHandler(
                 this.aboutCommand,
                 this.HandleAboutCommand,
@@ -260,7 +264,7 @@ namespace Chaskis
         // ---- Admin Command Handler ----
         private void AddAdminHandler()
         {
-            this.adminCommand = "[!@]" + this.ircConfig.Nick + @":?\s+admins";
+            this.adminCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+admins";
 
             MessageHandler helpHandler = new MessageHandler(
                 this.adminCommand,
@@ -296,7 +300,7 @@ namespace Chaskis
 
         private void AddHelpHandler()
         {
-            this.helpCommand = "[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
+            this.helpCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
             MessageHandler helpHandler = new MessageHandler(
                 this.helpCommand,
                 this.HandleHelpCommand,
