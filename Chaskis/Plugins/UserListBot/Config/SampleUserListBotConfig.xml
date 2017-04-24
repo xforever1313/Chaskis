@@ -10,6 +10,6 @@ This is the config for the user list bot.
                Can be 0.  Can not be negative.
 -->
 <userlistconfig>
-    <command>!userlist</command>
+    <command>^!userlist</command>
     <cooldown>60</cooldown>
 </userlistconfig>

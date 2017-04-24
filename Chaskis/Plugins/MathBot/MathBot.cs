@@ -31,7 +31,7 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// The regex this bot watches for.
         /// </summary>
-        private const string handlerRegex = @"!calc(ulate)?\s+(?<expression>.+)";
+        private const string handlerRegex = @"^!calc(ulate)?\s+(?<expression>.+)";
 
         // -------- Constructor ---------
 

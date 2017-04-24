@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 
@@ -20,15 +22,16 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         public UserListBotConfig()
         {
-            this.Command = "!userlist";
+            this.Command = "^!userlist";
             this.Cooldown = 60;
         }
 
         // -------- Properties --------
 
         /// <summary>
-        /// The command that triggers the bot to print the user list.
-        /// Defaulted to "!userlist"
+        /// The command that triggers the bot to print the user list in the form
+        /// of a regex.
+        /// Defaulted to "^!userlist"
         /// </summary>
         public string Command { get; set; }
 

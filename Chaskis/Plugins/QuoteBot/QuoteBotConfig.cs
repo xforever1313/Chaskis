@@ -19,10 +19,10 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         public QuoteBotConfig()
         {
-            this.AddCommand = @"!quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)";
-            this.DeleteCommand = @"!quote\s+delete\s+(?<id>\d+)";
-            this.RandomCommand = @"!quote\s+random";
-            this.GetCommand = @"!quote\s+(get)?\s*(?<id>\d+)";
+            this.AddCommand = @"^!quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)";
+            this.DeleteCommand = @"^!quote\s+delete\s+(?<id>\d+)";
+            this.RandomCommand = @"^!quote\s+random";
+            this.GetCommand = @"^!quote\s+(get)?\s*(?<id>\d+)";
         }
 
         // ---------------- Properties ----------------

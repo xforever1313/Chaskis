@@ -61,10 +61,10 @@ namespace Tests.Plugins.QuoteBot
         public void XmlLoadTest()
         {
             QuoteBotConfig expectedConfig = new QuoteBotConfig();
-            expectedConfig.AddCommand = @"@quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)";
-            expectedConfig.DeleteCommand = @"@quote\s+delete\s+(?<id>\d+)";
-            expectedConfig.RandomCommand = @"@quote\s+random";
-            expectedConfig.GetCommand = @"@quote\s+(get)?\s*(?<id>\d+)";
+            expectedConfig.AddCommand = @"^@quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)";
+            expectedConfig.DeleteCommand = @"^@quote\s+delete\s+(?<id>\d+)";
+            expectedConfig.RandomCommand = @"^@quote\s+random";
+            expectedConfig.GetCommand = @"^@quote\s+(get)?\s*(?<id>\d+)";
 
             QuoteBotConfig loadedConfig = XmlLoader.LoadConfig(
                 Path.Combine( quoteBotTestDir, "TestFiles", "GoodConfig.xml" )
