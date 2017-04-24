@@ -22,6 +22,10 @@ namespace Tests.Plugins.QuoteBot
 
         private QuoteBotDatabase uut;
 
+        private Quote quote1;
+        private Quote quote2;
+        private Quote quote3;
+
         // ---------------- Setup / Teardown ----------------
 
         [SetUp]
@@ -29,6 +33,19 @@ namespace Tests.Plugins.QuoteBot
         {
             this.DeleteDb();
             this.uut = new QuoteBotDatabase( dbName );
+
+            this.quote1 = new Quote();
+            this.quote1.Author = "xforever1313";
+            this.quote1.QuoteText = "Here is my quote!";
+
+            this.quote2 = new Quote();
+            this.quote2.Author = "thenaterhood";
+            this.quote2.QuoteText = "Here is another quote!";
+
+            this.quote3 = new Quote();
+            this.quote3.Author = "jgallstar1";
+            this.quote3.QuoteText = "This is yet another quote!";
+
         }
 
         [TearDown]
@@ -57,18 +74,6 @@ namespace Tests.Plugins.QuoteBot
         [Test]
         public void AddGetDeleteTest()
         {
-            Quote quote1 = new Quote();
-            quote1.Author = "xforever1313";
-            quote1.QuoteText = "Here is my quote!";
-
-            Quote quote2 = new Quote();
-            quote2.Author = "thenaterhood";
-            quote2.QuoteText = "Here is another quote!";
-
-            Quote quote3 = new Quote();
-            quote3.Author = "jgallstar1";
-            quote3.QuoteText = "This is yet another quote!";
-
             long quote1Id = this.uut.AddQuote( quote1 );
             long quote2Id = this.uut.AddQuote( quote2 );
 
@@ -147,6 +152,42 @@ namespace Tests.Plugins.QuoteBot
                 Assert.AreEqual( quote2Id, gotQuote2.Id.Value );
                 Assert.AreEqual( quote2.Author, gotQuote2.Author );
                 Assert.AreEqual( quote2.QuoteText, gotQuote2.QuoteText );
+            }
+        }
+
+        [Test]
+        public void RandomTest()
+        {
+            // Do empty.  Returns null.
+            {
+                Assert.IsNull( this.uut.GetRandomQuote() );
+            }
+
+            long quote1Id = this.uut.AddQuote( this.quote1 );
+            long quote2Id = this.uut.AddQuote( this.quote2 );
+            long quote3Id = this.uut.AddQuote( this.quote3 );
+
+            // Sync
+            {
+                Quote randomQuote = this.uut.GetRandomQuote();
+                Assert.IsTrue(
+                    ( randomQuote.Id.Value == quote1Id ) ||
+                    ( randomQuote.Id.Value == quote2Id ) ||
+                    ( randomQuote.Id.Value == quote3Id )
+                );
+            }
+
+            // Do Async
+            {
+                Task<Quote> task = this.uut.GetRandomQuoteAsync();
+                task.Wait();
+
+                Quote randomQuote = task.Result;
+                Assert.IsTrue(
+                    ( randomQuote.Id.Value == quote1Id ) ||
+                    ( randomQuote.Id.Value == quote2Id ) ||
+                    ( randomQuote.Id.Value == quote3Id )
+                );
             }
         }
     }

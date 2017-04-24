@@ -147,6 +147,32 @@ namespace Chaskis.Plugins.QuoteBot
         }
 
         /// <summary>
+        /// Gets a random quote from the database in a background thread.
+        /// </summary>
+        /// <returns>A random quote.  Null if none are in the database.</returns>
+        public Task<Quote> GetRandomQuoteAsync()
+        {
+            return Task<Quote>.Run(
+                delegate ()
+                {
+                    return this.GetRandomQuote();
+                }
+            );
+        }
+
+        /// <summary>
+        /// Gets a random quote from the database.
+        /// </summary>
+        /// <returns>A random quote.  Null if none are in the database.</returns>
+        public Quote GetRandomQuote()
+        {
+            lock( this.sqlite )
+            {
+                return this.sqlite.FindWithQuery<Quote>( "SELECT * FROM Quote WHERE id IN (SELECT id FROM quote ORDER BY RANDOM() LIMIT 1)" );
+            }
+        }
+
+        /// <summary>
         /// Gets the quote based on the id.
         /// </summary>
         /// <exception cref="InvalidOperationException">If not found.</exception>
