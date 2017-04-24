@@ -32,7 +32,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// otherwise we'll just consistently be modifying row 0.
         /// </summary>
         [PrimaryKey, AutoIncrement]
-        public int? Id { get; set; }
+        public long? Id { get; set; }
 
         /// <summary>
         /// Who said the quote.

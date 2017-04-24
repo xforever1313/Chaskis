@@ -74,7 +74,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// <param name="quoteId">The parsed quote ID to delete. -1 if not successful.</param>
         /// <param name="errorString">Reason why we didn't parse.</param>
         /// <returns>True if we were able to parse the command, else false.</returns>
-        public bool TryParseDeleteCommand( string str, out int quoteId, out string errorString )
+        public bool TryParseDeleteCommand( string str, out long quoteId, out string errorString )
         {
             Match match = this.deleteRegex.Match( str );
             return this.TryParseId( str, match, "delete", out quoteId, out errorString );
@@ -108,13 +108,13 @@ namespace Chaskis.Plugins.QuoteBot
         /// <param name="quoteId">The parsed quote ID to get. -1 if not successful.</param>
         /// <param name="errorString">Reason why we didn't parse.</param>
         /// <returns>True if we were able to parse the command, else false.</returns>
-        public bool TryParseGetCommand( string str, out int quoteId, out string errorString )
+        public bool TryParseGetCommand( string str, out long quoteId, out string errorString )
         {
             Match match = this.getRegex.Match( str );
             return this.TryParseId( str, match, "get", out quoteId, out errorString );
         }
 
-        private bool TryParseId( string str, Match match, string context, out int quoteId, out string errorString )
+        private bool TryParseId( string str, Match match, string context, out long quoteId, out string errorString )
         {
             if( match.Success == false )
             {
@@ -123,7 +123,7 @@ namespace Chaskis.Plugins.QuoteBot
                 return false;
             }
 
-            bool success = int.TryParse( match.Groups["id"].Value, out quoteId );
+            bool success = long.TryParse( match.Groups["id"].Value, out quoteId );
 
             if( success )
             {

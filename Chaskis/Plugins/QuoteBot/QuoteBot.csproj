@@ -80,6 +80,7 @@
     <Compile Include="QuoteBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuoteBotConfig.cs" />
+    <Compile Include="QuoteBotDatabase.cs" />
     <Compile Include="QuoteBotParser.cs" />
     <Compile Include="XmlLoader.cs" />
   </ItemGroup>
