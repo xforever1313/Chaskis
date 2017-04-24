@@ -96,16 +96,16 @@ namespace Chaskis
                                 string botName = string.Empty;
                                 string botRegex = string.Empty;
 
-                                foreach( XmlAttribute attr in bridgeBotNode.Attributes )
+                                foreach( XmlElement bridgeBotChild in bridgeBotNode.ChildNodes )
                                 {
-                                    switch( attr.Name )
+                                    switch( bridgeBotChild.Name )
                                     {
                                         case "botname":
-                                            botName = attr.Value;
+                                            botName = bridgeBotChild.InnerText;
                                             break;
 
                                         case "botregex":
-                                            botRegex = attr.Value;
+                                            botRegex = bridgeBotChild.InnerText;
                                             break;
                                     }
                                 }

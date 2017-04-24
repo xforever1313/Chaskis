@@ -69,8 +69,8 @@ namespace Tests
         [Test]
         public void TestValidXmlWithPasswordAndBridgeBots()
         {
-            this.ircConfig.BridgeBots.Add( "telegrambot", @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
-            this.ircConfig.BridgeBots.Add( "slackbot", @"(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
+            this.ircConfig.BridgeBots.Add( "telegrambot", @"^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
+            this.ircConfig.BridgeBots.Add( "slackbot", @"^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )

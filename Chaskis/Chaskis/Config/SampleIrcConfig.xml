@@ -49,10 +49,17 @@ to match Chaskis will treat the bridge bot as a regular user.
         <admin>person1</admin>
         <admin>person2</admin>
     </admins>
+
     <!--
     <bridgebots>
-        <bridgebot botname="telegrambot\d*" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
-        <bridgebot botname="slackbot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
+        <bridgebot>
+            <botname>telegrambot\d*</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+        <bridgebot>
+            <botname>slackbot</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
     </bridgebots>
     -->
 </ircbotconfig>

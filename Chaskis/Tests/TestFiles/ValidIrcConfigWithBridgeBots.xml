@@ -9,7 +9,13 @@
 	<password>apassword</password>
     <quitmessage>I am being shut down!</quitmessage>
     <bridgebots>
-        <bridgebot botname="telegrambot" botregex="(?&lt;bridgeUser&gt;\w+):\s+(?&lt;bridgeMessage&gt;.+)" />
-        <bridgebot botname="slackbot" botregex="(?&lt;bridgeUser&gt;\w+)--(?&lt;bridgeMessage&gt;.+)" />
+        <bridgebot>
+            <botname>telegrambot</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+        <bridgebot>
+            <botname>slackbot</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
     </bridgebots>
 </ircbotconfig>
