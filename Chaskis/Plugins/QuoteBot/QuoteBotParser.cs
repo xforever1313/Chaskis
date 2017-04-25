@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -37,10 +38,11 @@ namespace Chaskis.Plugins.QuoteBot
         /// Tries to parse the given add command.
         /// </summary>
         /// <param name="str">The string to parse.</param>
+        /// <param name="adder">IRC user who requested the quote be added.</param>
         /// <param name="quote">The parsed quote as a Quote object (ID is set to null).  Null if not successful.</param>
         /// <param name="errorString">Reason why the quote did not parse (if any).</param>
         /// <returns>True if we were able to parse the command, else false.</returns>
-        public bool TryParseAddCommand( string str, out Quote quote, out string errorString )
+        public bool TryParseAddCommand( string str, string adder, out Quote quote, out string errorString )
         {
             Match match = this.addRegex.Match( str );
             if( match.Success == false )
@@ -53,6 +55,8 @@ namespace Chaskis.Plugins.QuoteBot
             Quote tempQuote = new Quote();
             tempQuote.Author = match.Groups["user"].Value;
             tempQuote.QuoteText = match.Groups["quote"].Value;
+            tempQuote.Adder = adder;
+            tempQuote.TimeStamp = DateTime.UtcNow;
 
             bool success = tempQuote.TryValidate( out errorString );
             if( success )

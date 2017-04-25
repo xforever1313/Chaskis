@@ -24,6 +24,7 @@ namespace Tests.Plugins.QuoteBot
             Quote quote = new Quote();
             quote.Author = "author";
             quote.QuoteText = "Some Quote.";
+            quote.Adder = "Some user.";
 
             string errorString;
             Assert.IsTrue( quote.TryValidate( out errorString ) );
@@ -52,6 +53,19 @@ namespace Tests.Plugins.QuoteBot
             Assert.IsNotEmpty( errorString );
 
             quote.QuoteText = "             ";
+            Assert.IsFalse( quote.TryValidate( out errorString ) );
+            Assert.IsNotEmpty( errorString );
+
+            // Change adder text
+            quote.Adder = null;
+            Assert.IsFalse( quote.TryValidate( out errorString ) );
+            Assert.IsNotEmpty( errorString );
+
+            quote.Adder = string.Empty;
+            Assert.IsFalse( quote.TryValidate( out errorString ) );
+            Assert.IsNotEmpty( errorString );
+
+            quote.Adder = "             ";
             Assert.IsFalse( quote.TryValidate( out errorString ) );
             Assert.IsNotEmpty( errorString );
         }

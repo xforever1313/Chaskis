@@ -197,13 +197,13 @@ namespace Chaskis.Plugins.QuoteBot
         {
             Quote quote;
             string error;
-            if( this.parser.TryParseAddCommand( response.Message, out quote, out error ) )
+            if( this.parser.TryParseAddCommand( response.Message, response.RemoteUser, out quote, out error ) )
             {
                 try
                 {
                     long id = await this.db.AddQuoteAsync( quote );
                     writer.SendMessageToUser(
-                        string.Format( "Quote by {0} added.  Its ID is {1}", quote.Author, id ),
+                        string.Format( "Quote said by {0} added by {1}.  Its ID is {2}.", quote.Author, quote.Adder, id ),
                         response.Channel
                     );
                 }
@@ -291,7 +291,7 @@ namespace Chaskis.Plugins.QuoteBot
                     if( quote != null )
                     {
                         writer.SendMessageToUser(
-                            string.Format( "Quote {0} by {1}: '{2}'", quote.Id.Value, quote.Author, quote.QuoteText ),
+                            quote.ToString(),
                             response.Channel
                         );
                     }
@@ -335,7 +335,7 @@ namespace Chaskis.Plugins.QuoteBot
                     if( quote != null )
                     {
                         writer.SendMessageToUser(
-                            string.Format( "Quote {0} by {1}: '{2}'", quote.Id.Value, quote.Author, quote.QuoteText ),
+                            quote.ToString(),
                             response.Channel
                         );
                     }
@@ -351,7 +351,7 @@ namespace Chaskis.Plugins.QuoteBot
                 catch( InvalidOperationException err )
                 {
                     writer.SendMessageToUser(
-                        "Error getting quote: " + err.Message.NormalizeWhiteSpace() + ". Do any quotes exist?",
+                        "Error getting quote: " + err.Message.NormalizeWhiteSpace() + ". Are you sure it exists?",
                         response.Channel
                     );
                 }

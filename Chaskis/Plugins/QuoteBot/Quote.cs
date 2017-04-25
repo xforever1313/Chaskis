@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Text;
 using SQLite.Net.Attributes;
 
@@ -22,6 +23,8 @@ namespace Chaskis.Plugins.QuoteBot
             this.Id = null;
             this.Author = string.Empty;
             this.QuoteText = string.Empty;
+            this.Adder = string.Empty;
+            this.TimeStamp = DateTime.MinValue;
         }
 
         // ---------------- Properties ----------------
@@ -44,6 +47,18 @@ namespace Chaskis.Plugins.QuoteBot
         /// The text of the quote.
         /// </summary>
         public string QuoteText { get; set; }
+
+        /// <summary>
+        /// The timestamp of the quote.
+        /// 
+        /// Defaulted to DateTime.MinValue.
+        /// </summary>
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>
+        /// The person who added the quote.
+        /// </summary>
+        public string Adder { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -71,6 +86,12 @@ namespace Chaskis.Plugins.QuoteBot
                 builder.AppendLine( "\t-Quote Text can not be null, empty, or whitespace." );
             }
 
+            if( string.IsNullOrEmpty( this.Adder ) || string.IsNullOrWhiteSpace( this.Adder ) )
+            {
+                success = false;
+                builder.AppendLine( "\t-Adder can not be null, empty, or whitespace." );
+            }
+
             if( success )
             {
                 errorString = string.Empty;
@@ -81,6 +102,17 @@ namespace Chaskis.Plugins.QuoteBot
             }
 
             return success;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "'{0}' -{1}. Added by {2} on {3}.",
+                this.QuoteText,
+                this.Author,
+                this.Adder,
+                this.TimeStamp.ToShortDateString()
+            );
         }
     }
 }

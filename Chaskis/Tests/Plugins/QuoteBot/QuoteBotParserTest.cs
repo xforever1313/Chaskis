@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using Chaskis.Plugins.QuoteBot;
 using NUnit.Framework;
 
@@ -45,21 +46,24 @@ namespace Tests.Plugins.QuoteBot
         [Test]
         public void ParseAddCommandTest()
         {
+            const string adder = "ircuser";
             string errorString;
             Quote quote;
 
             // Good test.
             {
-                Assert.IsTrue( this.uut.TryParseAddCommand( "!quote add <me> This is a quote!", out quote, out errorString ) );
+                Assert.IsTrue( this.uut.TryParseAddCommand( "!quote add <me> This is a quote!", adder, out quote, out errorString ) );
                 Assert.IsEmpty( errorString );
                 Assert.IsNull( quote.Id );
                 Assert.AreEqual( "me", quote.Author );
+                Assert.AreEqual( adder, quote.Adder );
                 Assert.AreEqual( "This is a quote!", quote.QuoteText );
+                Assert.AreNotEqual( DateTime.MinValue, quote.TimeStamp );
             }
 
             // Does Not Match
             {
-                Assert.IsFalse( this.uut.TryParseAddCommand( "!Derp", out quote, out errorString ) );
+                Assert.IsFalse( this.uut.TryParseAddCommand( "!Derp", adder, out quote, out errorString ) );
                 Assert.IsNotEmpty( errorString );
                 Assert.IsNull( quote );
                 Assert.IsTrue( errorString.Contains( "match" ) ); // Error due to matching, we should have "match" somewhere in there.
@@ -67,15 +71,24 @@ namespace Tests.Plugins.QuoteBot
 
             // Empty Author
             {
-                Assert.IsFalse( this.uut.TryParseAddCommand( "!quote add <> This is a quote!", out quote, out errorString ) );
+                Assert.IsFalse( this.uut.TryParseAddCommand( "!quote add <> This is a quote!", adder, out quote, out errorString ) );
                 Assert.IsNotEmpty( errorString );
                 Assert.IsNull( quote );
                 Assert.IsTrue( errorString.Contains( "Author" ) ); // Error due to empty author, we should have "Author" somewhere in there.
             }
 
+
+            // Empty Adder
+            {
+                Assert.IsFalse( this.uut.TryParseAddCommand( "!quote add <me> This is a quote!", string.Empty, out quote, out errorString ) );
+                Assert.IsNotEmpty( errorString );
+                Assert.IsNull( quote );
+                Assert.IsTrue( errorString.Contains( "Adder" ) ); // Error due to empty adder, we should have "Adder" somewhere in there.
+            }
+
             // Empty QuoteText
             {
-                Assert.IsFalse( this.uut.TryParseAddCommand( "!quote add <me>  ", out quote, out errorString ) );
+                Assert.IsFalse( this.uut.TryParseAddCommand( "!quote add <me>  ", adder, out quote, out errorString ) );
                 Assert.IsNotEmpty( errorString );
                 Assert.IsNull( quote );
                 Assert.IsTrue( errorString.Contains( "Quote Text" ) ); // Error due to empty quote text, we should have "Quote Text" somewhere in there.
