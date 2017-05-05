@@ -1,12 +1,14 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using ChaskisCore;
+using Moq;
 using NUnit.Framework;
-using Tests.Mocks;
 
 namespace Tests
 {
@@ -26,9 +28,9 @@ namespace Tests
         private IrcConfig ircConfig;
 
         /// <summary>
-        /// The mock IRC connection to use.
+        /// Mock IRC writer to use.
         /// </summary>
-        private MockIrcConnection ircConnection;
+        private Mock<IIrcWriter> ircWriter;
 
         /// <summary>
         /// The response received from the event handler (if any).
@@ -46,9 +48,9 @@ namespace Tests
         public void TestSetup()
         {
             this.ircConfig = TestHelpers.GetTestIrcConfig();
-            ircConnection = new MockIrcConnection( this.ircConfig );
-            responseReceived = null;
-            this.uut = new AllHandler( AllFunction );
+            this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
+            this.responseReceived = null;
+            this.uut = new AllHandler( this.AllFunction );
         }
 
         // -------- Tests --------
@@ -75,17 +77,17 @@ namespace Tests
             );
 
             Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( null, new IrcConfig(), ircConnection )
+                this.uut.HandleEvent( null, new IrcConfig(), this.ircWriter.Object )
             );
             Assert.IsNull( this.responseReceived ); // Ensure handler didn't get called.
 
             Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( string.Empty, new IrcConfig(), ircConnection )
+                this.uut.HandleEvent( string.Empty, new IrcConfig(), this.ircWriter.Object )
             );
             Assert.IsNull( this.responseReceived ); // Ensure handler didn't get called.
 
             Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( "hello world", null, ircConnection )
+                this.uut.HandleEvent( "hello world", null, this.ircWriter.Object )
             );
             Assert.IsNull( this.responseReceived ); // Ensure handler didn't get called.
 
@@ -102,13 +104,13 @@ namespace Tests
         public void BotParts()
         {
             string ircString = TestHelpers.ConstructIrcString(
-                ircConfig.Nick,
+                this.ircConfig.Nick,
                 PartHandler.IrcCommand,
-                ircConfig.Channel,
+                this.ircConfig.Channel,
                 string.Empty
             );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
+            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
             this.CheckResponse( ircString );
         }
 
@@ -121,11 +123,11 @@ namespace Tests
             string ircString = TestHelpers.ConstructIrcString(
                 remoteUser,
                 MessageHandler.IrcCommand,
-                ircConfig.Channel,
+                this.ircConfig.Channel,
                 "A message"
             );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
+            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
             this.CheckResponse( ircString );
         }
 
@@ -138,11 +140,11 @@ namespace Tests
             string ircString = TestHelpers.ConstructIrcString(
                 remoteUser,
                 JoinHandler.IrcCommand,
-                ircConfig.Channel,
+                this.ircConfig.Channel,
                 string.Empty
             );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, ircConnection );
+            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
             this.CheckResponse( ircString );
         }
 
@@ -156,7 +158,7 @@ namespace Tests
             this.uut.HandleEvent(
                 ircString,
                 this.ircConfig,
-                ircConnection
+                this.ircWriter.Object
             );
             this.CheckResponse( ircString );
         }
@@ -170,7 +172,7 @@ namespace Tests
         /// <param name="response">The response from the server.</param>
         private void AllFunction( IIrcWriter writer, IrcResponse response )
         {
-            Assert.AreSame( this.ircConnection, writer );
+            Assert.AreSame( this.ircWriter.Object, writer );
             this.responseReceived = response;
         }
 
@@ -183,13 +185,13 @@ namespace Tests
             Assert.IsNotNull( this.responseReceived );
 
             // Ensure its the raw string.
-            Assert.AreEqual( rawIrcString, responseReceived.Message );
+            Assert.AreEqual( rawIrcString, this.responseReceived.Message );
 
             // Channel should be empty, its up to the user to parse it.
-            Assert.AreEqual( string.Empty, responseReceived.Channel );
+            Assert.AreEqual( string.Empty, this.responseReceived.Channel );
 
             // Nick should be empty.  Its up to the user to parse it.
-            Assert.AreEqual( string.Empty, responseReceived.RemoteUser );
+            Assert.AreEqual( string.Empty, this.responseReceived.RemoteUser );
         }
     }
 }
