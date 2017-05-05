@@ -1,12 +1,15 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
+using System.Threading.Tasks;
 using Chaskis.Plugins.WeatherBot;
+using Moq;
 using NUnit.Framework;
-using Tests.Plugins.WeatherBot.Mocks;
 
 namespace Tests.Plugins.WeatherBot
 {
@@ -18,7 +21,7 @@ namespace Tests.Plugins.WeatherBot
         /// <summary>
         /// The means to mock a weather query.
         /// </summary>
-        private MockWeatherQuery weatherQuery;
+        private Mock<IWeatherQuery> weatherQuery;
 
         /// <summary>
         /// The current report created for the test.
@@ -54,8 +57,8 @@ namespace Tests.Plugins.WeatherBot
         [SetUp]
         public void TestSetup()
         {
-            this.weatherQuery = new MockWeatherQuery();
-            this.uut = new WeatherReporter( this.weatherQuery );
+            this.weatherQuery = new Mock<IWeatherQuery>( MockBehavior.Strict );
+            this.uut = new WeatherReporter( this.weatherQuery.Object );
             this.currentReport = new WeatherReport();
         }
 
@@ -65,43 +68,47 @@ namespace Tests.Plugins.WeatherBot
         /// Tests that a valid zip code twice results in using the cached value.
         /// </summary>
         [Test]
-        public async void ValidZipCacheTest()
+        public void ValidZipCacheTest()
         {
             this.currentReport.ApparentTemp = "10";
-            this.weatherQuery.ReportToReturn = this.currentReport;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
 
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( this.currentReport.ToString(), response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 ); // 1 hour query cooldown.
 
-                // No value in cache, expect query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+                // Should expect a query.
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Returns(
+                    Task.Run( delegate () { return this.currentReport; } )
+                );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( this.currentReport.ToString(), response.Result );
             }
 
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ReportToReturn = this.currentReport;
-            this.weatherQuery.Cooldown = 1 * 60 * 60;
-
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( this.currentReport.ToString(), response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 );
 
-                // Should use cached value.
-                Assert.IsFalse( this.weatherQuery.WasQueried );
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( this.currentReport.ToString(), response.Result );
             }
 
             this.currentReport.ApparentTemp = "20";
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ReportToReturn = this.currentReport;
-            this.weatherQuery.Cooldown = 0; // Should always query.
 
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( this.currentReport.ToString(), response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 0 ); // Should always query.
 
-                // Cache timed out, should query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+                // Should expect a query.
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Returns(
+                    Task.Run( delegate () { return this.currentReport; } )
+                );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( this.currentReport.ToString(), response.Result );
             }
         }
 
@@ -109,41 +116,37 @@ namespace Tests.Plugins.WeatherBot
         /// Tests that a invalid zip code twice results in using the cached value.
         /// </summary>
         [Test]
-        public async void InvalidZipCacheTest()
+        public void InvalidZipCacheTest()
         {
-            this.weatherQuery.ExceptionToThrowDuringQuery = this.invalidZipException;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
-
             {
-                string response = await this.uut.QueryWeather( zip );
-                // Expect invalid zip message.
-                Assert.AreEqual( this.invalidZipException.Message, response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 ); // 1 hour query cooldown.
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Throws( this.invalidZipException );
 
-                // No value in cache, expect query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                // Expect invalid zip message.
+                Assert.AreEqual( this.invalidZipException.Message, response.Result );
             }
 
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ExceptionToThrowDuringQuery = this.invalidZipException;
-            this.weatherQuery.Cooldown = 1 * 60 * 60;
-
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( this.invalidZipException.Message, response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 ); // Should not query and use cache.
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
 
                 // Should use cached value, which is an error.
-                Assert.IsFalse( this.weatherQuery.WasQueried );
+                Assert.AreEqual( this.invalidZipException.Message, response.Result );
             }
 
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ExceptionToThrowDuringQuery = this.invalidZipException;
-            this.weatherQuery.Cooldown = 0; // Still should not query.
-
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( this.invalidZipException.Message, response );
                 // Should not query.  No need to waste the querier's time.
-                Assert.IsFalse( this.weatherQuery.WasQueried );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 0 );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( this.invalidZipException.Message, response.Result );
             }
         }
 
@@ -152,30 +155,30 @@ namespace Tests.Plugins.WeatherBot
         /// query exception properly (should not fill cache).
         /// </summary>
         [Test]
-        public async void NonZipQueryException()
+        public void NonZipQueryException()
         {
             QueryException err = new QueryException( QueryErrors.InvalidLatLon, "ERROR" );
-            this.weatherQuery.ExceptionToThrowDuringQuery = err;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
-
+            
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( err.Message, response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 ); // 1 hour query cooldown.
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Throws( err );
 
-                // No value in cache, expect query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( err.Message, response.Result );
             }
 
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ExceptionToThrowDuringQuery = err;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( err.Message, response );
-
                 // Non-zip code error should not fill cache, we should
                 // still query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 );
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Throws( err );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( err.Message, response.Result );
             }
         }
 
@@ -183,30 +186,33 @@ namespace Tests.Plugins.WeatherBot
         /// Tests to make sure we handle an Non-zip code based
         /// query exception properly (should not fill cache).        /// </summary>
         [Test]
-        public async void UnknownException()
+        public void UnknownException()
         {
             Exception err = new Exception( "ERROR" );
-            this.weatherQuery.ExceptionToThrowDuringQuery = err;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
 
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( err.Message, response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 );
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Throws( err );
 
                 // No value in cache, expect query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( err.Message, response.Result );
             }
 
-            this.weatherQuery.ResetStates();
-            this.weatherQuery.ExceptionToThrowDuringQuery = err;
-            this.weatherQuery.Cooldown = 1 * 60 * 60; // One hour.
             {
-                string response = await this.uut.QueryWeather( zip );
-                Assert.AreEqual( err.Message, response );
+                this.weatherQuery.Setup( w => w.Cooldown ).Returns( 1 * 60 * 60 );
+                this.weatherQuery.Setup( w => w.QueryForWeather( It.Is<string>( s => s == zip ) ) ).Throws( err );
 
                 // Non-zip code error should not fill cache, we should
                 // still query.
-                Assert.IsTrue( this.weatherQuery.WasQueried );
+
+                Task<string> response = this.uut.QueryWeather( zip );
+                response.Wait();
+
+                Assert.AreEqual( err.Message, response.Result );
             }
         }
     }
