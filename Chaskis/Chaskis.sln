@@ -47,7 +47,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteBot", "Plugins\QuoteBot\QuoteBot.csproj", "{43BF7896-1A47-4F7A-8FF8-0103180C3794}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlBot", "XmlBot\XmlBot.csproj", "{343A37BD-92FE-4858-A28B-1E7ED529FD97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlBot", "Plugins\XmlBot\XmlBot.csproj", "{343A37BD-92FE-4858-A28B-1E7ED529FD97}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

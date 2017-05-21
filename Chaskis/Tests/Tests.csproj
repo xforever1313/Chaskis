@@ -163,7 +163,7 @@
       <Project>{43bf7896-1a47-4f7a-8ff8-0103180c3794}</Project>
       <Name>QuoteBot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XmlBot\XmlBot.csproj">
+    <ProjectReference Include="..\Plugins\XmlBot\XmlBot.csproj">
       <Project>{343a37bd-92fe-4858-a28b-1e7ed529fd97}</Project>
       <Name>XmlBot</Name>
     </ProjectReference>
