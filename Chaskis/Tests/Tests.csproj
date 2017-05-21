@@ -82,6 +82,7 @@
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="MessageHandlerTest.cs" />
     <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="ParsingTests.cs" />
     <Compile Include="Plugins\CapsWatcher\CapsWatcherConfigTest.cs" />
     <Compile Include="Plugins\CapsWatcher\CapsWatcherTest.cs" />
     <Compile Include="Plugins\CapsWatcher\CapsWatcherXmlLoaderTest.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Plugins\UserListBot\UserListXmlLoaderTest.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherBotXmlLoaderTests.cs" />
     <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
+    <Compile Include="Plugins\XmlBot\XmlBotXmlLoaderTest.cs" />
     <Compile Include="PongHandlerTest.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="IrcResponseTest.cs" />
@@ -161,6 +163,10 @@
       <Project>{43bf7896-1a47-4f7a-8ff8-0103180c3794}</Project>
       <Name>QuoteBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XmlBot\XmlBot.csproj">
+      <Project>{343a37bd-92fe-4858-a28b-1e7ed529fd97}</Project>
+      <Name>XmlBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -204,7 +210,9 @@
     <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
     <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Plugins\XmlBot\TestFiles\" />
+  </ItemGroup>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.101.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Text.RegularExpressions;
@@ -14,7 +16,7 @@ namespace ChaskisCore
     /// </summary>
     public class MessageHandler : IIrcHandler
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// The irc command that will appear from the server.
@@ -30,7 +32,7 @@ namespace ChaskisCore
             RegexOptions.Compiled
         );
 
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor.
@@ -38,6 +40,8 @@ namespace ChaskisCore
         /// <param name="lineRegex">
         /// The regex to search for to fire the action.
         /// For example, if you want !bot help to trigger the action, pass in "!bot\s+help"
+        /// 
+        /// This DOES get Liquified via <see cref="Parsing.LiquefyStringWithIrcConfig(string, string, string, string)'"/>
         /// </param>
         /// <param name="lineAction">The action to perform based on the line.</param>
         /// <param name="coolDown">How long to wait between firing the line action in seconds.  0 for no cooldown.</param>
@@ -67,7 +71,7 @@ namespace ChaskisCore
             this.KeepHandling = true;
         }
 
-        // -------- Properties --------
+        // ------------------------ Properties ------------------------
 
         /// <summary>
         /// The regex to look in IRC Chat that triggers the line action.
@@ -117,7 +121,7 @@ namespace ChaskisCore
         /// </summary>
         public bool KeepHandling { get; set; }
 
-        // -------- Function --------
+        // ------------------------ Function ------------------------
 
         /// <summary>
         /// Fires the action if the line regex matches.
@@ -134,7 +138,7 @@ namespace ChaskisCore
             Match match = pattern.Match( line );
             if( match.Success )
             {
-                string nick = match.Groups["nick"].Value;
+                string remoteUser = match.Groups["nick"].Value;
                 string channel = match.Groups["channel"].Value;
                 string message = match.Groups["theIrcMessage"].Value;
 
@@ -142,7 +146,7 @@ namespace ChaskisCore
                 // the nick and the channel
                 foreach( string bridgeBotRegex in ircConfig.BridgeBots.Keys )
                 {
-                    Match nameMatch = Regex.Match( nick, bridgeBotRegex );
+                    Match nameMatch = Regex.Match( remoteUser, bridgeBotRegex );
                     if( nameMatch.Success )
                     {
                         Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[bridgeBotRegex] );
@@ -157,7 +161,7 @@ namespace ChaskisCore
                             // Only change the nick anme and the message if the nick and the message aren't empty.
                             if( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
                             {
-                                nick = newNick;
+                                remoteUser = newNick;
                                 message = newMessage;
                             }
 
@@ -168,14 +172,23 @@ namespace ChaskisCore
 
                 // Take the message from the PRIVMSG and see if it matches the regex this class is watching.
                 // If not, return and do nothing.
-                Match messageMatch = Regex.Match( message, this.LineRegex );
+
+                // But first, Liquefy things!
+                string lineRegex = Parsing.LiquefyStringWithIrcConfig(
+                    this.LineRegex,
+                    remoteUser,
+                    ircConfig.Nick,
+                    channel
+                );
+
+                Match messageMatch = Regex.Match( message, lineRegex );
                 if( messageMatch.Success == false )
                 {
                     return;
                 }
 
                 IrcResponse response = new IrcResponse(
-                    nick,
+                    remoteUser,
                     channel,
                     message
                 );

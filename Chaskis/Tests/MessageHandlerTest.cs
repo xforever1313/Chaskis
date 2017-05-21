@@ -411,6 +411,67 @@ namespace Tests
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
+        /// <summary>
+        /// Ensures {%user%}, {%channel%}, and {%nick%} get replaced in the line
+        /// regex properly.
+        /// </summary>
+        [Test]
+        public void TestLiquification()
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!{%nick%} {%channel%} {%user%}",
+                this.MessageFunction
+            );
+
+            string expectedMessage = string.Format(
+                "!{0} {1} {2}",
+                this.ircConfig.Nick,
+                this.ircConfig.Channel,
+                remoteUser
+            );
+
+            uut.HandleEvent(
+                this.GenerateMessage( remoteUser, this.ircConfig.Channel, expectedMessage ),
+                this.ircConfig,
+                this.ircWriter.Object
+            );
+
+            Assert.IsNotNull( this.responseReceived );
+            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
+
+        /// <summary>
+        /// Ensures {%user%}, {%channel%}, and {%nick%} get replaced in the line
+        /// regex properly with bridge bots.
+        /// </summary>
+        [Test]
+        public void TestLiquificationWithBridgeBots()
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!{%nick%} {%channel%} {%user%}",
+                this.MessageFunction
+            );
+
+            string expectedMessage = string.Format(
+                "!{0} {1} {2}",
+                this.ircConfig.Nick,
+                this.ircConfig.Channel,
+                remoteUser
+            );
+
+            uut.HandleEvent(
+                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channel, remoteUser + ": " + expectedMessage ),
+                this.ircConfig,
+                this.ircWriter.Object
+            );
+
+            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
+
         // -------- Test Helpers --------
 
         /// <summary>
