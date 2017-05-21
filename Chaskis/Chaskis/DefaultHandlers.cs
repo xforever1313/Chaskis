@@ -156,24 +156,22 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandleSourceCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.sourceCommand, RegexOptions.IgnoreCase );
-            if( match.Success )
+            Match match = response.Match;
+
+            string pluginName = match.Groups["pluginName"].Value.ToLower();
+            if( this.plugins.ContainsKey( pluginName ) )
             {
-                string pluginName = match.Groups["pluginName"].Value.ToLower();
-                if( this.plugins.ContainsKey( pluginName ) )
-                {
-                    string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].SourceCodeLocation;
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-                {
-                    string msg = "My source code is located here: https://github.com/xforever1313/Chaskis";
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else
-                {
-                    writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
-                }
+                string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].SourceCodeLocation;
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
+            {
+                string msg = "My source code is located here: https://github.com/xforever1313/Chaskis";
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else
+            {
+                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -198,24 +196,22 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandleVersionCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.versionCommand, RegexOptions.IgnoreCase );
-            if( match.Success )
+            Match match = response.Match;
+
+            string pluginName = match.Groups["pluginName"].Value.ToLower();
+            if( this.plugins.ContainsKey( pluginName ) )
             {
-                string pluginName = match.Groups["pluginName"].Value.ToLower();
-                if( this.plugins.ContainsKey( pluginName ) )
-                {
-                    string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Version;
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-                {
-                    string msg = "I am running version Chaskis " + Chaskis.VersionStr;
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else
-                {
-                    writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
-                }
+                string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Version;
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
+            {
+                string msg = "I am running version Chaskis " + Chaskis.VersionStr;
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else
+            {
+                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -240,24 +236,22 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.aboutCommand, RegexOptions.IgnoreCase );
-            if( match.Success )
+            Match match = response.Match;
+
+            string pluginName = match.Groups["pluginName"].Value.ToLower();
+            if( this.plugins.ContainsKey( pluginName ) )
             {
-                string pluginName = match.Groups["pluginName"].Value.ToLower();
-                if( this.plugins.ContainsKey( pluginName ) )
-                {
-                    string msg = "About '" + pluginName + "': " + this.plugins[pluginName].About;
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-                {
-                    string msg = "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
-                    writer.SendMessageToUser( msg, response.Channel );
-                }
-                else
-                {
-                    writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
-                }
+                string msg = "About '" + pluginName + "': " + this.plugins[pluginName].About;
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
+            {
+                string msg = "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
+                writer.SendMessageToUser( msg, response.Channel );
+            }
+            else
+            {
+                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -319,72 +313,70 @@ namespace Chaskis
         {
             const string defaultMessage = "Default Commands: 'plugins', 'admins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
 
-            Match match = Regex.Match( response.Message, this.helpCommand, RegexOptions.IgnoreCase );
-            if( match.Success )
+            Match match = response.Match;
+
+            string argsStr = match.Groups["args"].Value.ToLower();
+
+            if( string.IsNullOrEmpty( argsStr ) )
             {
-                string argsStr = match.Groups["args"].Value.ToLower();
+                // Print default message and return.
+                writer.SendMessageToUser(
+                    defaultMessage,
+                    response.Channel
+                );
+                return;
+            }
 
-                if( string.IsNullOrEmpty( argsStr ) )
+            argsStr = Regex.Replace( argsStr, @"\s+", " " ); // Strip multiple white spaces.
+            List<string> args = argsStr.Split( ' ' ).ToList();
+
+            if( this.plugins.ContainsKey( args[0] ) )
+            {
+                string pluginName = args[0];
+                args.RemoveAt( 0 );
+
+                // Handle the help command for the plugin
+                this.plugins[pluginName].HandleHelp( writer, response, args.ToArray() );
+            }
+            else
+            {
+                string message;
+                switch( args[0] )
                 {
-                    // Print default message and return.
-                    writer.SendMessageToUser(
-                        defaultMessage,
-                        response.Channel
-                    );
-                    return;
+                    case "plugins":
+                    case "pluginlist":
+                        message = "Gets the list of plugins running.";
+                        break;
+
+                    case "source":
+                        message = "Gets the source code URL of the given plugin.";
+                        break;
+
+                    case "version":
+                        message = "Gets the version of the given plugin.";
+                        break;
+
+                    case "about":
+                        message = "Gets information about the given plugin.";
+                        break;
+
+                    case "help":
+                        message = "Gets help information about the given plugin.";
+                        break;
+
+                    case "admins":
+                        message = "Shows the list of people who are consided admins.";
+                        break;
+
+                    default:
+                        message = "Invalid default command. " + defaultMessage;
+                        break;
                 }
 
-                argsStr = Regex.Replace( argsStr, @"\s+", " " ); // Strip multiple white spaces.
-                List<string> args = argsStr.Split( ' ' ).ToList();
-
-                if( this.plugins.ContainsKey( args[0] ) )
-                {
-                    string pluginName = args[0];
-                    args.RemoveAt( 0 );
-
-                    // Handle the help command for the plugin
-                    this.plugins[pluginName].HandleHelp( writer, response, args.ToArray() );
-                }
-                else
-                {
-                    string message;
-                    switch( args[0] )
-                    {
-                        case "plugins":
-                        case "pluginlist":
-                            message = "Gets the list of plugins running.";
-                            break;
-
-                        case "source":
-                            message = "Gets the source code URL of the given plugin.";
-                            break;
-
-                        case "version":
-                            message = "Gets the version of the given plugin.";
-                            break;
-
-                        case "about":
-                            message = "Gets information about the given plugin.";
-                            break;
-
-                        case "help":
-                            message = "Gets help information about the given plugin.";
-                            break;
-
-                        case "admins":
-                            message = "Shows the list of people who are consided admins.";
-                            break;
-                        
-                        default:
-                            message = "Invalid default command. " + defaultMessage;
-                            break;
-                    }
-
-                    writer.SendMessageToUser(
-                        message,
-                        response.Channel
-                    );
-                }
+                writer.SendMessageToUser(
+                    message,
+                    response.Channel
+                );
             }
         }
     }
