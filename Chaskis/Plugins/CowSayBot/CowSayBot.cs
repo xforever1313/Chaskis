@@ -142,7 +142,7 @@ namespace Chaskis.Plugins.CowSayBot
                 this.cowsayRegex,
                 HandleCowsayCommand,
                 (int)cowSayConfig.CoolDownTimeSeconds,
-                ResponseOptions.RespondOnlyToChannel
+                ResponseOptions.ChannelOnly
             );
 
             this.handlers.Add(

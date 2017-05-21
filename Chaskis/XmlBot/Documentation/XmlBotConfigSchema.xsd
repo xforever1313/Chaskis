@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XmlBotConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="xmlbotconfig" type="XmlBotConfig"/>
+    <xs:element name="message" type="Message"/>
+
+    <xs:complexType name="XmlBotConfig">
+        <xs:sequence>
+            <xs:element name="message" type="Message" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="RespondTo">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ChannelAndPms"/>
+            <xs:enumeration value="ChannelOnly"/>
+            <xs:enumeration value="PmsOnly"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="Message">
+        <xs:sequence>
+            <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="cooldown" type="xs:int" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="respondto" type="RespondTo" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

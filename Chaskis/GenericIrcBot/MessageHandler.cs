@@ -47,7 +47,7 @@ namespace ChaskisCore
             string lineRegex,
             Action<IIrcWriter, IrcResponse> lineAction,
             int coolDown = 0,
-            ResponseOptions responseOption = ResponseOptions.RespondToBoth,
+            ResponseOptions responseOption = ResponseOptions.ChannelAndPms,
             bool respondToSelf = false
         )
         {
@@ -186,12 +186,12 @@ namespace ChaskisCore
                     return;
                 }
                 // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
-                else if( ( this.ResponseOption == ResponseOptions.RespondOnlyToChannel ) && ( response.Channel.ToUpper() != ircConfig.Channel.ToUpper() ) )
+                else if( ( this.ResponseOption == ResponseOptions.ChannelOnly ) && ( response.Channel.ToUpper() != ircConfig.Channel.ToUpper() ) )
                 {
                     return;
                 }
                 // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
-                else if( ( this.ResponseOption == ResponseOptions.RespondOnlyToPMs ) && ( response.Channel.ToUpper() != ircConfig.Nick.ToUpper() ) )
+                else if( ( this.ResponseOption == ResponseOptions.PmsOnly ) && ( response.Channel.ToUpper() != ircConfig.Nick.ToUpper() ) )
                 {
                     return;
                 }
