@@ -132,7 +132,7 @@ namespace Chaskis.Plugins.UserListBot
             // User query command:
             {
                 MessageHandler userQueryHandler = new MessageHandler(
-                    this.userListConfig.Command.Replace( "{%nick%}", this.ircConfig.Nick ),
+                    this.userListConfig.Command,
                     this.HandleGetUsersCommand,
                     this.userListConfig.Cooldown
                 );

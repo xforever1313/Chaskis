@@ -200,7 +200,7 @@ namespace Chaskis.Plugins.CapsWatcher
         {
             if( CheckForCaps( response.Message ) )
             {
-                string msgToSend = SelectMessage().Replace( "{%user%}", response.RemoteUser );
+                string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.RemoteUser );
                 writer.SendCommandToChannel( msgToSend );
             }
         }

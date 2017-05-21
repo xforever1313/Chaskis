@@ -98,6 +98,8 @@ namespace Chaskis.Plugins.XmlBot
             }
 
             this.ircConfig = ircConfig;
+
+            this.handlers.AddRange( XmlLoader.LoadXmlBotConfig( configPath ) );
         }
 
         /// <summary>

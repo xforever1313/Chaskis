@@ -185,14 +185,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="response">The response from the channel.</param>
         private async void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.config.IncreaseCommandRegex );
-            if( match.Success )
-            {
-                string userName = match.Groups["name"].Value;
-                int karma = await this.dataBase.IncreaseKarma( userName );
+            Match match = response.Match;
+            string userName = match.Groups["name"].Value;
+            int karma = await this.dataBase.IncreaseKarma( userName );
 
-                writer.SendMessageToUser( userName + " has had their karma increased to " + karma, response.Channel );
-            }
+            writer.SendMessageToUser( userName + " has had their karma increased to " + karma, response.Channel );
         }
 
         /// <summary>
@@ -202,14 +199,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="response">The response from the channel.</param>
         private async void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.config.DecreaseCommandRegex );
-            if( match.Success )
-            {
-                string userName = match.Groups["name"].Value;
-                int karma = await this.dataBase.DecreaseKarma( userName );
+            Match match = response.Match;
+            string userName = match.Groups["name"].Value;
+            int karma = await this.dataBase.DecreaseKarma( userName );
 
-                writer.SendMessageToUser( userName + " has had their karma decreased to " + karma, response.Channel );
-            }
+            writer.SendMessageToUser( userName + " has had their karma decreased to " + karma, response.Channel );
         }
 
         /// <summary>
@@ -219,14 +213,11 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="response">The response from the channel.</param>
         private async void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, this.config.QueryCommand );
-            if( match.Success )
-            {
-                string userName = match.Groups["name"].Value;
-                int karma = await this.dataBase.QueryKarma( userName );
+            Match match = response.Match;
+            string userName = match.Groups["name"].Value;
+            int karma = await this.dataBase.QueryKarma( userName );
 
-                writer.SendMessageToUser( userName + " has " + karma + " karma.", response.Channel );
-            }
+            writer.SendMessageToUser( userName + " has " + karma + " karma.", response.Channel );
         }
     }
 }

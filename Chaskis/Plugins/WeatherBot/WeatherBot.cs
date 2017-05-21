@@ -193,13 +193,10 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, weatherCommand );
-            if( match.Success )
-            {
-                string zip = match.Groups["zipCode"].Value;
-                string strToWrite = await this.reporter.QueryWeather( zip );
-                writer.SendCommandToChannel( strToWrite );
-            }
+            Match match = response.Match;
+            string zip = match.Groups["zipCode"].Value;
+            string strToWrite = await this.reporter.QueryWeather( zip );
+            writer.SendCommandToChannel( strToWrite );
         }
     }
 }

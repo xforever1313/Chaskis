@@ -194,7 +194,7 @@ namespace ChaskisCore
                     channel,
                     message,
                     lineRegex,
-                    match
+                    messageMatch
                 );
 
                 // Return right away if the nick name from the remote user is our own.

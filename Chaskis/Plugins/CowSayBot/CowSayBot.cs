@@ -207,9 +207,6 @@ namespace Chaskis.Plugins.CowSayBot
             commandRegex += ")";
 
             string cowsayRegex = config.ListenRegex.Replace( "{%saycmd%}", commandRegex );
-            cowsayRegex = cowsayRegex.Replace( "{%channel%}", this.ircConfig.Channel );
-            cowsayRegex = cowsayRegex.Replace( "{%nick%}", this.ircConfig.Nick );
-
             return cowsayRegex;
         }
 
@@ -262,34 +259,28 @@ namespace Chaskis.Plugins.CowSayBot
         {
             try
             {
-                Match cowMatch = Regex.Match( response.Message, this.cowsayRegex );
-                if( cowMatch.Success )
+                Match cowMatch = response.Match;
+
+                string cowFile = this.cowSayConfig.CowFileInfoList.CommandList[cowMatch.Groups["command"].Value];
+                if( cowFile == "DEFAULT" )
                 {
-                    string cowFile = this.cowSayConfig.CowFileInfoList.CommandList[cowMatch.Groups["command"].Value];
-                    if( cowFile == "DEFAULT" )
-                    {
-                        cowFile = null;
-                    }
-
-                    string cowSayedMessage;
-                    int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out cowSayedMessage, cowFile );
-
-                    if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
-                    {
-                        writer.SendCommandToChannel( cowSayedMessage );
-                    }
-                    else if( exitCode != 0 )
-                    {
-                        Console.Error.WriteLine( "CowSayBot: Exit code not 0.  Got: " + exitCode );
-                    }
-                    else if( string.IsNullOrEmpty( cowSayedMessage ) )
-                    {
-                        Console.Error.WriteLine( "CowSayBot: Nothing returned from cowsay process." );
-                    }
+                    cowFile = null;
                 }
-                else
+
+                string cowSayedMessage;
+                int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out cowSayedMessage, cowFile );
+
+                if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                 {
-                    Console.Error.WriteLine( "CowSayBot: Saw unknown line:" + response.Message );
+                    writer.SendCommandToChannel( cowSayedMessage );
+                }
+                else if( exitCode != 0 )
+                {
+                    Console.Error.WriteLine( "CowSayBot: Exit code not 0.  Got: " + exitCode );
+                }
+                else if( string.IsNullOrEmpty( cowSayedMessage ) )
+                {
+                    Console.Error.WriteLine( "CowSayBot: Nothing returned from cowsay process." );
                 }
             }
             catch( Exception e )

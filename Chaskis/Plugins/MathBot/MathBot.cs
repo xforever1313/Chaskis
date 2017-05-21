@@ -129,28 +129,17 @@ namespace Chaskis.Plugins.MathBot
         /// <param name="response"></param>
         private static void MathHandler( IIrcWriter writer, IrcResponse response )
         {
-            Match match = Regex.Match( response.Message, handlerRegex );
+            Match match = response.Match;
             string expression = match.Groups["expression"].Value;
-
-            if( match.Success )
+            try
             {
-                try
-                {
-                    string answer = MathBotCalculator.Calculate( expression );
-                    writer.SendMessageToUser(
-                        "'" + expression + "' calculates to '" + answer + "'",
-                        response.Channel
-                    );
-                }
-                catch( Exception )
-                {
-                    writer.SendMessageToUser(
-                        "'" + expression + "' is not something I can calculate :(",
-                        response.Channel
-                    );
-                }
+                string answer = MathBotCalculator.Calculate( expression );
+                writer.SendMessageToUser(
+                    "'" + expression + "' calculates to '" + answer + "'",
+                    response.Channel
+                );
             }
-            else
+            catch( Exception )
             {
                 writer.SendMessageToUser(
                     "'" + expression + "' is not something I can calculate :(",

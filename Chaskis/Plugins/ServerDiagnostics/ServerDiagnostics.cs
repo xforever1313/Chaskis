@@ -106,7 +106,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
             if( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
             {
                 MessageHandler utimeHandler = new MessageHandler(
-                    config.UpTimeCmd.Replace( "{%nick%}", ircConfig.Nick ),
+                    config.UpTimeCmd,
                     HandleUpTimeCmd,
                     coolDown
                 );
@@ -116,7 +116,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
             if( string.IsNullOrEmpty( config.OsVersionCmd ) == false )
             {
                 MessageHandler osHandler = new MessageHandler(
-                    config.OsVersionCmd.Replace( "{%nick%}", ircConfig.Nick ),
+                    config.OsVersionCmd,
                     HandleOsVersionCmd,
                     coolDown
                 );
@@ -126,7 +126,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
             if( string.IsNullOrEmpty( config.ProcessorCountCmd ) == false )
             {
                 MessageHandler procCoundHandler = new MessageHandler(
-                    config.ProcessorCountCmd.Replace( "{%nick%}", ircConfig.Nick ),
+                    config.ProcessorCountCmd,
                     HandleProcessorCountCmd,
                     coolDown
                 );
@@ -136,7 +136,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
             if( string.IsNullOrEmpty( config.TimeCmd ) == false )
             {
                 MessageHandler timeHandler = new MessageHandler(
-                    config.TimeCmd.Replace( "{%nick%}", ircConfig.Nick ),
+                    config.TimeCmd,
                     HandleTimeCmd,
                     coolDown
                 );
