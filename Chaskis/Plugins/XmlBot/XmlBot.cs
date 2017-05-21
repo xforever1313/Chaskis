@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChaskisCore;
+using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.XmlBot
 {
@@ -123,6 +125,35 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         public void Dispose()
         {
+        }
+
+        /// <summary>
+        /// Generates the handler for the MessageHandler based on the user's command
+        /// and our expected response.
+        /// </summary>
+        /// <param name="command">The command our bot is listening for.</param>
+        /// <param name="response">The response our bot will generate.</param>
+        internal static Action<IIrcWriter, IrcResponse> GetMessageHandler( string response )
+        {
+            ArgumentChecker.StringIsNotNullOrEmpty( response, nameof( response ) );
+
+            return delegate ( IIrcWriter writer, IrcResponse ircResponse )
+            {
+                StringBuilder responseToSend = new StringBuilder( response );
+
+                foreach( string group in ircResponse.Regex.GetGroupNames() )
+                {
+                    responseToSend.Replace(
+                        "{%" + group + "%}",
+                        ircResponse.Match.Groups[group].Value
+                    );
+                }
+
+                writer.SendMessageToUser(
+                    responseToSend.ToString(),
+                    ircResponse.Channel
+                );
+            };
         }
     }
 }

@@ -74,7 +74,9 @@ namespace ChaskisCore
             IrcResponse response = new IrcResponse(
                 string.Empty,
                 string.Empty,
-                line
+                line,
+                null,
+                null
             );
 
             this.AllAction( ircWriter, response );

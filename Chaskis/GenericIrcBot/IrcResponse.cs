@@ -1,7 +1,11 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
+
+using System.Text.RegularExpressions;
 
 namespace ChaskisCore
 {
@@ -18,11 +22,14 @@ namespace ChaskisCore
         /// <param name="remoteUser">The user that sent the message.</param>
         /// <param name="channel">The message that channel was received on.</param>
         /// <param name="message">The message that was sent.</param>
-        public IrcResponse( string remoteUser, string channel, string message )
+        /// <param name="match">The Regex match that was used to get this response, if any.</param>
+        public IrcResponse( string remoteUser, string channel, string message, Regex regex, Match match )
         {
             this.RemoteUser = remoteUser;
             this.Channel = channel;
             this.Message = message;
+            this.Regex = regex;
+            this.Match = match;
         }
 
         // -------- Properties --------
@@ -42,44 +49,17 @@ namespace ChaskisCore
         /// The message that was sent via IRC.  Empty if a Join/Part event.
         /// </summary>
         public string Message { get; private set; }
-
-        // -------- Functions --------
+        
+        /// <summary>
+        /// The regex that was used to find this response.
+        /// Null if no regex was used.
+        /// </summary>
+        public Regex Regex { get; private set; }
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current object.
+        /// The regex match that was used to find this response.
+        /// Null if no Match was used.
         /// </summary>
-        /// <param name="obj">The object to compare with the current.</param>
-        /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
-        public override bool Equals( object obj )
-        {
-            IrcResponse other = obj as IrcResponse;
-            if( other == null )
-            {
-                return false;
-            }
-
-            return (
-                ( this.RemoteUser == other.RemoteUser ) &&
-                ( this.Channel == other.Channel ) &&
-                ( this.Message == other.Message )
-            );
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        /// <summary>
-        /// Clone this instance.
-        /// </summary>
-        public IrcResponse Clone()
-        {
-            return (IrcResponse)this.MemberwiseClone();
-        }
+        public Match Match { get; private set; }
     }
 }

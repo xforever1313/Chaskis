@@ -80,7 +80,7 @@ namespace Chaskis.Plugins.XmlBot
 
                     MessageHandler handler = new MessageHandler(
                         command,
-                        null, // TODO
+                        XmlBot.GetMessageHandler( response ),
                         cooldown,
                         responseTo
                     );

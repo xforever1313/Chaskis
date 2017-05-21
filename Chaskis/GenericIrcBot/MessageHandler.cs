@@ -174,14 +174,16 @@ namespace ChaskisCore
                 // If not, return and do nothing.
 
                 // But first, Liquefy things!
-                string lineRegex = Parsing.LiquefyStringWithIrcConfig(
-                    this.LineRegex,
-                    remoteUser,
-                    ircConfig.Nick,
-                    channel
+                Regex lineRegex = new Regex(
+                    Parsing.LiquefyStringWithIrcConfig(
+                        this.LineRegex,
+                        remoteUser,
+                        ircConfig.Nick,
+                        channel
+                    )
                 );
 
-                Match messageMatch = Regex.Match( message, lineRegex );
+                Match messageMatch = lineRegex.Match( message );
                 if( messageMatch.Success == false )
                 {
                     return;
@@ -190,7 +192,9 @@ namespace ChaskisCore
                 IrcResponse response = new IrcResponse(
                     remoteUser,
                     channel,
-                    message
+                    message,
+                    lineRegex,
+                    match
                 );
 
                 // Return right away if the nick name from the remote user is our own.

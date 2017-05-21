@@ -111,7 +111,6 @@
     <Compile Include="Plugins\XmlBot\XmlBotXmlLoaderTest.cs" />
     <Compile Include="PongHandlerTest.cs" />
     <Compile Include="TestHelpers.cs" />
-    <Compile Include="IrcResponseTest.cs" />
     <Compile Include="PartHandlerTest.cs" />
     <Compile Include="PingHandlerTest.cs" />
     <Compile Include="XmlLoaderTests.cs" />
