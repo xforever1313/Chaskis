@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using ChaskisCore;
+using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.XmlBot
 {
@@ -19,6 +20,8 @@ namespace Chaskis.Plugins.XmlBot
 
         public static IList<IIrcHandler> LoadXmlBotConfig( string file, IIrcConfig ircConfig )
         {
+            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
+
             if( File.Exists( file ) == false )
             {
                 throw new FileNotFoundException( "Could not find XmlBotConfig file '" + file + '"' );

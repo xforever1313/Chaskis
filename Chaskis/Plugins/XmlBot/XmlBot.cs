@@ -136,10 +136,12 @@ namespace Chaskis.Plugins.XmlBot
         {
             ArgumentChecker.StringIsNotNullOrEmpty( response, nameof( response ) );
 
+            string innerResponse = response;
+
             return delegate ( IIrcWriter writer, IrcResponse ircResponse )
             {
                 StringBuilder responseToSend = new StringBuilder(
-                    Parsing.LiquefyStringWithIrcConfig( response, ircResponse.RemoteUser, ircConfig.Nick, ircResponse.Channel )
+                    Parsing.LiquefyStringWithIrcConfig( innerResponse, ircResponse.RemoteUser, ircConfig.Nick, ircResponse.Channel )
                 );
 
                 foreach( string group in ircResponse.Regex.GetGroupNames() )

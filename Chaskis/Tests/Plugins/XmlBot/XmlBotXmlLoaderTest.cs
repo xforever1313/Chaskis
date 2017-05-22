@@ -56,7 +56,19 @@ namespace Tests.Plugins.XmlBot
         }
 
         // ---------------- Tests ----------------
-        
+
+        /// <summary>
+        /// Ensures if bad arguments get passed in, exceptions get thrown.
+        /// </summary>
+        [Test]
+        public void ArgumentTest()
+        {
+            Assert.Throws<ArgumentNullException>( () => XmlLoader.LoadXmlBotConfig( goodConfig, null ) );
+
+            // File Not Found
+            Assert.Throws<FileNotFoundException>( () => XmlLoader.LoadXmlBotConfig( "derp", this.testConfig ) );
+        }
+
         /// <summary>
         /// Ensures a valid config works correctly.
         /// </summary>

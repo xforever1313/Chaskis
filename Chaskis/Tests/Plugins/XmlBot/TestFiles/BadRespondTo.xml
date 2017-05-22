@@ -6,7 +6,7 @@
     <message>
         <command>[Hh]ello {%nick%}</command>
         <response>Hello {%user%}!</response>
-        <cooldown>sfasdfsdf</cooldown>
-        <respondto>ChannelAndPms</respondto>
+        <cooldown>0</cooldown>
+        <respondto>sfasdfsdf</respondto>
     </message>
 </xmlbotconfig>
