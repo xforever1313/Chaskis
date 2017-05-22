@@ -65,4 +65,16 @@ respondto -
         <cooldown>1</cooldown>
         <respondto>ChannelOnly</respondto>
     </message>
+    <message>
+        <command>^!{%nick%} {%channel%} {%user%}</command>
+        <response>Hello {%user%}, I am {%nick%} on channel {%channel%}!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command><![CDATA[[Ww]hat is a(?<an>n)? (?<thing>\w+)]]></command>
+        <response>A{%an%} {%thing%} is a thing!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
 </xmlbotconfig>

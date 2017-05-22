@@ -483,7 +483,7 @@ namespace Tests
         /// <returns>The string from an IRC server.</returns>
         private string GenerateMessage( string nick, string channel, string message )
         {
-            return ":" + nick + "!~user@192.168.2.1 PRIVMSG " + channel + " :" + message;
+            return TestHelpers.ConstructMessageString( nick, channel, message );
         }
 
         /// <summary>

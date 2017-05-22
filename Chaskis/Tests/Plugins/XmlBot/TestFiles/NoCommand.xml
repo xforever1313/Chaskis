@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- This file violates not having a command in a message.-->
+
+<xmlbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd">
+    <message>
+        <response>Hello {%user%}!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command><![CDATA[[Mm]y\s+name\s+is\s+(?<name>\w+)]]></command>
+        <response>Hello {%name%}!</response>
+        <cooldown>1</cooldown>
+        <respondto>ChannelOnly</respondto>
+    </message>
+</xmlbotconfig>

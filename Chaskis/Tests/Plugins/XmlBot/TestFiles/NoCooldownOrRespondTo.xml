@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+
+<!-- This file has no coodown or response options, both of which are valid. -->
+
+<xmlbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd">
+    <message>
+        <command>[Hh]ello {%nick%}</command>
+        <response>Hello {%user%}!</response>
+    </message>
+</xmlbotconfig>

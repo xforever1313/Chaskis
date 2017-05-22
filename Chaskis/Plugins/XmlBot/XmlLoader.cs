@@ -17,7 +17,7 @@ namespace Chaskis.Plugins.XmlBot
     {
         private const string rootXmlElementName = "xmlbotconfig";
 
-        public static IList<IIrcHandler> LoadXmlBotConfig( string file )
+        public static IList<IIrcHandler> LoadXmlBotConfig( string file, IIrcConfig ircConfig )
         {
             if( File.Exists( file ) == false )
             {
@@ -80,7 +80,7 @@ namespace Chaskis.Plugins.XmlBot
 
                     MessageHandler handler = new MessageHandler(
                         command,
-                        XmlBot.GetMessageHandler( response ),
+                        XmlBot.GetMessageHandler( response, ircConfig ),
                         cooldown,
                         responseTo
                     );

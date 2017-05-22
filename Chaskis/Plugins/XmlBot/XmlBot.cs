@@ -8,10 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ChaskisCore;
 using SethCS.Exceptions;
 
@@ -99,7 +96,7 @@ namespace Chaskis.Plugins.XmlBot
 
             this.ircConfig = ircConfig;
 
-            this.handlers.AddRange( XmlLoader.LoadXmlBotConfig( configPath ) );
+            this.handlers.AddRange( XmlLoader.LoadXmlBotConfig( configPath, this.ircConfig ) );
         }
 
         /// <summary>
@@ -135,13 +132,15 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         /// <param name="command">The command our bot is listening for.</param>
         /// <param name="response">The response our bot will generate.</param>
-        internal static Action<IIrcWriter, IrcResponse> GetMessageHandler( string response )
+        public static Action<IIrcWriter, IrcResponse> GetMessageHandler( string response, IIrcConfig ircConfig )
         {
             ArgumentChecker.StringIsNotNullOrEmpty( response, nameof( response ) );
 
             return delegate ( IIrcWriter writer, IrcResponse ircResponse )
             {
-                StringBuilder responseToSend = new StringBuilder( response );
+                StringBuilder responseToSend = new StringBuilder(
+                    Parsing.LiquefyStringWithIrcConfig( response, ircResponse.RemoteUser, ircConfig.Nick, ircResponse.Channel )
+                );
 
                 foreach( string group in ircResponse.Regex.GetGroupNames() )
                 {
