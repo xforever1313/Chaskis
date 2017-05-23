@@ -110,11 +110,15 @@ namespace Chaskis.Plugins.IrcLogger
             {
                 if( this.currentLineCount >= this.config.MaxNumberMessagesPerLog )
                 {
+                    // Spin until we get a new timestamp.
+                    while( DateTime.UtcNow.Equals( timeStamp ) ) { };
+
                     timeStamp = DateTime.UtcNow;
 
                     this.outFileWriter.WriteLine( "############################################################" );
                     this.outFileWriter.WriteLine( "Maximum Size reached.  Continuing in " + GenerateFileName( timeStamp ) );
                     this.outFileWriter.WriteLine( "############################################################" );
+                    this.outFileWriter.Flush();
 
                     this.outFileWriter.Dispose();
                     this.LastFileName = this.CurrentFileName;
@@ -162,6 +166,10 @@ namespace Chaskis.Plugins.IrcLogger
                 if( File.Exists( newFileName ) == false )
                 {
                     isNewFile = true;
+                }
+                else
+                {
+                    timeStamp = DateTime.UtcNow;
                 }
             }
 
