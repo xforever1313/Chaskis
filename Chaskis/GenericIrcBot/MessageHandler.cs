@@ -28,7 +28,7 @@ namespace ChaskisCore
         /// The pattern to search for when a line comes in.
         /// </summary>
         private static readonly Regex pattern = new Regex(
-            @"^:(?<nick>\w+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<theIrcMessage>.+)",
+            @"^:(?<nick>\S+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)\s+:(?<theIrcMessage>.+)",
             RegexOptions.Compiled
         );
 

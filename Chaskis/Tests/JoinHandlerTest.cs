@@ -103,26 +103,20 @@ namespace Tests
         [Test]
         public void JoinSuccess()
         {
-            string ircString =
-                TestHelpers.ConstructIrcString(
-                    RemoteUser,
-                    JoinHandler.IrcCommand,
-                    this.ircConfig.Channel,
-                    string.Empty
-                );
+            this.DoJoinSuccessTest( RemoteUser );
+        }
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
-
-            Assert.IsNotNull( this.responseReceived );
-
-            // Join handler has no message.
-            Assert.AreEqual( string.Empty, this.responseReceived.Message );
-
-            // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
-
-            // Nicks should match.
-            Assert.AreEqual( RemoteUser, this.responseReceived.RemoteUser );
+        /// <summary>
+        /// Ensures if a user with a strange name joins,
+        /// the event gets fired.
+        /// </summary>
+        [Test]
+        public void JoinWithStrangeName()
+        {
+            foreach( string name in TestHelpers.StrangeNames )
+            {
+                this.DoJoinSuccessTest( name );
+            }
         }
 
         /// <summary>
@@ -200,6 +194,30 @@ namespace Tests
         }
 
         // -------- Test Helpers --------
+
+        private void DoJoinSuccessTest( string user )
+        {
+            string ircString =
+            TestHelpers.ConstructIrcString(
+                user,
+                JoinHandler.IrcCommand,
+                this.ircConfig.Channel,
+                string.Empty
+            );
+
+            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+
+            Assert.IsNotNull( this.responseReceived );
+
+            // Join handler has no message.
+            Assert.AreEqual( string.Empty, this.responseReceived.Message );
+
+            // Channels should match.
+            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+
+            // Nicks should match.
+            Assert.AreEqual( user, this.responseReceived.RemoteUser );
+        }
 
         /// <summary>
         /// The function that is called

@@ -75,22 +75,19 @@ namespace Tests
         [Test]
         public void TestGoodMessage()
         {
-            MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
-            );
+            this.DoGoodMessageTest( remoteUser );
+        }
 
-            const string expectedMessage = "!bot help";
-
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channel, expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
-
-            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
-            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        /// <summary>
+        /// Ensures good messages work if the users have strange names.
+        /// </summary>
+        [Test]
+        public void TestGoodMessageWithStrangeNames()
+        {
+            foreach( string name in TestHelpers.StrangeNames )
+            {
+                this.DoGoodMessageTest( name );
+            }
         }
 
         /// <summary>
@@ -473,6 +470,26 @@ namespace Tests
         }
 
         // -------- Test Helpers --------
+
+        private void DoGoodMessageTest( string user )
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction
+            );
+
+            const string expectedMessage = "!bot help";
+
+            uut.HandleEvent(
+                this.GenerateMessage( user, this.ircConfig.Channel, expectedMessage ),
+                this.ircConfig,
+                this.ircWriter.Object
+            );
+
+            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+            Assert.AreEqual( user, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
 
         /// <summary>
         /// Generates the message from IRC.

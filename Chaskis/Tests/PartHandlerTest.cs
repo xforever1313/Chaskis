@@ -104,26 +104,16 @@ namespace Tests
         [Test]
         public void PartSuccess()
         {
-            string ircString =
-                TestHelpers.ConstructIrcString(
-                    RemoteUser,
-                    PartHandler.IrcCommand,
-                    this.ircConfig.Channel,
-                    string.Empty
-                );
+            this.DoPartSuccess( RemoteUser );
+        }
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
-
-            Assert.IsNotNull( this.responseReceived );
-
-            // Part handler has no message.
-            Assert.AreEqual( string.Empty, this.responseReceived.Message );
-
-            // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
-
-            // Nicks should match.
-            Assert.AreEqual( RemoteUser, this.responseReceived.RemoteUser );
+        [Test]
+        public void PartSuccessWithStrangeNames()
+        {
+            foreach( string name in TestHelpers.StrangeNames )
+            {
+                this.DoPartSuccess( name );
+            }
         }
 
         /// <summary>
@@ -201,6 +191,30 @@ namespace Tests
         }
 
         // -------- Test Helpers --------
+
+        private void DoPartSuccess( string name )
+        {
+            string ircString =
+                TestHelpers.ConstructIrcString(
+                    name,
+                    PartHandler.IrcCommand,
+                    this.ircConfig.Channel,
+                    string.Empty
+                );
+
+            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+
+            Assert.IsNotNull( this.responseReceived );
+
+            // Part handler has no message.
+            Assert.AreEqual( string.Empty, this.responseReceived.Message );
+
+            // Channels should match.
+            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+
+            // Nicks should match.
+            Assert.AreEqual( name, this.responseReceived.RemoteUser );
+        }
 
         /// <summary>
         /// The function that is called

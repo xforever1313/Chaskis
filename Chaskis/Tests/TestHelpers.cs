@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
 using System.IO;
 using ChaskisCore;
 
@@ -16,6 +17,8 @@ namespace Tests
     /// </summary>
     public static class TestHelpers
     {
+        // ---------------- Fields ----------------
+
         /// <summary>
         /// Path to the base directory of the Tests directory.
         /// </summary>
@@ -51,6 +54,19 @@ namespace Tests
         public static readonly string TestFilesDir = Path.Combine(
             TestsBaseDir, "TestFiles"
         );
+
+        /// <summary>
+        /// Strange names to test.
+        /// </summary>
+        public static IReadOnlyList<string> StrangeNames = new List<string>()
+        {
+            "xforever1313|m",
+            "xforever1313[m]",
+            "|hello{m}",
+            "Ihave-dashes-_-"
+        }.AsReadOnly();
+
+        // ---------------- Functions ----------------
 
         public static IrcConfig GetTestIrcConfig()
         {
