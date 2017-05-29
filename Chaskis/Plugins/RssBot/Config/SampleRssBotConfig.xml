@@ -12,7 +12,7 @@ Note that this will only post updates to the feed starting AFTER the bot starts 
 Any existing posts on the feed will NOT be posted.
 
 -->
-<rssbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/xmlbotconfig.xsd">
+<rssbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/rssbotconfig.xsd">
    <feed>
         <url>https://www.shendrick.net/atom.xml</url>
         <refreshinterval>60</refreshinterval>
