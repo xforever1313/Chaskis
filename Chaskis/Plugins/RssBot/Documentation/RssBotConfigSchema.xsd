@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema1"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/xmlbotconfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/xmlbotconfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/xmlbotconfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+    <xs:element name="rssbotconfig" type="RssBotConfig"/>
+    <xs:element name="feed" type="Feed"/>
+
+    <xs:complexType name="RssBotConfig">
+        <xs:sequence>
+            <xs:element name="feed" type="Feed" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Feed">
+        <xs:sequence>
+            <xs:element name="url" type="xs:anyURI" minOccurs="1" maxOccurs="1" />
+            <xs:element name="refreshinterval" type="xs:int" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>
