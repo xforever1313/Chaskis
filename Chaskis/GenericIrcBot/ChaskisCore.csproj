@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllHandler.cs" />
+    <Compile Include="IChaskisEventScheduler.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="IrcConfig.cs" />
     <Compile Include="ChaskisPlugin.cs" />
