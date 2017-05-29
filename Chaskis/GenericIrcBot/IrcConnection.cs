@@ -13,9 +13,9 @@ using SethCS.Basic;
 
 namespace ChaskisCore
 {
-    public class IrcConnection : IDisposable, IConnection
+    public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// Connection to the server.
@@ -51,6 +51,8 @@ namespace ChaskisCore
         /// Event queue.
         /// </summary>
         private EventExecutor eventQueue;
+
+        private EventScheduler eventScheduler;
 
         /// <summary>
         /// Used to mutex-protect keepReading.
@@ -111,6 +113,7 @@ namespace ChaskisCore
 
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
+            this.eventScheduler = new EventScheduler();
 
             // Start Executing
             this.eventQueue.Start();
@@ -121,7 +124,7 @@ namespace ChaskisCore
             this.connectionWatchDog.Start();
         }
 
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// Whether or not we are connected.
@@ -161,7 +164,7 @@ namespace ChaskisCore
         /// </summary>
         public IIrcConfig Config { get; private set; }
 
-        // -------- Functions --------
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Connects using the supplied settings.
@@ -385,6 +388,9 @@ namespace ChaskisCore
                 // 5. Wait for the reader thread to exit.
                 this.readerThread.Join();
 
+                // Stop all scheduled events.
+                this.eventScheduler.Dispose();
+
                 // Execute all remaining events. Any that call into writing to the channel
                 // will be a No-Op as the stream is closed.
                 this.eventQueue.Dispose();
@@ -427,6 +433,62 @@ namespace ChaskisCore
         public void Dispose()
         {
             Disconnect();
+        }
+
+        /// <summary>
+        /// Schedules a recurring event to be run.
+        /// </summary>
+        /// <param name="interval">The interval to fire the event at.</param>
+        /// <param name="action">
+        /// The action to perform after the delay.
+        /// Its parameter is an <see cref="IIrcWriter"/> so messages can be sent
+        /// out to the channel.
+        /// </param>
+        /// <returns>The id of the event which can be used to stop it</returns>
+        public int ScheduleRecurringEvent( TimeSpan interval, Action<IIrcWriter> action )
+        {
+            Action<IIrcWriter> theAction = action;
+            return this.eventScheduler.ScheduleRecurringEvent(
+                interval,
+                interval,
+                delegate ()
+                {
+                    this.eventQueue.AddEvent( () => theAction( this ) );
+                }
+            );
+        }
+
+        /// <summary>
+        /// Schedules a single event
+        /// </summary>
+        /// <returns>The event.</returns>
+        /// <param name="delay">How long to wait until we fire the first event.</param>
+        /// <param name="action">
+        /// The action to perform after the delay.
+        /// Its parameter is an <see cref="IIrcWriter"/> so messages can be sent
+        /// out to the channel.
+        /// </param>
+        /// <returns>The id of the event which can be used to stop it</returns>
+        public int ScheduleEvent( TimeSpan delay, Action<IIrcWriter> action )
+        {
+            Action<IIrcWriter> theAction = action;
+            return this.eventScheduler.ScheduleEvent(
+                delay,
+                delegate ()
+                {
+                    this.eventQueue.AddEvent( () => theAction( this ) );
+                }
+            );
+        }
+
+        /// <summary>
+        /// Stops the event from running.
+        /// No-Op if the event is not running.
+        /// </summary>
+        /// <param name="id">ID of the event to stop.</param>
+        public void StopEvent( int id )
+        {
+            this.eventScheduler.StopEvent( id );
         }
 
         /// <summary>
