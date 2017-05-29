@@ -3,7 +3,7 @@
 
 This is the configuration for RSS Bot.
 
-This bot queries the given RSS Feed in the URL tag every X seconds in the refreshinterval tag.
+This bot queries the given RSS Feed in the URL tag every X minutes in the refreshinterval tag.
 
 URL - The URL to pull the feed from
 refreshinterval - Minutes before it pulls from it again.

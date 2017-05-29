@@ -101,6 +101,8 @@
     <Compile Include="Plugins\QuoteBot\QuoteBotParserTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteTest.cs" />
     <Compile Include="Plugins\QuoteBot\XmlLoaderTests.cs" />
+    <Compile Include="Plugins\RssBot\RssBotConfigTest.cs" />
+    <Compile Include="Plugins\RssBot\RssBotTestHelpers.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
@@ -145,6 +147,10 @@
     <ProjectReference Include="..\Plugins\MathBot\MathBot.csproj">
       <Project>{b5c2b6b5-35a6-4ef8-ab4f-3bf5da743878}</Project>
       <Name>MathBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\RssBot\RssBot.csproj">
+      <Project>{B638ABB7-34C6-4D67-9EC7-224CB0F5C446}</Project>
+      <Name>RssBot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Plugins\UrlBot\UrlBot.csproj">
       <Project>{656faffb-0112-4f43-b98e-62c8d89188db}</Project>

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="RssBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RssBotConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericIrcBot\ChaskisCore.csproj">
