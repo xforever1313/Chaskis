@@ -1,10 +1,15 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 namespace ChaskisCore
 {
+    /// <summary>
+    /// Interface on how to write to an IRC channel.
+    /// </summary>
     public interface IIrcWriter
     {
         /// <summary>
@@ -45,5 +50,13 @@ namespace ChaskisCore
         /// </summary>
         /// <param name="cmd">The IRC command to send.</param>
         void SendRawCmd( string command );
+
+        /// <summary>
+        /// Sends a part to the current channel we are on.
+        /// Note, this will make the bot LEAVE the channel.  Only use
+        /// if you know what you are doing.
+        /// </summary>
+        /// <param name="reason">The reason for parting.</param>
+        void SendPart( string reason );
     }
 }
