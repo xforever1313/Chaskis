@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.IO;
 
 namespace Tests.Plugins.RssBot
 {
@@ -18,5 +19,12 @@ namespace Tests.Plugins.RssBot
         public const string TestUrl2 = "http://thenaterhood.com/feed.xml";
 
         public static readonly TimeSpan Interval2 = TimeSpan.FromMinutes( 30 );
+
+        public static readonly string RssTestFilesPath = Path.Combine(
+            TestHelpers.TestsBaseDir,
+            "Plugins",
+            "RssBot",
+            "TestFiles"
+        );
     }
 }

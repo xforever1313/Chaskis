@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+
+This test file has a bad root node name.
+
+-->
+<derp xmlns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/rssbotconfig.xsd">
+    <feed>
+        <url>https://www.shendrick.net/atom.xml</url>
+        <refreshinterval>60</refreshinterval>
+    </feed>
+    <feed>
+        <url>http://thenaterhood.com/feed.xml</url>
+        <refreshinterval>30</refreshinterval>
+    </feed>
+</derp>

@@ -103,6 +103,7 @@
     <Compile Include="Plugins\QuoteBot\XmlLoaderTests.cs" />
     <Compile Include="Plugins\RssBot\RssBotConfigTest.cs" />
     <Compile Include="Plugins\RssBot\RssBotTestHelpers.cs" />
+    <Compile Include="Plugins\RssBot\RssBotXmlLoaderTests.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
@@ -189,6 +190,8 @@
     <Content Include="Plugins\QuoteBot\TestFiles\EmptyStringConfig.xml" />
     <Content Include="Plugins\QuoteBot\TestFiles\BadRootConfig.xml" />
     <Content Include="Plugins\QuoteBot\TestFiles\GoodConfig.xml" />
+    <Content Include="Plugins\RssBot\TestFiles\BadEmptyFeedList.xml" />
+    <Content Include="Plugins\RssBot\TestFiles\BadRootNode.xml" />
     <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />
     <Content Include="Plugins\UrlBot\TestFiles\GoodSize.html" />
     <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />
