@@ -8,10 +8,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel.Syndication;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.RssBot
 {
@@ -33,6 +32,12 @@ namespace Chaskis.Plugins.RssBot
 
         private IIrcConfig ircConfig;
 
+        private RssBotConfig rssConfig;
+
+        private Dictionary<int, FeedReader> feedReaders;
+
+        IChaskisEventScheduler scheduler;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -41,6 +46,8 @@ namespace Chaskis.Plugins.RssBot
         public RssBot()
         {
             this.handlers = new List<IIrcHandler>();
+            this.feedReaders = new Dictionary<int, FeedReader>();
+            this.scheduler = null;
         }
 
         // ---------------- Properties ----------------
@@ -100,6 +107,66 @@ namespace Chaskis.Plugins.RssBot
             }
 
             this.ircConfig = ircConfig;
+
+            this.rssConfig = XmlLoader.ParseConfig( configPath );
+            foreach( Feed feed in this.rssConfig.Feeds )
+            {
+                FeedReader reader = new FeedReader( feed );
+
+                reader.Init();
+
+                int eventId = this.scheduler.ScheduleRecurringEvent(
+                    feed.RefreshInterval,
+                    async delegate ( IIrcWriter writer )
+                    {
+                        try
+                        {
+                            IList<SyndicationItem> newItems = await reader.Update();
+                            if( newItems.Count > 0 )
+                            {
+                                foreach( SyndicationItem item in newItems )
+                                {
+                                    string msg = string.Empty;
+
+                                    if( item.Links.Count > 0 )
+                                    {
+                                        msg = string.Format(
+                                            "{0}: '{1}' {2}",
+                                            reader.FeedTitle,
+                                            item.Title,
+                                            item.Links[0].Uri.ToString()
+                                        );
+                                    }
+                                    else
+                                    {
+                                        msg = string.Format(
+                                            "{0}: '{1}'",
+                                            reader.FeedTitle,
+                                            item.Title
+                                        );
+                                    }
+
+                                    writer.SendMessageToUser(
+                                        msg,
+                                        this.ircConfig.Channel
+                                    );
+                                }
+                            }
+                        }
+                        catch( Exception err )
+                        {
+                            StaticLogger.ErrorWriteLine(
+                                "RssBot> An Exception was caught while updating feed {0}:{1}{2}",
+                                reader.FeedTitle,
+                                Environment.NewLine,
+                                err.ToString()
+                            );
+                        }
+                    }
+                );
+
+                this.feedReaders.Add( eventId, reader );
+            }
         }
 
         /// <summary>
@@ -127,6 +194,13 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         public void Dispose()
         {
+            if( this.scheduler != null )
+            {
+                foreach( int eventId in this.feedReaders.Keys )
+                {
+                    this.scheduler.StopEvent( eventId );
+                }
+            }
         }
     }
 }

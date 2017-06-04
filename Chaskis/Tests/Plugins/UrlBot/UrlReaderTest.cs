@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Plugins.UrlBot;
 using NUnit.Framework;
+using SethCS.Extensions;
 
 namespace Tests.Plugins.UrlBot
 {
@@ -60,17 +61,7 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public void GoodFileTest()
         {
-            string url;
-
-            // On UNIX systems, need to strip out one '/' since it adds one as the root directory.
-            if ( Environment.OSVersion.Platform == PlatformID.Unix )
-            {
-                url = string.Format( "file://{0}", this.goodSizeFile.Replace( "\\", "/" ) );
-            }
-            else
-            {
-                url = string.Format( "file:///{0}", this.goodSizeFile.Replace( "\\", "/" ) );
-            }
+            string url = SethPath.ToUri( this.goodSizeFile );
 
             Task<UrlResponse> response = this.reader.GetDescription( url );
             response.Wait();
@@ -83,17 +74,7 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public void BigFileTest()
         {
-            string url;
-
-            // On UNIX systems, need to strip out one '/' since it adds one as the root directory.
-            if ( Environment.OSVersion.Platform == PlatformID.Unix )
-            {
-                url = string.Format( "file://{0}", this.bigSizeFile.Replace( "\\", "/" ) );
-            }
-            else
-            {
-                url = string.Format( "file:///{0}", this.bigSizeFile.Replace( "\\", "/" ) );
-            }
+            string url = SethPath.ToUri( this.bigSizeFile );
 
             Task<UrlResponse> response = this.reader.GetDescription( url );
             response.Wait();

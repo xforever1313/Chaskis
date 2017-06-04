@@ -66,6 +66,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.101.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -101,6 +102,7 @@
     <Compile Include="Plugins\QuoteBot\QuoteBotParserTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteTest.cs" />
     <Compile Include="Plugins\QuoteBot\XmlLoaderTests.cs" />
+    <Compile Include="Plugins\RssBot\FeedReaderTest.cs" />
     <Compile Include="Plugins\RssBot\RssBotConfigTest.cs" />
     <Compile Include="Plugins\RssBot\RssBotTestHelpers.cs" />
     <Compile Include="Plugins\RssBot\RssBotXmlLoaderTests.cs" />
@@ -192,6 +194,8 @@
     <Content Include="Plugins\QuoteBot\TestFiles\GoodConfig.xml" />
     <Content Include="Plugins\RssBot\TestFiles\BadEmptyFeedList.xml" />
     <Content Include="Plugins\RssBot\TestFiles\BadRootNode.xml" />
+    <Content Include="Plugins\RssBot\TestFiles\Reddit_Update.xml" />
+    <Content Include="Plugins\RssBot\TestFiles\Reddit_Init.xml" />
     <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />
     <Content Include="Plugins\UrlBot\TestFiles\GoodSize.html" />
     <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />

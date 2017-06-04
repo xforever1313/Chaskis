@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Chaskis.Plugins.RssBot</RootNamespace>
-    <AssemblyName>RssBot.cs</AssemblyName>
+    <AssemblyName>RssBot</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -40,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Feed.cs" />
+    <Compile Include="FeedReader.cs" />
     <Compile Include="RssBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RssBotConfig.cs" />
