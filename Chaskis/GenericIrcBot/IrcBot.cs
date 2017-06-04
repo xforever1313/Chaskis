@@ -32,12 +32,12 @@ namespace ChaskisCore
         /// <summary>
         /// The line configs to use.
         /// </summary>
-        private readonly IList<IIrcHandler> ircHandlers;
+        private IList<IIrcHandler> ircHandlers;
 
         /// <summary>
         /// The IRC Connection.
         /// </summary>
-        private readonly IConnection ircConnection;
+        private readonly IrcConnection ircConnection;
 
         // -------- Constructor --------
 
@@ -48,25 +48,14 @@ namespace ChaskisCore
         /// <param name="ircHandlers">The line configs to be used in this bot.</param>
         /// <param name="infoLogEvent">The event to do if we want to log information.</param>
         /// <param name="errorLogEvent">The event to do if an error occurrs.</param>
-        public IrcBot( IIrcConfig ircConfig, IList<IIrcHandler> ircHandlers )
+        public IrcBot( IIrcConfig ircConfig )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-            ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
 
             this.ircConfig = ircConfig.Clone();
             this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );
 
-            this.ircHandlers = ircHandlers;
-
             IrcConnection connection = new IrcConnection( ircConfig );
-            connection.ReadEvent = delegate( string line )
-            {
-                foreach( IIrcHandler config in this.ircHandlers )
-                {
-                    config.HandleEvent( line, this.ircConfig, connection );
-                }
-            };
-
             this.ircConnection = connection;
         }
 
@@ -77,7 +66,29 @@ namespace ChaskisCore
         /// </summary>
         public IIrcConfig IrcConfig { get; private set; }
 
+        /// <summary>
+        /// Access to our scheduler.
+        /// </summary>
+        public IChaskisEventScheduler Scheduler => this.ircConnection;
+
         // -------- Functions -------
+
+        public void Init( IList<IIrcHandler> ircHandlers )
+        {
+            ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
+
+            this.ircHandlers = ircHandlers;
+
+            this.ircConnection.ReadEvent = delegate ( string line )
+            {
+                foreach( IIrcHandler config in this.ircHandlers )
+                {
+                    config.HandleEvent( line, this.ircConfig, this.ircConnection );
+                }
+            };
+
+            this.ircConnection.Init();
+        }
 
         /// <summary>
         /// Starts the IRC Connection.  No-op if already started.

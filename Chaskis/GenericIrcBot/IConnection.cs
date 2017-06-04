@@ -23,6 +23,11 @@ namespace ChaskisCore
         bool IsConnected { get; }
 
         /// <summary>
+        /// Inits the class.
+        /// </summary>
+        void Init();
+
+        /// <summary>
         /// Connects using the supplied settings.
         /// </summary>
         void Connect();

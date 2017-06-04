@@ -77,6 +77,8 @@ namespace ChaskisCore
         /// </summary>
         private AutoResetEvent connectionWatchDogPongEvent;
 
+        bool inited;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -85,6 +87,7 @@ namespace ChaskisCore
         /// <param name="config">The configuration to use.</param>
         public IrcConnection( IIrcConfig config )
         {
+            this.inited = false;
             this.Config = new ReadOnlyIrcConfig( config );
             this.IsConnected = false;
 
@@ -114,14 +117,6 @@ namespace ChaskisCore
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
             this.eventScheduler = new EventScheduler();
-
-            // Start Executing
-            this.eventQueue.Start();
-
-            this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
-            this.connectionWatchDogKeepGoing = new ManualResetEvent( false );
-            this.connectionWatchDogPongEvent = new AutoResetEvent( false );
-            this.connectionWatchDog.Start();
         }
 
         // ---------------- Properties ----------------
@@ -167,11 +162,35 @@ namespace ChaskisCore
         // ---------------- Functions ----------------
 
         /// <summary>
+        /// Inits this class.
+        /// </summary>
+        public void Init()
+        {
+            if( this.inited == false )
+            {
+                // Start Executing
+                this.eventQueue.Start();
+
+                this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
+                this.connectionWatchDogKeepGoing = new ManualResetEvent( false );
+                this.connectionWatchDogPongEvent = new AutoResetEvent( false );
+                this.connectionWatchDog.Start();
+
+                this.inited = true;
+            }
+        }
+
+        /// <summary>
         /// Connects using the supplied settings.
         /// Throws InvalidOperationException if already connected.
         /// </summary>
         public void Connect()
         {
+            if( this.inited == false )
+            {
+                throw new InvalidOperationException( nameof( this.Init ) + " has not been called yet..." );
+            }
+
             if( this.IsConnected == true )
             {
                 throw new InvalidOperationException(

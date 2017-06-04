@@ -68,6 +68,7 @@ namespace Chaskis
         public void InitState1_LoadIrcConfig( string xmlFilePath )
         {
             this.ircConfig = XmlLoader.ParseIrcConfig( xmlFilePath );
+            this.ircBot = new IrcBot( this.ircConfig );
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if( manager.LoadPlugins( pluginList, this.ircConfig ) )
+            if( manager.LoadPlugins( pluginList, this.ircConfig, this.ircBot.Scheduler ) )
             {
                 this.plugins = manager.Plugins;
                 foreach( IPlugin plugin in this.plugins.Values )
@@ -152,7 +153,7 @@ namespace Chaskis
                 );
             }
 
-            this.ircBot = new IrcBot( this.ircConfig, this.handlers );
+            this.ircBot.Init( this.handlers );
             this.ircBot.Start();
             this.fullyLoaded = true;
         }

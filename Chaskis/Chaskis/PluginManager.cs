@@ -55,7 +55,8 @@ namespace Chaskis
         /// <param name="ircConfig">The irc config we are using.</param>
         public bool LoadPlugins(
             IList<AssemblyConfig> pluginList,
-            IIrcConfig ircConfig
+            IIrcConfig ircConfig,
+            IChaskisEventScheduler scheduler
         )
         {
             bool success = true;
@@ -89,7 +90,7 @@ namespace Chaskis
                             throw new InvalidCastException( errorString );
                         }
 
-                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig } );
+                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig, scheduler } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
 
                         this.plugins.Add( chaskisPlugin.PluginName, plugin );
