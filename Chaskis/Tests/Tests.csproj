@@ -194,6 +194,7 @@
     <Content Include="Plugins\QuoteBot\TestFiles\GoodConfig.xml" />
     <Content Include="Plugins\RssBot\TestFiles\BadEmptyFeedList.xml" />
     <Content Include="Plugins\RssBot\TestFiles\BadRootNode.xml" />
+    <Content Include="Plugins\RssBot\TestFiles\Reddit_Update_Same_Number.xml" />
     <Content Include="Plugins\RssBot\TestFiles\Reddit_Update.xml" />
     <Content Include="Plugins\RssBot\TestFiles\Reddit_Init.xml" />
     <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />

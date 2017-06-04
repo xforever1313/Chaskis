@@ -81,7 +81,7 @@ namespace Chaskis.Plugins.RssBot
         {
             get
             {
-                return "I post updates to RSS and ATOM feeds when they get updated.";
+                return "I post updates from RSS and ATOM feeds when they get updated.";
             }
         }
 
@@ -119,11 +119,11 @@ namespace Chaskis.Plugins.RssBot
 
                 int eventId = this.scheduler.ScheduleRecurringEvent(
                     feed.RefreshInterval,
-                    async delegate ( IIrcWriter writer )
+                    delegate ( IIrcWriter writer )
                     {
                         try
                         {
-                            IList<SyndicationItem> newItems = await reader.Update();
+                            IList<SyndicationItem> newItems = reader.Update();
                             if( newItems.Count > 0 )
                             {
                                 foreach( SyndicationItem item in newItems )
@@ -135,7 +135,7 @@ namespace Chaskis.Plugins.RssBot
                                         msg = string.Format(
                                             "{0}: '{1}' {2}",
                                             reader.FeedTitle,
-                                            item.Title,
+                                            item.Title.Text,
                                             item.Links[0].Uri.ToString()
                                         );
                                     }
@@ -144,7 +144,7 @@ namespace Chaskis.Plugins.RssBot
                                         msg = string.Format(
                                             "{0}: '{1}'",
                                             reader.FeedTitle,
-                                            item.Title
+                                            item.Title.Text
                                         );
                                     }
 

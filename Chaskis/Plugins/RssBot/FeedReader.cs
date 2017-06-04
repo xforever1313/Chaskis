@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using System.Xml;
 using SethCS.Exceptions;
 
@@ -67,39 +66,26 @@ namespace Chaskis.Plugins.RssBot
         /// Items are sorted by last updated time, with the oldest being in
         /// index 0.
         /// </returns>
-        public async Task<IList<SyndicationItem>> Update()
+        public IList<SyndicationItem> Update()
         {
             List<SyndicationItem> newItems = new List<SyndicationItem>();
 
-            SyndicationFeed updatedFeed = await this.AsyncFetchFeed();
+            SyndicationFeed updatedFeed = this.FetchFeed();
 
-            // If we have more items than what our old feed is, we need to update.
-            if( updatedFeed.Items.Count() > this.feed.Items.Count() )
+            foreach( SyndicationItem item in updatedFeed.Items )
             {
-                foreach( SyndicationItem item in updatedFeed.Items )
+                // If our item does not exist, call OnNewItem.
+                if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
                 {
-                    // If our item does not exist, call OnNewItem.
-                    if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
-                    {
-                        newItems.Add( item );
-                    }
+                    newItems.Add( item );
                 }
-
-                this.feed = updatedFeed;
             }
+
+            this.feed = updatedFeed;
 
             newItems.Sort( this.SortByDate );
 
             return newItems;
-        }
-
-        /// <summary>
-        /// Updates the feed in a background thread.
-        /// </summary>
-        /// <returns></returns>
-        public Task<SyndicationFeed> AsyncFetchFeed()
-        {
-            return Task.Run( () => { return this.FetchFeed(); } );
         }
 
         private SyndicationFeed FetchFeed()

@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <category term="csharp" label="r/csharp"/>
+    <updated>2017-05-31T02:35:23+00:00</updated>
+    <icon>https://www.redditstatic.com/icon.png/</icon>
+    <id>/r/csharp/.rss</id>
+    <link rel="self" href="https://www.reddit.com/r/csharp/.rss" type="application/atom+xml" />
+    <link rel="alternate" href="https://www.reddit.com/r/csharp/" type="text/html" />
+    <logo>https://b.thumbs.redditmedia.com/_gnmR9ss_V9Jia0kNcxX7n6Mv0pTkkLgly8fZG5a_Kc.png</logo>
+    <title>C# programming language</title>
+    <entry>
+        <author>
+            <name>/u/nerdshark</name>
+            <uri>https://www.reddit.com/user/nerdshark</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;h1&gt;Welcome!&lt;/h1&gt; &lt;p&gt;&lt;a href=&quot;/r/csharp&quot;&gt;/r/csharp&lt;/a&gt; is for technical discussion of the C# programming language, as well as associated tools, libraries, news, announcements, events, and software engineering practices.&lt;/p&gt; &lt;p&gt;This post attempts to provide useful links to software frequently used by C# and .NET developers, as well as links to associated subreddits and communities. See the sidebar for additional information.&lt;/p&gt; &lt;h1&gt;Before asking for help, check if one of the communities below is a better fit for your question&lt;/h1&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;/r/learncsharp&quot;&gt;/r/learncsharp&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/learnprogramming&quot;&gt;/r/learnprogramming&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/programmingbuddies&quot;&gt;/r/programmingbuddies&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com&quot;&gt;StackOverflow&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h2&gt;Tips for asking good questions&lt;/h2&gt; &lt;ol&gt; &lt;li&gt;Summarize your question in your title &lt;ul&gt; &lt;li&gt;&lt;strong&gt;Do:&lt;/strong&gt; &amp;quot;Application crashes with exception &lt;em&gt;SomeException&lt;/em&gt; when I try &lt;em&gt;some action&lt;/em&gt;&amp;quot;&lt;/li&gt; &lt;li&gt;&lt;strong&gt;Don&amp;#39;t:&lt;/strong&gt; &amp;quot;My code doesn&amp;#39;t work, help!&amp;quot;&lt;/li&gt; &lt;/ul&gt;&lt;/li&gt; &lt;li&gt;List &lt;em&gt;all&lt;/em&gt; errors and exceptions that you receive&lt;/li&gt; &lt;li&gt;Tell us what steps you&amp;#39;ve taken to try to solve the problem and why they didn&amp;#39;t work (as best you can)&lt;/li&gt; &lt;li&gt;Put all the relevant code into a snippet or fiddle online, or share the source repository &lt;ul&gt; &lt;li&gt;&lt;strong&gt;Do:&lt;/strong&gt; Use &lt;a href=&quot;https://gist.github.com&quot;&gt;GitHub Gists&lt;/a&gt;, &lt;a href=&quot;https://pastee.org/&quot;&gt;Pastee&lt;/a&gt;, or &lt;a href=&quot;https://dotnetfiddle.net/&quot;&gt;.NET Fiddle&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;strong&gt;Do:&lt;/strong&gt; Paste screenshots of errors that are graphical (such as UI layout issues or garbled controls)&lt;/li&gt; &lt;li&gt;&lt;strong&gt;Don&amp;#39;t:&lt;/strong&gt; Paste screenshots of your code or compiler errors.&lt;/li&gt; &lt;/ul&gt;&lt;/li&gt; &lt;li&gt;Use &lt;a href=&quot;https://www.reddit.com/wiki/commenting&quot;&gt;reddit markdown&lt;/a&gt; to properly format your posts.&lt;/li&gt; &lt;/ol&gt; &lt;h2&gt;Learning and reference material&lt;/h2&gt; &lt;h3&gt;Online documentation&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/kx37x362.aspx&quot;&gt;MSDN C# Documentation&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://msdn.microsoft.com/en-us/library/vstudio/dd460655.aspx&quot;&gt;C# Programming Concepts&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.codeproject.com/Articles/22769/Introduction-to-Object-Oriented-Programming-Concep&quot;&gt;Introduction to Object Oriented Programming Concepts (OOP) and More&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/documentation/c%23/topics&quot;&gt;StackOverflow: C# Documentation&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;Books&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://www.csharpcourse.com/&quot;&gt;C# Yellow Book&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://csharpindepth.com/&quot;&gt;C# in Depth&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.wintellect.com/devcenter/paulballard/clr-via-c-by-jeffrey-richter&quot;&gt;CLR via C#&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;Courses&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;https://mva.microsoft.com/&quot;&gt;Microsoft Virtual Academy&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://www.pluralsight.com/search?q=c%23+.net&amp;amp;categories=course&quot;&gt;Pluralsight C# and .NET&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://www.udacity.com/courses/software-engineering&quot;&gt;Udacity Software Engineering Courses&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://www.edx.org/course?search_query=.net&quot;&gt;edX .NET Courses&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://www.edx.org/course/programming-c-microsoft-dev204x-1&quot;&gt;edX C# Course&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;Video Tutorials&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;https://channel9.msdn.com/Series/C-Fundamentals-for-Absolute-Beginners&quot;&gt;C# Fundamentals: Development for Absolute Beginners&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h2&gt;Related communities&lt;/h2&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;/r/dotnet&quot;&gt;/r/dotnet&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/windowsazure&quot;&gt;/r/windowsazure&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/fsharp&quot;&gt;/r/fsharp&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/visualbasic&quot;&gt;/r/visualbasic&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;/r/wpdev&quot;&gt;/r/wpdev&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://plus.google.com/communities/105633785309529478535&quot;&gt;C# Enthusiasts&lt;/a&gt; - Google+ Community&lt;/li&gt; &lt;/ul&gt; &lt;h2&gt;Useful software&lt;/h2&gt; &lt;h3&gt;Editors and IDEs&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;https://www.visualstudio.com/products/visual-studio-community-vs&quot;&gt;Visual Studio Community 2015&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://xamarin.com/platform&quot;&gt;Xamarin&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://atom.io/&quot;&gt;Atom&lt;/a&gt; + &lt;a href=&quot;https://atom.io/packages/omnisharp-atom&quot;&gt;atom-omnisharp&lt;/a&gt; + &lt;a href=&quot;http://www.omnisharp.net/&quot;&gt;Omnisharp&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.icsharpcode.net/opensource/sd/&quot;&gt;SharpDevelop&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;Obscenely useful IDE extensions/plugins/integrations&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;https://www.jetbrains.com/resharper/&quot;&gt;Resharper&lt;/a&gt; - on-the-fly code analysis, snippets, solution-wide refactoring, automatic quick-fixes and good practice suggestions&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;.NET decompilers&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://ilspy.net/&quot;&gt;ILSpy&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.telerik.com/products/decompiler.aspx&quot;&gt;Telerik JustDecompile&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.jetbrains.com/decompiler/&quot;&gt;JetBrains dotPeek&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;h3&gt;C# interactive shells/exploratory programming&lt;/h3&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://www.linqpad.net/&quot;&gt;LINQPad&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://roslynpad.net/&quot;&gt;RoslynPad&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://cshell.net/&quot;&gt;CShell&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.mono-project.com/docs/tools+libraries/tools/repl/&quot;&gt;Mono C# REPL&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;https://www.visualstudio.com/en-us/news/vs2015-update1-vs.aspx#Csharp&quot;&gt;Visual Studio C# Interactive&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://csharppad.com/&quot;&gt;CSharpPad&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/nerdshark&quot;&gt; /u/nerdshark &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/3xn6sm/welcome_to_rcsharp_read_this_post_before/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/3xn6sm/welcome_to_rcsharp_read_this_post_before/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_3xn6sm</id>
+        <link href="https://www.reddit.com/r/csharp/comments/3xn6sm/welcome_to_rcsharp_read_this_post_before/" />
+        <updated>2015-12-21T01:05:06+00:00</updated>
+        <title>Welcome to /r/csharp! Read this post before submitting.</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/jakubgarfield</name>
+            <uri>https://www.reddit.com/user/jakubgarfield</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;table&gt; &lt;tr&gt;&lt;td&gt; &lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6ebyxj/c_7_series_part_2_async_main/&quot;&gt; &lt;img src=&quot;https://b.thumbs.redditmedia.com/ikmuVvRAWwcCvamUG5XQqc08jxygPEEYWDY4M_DOSdE.jpg&quot; alt=&quot;C# 7 Series, Part 2: Async Main&quot; title=&quot;C# 7 Series, Part 2: Async Main&quot; /&gt; &lt;/a&gt; &lt;/td&gt;&lt;td&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/jakubgarfield&quot;&gt; /u/jakubgarfield &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://blogs.msdn.microsoft.com/mazhou/2017/05/30/c-7-series-part-2-async-main/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6ebyxj/c_7_series_part_2_async_main/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt; &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content>
+        <id>t3_6ebyxj</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6ebyxj/c_7_series_part_2_async_main/" />
+        <updated>2017-05-31T02:09:32+00:00</updated>
+        <title>C# 7 Series, Part 2: Async Main</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/omnibean</name>
+            <uri>https://www.reddit.com/user/omnibean</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;table&gt; &lt;tr&gt;&lt;td&gt; &lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6ea2vi/penguinupload_file_hosting_service_built_with/&quot;&gt; &lt;img src=&quot;https://b.thumbs.redditmedia.com/Ynn_h6QygUu96IWFpCRVP5Wq-Hl26dsRB8Q0foGFuos.jpg&quot; alt=&quot;PenguinUpload - file hosting service built with ASP.NET Core, NancyFx, and Vue.js&quot; title=&quot;PenguinUpload - file hosting service built with ASP.NET Core, NancyFx, and Vue.js&quot; /&gt; &lt;/a&gt; &lt;/td&gt;&lt;td&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/omnibean&quot;&gt; /u/omnibean &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://github.com/0xFireball/PenguinUpload&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6ea2vi/penguinupload_file_hosting_service_built_with/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt; &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content>
+        <id>t3_6ea2vi</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6ea2vi/penguinupload_file_hosting_service_built_with/" />
+        <updated>2017-05-30T20:46:15+00:00</updated>
+        <title>PenguinUpload - file hosting service built with ASP.NET Core, NancyFx, and Vue.js</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/Caller_of_Souls</name>
+            <uri>https://www.reddit.com/user/Caller_of_Souls</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;Hi im trying to find out how to start an f# script from within c# and retrieve the output so that i can pass it to a variable in c#. I know you can add an f# script to a c# project in Visual Studio 2017. &lt;/p&gt; &lt;p&gt;EDIT: i got the answer i needed. Thanks everyone who suggested things. You all gave me part of a whole and with most of the suggestions combined i have what i need. Thank you all. &lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/Caller_of_Souls&quot;&gt; /u/Caller_of_Souls &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e8y28/how_to_run_an_f_script_in_c/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e8y28/how_to_run_an_f_script_in_c/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e8y28</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e8y28/how_to_run_an_f_script_in_c/" />
+        <updated>2017-05-30T17:50:10+00:00</updated>
+        <title>How to run an F# script in C#</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/boaratio</name>
+            <uri>https://www.reddit.com/user/boaratio</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I&amp;#39;m using a fully​ up to date install of Visual Studio 2015, and am having a problem getting my debug build of my C#/WPF application build. I know why this happens, but was wondering if anyone else had encountered it.&lt;/p&gt; &lt;p&gt;When building the debug configuration, I get the following error: CS0041: Unexpected error writing debug information -- &amp;quot;Insufficient memory to continue the execution of the program.&amp;quot;&lt;/p&gt; &lt;p&gt;Anyways, I have a single class that is roughly ~30k LOC. This is what causes the error according to the limited information I&amp;#39;ve been able to find online. I&amp;#39;ve tried the same project in VS2013 and VS2017 and get the same error. &lt;/p&gt; &lt;p&gt;Before anyone berates me for having such a large single file/class, let me explain that this is an MVVM application, and this file is the model. It contains only basic data types in a flat class. If I trim the file down by half, everything compiles and runs just fine in debug mode.&lt;/p&gt; &lt;p&gt;Things I&amp;#39;ve tried so far that didn&amp;#39;t work: - breaking the file up into multiple partial class files. - changing the debug configuration to enable optimizations. - having the debug configuration only produce partial PDB files.&lt;/p&gt; &lt;p&gt;As soon as I turn off the generation of the PDB file, everything is fine. My build machine is running 64 bit windows with 24GB of RAM, so I believe this is strictly a bug in the compiler somewhere. Unfortunately, I can&amp;#39;t share the source, as it&amp;#39;s for work.&lt;/p&gt; &lt;p&gt;Does anyone have any suggestions? Thanks guys.&lt;/p&gt; &lt;p&gt;EDIT: Apparently no one else has encountered this bug, and has no potential work arounds. I&amp;#39;ll look into the possibility of changing the overall architecture, but I&amp;#39;m not holding my breath. Thanks for all the suggestions everyone.&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/boaratio&quot;&gt; /u/boaratio &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e8tq6/debug_build_fails_release_mode_works_any/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e8tq6/debug_build_fails_release_mode_works_any/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e8tq6</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e8tq6/debug_build_fails_release_mode_works_any/" />
+        <updated>2017-05-30T17:32:20+00:00</updated>
+        <title>Debug build fails, release mode works. Any workarounds?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/nubnubbud</name>
+            <uri>https://www.reddit.com/user/nubnubbud</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I&amp;#39;ve been thinking about this a lot lately, and want to try getting into some more intensive application creation(still a novice to c# of course), but then thought; &lt;/p&gt; &lt;p&gt;&amp;quot;how DOES a node editor work?&amp;quot;&lt;br/&gt; I looked up some example UI, ( &lt;a href=&quot;https://s6.postimg.org/ybl4qj8ox/overlay_node.png&quot;&gt;https://s6.postimg.org/ybl4qj8ox/overlay_node.png&lt;/a&gt; &lt;a href=&quot;https://s6.postimg.org/ucnx7pk1r/progress_day10_smallfixes_append.jpg&quot;&gt;https://s6.postimg.org/ucnx7pk1r/progress_day10_smallfixes_append.jpg&lt;/a&gt;&lt;br/&gt; &lt;a href=&quot;https://s6.postimg.org/iotvd5uwx/Node_Editor.jpg&quot;&gt;https://s6.postimg.org/iotvd5uwx/Node_Editor.jpg&lt;/a&gt;) &lt;/p&gt; &lt;p&gt;and I came up with several answers:&lt;br/&gt; 1. it could keep and save the nodes as UI elements, then use their order to compile a simplistic program of methods outputting to other methods, till the result is saved as an output on the disk. (how could you do live previews with this?)&lt;br/&gt; 2. by using a kind of code that does not need to be compiled, it constructs a program in an internal &amp;quot;sandbox&amp;quot; and continually updates it as nodes are adjusted. this allows for low quality live updates and high quality exports, with considerable lag.&lt;br/&gt; 3. the program uses #1 for final outputs, and #2 for previews&lt;br/&gt; 4. I could be completely wrong, please help me understand how these things work XD &lt;/p&gt; &lt;p&gt;if you do know for sure how one of these programs has been coded, please speak up. as for anyone else, how would you attempt to make a node editor?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/nubnubbud&quot;&gt; /u/nubnubbud &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e45y2/how_would_you_implement_a_node_editor_in_your/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e45y2/how_would_you_implement_a_node_editor_in_your/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e45y2</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e45y2/how_would_you_implement_a_node_editor_in_your/" />
+        <updated>2017-05-30T01:02:54+00:00</updated>
+        <title>How would YOU implement a node editor in your program? Is there a standard way to do it?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/lippiro</name>
+            <uri>https://www.reddit.com/user/lippiro</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;(C# beginner coming from python)&lt;/p&gt; &lt;p&gt;I have a Game class which has a scoreCard attribute:&lt;/p&gt; &lt;pre&gt;&lt;code&gt;public Dictionary&amp;lt;int, List&amp;lt;int&amp;gt;&amp;gt; scoreCard = new Dictionary&amp;lt;int, List&amp;lt;int&amp;gt;&amp;gt; (); &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;I have written a test which asserts that game.scoreCard[10] is a list containing the numbers {10, 10, 10}:&lt;/p&gt; &lt;pre&gt;&lt;code&gt;Assert.AreEqual(game.scoreCard[10], new List&amp;lt;int&amp;gt;() {10, 10, 10}); &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;Unfortunately this doesn&amp;#39;t pass, but if I were to say:&lt;/p&gt; &lt;pre&gt;&lt;code&gt;Assert.AreEqual(game.scoreCard[10][0], 10); Assert.AreEqual(game.scoreCard[10][1], 10); Assert.AreEqual(game.scoreCard[10][2], 10); &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;then the test passes. I don&amp;#39;t understand why..? I would appreciate any help :)&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/lippiro&quot;&gt; /u/lippiro &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e36zh/cant_get_this_unit_test_to_pass_the_way_i_want_it/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e36zh/cant_get_this_unit_test_to_pass_the_way_i_want_it/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e36zh</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e36zh/cant_get_this_unit_test_to_pass_the_way_i_want_it/" />
+        <updated>2017-05-29T21:59:35+00:00</updated>
+        <title>Can't get this unit test to pass the way I want it to?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/FrigoCoder</name>
+            <uri>https://www.reddit.com/user/FrigoCoder</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;Hi guys!&lt;/p&gt; &lt;p&gt;I wrote an Alt-Tab replacement in the spirit of Switcher 2.0 or Exposé.&lt;/p&gt; &lt;p&gt;I use SetForegroundWindow to bring my task switching form, and other applications as well, to the front and into focus, along with the AttachThreadInput trick to prevent Windows 7 from rejecting the switch:&lt;/p&gt; &lt;pre&gt;&lt;code&gt;private readonly IntPtr _handle; ... public void SetForeground () { if( GetWindowStyles().HasFlag(WindowStyles.Minimize) ) { ShowWindow(_handle, ShowWindowCommand.Restore); } int current = GetCurrentThreadId(); int foreground = GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero); AttachThreadInput(current, foreground, true); SetForegroundWindow(_handle); AttachThreadInput(current, foreground, false); } &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;This works fine for most purposes, but it fails for one crucial class of windows, command line prompts such as cmd.exe or bash.exe.&lt;/p&gt; &lt;p&gt;I can switch from command lines to my task switching form, but if I try to switch to another application from there, Windows 7 refuses, returns me to the command line window, and the icon of the target application starts to blink, the usual behavior if Windows 7 refuses a SetForegroundWindow call.&lt;/p&gt; &lt;p&gt;From what I have read online, this is because command line prompts do not have a message loop. But this does not explain 1) why I am able to switch from them to my form, 2) why Windows 7 still receives the SetForegroundWindow call, 3) why it refuses, 4) and why it still does not work if I remove the AttachThreadInput trick and only use SetForegroundWindow.&lt;/p&gt; &lt;p&gt;I know it &lt;em&gt;is&lt;/em&gt; possible to switch to another task from command line windows, quite obviously since the default Alt-Tab implementation can do it. But I am completely ignorant of how exactly it does it.&lt;/p&gt; &lt;p&gt;Could anyone familiar with the WinAPI or the default Alt-Tab implementation offer any insight into the topic?&lt;/p&gt; &lt;p&gt;The source code of my application if it offers any clue: &lt;a href=&quot;https://bitbucket.org/FrigoCoder/frigotab/src&quot;&gt;https://bitbucket.org/FrigoCoder/frigotab/src&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Thank you in advance!&lt;/p&gt; &lt;p&gt;Edit: Almost forgot to mention! When I run it from Visual Studio, it works perfectly. But as soon as I try to run it from Total Commander or Explorer, it behaves as described above.&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/FrigoCoder&quot;&gt; /u/FrigoCoder &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e1n08/made_an_alttab_replacement_it_fails_for_command/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e1n08/made_an_alttab_replacement_it_fails_for_command/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e1n08</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e1n08/made_an_alttab_replacement_it_fails_for_command/" />
+        <updated>2017-05-29T17:36:11+00:00</updated>
+        <title>Made an Alt-Tab replacement, it fails for command line windows, need some WinAPI help</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/LastSquirrel</name>
+            <uri>https://www.reddit.com/user/LastSquirrel</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;[SOLVED] I want to load a Image with OFD and it does not work. Here is the C# code: private void Button_add_Click(object sender, RoutedEventArgs e) {&lt;/p&gt; &lt;pre&gt;&lt;code&gt; { OpenFileDialog op = new OpenFileDialog(); op.Title = &amp;quot;Select a picture&amp;quot;; op.Filter = &amp;quot;JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif&amp;quot;; if (op.ShowDialog() == true) { Image1.Source = new BitmapImage(new Uri(op.FileName)); } } &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;It gives me an error in this line if (op.ShowDialog() == true) The error is Operator &amp;#39;==&amp;#39; cannot be applied to operands of type &amp;#39;DialogResult&amp;#39; and &amp;#39;bool&amp;#39;.&lt;/p&gt; &lt;p&gt;Please help.&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/LastSquirrel&quot;&gt; /u/LastSquirrel &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e6l5u/loading_a_picture_with_openfiledialog_wpf/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e6l5u/loading_a_picture_with_openfiledialog_wpf/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e6l5u</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e6l5u/loading_a_picture_with_openfiledialog_wpf/" />
+        <updated>2017-05-30T10:47:39+00:00</updated>
+        <title>Loading a picture with OpenFileDialog. (WPF)</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/djuggler</name>
+            <uri>https://www.reddit.com/user/djuggler</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;EDIT: SOLVED. Not entirely sure, but I must have still have an 11.0.0.0 reference in the code which got scrubbed in exercising the suggestions in the comments. Thank you all!&lt;/p&gt; &lt;p&gt;The only thing that jumps out at me is that both v11 and v12 seem to use the same public key token 89845dcd8080cc91.&lt;/p&gt; &lt;p&gt;I started down this path after upgrading to .net4 and my reportviewer started into some infinite loop.&lt;/p&gt; &lt;p&gt;The type &amp;#39;Microsoft.Reporting.WebForms.ReportDataSource&amp;#39; exists in both &amp;#39;c:\Windows\assembly\GAC&lt;em&gt;MSIL\Microsoft.ReportViewer.WebForms\12.0.0.0&lt;/em&gt;&lt;em&gt;89845dcd8080cc91\Microsoft.ReportViewer.WebForms.DLL&amp;#39; and &amp;#39;c:\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.WebForms\11.0.0.0&lt;/em&gt;_89845dcd8080cc91\Microsoft.ReportViewer.WebForms.DLL&amp;#39; c:\Users\user\AppData\Local\Temp\Temporary ASP.NET Files\root\9f9551b5\1f28604a\App_Web_ihbssfex.12.cs 870&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/djuggler&quot;&gt; /u/djuggler &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e14fn/the_type/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e14fn/the_type/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e14fn</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e14fn/the_type/" />
+        <updated>2017-05-29T16:11:23+00:00</updated>
+        <title>The type 'Microsoft.Reporting.WebForms.ReportDataSource' exists in both ... this GAC error is driving me nuts. I've googled, forumed, rtfm'd, installed, uninstalled, and am just out of ideas. Any suggestions?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/jimmyayo</name>
+            <uri>https://www.reddit.com/user/jimmyayo</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/jimmyayo&quot;&gt; /u/jimmyayo &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e5j74/how_many_if_you_transitioned_to_javascript_and/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e5j74/how_many_if_you_transitioned_to_javascript_and/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e5j74</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e5j74/how_many_if_you_transitioned_to_javascript_and/" />
+        <updated>2017-05-30T05:55:43+00:00</updated>
+        <title>How many if you transitioned to JavaScript? And what was that journey like? For those that didn't change - how did you stay relevant in the job market? Staying in WPF??</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/WhataNoobUser</name>
+            <uri>https://www.reddit.com/user/WhataNoobUser</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I have a profile class that has a list of Occupation&lt;/p&gt; &lt;pre&gt;&lt;code&gt;public class Profile { . List&amp;lt;Occupation&amp;gt; Occupations; . } public class Occupation { string Category; string Desc; } public class CreateProfileViewModel { public Profile Profile { get; set; } } &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;I&amp;#39;m trying to submit a form in the cshtml&lt;/p&gt; &lt;pre&gt;&lt;code&gt;&amp;lt;input asp-for=&amp;quot;Profile.Occupations[0].Desc&amp;quot; class=&amp;quot;form-control&amp;quot; /&amp;gt; &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;but I get the following error when I submit the form&lt;/p&gt; &lt;p&gt;InvalidOperationException: The model item passed into the ViewDataDictionary is of type &amp;#39;MyApp.Models.Profile&amp;#39;, but this ViewDataDictionary instance requires a model item of type &amp;#39;MyApp.Models.ProfileViewModels.CreateProfileViewModel&amp;#39;&lt;/p&gt; &lt;ol&gt; &lt;li&gt;&lt;p&gt;What is the error saying?&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;How can a bind a list of objects as a child of the main object Profile in CreateProfileViewModel and that sends it to the controller&lt;/p&gt;&lt;/li&gt; &lt;/ol&gt; &lt;p&gt;. .&lt;/p&gt; &lt;pre&gt;&lt;code&gt;[HttpPost] [ValidateAntiForgeryToken] public async Task&amp;lt;IActionResult&amp;gt; Create(Profile profile) &lt;/code&gt;&lt;/pre&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/WhataNoobUser&quot;&gt; /u/WhataNoobUser &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e29qy/help_for_asp_mvc_core_how_to_bind_a_list_of/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e29qy/help_for_asp_mvc_core_how_to_bind_a_list_of/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e29qy</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e29qy/help_for_asp_mvc_core_how_to_bind_a_list_of/" />
+        <updated>2017-05-29T19:20:49+00:00</updated>
+        <title>[Help for ASP MVC Core] - How to bind a list of complex types as child?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/soichiroH</name>
+            <uri>https://www.reddit.com/user/soichiroH</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I have 6 doctors listed like this: (one example).&lt;/p&gt; &lt;pre&gt;&lt;code&gt;ListDoctor.Add(new Medico(01, &amp;quot;Antonio&amp;quot;, 555444333, &amp;quot;antonio@gmail.com&amp;quot;, &amp;quot;Dermatologista&amp;quot;)); &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;And I want to assign to each of these 6 Doctors, 1 member of this list (20 members).&lt;/p&gt; &lt;pre&gt;&lt;code&gt;ListSickPeople.Add(new Utente(100001, &amp;quot;Pedro&amp;quot;, 914754123, &amp;quot;pedro@gmail.com&amp;quot;, GetRandomColor())); &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;This is an Hospital simulation, I want each Doctor to have a Patient assigned but it has to respect the color hierarqy.&lt;/p&gt; &lt;p&gt;This is the color code I used.&lt;/p&gt; &lt;pre&gt;&lt;code&gt;static ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Yellow, ConsoleColor.Magenta }; //Ticket Colors. static ConsoleColor GetRandomColor() { return colors[random.Next(colors.Length)]; } &lt;/code&gt;&lt;/pre&gt; &lt;p&gt;The order of gravity is Magenta, Red, Yellow and Green which I am assigning randomly each time I start my program. How can I do something like this?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/soichiroH&quot;&gt; /u/soichiroH &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e2hgm/assigning_objects_from_a_list_to_other_list/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e2hgm/assigning_objects_from_a_list_to_other_list/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e2hgm</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e2hgm/assigning_objects_from_a_list_to_other_list/" />
+        <updated>2017-05-29T19:57:13+00:00</updated>
+        <title>Assigning Objects from a List to Other List.</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/WinterKappa</name>
+            <uri>https://www.reddit.com/user/WinterKappa</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;Hey guys!&lt;/p&gt; &lt;p&gt;Is there any way to write something that scans all the text currently displayed on the screen (or at least in Internet Explorer) and if a text ex. &amp;quot;B2&amp;quot; appears, to make it pop some sort of notification?&lt;/p&gt; &lt;p&gt;I&amp;#39;ve really only programmed very basic things and I&amp;#39;m looking for guidelines on where to look, also what to look for. I don&amp;#39;t even know the proper keywords to conduct a search.. yes &lt;sup&gt;^&lt;/sup&gt;&lt;/p&gt; &lt;p&gt;Thanks!&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/WinterKappa&quot;&gt; /u/WinterKappa &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dzl6d/search_for_a_string_of_text_anywhere_on_the_screen/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dzl6d/search_for_a_string_of_text_anywhere_on_the_screen/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dzl6d</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dzl6d/search_for_a_string_of_text_anywhere_on_the_screen/" />
+        <updated>2017-05-29T10:41:55+00:00</updated>
+        <title>Search for a string of text anywhere on the screen</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/jakubgarfield</name>
+            <uri>https://www.reddit.com/user/jakubgarfield</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/jakubgarfield&quot;&gt; /u/jakubgarfield &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://blogs.msdn.microsoft.com/dotnet/2017/05/25/using-net-and-docker-together/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dx9ka/using_net_and_docker_together/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dx9ka</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dx9ka/using_net_and_docker_together/" />
+        <updated>2017-05-29T00:48:32+00:00</updated>
+        <title>Using .NET and Docker Together</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/big_sam123</name>
+            <uri>https://www.reddit.com/user/big_sam123</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I would like to change the existing Unicode to European or Chinese in C#. The aim of my required functionality should be such that, the .exe file should be just read by an external application(in another language). How can I implement this?&lt;/p&gt; &lt;p&gt;NOTE: There&amp;#39;s no input string in the C# code. The input string is in another language(Visual Basic) which will open the .exe file and later convert the Unicode from the existing one to the European or Chinese.&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/big_sam123&quot;&gt; /u/big_sam123 &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e19de/need_help_with_code_page/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6e19de/need_help_with_code_page/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6e19de</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6e19de/need_help_with_code_page/" />
+        <updated>2017-05-29T16:33:38+00:00</updated>
+        <title>Need help with code page</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/Ludwig0</name>
+            <uri>https://www.reddit.com/user/Ludwig0</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;So for example int is just a keyword that references an actual class unlike Java where int isn&amp;#39;t even a class. So how come when you pass an int it&amp;#39;s treated as a value type? What decides if a class is value type or reference type?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/Ludwig0&quot;&gt; /u/Ludwig0 &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dv24c/if_everything_in_c_is_an_object_why_isnt/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dv24c/if_everything_in_c_is_an_object_why_isnt/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dv24c</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dv24c/if_everything_in_c_is_an_object_why_isnt/" />
+        <updated>2017-05-28T17:41:17+00:00</updated>
+        <title>If everything in C# is an object why isn't everything reference type instead of value type?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/hordecore80</name>
+            <uri>https://www.reddit.com/user/hordecore80</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;i just bought subscription with pluralsight choose their c# path and finish first video listed. it was somewhat fast paced . i understood the concepts but when i tried to apply them i had hard time applying them , anyone recommend good tuts to learn c# and teach how to apply them to real world problems ? also which path is easier for noob wed development or mobile dev using xaramin and c# &lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/hordecore80&quot;&gt; /u/hordecore80 &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dz17w/i_want_to_learn_coding_not_just_memorizing_syntax/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dz17w/i_want_to_learn_coding_not_just_memorizing_syntax/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dz17w</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dz17w/i_want_to_learn_coding_not_just_memorizing_syntax/" />
+        <updated>2017-05-29T07:56:32+00:00</updated>
+        <title>i want to learn coding not just memorizing syntax help</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/jaroslaw-jaroslaw</name>
+            <uri>https://www.reddit.com/user/jaroslaw-jaroslaw</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I am using Equals for comparing two object references. Is there a chance that after I destroy one object and allocate new, it will replace old object and Equals returns true on new object? What is the mechanism behind the Equals method?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/jaroslaw-jaroslaw&quot;&gt; /u/jaroslaw-jaroslaw &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dyb3o/is_c_equals_safe_to_use/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dyb3o/is_c_equals_safe_to_use/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dyb3o</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dyb3o/is_c_equals_safe_to_use/" />
+        <updated>2017-05-29T04:43:58+00:00</updated>
+        <title>is c# Equals safe to use?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/adscott1982</name>
+            <uri>https://www.reddit.com/user/adscott1982</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I have found the explore functionality of Github somewhat lacking. It only seems to display the top repositories or curated collections. &lt;/p&gt; &lt;p&gt;I am probably missing a trick and there is a more advanced way to search repositories. I would like to contribute to less well known and established projects. &lt;/p&gt; &lt;p&gt;What do you guys recommend?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/adscott1982&quot;&gt; /u/adscott1982 &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dusx2/how_do_you_find_interesting_github_repositories/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dusx2/how_do_you_find_interesting_github_repositories/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dusx2</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dusx2/how_do_you_find_interesting_github_repositories/" />
+        <updated>2017-05-28T16:54:54+00:00</updated>
+        <title>How do you find interesting Github repositories?</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/crushfield</name>
+            <uri>https://www.reddit.com/user/crushfield</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;Hi csharp,&lt;/p&gt; &lt;p&gt;Apologies if this is the wrong place to post this&lt;/p&gt; &lt;p&gt;Indie dev here, I&amp;#39;ve started collaborating heavily with the same person and we explored the idea of creating a shared namespace for working on games projects together.&lt;/p&gt; &lt;p&gt;We felt there we certain functions that needed to constantly be used through out our games and thought this would be a good way to simplify things, especially when working collaboratively.&lt;/p&gt; &lt;p&gt;My question to the pros is this: what sort of unexpected pitfalls may occur and moreover, is this actually a good idea.&lt;/p&gt; &lt;p&gt;Just looking for some additional insight from people with more lines written than us.&lt;/p&gt; &lt;p&gt;Thanks!&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/crushfield&quot;&gt; /u/crushfield &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6duol1/creating_namespaces_for_collaboration/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6duol1/creating_namespaces_for_collaboration/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6duol1</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6duol1/creating_namespaces_for_collaboration/" />
+        <updated>2017-05-28T16:32:15+00:00</updated>
+        <title>Creating Namespaces for collaboration</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/opensharp</name>
+            <uri>https://www.reddit.com/user/opensharp</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;I am developing &lt;a href=&quot;https://github.com/bbougot/Popcorn&quot;&gt;Popcorn&lt;/a&gt; and the app is working fine (I let you guess its intended use). However, I have an issue which appears hard to solve. I use SharpCaster to cast the media to a Chromecast, but most of the time, the Chromecast could not be found. Worse, when the Chromecast is found, SharpCaster could not connect to the device. Any users of SharpCaster here, or Chromecast users who can try using it?&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/opensharp&quot;&gt; /u/opensharp &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dul0w/need_help_to_solve_an_issue_for_an_oss/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dul0w/need_help_to_solve_an_issue_for_an_oss/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dul0w</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dul0w/need_help_to_solve_an_issue_for_an_oss/" />
+        <updated>2017-05-28T16:14:09+00:00</updated>
+        <title>Need help to solve an issue for an OSS</title>
+    </entry>
+    <entry>
+        <author>
+            <name>/u/CPUCraft</name>
+            <uri>https://www.reddit.com/user/CPUCraft</uri>
+        </author>
+        <category term="csharp" label="r/csharp"/>
+        <content type="html">&lt;!-- SC_OFF --&gt;&lt;div class=&quot;md&quot;&gt;&lt;p&gt;Hello :)&lt;/p&gt; &lt;p&gt;I follow the bob tabor begginers course on the microsoft virtual academy, but after i will want to make games with monogame but i don&amp;#39;t know if this course will give me the knowledges to after learn monogame, so, the bob tabor course is enough to learn monogame after ?&lt;/p&gt; &lt;p&gt;One another question, i search a website to do practice my programming skills with some exercises, do you know a good website for that ?&lt;/p&gt; &lt;p&gt;Thanks !&lt;/p&gt; &lt;/div&gt;&lt;!-- SC_ON --&gt; &amp;#32; submitted by &amp;#32; &lt;a href=&quot;https://www.reddit.com/user/CPUCraft&quot;&gt; /u/CPUCraft &lt;/a&gt; &lt;br/&gt; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dwhx4/looking_for_exercises_website/&quot;&gt;[link]&lt;/a&gt;&lt;/span&gt; &amp;#32; &lt;span&gt;&lt;a href=&quot;https://www.reddit.com/r/csharp/comments/6dwhx4/looking_for_exercises_website/&quot;&gt;[comments]&lt;/a&gt;&lt;/span&gt;</content>
+        <id>t3_6dwhx4</id>
+        <link href="https://www.reddit.com/r/csharp/comments/6dwhx4/looking_for_exercises_website/" />
+        <updated>2017-05-28T22:08:13+00:00</updated>
+        <title>Looking for exercises website</title>
+    </entry>
+</feed>
