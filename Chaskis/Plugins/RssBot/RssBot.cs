@@ -36,7 +36,7 @@ namespace Chaskis.Plugins.RssBot
 
         private Dictionary<int, FeedReader> feedReaders;
 
-        IChaskisEventScheduler scheduler;
+        private IChaskisEventScheduler scheduler;
 
         // ---------------- Constructor ----------------
 
@@ -92,7 +92,8 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         /// <param name="pluginPath">The absolute path to the plugin dll.</param>
         /// <param name="ircConfig">The IRC config we are using.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig )
+        /// <param name="eventScheduler">The event scheduler.</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             string configPath = Path.Combine(
                 Path.GetDirectoryName( pluginPath ),
@@ -106,6 +107,7 @@ namespace Chaskis.Plugins.RssBot
                 );
             }
 
+            this.scheduler = eventScheduler;
             this.ircConfig = ircConfig;
 
             this.rssConfig = XmlLoader.ParseConfig( configPath );

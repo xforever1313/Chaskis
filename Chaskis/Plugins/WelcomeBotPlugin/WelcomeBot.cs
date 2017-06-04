@@ -82,7 +82,8 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// </summary>
         /// <param name="pluginPath">Path to the plugin.</param>
         /// <param name="ircConfig">The IRC config to use.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig )
+        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             if( this.isLoaded == false )
             {

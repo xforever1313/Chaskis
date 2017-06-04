@@ -85,7 +85,8 @@ namespace Chaskis.Plugins.MathBot
         /// </summary>
         /// <param name="pluginPath">The absolute path to the plugin dll.</param>
         /// <param name="ircConfig">The IRC config we are using.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig )
+        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             MessageHandler handler = new MessageHandler(
                 handlerRegex,

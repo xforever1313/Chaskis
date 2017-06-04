@@ -90,7 +90,8 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="pluginPath">Path to the plugin DLL</param>
         /// <param name="ircConfig">The IRC config being used.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig )
+        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             ArgumentChecker.StringIsNotNullOrEmpty( pluginPath, nameof( pluginPath ) );
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );

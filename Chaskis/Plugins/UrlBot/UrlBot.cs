@@ -88,7 +88,8 @@ namespace Chaskis.Plugins.UrlBot
         /// the path to the plugin, call Path.GetDirectoryName on this argument.
         /// </param>
         /// <param name="ircConfig">The IRC config we are using.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig )
+        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             MessageHandler handler = new MessageHandler(
                 ".+",

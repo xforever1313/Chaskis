@@ -110,7 +110,8 @@ namespace Chaskis.Plugins.CowSayBot
         /// </summary>
         /// <param name="pluginPath">Path to the plugin dll.</param>
         /// <param name="config">The irc config to use.</param>
-        public void Init( string pluginPath, IIrcConfig config )
+        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
+        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
         {
             string configPath = Path.Combine(
                 Path.GetDirectoryName( pluginPath ),
@@ -124,7 +125,7 @@ namespace Chaskis.Plugins.CowSayBot
                 );
             }
 
-            this.ircConfig = config;
+            this.ircConfig = ircConfig;
 
             this.cowSayConfig = XmlLoader.LoadCowSayBotConfig( configPath );
 

@@ -61,7 +61,10 @@ namespace ChaskisCore
         /// the path to the plugin, call Path.GetDirectoryName on this argument.
         /// </param>
         /// <param name="ircConfig">The IRC config we are using.</param>
-        void Init( string pluginPath, IIrcConfig ircConfig );
+        /// <param name="eventScheduler">
+        /// The event scheduler that can be used to schedule events to run on the event queue.
+        /// </param>
+        void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler );
 
         /// <summary>
         /// When a user queries the bot for help information about this plugin,
