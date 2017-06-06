@@ -99,20 +99,10 @@ namespace ChaskisCore
             this.KeepReading = false;
 
             this.eventQueue = new EventExecutor(
-                true,
-                delegate ( Exception err )
-                {
-                    StringWriter errorMessage = new StringWriter();
-
-                    errorMessage.WriteLine( "***************" );
-                    errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
-                    errorMessage.WriteLine( err.Message );
-                    errorMessage.WriteLine( err.StackTrace );
-                    errorMessage.WriteLine( "***************" );
-
-                    StaticLogger.ErrorWriteLine( errorMessage.ToString() );
-                }
+                true
             );
+
+            this.eventQueue.OnError += EventQueue_OnError;
 
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
@@ -452,6 +442,7 @@ namespace ChaskisCore
         public void Dispose()
         {
             Disconnect();
+            this.eventQueue.OnError -= this.EventQueue_OnError;
         }
 
         /// <summary>
@@ -709,6 +700,19 @@ namespace ChaskisCore
                     );
                 }
             } // End While
+        }
+
+        private void EventQueue_OnError( Exception err )
+        {
+            StringWriter errorMessage = new StringWriter();
+
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
+            errorMessage.WriteLine( err.Message );
+            errorMessage.WriteLine( err.StackTrace );
+            errorMessage.WriteLine( "***************" );
+
+            StaticLogger.ErrorWriteLine( errorMessage.ToString() );
         }
     }
 }
