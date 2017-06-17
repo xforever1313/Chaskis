@@ -176,7 +176,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 message += "that is not a valid help command.  I can do 'uptime', 'os', 'processors', or 'time'";
             }
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 message,
                 response.Channel
             );
@@ -217,8 +217,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 span.Seconds
             );
 
-            writer.SendCommandToChannel(
-                str
+            writer.SendMessage(
+                str,
+                response.Channel
             );
         }
 
@@ -229,8 +230,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <param name="response">The response from the channel.</param>
         private static void HandleOsVersionCmd( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommandToChannel(
-                "My system is " + Environment.OSVersion.ToString() + "."
+            writer.SendMessage(
+                "My system is " + Environment.OSVersion.ToString() + ".",
+                response.Channel
             );
         }
 
@@ -241,8 +243,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <param name="response">The response from the channel.</param>
         private static void HandleProcessorCountCmd( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommandToChannel(
-                "My system has " + Environment.ProcessorCount + " processors."
+            writer.SendMessage(
+                "My system has " + Environment.ProcessorCount + " processors.",
+                response.Channel
             );
         }
 
@@ -254,8 +257,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
         private static void HandleTimeCmd( IIrcWriter writer, IrcResponse response )
         {
             DateTime time = DateTime.UtcNow;
-            writer.SendCommandToChannel(
-                "My time is " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC."
+            writer.SendMessage(
+                "My time is " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC.",
+                response.Channel
             );
         }
     }

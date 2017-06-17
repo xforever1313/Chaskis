@@ -154,7 +154,7 @@ namespace Chaskis.Plugins.KarmaBot
                 message += "that is not a valid help command.  I can do 'increase', 'decrease', or 'query'";
             }
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 message,
                 response.Channel
             );
@@ -190,7 +190,7 @@ namespace Chaskis.Plugins.KarmaBot
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.IncreaseKarma( userName );
 
-            writer.SendMessageToUser( userName + " has had their karma increased to " + karma, response.Channel );
+            writer.SendMessage( userName + " has had their karma increased to " + karma, response.Channel );
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace Chaskis.Plugins.KarmaBot
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.DecreaseKarma( userName );
 
-            writer.SendMessageToUser( userName + " has had their karma decreased to " + karma, response.Channel );
+            writer.SendMessage( userName + " has had their karma decreased to " + karma, response.Channel );
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Chaskis.Plugins.KarmaBot
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.QueryKarma( userName );
 
-            writer.SendMessageToUser( userName + " has " + karma + " karma.", response.Channel );
+            writer.SendMessage( userName + " has " + karma + " karma.", response.Channel );
         }
     }
 }

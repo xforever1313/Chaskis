@@ -132,7 +132,7 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandlePluginListCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendMessageToUser( this.pluginListResponse, response.Channel );
+            writer.SendMessage( this.pluginListResponse, response.Channel );
         }
 
         // ---- Source Command Handler ----
@@ -162,16 +162,16 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].SourceCodeLocation;
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
             {
                 string msg = "My source code is located here: https://github.com/xforever1313/Chaskis";
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else
             {
-                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -202,16 +202,16 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Version;
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
             {
                 string msg = "I am running version Chaskis " + Chaskis.VersionStr;
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else
             {
-                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -242,16 +242,16 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "About '" + pluginName + "': " + this.plugins[pluginName].About;
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
             {
                 string msg = "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
-                writer.SendMessageToUser( msg, response.Channel );
+                writer.SendMessage( msg, response.Channel );
             }
             else
             {
-                writer.SendMessageToUser( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
         }
 
@@ -284,7 +284,7 @@ namespace Chaskis
                 builder.Append( name + " " );
             }
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 builder.ToString(),
                 response.Channel
             );
@@ -320,7 +320,7 @@ namespace Chaskis
             if( string.IsNullOrEmpty( argsStr ) )
             {
                 // Print default message and return.
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     defaultMessage,
                     response.Channel
                 );
@@ -373,7 +373,7 @@ namespace Chaskis
                         break;
                 }
 
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     message,
                     response.Channel
                 );

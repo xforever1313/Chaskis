@@ -166,7 +166,7 @@ namespace Chaskis.Plugins.QuoteBot
                 builder.Append( "Posts the given quote from the database. Command regex: " + this.quoteBotConfig.GetCommand );
             }
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 builder.ToString(),
                 response.Channel
             );
@@ -203,14 +203,14 @@ namespace Chaskis.Plugins.QuoteBot
                 try
                 {
                     long id = await this.db.AddQuoteAsync( quote );
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         string.Format( "Quote said by {0} added by {1}.  Its ID is {2}.", quote.Author, quote.Adder, id ),
                         response.Channel
                     );
                 }
                 catch( Exception err )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         "Error when adding quote: " + err.Message.NormalizeWhiteSpace(),
                         response.Channel
                     );
@@ -218,7 +218,7 @@ namespace Chaskis.Plugins.QuoteBot
             }
             else
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "Error when adding quote: " + error.NormalizeWhiteSpace(),
                     response.Channel
                 );
@@ -232,7 +232,7 @@ namespace Chaskis.Plugins.QuoteBot
         {
             if( this.ircConfig.Admins.Contains( response.RemoteUser ) == false )
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "@" + response.RemoteUser + ": you are not a bot admin.  You can not delete quotes.",
                     response.Channel
                 );
@@ -248,14 +248,14 @@ namespace Chaskis.Plugins.QuoteBot
                     bool success = await this.db.DeleteQuoteAsync( id );
                     if( success )
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             "Quote " + id + " deleted successfully.",
                             response.Channel
                         );
                     }
                     else
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             "Can not delete quote " + id + ".  Are you sure it existed?",
                             response.Channel
                         );
@@ -263,7 +263,7 @@ namespace Chaskis.Plugins.QuoteBot
                 }
                 catch( Exception err )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         "Error when deleting quote: " + err.Message.NormalizeWhiteSpace(),
                         response.Channel
                     );
@@ -271,7 +271,7 @@ namespace Chaskis.Plugins.QuoteBot
             }
             else
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "Error when deleteing quote.  Are you sure it exists? " + error.NormalizeWhiteSpace(),
                     response.Channel
                 );
@@ -291,14 +291,14 @@ namespace Chaskis.Plugins.QuoteBot
                     Quote quote = await this.db.GetRandomQuoteAsync();
                     if( quote != null )
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             quote.ToString(),
                             response.Channel
                         );
                     }
                     else
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             "Can not get random quote.  Do we even have any?",
                             response.Channel
                         );
@@ -306,7 +306,7 @@ namespace Chaskis.Plugins.QuoteBot
                 }
                 catch( Exception err )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         "Error getting random quote: " + err.Message.NormalizeWhiteSpace(),
                         response.Channel
                     );
@@ -314,7 +314,7 @@ namespace Chaskis.Plugins.QuoteBot
             }
             else
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "Error getting random quote: " + error.NormalizeWhiteSpace(),
                     response.Channel
                 );
@@ -335,14 +335,14 @@ namespace Chaskis.Plugins.QuoteBot
                     Quote quote = await this.db.GetQuoteAsync( id );
                     if( quote != null )
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             quote.ToString(),
                             response.Channel
                         );
                     }
                     else
                     {
-                        writer.SendMessageToUser(
+                        writer.SendMessage(
                             "Can not get quote with id " + id + ". Are you sure it exists?",
                             response.Channel
                         );
@@ -351,14 +351,14 @@ namespace Chaskis.Plugins.QuoteBot
                 // Error that happens if there are no quotes.
                 catch( InvalidOperationException err )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         "Error getting quote: " + err.Message.NormalizeWhiteSpace() + ". Are you sure it exists?",
                         response.Channel
                     );
                 }
                 catch( Exception err )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         "Error getting quote: " + err.Message.NormalizeWhiteSpace(),
                         response.Channel
                     );
@@ -366,7 +366,7 @@ namespace Chaskis.Plugins.QuoteBot
             }
             else
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "Error getting quote: " + error.NormalizeWhiteSpace(),
                     response.Channel
                 );

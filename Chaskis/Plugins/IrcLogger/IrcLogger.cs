@@ -116,7 +116,7 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 this.About,
                 response.Channel
             );

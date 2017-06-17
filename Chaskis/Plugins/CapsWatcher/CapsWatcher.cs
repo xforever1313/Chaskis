@@ -129,7 +129,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 "Type in all caps to see what happens. Go ahead, I DARE YOU! Messages must contain at least 3 characters and 1 letter for a response.",
                 response.Channel
             );
@@ -202,7 +202,7 @@ namespace Chaskis.Plugins.CapsWatcher
             if( CheckForCaps( response.Message ) )
             {
                 string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.RemoteUser );
-                writer.SendCommandToChannel( msgToSend );
+                writer.SendMessage( msgToSend, response.Channel );
             }
         }
     }

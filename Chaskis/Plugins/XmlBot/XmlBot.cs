@@ -105,7 +105,7 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 "I just respond to whatever my admin told me to respond to.  They configured me with an XML file.  Blame my admin for anything I say!",
                 response.Channel
             );
@@ -153,7 +153,7 @@ namespace Chaskis.Plugins.XmlBot
                     );
                 }
 
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     responseToSend.ToString(),
                     ircResponse.Channel
                 );

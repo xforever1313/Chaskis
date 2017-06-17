@@ -99,7 +99,7 @@ namespace Chaskis.Plugins.ConsoleOut
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser( this.About, response.Channel );
+            writer.SendMessage( this.About, response.Channel );
         }
 
         /// <summary>

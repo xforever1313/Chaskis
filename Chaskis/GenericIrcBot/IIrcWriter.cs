@@ -13,18 +13,12 @@ namespace ChaskisCore
     public interface IIrcWriter
     {
         /// <summary>
-        /// Sends the given command to channel the bot is listening on.
-        /// </summary>
-        /// <param name="msg">The message to send.</param>
-        void SendCommandToChannel( string msg );
-
-        /// <summary>
         /// Sends the given command to the user.  Also works for sending messages
         /// to other channels.
         /// </summary>
         /// <param name="msg">The message to send.</param>
         /// <param name="userNick">The user (or #channel) to send the message to.</param>
-        void SendMessageToUser( string msg, string userNick );
+        void SendMessage( string msg, string userNick );
 
         /// <summary>
         /// Sends a pong using the given response.

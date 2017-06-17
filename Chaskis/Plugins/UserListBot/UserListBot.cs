@@ -162,7 +162,7 @@ namespace Chaskis.Plugins.UserListBot
                 this.userListConfig.Cooldown.ToString()
             );
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 message,
                 response.Channel
             );
@@ -219,7 +219,7 @@ namespace Chaskis.Plugins.UserListBot
             {
                 if( this.isQueried.ContainsKey( userList.Item1 ) && this.isQueried[userList.Item1] )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         string.Format( "Users in {0}: {1}", userList.Item1, userList.Item2 ),
                         userList.Item1
                     );

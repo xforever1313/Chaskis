@@ -101,7 +101,7 @@ namespace Chaskis.Plugins.MathBot
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 "Usage: !calc " + MathBotCalculator.calculatorRegex,
                 response.Channel
             );
@@ -135,14 +135,14 @@ namespace Chaskis.Plugins.MathBot
             try
             {
                 string answer = MathBotCalculator.Calculate( expression );
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "'" + expression + "' calculates to '" + answer + "'",
                     response.Channel
                 );
             }
             catch( Exception )
             {
-                writer.SendMessageToUser(
+                writer.SendMessage(
                     "'" + expression + "' is not something I can calculate :(",
                     response.Channel
                 );

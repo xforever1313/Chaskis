@@ -104,7 +104,7 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 this.About,
                 response.Channel
             );
@@ -140,7 +140,7 @@ namespace Chaskis.Plugins.UrlBot
 
                 if( urlResponse.IsValid )
                 {
-                    writer.SendMessageToUser(
+                    writer.SendMessage(
                         string.Format( "Title: {0}", urlResponse.TitleShortened ),
                         response.Channel
                     );

@@ -88,7 +88,7 @@ namespace Tests.Plugins.XmlBot
 
                 // Expect a message to go out.
                 string expectedMessage = "Hello " + remoteUser + "!";
-                this.mockIrcWriter.Setup( w => w.SendMessageToUser( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
 
                 handler0.HandleEvent(
                     TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, "Hello " + this.testConfig.Nick ),
@@ -108,7 +108,7 @@ namespace Tests.Plugins.XmlBot
 
                 // Expect a message to go out.
                 string expectedMessage = "Hello Seth!";
-                this.mockIrcWriter.Setup( w => w.SendMessageToUser( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
 
                 handler1.HandleEvent(
                     TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, "My name is Seth" ),
@@ -133,7 +133,7 @@ namespace Tests.Plugins.XmlBot
                     this.testConfig.Nick,
                     this.testConfig.Channel
                 );
-                this.mockIrcWriter.Setup( w => w.SendMessageToUser( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
 
                 string command = string.Format(
                     "!{0} {1} {2}",
@@ -161,7 +161,7 @@ namespace Tests.Plugins.XmlBot
                 // Expect a message to go out.
                 {
                     string expectedMessage = "A mouse is a thing!";
-                    this.mockIrcWriter.Setup( w => w.SendMessageToUser( expectedMessage, this.testConfig.Channel ) );
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
 
                     string command = "What is a mouse";
                     handler3.HandleEvent(
@@ -173,7 +173,7 @@ namespace Tests.Plugins.XmlBot
 
                 {
                     string expectedMessage = "An acorn is a thing!";
-                    this.mockIrcWriter.Setup( w => w.SendMessageToUser( expectedMessage, this.testConfig.Channel ) );
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
 
                     string command = "What is an acorn";
                     handler3.HandleEvent(

@@ -98,7 +98,7 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 this.About,
                 response.Channel
             );
@@ -137,11 +137,14 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// <param name="response">The command from the server.</param>
         private static void JoinMessage( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 "Greetings " + response.RemoteUser + ", welcome to " + response.Channel + "!",
                 response.RemoteUser
             );
-            writer.SendCommandToChannel( response.RemoteUser + " has joined " + response.Channel );
+            writer.SendMessage(
+                response.RemoteUser + " has joined " + response.Channel,
+                response.Channel
+            );
         }
 
         /// <summary>
@@ -151,12 +154,13 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// <param name="response">The command from the server.</param>
         private static void PartMessage( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 "Thanks for visiting " + response.Channel + "!  Please come back soon!",
                 response.RemoteUser
             );
-            writer.SendCommandToChannel(
-                response.RemoteUser + " has left " + response.Channel
+            writer.SendMessage(
+                response.RemoteUser + " has left " + response.Channel,
+                response.Channel
             );
         }
     }

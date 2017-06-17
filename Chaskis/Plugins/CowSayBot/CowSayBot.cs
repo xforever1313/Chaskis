@@ -169,7 +169,7 @@ namespace Chaskis.Plugins.CowSayBot
                 builder.Remove( 450, builder.Length );
             }
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 builder.ToString(),
                 response.Channel
             );
@@ -273,7 +273,7 @@ namespace Chaskis.Plugins.CowSayBot
 
                 if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                 {
-                    writer.SendCommandToChannel( cowSayedMessage );
+                    writer.SendMessage( cowSayedMessage, response.Channel );
                 }
                 else if( exitCode != 0 )
                 {

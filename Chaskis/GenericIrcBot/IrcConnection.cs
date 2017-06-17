@@ -227,25 +227,13 @@ namespace ChaskisCore
         }
 
         /// <summary>
-        /// Sends the given command to the channel.
+        /// Sends the given message to the given channel.
         /// Thread-safe.
         /// Throws InvalidOperationException if not connected.
         /// </summary>
         /// <param name="msg">The message to send.</param>
-        public void SendCommandToChannel( string msg )
-        {
-            SendMessageToUser( msg, this.Config.Channel );
-        }
-
-        /// <summary>
-        /// Sends the given command to the user.  Also works for sending messages
-        /// to other channels.
-        /// Thread-safe.
-        /// Throws InvalidOperationException if not connected.
-        /// </summary>
-        /// <param name="msg">The message to send.</param>
-        /// <param name="userNick">The user (or #channel) to send the message to.</param>
-        public void SendMessageToUser( string msg, string userNick )
+        /// <param name="channel">The user or #channel to send the message to.</param>
+        public void SendMessage( string msg, string channel )
         {
             if( this.IsConnected == false )
             {
@@ -273,7 +261,7 @@ namespace ChaskisCore
                         if( string.IsNullOrEmpty( line ) == false )
                         {
                             // PRIVMSG < msgtarget > < message >
-                            this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", userNick, line );
+                            this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
                             this.ircWriter.Flush();
                         }
                     }

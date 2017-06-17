@@ -148,7 +148,7 @@ namespace Chaskis.Plugins.RssBot
                                         );
                                     }
 
-                                    writer.SendMessageToUser(
+                                    writer.SendMessage(
                                         msg,
                                         this.ircConfig.Channel
                                     );
@@ -176,7 +176,7 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 this.About + "  Don't like one of the feeds I post?  Yell at my admin!",
                 response.Channel
             );

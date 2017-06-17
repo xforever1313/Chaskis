@@ -151,7 +151,7 @@ namespace Chaskis.Plugins.WeatherBot
                 cooldown
             );
 
-            writer.SendMessageToUser(
+            writer.SendMessage(
                 message,
                 response.Channel
             );
@@ -182,8 +182,9 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="response">The response from the channel.</param>
         private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendCommandToChannel(
-                "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown."
+            writer.SendMessage(
+                "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown.",
+                response.Channel
             );
         }
 
@@ -197,7 +198,7 @@ namespace Chaskis.Plugins.WeatherBot
             Match match = response.Match;
             string zip = match.Groups["zipCode"].Value;
             string strToWrite = await this.reporter.QueryWeather( zip );
-            writer.SendCommandToChannel( strToWrite );
+            writer.SendMessage( strToWrite, response.Channel );
         }
     }
 }
