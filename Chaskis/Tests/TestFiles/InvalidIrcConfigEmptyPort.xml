@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ircbotconfig>
+<ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
     <server>irc.testdomain.com</server>
-    <channel>#testchannel</channel>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
     <port></port>
     <username>testbot</username>
     <nick>testbot</nick>

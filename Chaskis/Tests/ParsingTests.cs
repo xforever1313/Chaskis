@@ -78,10 +78,10 @@ namespace Tests
                     baseString,
                     config.Nick,
                     remoteUser,
-                    config.Channel
+                    config.Channels[0]
                 );
 
-                string endString = Parsing.LiquefyStringWithIrcConfig( startString, remoteUser, config.Nick, config.Channel );
+                string endString = Parsing.LiquefyStringWithIrcConfig( startString, remoteUser, config.Nick, config.Channels[0] );
                 Assert.AreEqual( expectedEndString, endString );
             }
 
@@ -91,10 +91,10 @@ namespace Tests
                     baseString,
                     config.Nick,
                     "{%user%}",
-                    config.Channel
+                    config.Channels[0]
                 );
 
-                string endString = Parsing.LiquefyStringWithIrcConfig( startString, null, config.Nick, config.Channel );
+                string endString = Parsing.LiquefyStringWithIrcConfig( startString, null, config.Nick, config.Channels[0] );
                 Assert.AreEqual( expectedEndString, endString );
             }
 
@@ -104,10 +104,10 @@ namespace Tests
                     baseString,
                     "{%nick%}",
                     remoteUser,
-                    config.Channel
+                    config.Channels[0]
                 );
 
-                string endString = Parsing.LiquefyStringWithIrcConfig( startString, remoteUser, null, config.Channel );
+                string endString = Parsing.LiquefyStringWithIrcConfig( startString, remoteUser, null, config.Channels[0] );
                 Assert.AreEqual( expectedEndString, endString );
             }
 

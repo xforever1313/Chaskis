@@ -212,7 +212,11 @@ namespace ChaskisCore
             // Join Channel.
             // JOIN <channels>
             // If channel does not exist it will be created.
-            this.ircWriter.WriteLine( "JOIN {0}", this.Config.Channel );
+            foreach( string channel in this.Config.Channels )
+            {
+                this.ircWriter.WriteLine( "JOIN {0}", channel );
+                Thread.Sleep( 200 );
+            }
             this.ircWriter.Flush();
 
             // Tell nickserv we are a bot.
@@ -224,6 +228,17 @@ namespace ChaskisCore
             this.IsConnected = true;
 
             StaticLogger.WriteLine( "Connection made!" );
+        }
+
+        /// <summary>
+        /// Sends the given message to ALL channels this bot is listening on.
+        /// </summary>
+        public void SendBroadcastMessage( string message )
+        {
+            foreach( string channel in this.Config.Channels )
+            {
+                this.SendMessage( message, channel );
+            }
         }
 
         /// <summary>
@@ -315,7 +330,7 @@ namespace ChaskisCore
         /// <param name="reason">The reason for parting.</param>
         public void SendPart( string reason )
         {
-            string partString = string.Format( "PART {0} :{1}", this.Config.Channel, this.Config.QuitMessage );
+            string partString = string.Format( "PART {0} :{1}", this.Config.Channels, this.Config.QuitMessage );
             this.SendRawCmd( partString );
         }
 

@@ -64,8 +64,16 @@ namespace Chaskis
                         config.Server = childNode.InnerText;
                         break;
 
-                    case "channel":
-                        config.Channel = childNode.InnerText;
+                    case "channels":
+                        foreach( XmlNode channelNode in childNode.ChildNodes )
+                        {
+                            switch( channelNode.Name )
+                            {
+                                case "channel":
+                                    config.Channels.Add( channelNode.InnerText );
+                                    break;
+                            }
+                        }
                         break;
 
                     case "port":

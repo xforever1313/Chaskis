@@ -72,7 +72,7 @@ namespace Tests
         {
             IrcConfig ircConfig = new IrcConfig();
             ircConfig.Server = "AServer";
-            ircConfig.Channel = "#AChannel";
+            ircConfig.Channels.Add( "#AChannel" );
             ircConfig.Port = 1234;
             ircConfig.UserName = "SomeUserName";
             ircConfig.Nick = "SomeNick";

@@ -57,6 +57,9 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Config\SamplePluginConfig.xml" />
+    <None Include="Documentation\ChaskisIrcConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\SampleIrcConfig.xml" />

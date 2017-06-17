@@ -192,7 +192,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <param name="response">The response from the channel.</param>
         private void HandleGetUsersCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendRawCmd( "NAMES " + this.ircConfig.Channel );
+            writer.SendRawCmd( "NAMES " + this.ircConfig.Channels );
             this.isQueried[response.Channel] = true;
         }
 

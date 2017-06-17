@@ -13,6 +13,11 @@ namespace ChaskisCore
     public interface IIrcWriter
     {
         /// <summary>
+        /// Sends the given message to ALL channels this bot is listening on.
+        /// </summary>
+        void SendBroadcastMessage( string msg );
+
+        /// <summary>
         /// Sends the given command to the user.  Also works for sending messages
         /// to other channels.
         /// </summary>

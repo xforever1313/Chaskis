@@ -88,10 +88,10 @@ namespace Tests.Plugins.XmlBot
 
                 // Expect a message to go out.
                 string expectedMessage = "Hello " + remoteUser + "!";
-                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                 handler0.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, "Hello " + this.testConfig.Nick ),
+                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "Hello " + this.testConfig.Nick ),
                     this.testConfig,
                     this.mockIrcWriter.Object
                 );
@@ -108,10 +108,10 @@ namespace Tests.Plugins.XmlBot
 
                 // Expect a message to go out.
                 string expectedMessage = "Hello Seth!";
-                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                 handler1.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, "My name is Seth" ),
+                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "My name is Seth" ),
                     this.testConfig,
                     this.mockIrcWriter.Object
                 );
@@ -131,19 +131,19 @@ namespace Tests.Plugins.XmlBot
                     "Hello {0}, I am {1} on channel {2}!",
                     remoteUser,
                     this.testConfig.Nick,
-                    this.testConfig.Channel
+                    this.testConfig.Channels
                 );
-                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
+                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                 string command = string.Format(
                     "!{0} {1} {2}",
                     this.testConfig.Nick,
-                    this.testConfig.Channel,
+                    this.testConfig.Channels,
                     remoteUser
                 );
 
                 handler2.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, command ),
+                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
                     this.testConfig,
                     this.mockIrcWriter.Object
                 );
@@ -161,11 +161,11 @@ namespace Tests.Plugins.XmlBot
                 // Expect a message to go out.
                 {
                     string expectedMessage = "A mouse is a thing!";
-                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                     string command = "What is a mouse";
                     handler3.HandleEvent(
-                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, command ),
+                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
                         this.testConfig,
                         this.mockIrcWriter.Object
                     );
@@ -173,11 +173,11 @@ namespace Tests.Plugins.XmlBot
 
                 {
                     string expectedMessage = "An acorn is a thing!";
-                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channel ) );
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                     string command = "What is an acorn";
                     handler3.HandleEvent(
-                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channel, command ),
+                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
                         this.testConfig,
                         this.mockIrcWriter.Object
                     );

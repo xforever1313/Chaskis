@@ -69,7 +69,7 @@ namespace Tests
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
-            this.ircConfig.Channel = "#derp";
+            this.ircConfig.Channels.Add( "#derp" );
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
@@ -123,7 +123,7 @@ namespace Tests
 
             // First, ensure properties are all equal
             Assert.AreEqual( this.ircConfig.Server, config.Server );
-            Assert.AreEqual( this.ircConfig.Channel, config.Channel );
+            Assert.AreEqual( this.ircConfig.Channels, config.Channels );
             Assert.AreEqual( this.ircConfig.Port, config.Port );
             Assert.AreEqual( this.ircConfig.UserName, config.UserName );
             Assert.AreEqual( this.ircConfig.Nick, config.Nick );
@@ -148,13 +148,12 @@ namespace Tests
                 );
             Assert.IsTrue( ex.Message.Contains( "Server" ) );
 
-            ex = Assert.Throws<ReadOnlyException>(
+            Assert.Throws<NotSupportedException>(
                 delegate ()
                 {
-                    roConfig.Channel = "#NewChannel";
+                    roConfig.Channels.Add( "#NewChannel" );
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( "Channel" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -239,7 +238,15 @@ namespace Tests
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
-            this.ircConfig.Channel = string.Empty;
+            this.ircConfig.Channels.Add( string.Empty );
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            this.ircConfig.Channels.Add( null );
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            this.ircConfig.Channels.Clear();
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 

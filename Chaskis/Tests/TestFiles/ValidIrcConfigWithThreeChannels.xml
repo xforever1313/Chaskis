@@ -1,17 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
 	<server>irc.testdomain.com</server>
-    <channels>
+	<channels>
         <channel>#testchannel</channel>
+        <channel>#mychannel</channel>
+        <channel>#chaskis</channel>
     </channels>
 	<port>6667</port>
 	<username>testbot</username>
 	<nick>testbot</nick>
 	<realname>test bot</realname>
-	<password>apassword</password>
+    <password>apassword</password>
     <quitmessage>I am being shut down!</quitmessage>
-    <admins>
-        <admin></admin>
-        <admin>person2</admin>
-    </admins>
 </ircbotconfig>

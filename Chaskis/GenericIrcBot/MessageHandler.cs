@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -203,7 +204,7 @@ namespace ChaskisCore
                     return;
                 }
                 // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
-                else if( ( this.ResponseOption == ResponseOptions.ChannelOnly ) && ( response.Channel.ToUpper() != ircConfig.Channel.ToUpper() ) )
+                else if( ( this.ResponseOption == ResponseOptions.ChannelOnly ) && ( ircConfig.Channels.Any( c => c.ToUpper() == response.Channel.ToUpper() ) == false ) )
                 {
                     return;
                 }

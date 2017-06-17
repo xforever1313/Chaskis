@@ -219,6 +219,7 @@
     <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
     <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
     <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigWithEmptyChannel.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
@@ -228,6 +229,7 @@
     <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
     <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithBridgeBots.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithThreeChannels.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
     <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
   </ItemGroup>

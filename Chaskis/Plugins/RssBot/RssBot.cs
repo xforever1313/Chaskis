@@ -148,9 +148,8 @@ namespace Chaskis.Plugins.RssBot
                                         );
                                     }
 
-                                    writer.SendMessage(
-                                        msg,
-                                        this.ircConfig.Channel
+                                    writer.SendBroadcastMessage(
+                                        msg
                                     );
                                 }
                             }

@@ -113,7 +113,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     MessageHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     "A message"
                 );
 
@@ -131,7 +131,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     PartHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     string.Empty
                 );
 
@@ -149,7 +149,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     JoinHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     string.Empty
                 );
 

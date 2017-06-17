@@ -40,7 +40,7 @@ namespace Tests
         {
             this.ircConfig = new IrcConfig();
             this.ircConfig.Server = "irc.testdomain.com";
-            this.ircConfig.Channel = "#testchannel";
+            this.ircConfig.Channels.Add( "#testchannel" );
             this.ircConfig.Port = 6667;
             this.ircConfig.Nick = "testbot";
             this.ircConfig.UserName = "testbot";
@@ -78,6 +78,17 @@ namespace Tests
             Assert.AreEqual( this.ircConfig, config );
         }
 
+        [Test]
+        public void TestValidXmlWithThreeChannelsAndPassword()
+        {
+            this.ircConfig.Channels.Add( "#mychannel" );
+            this.ircConfig.Channels.Add( "#chaskis" );
+
+            IIrcConfig config = XmlLoader.ParseIrcConfig(
+                Path.Combine( testXmlFiles, "ValidIrcConfigWithThreeChannels.xml" )
+            );
+            Assert.AreEqual( this.ircConfig, config );
+        }
 
         /// <summary>
         /// Tests an XML file that is valid and admins
@@ -132,11 +143,14 @@ namespace Tests
             // Our expected behavior is everything but channel and server to be defaults.
             IrcConfig expectedConfig = new IrcConfig();
             expectedConfig.Server = this.ircConfig.Server;
-            expectedConfig.Channel = this.ircConfig.Channel;
+            foreach( string channel in this.ircConfig.Channels )
+            {
+                expectedConfig.Channels.Add( channel );
+            }
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
-                                    Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
-                                );
+                Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
+            );
             Assert.AreEqual( expectedConfig, config );
         }
 
@@ -203,6 +217,17 @@ namespace Tests
         {
             Assert.Throws<ApplicationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
+            );
+        }
+
+        /// <summary>
+        /// Tests an XML file that is invalid since it has a channel that is empty.
+        /// </summary>
+        [Test]
+        public void TestInvalidXmlWithEmptyChannel()
+        {
+            Assert.Throws<ApplicationException>( () =>
+                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyChannel.xml" ) )
             );
         }
 

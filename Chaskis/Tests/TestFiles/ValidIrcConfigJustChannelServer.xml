@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ircbotconfig>
+<!--
+This is technically a valid config, as everything else will get default values.
+However, it is highly recommended not to use this config, which is why
+this will fail the schema but pass Chaskis's IrcConfig validation.
+-->
+
+<ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
     <server>irc.testdomain.com</server>
-    <channel>#testchannel</channel>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
 </ircbotconfig>

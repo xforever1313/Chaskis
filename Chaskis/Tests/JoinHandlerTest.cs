@@ -129,7 +129,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     this.ircConfig.Nick,
                     JoinHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     string.Empty
                 );
 
@@ -149,7 +149,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     MessageHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     "A message"
                 );
 
@@ -169,7 +169,7 @@ namespace Tests
                 TestHelpers.ConstructIrcString(
                     RemoteUser,
                     PartHandler.IrcCommand,
-                    this.ircConfig.Channel,
+                    this.ircConfig.Channels[0],
                     string.Empty
                 );
 
@@ -201,7 +201,7 @@ namespace Tests
             TestHelpers.ConstructIrcString(
                 user,
                 JoinHandler.IrcCommand,
-                this.ircConfig.Channel,
+                this.ircConfig.Channels[0],
                 string.Empty
             );
 
@@ -213,7 +213,7 @@ namespace Tests
             Assert.AreEqual( string.Empty, this.responseReceived.Message );
 
             // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channel, this.responseReceived.Channel );
+            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
 
             // Nicks should match.
             Assert.AreEqual( user, this.responseReceived.RemoteUser );

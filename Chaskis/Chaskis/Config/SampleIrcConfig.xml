@@ -8,7 +8,8 @@ Notice the password in this field.  Don't be dumb and commit this file to a sens
 Copy/Paste this elsewhere if needed. Chaskis has command line arguments you can use to point
 to that pasted file instead of having to use the one located in ApplicationData
 
-The server and channel are required.  No field can be an empty string (except for optional fields).  Port can not be negative.
+The server and at least one channel are required.
+No field can be an empty string (except for optional fields).  Port can not be negative.
 Password is optional.  quitmesssage is optional.
 
 Admins are optional.
@@ -36,9 +37,12 @@ as the nick and the bridgeMessage as the message when processing privmsg events.
 to match Chaskis will treat the bridge bot as a regular user.
 
 -->
-<ircbotconfig>
+<ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
 	<server>irc.testdomain.com</server>
-	<channel>#testchannel</channel>
+    <channels>
+	    <channel>#testchannel</channel>
+        <channel>#testchannel2</channel>
+    </channels>
 	<port>6667</port>
 	<username>testbot</username>
 	<nick>testbot</nick>

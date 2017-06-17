@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 using SethCS.Exceptions;
 
 namespace ChaskisCore
@@ -25,7 +27,7 @@ namespace ChaskisCore
         /// <summary>
         /// The room to connect to (Include the # character in front if needed).
         /// </summary>
-        string Channel { get; }
+        IList<string> Channels { get; }
 
         /// <summary>
         /// The port to connect to.
@@ -118,7 +120,7 @@ namespace ChaskisCore
         public IrcConfig()
         {
             this.Server = string.Empty;
-            this.Channel = string.Empty;
+            this.Channels = new List<string>();
             this.Port = 6667; // Default IRC port.
             this.UserName = "SomeIrcBot";
             this.Nick = "SomeIrcBot";
@@ -139,7 +141,7 @@ namespace ChaskisCore
         /// <summary>
         /// The room to connect to (Include the # character in front if needed).
         /// </summary>
-        public string Channel { get; set; }
+        public IList<string> Channels { get; private set; }
 
         /// <summary>
         /// The port to connect to.
@@ -195,8 +197,11 @@ namespace ChaskisCore
         public IIrcConfig Clone()
         {
             IrcConfig clone = (IrcConfig)this.MemberwiseClone();
+
+            clone.Channels = new List<string>( clone.Channels );
             clone.BridgeBots = new Dictionary<string, string>( clone.BridgeBots );
             clone.Admins = new List<string>( clone.Admins );
+
             return clone;
         }
 
@@ -254,7 +259,10 @@ namespace ChaskisCore
         public ReadOnlyIrcConfig( IIrcConfig config )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
+
             this.wrappedConfig = config;
+
+            this.Channels = new List<string>( config.Channels ).AsReadOnly();
             this.BridgeBots = new ReadOnlyDictionary<string, string>( config.BridgeBots );
             this.Admins = new List<string>( config.Admins ).AsReadOnly();
         }
@@ -279,17 +287,7 @@ namespace ChaskisCore
         /// <summary>
         /// The room to connect to (Include the # character in front if needed).
         /// </summary>
-        public string Channel
-        {
-            get
-            {
-                return this.wrappedConfig.Channel;
-            }
-            set
-            {
-                ThrowException( nameof( this.Channel ) );
-            }
-        }
+        public IList<string> Channels { get; private set; }
 
         /// <summary>
         /// The port to connect to.
@@ -464,61 +462,75 @@ namespace ChaskisCore
         internal static void Validate( IIrcConfig config )
         {
             bool success = true;
-            string errorString = "The following errors are wrong with the IrcConfig:" + Environment.NewLine;
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine( "The following errors are wrong with the IrcConfig:" );
 
             if( string.IsNullOrEmpty( config.Server ) )
             {
-                errorString += "Server can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tServer can not be null or empty" );
                 success = false;
             }
-            if( string.IsNullOrEmpty( config.Channel ) )
+
+            if( config.Channels == null )
             {
-                errorString += "Channel can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tChannel can not be null or empty" );
                 success = false;
             }
+            else if( config.Channels.Count == 0 )
+            {
+                builder.AppendLine( "-\tMust contain at least one channel." );
+                success = false;
+            }
+            else if( config.Channels.Any( c => string.IsNullOrEmpty( c ) || string.IsNullOrWhiteSpace( c ) ) )
+            {
+                builder.AppendLine( "\t-Channels can not be null, empty, or whitespace." );
+                success = false;
+            }
+
             if( config.Port < 0 )
             {
-                errorString += "Port can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tPort can not be null or empty" );
                 success = false;
             }
             if( string.IsNullOrEmpty( config.UserName ) )
             {
-                errorString += "UserName can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tUserName can not be null or empty" );
                 success = false;
             }
             if( string.IsNullOrEmpty( config.Nick ) )
             {
-                errorString += "Nick can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tNick can not be null or empty" );
                 success = false;
             }
             if( string.IsNullOrEmpty( config.RealName ) )
             {
-                errorString += "RealName can not be null or empty" + Environment.NewLine;
+                builder.AppendLine( "-\tRealName can not be null or empty" );
                 success = false;
             }
             if( config.QuitMessage == null )
             {
-                errorString += "Quit Message can not be null" + Environment.NewLine;
+                builder.AppendLine( "-\tQuit Message can not be null" );
                 success = false;
             }
             // Per this website, quit messages can not contain new lines:
             // http://www.user-com.undernet.org/documents/quitmsg.php
             else if( config.QuitMessage.Contains( Environment.NewLine ) )
             {
-                errorString += "Quit Message can not contain new lines" + Environment.NewLine;
+                builder.AppendLine( "-\tQuit Message can not contain new lines" );
                 success = false;
             }
             // Per this website, quit messages can not contain more than 160 characters.
             // http://www.user-com.undernet.org/documents/quitmsg.php
             else if( config.QuitMessage.Length > 160 )
             {
-                errorString += "Quit Message can not contain more than 160 characters" + Environment.NewLine;
+                builder.AppendLine( "-\tQuit Message can not contain more than 160 characters" );
                 success = false;
             }
             // Bridge bots MAY be empty, but can not be null.
             if( config.BridgeBots == null )
             {
-                errorString += "BridgeBots can not be null" + Environment.NewLine;
+                builder.AppendLine( "-\tBridgeBots can not be null" );
                 success = false;
             }
             else
@@ -527,24 +539,24 @@ namespace ChaskisCore
                 {
                     if( string.IsNullOrEmpty( bridgeBot.Key ) )
                     {
-                        errorString += "BrideBots can not have empty or null Key" + Environment.NewLine;
+                        builder.AppendLine( "-\tBrideBots can not have empty or null Key" );
                         success = false;
                     }
                     if( string.IsNullOrEmpty( bridgeBot.Value ) )
                     {
-                        errorString += "BrideBots " + bridgeBot.Key + " can not have empty or null Value" + Environment.NewLine;
+                        builder.AppendLine( "-\tBrideBots " + bridgeBot.Key + " can not have empty or null Value" );
                         success = false;
                     }
                     else
                     {
                         if( bridgeBot.Value.Contains( @"?<bridgeUser>" ) == false )
                         {
-                            errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeUser' in it" + Environment.NewLine;
+                            builder.AppendLine( "-\tBrideBots " + bridgeBot.Key + " must have regex group 'bridgeUser' in it" );
                             success = false;
                         }
                         if( bridgeBot.Value.Contains( @"?<bridgeMessage>" ) == false )
                         {
-                            errorString += "BrideBots " + bridgeBot.Key + " must have regex group 'bridgeMessage' in it" + Environment.NewLine;
+                            builder.AppendLine( "-\tBrideBots " + bridgeBot.Key + " must have regex group 'bridgeMessage' in it" );
                             success = false;
                         }
                     }
@@ -553,7 +565,7 @@ namespace ChaskisCore
 
             if( config.Admins == null )
             {
-                errorString += "Admins can not be null." + Environment.NewLine;
+                builder.AppendLine( "-\tAdmins can not be null." );
                 success = false;
             }
             else
@@ -562,7 +574,7 @@ namespace ChaskisCore
                 {
                     if( string.IsNullOrEmpty( admin ) || string.IsNullOrWhiteSpace( admin ) )
                     {
-                        errorString += "Admin can not be null, empty, or whitespace.";
+                        builder.AppendLine( "-\tAdmin can not be null, empty, or whitespace." );
                         success = false;
                     }
                 }
@@ -572,7 +584,7 @@ namespace ChaskisCore
 
             if( success == false )
             {
-                throw new ApplicationException( errorString );
+                throw new ApplicationException( builder.ToString() );
             }
         }
 
@@ -585,7 +597,7 @@ namespace ChaskisCore
         {
             return
                 config.Server.GetHashCode() +
-                config.Channel.GetHashCode() +
+                config.Channels.GetHashCode() +
                 config.Port.GetHashCode() +
                 config.UserName.GetHashCode() +
                 config.Nick.GetHashCode() +
@@ -608,7 +620,7 @@ namespace ChaskisCore
 
             bool isEqual =
                 ( config1.Server == other.Server ) &&
-                ( config1.Channel == other.Channel ) &&
+                ( config1.Channels.Count == other.Channels.Count ) &&
                 ( config1.Port == other.Port ) &&
                 ( config1.UserName == other.UserName ) &&
                 ( config1.Nick == other.Nick ) &&
@@ -617,6 +629,18 @@ namespace ChaskisCore
                 ( config1.QuitMessage == other.QuitMessage ) &&
                 ( config1.BridgeBots.Count == other.BridgeBots.Count ) &&
                 ( config1.Admins.Count == other.Admins.Count );
+
+            if( isEqual )
+            {
+                foreach( string channel in config1.Channels )
+                {
+                    if( other.Channels.Contains( channel ) == false )
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
 
             if( isEqual )
             {

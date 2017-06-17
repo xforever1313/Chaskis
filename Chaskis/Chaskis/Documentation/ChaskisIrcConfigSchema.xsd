@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XmlBotConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="ircbotconfig" type="IrcBotConfig"/>
+    <xs:element name="channels" type="Channels"/>
+    <xs:element name="admins" type="Admin"/>
+    <xs:element name="bridgebots" type="BridgeBots"/>
+    <xs:element name="bridgebot" type="BridgeBot"/>
+
+    <xs:complexType name="IrcBotConfig">
+        <xs:sequence>
+            <xs:element name="server" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="channels" type="Channels" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="port" type="xs:short" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="nick" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="realname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="password" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="quitmessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="admins" type="Admin" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bridgebots" type="BridgeBots" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Admin">
+        <xs:sequence>
+            <xs:element name="admin" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Channels">
+        <xs:sequence>
+            <xs:element name="channel" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BridgeBot">
+        <xs:sequence>
+            <xs:element name="botname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="botregex" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="BridgeBots">
+        <xs:sequence>
+            <xs:element name="bridgebot" type="BridgeBot" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>    
+</xs:schema>
