@@ -180,6 +180,8 @@ namespace Chaskis
             {
                 if( childNode.Name == "assembly" )
                 {
+                    List<string> blackListedChannels = new List<string>();
+
                     string path = string.Empty;
                     foreach( XmlAttribute attribute in childNode.Attributes )
                     {
@@ -191,7 +193,17 @@ namespace Chaskis
                         }
                     }
 
-                    plugins.Add( new AssemblyConfig( path ) );
+                    foreach( XmlNode assemblyChild in childNode.ChildNodes )
+                    {
+                        switch( assemblyChild.Name )
+                        {
+                            case "ignorechannel":
+                                blackListedChannels.Add( assemblyChild.InnerText );
+                                break;
+                        }
+                    }
+
+                    plugins.Add( new AssemblyConfig( path, blackListedChannels ) );
                 }
             }
 

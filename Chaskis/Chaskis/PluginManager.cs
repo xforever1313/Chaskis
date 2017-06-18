@@ -105,7 +105,7 @@ namespace Chaskis
                             new PluginConfig(
                                 assemblyConfig.AssemblyPath,
                                 chaskisPlugin.PluginName,
-                                new List<string>(), // <- TODO.
+                                assemblyConfig.BlackListedChannels,
                                 plugin
                             )
                         );

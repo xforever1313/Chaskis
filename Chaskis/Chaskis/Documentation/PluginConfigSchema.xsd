@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PluginConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="pluginconfig" type="PluginConfig"/>
+    <xs:element name="assembly" type="Assembly"/>
+    
+    <xs:complexType name="PluginConfig">
+        <xs:sequence>
+            <xs:element name="assembly" minOccurs="1" maxOccurs="unbounded" type="Assembly"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Assembly">
+        <xs:sequence>
+            <xs:element name="ignorechannel" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="path" use="required"/>
+    </xs:complexType>
+    
+</xs:schema>

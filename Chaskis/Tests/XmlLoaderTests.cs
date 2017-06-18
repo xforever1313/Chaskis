@@ -277,7 +277,12 @@ namespace Tests
             Assert.AreEqual( 2, configs.Count );
 
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll", configs[0].AssemblyPath );
+            Assert.AreEqual( 0, configs[0].BlackListedChannels.Count );
+
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll", configs[1].AssemblyPath );
+            Assert.AreEqual( 2, configs[1].BlackListedChannels.Count );
+            Assert.AreEqual( "#blacklist", configs[1].BlackListedChannels[0] );
+            Assert.AreEqual( "#evil", configs[1].BlackListedChannels[1] );
         }
 
         /// <summary>

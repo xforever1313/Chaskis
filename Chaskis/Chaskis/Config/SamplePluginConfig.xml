@@ -8,7 +8,17 @@ the program will terminate on a bad load, so make sure your path and class name 
 Typically plugins live in ApplicationData/Chaskis/plugins.
 
 ChaskisCore.dll is loaded automatically.
+
+assembly
+    path - the ABSOLUTE path of plugin's dll.
+    ignorechannel - optional.  If a channel the bot is in does not want a plugin
+                    to be used, but other channels do, use this to specify which channels
+                    the plugin will ignore commands from.
 -->
-<pluginconfig>
-	<assembly path="/home/me/.config/Chaskis/plugins/WelcomeBotPlugin/WelcomeBotPlugin.dll" />
+<pluginconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd">
+	<assembly path="/home/me/.config/Chaskis/plugins/WelcomeBotPlugin/WelcomeBotPlugin.dll" >
+        <ignorechannel>#blacklist</ignorechannel>
+        <ignorechannel>#otherchannel</ignorechannel>
+    </assembly>
+    <assembly path="/home/me/.config/Chaskis/plugins/XmlBot/XmlBot.dll" />
 </pluginconfig>
