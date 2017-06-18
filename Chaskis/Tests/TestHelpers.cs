@@ -81,6 +81,7 @@ namespace Tests
             ircConfig.BridgeBots[BridgeBotUser] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
             ircConfig.Admins.Add( "person1" );
             ircConfig.Admins.Add( "person2" );
+            ircConfig.RateLimit = 800;
 
             return ircConfig;
         }

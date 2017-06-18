@@ -47,6 +47,7 @@ namespace Tests
             this.ircConfig.RealName = "test bot";
             this.ircConfig.Password = "apassword";
             this.ircConfig.QuitMessage = "I am being shut down!";
+            this.ircConfig.RateLimit = 800;
         }
 
         // -------- Tests --------
@@ -129,6 +130,17 @@ namespace Tests
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
+                                );
+            Assert.AreEqual( this.ircConfig, config );
+        }
+
+        [Test]
+        public void TestValidXmlWithRateLimit()
+        {
+            this.ircConfig.RateLimit = 0;
+
+            IIrcConfig config = XmlLoader.ParseIrcConfig(
+                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithNoRateLimit.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
         }

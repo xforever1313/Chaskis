@@ -12,6 +12,10 @@ The server and at least one channel are required.
 No field can be an empty string (except for optional fields).  Port can not be negative.
 Password is optional.  quitmesssage is optional.
 
+Rate Limit is how many milliseconds occur between messages that are sent to the IRC server
+from the bot.  Most servers have flood limiting, and if the bot does not follow it, it can
+get kicked or banned.
+
 Admins are optional.
 These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
 **IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
@@ -48,6 +52,7 @@ to match Chaskis will treat the bridge bot as a regular user.
 	<nick>testbot</nick>
 	<realname>test bot</realname>
 	<password>apassword</password>
+    <ratelimit>800</ratelimit>
     <quitmessage>I am being shut down!</quitmessage>
     <admins>
         <admin>person1</admin>

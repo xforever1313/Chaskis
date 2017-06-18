@@ -221,6 +221,7 @@
     <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
     <Content Include="TestFiles\InvalidIrcConfigWithEmptyChannel.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithNoRateLimit.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
     <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
     <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />

@@ -135,6 +135,10 @@ namespace Chaskis
                     case "password":
                         config.Password = childNode.InnerText;
                         break;
+
+                    case "ratelimit":
+                        config.RateLimit = int.Parse( childNode.InnerText );
+                        break;
                 }
             }
 

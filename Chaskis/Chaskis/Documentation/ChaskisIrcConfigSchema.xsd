@@ -21,6 +21,7 @@
             <xs:element name="nick" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="realname" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="password" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ratelimit" type="xs:int" minOccurs="0" maxOccurs="1"/>
             <xs:element name="quitmessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="admins" type="Admin" minOccurs="0" maxOccurs="1"/>
             <xs:element name="bridgebots" type="BridgeBots" minOccurs="0" maxOccurs="1"/>

@@ -84,6 +84,13 @@ namespace ChaskisCore
         /// </summary>
         IList<string> Admins { get; }
 
+        /// <summary>
+        /// How long between sending messages to the IRC channel in milliseconds.
+        /// Each server and/or channel usually has a flood limit that the bot needs
+        /// to observe or risk being kicked/banned.
+        /// </summary>
+        int RateLimit { get; }
+
         // -------- Functions ---------
 
         /// <summary>
@@ -129,6 +136,7 @@ namespace ChaskisCore
             this.BridgeBots = new Dictionary<string, string>();
             this.Admins = new List<string>();
             this.QuitMessage = string.Empty;
+            this.RateLimit = 0;
         }
 
         // -------- Properties --------
@@ -188,6 +196,13 @@ namespace ChaskisCore
         /// do things such as delete entries, etc.
         /// </summary>
         public IList<string> Admins { get; private set; }
+
+        /// <summary>
+        /// How long between sending messages to the IRC channel in milliseconds.
+        /// Each server and/or channel usually has a flood limit that the bot needs
+        /// to observe or risk being kicked/banned.
+        /// </summary>
+        public int RateLimit { get; set; }
 
         // --------- Functions --------
 
@@ -397,6 +412,23 @@ namespace ChaskisCore
         /// </summary>
         public IList<string> Admins { get; private set; }
 
+        /// <summary>
+        /// How long between sending messages to the IRC channel in milliseconds.
+        /// Each server and/or channel usually has a flood limit that the bot needs
+        /// to observe or risk being kicked/banned.
+        /// </summary>
+        public int RateLimit
+        {
+            get
+            {
+                return this.wrappedConfig.RateLimit;
+            }
+            set
+            {
+                ThrowException( nameof( this.RateLimit ) );
+            }
+        }
+
         // -------- Functions --------
 
         /// <summary>
@@ -580,6 +612,12 @@ namespace ChaskisCore
                 }
             }
 
+            if( config.RateLimit < 0 )
+            {
+                builder.AppendLine( "-\tRate Limit can not be negative." );
+                success = false;
+            }
+
             // Password can be empty, its optional on servers.
 
             if( success == false )
@@ -604,7 +642,9 @@ namespace ChaskisCore
                 config.RealName.GetHashCode() +
                 config.Password.GetHashCode() +
                 config.QuitMessage.GetHashCode() +
-                config.BridgeBots.GetHashCode();
+                config.BridgeBots.GetHashCode() +
+                config.Admins.GetHashCode() +
+                config.RateLimit.GetHashCode();
         }
 
         /// <summary>
@@ -628,7 +668,8 @@ namespace ChaskisCore
                 ( config1.Password == other.Password ) &&
                 ( config1.QuitMessage == other.QuitMessage ) &&
                 ( config1.BridgeBots.Count == other.BridgeBots.Count ) &&
-                ( config1.Admins.Count == other.Admins.Count );
+                ( config1.Admins.Count == other.Admins.Count ) &&
+                ( config1.RateLimit == other.RateLimit );
 
             if( isEqual )
             {

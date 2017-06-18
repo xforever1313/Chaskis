@@ -213,10 +213,12 @@ namespace ChaskisCore
             // <realname> may contain spaces, and thus must be prefixed with a colon.
             this.ircWriter.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
             this.ircWriter.Flush();
+            Thread.Sleep( this.Config.RateLimit );
 
             // NICK <nickname>
             this.ircWriter.WriteLine( "NICK {0}", this.Config.Nick );
             this.ircWriter.Flush();
+            Thread.Sleep( this.Config.RateLimit );
 
             // Join Channel.
             // JOIN <channels>
@@ -224,15 +226,16 @@ namespace ChaskisCore
             foreach( string channel in this.Config.Channels )
             {
                 this.ircWriter.WriteLine( "JOIN {0}", channel );
-                Thread.Sleep( 200 );
+                this.ircWriter.Flush();
+                Thread.Sleep( this.Config.RateLimit );
             }
-            this.ircWriter.Flush();
 
             // Tell nickserv we are a bot.
             if( string.IsNullOrEmpty( this.Config.Password ) == false )
             {
                 this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.Config.Password );
                 this.ircWriter.Flush();
+                Thread.Sleep( this.Config.RateLimit );
             }
 
             this.IsConnected = true;
@@ -390,7 +393,7 @@ namespace ChaskisCore
                 delegate ()
                 {
                     action();
-                    Thread.Sleep( 250 ); // TODO: Make this user-configurable.
+                    Thread.Sleep( this.Config.RateLimit );
                 }
             );
         }

@@ -111,6 +111,11 @@ namespace Tests
             this.ircConfig.Admins.Add( "person3" );
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Rate Limit
+            this.ircConfig.RateLimit = this.ircConfig.RateLimit + 1;
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
 
         /// <summary>
@@ -130,6 +135,7 @@ namespace Tests
             Assert.AreEqual( this.ircConfig.RealName, config.RealName );
             Assert.AreEqual( this.ircConfig.Password, config.Password );
             Assert.AreEqual( this.ircConfig.QuitMessage, config.QuitMessage );
+            Assert.AreEqual( this.ircConfig.RateLimit, config.RateLimit );
             Assert.AreNotSame( this.ircConfig.BridgeBots, config.BridgeBots ); // Should not be same reference.
             Assert.AreNotSame( this.ircConfig.Admins, config.Admins ); // Should not be same reference.
 
@@ -202,6 +208,14 @@ namespace Tests
                 }
             );
             Assert.IsTrue( ex.Message.Contains( "QuitMessage" ) );
+
+            ex = Assert.Throws<ReadOnlyException>(
+                delegate ()
+                {
+                    roConfig.RateLimit = 3;
+                }
+            );
+            Assert.IsTrue( ex.Message.Contains( "RateLimit" ) );
         }
 
         [Test]
@@ -308,6 +322,11 @@ namespace Tests
 
             // Null Admin
             this.ircConfig.Admins.Add( null );
+            CheckNotValid( this.ircConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            // Negative rate limit.
+            this.ircConfig.RateLimit = -1;
             CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
         }

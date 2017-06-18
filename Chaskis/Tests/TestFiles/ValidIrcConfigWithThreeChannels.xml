@@ -11,5 +11,6 @@
 	<nick>testbot</nick>
 	<realname>test bot</realname>
     <password>apassword</password>
+    <ratelimit>800</ratelimit>
     <quitmessage>I am being shut down!</quitmessage>
 </ircbotconfig>
