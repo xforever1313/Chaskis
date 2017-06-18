@@ -56,15 +56,8 @@ namespace ChaskisCore
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
         /// </summary>
-        /// <param name="pluginPath">
-        /// The absolute path to the plugin, including the file name.  To just get
-        /// the path to the plugin, call Path.GetDirectoryName on this argument.
-        /// </param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">
-        /// The event scheduler that can be used to schedule events to run on the event queue.
-        /// </param>
-        void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler );
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        void Init( PluginInitor pluginInit );
 
         /// <summary>
         /// When a user queries the bot for help information about this plugin,

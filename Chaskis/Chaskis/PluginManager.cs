@@ -92,7 +92,12 @@ namespace Chaskis
                             throw new InvalidCastException( errorString );
                         }
 
-                        initFunction.Invoke( instance, new object[] { assemblyConfig.AssemblyPath, ircConfig, scheduler } );
+                        PluginInitor initor = new PluginInitor();
+                        initor.PluginPath = assemblyConfig.AssemblyPath;
+                        initor.IrcConfig = ircConfig;
+                        initor.EventScheduler = scheduler;
+
+                        initFunction.Invoke( instance, new object[] { initor } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
 
                         this.plugins.Add(

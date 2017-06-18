@@ -90,13 +90,11 @@ namespace Chaskis.Plugins.RssBot
         /// <summary>
         /// Initializes the plugin.
         /// </summary>
-        /// <param name="pluginPath">The absolute path to the plugin dll.</param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">The event scheduler.</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "RssBotConfig.xml"
             );
 
@@ -107,8 +105,8 @@ namespace Chaskis.Plugins.RssBot
                 );
             }
 
-            this.scheduler = eventScheduler;
-            this.ircConfig = ircConfig;
+            this.scheduler = initor.EventScheduler;
+            this.ircConfig = initor.IrcConfig;
 
             this.rssConfig = XmlLoader.ParseConfig( configPath );
             foreach( Feed feed in this.rssConfig.Feeds )

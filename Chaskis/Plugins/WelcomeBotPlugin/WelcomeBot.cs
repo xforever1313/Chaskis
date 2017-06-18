@@ -80,10 +80,8 @@ namespace Chaskis.Plugins.WelcomeBotPlugin
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin.</param>
-        /// <param name="ircConfig">The IRC config to use.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             if( this.isLoaded == false )
             {

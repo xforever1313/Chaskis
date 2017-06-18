@@ -108,13 +108,12 @@ namespace Chaskis.Plugins.CowSayBot
         /// Initializes the plugin.  This includes loading any configuration files,
         /// starting services, etc.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin dll.</param>
-        /// <param name="config">The irc config to use.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+
+        public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "CowSayBotConfig.xml"
             );
 
@@ -125,7 +124,7 @@ namespace Chaskis.Plugins.CowSayBot
                 );
             }
 
-            this.ircConfig = ircConfig;
+            this.ircConfig = initor.IrcConfig;
 
             this.cowSayConfig = XmlLoader.LoadCowSayBotConfig( configPath );
 

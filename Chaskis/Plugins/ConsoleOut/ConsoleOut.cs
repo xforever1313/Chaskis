@@ -78,10 +78,8 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <summary>
         /// Initializes the plugin.
         /// </summary>
-        /// <param name="pluginPath">The absolute path to the plugin dll.</param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             AllHandler handler = new AllHandler(
                 delegate ( IIrcWriter writer, IrcResponse response )

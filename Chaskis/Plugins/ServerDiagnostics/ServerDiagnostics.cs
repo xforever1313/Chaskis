@@ -88,21 +88,16 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// Inits this plugin.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin DLL</param>
-        /// <param name="ircConfig">The IRC config being used.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( pluginPath, nameof( pluginPath ) );
-            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "ServerDiagnosticsConfig.xml"
             );
 
             this.config = XmlLoader.LoadConfig( configPath );
-            this.ircConfig = ircConfig;
+            this.ircConfig = initor.IrcConfig;
 
             if( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
             {

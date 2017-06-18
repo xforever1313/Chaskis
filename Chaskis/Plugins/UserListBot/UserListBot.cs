@@ -107,16 +107,11 @@ namespace Chaskis.Plugins.UserListBot
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
         /// </summary>
-        /// <param name="pluginPath">
-        /// The absolute path to the plugin, including the file name.  To just get
-        /// the path to the plugin, call Path.GetDirectoryName on this argument.
-        /// </param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "UserListBotConfig.xml"
             );
 
@@ -127,7 +122,7 @@ namespace Chaskis.Plugins.UserListBot
                 );
             }
 
-            this.ircConfig = ircConfig;
+            this.ircConfig = initor.IrcConfig;
             this.userListConfig = XmlLoader.LoadConfig( configPath );
 
             // User query command:
@@ -192,7 +187,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <param name="response">The response from the channel.</param>
         private void HandleGetUsersCommand( IIrcWriter writer, IrcResponse response )
         {
-            writer.SendRawCmd( "NAMES " + this.ircConfig.Channels );
+            writer.SendRawCmd( "NAMES " + response.Channel );
             this.isQueried[response.Channel] = true;
         }
 

@@ -126,10 +126,8 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Inits this plugin.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin DLL</param>
-        /// <param name="ircConfig">The IRC config being used.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             MessageHandler weatherHandler = new MessageHandler(
                 weatherCommand,

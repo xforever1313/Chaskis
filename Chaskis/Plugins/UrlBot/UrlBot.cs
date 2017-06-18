@@ -83,13 +83,8 @@ namespace Chaskis.Plugins.UrlBot
         /// For example, it has all dependencies installed, config files are in the correct spot, etc.
         /// It should also load GetHandlers() with the handlers.
         /// </summary>
-        /// <param name="pluginPath">
-        /// The absolute path to the plugin, including the file name.  To just get
-        /// the path to the plugin, call Path.GetDirectoryName on this argument.
-        /// </param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             MessageHandler handler = new MessageHandler(
                 ".+",

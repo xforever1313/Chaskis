@@ -88,13 +88,11 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Initializes the plugin.
         /// </summary>
-        /// <param name="pluginPath">The absolute path to the plugin dll.</param>
-        /// <param name="ircConfig">The IRC config we are using.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "QuoteBotConfig.xml"
             );
 
@@ -105,11 +103,11 @@ namespace Chaskis.Plugins.QuoteBot
                 );
             }
 
-            this.ircConfig = ircConfig;
+            this.ircConfig = initor.IrcConfig;
 
             this.quoteBotConfig = XmlLoader.LoadConfig( configPath );
             this.parser = new QuoteBotParser( this.quoteBotConfig );
-            this.db = new QuoteBotDatabase( Path.Combine( Path.GetDirectoryName( pluginPath ), "quotes.db" ) );
+            this.db = new QuoteBotDatabase( Path.Combine( initor.PluginDirectory, "quotes.db" ) );
 
             MessageHandler addHandler = new MessageHandler(
                 this.quoteBotConfig.AddCommand,

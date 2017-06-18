@@ -82,18 +82,16 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// Inits this plugin.
         /// </summary>
-        /// <param name="pluginPath">Path to the plugin DLL</param>
-        /// <param name="ircConfig">The IRC config being used.</param>
-        /// <param name="eventScheduler">The event scheduler (not used in this plugin).</param>
-        public void Init( string pluginPath, IIrcConfig ircConfig, IChaskisEventScheduler eventScheduler )
+        /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
+        public void Init( PluginInitor initor )
         {
             string dbPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "karmabot.db"
             );
 
             string configPath = Path.Combine(
-                Path.GetDirectoryName( pluginPath ),
+                initor.PluginDirectory,
                 "KarmaBotConfig.xml"
             );
 
