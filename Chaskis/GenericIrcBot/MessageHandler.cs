@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
@@ -23,6 +24,13 @@ namespace ChaskisCore
         /// The irc command that will appear from the server.
         /// </summary>
         public const string IrcCommand = "PRIVMSG";
+
+        /// <summary>
+        /// Last time this event was triggered in the channel.
+        /// Key is the channel
+        /// Value is the timestamp of the last event.
+        /// </summary>
+        private Dictionary<string, DateTime> lastEvent;
 
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
@@ -68,7 +76,7 @@ namespace ChaskisCore
             this.CoolDown = coolDown;
             this.RespondToSelf = respondToSelf;
             this.ResponseOption = responseOption;
-            this.LastEvent = DateTime.MinValue;
+            this.lastEvent = new Dictionary<string, DateTime>();
             this.KeepHandling = true;
         }
 
@@ -86,6 +94,7 @@ namespace ChaskisCore
 
         /// <summary>
         /// How long to wait in seconds between firing events. 0 for no cool down.
+        /// This cool down is on a per-channel basis if the bot is in multiple channels.
         /// </summary>
         public int CoolDown { get; private set; }
 
@@ -99,11 +108,6 @@ namespace ChaskisCore
         /// who sent the message was this bot.
         /// </summary>
         public bool RespondToSelf { get; private set; }
-
-        /// <summary>
-        /// The last time this event was triggered.
-        /// </summary>
-        public DateTime LastEvent { get; private set; }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.
@@ -142,6 +146,11 @@ namespace ChaskisCore
                 {
                     // Blacklist channel, return.
                     return;
+                }
+
+                if( this.lastEvent.ContainsKey( channel ) == false )
+                {
+                    this.lastEvent[channel] = DateTime.MinValue;
                 }
 
                 // If we are a bridge bot, we need to change
@@ -226,7 +235,7 @@ namespace ChaskisCore
                 else
                 {
                     DateTime currentTime = DateTime.UtcNow;
-                    TimeSpan timeSpan = currentTime - this.LastEvent;
+                    TimeSpan timeSpan = currentTime - this.lastEvent[channel];
 
                     // Only fire if our cooldown was long enough. Cooldown of zero means always fire.
                     // Need to explictly say Cooldown == 0 since DateTime.UtcNow has a innacurracy of +/- 15ms.  Therefore,
@@ -234,7 +243,7 @@ namespace ChaskisCore
                     if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
                     {
                         this.LineAction( args.IrcWriter, response );
-                        this.LastEvent = currentTime;
+                        this.lastEvent[channel] = currentTime;
                     }
                 }
             }

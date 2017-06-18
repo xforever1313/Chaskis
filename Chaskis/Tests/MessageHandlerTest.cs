@@ -149,6 +149,63 @@ namespace Tests
         }
 
         /// <summary>
+        /// Ensures cool downs are on a per-channel basis.
+        /// </summary>
+        [Test]
+        public void CooldownMultiChannelTest()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"(!bot\s+help)|(!bot\s+hello)",
+                this.MessageFunction,
+                int.MaxValue
+            );
+
+            this.ircConfig.Channels.Add( this.ircConfig.Channels[0] + "2" );
+
+            // Fire on channel 1.
+            {
+                string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNotNull( this.responseReceived );
+                Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel ); // <- Should fire.
+                Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+                this.responseReceived = null;
+            }
+
+            // Fire on channel 2.
+            {
+                string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[1], expectedMessage );
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNotNull( this.responseReceived );
+                Assert.AreEqual( this.ircConfig.Channels[1], this.responseReceived.Channel ); // <- Should fire.
+                Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+                this.responseReceived = null;
+            }
+
+            // Fire again on channel 1.  Should not trigger.
+            {
+                string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNull( this.responseReceived ); // <- should not fire, cool down has not happened on this channel yet.
+            }
+
+            // Fire again on channel 2.  Should not trigger.
+            {
+                string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[1], expectedMessage );
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNull( this.responseReceived ); // <- should not fire, cool down has not happened on this channel yet.
+            }
+        }
+
+        /// <summary>
         /// Ensures a message that does not fit the pattern does not go through.
         /// </summary>
         [Test]
