@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +25,7 @@ namespace Chaskis
         /// <summary>
         /// The plugins loaded thus far.
         /// </summary>
-        private Dictionary<string, IPlugin> plugins;
+        private Dictionary<string, PluginConfig> plugins;
 
         // -------- Constructor --------
 
@@ -33,8 +35,8 @@ namespace Chaskis
         /// <param name="logger">Where to log to.  Null for Console.out</param>
         public PluginManager()
         {
-            this.plugins = new Dictionary<string, IPlugin>();
-            this.Plugins = new ReadOnlyDictionary<string, IPlugin>( this.plugins );
+            this.plugins = new Dictionary<string, PluginConfig>();
+            this.Plugins = new ReadOnlyDictionary<string, PluginConfig>( this.plugins );
         }
 
         // -------- Properties --------
@@ -44,7 +46,7 @@ namespace Chaskis
         /// String is the plugin name in all lower case, value is the IPlugin object.
         /// Its recommended that this is not called unless you are done loading plugins.
         /// </summary>
-        public IDictionary<string, IPlugin> Plugins { get; private set; }
+        public IDictionary<string, PluginConfig> Plugins { get; private set; }
 
         // -------- Functions --------
 
@@ -54,18 +56,18 @@ namespace Chaskis
         /// </summary>
         /// <param name="ircConfig">The irc config we are using.</param>
         public bool LoadPlugins(
-            IList<AssemblyConfig> pluginList,
+            IList<AssemblyConfig> assemblyList,
             IIrcConfig ircConfig,
             IChaskisEventScheduler scheduler
         )
         {
             bool success = true;
 
-            foreach( AssemblyConfig pluginConfig in pluginList )
+            foreach( AssemblyConfig assemblyConfig in assemblyList )
             {
                 try
                 {
-                    Assembly dll = Assembly.LoadFrom( pluginConfig.AssemblyPath );
+                    Assembly dll = Assembly.LoadFrom( assemblyConfig.AssemblyPath );
 
                     // Grab all the plugins, which have the ChaskisPlugin Attribute attached to them.
                     var types = from type in dll.GetTypes()
@@ -90,10 +92,18 @@ namespace Chaskis
                             throw new InvalidCastException( errorString );
                         }
 
-                        initFunction.Invoke( instance, new object[] { pluginConfig.AssemblyPath, ircConfig, scheduler } );
+                        initFunction.Invoke( instance, new object[] { assemblyConfig.AssemblyPath, ircConfig, scheduler } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
 
-                        this.plugins.Add( chaskisPlugin.PluginName, plugin );
+                        this.plugins.Add(
+                            chaskisPlugin.PluginName,
+                            new PluginConfig(
+                                assemblyConfig.AssemblyPath,
+                                chaskisPlugin.PluginName,
+                                new List<string>(), // <- TODO.
+                                plugin
+                            )
+                        );
 
                         StaticLogger.WriteLine( "Successfully loaded plugin: " + chaskisPlugin.PluginName );
                     }
@@ -101,7 +111,7 @@ namespace Chaskis
                 catch( Exception e )
                 {
                     StaticLogger.ErrorWriteLine( "*************" );
-                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + pluginConfig.AssemblyPath + ":" );
+                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
                     StaticLogger.ErrorWriteLine( e.Message );
                     StaticLogger.ErrorWriteLine();
                     StaticLogger.ErrorWriteLine( e.StackTrace );

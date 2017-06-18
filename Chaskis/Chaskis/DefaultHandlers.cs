@@ -13,7 +13,7 @@ using ChaskisCore;
 
 namespace Chaskis
 {
-    public class DefaultHandlers
+    public class DefaultHandlers : IHandlerConfig
     {
         // ---------------- Fields ----------------
 
@@ -25,7 +25,7 @@ namespace Chaskis
         /// <summary>
         /// The plugins we are using.
         /// </summary>
-        private IDictionary<string, IPlugin> plugins;
+        private IDictionary<string, PluginConfig> plugins;
 
         /// <summary>
         /// IRC handlers we will be using.
@@ -71,12 +71,13 @@ namespace Chaskis
         /// <summary>
         /// Constructor.
         /// </summary>
-        public DefaultHandlers( IIrcConfig config, IDictionary<string, IPlugin> plugins )
+        public DefaultHandlers( IIrcConfig config, IDictionary<string, PluginConfig> plugins )
         {
             this.ircConfig = config;
             this.plugins = plugins;
             this.handlers = new List<IIrcHandler>();
             this.Handlers = this.handlers.AsReadOnly();
+            this.BlackListedChannels = new List<string>().AsReadOnly();
         }
 
         // ---------------- Properties ----------------
@@ -85,6 +86,12 @@ namespace Chaskis
         /// Read-only list of handlers.
         /// </summary>
         public IList<IIrcHandler> Handlers { get; private set; }
+
+        /// <summary>
+        /// Read-only empty list of black-listed channels.
+        /// There are none here.
+        /// </summary>
+        public IList<string> BlackListedChannels { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -161,7 +168,7 @@ namespace Chaskis
             string pluginName = match.Groups["pluginName"].Value.ToLower();
             if( this.plugins.ContainsKey( pluginName ) )
             {
-                string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].SourceCodeLocation;
+                string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].Plugin.SourceCodeLocation;
                 writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
@@ -201,7 +208,7 @@ namespace Chaskis
             string pluginName = match.Groups["pluginName"].Value.ToLower();
             if( this.plugins.ContainsKey( pluginName ) )
             {
-                string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Version;
+                string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Plugin.Version;
                 writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
@@ -241,7 +248,7 @@ namespace Chaskis
             string pluginName = match.Groups["pluginName"].Value.ToLower();
             if( this.plugins.ContainsKey( pluginName ) )
             {
-                string msg = "About '" + pluginName + "': " + this.plugins[pluginName].About;
+                string msg = "About '" + pluginName + "': " + this.plugins[pluginName].Plugin.About;
                 writer.SendMessage( msg, response.Channel );
             }
             else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
@@ -336,7 +343,7 @@ namespace Chaskis
                 args.RemoveAt( 0 );
 
                 // Handle the help command for the plugin
-                this.plugins[pluginName].HandleHelp( writer, response, args.ToArray() );
+                this.plugins[pluginName].Plugin.HandleHelp( writer, response, args.ToArray() );
             }
             else
             {

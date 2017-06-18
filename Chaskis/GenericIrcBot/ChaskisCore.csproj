@@ -37,6 +37,7 @@
     <Compile Include="AllHandler.cs" />
     <Compile Include="IChaskisEventScheduler.cs" />
     <Compile Include="IConnection.cs" />
+    <Compile Include="IHandlerConfig.cs" />
     <Compile Include="IrcConfig.cs" />
     <Compile Include="ChaskisPlugin.cs" />
     <Compile Include="PongHandler.cs" />

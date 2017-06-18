@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -32,12 +33,7 @@ namespace Chaskis
         /// <summary>
         /// The plugins we are using.
         /// </summary>
-        private IDictionary<string, IPlugin> plugins;
-
-        /// <summary>
-        /// IRC handlers we will be using.
-        /// </summary>
-        private List<IIrcHandler> handlers;
+        private IDictionary<string, PluginConfig> plugins;
 
         private DefaultHandlers defaultHandlers;
 
@@ -55,7 +51,7 @@ namespace Chaskis
         {
             this.plugins = null;
             this.defaultHandlers = null;
-            this.handlers = new List<IIrcHandler>();
+            this.plugins = new Dictionary<string, PluginConfig>();
             this.fullyLoaded = false;
         }
 
@@ -102,10 +98,6 @@ namespace Chaskis
             if( manager.LoadPlugins( pluginList, this.ircConfig, this.ircBot.Scheduler ) )
             {
                 this.plugins = manager.Plugins;
-                foreach( IPlugin plugin in this.plugins.Values )
-                {
-                    this.handlers.AddRange( plugin.GetHandlers() );
-                }
                 return true;
             }
             else
@@ -129,8 +121,6 @@ namespace Chaskis
 
             this.defaultHandlers = new DefaultHandlers( this.ircConfig, this.plugins );
             this.defaultHandlers.Init();
-
-            this.handlers.AddRange( this.defaultHandlers.Handlers );
         }
 
         /// <summary>
@@ -144,16 +134,23 @@ namespace Chaskis
                     nameof( this.ircConfig ) + " is null.  Ensure " + nameof( this.InitState1_LoadIrcConfig ) + " was call prior to this function."
                 );
             }
-            else if( this.handlers.Count == 0 )
+            else if( this.defaultHandlers == null )
             {
                 throw new InvalidOperationException(
-                    nameof( this.handlers ) + " is empty.  Ensure " +
+                    nameof( this.defaultHandlers ) + " is null.  Ensure " +
                     nameof( this.InitStage3_DefaultHandlers ) + " and/or " +
                     nameof( this.InitStage2_LoadPlugins ) + " was call prior to this function."
                 );
             }
 
-            this.ircBot.Init( this.handlers );
+            Dictionary<string, IHandlerConfig> handlers = new Dictionary<string, IHandlerConfig>();
+            handlers.Add( "chaskis", this.defaultHandlers );
+            foreach( KeyValuePair<string, PluginConfig> plugin in this.plugins )
+            {
+                handlers.Add( plugin.Key, plugin.Value );
+            }
+
+            this.ircBot.Init( new ReadOnlyDictionary<string, IHandlerConfig>( handlers ) );
             this.ircBot.Start();
             this.fullyLoaded = true;
         }
@@ -165,11 +162,11 @@ namespace Chaskis
         {
             if( this.fullyLoaded )
             {
-                foreach( IPlugin plugin in plugins.Values )
+                foreach( PluginConfig plugin in plugins.Values )
                 {
                     try
                     {
-                        plugin.Dispose();
+                        plugin.Plugin.Dispose();
                     }
                     catch( Exception err )
                     {

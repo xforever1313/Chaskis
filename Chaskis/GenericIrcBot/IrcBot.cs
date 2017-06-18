@@ -30,9 +30,10 @@ namespace ChaskisCore
         private readonly IIrcConfig ircConfig;
 
         /// <summary>
-        /// The line configs to use.
+        /// The handlers
+        /// string is plugin name, value is the list of corresponding handlers. 
         /// </summary>
-        private IList<IIrcHandler> ircHandlers;
+        IReadOnlyDictionary<string, IHandlerConfig> ircHandlers;
 
         /// <summary>
         /// The IRC Connection.
@@ -73,7 +74,11 @@ namespace ChaskisCore
 
         // -------- Functions -------
 
-        public void Init( IList<IIrcHandler> ircHandlers )
+        /// <summary>
+        /// Inits the IRC bot.
+        /// </summary>
+        /// <param name="ircHandlers">IRC handlers.  Key is the plugin name, value is the corresponding handlers.</param>
+        public void Init( IReadOnlyDictionary<string, IHandlerConfig> ircHandlers )
         {
             ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
 
@@ -81,9 +86,12 @@ namespace ChaskisCore
 
             this.ircConnection.ReadEvent = delegate ( string line )
             {
-                foreach( IIrcHandler config in this.ircHandlers )
+                foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
                 {
-                    config.HandleEvent( line, this.ircConfig, this.ircConnection );
+                    foreach( IIrcHandler handler in handlers.Value.Handlers )
+                    {
+                        handler.HandleEvent( line, this.ircConfig, this.ircConnection );
+                    }
                 }
             };
 
