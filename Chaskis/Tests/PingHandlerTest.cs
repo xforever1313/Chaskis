@@ -68,19 +68,7 @@ namespace Tests
         public void ArgumentNullTest()
         {
             Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( null, new IrcConfig(), this.ircWriter.Object )
-            );
-
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( string.Empty, new IrcConfig(), this.ircWriter.Object )
-            );
-
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( "hello world", null, this.ircWriter.Object )
-            );
-
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( "hello world", new IrcConfig(), null )
+                this.uut.HandleEvent( null )
             );
         }
 
@@ -95,11 +83,8 @@ namespace Tests
             // Expect us to send the response.
             this.ircWriter.Setup( i => i.SendPong( It.Is<string>( s => s == response ) ) );
 
-            this.uut.HandleEvent(
-                TestHelpers.ConstructPingString( response ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = TestHelpers.ConstructPingString( response );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
         }
 
         /// <summary>
@@ -117,7 +102,7 @@ namespace Tests
                     "A message"
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
         }
 
         /// <summary>
@@ -135,7 +120,7 @@ namespace Tests
                     string.Empty
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
         }
 
         /// <summary>
@@ -153,7 +138,17 @@ namespace Tests
                     string.Empty
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+        }
+
+        private HandlerArgs ConstructArgs( string line )
+        {
+            HandlerArgs args = new HandlerArgs();
+            args.Line = line;
+            args.IrcWriter = this.ircWriter.Object;
+            args.IrcConfig = this.ircConfig;
+
+            return args;
         }
     }
 }

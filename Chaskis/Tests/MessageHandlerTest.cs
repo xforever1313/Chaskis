@@ -105,18 +105,13 @@ namespace Tests
                 10000
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             // Quickly send it out.  Nothing should happen since the cooldown is so high.
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], "!bot help" ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], "!bot help" );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -138,20 +133,14 @@ namespace Tests
                 1
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], "!bot hello" ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], "!bot hello" );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Thread.Sleep( 2000 );
 
             // Quickly send it out.  Nothing should happen since the cooldown is so high.
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -171,12 +160,8 @@ namespace Tests
 
             // Does not match pattern.  No response expected.
             const string expectedMessage = "hello world!";
-
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
         }
@@ -194,11 +179,8 @@ namespace Tests
                this.MessageFunction
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -234,11 +216,8 @@ namespace Tests
                     bridgeBotNick = TestHelpers.BridgeBotUser + ( 10 * i );
                 }
 
-                uut.HandleEvent(
-                    this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                    this.ircConfig,
-                    this.ircWriter.Object
-                );
+                string ircString = this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                 Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
                 Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -279,11 +258,8 @@ namespace Tests
                 // This is the wrong regex, ensure the remote user is set to the bot, not the bridged user.
                 {
                     string expectedReceivedMessage = remoteUser + ": " + expectedMessage;
-                    uut.HandleEvent(
-                        this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], expectedReceivedMessage ),
-                        this.ircConfig,
-                        this.ircWriter.Object
-                    );
+                    string ircString = this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], expectedReceivedMessage );
+                    uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                     Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
                     Assert.AreEqual( bridgeBotNick, this.responseReceived.RemoteUser );
@@ -294,11 +270,8 @@ namespace Tests
 
                 // Next, use the right regex.
                 {
-                    uut.HandleEvent(
-                        this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], "<" + remoteUser + "> " + expectedMessage ),
-                        this.ircConfig,
-                        this.ircWriter.Object
-                    );
+                    string ircString = this.GenerateMessage( bridgeBotNick, this.ircConfig.Channels[0], "<" + remoteUser + "> " + expectedMessage );
+                    uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                     Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
                     Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -323,11 +296,8 @@ namespace Tests
                 this.MessageFunction
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -348,11 +318,8 @@ namespace Tests
                 this.MessageFunction
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -372,11 +339,8 @@ namespace Tests
                 this.MessageFunction
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
         }
@@ -397,11 +361,8 @@ namespace Tests
 
             const string expectedMessage = "!bot help";
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( TestHelpers.BridgeBotUser, this.responseReceived.RemoteUser );
@@ -427,11 +388,8 @@ namespace Tests
                 remoteUser
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNotNull( this.responseReceived );
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
@@ -458,11 +416,8 @@ namespace Tests
                 remoteUser
             );
 
-            uut.HandleEvent(
-                this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
@@ -480,11 +435,8 @@ namespace Tests
 
             const string expectedMessage = "!bot help";
 
-            uut.HandleEvent(
-                this.GenerateMessage( user, this.ircConfig.Channels[0], expectedMessage ),
-                this.ircConfig,
-                this.ircWriter.Object
-            );
+            string ircString = this.GenerateMessage( user, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
             Assert.AreEqual( user, this.responseReceived.RemoteUser );
@@ -512,6 +464,16 @@ namespace Tests
         {
             Assert.AreSame( this.ircWriter.Object, writer );
             this.responseReceived = response;
+        }
+
+        private HandlerArgs ConstructArgs( string line )
+        {
+            HandlerArgs args = new HandlerArgs();
+            args.Line = line;
+            args.IrcWriter = this.ircWriter.Object;
+            args.IrcConfig = this.ircConfig;
+
+            return args;
         }
     }
 }

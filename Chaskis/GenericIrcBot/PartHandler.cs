@@ -77,22 +77,17 @@ namespace ChaskisCore
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.
         /// </summary>
-        /// <param name="line">The RAW line from IRC to check.</param>
-        /// <param name="ircConfig">The irc config to use when parsing this line.</param>
-        /// <param name="ircWriter">The way to write to the irc channel.</param>
-        public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
+        public void HandleEvent( HandlerArgs args )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
-            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
+            ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            Match match = pattern.Match( line );
+            Match match = pattern.Match( args.Line );
             if( match.Success )
             {
                 string remoteUser = match.Groups["nick"].Value;
 
                 // Don't fire if we were the ones to trigger the event.
-                if( remoteUser.ToUpper() == ircConfig.Nick.ToUpper() )
+                if( remoteUser.ToUpper() == args.IrcConfig.Nick.ToUpper() )
                 {
                     return;
                 }
@@ -106,7 +101,7 @@ namespace ChaskisCore
                         match
                     );
 
-                this.PartAction( ircWriter, response );
+                this.PartAction( args.IrcWriter, response );
             }
         }
     }

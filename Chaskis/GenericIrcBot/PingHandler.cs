@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
@@ -61,19 +63,14 @@ namespace ChaskisCore
         /// <summary>
         /// Handles the event and the pong back to the server.
         /// </summary>
-        /// <param name="line">The RAW line from IRC to check.</param>
-        /// <param name="ircConfig">The irc config to use when parsing this line.</param>
-        /// <param name="ircWriter">The way to write to the irc channel.</param>
-        public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
+        public void HandleEvent( HandlerArgs args )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
-            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
+            ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            Match match = pattern.Match( line );
+            Match match = pattern.Match( args.Line );
             if( match.Success )
             {
-                ircWriter.SendPong( match.Groups["response"].Value );
+                args.IrcWriter.SendPong( match.Groups["response"].Value );
             }
         }
     }

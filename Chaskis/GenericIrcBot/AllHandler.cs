@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using SethCS.Exceptions;
@@ -14,7 +16,7 @@ namespace ChaskisCore
     /// </summary>
     public class AllHandler : IIrcHandler
     {
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor
@@ -28,7 +30,7 @@ namespace ChaskisCore
             this.KeepHandling = true;
         }
 
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// The action to take when ANY message appears from IRC (JOIN, PART, PRIVMSG, PING, etc).
@@ -57,29 +59,24 @@ namespace ChaskisCore
         /// </summary>
         public bool KeepHandling { get; set; }
 
-        // -------- Functions --------
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Handles the event.
         /// </summary>
-        /// <param name="line">The RAW line from IRC to check.</param>
-        /// <param name="ircConfig">The irc config to use when parsing this line.</param>
-        /// <param name="ircWriter">The way to write to the irc channel.</param>
-        public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
+        public void HandleEvent( HandlerArgs args )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
-            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
+            ArgumentChecker.IsNotNull( args, nameof( args ) );
 
             IrcResponse response = new IrcResponse(
                 string.Empty,
                 string.Empty,
-                line,
+                args.Line,
                 null,
                 null
             );
 
-            this.AllAction( ircWriter, response );
+            this.AllAction( args.IrcWriter, response );
         }
     }
 }

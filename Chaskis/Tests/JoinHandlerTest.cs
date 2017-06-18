@@ -77,23 +77,9 @@ namespace Tests
             );
 
             Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( null, new IrcConfig(), this.ircWriter.Object )
+                this.uut.HandleEvent( null )
             );
-            Assert.IsNull( responseReceived ); // Ensure handler didn't get called.
 
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( string.Empty, new IrcConfig(), this.ircWriter.Object )
-            );
-            Assert.IsNull( responseReceived ); // Ensure handler didn't get called.
-
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( "hello world", null, this.ircWriter.Object )
-            );
-            Assert.IsNull( responseReceived ); // Ensure handler didn't get called.
-
-            Assert.Throws<ArgumentNullException>( () =>
-                this.uut.HandleEvent( "hello world", new IrcConfig(), null )
-            );
             Assert.IsNull( this.responseReceived ); // Ensure handler didn't get called.
         }
 
@@ -133,7 +119,7 @@ namespace Tests
                     string.Empty
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
         }
@@ -153,7 +139,7 @@ namespace Tests
                     "A message"
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
         }
@@ -173,7 +159,7 @@ namespace Tests
                     string.Empty
                 );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
         }
@@ -186,9 +172,7 @@ namespace Tests
         public void PingAppears()
         {
             this.uut.HandleEvent(
-                TestHelpers.ConstructPingString( "12345" ),
-                this.ircConfig,
-                this.ircWriter.Object
+                this.ConstructArgs( TestHelpers.ConstructPingString( "12345" ) )
             );
             Assert.IsNull( this.responseReceived );
         }
@@ -205,7 +189,7 @@ namespace Tests
                 string.Empty
             );
 
-            this.uut.HandleEvent( ircString, this.ircConfig, this.ircWriter.Object );
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNotNull( this.responseReceived );
 
@@ -228,6 +212,16 @@ namespace Tests
         {
             Assert.AreSame( this.ircWriter.Object, writer );
             this.responseReceived = response;
+        }
+
+        private HandlerArgs ConstructArgs( string line )
+        {
+            HandlerArgs args = new HandlerArgs();
+            args.Line = line;
+            args.IrcWriter = this.ircWriter.Object;
+            args.IrcConfig = this.ircConfig;
+
+            return args;
         }
     }
 }

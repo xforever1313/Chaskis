@@ -86,11 +86,17 @@ namespace ChaskisCore
 
             this.ircConnection.ReadEvent = delegate ( string line )
             {
+                HandlerArgs args = new HandlerArgs();
+                args.IrcConfig = this.ircConfig;
+                args.IrcWriter = this.ircConnection;
+                args.Line = line;
+
                 foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
                 {
+                    args.BlackListedChannels = handlers.Value.BlackListedChannels;
                     foreach( IIrcHandler handler in handlers.Value.Handlers )
                     {
-                        handler.HandleEvent( line, this.ircConfig, this.ircConnection );
+                        handler.HandleEvent( args );
                     }
                 }
             };

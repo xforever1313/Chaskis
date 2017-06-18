@@ -90,11 +90,8 @@ namespace Tests.Plugins.XmlBot
                 string expectedMessage = "Hello " + remoteUser + "!";
                 this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
-                handler0.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "Hello " + this.testConfig.Nick ),
-                    this.testConfig,
-                    this.mockIrcWriter.Object
-                );
+                string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "Hello " + this.testConfig.Nick );
+                handler0.HandleEvent( this.ConstructArgs( ircString ) );
             }
 
             // Slot 1 should be a Message Handler
@@ -110,11 +107,8 @@ namespace Tests.Plugins.XmlBot
                 string expectedMessage = "Hello Seth!";
                 this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
-                handler1.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "My name is Seth" ),
-                    this.testConfig,
-                    this.mockIrcWriter.Object
-                );
+                string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "My name is Seth" );
+                handler1.HandleEvent( this.ConstructArgs( ircString ) );
             }
 
             // Slot 2 should be a message Handler
@@ -142,11 +136,9 @@ namespace Tests.Plugins.XmlBot
                     remoteUser
                 );
 
-                handler2.HandleEvent(
-                    TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
-                    this.testConfig,
-                    this.mockIrcWriter.Object
-                );
+                string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command );
+
+                handler2.HandleEvent( this.ConstructArgs( ircString ) );
             }
 
             // Slot 3 should be a message Handler
@@ -164,11 +156,9 @@ namespace Tests.Plugins.XmlBot
                     this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                     string command = "What is a mouse";
-                    handler3.HandleEvent(
-                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
-                        this.testConfig,
-                        this.mockIrcWriter.Object
-                    );
+
+                    string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command );
+                    handler3.HandleEvent( this.ConstructArgs( ircString ) );
                 }
 
                 {
@@ -176,11 +166,8 @@ namespace Tests.Plugins.XmlBot
                     this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
 
                     string command = "What is an acorn";
-                    handler3.HandleEvent(
-                        TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command ),
-                        this.testConfig,
-                        this.mockIrcWriter.Object
-                    );
+                    string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], command );
+                    handler3.HandleEvent( this.ConstructArgs( ircString ) );
                 }
             }
         }
@@ -236,6 +223,16 @@ namespace Tests.Plugins.XmlBot
 
             Assert.AreEqual( 0, handler.CoolDown ); // Defaulted to 0.
             Assert.AreEqual( ResponseOptions.ChannelAndPms, handler.ResponseOption ); // Defaulted to both.
+        }
+
+        private HandlerArgs ConstructArgs( string line )
+        {
+            HandlerArgs args = new HandlerArgs();
+            args.Line = line;
+            args.IrcWriter = this.mockIrcWriter.Object;
+            args.IrcConfig = this.testConfig;
+
+            return args;
         }
     }
 }

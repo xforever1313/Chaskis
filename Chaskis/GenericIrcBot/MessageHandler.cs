@@ -127,16 +127,11 @@ namespace ChaskisCore
         /// <summary>
         /// Fires the action if the line regex matches.
         /// </summary>
-        /// <param name="line">The RAW line from IRC to check.</param>
-        /// <param name="ircConfig">The irc config to use when parsing this line.</param>
-        /// <param name="ircWriter">The way to write to the irc channel.</param>
-        public void HandleEvent( string line, IIrcConfig ircConfig, IIrcWriter ircWriter )
+        public void HandleEvent( HandlerArgs args )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( line, nameof( line ) );
-            ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
-            ArgumentChecker.IsNotNull( ircWriter, nameof( ircWriter ) );
+            ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            Match match = pattern.Match( line );
+            Match match = pattern.Match( args.Line );
             if( match.Success )
             {
                 string remoteUser = match.Groups["nick"].Value;
@@ -145,12 +140,12 @@ namespace ChaskisCore
 
                 // If we are a bridge bot, we need to change
                 // the nick and the channel
-                foreach( string bridgeBotRegex in ircConfig.BridgeBots.Keys )
+                foreach( string bridgeBotRegex in args.IrcConfig.BridgeBots.Keys )
                 {
                     Match nameMatch = Regex.Match( remoteUser, bridgeBotRegex );
                     if( nameMatch.Success )
                     {
-                        Match bridgeBotMatch = Regex.Match( message, ircConfig.BridgeBots[bridgeBotRegex] );
+                        Match bridgeBotMatch = Regex.Match( message, args.IrcConfig.BridgeBots[bridgeBotRegex] );
 
                         // If the regex matches, then we'll update the nick and message
                         // to be whatever came from the bridge.
@@ -179,7 +174,7 @@ namespace ChaskisCore
                     Parsing.LiquefyStringWithIrcConfig(
                         this.LineRegex,
                         remoteUser,
-                        ircConfig.Nick,
+                        args.IrcConfig.Nick,
                         channel
                     )
                 );
@@ -199,17 +194,26 @@ namespace ChaskisCore
                 );
 
                 // Return right away if the nick name from the remote user is our own.
-                if( ( this.RespondToSelf == false ) && ( response.RemoteUser.ToUpper() == ircConfig.Nick.ToUpper() ) )
+                if(
+                    ( this.RespondToSelf == false ) &&
+                    ( response.RemoteUser.ToUpper() == args.IrcConfig.Nick.ToUpper() )
+                )
                 {
                     return;
                 }
                 // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
-                else if( ( this.ResponseOption == ResponseOptions.ChannelOnly ) && ( ircConfig.Channels.Any( c => c.ToUpper() == response.Channel.ToUpper() ) == false ) )
+                else if(
+                    ( this.ResponseOption == ResponseOptions.ChannelOnly ) &&
+                    ( args.IrcConfig.Channels.Any( c => c.ToUpper() == response.Channel.ToUpper() ) == false )
+                )
                 {
                     return;
                 }
                 // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
-                else if( ( this.ResponseOption == ResponseOptions.PmsOnly ) && ( response.Channel.ToUpper() != ircConfig.Nick.ToUpper() ) )
+                else if(
+                    ( this.ResponseOption == ResponseOptions.PmsOnly ) &&
+                    ( response.Channel.ToUpper() != args.IrcConfig.Nick.ToUpper() )
+                )
                 {
                     return;
                 }
@@ -223,7 +227,7 @@ namespace ChaskisCore
                     // if the action happens too quickly, it can incorrectly not be triggered.
                     if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
                     {
-                        this.LineAction( ircWriter, response );
+                        this.LineAction( args.IrcWriter, response );
                         this.LastEvent = currentTime;
                     }
                 }
