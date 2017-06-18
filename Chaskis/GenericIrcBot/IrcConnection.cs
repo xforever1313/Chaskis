@@ -52,6 +52,11 @@ namespace ChaskisCore
         /// </summary>
         private EventExecutor eventQueue;
 
+        /// <summary>
+        /// Writer Queue.
+        /// </summary>
+        private EventExecutor writerQueue;
+
         private EventScheduler eventScheduler;
 
         /// <summary>
@@ -103,6 +108,9 @@ namespace ChaskisCore
             );
 
             this.eventQueue.OnError += EventQueue_OnError;
+
+            this.writerQueue = new EventExecutor( false );
+            this.writerQueue.OnError += EventQueue_OnError;
 
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
@@ -159,6 +167,7 @@ namespace ChaskisCore
             if( this.inited == false )
             {
                 // Start Executing
+                this.writerQueue.Start();
                 this.eventQueue.Start();
 
                 this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
@@ -223,6 +232,7 @@ namespace ChaskisCore
             if( string.IsNullOrEmpty( this.Config.Password ) == false )
             {
                 this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.Config.Password );
+                this.ircWriter.Flush();
             }
 
             this.IsConnected = true;
@@ -257,31 +267,36 @@ namespace ChaskisCore
                 );
             }
 
-            lock( this.ircWriterLock )
-            {
-                // This should be in the lock.  If this is before the lock,
-                // CanWrite can return true, this thread can be preempted,
-                // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
-                // to a socket that is closed which is a problem.
-                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+            this.AddToWriterQueue(
+                delegate ()
                 {
-                    return;
-                }
-
-                using( StringReader reader = new StringReader( msg ) )
-                {
-                    string line;
-                    while( ( line = reader.ReadLine() ) != null )
+                    lock( this.ircWriterLock )
                     {
-                        if( string.IsNullOrEmpty( line ) == false )
+                        // This should be in the lock.  If this is before the lock,
+                        // CanWrite can return true, this thread can be preempted,
+                        // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
+                        // to a socket that is closed which is a problem.
+                        if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
                         {
-                            // PRIVMSG < msgtarget > < message >
-                            this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
-                            this.ircWriter.Flush();
+                            return;
+                        }
+
+                        using( StringReader reader = new StringReader( msg ) )
+                        {
+                            string line;
+                            while( ( line = reader.ReadLine() ) != null )
+                            {
+                                if( string.IsNullOrEmpty( line ) == false )
+                                {
+                                    // PRIVMSG < msgtarget > < message >
+                                    this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
+                                    this.ircWriter.Flush();
+                                }
+                            }
                         }
                     }
                 }
-            }
+            );
         }
 
         /// <summary>
@@ -348,16 +363,36 @@ namespace ChaskisCore
                 );
             }
 
-            lock( this.ircWriterLock )
-            {
-                if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+            this.AddToWriterQueue(
+                delegate ()
                 {
-                    return;
-                }
+                    lock( this.ircWriterLock )
+                    {
+                        if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                        {
+                            return;
+                        }
 
-                this.ircWriter.WriteLine( cmd );
-                this.ircWriter.Flush();
-            }
+                        this.ircWriter.WriteLine( cmd );
+                        this.ircWriter.Flush();
+                    }
+                }
+            );
+        }
+
+        /// <summary>
+        /// Adds action to the writer queue.
+        /// Used for rate-limiting.
+        /// </summary>
+        private void AddToWriterQueue( Action action )
+        {
+            this.writerQueue.AddEvent(
+                delegate ()
+                {
+                    action();
+                    Thread.Sleep( 250 ); // TODO: Make this user-configurable.
+                }
+            );
         }
 
         /// <summary>
@@ -406,6 +441,7 @@ namespace ChaskisCore
                 // Execute all remaining events. Any that call into writing to the channel
                 // will be a No-Op as the stream is closed.
                 this.eventQueue.Dispose();
+                this.writerQueue.Dispose();
 
                 // Finish disconnecting by closing the connection.
                 DisconnectHelper();
@@ -446,6 +482,7 @@ namespace ChaskisCore
         {
             Disconnect();
             this.eventQueue.OnError -= this.EventQueue_OnError;
+            this.writerQueue.OnError -= this.EventQueue_OnError;
         }
 
         /// <summary>
