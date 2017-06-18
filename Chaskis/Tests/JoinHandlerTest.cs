@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using ChaskisCore;
 using Moq;
 using NUnit.Framework;
@@ -111,15 +112,40 @@ namespace Tests
         [Test]
         public void BotJoins()
         {
-            string ircString =
-                TestHelpers.ConstructIrcString(
-                    this.ircConfig.Nick,
-                    JoinHandler.IrcCommand,
-                    this.ircConfig.Channels[0],
-                    string.Empty
-                );
+            string ircString = TestHelpers.ConstructIrcString(
+                this.ircConfig.Nick,
+                JoinHandler.IrcCommand,
+                this.ircConfig.Channels[0],
+                string.Empty
+            );
 
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
+        /// Ensures that if we get a part from a channel
+        /// that is black-listed, nothing happens.
+        /// </summary>
+        [Test]
+        public void BlacklistTest()
+        {
+            const string channel = "#blacklist";
+
+            List<string> blackList = new List<string>() { channel };
+
+            string ircString = TestHelpers.ConstructIrcString(
+                RemoteUser,
+                JoinHandler.IrcCommand,
+                channel,
+                string.Empty
+            );
+
+            HandlerArgs args = this.ConstructArgs( ircString );
+            args.BlackListedChannels = blackList;
+
+            this.uut.HandleEvent( args );
 
             Assert.IsNull( this.responseReceived );
         }

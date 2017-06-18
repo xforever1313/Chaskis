@@ -138,6 +138,12 @@ namespace ChaskisCore
                 string channel = match.Groups["channel"].Value;
                 string message = match.Groups["theIrcMessage"].Value;
 
+                if( args.BlackListedChannels.Contains( channel.ToLower() ) )
+                {
+                    // Blacklist channel, return.
+                    return;
+                }
+
                 // If we are a bridge bot, we need to change
                 // the nick and the channel
                 foreach( string bridgeBotRegex in args.IrcConfig.BridgeBots.Keys )

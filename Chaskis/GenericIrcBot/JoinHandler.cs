@@ -92,14 +92,20 @@ namespace ChaskisCore
                     return;
                 }
 
-                IrcResponse response =
-                    new IrcResponse(
-                        remoteUser,
-                        match.Groups["channel"].Value,
-                        string.Empty,
-                        pattern,
-                        match
-                    );
+                string channel = match.Groups["channel"].Value;
+                if( args.BlackListedChannels.Contains( channel.ToLower() ) )
+                {
+                    // Blacklisted channel, return.
+                    return;
+                }
+
+                IrcResponse response = new IrcResponse(
+                    remoteUser,
+                    channel,
+                    string.Empty,
+                    pattern,
+                    match
+                );
 
                 this.JoinAction( args.IrcWriter, response );
             }

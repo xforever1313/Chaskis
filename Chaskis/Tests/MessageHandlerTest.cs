@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
 using System.Threading;
 using ChaskisCore;
 using Moq;
@@ -162,6 +163,33 @@ namespace Tests
             const string expectedMessage = "hello world!";
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
             uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
+        /// Ensures that if we get a part from a channel
+        /// that is black-listed, nothing happens.
+        /// </summary>
+        [Test]
+        public void BlacklistTest()
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction
+            );
+
+            const string channel = "#blacklist";
+            const string expectedMessage = "!bot help";
+
+            List<string> blackList = new List<string>() { channel };
+
+            string ircString = this.GenerateMessage( remoteUser, channel, expectedMessage );
+
+            HandlerArgs args = this.ConstructArgs( ircString );
+            args.BlackListedChannels = blackList;
+
+            uut.HandleEvent( args );
 
             Assert.IsNull( this.responseReceived );
         }
