@@ -28,11 +28,6 @@ namespace Chaskis.Plugins.UserListBot
         private readonly List<IIrcHandler> handlers;
 
         /// <summary>
-        /// The irc configuration.
-        /// </summary>
-        private IIrcConfig ircConfig;
-
-        /// <summary>
         /// The config for this plugin.
         /// </summary>
         private UserListBotConfig userListConfig;
@@ -122,7 +117,6 @@ namespace Chaskis.Plugins.UserListBot
                 );
             }
 
-            this.ircConfig = initor.IrcConfig;
             this.userListConfig = XmlLoader.LoadConfig( configPath );
 
             // User query command:
