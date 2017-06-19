@@ -46,7 +46,7 @@ namespace Chaskis
 
             doc.Load( fileName );
 
-            XmlElement rootNode = doc.DocumentElement;
+            XmlNode rootNode = doc.DocumentElement;
             if( rootNode.Name != ircConfigRootNodeName )
             {
                 throw new XmlException(
@@ -97,14 +97,14 @@ namespace Chaskis
                         break;
 
                     case "bridgebots":
-                        foreach( XmlElement bridgeBotNode in childNode.ChildNodes )
+                        foreach( XmlNode bridgeBotNode in childNode.ChildNodes )
                         {
                             if( bridgeBotNode.Name == "bridgebot" )
                             {
                                 string botName = string.Empty;
                                 string botRegex = string.Empty;
 
-                                foreach( XmlElement bridgeBotChild in bridgeBotNode.ChildNodes )
+                                foreach( XmlNode bridgeBotChild in bridgeBotNode.ChildNodes )
                                 {
                                     switch( bridgeBotChild.Name )
                                     {
@@ -123,7 +123,7 @@ namespace Chaskis
                         break;
 
                     case "admins":
-                        foreach( XmlElement adminNode in childNode.ChildNodes )
+                        foreach( XmlNode adminNode in childNode.ChildNodes )
                         {
                             if( adminNode.Name == "admin" )
                             {
@@ -166,7 +166,7 @@ namespace Chaskis
 
             doc.Load( fileName );
 
-            XmlElement rootNode = doc.DocumentElement;
+            XmlNode rootNode = doc.DocumentElement;
             if( rootNode.Name != pluginConfigRootNodeName )
             {
                 throw new XmlException(
