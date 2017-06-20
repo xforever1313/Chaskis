@@ -10,12 +10,45 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using SethCS.Basic;
+using SethCS.Extensions;
 
 namespace ChaskisCore
 {
     public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler
     {
         // ---------------- Fields ----------------
+
+        // Rationale for maximum length:
+        // Per this site: http://www.networksorcery.com/enp/protocol/irc.htm
+        // The command MUST either be a valid IRC command or a three digit 
+        // number represented in ASCII text. IRC messages are always lines 
+        // of characters terminated with a CR-LF pair, and these messages SHALL NOT 
+        // exceed 512 characters in length, counting all characters including the 
+        // trailing CR-LF. Thus, there are 510 characters maximum allowed for the 
+        // command and its parameters. There is no provision for continuation of 
+        // message lines.
+        //
+        // Maximum number of characters for nicknames, usernames, and channels vary per server. Lets assume 64 is the worst-case scenario.
+        // 
+        // Characters in use:
+        //     | char       | Length |
+        //     | PRIVMSG    | 7      |
+        //     | WhiteSpace | 1      |
+        //     | Channel    | 64     |
+        //     | WhiteSpace | 1      |
+        //     | Colon      | 1      |
+        // 
+        // That is a total of 74 characters. 510-74 is 436.
+        // I say let's round down to 400 just to be extra safe.
+        // 
+        // If a message is more than 400 characters, split it up and have it appear on a new line.
+
+        /// <summary>
+        /// This is the maximum length of a message.  Should
+        /// any messages the bot produces be more than this, it
+        /// will be split and printed to a new line.
+        /// </summary>
+        public const int MaximumLength = 400;
 
         /// <summary>
         /// Connection to the server.
@@ -270,6 +303,38 @@ namespace ChaskisCore
                 );
             }
 
+            using( StringReader reader = new StringReader( msg ) )
+            {
+                string line;
+                while( ( line = reader.ReadLine() ) != null )
+                {
+                    if( string.IsNullOrEmpty( line ) == false )
+                    {
+                        if( line.Length <= MaximumLength )
+                        {
+                            this.SendMessageHelper( line, channel );
+                        }
+                        else
+                        {
+                            // If our length is too great, split it up by our maximum length
+                            // and set each split part as a separate message.
+                            string[] splitString = line.SplitByLength( MaximumLength );
+                            for( int i = 0; i < ( splitString.Length - 1 ); ++i )
+                            {
+                                this.SendMessageHelper( splitString[i] + "<more>", channel );
+                            }
+                            this.SendMessageHelper( splitString[splitString.Length - 1], channel );
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the given message to our writer queue.
+        /// </summary>
+        private void SendMessageHelper( string line, string channel )
+        {
             this.AddToWriterQueue(
                 delegate ()
                 {
@@ -284,21 +349,11 @@ namespace ChaskisCore
                             return;
                         }
 
-                        using( StringReader reader = new StringReader( msg ) )
-                        {
-                            string line;
-                            while( ( line = reader.ReadLine() ) != null )
-                            {
-                                if( string.IsNullOrEmpty( line ) == false )
-                                {
-                                    // PRIVMSG < msgtarget > < message >
-                                    this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
-                                    this.ircWriter.Flush();
-                                }
-                            }
-                        }
+                        // PRIVMSG < msgtarget > < message >
+                        this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
+                        this.ircWriter.Flush();
                     }
-                }
+                } 
             );
         }
 
