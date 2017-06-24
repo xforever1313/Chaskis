@@ -1,8 +1,9 @@
-﻿
+﻿//
 //          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Net;
@@ -112,7 +113,8 @@ namespace Chaskis.Plugins.UrlBot
                         HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
                         if( node != null )
                         {
-                            response.Title = node.InnerText;
+                            // Issue #15: Ensure we decode characters such as &lt; and &gt;
+                            response.Title = WebUtility.HtmlDecode( node.InnerText );
                         }
                     }
                     catch( Exception e )

@@ -1,7 +1,7 @@
 ﻿//
 //          Copyright Seth Hendrick 2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -24,8 +24,8 @@ namespace Tests.Plugins.UrlBot
         private string urlTestFiles;
 
         private string goodSizeFile;
-
         private string bigSizeFile;
+        private string escapedCharactersFile;
 
         // ---------------- Setup / Teardown ----------------
 
@@ -43,6 +43,7 @@ namespace Tests.Plugins.UrlBot
 
             this.goodSizeFile = Path.Combine( urlTestFiles, "GoodSize.html" );
             this.bigSizeFile = Path.Combine( urlTestFiles, "BigSize.html" );
+            this.escapedCharactersFile = Path.Combine( urlTestFiles, "EscapedCharacters.html" );
         }
 
         [SetUp]
@@ -79,6 +80,19 @@ namespace Tests.Plugins.UrlBot
             Task<UrlResponse> response = this.reader.GetDescription( url );
             response.Wait();
             Assert.IsFalse( response.Result.IsValid );
+        }
+
+        [Test]
+        public void EscapedCharactersTest()
+        {
+            string url = SethPath.ToUri( this.escapedCharactersFile );
+
+            Task<UrlResponse> response = this.reader.GetDescription( url );
+            response.Wait();
+
+            Assert.IsTrue( response.Result.IsValid );
+            Assert.AreEqual( @"<My ""Title"">", response.Result.Title );
+            Assert.AreEqual( @"<My ""Title"">", response.Result.TitleShortened );
         }
     }
 }

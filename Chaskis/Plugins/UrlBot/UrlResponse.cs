@@ -1,14 +1,17 @@
-﻿
-//          Copyright Seth Hendrick 2017.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
+
+using ChaskisCore;
 
 namespace Chaskis.Plugins.UrlBot
 {
     public class UrlResponse
     {
-        public const int MaxTitleLength = 80;
+        public const int MaxTitleLength = IrcConnection.MaximumLength;
 
         /// <summary>
         /// Constructor.
@@ -27,7 +30,7 @@ namespace Chaskis.Plugins.UrlBot
         /// <summary>
         /// A title that is shortened so we don't overflow IRC.
         /// 
-        /// We'll shorten at 80 characters (seems reasonable).
+        /// We'll shorten at our IRC bot's maximum length-3 characters (seems reasonable).
         /// 
         /// Also, removes new lines.
         /// </summary>

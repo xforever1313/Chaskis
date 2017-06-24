@@ -198,6 +198,7 @@
     <Content Include="Plugins\RssBot\TestFiles\Reddit_Update.xml" />
     <Content Include="Plugins\RssBot\TestFiles\Reddit_Init.xml" />
     <Content Include="Plugins\UrlBot\TestFiles\BigSize.html" />
+    <Content Include="Plugins\UrlBot\TestFiles\EscapedCharacters.html" />
     <Content Include="Plugins\UrlBot\TestFiles\GoodSize.html" />
     <Content Include="Plugins\UserListBot\TestFiles\BlankConfig.xml" />
     <Content Include="Plugins\UserListBot\TestFiles\GoodConfig.xml" />

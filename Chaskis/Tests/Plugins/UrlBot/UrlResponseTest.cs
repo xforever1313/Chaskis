@@ -1,12 +1,14 @@
-﻿
+﻿//
 //          Copyright Seth Hendrick 2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Text;
 using Chaskis.Plugins.UrlBot;
+using ChaskisCore;
 using NUnit.Framework;
 
 namespace Tests.Plugins.UrlBot
@@ -21,10 +23,16 @@ namespace Tests.Plugins.UrlBot
         // ---------------- Tests ----------------
 
         [Test]
-        public void EightyCharacterTest()
+        public void MaxCharacterTest()
         {
-            const string str = "12345678911234567892123456789312345678941234567895123456789612345678971234567898";
-            Assert.AreEqual( 80, str.Length );
+            StringBuilder builder = new StringBuilder();
+            for( int i = 0; i < IrcConnection.MaximumLength; ++i )
+            {
+                builder.Append( (char)( '0' + i ) % 10 );
+            }
+            string str = builder.ToString();
+
+            Assert.AreEqual( IrcConnection.MaximumLength, str.Length );
 
             UrlResponse response = new UrlResponse();
             response.Title = str;
@@ -57,13 +65,19 @@ namespace Tests.Plugins.UrlBot
         }
 
         [Test]
-        public void EightyOneCharacterTest()
+        public void MoreThanMaxTest()
         {
-            const string str = "123456789112345678921234567893123456789412345678951234567896123456789712345678981";
-            Assert.AreEqual( 81, str.Length );
+            StringBuilder builder = new StringBuilder();
+            for( int i = 0; i < ( IrcConnection.MaximumLength + 1 ); ++i )
+            {
+                builder.Append( (char)( '0' + i ) % 10 );
+            }
+            string str = builder.ToString();
 
-            const string shortenedStr = "12345678911234567892123456789312345678941234567895123456789612345678971234567...";
-            Assert.AreEqual( 80, shortenedStr.Length );
+            Assert.AreEqual( IrcConnection.MaximumLength + 1, str.Length );
+
+            string shortenedStr = str.Substring( 0, IrcConnection.MaximumLength - 3 ) + "...";
+            Assert.AreEqual( IrcConnection.MaximumLength, shortenedStr.Length );
 
             UrlResponse response = new UrlResponse();
             response.Title = str;
