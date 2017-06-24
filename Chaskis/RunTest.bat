@@ -8,4 +8,4 @@ del /Q CodeCoverage\*
 packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -filter:+[*]Chaskis* -returntargetcode -searchdirs:Tests\bin\Debug -target:packages\NUnit.ConsoleRunner.3.5.0\tools\nunit3-console.exe -targetargs:"--result=CodeCoverage\TestResult.xml Tests\bin\Debug\Tests.dll" -output:CodeCoverage\coverage.xml
 
 ::Open ReportGenerator
-packages\ReportGenerator.2.4.5.0\tools\ReportGenerator.exe -reports:CodeCoverage\coverage.xml -targetdir:CodeCoverage
+packages\ReportGenerator.2.5.8\tools\ReportGenerator.exe -reports:CodeCoverage\coverage.xml -targetdir:CodeCoverage
