@@ -86,7 +86,7 @@
     <Compile Include="XmlLoader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GenericIrcBot\ChaskisCore.csproj">
+    <ProjectReference Include="..\..\ChaskisCore\ChaskisCore.csproj">
       <Project>{501708e7-ac43-4df4-b7bc-6a31074e30d1}</Project>
       <Name>ChaskisCore</Name>
     </ProjectReference>
