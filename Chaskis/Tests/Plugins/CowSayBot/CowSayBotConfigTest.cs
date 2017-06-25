@@ -1,12 +1,14 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
-using System;
 using System.IO;
 using Chaskis.Plugins.CowSayBot;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests.Plugins.CowSayBot
 {
@@ -46,13 +48,13 @@ namespace Tests.Plugins.CowSayBot
             uut.ExeCommand = FakeExe;
             uut.CowFileInfoList.CommandList["command"] = "name";
 
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.ListenRegex = string.Empty;
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.ListenRegex = "       ";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -67,16 +69,16 @@ namespace Tests.Plugins.CowSayBot
             uut.ExeCommand = null;
             uut.CowFileInfoList.CommandList["command"] = "name";
 
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.ExeCommand = string.Empty;
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.ExeCommand = "       ";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.ExeCommand = "doesNotExist";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace Tests.Plugins.CowSayBot
             uut.ExeCommand = FakeExe;
             uut.CowFileInfoList.CommandList.Clear();
 
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>

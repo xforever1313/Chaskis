@@ -1,11 +1,13 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
-using System;
 using Chaskis.Plugins.UserListBot;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests.Plugins.UserListBot
 {
@@ -42,20 +44,20 @@ namespace Tests.Plugins.UserListBot
 
             // Null, empty, or whitespace command should fail.
             this.uut.Command = null;
-            Assert.Throws<InvalidOperationException>( () => this.uut.Validate() );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
             this.uut = new UserListBotConfig();
 
             this.uut.Command = string.Empty;
-            Assert.Throws<InvalidOperationException>( () => this.uut.Validate() );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
             this.uut = new UserListBotConfig();
 
             this.uut.Command = "   ";
-            Assert.Throws<InvalidOperationException>( () => this.uut.Validate() );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
             this.uut = new UserListBotConfig();
 
             // Negative cooldown should fail.
             this.uut.Cooldown = -1;
-            Assert.Throws<InvalidOperationException>( () => this.uut.Validate() );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
             this.uut = new UserListBotConfig();
 
             // Zero cooldown should not.

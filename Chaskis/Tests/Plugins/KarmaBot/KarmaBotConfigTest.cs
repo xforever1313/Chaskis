@@ -1,12 +1,14 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
-//          http://www.boost.org/LICENSE_1_0.txt)
+//    (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//
 
-using System;
 using System.Text.RegularExpressions;
 using Chaskis.Plugins.KarmaBot;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests.Plugins.KarmaBot
 {
@@ -162,14 +164,14 @@ namespace Tests.Plugins.KarmaBot
         {
             KarmaBotConfig uut = new KarmaBotConfig();
             uut.IncreaseCommandRegex = null; // Null is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.IncreaseCommandRegex = string.Empty; // Empty is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             // No <name> group.
             uut.IncreaseCommandRegex = "++derp";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -181,14 +183,14 @@ namespace Tests.Plugins.KarmaBot
         {
             KarmaBotConfig uut = new KarmaBotConfig();
             uut.DecreaseCommandRegex = null; // Null is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.DecreaseCommandRegex = string.Empty; // Empty is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             // No <name> group.
             uut.DecreaseCommandRegex = "++derp";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -200,14 +202,14 @@ namespace Tests.Plugins.KarmaBot
         {
             KarmaBotConfig uut = new KarmaBotConfig();
             uut.QueryCommand = null; // Null is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             uut.QueryCommand = string.Empty; // Empty is bad.
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
 
             // No <name> group.
             uut.QueryCommand = "++derp";
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
     }
 }

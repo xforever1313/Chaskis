@@ -366,13 +366,13 @@ namespace Tests
         /// <param name="config">The config to check.</param>
         public void CheckNotValid( IrcConfig config )
         {
-            Assert.Throws<ApplicationException>( () => config.Validate() );
+            Assert.Throws<ValidationException>( () => config.Validate() );
 
             ReadOnlyIrcConfig roConfig = new ReadOnlyIrcConfig( config.Clone() );
-            Assert.Throws<ApplicationException>( () => roConfig.Validate() );
+            Assert.Throws<ValidationException>( () => roConfig.Validate() );
 
             IIrcConfig iircConfig = config;
-            Assert.Throws<ApplicationException>( () => iircConfig.Validate() );
+            Assert.Throws<ValidationException>( () => iircConfig.Validate() );
         }
     }
 }

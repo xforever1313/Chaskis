@@ -1,8 +1,8 @@
 ﻿//
 //          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//         http://www.boost.org/LICENSE_1_0.txt)
 //
 
 using System;
@@ -12,6 +12,7 @@ using System.Xml;
 using Chaskis;
 using ChaskisCore;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests
 {
@@ -172,7 +173,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithUserName()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyUserName.xml" ) )
             );
         }
@@ -183,7 +184,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithEmptyNick()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyNick.xml" ) )
             );
         }
@@ -205,7 +206,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithEmptyRealName()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyRealName.xml" ) )
             );
         }
@@ -216,7 +217,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithNoServer()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoServer.xml" ) )
             );
         }
@@ -227,7 +228,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithNoChannel()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
             );
         }
@@ -238,7 +239,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlWithEmptyChannel()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyChannel.xml" ) )
             );
         }
@@ -249,7 +250,7 @@ namespace Tests
         [Test]
         public void TestInvalidXmlEmptyAdmin()
         {
-            Assert.Throws<ApplicationException>( () =>
+            Assert.Throws<ValidationException>( () =>
                 XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyAdmins.xml" ) )
             );
         }

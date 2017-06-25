@@ -1,11 +1,13 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
-using System;
 using Chaskis.Plugins.CowSayBot;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Tests.Plugins.CowSayBot
 {
@@ -37,7 +39,7 @@ namespace Tests.Plugins.CowSayBot
         public void ValidateFailEmptyList()
         {
             CowFileInfo uut = new CowFileInfo();
-            Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+            Assert.Throws<ValidationException>( () => uut.Validate() );
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace Tests.Plugins.CowSayBot
             {
                 CowFileInfo uut = new CowFileInfo();
                 uut.CommandList[command] = name;
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+                Assert.Throws<ValidationException>( () => uut.Validate() );
             }
 
             name = null;
@@ -61,14 +63,14 @@ namespace Tests.Plugins.CowSayBot
             {
                 CowFileInfo uut = new CowFileInfo();
                 uut.CommandList[command] = name;
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+                Assert.Throws<ValidationException>( () => uut.Validate() );
             }
 
             name = "     ";
             {
                 CowFileInfo uut = new CowFileInfo();
                 uut.CommandList[command] = name;
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+                Assert.Throws<ValidationException>( () => uut.Validate() );
             }
         }
 
@@ -85,14 +87,14 @@ namespace Tests.Plugins.CowSayBot
             {
                 CowFileInfo uut = new CowFileInfo();
                 uut.CommandList[command] = name;
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+                Assert.Throws<ValidationException>( () => uut.Validate() );
             }
 
             command = "     ";
             {
                 CowFileInfo uut = new CowFileInfo();
                 uut.CommandList[command] = name;
-                Assert.Throws<InvalidOperationException>( () => uut.Validate() );
+                Assert.Throws<ValidationException>( () => uut.Validate() );
             }
         }
 

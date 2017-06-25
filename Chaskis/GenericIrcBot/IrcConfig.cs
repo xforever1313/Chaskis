@@ -245,7 +245,7 @@ namespace ChaskisCore
         /// bad, such as values being null/empty or negative.
         /// Only password can be empty, all others need some value in them.
         /// </summary>
-        /// <exception cref="ApplicationException">If this object doesn't validate.</exception>
+        /// <exception cref="ValidationException">If this object doesn't validate.</exception>
         public void Validate()
         {
             IrcConfigHelpers.Validate( this );
@@ -464,7 +464,7 @@ namespace ChaskisCore
         /// bad, such as values being null/empty or negative.
         /// Only password can be empty, all others need some value in them.
         /// </summary>
-        /// <exception cref="ApplicationException">If this object doesn't validate.</exception>
+        /// <exception cref="ValidationException">If this object doesn't validate.</exception>
         public void Validate()
         {
             IrcConfigHelpers.Validate( this );
@@ -622,7 +622,7 @@ namespace ChaskisCore
 
             if( success == false )
             {
-                throw new ApplicationException( builder.ToString() );
+                throw new ValidationException( builder.ToString() );
             }
         }
 

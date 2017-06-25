@@ -6,6 +6,7 @@
 //
 
 using System;
+using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.UserListBot
 {
@@ -47,7 +48,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Ensures the config is in a valid state.
         /// Command can not be null or empty.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when this does not validate.</exception>
+        /// <exception cref="ValidationException">Thrown when this does not validate.</exception>
         public void Validate()
         {
             string errorMessage = "Can not validate this " + nameof( UserListBotConfig ) + " object:" + Environment.NewLine;
@@ -66,7 +67,7 @@ namespace Chaskis.Plugins.UserListBot
 
             if( success == false )
             {
-                throw new InvalidOperationException( errorMessage );
+                throw new ValidationException( errorMessage );
             }
         }
     }
