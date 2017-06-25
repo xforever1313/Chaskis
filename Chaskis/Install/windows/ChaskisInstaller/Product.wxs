@@ -514,7 +514,7 @@
 
             <!-- WelcomeBot Readme -->
             <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
-                <File Id="WelcomeBotReadme" Source="..\..\..\Plugins\WelcomeBotPlugin\Readme.md" KeyPath="yes"/>
+                <File Id="WelcomeBotReadme" Source="..\..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
