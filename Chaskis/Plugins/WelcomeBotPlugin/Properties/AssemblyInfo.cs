@@ -6,16 +6,16 @@
 //
 
 using System.Reflection;
-using Chaskis.Plugins.WelcomeBotPlugin;
+using Chaskis.Plugins.WelcomeBot;
 
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle( "WelcomeBotPlugin" )]
+[assembly: AssemblyTitle( "WelcomeBot" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "WelcomeBotPlugin" )]
+[assembly: AssemblyProduct( "WelcomeBot" )]
 [assembly: AssemblyCopyright( "Copyright © Seth Hendrick 2016-2017" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

@@ -507,17 +507,15 @@
         </ComponentGroup>
 
         <ComponentGroup Id="WelcomeBotComponent">
-            <!-- WeatherBot.dll -->
+            <!-- WelcomeBot.dll -->
             <Component Guid="{751F25F6-951A-45AE-AC0C-194019BC8B02}" Directory="WelcomeBotFolder">
-                <File Source="$(var.WelcomeBotPlugin.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.WelcomeBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
-            <!-- WeatherBot Readme -->
-            <!--
+            <!-- WelcomeBot Readme -->
             <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
                 <File Id="WelcomeBotReadme" Source="..\..\..\Plugins\WelcomeBotPlugin\Readme.md" KeyPath="yes"/>
             </Component>
-            -->
         </ComponentGroup>
 
         <ComponentGroup Id="XmlBotComponent">

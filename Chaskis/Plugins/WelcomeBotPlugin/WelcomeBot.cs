@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using ChaskisCore;
 
-namespace Chaskis.Plugins.WelcomeBotPlugin
+namespace Chaskis.Plugins.WelcomeBot
 {
     /// <summary>
     /// This plugin welcomes a user to the channel when he or she joins.

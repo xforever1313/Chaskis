@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisService", "ChaskisSe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{ADC1D076-BA86-4137-AAEA-804181341468}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBotPlugin", "Plugins\WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeBot", "Plugins\WelcomeBotPlugin\WelcomeBotPlugin.csproj", "{19016BB6-B4C0-4E46-AB3B-EA7DED736BE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowSayBot", "Plugins\CowSayBot\CowSayBot.csproj", "{C82EC85E-1885-4F71-BA54-81EF08D169F6}"
 EndProject
