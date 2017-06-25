@@ -176,17 +176,17 @@
 
             <!-- Sample IRC Config -->
             <Component Guid="{5CBBDB7E-F900-4E70-9DC5-CD48CC0FC747}" Directory="SampleConfig">
-                <File Source="..\..\..\Chaskis\Config\SampleIrcConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Chaskis\Config\SampleIrcConfig.xml" KeyPath="yes"/>
             </Component>
 
             <!-- Sample Plugin Config -->
             <Component Guid="{B47FFBE0-730D-4B28-B186-64069636A4D2}" Directory="SampleConfig">
-                <File Source="..\..\..\Chaskis\Config\SamplePluginConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Chaskis\Config\SamplePluginConfig.xml" KeyPath="yes"/>
             </Component>
 
             <!-- License -->
             <Component Guid="{69E918E2-C679-49F2-9EEA-06373A8EA977}" Directory="INSTALLFOLDER">
-                <File Source="..\..\..\..\LICENSE_1_0.txt" KeyPath="yes"/>
+                <File Source="..\..\..\LICENSE_1_0.txt" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -198,12 +198,12 @@
 
             <!-- CapsWatcher Readme -->
             <Component Guid="{D3917DEB-8EA0-444D-B5C6-5AF09E851BD9}" Directory="CapsWatcherFolder">
-                <File Id="CapsWatcherReadme" Source="..\..\..\Plugins\CapsWatcher\Readme.md" KeyPath="yes"/>
+                <File Id="CapsWatcherReadme" Source="..\..\Plugins\CapsWatcher\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- CapsWatcher Config -->
             <Component Guid="{1BCFC65E-4BD9-4256-864C-19EFE3DA0F5D}" Directory="CapsWatcherConfigFolder">
-                <File Source="..\..\..\Plugins\CapsWatcher\Config\SampleCapsWatcherConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\CapsWatcher\Config\SampleCapsWatcherConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -215,7 +215,7 @@
 
             <!-- ConsoleOut Readme -->
             <Component Guid="{EF1FDAB8-8780-4666-A9C4-C3FDC8C116C5}" Directory="ConsoleOutFolder">
-                <File Id="ConsoleOutReadme" Source="..\..\..\Plugins\ConsoleOut\Readme.md" KeyPath="yes"/>
+                <File Id="ConsoleOutReadme" Source="..\..\Plugins\ConsoleOut\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -227,12 +227,12 @@
 
             <!-- CowSayBot Readme -->
             <Component Guid="{C620F9DD-13C9-4407-A9A2-42781988E493}" Directory="CowSayBotFolder">
-                <File Id="CowSayBotReadme" Source="..\..\..\Plugins\CowSayBot\Readme.md" KeyPath="yes"/>
+                <File Id="CowSayBotReadme" Source="..\..\Plugins\CowSayBot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- CowSayBot Config -->
             <Component Guid="{558D00A7-7E27-4799-8389-C4225806B2ED}" Directory="CowSayBotConfigFolder">
-                <File Source="..\..\..\Plugins\CowSayBot\Config\SampleCowSayBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\CowSayBot\Config\SampleCowSayBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -244,7 +244,7 @@
 
             <!-- CrossChannel Readme -->
             <Component Guid="{4C022F3B-E222-4893-B8D7-6CCA95050D62}" Directory="CrossChannelFolder">
-                <File Id="CrossChannelReadme" Source="..\..\..\Plugins\CrossChannel\Readme.md" KeyPath="yes"/>
+                <File Id="CrossChannelReadme" Source="..\..\Plugins\CrossChannel\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -256,12 +256,12 @@
 
             <!-- IrcLogger Readme -->
             <Component Guid="{542FC792-4897-4259-BE16-146ECE9E8F27}" Directory="IrcLoggerFolder">
-                <File Id="IrcLoggerReadme" Source="..\..\..\Plugins\IrcLogger\Readme.md" KeyPath="yes"/>
+                <File Id="IrcLoggerReadme" Source="..\..\Plugins\IrcLogger\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- IrcLogger Config -->
             <Component Guid="{FAC520DF-7CD5-4AF0-8A55-9875C53D5B2B}" Directory="IrcLoggerConfigFolder">
-                <File Source="..\..\..\Plugins\IrcLogger\Config\SampleIrcLoggerConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\IrcLogger\Config\SampleIrcLoggerConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -333,12 +333,12 @@
 
             <!-- KarmaBot Readme -->
             <Component Guid="{0528CE23-646D-4D1F-92DB-109C6DF8863D}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotReadme" Source="..\..\..\Plugins\KarmaBot\Readme.md" KeyPath="yes"/>
+                <File Id="KarmaBotReadme" Source="..\..\Plugins\KarmaBot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- KarmaBot Config -->
             <Component Guid="{017E7A59-6344-455D-8BBB-64ADA01F99BA}" Directory="KarmaBotConfigFolder">
-                <File Source="..\..\..\Plugins\KarmaBot\Config\SampleKarmaBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\KarmaBot\Config\SampleKarmaBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -350,7 +350,7 @@
 
             <!-- CrossChannel Readme -->
             <Component Guid="{6F87FA50-C745-406B-B745-4C165608991A}" Directory="MathBotFolder">
-                <File Id="MathBotReadme" Source="..\..\..\Plugins\MathBot\Readme.md" KeyPath="yes"/>
+                <File Id="MathBotReadme" Source="..\..\Plugins\MathBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -422,12 +422,12 @@
 
             <!-- QuoteBot Readme -->
             <Component Guid="{364C34E4-DED5-4F42-8AAC-CD2B9C2B9569}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotReadme" Source="..\..\..\Plugins\QuoteBot\Readme.md" KeyPath="yes"/>
+                <File Id="QuoteBotReadme" Source="..\..\Plugins\QuoteBot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- QuoteBot Config -->
             <Component Guid="{A3A5F197-BC25-424A-B456-A2A4C5552647}" Directory="QuoteBotConfigFolder">
-                <File Source="..\..\..\Plugins\QuoteBot\Config\SampleQuoteBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\QuoteBot\Config\SampleQuoteBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -439,12 +439,12 @@
 
             <!-- RssBot Readme -->
             <Component Guid="{0E0C1785-4CED-427B-8476-F44BCC98A59A}" Directory="RssBotFolder">
-                <File Id="RssBotReadme" Source="..\..\..\Plugins\RssBot\Readme.md" KeyPath="yes"/>
+                <File Id="RssBotReadme" Source="..\..\Plugins\RssBot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- RssBot Config -->
             <Component Guid="{7747B1ED-DF28-485D-AF52-023F87F0601B}" Directory="RssBotConfigFolder">
-                <File Source="..\..\..\Plugins\RssBot\Config\SampleRssBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\RssBot\Config\SampleRssBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -456,12 +456,12 @@
 
             <!-- ServerDiagnostics Readme -->
             <Component Guid="{67938665-A685-4116-BA56-3969B2C2D05C}" Directory="ServerDiagnosticsFolder">
-                <File Id="ServerDiagnosticsReadme" Source="..\..\..\Plugins\ServerDiagnostics\Readme.md" KeyPath="yes"/>
+                <File Id="ServerDiagnosticsReadme" Source="..\..\Plugins\ServerDiagnostics\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- ServerDiagnostics Config -->
             <Component Guid="{73E5C3C2-4405-4690-B0EE-FEABC3626B1A}" Directory="ServerDiagnosticsConfigFolder">
-                <File Source="..\..\..\Plugins\ServerDiagnostics\Config\SampleServerDiagnosticsConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\ServerDiagnostics\Config\SampleServerDiagnosticsConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -478,7 +478,7 @@
 
             <!-- UrlBot Readme -->
             <Component Guid="{0711C62F-7E11-4EDB-9558-5DCB7AB029F4}" Directory="UrlBotFolder">
-                <File Id="UrlBotReadme" Source="..\..\..\Plugins\UrlBot\Readme.md" KeyPath="yes"/>
+                <File Id="UrlBotReadme" Source="..\..\Plugins\UrlBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -490,7 +490,7 @@
 
             <!-- UserListBot Readme -->
             <Component Guid="{A5AF0979-9533-4F44-953F-C33F832EA393}" Directory="UserListBotFolder">
-                <File Id="UserListBotReadme" Source="..\..\..\Plugins\UserListBot\Readme.md" KeyPath="yes"/>
+                <File Id="UserListBotReadme" Source="..\..\Plugins\UserListBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -502,7 +502,7 @@
 
             <!-- WeatherBot Readme -->
             <Component Guid="{B8B7B2D9-22BC-46FA-B6D2-08AA6387E4FB}" Directory="WeatherBotFolder">
-                <File Id="WeatherBotReadme" Source="..\..\..\Plugins\WeatherBot\Readme.md" KeyPath="yes"/>
+                <File Id="WeatherBotReadme" Source="..\..\Plugins\WeatherBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -514,7 +514,7 @@
 
             <!-- WelcomeBot Readme -->
             <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
-                <File Id="WelcomeBotReadme" Source="..\..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>
+                <File Id="WelcomeBotReadme" Source="..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
@@ -526,12 +526,12 @@
 
             <!-- XmlBot Readme -->
             <Component Guid="{B97515F7-EAD8-4707-9E30-9EA4315D002A}" Directory="XmlBotFolder">
-                <File Id="XmlBotReadme" Source="..\..\..\Plugins\Xmlbot\Readme.md" KeyPath="yes"/>
+                <File Id="XmlBotReadme" Source="..\..\Plugins\Xmlbot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- XmlBot Config -->
             <Component Guid="{FA3291D0-0C11-4E42-86CA-BFB9C831FC4D}" Directory="XmlBotConfigFolder">
-                <File Source="..\..\..\Plugins\Xmlbot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\Xmlbot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 	</Fragment>

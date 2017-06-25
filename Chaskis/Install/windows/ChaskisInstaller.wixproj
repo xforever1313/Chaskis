@@ -33,7 +33,7 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ChaskisCore\ChaskisCore.csproj">
+    <ProjectReference Include="..\..\ChaskisCore\ChaskisCore.csproj">
       <Name>ChaskisCore</Name>
       <Project>{501708e7-ac43-4df4-b7bc-6a31074e30d1}</Project>
       <Private>True</Private>
@@ -41,7 +41,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ChaskisService\ChaskisService.csproj">
+    <ProjectReference Include="..\..\ChaskisService\ChaskisService.csproj">
       <Name>ChaskisService</Name>
       <Project>{feaed314-aa03-440f-9463-1d43abcc471f}</Project>
       <Private>True</Private>
@@ -49,7 +49,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Chaskis\Chaskis.csproj">
+    <ProjectReference Include="..\..\Chaskis\Chaskis.csproj">
       <Name>Chaskis</Name>
       <Project>{0a5e0053-5976-4e2c-a41b-8baa8f112563}</Project>
       <Private>True</Private>
@@ -57,7 +57,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\CapsWatcher\CapsWatcher.csproj">
+    <ProjectReference Include="..\..\Plugins\CapsWatcher\CapsWatcher.csproj">
       <Name>CapsWatcher</Name>
       <Project>{a5300647-4b0a-4c23-b714-5350070991fd}</Project>
       <Private>True</Private>
@@ -65,7 +65,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\ConsoleOut\ConsoleOut.csproj">
+    <ProjectReference Include="..\..\Plugins\ConsoleOut\ConsoleOut.csproj">
       <Name>ConsoleOut</Name>
       <Project>{2d639f2a-0ad9-45b9-9fc1-17ee4ebaa529}</Project>
       <Private>True</Private>
@@ -73,7 +73,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\CowSayBot\CowSayBot.csproj">
+    <ProjectReference Include="..\..\Plugins\CowSayBot\CowSayBot.csproj">
       <Name>CowSayBot</Name>
       <Project>{c82ec85e-1885-4f71-ba54-81ef08d169f6}</Project>
       <Private>True</Private>
@@ -81,7 +81,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\CrossChannel\CrossChannel.csproj">
+    <ProjectReference Include="..\..\Plugins\CrossChannel\CrossChannel.csproj">
       <Name>CrossChannel</Name>
       <Project>{e140e242-0c4d-4efc-b423-4492bb01ab91}</Project>
       <Private>True</Private>
@@ -89,7 +89,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\IrcLogger\IrcLogger.csproj">
+    <ProjectReference Include="..\..\Plugins\IrcLogger\IrcLogger.csproj">
       <Name>IrcLogger</Name>
       <Project>{60dfa3f8-e518-482c-a620-e947d13a72e6}</Project>
       <Private>True</Private>
@@ -97,7 +97,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\KarmaBot\KarmaBot.csproj">
+    <ProjectReference Include="..\..\Plugins\KarmaBot\KarmaBot.csproj">
       <Name>KarmaBot</Name>
       <Project>{adfa8d13-b83b-4ed4-8c23-f85fdba8fc6e}</Project>
       <Private>True</Private>
@@ -105,7 +105,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\MathBot\MathBot.csproj">
+    <ProjectReference Include="..\..\Plugins\MathBot\MathBot.csproj">
       <Name>MathBot</Name>
       <Project>{b5c2b6b5-35a6-4ef8-ab4f-3bf5da743878}</Project>
       <Private>True</Private>
@@ -113,7 +113,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\QuoteBot\QuoteBot.csproj">
+    <ProjectReference Include="..\..\Plugins\QuoteBot\QuoteBot.csproj">
       <Name>QuoteBot</Name>
       <Project>{43bf7896-1a47-4f7a-8ff8-0103180c3794}</Project>
       <Private>True</Private>
@@ -121,7 +121,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\RssBot\RssBot.csproj">
+    <ProjectReference Include="..\..\Plugins\RssBot\RssBot.csproj">
       <Name>RssBot</Name>
       <Project>{b638abb7-34c6-4d67-9ec7-224cb0f5c446}</Project>
       <Private>True</Private>
@@ -129,7 +129,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\ServerDiagnostics\ServerDiagnostics.csproj">
+    <ProjectReference Include="..\..\Plugins\ServerDiagnostics\ServerDiagnostics.csproj">
       <Name>ServerDiagnostics</Name>
       <Project>{13694108-dd59-4147-8ae0-8573414372b1}</Project>
       <Private>True</Private>
@@ -137,7 +137,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\UrlBot\UrlBot.csproj">
+    <ProjectReference Include="..\..\Plugins\UrlBot\UrlBot.csproj">
       <Name>UrlBot</Name>
       <Project>{656faffb-0112-4f43-b98e-62c8d89188db}</Project>
       <Private>True</Private>
@@ -145,7 +145,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\UserListBot\UserListBot.csproj">
+    <ProjectReference Include="..\..\Plugins\UserListBot\UserListBot.csproj">
       <Name>UserListBot</Name>
       <Project>{3fa4494d-50ce-47de-96b2-ace032fa830a}</Project>
       <Private>True</Private>
@@ -153,7 +153,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\WeatherBot\WeatherBot.csproj">
+    <ProjectReference Include="..\..\Plugins\WeatherBot\WeatherBot.csproj">
       <Name>WeatherBot</Name>
       <Project>{0fb1c4e1-91c0-4988-bf4a-a9a1624df5a8}</Project>
       <Private>True</Private>
@@ -161,7 +161,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\WelcomeBot\WelcomeBot.csproj">
+    <ProjectReference Include="..\..\Plugins\WelcomeBot\WelcomeBot.csproj">
       <Name>WelcomeBot</Name>
       <Project>{19016bb6-b4c0-4e46-ab3b-ea7ded736be5}</Project>
       <Private>True</Private>
@@ -169,7 +169,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\XmlBot\XmlBot.csproj">
+    <ProjectReference Include="..\..\Plugins\XmlBot\XmlBot.csproj">
       <Name>XmlBot</Name>
       <Project>{343a37bd-92fe-4858-a28b-1e7ed529fd97}</Project>
       <Private>True</Private>
