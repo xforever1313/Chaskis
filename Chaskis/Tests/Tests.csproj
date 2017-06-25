@@ -73,6 +73,7 @@
     <Compile Include="Plugins\CowSayBot\CowSayXmlLoaderTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowFileInfoTest.cs" />
     <Compile Include="Plugins\CowSayBot\CowSayBotConfigTest.cs" />
+    <Compile Include="Plugins\CrossChannel\CrossChannelTests.cs" />
     <Compile Include="Plugins\IrcLogger\IrcLoggerConfigTest.cs" />
     <Compile Include="Plugins\IrcLogger\IrcLoggerXmlLoaderTest.cs" />
     <Compile Include="Plugins\IrcLogger\LogManagerTest.cs" />
@@ -121,6 +122,10 @@
     <ProjectReference Include="..\Plugins\CowSayBot\CowSayBot.csproj">
       <Project>{c82ec85e-1885-4f71-ba54-81ef08d169f6}</Project>
       <Name>CowSayBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\CrossChannel\CrossChannel.csproj">
+      <Project>{e140e242-0c4d-4efc-b423-4492bb01ab91}</Project>
+      <Name>CrossChannel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Plugins\IrcLogger\IrcLogger.csproj">
       <Project>{60dfa3f8-e518-482c-a620-e947d13a72e6}</Project>
