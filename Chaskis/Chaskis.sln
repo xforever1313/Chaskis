@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssBot", "Plugins\RssBot\Rs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossChannel", "Plugins\CrossChannel\CrossChannel.csproj", "{E140E242-0C4D-4EFC-B423-4492BB01AB91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisCliInstaller", "ChaskisCliInstaller\ChaskisCliInstaller.csproj", "{FBAA5443-4CB9-4190-90E1-8B8711C5707C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -217,6 +219,14 @@ Global
 		{E140E242-0C4D-4EFC-B423-4492BB01AB91}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{E140E242-0C4D-4EFC-B423-4492BB01AB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E140E242-0C4D-4EFC-B423-4492BB01AB91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

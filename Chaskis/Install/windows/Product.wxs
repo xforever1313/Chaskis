@@ -112,7 +112,7 @@
         </Feature>
 	</Product>
 
-	<Fragment>
+	<Fragment Id="Directories">
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="ProgramFiles64Folder">
                 <Directory Id="INSTALLFOLDER" Name="Chaskis">
@@ -157,7 +157,7 @@
         </Directory>
 	</Fragment>
 
-	<Fragment>
+	<Fragment Id="Components">
         <ComponentGroup Id="CoreComponents">          
             <!-- Chaskis.exe -->
             <Component Guid="{E7EAC2D8-C364-4E1C-B78E-B3AAC8BAF5A6}" Directory="BinFolder">
