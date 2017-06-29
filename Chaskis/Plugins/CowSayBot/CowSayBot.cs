@@ -38,11 +38,6 @@ namespace Chaskis.Plugins.CowSayBot
         private readonly List<IIrcHandler> handlers;
 
         /// <summary>
-        /// The irc config to use.
-        /// </summary>
-        private IIrcConfig ircConfig;
-
-        /// <summary>
         /// The cowsay bot config.
         /// </summary>
         private CowSayBotConfig cowSayConfig;
@@ -123,8 +118,6 @@ namespace Chaskis.Plugins.CowSayBot
                     "Can not open " + configPath
                 );
             }
-
-            this.ircConfig = initor.IrcConfig;
 
             this.cowSayConfig = XmlLoader.LoadCowSayBotConfig( configPath );
 

@@ -30,8 +30,6 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private IIrcConfig ircConfig;
-
         private RssBotConfig rssConfig;
 
         private Dictionary<int, FeedReader> feedReaders;
@@ -106,7 +104,6 @@ namespace Chaskis.Plugins.RssBot
             }
 
             this.scheduler = initor.EventScheduler;
-            this.ircConfig = initor.IrcConfig;
 
             this.rssConfig = XmlLoader.ParseConfig( configPath );
             foreach( Feed feed in this.rssConfig.Feeds )

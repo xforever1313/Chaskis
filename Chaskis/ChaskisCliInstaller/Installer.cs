@@ -350,8 +350,6 @@ namespace Chaskis.ChaskisCliInstaller
         /// <param name="source">The path from the XML file.</param>
         private string GetComponentAbsPath( string source )
         {
-            Match match = Regex.Match( source, @"\$\(var\.(?<plugin>\S+)\.(?<target>TargetPath|TargetDir)\)(?<file>\S+)?" );
-
             if( TryParseVar( source, out source ) == false )
             {
                 source = Path.Combine(
