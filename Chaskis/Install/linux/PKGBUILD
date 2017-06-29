@@ -1,6 +1,6 @@
 # Maintainer: Seth Hendrick <seth@shendrick.net>
 pkgname=chaskis
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 epoch=
 pkgdesc=".NET IRC Bot Framework."
@@ -15,13 +15,10 @@ optdepends=()
 provides=()
 conflicts=()
 replaces=()
-backup=(
-    "home/chaskis/.config/Chaskis/IrcConfig.xml"
-    "home/chaskis/.config/Chaskis/PluginConfig.xml"
-)
+backup=()
 options=()
 install=
-changelog=
+changelog=()
 source=("https://github.com/xforever1313/Chaskis/archive/master.tar.gz")
 noextract=()
 md5sums=('SKIP')
@@ -39,62 +36,31 @@ build() {
 }
 
 check() {
-        cd "$srcdir/Chaskis-master"
-        nuget restore ./Chaskis/Chaskis.sln
-        nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory ./nunit/
-        mono ./nunit/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
+        #cd "$srcdir/Chaskis-master"
+        #nuget restore ./Chaskis/Chaskis.sln
+        #nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory ./nunit/
+        #mono ./nunit/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
+        echo "Nothing to check."
 }
 
 package() {
 
         cd "$srcdir/Chaskis-master"
 
-        #Where everything will be installed
-        installLocation=/home/chaskis/
+        mkdir -p $pkgdir/usr/lib
 
-        #Where the exe files will go.
-        exeLocation=$installLocation/bin/
-
-        #Where the config stuff goes.  Should be the same as
-        #where mono puts application data.
-        configLocation=$installLocation/.config/Chaskis
-
-        # Where plugins go
-        pluginLocation=$configLocation/plugins
-
-        # Copy all the things!
-
-        # Start with the executable and main dlls.
-        mkdir -p $pkgdir/$exeLocation
-        cp ./Chaskis/ChaskisService/bin/Release/Chaskis.exe $pkgdir/$exeLocation
-        cp ./Chaskis/ChaskisService/bin/Release/GenericIrcBot.dll $pkgdir/$exeLocation
-        cp ./Chaskis/ChaskisService/bin/Release/ChaskisService.exe $pkgdir/$exeLocation
-
-        # Next is the configs.
-        mkdir -p $pkgdir/$configLocation
-        cp ./Chaskis/Chaskis/Config/SampleIrcConfig.xml $pkgdir/$configLocation/IrcConfig.xml
-        cp ./Chaskis/Chaskis/Config/SamplePluginConfig.xml $pkgdir/$configLocation/PluginConfig.xml
+        mono ./Chaskis/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./Chaskis $pkgdir/usr/lib ./Chaskis/Install/windows/Product.wxs Release
 
         # Systemd service
         mkdir -p $pkgdir/usr/lib/systemd/system
         cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/system
 
-        # Last is the plugins
-        mkdir -p $pkgdir/$pluginLocation
-
-        # Welcome bot
-        mkdir -p $pkgdir/$pluginLocation/WelcomeBot
-        cp ./Chaskis/Plugins/WelcomeBotPlugin/bin/Release/WelcomeBotPlugin.dll $pkgdir/$pluginLocation/WelcomeBot
-
-        # Cowsay Bot
-        mkdir -p $pkgdir/$pluginLocation/CowSayBot
-        cp ./Chaskis/Plugins/CowSayBot/bin/Release/CowSayBot.dll $pkgdir/$pluginLocation/CowSayBot
 }
 
 pre_install() {
-    id -u chaskis &> /dev/null || useradd -m chaskis
+    return
 }
 
 post_remove() {
-    userdel chaskis
+    return
 }
