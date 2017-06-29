@@ -5,9 +5,9 @@ After=network.target
 [Service]
 Type=forking
 User=chaskis
-WorkingDirectory=/home/chaskis/.config/Chaskis/bin
-ExecStart=/usr/bin/mono-service -l:/tmp/chaskis.lock -m:chaskis /home/chaskis/.config/Chaskis/bin/ChaskisService.exe
-ExecStop=kill `cat /tmp/chaskis.lock`
+WorkingDirectory=/usr/lib/Chaskis/bin/
+ExecStart=/usr/bin/mono-service -l:/tmp/chaskis_$USER.lock -m:chaskis_$USER /usr/lib/Chaskis/bin/ChaskisService.exe
+ExecStop=kill `cat /tmp/chaskis_$USER.lock`
 TimeoutStopSecs=5
 Restart=always
 
