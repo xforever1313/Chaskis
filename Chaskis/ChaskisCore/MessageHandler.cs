@@ -234,6 +234,20 @@ namespace ChaskisCore
                 }
                 else
                 {
+                    if( response.Channel.ToUpper() == args.IrcConfig.Nick.ToUpper() )
+                    {
+                        // If our response is a PM (channel name matches our bot's)
+                        // we need to change our channel to the remote user's
+                        // channel so it gets sent out correctly when handle event is called.
+                        response = new IrcResponse(
+                            remoteUser,
+                            remoteUser,
+                            message,
+                            lineRegex,
+                            messageMatch
+                        );
+                    }
+
                     DateTime currentTime = DateTime.UtcNow;
                     TimeSpan timeSpan = currentTime - this.lastEvent[channel];
 

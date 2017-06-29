@@ -41,8 +41,11 @@ namespace ChaskisCore
 
         /// <summary>
         /// The channel that the message was received on.
+        /// However, if the message was a PM, then this will become the user
+        /// who sent the message's name (a PM would usually have the channel be this bot's name),
+        /// so we can call the same function for a channel message
+        /// and a private message. 
         /// </summary>
-        /// <value>The channel.</value>
         public string Channel { get; private set; }
 
         /// <summary>

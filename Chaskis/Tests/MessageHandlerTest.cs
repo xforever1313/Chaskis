@@ -528,6 +528,147 @@ namespace Tests
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
+        /// <summary>
+        /// Ensures if we are set to "PMs Only" we'll get the
+        /// PM correctly.
+        /// </summary>
+        [Test]
+        public void TestPmOnlyMessage()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.PmsOnly
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            // Need to set the remote user as the channel so the message goes to the right channel.
+            Assert.AreEqual( remoteUser, this.responseReceived.Channel );
+            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
+
+        /// <summary>
+        /// Ensures that if we are set to channels only we do
+        /// NOT respond to PMs.
+        /// </summary>
+        [Test]
+        public void TestPmInChannelOnlyMessage()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.ChannelOnly
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
+        /// Ensures if we are set to "Channel Only" we'll get the
+        /// PM correctly.
+        /// </summary>
+        [Test]
+        public void TestChannelOnlyMessage()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.ChannelOnly
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
+            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
+
+        /// <summary>
+        /// Ensures that if we are set to channels only we do
+        /// NOT respond to PMs.
+        /// </summary>
+        [Test]
+        public void TestChannelInPmOnlyMessage()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.PmsOnly
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
+        /// Ensures that if RespondToSelf is set to true,
+        /// we'll respond to ourself.
+        /// </summary>
+        [Test]
+        public void RespondToSelfTest()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.ChannelAndPms,
+                true
+            );
+
+            string ircString = this.GenerateMessage( this.ircConfig.Nick, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.Channel );
+            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.RemoteUser );
+            Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+        }
+
+        /// <summary>
+        /// Ensures that if RespondToSelf is set to false,
+        /// we will NOT respond to ourself.
+        /// </summary>
+        [Test]
+        public void DontRespondToSelfTest()
+        {
+            const string expectedMessage = "!bot help";
+
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction,
+                0,
+                ResponseOptions.ChannelAndPms,
+                false
+            );
+
+            string ircString = this.GenerateMessage( this.ircConfig.Nick, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
         // -------- Test Helpers --------
 
         private void DoGoodMessageTest( string user, string channel )
