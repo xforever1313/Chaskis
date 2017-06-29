@@ -76,7 +76,7 @@ namespace Tests
         [Test]
         public void TestGoodMessage()
         {
-            this.DoGoodMessageTest( remoteUser );
+            this.DoGoodMessageTest( remoteUser, this.ircConfig.Channels[0] );
         }
 
         /// <summary>
@@ -87,7 +87,26 @@ namespace Tests
         {
             foreach( string name in TestHelpers.StrangeNames )
             {
-                this.DoGoodMessageTest( name );
+                this.DoGoodMessageTest( name, this.ircConfig.Channels[0] );
+            }
+        }
+
+        /// <summary>
+        /// Ensures good messages work if the channels have strange names.
+        /// </summary>
+        [Test]
+        public void TestGoodMessageWithStrangeChannelNames()
+        {
+            // Do channels.
+            foreach( string channel in TestHelpers.StrangeChannels )
+            {
+                this.DoGoodMessageTest( remoteUser, channel );
+            }
+
+            // Do users (users can be a channel for a private message).
+            foreach( string channel in TestHelpers.StrangeNames )
+            {
+                this.DoGoodMessageTest( remoteUser, channel );
             }
         }
 
@@ -511,7 +530,7 @@ namespace Tests
 
         // -------- Test Helpers --------
 
-        private void DoGoodMessageTest( string user )
+        private void DoGoodMessageTest( string user, string channel )
         {
             MessageHandler uut = new MessageHandler(
                 @"!bot\s+help",
@@ -520,10 +539,10 @@ namespace Tests
 
             const string expectedMessage = "!bot help";
 
-            string ircString = this.GenerateMessage( user, this.ircConfig.Channels[0], expectedMessage );
+            string ircString = this.GenerateMessage( user, channel, expectedMessage );
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
-            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
+            Assert.AreEqual( channel, this.responseReceived.Channel );
             Assert.AreEqual( user, this.responseReceived.RemoteUser );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }

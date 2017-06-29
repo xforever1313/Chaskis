@@ -66,6 +66,17 @@ namespace Tests
             "Ihave-dashes-_-"
         }.AsReadOnly();
 
+        /// <summary>
+        /// Strange channel names to test.
+        /// </summary>
+        public static IReadOnlyList<string> StrangeChannels = new List<string>()
+        {
+            "#channel:1",
+            "#channel-2",
+            "#my-channel",
+            "#my_channel"
+        }.AsReadOnly();
+
         // ---------------- Functions ----------------
 
         public static IrcConfig GetTestIrcConfig()

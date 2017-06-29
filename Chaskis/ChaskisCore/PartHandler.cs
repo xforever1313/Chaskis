@@ -30,7 +30,7 @@ namespace ChaskisCore
         /// </summary>
         private static readonly Regex pattern =
             new Regex(
-                @"^:(?<nick>\S+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>#?\w+)",
+                @"^:(?<nick>\S+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>\S+)",
                 RegexOptions.Compiled
             );
 

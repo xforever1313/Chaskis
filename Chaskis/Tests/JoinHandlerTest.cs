@@ -90,7 +90,7 @@ namespace Tests
         [Test]
         public void JoinSuccess()
         {
-            this.DoJoinSuccessTest( RemoteUser );
+            this.DoJoinSuccessTest( RemoteUser, this.ircConfig.Channels[0] );
         }
 
         /// <summary>
@@ -102,7 +102,26 @@ namespace Tests
         {
             foreach( string name in TestHelpers.StrangeNames )
             {
-                this.DoJoinSuccessTest( name );
+                this.DoJoinSuccessTest( name, this.ircConfig.Channels[0] );
+            }
+        }
+
+        /// <summary>
+        /// Ensures if we are in a strange channel,
+        /// the event gets fired.
+        /// </summary>
+        [Test]
+        public void JoinWithStrangeChannels()
+        {
+            foreach( string channel in TestHelpers.StrangeChannels )
+            {
+                this.DoJoinSuccessTest( RemoteUser, channel );
+            }
+
+            // Private messages use names.
+            foreach( string name in TestHelpers.StrangeNames )
+            {
+                this.DoJoinSuccessTest( RemoteUser, name );
             }
         }
 
@@ -205,13 +224,13 @@ namespace Tests
 
         // -------- Test Helpers --------
 
-        private void DoJoinSuccessTest( string user )
+        private void DoJoinSuccessTest( string user, string channel )
         {
             string ircString =
             TestHelpers.ConstructIrcString(
                 user,
                 JoinHandler.IrcCommand,
-                this.ircConfig.Channels[0],
+                channel,
                 string.Empty
             );
 
@@ -223,7 +242,7 @@ namespace Tests
             Assert.AreEqual( string.Empty, this.responseReceived.Message );
 
             // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
+            Assert.AreEqual( channel, this.responseReceived.Channel );
 
             // Nicks should match.
             Assert.AreEqual( user, this.responseReceived.RemoteUser );

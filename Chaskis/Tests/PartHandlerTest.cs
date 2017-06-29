@@ -91,7 +91,7 @@ namespace Tests
         [Test]
         public void PartSuccess()
         {
-            this.DoPartSuccess( RemoteUser );
+            this.DoPartSuccess( RemoteUser, this.ircConfig.Channels[0] );
         }
 
         [Test]
@@ -99,7 +99,25 @@ namespace Tests
         {
             foreach( string name in TestHelpers.StrangeNames )
             {
-                this.DoPartSuccess( name );
+                this.DoPartSuccess( name, this.ircConfig.Channels[0] );
+            }
+        }
+
+        /// <summary>
+        /// Ensures that if a user parts on a strange channel,
+        /// the event gets fired.
+        /// </summary>
+        [Test]
+        public void PartSuccessWithStrangeChannel()
+        {
+            foreach( string channel in TestHelpers.StrangeChannels )
+            {
+                this.DoPartSuccess( RemoteUser, channel );
+            }
+
+            foreach( string name in TestHelpers.StrangeNames )
+            {
+                this.DoPartSuccess( RemoteUser, name );
             }
         }
 
@@ -203,13 +221,13 @@ namespace Tests
 
         // -------- Test Helpers --------
 
-        private void DoPartSuccess( string name )
+        private void DoPartSuccess( string name, string channel )
         {
             string ircString =
                 TestHelpers.ConstructIrcString(
                     name,
                     PartHandler.IrcCommand,
-                    this.ircConfig.Channels[0],
+                    channel,
                     string.Empty
                 );
 
@@ -221,7 +239,7 @@ namespace Tests
             Assert.AreEqual( string.Empty, this.responseReceived.Message );
 
             // Channels should match.
-            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
+            Assert.AreEqual( channel, this.responseReceived.Channel );
 
             // Nicks should match.
             Assert.AreEqual( name, this.responseReceived.RemoteUser );
