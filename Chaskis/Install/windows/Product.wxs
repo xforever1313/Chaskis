@@ -526,12 +526,12 @@
 
             <!-- XmlBot Readme -->
             <Component Guid="{B97515F7-EAD8-4707-9E30-9EA4315D002A}" Directory="XmlBotFolder">
-                <File Id="XmlBotReadme" Source="..\..\Plugins\Xmlbot\Readme.md" KeyPath="yes"/>
+                <File Id="XmlBotReadme" Source="..\..\Plugins\XmlBot\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- XmlBot Config -->
             <Component Guid="{FA3291D0-0C11-4E42-86CA-BFB9C831FC4D}" Directory="XmlBotConfigFolder">
-                <File Source="..\..\Plugins\Xmlbot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\XmlBot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 	</Fragment>
