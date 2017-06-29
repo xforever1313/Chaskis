@@ -250,10 +250,24 @@ namespace Chaskis.ChaskisCliInstaller
 
                                     string relPath;
                                     TryParseVar( source.Value, out relPath );
+
+                                    string fileName = Path.GetFileName( relPath );
+                                    if( ( Environment.OSVersion.Platform == PlatformID.Unix ) || ( Environment.OSVersion.Platform == PlatformID.MacOSX ) )
+                                    {
+                                        // For some reason, the sqlite.native package is broken, and when it gets copied over,
+                                        // it becomes '%(Filename)%(Extension)'.  lolwut.
+                                        // Unix systems usually have sqlite already installed, we're just going to need to make it a
+                                        // dependency.  Therefore, skip this file.
+                                        if( fileName == "sqlite3.dll" )
+                                        {
+                                            continue;
+                                        }
+                                    }
+
                                     string dest =
                                         Path.Combine(
                                             this.GetPath( this.dirInfo[directory] ),
-                                            Path.GetFileName( relPath )
+                                            fileName
                                         );
 
                                     Tuple<string, string> f = new Tuple<string, string>(
