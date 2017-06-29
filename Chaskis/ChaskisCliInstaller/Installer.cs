@@ -246,10 +246,16 @@ namespace Chaskis.ChaskisCliInstaller
                                         );
                                     }
 
-                                    string originalDir = this.GetComponentPath( source.Value );
+                                    string sourcePath = source.Value;
+                                    if( Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX )
+                                    {
+                                        sourcePath = sourcePath.Replace( "\\", "/" );
+                                    }
+
+                                    string originalDir = this.GetComponentPath( sourcePath );
 
                                     string relPath;
-                                    TryParseVar( source.Value, out relPath );
+                                    TryParseVar( sourcePath, out relPath );
 
                                     string fileName = Path.GetFileName( relPath );
                                     if( ( Environment.OSVersion.Platform == PlatformID.Unix ) || ( Environment.OSVersion.Platform == PlatformID.MacOSX ) )
@@ -293,11 +299,6 @@ namespace Chaskis.ChaskisCliInstaller
         private string GetComponentPath( string source )
         {
             source = this.GetComponentAbsPath( source );
-
-            if( Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX )
-            {
-                source = source.Replace( "\\", "/" );
-            }
 
             return Path.Combine(
                 Path.GetDirectoryName( this.WixFile ),
