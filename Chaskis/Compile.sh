@@ -1,0 +1,1 @@
+xbuild /p:Configuration=Debug ./Chaskis.sln
