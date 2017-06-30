@@ -55,6 +55,9 @@ package() {
         mkdir -p $pkgdir/usr/lib/systemd/system
         cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/system
 
+        # Binary
+        mkdir -p $pkgdir/usr/bin/
+        cp ./Chaskis/Install/linux/bin/chaskis $pkgdir/usr/bin/chaskis
 }
 
 pre_install() {

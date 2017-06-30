@@ -1,0 +1,5 @@
+#!/bin/bash
+# This file is a pass through that calls mono and Chaskis.exe
+# from its correct spot in /usr/lib.
+
+mono /usr/lib/Chaskis/bin/Chaskis.exe "$@"
