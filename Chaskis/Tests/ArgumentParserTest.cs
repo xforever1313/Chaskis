@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using Chaskis;
@@ -17,7 +19,7 @@ namespace Tests
         /// <summary>
         /// The test root directory.
         /// </summary>
-        private static readonly string rootDir = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+        private static readonly string rootDir = Chaskis.Chaskis.DefaultRootDirectory;
 
         // -------- Tests --------
 
@@ -30,11 +32,11 @@ namespace Tests
             string[] args = { };
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
-            Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-            Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+            Assert.AreEqual( rootDir, uut.ChaskisRoot );
             Assert.IsFalse( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
+            Assert.IsFalse( uut.BootStrap );
             Assert.IsTrue( uut.IsValid );
         }
 
@@ -49,11 +51,11 @@ namespace Tests
                 string[] args = { s };
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+                Assert.AreEqual( rootDir, uut.ChaskisRoot );
                 Assert.IsFalse( uut.FailOnPluginFailure );
                 Assert.IsTrue( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
+                Assert.IsFalse( uut.BootStrap );
                 Assert.IsTrue( uut.IsValid );
             }
         }
@@ -67,11 +69,11 @@ namespace Tests
             string[] args = { "--version" };
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
-            Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-            Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+            Assert.AreEqual( rootDir, uut.ChaskisRoot );
             Assert.IsFalse( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsTrue( uut.PrintVersion );
+            Assert.IsFalse( uut.BootStrap );
             Assert.IsTrue( uut.IsValid );
         }
 
@@ -85,8 +87,7 @@ namespace Tests
                 string[] args = { "--failOnBadPlugin=yes" };
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+                Assert.AreEqual( rootDir, uut.ChaskisRoot );
                 Assert.IsTrue( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
@@ -96,8 +97,7 @@ namespace Tests
                 string[] args = { "--failOnBadPlugin=no" };
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+                Assert.AreEqual( rootDir, uut.ChaskisRoot );
                 Assert.IsFalse( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
@@ -107,8 +107,7 @@ namespace Tests
                 string[] args = { "--failOnBadPlugin=derp" };
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
+                Assert.AreEqual( rootDir, uut.ChaskisRoot );
                 Assert.IsFalse( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
@@ -117,65 +116,38 @@ namespace Tests
         }
 
         /// <summary>
-        /// Irc Config Argument test.
+        /// Using something with non-default root.
         /// </summary>
         [Test]
-        public void IrcConfigArg()
+        public void DifferentRootTest()
         {
-            {
-                const string xmlFile = "config.xml";
-                string[] args = { "--configPath=" + xmlFile };
+            const string differentRoot = "/usr/lib/derp";
+            string[] args = { "--chaskisroot=" + differentRoot };
 
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( xmlFile, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
-                Assert.IsFalse( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsTrue( uut.IsValid );
-            }
-            {
-                string[] args = { "--configPath=" };
-
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
-                Assert.IsFalse( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsFalse( uut.IsValid );
-            }
+            ArgumentParser uut = new ArgumentParser( args, differentRoot );
+            Assert.AreEqual( differentRoot, uut.ChaskisRoot );
+            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsFalse( uut.PrintHelp );
+            Assert.IsFalse( uut.PrintVersion );
+            Assert.IsFalse( uut.BootStrap );
+            Assert.IsTrue( uut.IsValid );
         }
 
         /// <summary>
-        /// Irc Plugin Config Argument test.
+        /// Ensures bootstrap arg is used correctly.
         /// </summary>
         [Test]
-        public void IrcPluginConfigArg()
+        public void BootstrapTest()
         {
-            {
-                const string xmlFile = "config.xml";
-                string[] args = { "--pluginConfigPath=" + xmlFile };
+            string[] args = { "--bootstrap" };
 
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( xmlFile, uut.IrcPluginConfigLocation );
-                Assert.IsFalse( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsTrue( uut.IsValid );
-            }
-            {
-                string[] args = { "--pluginConfigPath=" };
-
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( uut.DefaultIrcConfigLocation, uut.IrcConfigLocation );
-                Assert.AreEqual( uut.DefaultIrcPluginConfigLocation, uut.IrcPluginConfigLocation );
-                Assert.IsFalse( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsFalse( uut.IsValid );
-            }
+            ArgumentParser uut = new ArgumentParser( args, rootDir );
+            Assert.AreEqual( rootDir, uut.ChaskisRoot );
+            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsFalse( uut.PrintHelp );
+            Assert.IsFalse( uut.PrintVersion );
+            Assert.IsTrue( uut.BootStrap );
+            Assert.IsTrue( uut.IsValid );
         }
     }
 }

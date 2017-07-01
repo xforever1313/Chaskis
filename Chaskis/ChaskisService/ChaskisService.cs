@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Diagnostics;
@@ -22,6 +24,8 @@ namespace ChaskisService
 
         private FileStream logFile;
         private StreamWriter logWriter;
+
+        private string rootDir;
 
         // -------- Constructor --------
 
@@ -49,7 +53,9 @@ namespace ChaskisService
                 StaticLogger.OnErrorWriteLine += this.WindowsLogError;
             }
 
-            this.chaskis = new Chaskis.Chaskis();
+            this.rootDir = Chaskis.Chaskis.DefaultRootDirectory;
+
+            this.chaskis = new Chaskis.Chaskis( rootDir );
         }
 
         /// <summary>
@@ -60,22 +66,20 @@ namespace ChaskisService
         {
             try
             {
-                string rootDir = Path.Combine(
-                    Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                    "Chaskis"
-                );
-
                 if( Environment.OSVersion.Platform == PlatformID.Unix )
                 {
-                    string filePath = Path.Combine( rootDir, "Chaskis." + DateTime.Now.ToString( "yyyy-MM-dd_HH-mm-ss-ffff" ) + ".Log" );
+                    string filePath = Path.Combine(
+                        this.rootDir,
+                        "Chaskis." + DateTime.Now.ToString( "yyyy-MM-dd_HH-mm-ss-ffff" ) + ".Log"
+                    );
                     this.logFile = new FileStream( filePath, FileMode.Create, FileAccess.Write );
                     this.logWriter = new StreamWriter( this.logFile );
                 }
 
-                chaskis.InitState1_LoadIrcConfig( Path.Combine( rootDir, "IrcConfig.xml" ) );
+                chaskis.InitState1_LoadIrcConfig();
 
                 // Load Plugins.
-                bool loaded = chaskis.InitStage2_LoadPlugins( Path.Combine( rootDir, "PluginConfig.xml" ) );
+                bool loaded = chaskis.InitStage2_LoadPlugins();
                 if( ( loaded == false ) )
                 {
                     this.ExitCode = 1;

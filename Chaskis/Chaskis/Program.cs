@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.IO;
@@ -16,12 +18,7 @@ namespace Chaskis
         {
             try
             {
-                string rootDir = Path.Combine(
-                    Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                    "Chaskis"
-                );
-
-                ArgumentParser parser = new ArgumentParser( args, rootDir );
+                ArgumentParser parser = new ArgumentParser( args, Chaskis.DefaultRootDirectory );
 
                 if( parser.IsValid == false )
                 {
@@ -46,20 +43,28 @@ namespace Chaskis
                 StaticLogger.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
                 StaticLogger.OnErrorWriteLine += StaticLogger_OnErrorWriteLine;
 
-                using( Chaskis chaskis = new Chaskis() )
+                if( parser.BootStrap )
                 {
-                    chaskis.InitState1_LoadIrcConfig( parser.IrcConfigLocation );
-                    bool pluginLoaded = chaskis.InitStage2_LoadPlugins( parser.IrcPluginConfigLocation );
-                    if( ( pluginLoaded == false ) && parser.FailOnPluginFailure )
+                    BootStrapper bootStrapper = new BootStrapper( parser.ChaskisRoot );
+                    bootStrapper.DoBootStrap();
+                }
+                else
+                { 
+                    using( Chaskis chaskis = new Chaskis( parser.ChaskisRoot ) )
                     {
-                        Console.WriteLine( "Fail on assembly was enable.  Terminating." );
-                        return 2;
-                    }
-                    chaskis.InitStage3_DefaultHandlers();
-                    chaskis.InitStage4_OpenConnection();
+                        chaskis.InitState1_LoadIrcConfig();
+                        bool pluginLoaded = chaskis.InitStage2_LoadPlugins();
+                        if( ( pluginLoaded == false ) && parser.FailOnPluginFailure )
+                        {
+                            Console.WriteLine( "Fail on assembly was enable.  Terminating." );
+                            return 2;
+                        }
+                        chaskis.InitStage3_DefaultHandlers();
+                        chaskis.InitStage4_OpenConnection();
 
-                    Console.WriteLine();
-                    Console.ReadKey();
+                        Console.WriteLine();
+                        Console.ReadKey();
+                    }
                 }
             }
             catch( Exception err )
@@ -96,10 +101,11 @@ namespace Chaskis
             Console.WriteLine( "Chaskis IRC Bot Help:" );
             Console.WriteLine( "--help, -h, /?    --------  Prints this message and exits." );
             Console.WriteLine( "--version         --------  Prints this message and exits." );
-            Console.WriteLine( "--configPath=xxx  --------  The IRC config xml file to use." );
+            Console.WriteLine( "--chaskisroot=xxx  -------- The chaskis root, where to find the chaskis config files." );
             Console.WriteLine( "                            Default is in AppData." );
-            Console.WriteLine( "--pluginConfigPath=xxx ---  The plugin config xml file to use." );
-            Console.WriteLine( "                            Default is in AppData." );
+            Console.WriteLine( "                            If --bootstrap is passed in, location of where to bootstrap." );
+            Console.WriteLine( "--bootstrap --------------  Puts default configuration in this area." );
+            Console.WriteLine( "                            Default is in AppData if --chaskisroot is not specified." );
             Console.WriteLine( "--failOnBadPlugin=yes|no -  Whether or not to fail if a plugin load fails." );
             Console.WriteLine( "                            Defaulted to no." );
         }
@@ -111,7 +117,7 @@ namespace Chaskis
         {
             Console.WriteLine( "Chaskis IRC Bot Version:" );
             Console.WriteLine( IrcBot.VersionString );
-            Console.WriteLine( "Copyright (C) 2016 Seth Hendrick" );
+            Console.WriteLine( "Copyright (C) 2016-2017 Seth Hendrick" );
             Console.WriteLine();
             Console.WriteLine( "Released under the Boost Software License:" );
             Console.WriteLine( "http://www.boost.org/LICENSE_1_0.txt" );

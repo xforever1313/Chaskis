@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -44,40 +45,67 @@ namespace Chaskis
         /// </summary>
         private bool fullyLoaded;
 
+        /// <summary>
+        /// The chaskis config root directory.
+        /// </summary>
+        private string chaskisRoot;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Chaskis()
+        /// <param name="chaskisRoot">Where to find the configuration files.</param>
+        public Chaskis( string chaskisRoot )
         {
             this.plugins = null;
             this.defaultHandlers = null;
             this.plugins = new Dictionary<string, PluginConfig>();
             this.fullyLoaded = false;
+            this.chaskisRoot = chaskisRoot;
         }
+
+        /// <summary>
+        /// Static constructor.
+        /// </summary>
+        static Chaskis()
+        {
+            DefaultRootDirectory = Path.Combine(
+                Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
+                "Chaskis"
+            );
+        }
+
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// The default chaskis root directory.
+        /// </summary>
+        public static string DefaultRootDirectory { get; private set; }
 
         // ---------------- Functions ----------------
 
         /// <summary>
-        /// Loads the IRC config from the given XML path.
+        /// Loads the IRC config from the chaskis root.
         /// </summary>
         /// <param name="xmlFilePath">The path to the IRC config XML.</param>
-        public void InitState1_LoadIrcConfig( string xmlFilePath )
+        public void InitState1_LoadIrcConfig()
         {
-            this.ircConfig = XmlLoader.ParseIrcConfig( xmlFilePath );
+            string ircConfigFile = Path.Combine( this.chaskisRoot, "IrcConfig.xml" );
+            this.ircConfig = XmlLoader.ParseIrcConfig( ircConfigFile );
             this.ircBot = new IrcBot( this.ircConfig );
         }
 
         /// <summary>
-        /// Loads the Plugins from the given XML path.
+        /// Loads the Plugins from the chaskis root.
         /// The IRC config MUST be loaded first.
         /// </summary>
-        /// <param name="xmlFilePath">The path to the plugin config XML.</param>
         /// <returns>True if load was successful, else false.</returns>
-        public bool InitStage2_LoadPlugins( string xmlFilePath )
+        public bool InitStage2_LoadPlugins()
         {
-            IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( xmlFilePath );
+            string pluginConfigFile = Path.Combine( this.chaskisRoot, "PluginConfig.xml" );
+
+            IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( pluginConfigFile );
             return InitStage2_LoadPlugins( pluginList );
         }
 

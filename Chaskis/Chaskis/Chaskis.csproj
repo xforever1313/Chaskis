@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BootStrapper.cs" />
     <Compile Include="Chaskis.cs" />
     <Compile Include="DefaultHandlers.cs" />
     <Compile Include="PluginConfig.cs" />

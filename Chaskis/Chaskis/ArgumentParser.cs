@@ -1,9 +1,10 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
-using System.IO;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -17,24 +18,14 @@ namespace Chaskis
         // -------- Fields --------
 
         /// <summary>
-        /// The argument for the irc config.
+        /// The argument for the chaskis root.
         /// </summary>
-        private const string configArg = "--configPath=";
+        private const string rootArg = "--chaskisroot=";
 
         /// <summary>
         /// The regex to search for a configuration regex.
         /// </summary>
-        private const string configRegex = configArg + "(?<path>.+)";
-
-        /// <summary>
-        /// The argument for the irc plugin config.
-        /// </summary>
-        private const string pluginArg = "--pluginConfigPath=";
-
-        /// <summary>
-        /// The regex to search for a plugin regex.
-        /// </summary>
-        private const string pluginRegex = pluginArg + "(?<path>.+)";
+        private const string rootRegex = rootArg + "(?<path>.+)";
 
         /// <summary>
         /// The argument for the irc plugin config.
@@ -47,14 +38,9 @@ namespace Chaskis
         private const string failPluginRegex = failPluginArg + "(?<yesOrNo>(yes|no))";
 
         /// <summary>
-        /// Default irc config location.
+        /// The argument to turn on bootstrapping.
         /// </summary>
-        public readonly string DefaultIrcConfigLocation;
-
-        /// <summary>
-        /// Default plugin config location;
-        /// </summary>
-        public readonly string DefaultIrcPluginConfigLocation;
+        private const string bootStrapArg = "--bootstrap";
 
         // -------- Constructor --------
 
@@ -62,17 +48,13 @@ namespace Chaskis
         /// Constructor.
         /// </summary>
         /// <param name="args">Arguments to parse</param>
-        /// <param name="rootDir">Where the DEFAULT root of the config directory is.</param>
-        public ArgumentParser( string[] args, string rootDir )
+        /// <param name="defaultRootDir">Where the DEFAULT root of the config directory is.</param>
+        public ArgumentParser( string[] args, string defaultRootDir )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
-            ArgumentChecker.StringIsNotNullOrEmpty( rootDir, nameof( rootDir ) );
+            ArgumentChecker.StringIsNotNullOrEmpty( defaultRootDir, nameof( defaultRootDir ) );
 
-            this.DefaultIrcConfigLocation = Path.Combine( rootDir, "IrcConfig.xml" );
-            this.DefaultIrcPluginConfigLocation = Path.Combine( rootDir, "PluginConfig.xml" );
-
-            this.IrcConfigLocation = this.DefaultIrcConfigLocation;
-            this.IrcPluginConfigLocation = this.DefaultIrcPluginConfigLocation;
+            this.ChaskisRoot = defaultRootDir;
             this.FailOnPluginFailure = false;
             this.IsValid = true;
 
@@ -89,24 +71,16 @@ namespace Chaskis
                 {
                     this.PrintVersion = true;
                 }
-                else if( arg.StartsWith( configArg ) )
+                else if( arg == "--bootstrap" )
                 {
-                    Match configMatch = Regex.Match( arg, configRegex );
+                    this.BootStrap = true;
+                }
+                else if( arg.StartsWith( rootArg ) )
+                {
+                    Match configMatch = Regex.Match( arg, rootRegex );
                     if( configMatch.Success )
                     {
-                        this.IrcConfigLocation = configMatch.Groups["path"].Value;
-                    }
-                    else
-                    {
-                        this.IsValid = false;
-                    }
-                }
-                else if( arg.StartsWith( pluginArg ) )
-                {
-                    Match pluginMatch = Regex.Match( arg, pluginRegex );
-                    if( pluginMatch.Success )
-                    {
-                        this.IrcPluginConfigLocation = pluginMatch.Groups["path"].Value;
+                        this.ChaskisRoot = configMatch.Groups["path"].Value;
                     }
                     else
                     {
@@ -142,16 +116,10 @@ namespace Chaskis
         // -------- Properties --------
 
         /// <summary>
-        /// Where the irc config XML file is located.
-        /// Defaulted to rootDir\IrcConfig.xml.
+        /// Where we will treat our Chaskis config root.
+        /// Defaulted to AppData/Chaskis.
         /// </summary>
-        public string IrcConfigLocation { get; private set; }
-
-        /// <summary>
-        /// Where the irc plugin XML file is located.
-        /// Defaulted to rootDir\PluginConfig.xml.
-        /// </summary>
-        public string IrcPluginConfigLocation { get; private set; }
+        public string ChaskisRoot { get; private set; }
 
         /// <summary>
         /// Whether or not to print the help.
@@ -173,5 +141,10 @@ namespace Chaskis
         /// Whether or not the args were parsed correctly.
         /// </summary>
         public bool IsValid { get; private set; }
+
+        /// <summary>
+        /// Should we bootstrap or not.
+        /// </summary>
+        public bool BootStrap { get; private set; }
     }
 }
