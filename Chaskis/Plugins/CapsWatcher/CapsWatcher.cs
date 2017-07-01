@@ -98,7 +98,8 @@ namespace Chaskis.Plugins.CapsWatcher
         public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                initor.PluginDirectory,
+                initor.ChaskisConfigPluginRoot,
+                "CapsWatcher",
                 "CapsWatcherConfig.xml"
             );
 

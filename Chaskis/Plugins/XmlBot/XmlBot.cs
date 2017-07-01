@@ -82,7 +82,8 @@ namespace Chaskis.Plugins.XmlBot
         public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                initor.PluginDirectory,
+                initor.ChaskisConfigPluginRoot,
+                "XmlBot",
                 "XmlBotConfig.xml"
             );
 

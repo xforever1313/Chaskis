@@ -85,13 +85,18 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            string karmaBotRoot = Path.Combine(
+                initor.ChaskisConfigPluginRoot,
+                "KarmaBot"
+            );
+
             string dbPath = Path.Combine(
-                initor.PluginDirectory,
+                karmaBotRoot,
                 "karmabot.db"
             );
 
             string configPath = Path.Combine(
-                initor.PluginDirectory,
+                karmaBotRoot,
                 "KarmaBotConfig.xml"
             );
 

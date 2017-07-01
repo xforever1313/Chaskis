@@ -47,5 +47,16 @@ namespace ChaskisCore
         /// The event scheduler that can be used to schedule events to run on the event queue.
         /// </summary>
         public IChaskisEventScheduler EventScheduler { get; set; }
+
+        /// <summary>
+        /// The root of the directory that contains the configuration.
+        /// </summary>
+        public string ChaskisConfigRoot { get; set; }
+
+        /// <summary>
+        /// Directory that contains the plugin config folder.
+        /// Your plugin config will live in <see cref="ChaskisConfigPluginRoot"/>/PluginName/config.xml
+        /// </summary>
+        public string ChaskisConfigPluginRoot => Path.Combine( this.ChaskisConfigRoot, "Plugins" );
     }
 }

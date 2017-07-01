@@ -91,8 +91,13 @@ namespace Chaskis.Plugins.QuoteBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            string quoteBotRoot = Path.Combine(
+                initor.ChaskisConfigPluginRoot,
+                "QuoteBot"
+            );
+
             string configPath = Path.Combine(
-                initor.PluginDirectory,
+                quoteBotRoot,
                 "QuoteBotConfig.xml"
             );
 
@@ -107,7 +112,7 @@ namespace Chaskis.Plugins.QuoteBot
 
             this.quoteBotConfig = XmlLoader.LoadConfig( configPath );
             this.parser = new QuoteBotParser( this.quoteBotConfig );
-            this.db = new QuoteBotDatabase( Path.Combine( initor.PluginDirectory, "quotes.db" ) );
+            this.db = new QuoteBotDatabase( Path.Combine( quoteBotRoot, "quotes.db" ) );
 
             MessageHandler addHandler = new MessageHandler(
                 this.quoteBotConfig.AddCommand,

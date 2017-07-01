@@ -54,11 +54,14 @@ namespace Chaskis
         /// Loads the given list of plugins.
         /// Any errors are logged to the passed in logger.
         /// </summary>
+        /// <param name="assemblyList">List of assemblies we are to load.</param>
         /// <param name="ircConfig">The irc config we are using.</param>
+        /// <param name="chaskisConfigRoot">The root of the chaskis config.</param>
         public bool LoadPlugins(
             IList<AssemblyConfig> assemblyList,
             IIrcConfig ircConfig,
-            IChaskisEventScheduler scheduler
+            IChaskisEventScheduler scheduler,
+            string chaskisConfigRoot
         )
         {
             bool success = true;
@@ -96,6 +99,7 @@ namespace Chaskis
                         initor.PluginPath = assemblyConfig.AssemblyPath;
                         initor.IrcConfig = ircConfig;
                         initor.EventScheduler = scheduler;
+                        initor.ChaskisConfigRoot = chaskisConfigRoot;
 
                         initFunction.Invoke( instance, new object[] { initor } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();

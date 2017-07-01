@@ -106,7 +106,8 @@ namespace Chaskis.Plugins.UserListBot
         public void Init( PluginInitor initor )
         {
             string configPath = Path.Combine(
-                initor.PluginDirectory,
+                initor.ChaskisConfigPluginRoot,
+                "UserListBot",
                 "UserListBotConfig.xml"
             );
 

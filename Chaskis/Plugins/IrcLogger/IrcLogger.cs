@@ -85,10 +85,18 @@ namespace Chaskis.Plugins.IrcLogger
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
-            string pluginDir = initor.PluginDirectory;
+            string pluginDir = Path.Combine(
+                initor.ChaskisConfigPluginRoot,
+                "IrcLogger"
+            );
+
+            string configPath = Path.Combine(
+                pluginDir,
+                "IrcLoggerConfig.xml"
+            );
 
             IrcLoggerConfig config = XmlLoader.LoadIrcLoggerConfig(
-                Path.Combine( pluginDir, "IrcLoggerConfig.xml" )
+                configPath
             );
 
             if( string.IsNullOrEmpty( config.LogFileLocation ) )
