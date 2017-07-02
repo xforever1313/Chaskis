@@ -15,12 +15,14 @@ Installing
 
 Cross Channel Bot comes with Chaskis by default. To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
-*Windows:*
+### Windows: ###
+
 ```XML
 <assembly path="C:\Program Files\Chaskis\Plugins\CrossChannel\CrossChannel.dll" />
 ```
 
-*Linux:*
+### Linux: ###
+
 ```XML
 <assembly path="/usr/lib/Chaskis/Plugins/CrossChannel/CrossChannel.dll" />
 ```

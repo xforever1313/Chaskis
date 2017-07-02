@@ -32,12 +32,14 @@ Installing
 
 ServerDiagnostics comes with Chaskis by default.  To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
-*Windows:*
+### Windows: ###
+
 ```XML
 <assembly path="C:\Program Files\Chaskis\Plugins\ServerDiagnostics\ServerDiagnostics.dll" />
 ```
 
-*Linux:*
+### Linux: ###
+
 ```XML
 <assembly path="/usr/lib/Chaskis/Plugins/ServerDiagnostics/ServerDiagnostics.dll" />
 ```

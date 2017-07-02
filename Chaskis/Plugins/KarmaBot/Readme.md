@@ -60,12 +60,14 @@ Installation
 --------
 KarmaBot is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
-*Windows:*
+### Windows: ###
+
 ```XML
 <assembly path="C:\Program Files\Chaskis\Plugins\KarmaBot\KarmaBot.dll" />
 ```
 
-*Linux:*
+### Linux: ###
+
 ```XML
 <assembly path="/usr/lib/Chaskis/Plugins/KarmaBot/KarmaBot.dll" />
 ```
