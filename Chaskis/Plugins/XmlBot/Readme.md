@@ -8,8 +8,6 @@ This bot takes in an XML file of commands and their corresponding response.  You
 Configuration
 =====
 
-The configuration file lives in /home/chaskis/.config/Chaskis/Plugins/XmlBot/XmlBotConfig.xml
-
 ```XML
 <?xml version="1.0" encoding="utf-8" ?>
 
@@ -97,10 +95,16 @@ respondto -
 Installing
 ======
 
-XmlBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/Xmlbot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+XmlBot comes with Chaskis by default.  To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/XmlBot/XmlBot.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\XmlBot\XmlBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/XmlBot/XmlBot.dll" />
 ```
 
 Sample Output:

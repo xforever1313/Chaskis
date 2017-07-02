@@ -18,3 +18,18 @@ Caveots
   * Only US zip codes are accepted
   * NOAA updates their database every hour.  They ask on their site to only query the database no more than once per hour per location.  We therefore do cacheing of each location that is queried in the channel.  After an hour, if a location is queried we grab the latest information from NOAA.
   * Each command has a 15 second cooldown.  Therefore, any commands that happen within 15 seconds of the previous command type are ignored.
+
+Installing
+------
+
+WeatherBot comes with Chaskis by default. To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+
+*Windows:*
+```XML
+<assembly path="C:\Program Files\Chaskis\Plugins\WeatherBot\WeatherBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/WeatherBot/WeatherBot.dll" />
+```

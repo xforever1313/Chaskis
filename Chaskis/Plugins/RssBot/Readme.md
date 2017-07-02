@@ -8,8 +8,6 @@ The RSS Bot plugin pulls from an RSS or ATOM feed at an interval, and then posts
 Configuration
 =====
 
-The configuration file lives in /home/chaskis/.config/Chaskis/Plugins/RssBot/RssBotConfig.xml
-
 ```XML
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
@@ -41,8 +39,14 @@ Any existing posts on the feed will NOT be posted.
 Installing
 ======
 
-RssBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/RssBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+RssBot comes with Chaskis by default.  To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/RssBot/RssBot.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\RssBot\RssBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/RssBot/RssBot.dll" />
 ```

@@ -19,10 +19,16 @@ There is no configuration.
 Installing
 ======
 
-Url Bot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/UrlBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+Url Bot comes with Chaskis by default. To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/UrlBot/UrlBot.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\UrlBot\UrlBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/UrlBot/UrlBot.dll" />
 ```
 
 Sample Output:

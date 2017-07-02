@@ -30,7 +30,7 @@ To query how much Karma a user has, type
 
 Configuration
 --------
-The plugin settings are located in the default Chaskis plugin folder (AppData/Chaskis/Plugins/KarmaBot).  There are three settings you can set.  The default is below.
+The plugin settings are located in the default Chaskis plugin folder (Chaskis/Plugins/KarmaBot).  There are three settings you can set.  The default is below.
 
 ```XML
 <!--
@@ -60,11 +60,17 @@ Installation
 --------
 KarmaBot is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
+*Windows:*
 ```XML
-<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/KarmaBot/KarmaBot.dll" />
+<assembly path="C:\Program Files\Chaskis\Plugins\KarmaBot\KarmaBot.dll" />
 ```
 
-Note, you'll need SQLite installed.  It does get installed with NuGet when you restore the packages during building.
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/KarmaBot/KarmaBot.dll" />
+```
+
+Note, you'll need SQLite installed.  It does get installed with NuGet when you restore the packages during building on Windows ONLY.  On Linux, install it SQLite with your favorite package manager.
 
 Sample Output
 --------

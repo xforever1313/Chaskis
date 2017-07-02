@@ -7,8 +7,7 @@ This bot prints all the users in the channel in a single message.
 
 Configuration
 =====
-
-The configuration file lives in /home/chaskis/.config/Chaskis/Plugins/UserListBot/UserListBotConfig.xml  There are two things to configure: command and cooldown.
+There are two things to configure: command and cooldown.
 
 ```XML
 <!--
@@ -34,10 +33,16 @@ User the following for a default configuration:
 Installing
 ======
 
-UserListBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/UserListBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+UserListBot comes with Chaskis by default. To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/UserListBot/UserListBot.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\UserListBot\UserListBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/UserListBot/UserListBot.dll" />
 ```
 
 Sample Output:

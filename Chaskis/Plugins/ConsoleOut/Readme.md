@@ -13,8 +13,14 @@ Installation
 --------
 ConsoleOut is included as a default Chaskis plugin.  To enable, open PluginConfig.xml and add the following line:
 
+*Windows:*
 ```XML
-<assembly path="Path/To/Chaskis/Install/Chaskis/Plugins/ConsoleOut/ConsoleOut.dll" />
+<assembly path="C:\Program Files\Chaskis\Plugins\ConsoleOut\ConsoleOut.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/ConsoleOut/ConsoleOut.dll" />
 ```
 
 Its recommended that this line is the first line in the XML so its the first handler that gets fired.  This way you can see what you get from IRC before the other plugins react to it.

@@ -13,10 +13,16 @@ There is no configuration.
 Installing
 ======
 
-Cross Channel Bot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/CrossChannel.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+Cross Channel Bot comes with Chaskis by default. To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/CrossChannel/CrossChannel.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\CrossChannel\CrossChannel.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/CrossChannel/CrossChannel.dll" />
 ```
 
 Sample Output:

@@ -21,9 +21,17 @@ Cowsay Bot is a plugin for Chaskis.  An IRC user is able to call this bot and th
 Installing
 ======
 
-CowsayBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/CowSayBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+CowsayBot comes with Chaskis by default.  To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
-&lt;assembly path="/home/cowsaybot/.config/Chaskis/Plugins/CowSayBot/CowSayBot.dll" /&gt;
+*Windows:*
+```XML
+<assembly path="C:\Program Files\Chaskis\Plugins\CowSayBot\CowSayBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/CowSayBot/CowSayBot.dll" />
+```
 
 You must have cowsay installed.  Install it using your favorite package manager:
 * Arch: pacman -S cowsay

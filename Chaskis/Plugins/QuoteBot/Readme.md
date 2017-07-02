@@ -41,10 +41,16 @@ Note: Notice for all the commands, there is a '^' in front.  This is important, 
 Installing
 ======
 
-QuoteBot comes with Chaskis by default.  It lives in /home/chaskis/.config/Chaskis/Plugins/QuoteBot.  To enable, open /home/chaskis/.config/Chaskis/PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
+QuoteBot comes with Chaskis by default.  To enable, open PluginConfig.xml, and add the following line inside of &lt;pluginconfig&gt;
 
+*Windows:*
 ```XML
-<assembly path="/home/chaskis/.config/Chaskis/Plugins/QuoteBot/QuoteBot.dll" />;
+<assembly path="C:\Program Files\Chaskis\Plugins\QuoteBot\QuoteBot.dll" />
+```
+
+*Linux:*
+```XML
+<assembly path="/usr/lib/Chaskis/Plugins/QuoteBot/QuoteBot.dll" />
 ```
 
 Sample Output:
@@ -58,4 +64,4 @@ Sample Output:
 [09:35.19] <SethTestBot> Quote 2 deleted successfully.
 ```
 
-SQLite database gets saved as Chaskis/Plugins/QuoteBot/quotes.db
+SQLite database gets saved as Chaskis/Plugins/QuoteBot/quotes.db in your Chaskis Config Root.
