@@ -18,8 +18,27 @@ Install Instructions
 ----------------------
 
 ### Windows ###
+Run the Windows installer.  This will install Chaskis to C:\Program Files\Chaskis.  The service will also be installed but NOT enabled.
 
 ### Linux ###
+
+Configuration
+---------------
+Once Chaskis is installed, run ```Chaskis.exe --bootstrap``` to create an empty configuration in side of your Application Data folder.  On Windows, this is ```C:\Users\you\AppData\Roaming\Chaskis```.  On Linux, this is ```/home/you/.config/Chaskis```.  If you wish to install a default config else where, specify that in the ```--chaskisroot argument``` (e.g. ```Chaskis.exe --bootstrap --chaskisroot=/home/you/chakisconfig```).
+
+Note, if running Chaskis as a Service, you MUST store your user's configuration in the Application Data folder.
+
+After running Chaskis.exe with the bootstrap argument, default configurations will appear in the folder.  They are XML Files, and their instructions live as comments in those files.  Plugin configuration lives in the Plugins folder.
+
+Running
+---------------
+*Chaskis.exe*
+There are two ways to run Chaskis.  The first is with ```Chaskis.exe```. By default, this will look for configuration in your Application Data folder, but you can override this by passing in the ```--chaskisroot``` argument (e.g. ```Chaskis.exe --chaskisroot=/home/you/chakisconfig```).  You can run multiple instances of Chaskis.exe per user this way.  Running Chaskis in a tool such as tmux or screen an keep it running in the background.
+
+*ChaskisService.exe*
+The other way to run Chaskis is by the service.  The advantage of a service is you can tell Chaskis to run when your system starts up.  The disadvantage is you can only have on configuration per user, which lives in the user's Application Data folder.
+
+TODO: Start Service Instructions for Windows/Systemd.
 
 Writing Plugins
 ----------------
