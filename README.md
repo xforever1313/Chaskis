@@ -32,10 +32,12 @@ After running Chaskis.exe with the bootstrap argument, default configurations wi
 
 Running
 ---------------
-*Chaskis.exe*
+### Chaskis.exe ###
+
 There are two ways to run Chaskis.  The first is with ```Chaskis.exe```. By default, this will look for configuration in your Application Data folder, but you can override this by passing in the ```--chaskisroot``` argument (e.g. ```Chaskis.exe --chaskisroot=/home/you/chakisconfig```).  You can run multiple instances of Chaskis.exe per user this way.  Running Chaskis in a tool such as tmux or screen an keep it running in the background.
 
-*ChaskisService.exe*
+### ChaskisService.exe ###
+
 The other way to run Chaskis is by the service.  The advantage of a service is you can tell Chaskis to run when your system starts up.  The disadvantage is you can only have on configuration per user, which lives in the user's Application Data folder.
 
 TODO: Start Service Instructions for Windows/Systemd.
