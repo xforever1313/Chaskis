@@ -42,3 +42,10 @@ Sample Output:
 [12:13.46] <xforever1313> https://github.com/xforever1313/Chaskis
 [12:13.47] <SethTestBot> Title: GitHub - xforever1313/Chaskis: A generic framework for making IRC Bots.
 ```
+
+Credits
+--------
+
+ * ### HtmlAgilityPack ###
+    * **License:** https://github.com/zzzprojects/html-agility-pack/blob/master/LICENSE
+    * **Website:** http://html-agility-pack.net/
