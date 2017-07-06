@@ -172,6 +172,16 @@
             <!-- ChaskisService.exe -->
             <Component Guid="{3FB8D929-4ADC-4B05-87AD-3C424AFE17D8}" Directory="BinFolder">
                 <File Source="$(var.ChaskisService.TargetPath)" KeyPath="yes"/>
+                <ServiceInstall
+                    Id="ServiceInstaller"
+                    Type="ownProcess"
+                    Name="Chaskis"
+                    Description="Generic IRC Bot Framework"
+                    Start="demand"
+                    Account="LocalSystem"
+                    ErrorControl="ignore"
+                />
+            <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
             </Component>
 
             <!-- Sample IRC Config -->
