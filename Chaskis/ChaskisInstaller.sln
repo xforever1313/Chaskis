@@ -55,7 +55,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossChannel", "Plugins\Cro
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ChaskisInstaller", "Install\windows\ChaskisInstaller.wixproj", "{3F5C76B6-5ADF-4AFC-8580-29311DC30836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisCliInstaller", "ChaskisCliInstaller\ChaskisCliInstaller.csproj", "{FBAA5443-4CB9-4190-90E1-8B8711C5707C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisCliInstaller", "Install\ChaskisCliInstaller\ChaskisCliInstaller.csproj", "{FBAA5443-4CB9-4190-90E1-8B8711C5707C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

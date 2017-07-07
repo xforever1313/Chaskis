@@ -49,7 +49,7 @@ package() {
 
         mkdir -p $pkgdir/usr/lib
 
-        mono ./Chaskis/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./Chaskis $pkgdir/usr/lib ./Chaskis/Install/windows/Product.wxs Release
+        mono ./Chaskis/Install/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./Chaskis $pkgdir/usr/lib ./Chaskis/Install/windows/Product.wxs Release
 
         # Systemd service
         mkdir -p $pkgdir/usr/lib/systemd/system
