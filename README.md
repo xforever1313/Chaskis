@@ -40,7 +40,8 @@ There are two ways to run Chaskis.  The first is with ```Chaskis.exe```. By defa
 
 The other way to run Chaskis is by the service.  The advantage of a service is you can tell Chaskis to run when your system starts up.  The disadvantage is you can only have on configuration per user, which lives in the user's Application Data folder.
 
-TODO: Start Service Instructions for Windows/Systemd.
+* [Windows Instructions](https://github.com/xforever1313/Chaskis/wiki/Running-as-a-Windows-Service)
+* [Linux Instructions](https://github.com/xforever1313/Chaskis/wiki/Running-as-a-Linux-Service)
 
 Writing Plugins
 ----------------
