@@ -92,6 +92,9 @@ namespace Chaskis
         public void InitState1_LoadIrcConfig()
         {
             string ircConfigFile = Path.Combine( this.chaskisRoot, "IrcConfig.xml" );
+
+            StaticLogger.WriteLine( "Using IRC config file '{0}'", ircConfigFile );
+
             this.ircConfig = XmlLoader.ParseIrcConfig( ircConfigFile );
             this.ircBot = new IrcBot( this.ircConfig );
         }
@@ -104,6 +107,8 @@ namespace Chaskis
         public bool InitStage2_LoadPlugins()
         {
             string pluginConfigFile = Path.Combine( this.chaskisRoot, "PluginConfig.xml" );
+
+            StaticLogger.WriteLine( "Using Plugin config file '{0}'", pluginConfigFile );
 
             IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( pluginConfigFile );
             return InitStage2_LoadPlugins( pluginList );

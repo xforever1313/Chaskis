@@ -76,6 +76,8 @@ namespace ChaskisService
                     this.logWriter = new StreamWriter( this.logFile );
                 }
 
+                StaticLogger.WriteLine( "Starting." );
+
                 chaskis.InitState1_LoadIrcConfig();
 
                 // Load Plugins.

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -119,21 +120,24 @@ namespace Chaskis
                 }
                 catch( Exception e )
                 {
-                    StaticLogger.ErrorWriteLine( "*************" );
-                    StaticLogger.ErrorWriteLine( "Warning! Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
-                    StaticLogger.ErrorWriteLine( e.Message );
-                    StaticLogger.ErrorWriteLine();
-                    StaticLogger.ErrorWriteLine( e.StackTrace );
-                    StaticLogger.ErrorWriteLine();
+                    StringBuilder errorString = new StringBuilder();
+                    errorString.AppendLine( "*************" );
+                    errorString.AppendLine( "Warning! Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
+                    errorString.AppendLine( e.Message );
+                    errorString.AppendLine();
+                    errorString.AppendLine( e.StackTrace );
+                    errorString.AppendLine();
                     if( e.InnerException != null )
                     {
-                        StaticLogger.ErrorWriteLine( "Inner Exception:" );
-                        StaticLogger.ErrorWriteLine( e.InnerException.Message );
-                        StaticLogger.ErrorWriteLine( e.InnerException.StackTrace );
+                        errorString.AppendLine( "\tInner Exception:" );
+                        errorString.AppendLine( "\t\t" + e.InnerException.Message );
+                        errorString.AppendLine( "\t\t" + e.InnerException.StackTrace );
                     }
-                    StaticLogger.ErrorWriteLine( "*************" );
+                    errorString.AppendLine( "*************" );
 
                     success = false;
+
+                    StaticLogger.ErrorWriteLine( errorString.ToString() );
                 }
             }
 
