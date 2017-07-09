@@ -52,7 +52,7 @@ package() {
         mono ./Chaskis/Install/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./Chaskis $pkgdir/usr/lib ./Chaskis/Install/windows/Product.wxs Release
 
         # Systemd service
-        mkdir -p $pkgdir/usr/lib/systemd/system
+        mkdir -p $pkgdir/usr/lib/systemd/user
         cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/user/chaskis.service
 
         # Binary
