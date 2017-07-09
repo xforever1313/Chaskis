@@ -8,7 +8,7 @@ Build Status
 
 [![Build status](https://ci.appveyor.com/api/projects/status/n8sbo1ay6wr2xxyc/branch/master?svg=true)](https://ci.appveyor.com/project/xforever1313/chaskis/branch/master)
 
-[![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/ChaskisCore/)
+[![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/)
 
 About
 --------
