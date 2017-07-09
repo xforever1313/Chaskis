@@ -46,4 +46,4 @@ The other way to run Chaskis is by the service.  The advantage of a service is y
 Writing Plugins
 ----------------
 
-See WritingPlugins.md for more information.
+Visit our Wiki page [here](https://github.com/xforever1313/Chaskis/wiki/Writing-Plugins).
