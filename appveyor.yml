@@ -28,9 +28,7 @@ before_build:
 build:
     parallel: false
     project: Chaskis/Chaskis.sln
-
-after_build:
-    - nuget pack Chaskis\ChaskisCore\ChaskisCore.csproj -properties Configuration=Release
+    publish_nuget: true
    
 #-------------#
 # Test Config #
@@ -46,10 +44,3 @@ notifications:
           - seth@shendrick.net
       subject: 'Chaskis Build {{status}}'
 
-
-#---------#
-# Archive #
-#---------#
-
-artifacts:
-    - path: '*.nupkg'
