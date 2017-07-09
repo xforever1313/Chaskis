@@ -23,7 +23,7 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "1.0.0";
+        public const string VersionStr = "0.2.0";
 
         /// <summary>
         /// The handlers for this plugin.
