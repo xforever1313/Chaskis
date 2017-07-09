@@ -19,7 +19,7 @@ backup=()
 options=()
 install=
 changelog=()
-source=("https://github.com/xforever1313/Chaskis/archive/0.2.0.tar.gz")
+source=("https://github.com/xforever1313/Chaskis/archive/$pkgver.tar.gz")
 noextract=()
 md5sums=('SKIP')
 validpgpkeys=()
@@ -29,14 +29,14 @@ prepare() {
 }
 
 build() {
-        cd "$srcdir/Chaskis-master"
+        cd "$srcdir/Chaskis-$pkgver"
         git clone https://github.com/xforever1313/sethcs SethCS
         nuget restore ./Chaskis/Chaskis.sln
         xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
 }
 
 check() {
-        #cd "$srcdir/Chaskis-master"
+        #cd "$srcdir/Chaskis-$pkgver"
         #nuget restore ./Chaskis/Chaskis.sln
         #nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory ./nunit/
         #mono ./nunit/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
@@ -45,7 +45,7 @@ check() {
 
 package() {
 
-        cd "$srcdir/Chaskis-master"
+        cd "$srcdir/Chaskis-$pkgver"
 
         mkdir -p $pkgdir/usr/lib
 
