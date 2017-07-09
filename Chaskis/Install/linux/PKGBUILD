@@ -53,7 +53,7 @@ package() {
 
         # Systemd service
         mkdir -p $pkgdir/usr/lib/systemd/system
-        cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/system
+        cp ./Chaskis/Install/linux/systemd/chaskis.service $pkgdir/usr/lib/systemd/user
 
         # Binary
         mkdir -p $pkgdir/usr/bin/
