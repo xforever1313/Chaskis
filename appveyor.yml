@@ -29,17 +29,27 @@ build:
     parallel: false
     project: Chaskis/Chaskis.sln
 
+after_build:
+    - nuget pack Chaskis\ChaskisCore\ChaskisCore.csproj -properties Configuration=Release
+   
 #-------------#
 # Test Config #
 #-------------#
 
 test:
     assemblies:
-        Tests.dll
 
+        Tests.dll
 notifications:
     - provider: Email
       to:
           - seth@shendrick.net
       subject: 'Chaskis Build {{status}}'
 
+
+#---------#
+# Archive #
+#---------#
+
+artifacts:
+    - path: *.nupkg
