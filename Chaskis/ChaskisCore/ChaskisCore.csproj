@@ -57,6 +57,9 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="Parsing.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ChaskisCore.nuspec" />
+  </ItemGroup>
   <Import Project="..\..\SethCS\SethCS\SethCS.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

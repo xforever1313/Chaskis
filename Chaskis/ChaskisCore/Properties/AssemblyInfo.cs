@@ -12,9 +12,9 @@ using ChaskisCore;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle( "ChaskisCore" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyDescription( "The core library of Chaskis.  All Chaskis Plugins must reference this library." )]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "" )]
+[assembly: AssemblyCompany( "Seth Hendrick" )]
 [assembly: AssemblyProduct( "" )]
 [assembly: AssemblyCopyright( "Seth Hendrick 2016-2017" )]
 [assembly: AssemblyTrademark( "" )]
