@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ChaskisCore;
 
 namespace Chaskis.Plugins.CapsWatcher
@@ -37,6 +38,11 @@ namespace Chaskis.Plugins.CapsWatcher
         /// RNG.
         /// </summary>
         private readonly Random random;
+
+        private static readonly Regex capsRegex = new Regex(
+            @"^[\p{P}A-Z]+\s+[\p{P}A-Z\s]+$",
+            RegexOptions.Compiled
+        );
 
         // -------- Constructor --------
 
@@ -177,15 +183,15 @@ namespace Chaskis.Plugins.CapsWatcher
                 return false;
             }
 
-            // Find letter.  Return if can't find it.
-            else if( message.FirstOrDefault( ch => char.IsLetter( ch ) ) == '\0' )
-            {
-                return false;
-            }
+            // Requirements:
+            // 1. Must contain at least one space, otherwise it could be an emoji
+            //    or abbreviation 
+            // 2. Must contain no lowercase characters.
+            // 3. Must be at least 3 characters long... don't want one character
+            //    or emoji's to trigger the bot.
+            // 4. Punctuation is okay.
 
-            // If our message matches what it would be upper case, then
-            // we are good to go.
-            return message.Equals( message.ToUpper() );
+            return capsRegex.IsMatch( message );
         }
 
         /// <summary>

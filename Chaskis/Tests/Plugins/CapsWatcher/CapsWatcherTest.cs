@@ -19,18 +19,36 @@ namespace Tests.Plugins.CapsWatcher
         public void CheckForCapsTest()
         {
             GoodTest( "HELLO WORLD!" );
-            GoodTest( "123HI21" );
             GoodTest( "I AM TALKING VERY LOUDLY!" );
-            GoodTest( "HEY" );
-            GoodTest( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+            GoodTest( "HELLO THERE WORLD" );
+            GoodTest( "I AM, COOL!?" );
 
+            // Needs at least one space in order to work.
+            BadTest( "123HI21" );
+            BadTest( "HEY" );
+            BadTest( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+
+            // Lowercase doesn't work.
             BadTest( "LOWERcASE" );
+
+            // Just numbers are ignored.
             BadTest( "1234567890" );
+
+            // Not enough characters or spaces.
             BadTest( "HI" );
+
+            // Null/Empty
             BadTest( string.Empty );
             BadTest( null );
+
+            // No letters
             BadTest( "!@#$%^&*()" );
+
+            // Just lowercase.
             BadTest( "abcdefghijklmnopqrstuvwxyz" );
+
+            // Emoji's shouldn't work.
+            BadTest( "¯\\_(ツ)_/¯" );
         }
 
         // -------- Test Helpers -------
