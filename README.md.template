@@ -1,6 +1,6 @@
 Chaskis 
 ==========
-A generic framework written in C# for making IRC Bots.
+{%Summary%}
 
 Build Status
 --------------
@@ -12,9 +12,7 @@ Build Status
 
 About
 --------
-Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
-
-Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
+{%Description%}
 
 Install Instructions
 ----------------------
@@ -49,4 +47,3 @@ Writing Plugins
 ----------------
 
 Visit our Wiki page [here](https://github.com/xforever1313/Chaskis/wiki/Writing-Plugins).
-

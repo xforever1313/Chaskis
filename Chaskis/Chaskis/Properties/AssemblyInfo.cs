@@ -6,6 +6,7 @@
 //
 
 using System.Reflection;
+using ChaskisCore;
 
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
@@ -15,7 +16,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "Chaskis" )]
-[assembly: AssemblyCopyright( "Copyright © Seth Hendrick 2016-2017" )]
+[assembly: AssemblyCopyright( IrcBot.CopyRight )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 

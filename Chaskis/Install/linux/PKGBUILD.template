@@ -1,11 +1,11 @@
-# Maintainer: Seth Hendrick <seth@shendrick.net>
+# Maintainer: {%Author%} <{%AuthorEmail%}>
 pkgname=chaskis
-pkgver=0.2.0
+pkgver={%ChaskisMainVersion%}
 pkgrel=1
 epoch=
-pkgdesc="A generic framework written in C# for making IRC Bots."
+pkgdesc="{%Summary%}"
 arch=('any')
-url="https://github.com/xforever1313/Chaskis/"
+url="{%ProjectUrl%}"
 license=('BSL')
 groups=()
 depends=('mono>=4.2.2' 'git' 'nuget')
@@ -67,4 +67,3 @@ pre_install() {
 post_remove() {
     return
 }
-

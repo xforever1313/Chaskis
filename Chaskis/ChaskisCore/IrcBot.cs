@@ -22,6 +22,11 @@ namespace ChaskisCore
         public const string VersionString = "0.2.0";
 
         /// <summary>
+        /// Copyright information.
+        /// </summary>
+        public const string CopyRight = "Copyright © Seth Hendrick 2016-2017";
+
+        /// <summary>
         /// Semantic Version of the bot.
         /// </summary>
         public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );

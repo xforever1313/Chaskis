@@ -26,36 +26,34 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <!-- version should MATCH as closely as possible with the underlying software -->
     <!-- Is the version a prerelease of a version? https://docs.nuget.org/create/versioning#creating-prerelease-packages -->
     <!-- Note that unstable versions like 0.0.1 can be considered a released version, but it's possible that one can release a 0.0.1-beta before you release a 0.0.1 version. If the version number is final, that is considered a released version and not a prerelease. -->
-    <version>0.2.0</version>
-    <packageSourceUrl>https://github.com/xforever1313/Chaskis/</packageSourceUrl>
+    <version>{%ChaskisMainVersion%}</version>
+    <packageSourceUrl>{%ProjectUrl%}</packageSourceUrl>
     <!-- owners is a poor name for maintainers of the package. It sticks around by this name for compatibility reasons. It basically means you. -->
-    <owners>Seth Hendrick</owners>
+    <owners>{%Author%}</owners>
     <!-- ============================== -->
 
     <!-- == SOFTWARE SPECIFIC SECTION == -->
     <!-- This section is about the software itself -->
-    <title>Chaskis IRC Bot (Install)</title>
-    <authors>Seth Hendrick</authors>
+    <title>{%FullName%} (Install)</title>
+    <authors>{%Author%}</authors>
     <!-- projectUrl is required for the community feed -->
-    <projectUrl>https://github.com/xforever1313/Chaskis/</projectUrl>
+    <projectUrl>{%ProjectUrl%}</projectUrl>
     <!--<iconUrl>http://cdn.rawgit.com/https://github.com/xforever1313/Chaskis/master/icons/chaskis.png</iconUrl>-->
-    <copyright>Copyright © Seth Hendrick 2016-2017</copyright>
+    <copyright>{%CopyRight%}</copyright>
     <!-- If there is a license Url available, it is required for the community feed -->
-    <licenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</licenseUrl>
+    <licenseUrl>{%LicenseUrl%}</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/xforever1313/Chaskis/</projectSourceUrl>
-    <docsUrl>https://github.com/xforever1313/Chaskis/wiki</docsUrl>
+    <projectSourceUrl>{%ProjectUrl%}</projectSourceUrl>
+    <docsUrl>{%WikiUrl%}</docsUrl>
     <!--<mailingListUrl></mailingListUrl>-->
-    <bugTrackerUrl>https://github.com/xforever1313/Chaskis/issues</bugTrackerUrl>
-    <tags>chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows service full installer</tags>
-    <summary>A generic framework written in C# for making IRC Bots.</summary>
+    <bugTrackerUrl>{%IssueTrackerUrl%}</bugTrackerUrl>
+    <tags>{%MainTags%}</tags>
+    <summary>{%Summary%}</summary>
     <description>
-Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
-
-Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
+{%Description%}
     </description>
     <releaseNotes>
-View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)
+{%ReleaseNotes%}
     </releaseNotes>
     <!-- =============================== -->      
 
@@ -84,4 +82,3 @@ View release notes here: [https://github.com/xforever1313/Chaskis/releases](http
     <!--Building from Linux? You may need this instead: <file src="tools/**" target="tools" />-->
   </files>
 </package>
-

@@ -7,11 +7,12 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</licenseUrl>
-    <projectUrl>https://github.com/xforever1313/Chaskis</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/xforever1313/Chaskis/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial Release</releaseNotes>
-    <copyright>Copyright 2017</copyright>
-    <tags>Chaskis IRC bot framework plugin seth hendrick xforever1313</tags>
+    <releaseNotes>View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)</releaseNotes>
+    <copyright>Copyright © Seth Hendrick 2016-2017</copyright>
+    <tags>chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows core</tags>
   </metadata>
 </package>
+

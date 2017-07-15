@@ -12,11 +12,15 @@ using ChaskisCore;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle( "ChaskisCore" )]
-[assembly: AssemblyDescription( "The core library of Chaskis.  All Chaskis Plugins must reference this library." )]
+[assembly: AssemblyDescription(
+@"Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
+
+Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages."
+)] // End Description
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Seth Hendrick" )]
 [assembly: AssemblyProduct( "" )]
-[assembly: AssemblyCopyright( "Seth Hendrick 2016-2017" )]
+[assembly: AssemblyCopyright( IrcBot.CopyRight )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
