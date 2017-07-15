@@ -30,6 +30,9 @@ build:
     project: Chaskis/Chaskis.sln
     publish_nuget: true
    
+after_build:
+    - cpack .\Chaskis\Install\windows\choco\chaskis.nuspec
+   
 #-------------#
 # Test Config #
 #-------------#
