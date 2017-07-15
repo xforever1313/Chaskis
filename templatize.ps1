@@ -72,7 +72,8 @@ $FilesToTemplate =(
     ".\Chaskis\Install\windows\choco\chaskis.nuspec.template",
     ".\Chaskis\Install\windows\choco\tools\LICENSE.txt.template",
     ".\README.md.template",
-    ".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template"
+    ".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template",
+    ".\Chaskis\Install\windows\choco\tools\chocolateyinstall.ps1.template"
 )
 
 function TemplateFile($filePath)
