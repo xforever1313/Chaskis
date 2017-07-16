@@ -30,7 +30,7 @@ namespace Chaskis.Plugins.UrlBot
         /// Taken from (and slightly tweaked) from: https://weblogs.asp.net/farazshahkhan/regex-to-find-url-within-text-and-make-them-as-link
         /// </summary>
         public const string UrlRegex =
-            @"(?<url>(http://|https://|ftp://|file:///)([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)";
+            @"(?<url>(http://|https://|ftp://)([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)";
 
         private static readonly Regex urlRegex = new Regex( UrlRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled );
 
@@ -78,7 +78,7 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         /// <param name="url">URL to grab.</param>
         /// <returns>The description from the website's meta tag.</returns>
-        public Task<UrlResponse> GetDescription( string url )
+        public Task<UrlResponse> AsyncGetDescription( string url )
         {
             return Task<UrlResponse>.Run(
                 delegate()
@@ -87,34 +87,47 @@ namespace Chaskis.Plugins.UrlBot
 
                     try
                     {
-                        string webResponse;
-                        using( WebClient client = new WebClient() )
+                        long totalBytes;
+
+                        // Get the length of the file we are going to download.
+                        // Ignore if its going to be too big.
+                        // 
+                        // The HEAD method is the same thing as a GET request... the only
+                        // difference being the content does not get returned.
+                        //
+                        // Check the content length first so we don't download a massive file.
                         {
-                            client.Headers.Add( "user-agent", userAgent );
-                            client.DownloadProgressChanged += delegate ( object sender, DownloadProgressChangedEventArgs e )
+                            WebRequest request = WebRequest.Create( url );
+                            request.Method = "HEAD";
+                            using( WebResponse webResponse = request.GetResponse() )
                             {
-                                if( e.TotalBytesToReceive >= maxFileSize )
-                                {
-                                    client.CancelAsync();
-                                    StaticLogger.WriteLine( "UrlReader> Request Cancelled due to size of {0}", e.TotalBytesToReceive );
-                                }
-                            };
-
-                            Task<string> str = client.DownloadStringTaskAsync( url );
-
-                            str.Wait();
-
-                            webResponse = str.Result;
+                                totalBytes = webResponse.ContentLength;
+                            }
                         }
 
-                        HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml( webResponse );
-
-                        HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
-                        if( node != null )
+                        // If th length is too big, ignore.
+                        if( totalBytes <= maxFileSize )
                         {
-                            // Issue #15: Ensure we decode characters such as &lt; and &gt;
-                            response.Title = WebUtility.HtmlDecode( node.InnerText );
+                            string webResponse;
+                            using( WebClient client = new WebClient() )
+                            {
+                                client.Headers.Add( "user-agent", userAgent );
+                                webResponse = client.DownloadString( url );
+                            }
+
+                            HtmlDocument doc = new HtmlDocument();
+                            doc.LoadHtml( webResponse );
+
+                            HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
+                            if( node != null )
+                            {
+                                // Issue #15: Ensure we decode characters such as &lt; and &gt;
+                                response.Title = WebUtility.HtmlDecode( node.InnerText );
+                            }
+                        }
+                        else
+                        {
+                            StaticLogger.WriteLine( "UrlReader> Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
                         }
                     }
                     catch( Exception e )

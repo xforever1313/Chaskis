@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Plugins.UrlBot;
@@ -23,9 +22,13 @@ namespace Tests.Plugins.UrlBot
 
         private string urlTestFiles;
 
-        private string goodSizeFile;
-        private string bigSizeFile;
-        private string escapedCharactersFile;
+        // Don't use file:// for these files because:
+        // 1. We no longer suppor that.
+        // 2. file://'s HEAD method returns the entire file, which does not emulate what a real HTTP server does.
+
+        private const string goodSizeFile = "https://files.shendrick.net/projects/chaskis/testfiles/urlbot/goodsize.html";
+        private const string bigSizeFile = "https://files.shendrick.net/projects/chaskis/testfiles/urlbot/bigsize.html";
+        private const string escapedCharactersFile = "https://files.shendrick.net/projects/chaskis/testfiles/urlbot/escapedcharacters.html";
 
         // ---------------- Setup / Teardown ----------------
 
@@ -40,10 +43,6 @@ namespace Tests.Plugins.UrlBot
                     "TestFiles"
                 )
             );
-
-            this.goodSizeFile = Path.Combine( urlTestFiles, "GoodSize.html" );
-            this.bigSizeFile = Path.Combine( urlTestFiles, "BigSize.html" );
-            this.escapedCharactersFile = Path.Combine( urlTestFiles, "EscapedCharacters.html" );
         }
 
         [SetUp]
@@ -62,9 +61,9 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public void GoodFileTest()
         {
-            string url = SethPath.ToUri( this.goodSizeFile );
+            string url = goodSizeFile;
 
-            Task<UrlResponse> response = this.reader.GetDescription( url );
+            Task<UrlResponse> response = this.reader.AsyncGetDescription( url );
             response.Wait();
 
             Assert.IsTrue( response.Result.IsValid );
@@ -75,9 +74,9 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public void BigFileTest()
         {
-            string url = SethPath.ToUri( this.bigSizeFile );
+            string url = bigSizeFile;
 
-            Task<UrlResponse> response = this.reader.GetDescription( url );
+            Task<UrlResponse> response = this.reader.AsyncGetDescription( url );
             response.Wait();
             Assert.IsFalse( response.Result.IsValid );
         }
@@ -85,14 +84,30 @@ namespace Tests.Plugins.UrlBot
         [Test]
         public void EscapedCharactersTest()
         {
-            string url = SethPath.ToUri( this.escapedCharactersFile );
+            string url = escapedCharactersFile;
 
-            Task<UrlResponse> response = this.reader.GetDescription( url );
+            Task<UrlResponse> response = this.reader.AsyncGetDescription( url );
             response.Wait();
 
             Assert.IsTrue( response.Result.IsValid );
             Assert.AreEqual( @"<My ""Title"">", response.Result.Title );
             Assert.AreEqual( @"<My ""Title"">", response.Result.TitleShortened );
+        }
+
+        /// <summary>
+        /// Ensure the file:/// is ignored.
+        /// Don't want someone accessing files on our server... that would
+        /// be a problem.
+        /// </summary>
+        [Test]
+        public void IgnoreFileProtocol()
+        {
+            string localGoodSizeFile = Path.Combine( urlTestFiles, "GoodSize.html" );
+            string url = SethPath.ToUri( localGoodSizeFile );
+
+            string outStr;
+            Assert.IsFalse( UrlReader.TryParseUrl( url, out outStr ) );
+            Assert.IsEmpty( outStr );
         }
     }
 }

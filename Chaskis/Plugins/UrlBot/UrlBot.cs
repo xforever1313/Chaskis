@@ -132,7 +132,7 @@ namespace Chaskis.Plugins.UrlBot
             string url;
             if( UrlReader.TryParseUrl( response.Message, out url ) )
             {
-                UrlResponse urlResponse = await this.urlReader.GetDescription( url );
+                UrlResponse urlResponse = await this.urlReader.AsyncGetDescription( url );
 
                 if( urlResponse.IsValid )
                 {
