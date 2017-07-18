@@ -90,6 +90,7 @@
     <Compile Include="Plugins\RssBot\RssBotConfigTest.cs" />
     <Compile Include="Plugins\RssBot\RssBotTestHelpers.cs" />
     <Compile Include="Plugins\RssBot\RssBotXmlLoaderTests.cs" />
+    <Compile Include="Plugins\MessageFixerBot\MessageFixerTests.cs" />
     <Compile Include="Plugins\UrlBot\UrlReaderTest.cs" />
     <Compile Include="Plugins\UrlBot\UrlResponseTest.cs" />
     <Compile Include="Plugins\UserListBot\UserListBotConfigTest.cs" />
@@ -142,6 +143,10 @@
     <ProjectReference Include="..\Plugins\RssBot\RssBot.csproj">
       <Project>{B638ABB7-34C6-4D67-9EC7-224CB0F5C446}</Project>
       <Name>RssBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\MessageFixerBot\MessageFixerBot.csproj">
+      <Project>{69d4a1c8-f7a7-44ee-b8c6-b3026bddc6cd}</Project>
+      <Name>MessageFixerBot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Plugins\UrlBot\UrlBot.csproj">
       <Project>{656faffb-0112-4f43-b98e-62c8d89188db}</Project>

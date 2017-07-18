@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossChannel", "Plugins\Cro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisCliInstaller", "Install\ChaskisCliInstaller\ChaskisCliInstaller.csproj", "{FBAA5443-4CB9-4190-90E1-8B8711C5707C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageFixerBot", "Plugins\MessageFixerBot\MessageFixerBot.csproj", "{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -227,6 +229,14 @@ Global
 		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBAA5443-4CB9-4190-90E1-8B8711C5707C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +257,7 @@ Global
 		{343A37BD-92FE-4858-A28B-1E7ED529FD97} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{B638ABB7-34C6-4D67-9EC7-224CB0F5C446} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{E140E242-0C4D-4EFC-B423-4492BB01AB91} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
