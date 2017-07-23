@@ -54,7 +54,7 @@ $License =  Get-Content ".\LICENSE_1_0.txt" | Out-String
 
 $Tags = "chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows"
 $CoreTags = $Tags + " core"
-$MainTags = $Tags + " service full installer"
+$MainTags = $Tags + " service full installer admin"
 $Author = "Seth Hendrick"
 $AuthorEmail = "seth@shendrick.net"
 $ProjectUrl = "https://github.com/xforever1313/Chaskis/"
