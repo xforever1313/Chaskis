@@ -67,19 +67,17 @@ $ReleaseNotes = "View release notes here: [https://github.com/xforever1313/Chask
 $Summary = "A generic framework written in C# for making IRC Bots."
 
 $FilesToTemplate =(
-    ".\Chaskis\Install\windows\Product.wxs.template",
-    ".\Chaskis\Install\linux\PKGBUILD.template",
-    ".\Chaskis\Install\windows\choco\chaskis.nuspec.template",
-    ".\Chaskis\Install\windows\choco\tools\LICENSE.txt.template",
-    ".\README.md.template",
-    ".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template",
-    ".\Chaskis\Install\windows\choco\tools\chocolateyinstall.ps1.template"
+    (".\Chaskis\Install\windows\Product.wxs.template", ".\Chaskis\Install\windows\Product.wxs"),
+    (".\Chaskis\Install\linux\PKGBUILD.template", ".\Chaskis\Install\linux\PKGBUILD"),
+    (".\Chaskis\Install\chocolatey\template\chaskis.nuspec.template", ".\Chaskis\Install\chocolatey\package\chaskis.nuspec"),
+    (".\Chaskis\Install\chocolatey\template\tools\LICENSE.txt.template", ".\Chaskis\Install\chocolatey\package\tools\LICENSE.txt"),
+    (".\README.md.template", ".\README.md"),
+    (".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template", ".\Chaskis\ChaskisCore\ChaskisCore.nuspec"),
+    (".\Chaskis\Install\chocolatey\template\tools\chocolateyinstall.ps1.template", ".\Chaskis\Install\chocolatey\package\tools\chocolateyinstall.ps1")
 )
 
-function TemplateFile($filePath)
+function TemplateFile($filePath, $Output)
 {
-    $Output = [System.IO.Path]::GetDirectoryName($filePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($filePath)
-    
     $inputContents = Get-Content $filePath | Out-String
     $inputContents = $inputContents.replace("{%FullName%}", $FullName)
     $inputContents = $inputContents.replace("{%ChaskisMainVersion%}", $ChaskisMainVersion)
@@ -103,5 +101,5 @@ function TemplateFile($filePath)
 
 foreach($file in $FilesToTemplate)
 {
-    TemplateFile $file
+    TemplateFile $file[0] $file[1]
 }
