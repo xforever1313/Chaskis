@@ -91,23 +91,6 @@ namespace ChaskisCore
 
             this.ircHandlers = ircHandlers;
 
-            this.ircConnection.ReadEvent = delegate ( string line )
-            {
-                HandlerArgs args = new HandlerArgs();
-                args.IrcConfig = this.ircConfig;
-                args.IrcWriter = this.ircConnection;
-                args.Line = line;
-
-                foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
-                {
-                    args.BlackListedChannels = handlers.Value.BlackListedChannels;
-                    foreach( IIrcHandler handler in handlers.Value.Handlers )
-                    {
-                        handler.HandleEvent( args );
-                    }
-                }
-            };
-
             this.ircConnection.Init();
         }
 
@@ -118,6 +101,7 @@ namespace ChaskisCore
         {
             if( this.ircConnection.IsConnected == false )
             {
+                this.ircConnection.ReadEvent += this.IrcConnection_ReadEvent;
                 this.ircConnection.Connect();
             }
         }
@@ -136,6 +120,24 @@ namespace ChaskisCore
                 finally
                 {
                     this.ircConnection.Disconnect();
+                    this.ircConnection.ReadEvent -= this.IrcConnection_ReadEvent;
+                }
+            }
+        }
+
+        private void IrcConnection_ReadEvent( string line )
+        {
+            HandlerArgs args = new HandlerArgs();
+            args.IrcConfig = this.ircConfig;
+            args.IrcWriter = this.ircConnection;
+            args.Line = line;
+
+            foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
+            {
+                args.BlackListedChannels = handlers.Value.BlackListedChannels;
+                foreach( IIrcHandler handler in handlers.Value.Handlers )
+                {
+                    handler.HandleEvent( args );
                 }
             }
         }

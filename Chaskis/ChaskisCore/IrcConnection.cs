@@ -18,6 +18,12 @@ namespace ChaskisCore
     {
         // ---------------- Fields ----------------
 
+        /// <summary>
+        /// Called when a line is read.
+        /// The parameter is the line from the connection.
+        /// </summary>
+        public event Action<string> ReadEvent;
+
         // Rationale for maximum length:
         // Per this site: http://www.networksorcery.com/enp/protocol/irc.htm
         // The command MUST either be a valid IRC command or a three digit 
@@ -156,12 +162,6 @@ namespace ChaskisCore
         /// Whether or not we are connected.
         /// </summary>
         public bool IsConnected { get; private set; }
-
-        /// <summary>
-        /// Called when a line is read.
-        /// The parameter is the line from the connection.
-        /// </summary>
-        public Action<string> ReadEvent { get; set; }
 
         /// <summary>
         /// Whether or not to keep reading.
