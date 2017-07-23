@@ -26,12 +26,12 @@ before_build:
     - nuget restore Chaskis/Chaskis.sln
 
 build:
-    parallel: false
+    parallel: true
     project: Chaskis/Chaskis.sln
     publish_nuget: true
    
 before_package:
-    - choco pack .\Chaskis\Install\windows\choco\chaskis.nuspec
+    - choco pack .\Chaskis\Install\chocolatey\package\chaskis.nuspec
    
 #-------------#
 # Test Config #
