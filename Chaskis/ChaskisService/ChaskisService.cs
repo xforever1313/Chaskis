@@ -38,19 +38,19 @@ namespace ChaskisService
 
             if( Environment.OSVersion.Platform == PlatformID.Unix )
             {
-                StaticLogger.OnWriteLine -= this.LinuxLogInfo;
-                StaticLogger.OnWriteLine += this.LinuxLogInfo;
+                StaticLogger.Log.OnWriteLine -= this.LinuxLogInfo;
+                StaticLogger.Log.OnWriteLine += this.LinuxLogInfo;
 
-                StaticLogger.OnErrorWriteLine -= this.LinuxLogError;
-                StaticLogger.OnErrorWriteLine += this.LinuxLogError;
+                StaticLogger.Log.OnErrorWriteLine -= this.LinuxLogError;
+                StaticLogger.Log.OnErrorWriteLine += this.LinuxLogError;
             }
             else
             {
-                StaticLogger.OnWriteLine -= this.WindowsLogInfo;
-                StaticLogger.OnWriteLine += this.WindowsLogInfo;
+                StaticLogger.Log.OnWriteLine -= this.WindowsLogInfo;
+                StaticLogger.Log.OnWriteLine += this.WindowsLogInfo;
 
-                StaticLogger.OnErrorWriteLine -= this.WindowsLogError;
-                StaticLogger.OnErrorWriteLine += this.WindowsLogError;
+                StaticLogger.Log.OnErrorWriteLine -= this.WindowsLogError;
+                StaticLogger.Log.OnErrorWriteLine += this.WindowsLogError;
             }
 
             this.rootDir = Chaskis.Chaskis.DefaultRootDirectory;
@@ -76,7 +76,7 @@ namespace ChaskisService
                     this.logWriter = new StreamWriter( this.logFile );
                 }
 
-                StaticLogger.WriteLine( "Starting." );
+                StaticLogger.Log.WriteLine( "Starting." );
 
                 chaskis.InitState1_LoadIrcConfig();
 
@@ -93,7 +93,7 @@ namespace ChaskisService
             }
             catch( Exception err )
             {
-                StaticLogger.ErrorWriteLine(
+                StaticLogger.Log.ErrorWriteLine(
                     "FATAL ERROR:" + Environment.NewLine + err.Message + Environment.NewLine + err.StackTrace
                 );
                 this.Stop();
@@ -105,7 +105,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnStop()
         {
-            StaticLogger.WriteLine( "Stopping." );
+            StaticLogger.Log.WriteLine( "Stopping." );
             Teardown();
         }
 
@@ -114,7 +114,7 @@ namespace ChaskisService
         /// </summary>
         protected override void OnShutdown()
         {
-            StaticLogger.WriteLine( "Shutting down." );
+            StaticLogger.Log.WriteLine( "Shutting down." );
             Teardown();
         }
 
@@ -128,13 +128,13 @@ namespace ChaskisService
 
             if( Environment.OSVersion.Platform == PlatformID.Unix )
             {
-                StaticLogger.OnWriteLine -= this.LinuxLogInfo;
-                StaticLogger.OnErrorWriteLine -= this.LinuxLogError;
+                StaticLogger.Log.OnWriteLine -= this.LinuxLogInfo;
+                StaticLogger.Log.OnErrorWriteLine -= this.LinuxLogError;
             }
             else
             {
-                StaticLogger.OnWriteLine -= this.WindowsLogInfo;
-                StaticLogger.OnErrorWriteLine -= this.WindowsLogError;
+                StaticLogger.Log.OnWriteLine -= this.WindowsLogInfo;
+                StaticLogger.Log.OnErrorWriteLine -= this.WindowsLogError;
             }
         }
 

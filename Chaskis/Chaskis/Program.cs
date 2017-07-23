@@ -37,11 +37,11 @@ namespace Chaskis
                     return 0;
                 }
 
-                StaticLogger.OnWriteLine -= StaticLogger_OnWriteLine;
-                StaticLogger.OnWriteLine += StaticLogger_OnWriteLine;
+                StaticLogger.Log.OnWriteLine -= StaticLogger_OnWriteLine;
+                StaticLogger.Log.OnWriteLine += StaticLogger_OnWriteLine;
 
-                StaticLogger.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
-                StaticLogger.OnErrorWriteLine += StaticLogger_OnErrorWriteLine;
+                StaticLogger.Log.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
+                StaticLogger.Log.OnErrorWriteLine += StaticLogger_OnErrorWriteLine;
 
                 if( parser.BootStrap )
                 {
@@ -74,8 +74,8 @@ namespace Chaskis
             }
             finally
             {
-                StaticLogger.OnWriteLine -= StaticLogger_OnWriteLine;
-                StaticLogger.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
+                StaticLogger.Log.OnWriteLine -= StaticLogger_OnWriteLine;
+                StaticLogger.Log.OnErrorWriteLine -= StaticLogger_OnErrorWriteLine;
             }
 
             return 0;

@@ -93,7 +93,7 @@ namespace Chaskis
         {
             string ircConfigFile = Path.Combine( this.chaskisRoot, "IrcConfig.xml" );
 
-            StaticLogger.WriteLine( "Using IRC config file '{0}'", ircConfigFile );
+            StaticLogger.Log.WriteLine( "Using IRC config file '{0}'", ircConfigFile );
 
             this.ircConfig = XmlLoader.ParseIrcConfig( ircConfigFile );
             this.ircBot = new IrcBot( this.ircConfig );
@@ -108,7 +108,7 @@ namespace Chaskis
         {
             string pluginConfigFile = Path.Combine( this.chaskisRoot, "PluginConfig.xml" );
 
-            StaticLogger.WriteLine( "Using Plugin config file '{0}'", pluginConfigFile );
+            StaticLogger.Log.WriteLine( "Using Plugin config file '{0}'", pluginConfigFile );
 
             IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( pluginConfigFile );
             return InitStage2_LoadPlugins( pluginList );
@@ -205,7 +205,7 @@ namespace Chaskis
                     }
                     catch( Exception err )
                     {
-                        StaticLogger.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
+                        StaticLogger.Log.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
                     }
                 }
                 this.ircBot.Dispose();

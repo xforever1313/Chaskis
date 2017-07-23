@@ -273,7 +273,7 @@ namespace ChaskisCore
 
             this.IsConnected = true;
 
-            StaticLogger.WriteLine( "Connection made!" );
+            StaticLogger.Log.WriteLine( "Connection made!" );
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace ChaskisCore
         {
             if( IsConnected != false )
             {
-                StaticLogger.WriteLine( "Disconnecting..." );
+                StaticLogger.Log.WriteLine( "Disconnecting..." );
 
                 // Stop the reader thread.  This prevents any more events from
                 // being queued.
@@ -511,7 +511,7 @@ namespace ChaskisCore
                 this.connectionWatchDogKeepGoing.Dispose();
                 this.connectionWatchDogPongEvent.Dispose();
 
-                StaticLogger.WriteLine( "Disconnect Complete." );
+                StaticLogger.Log.WriteLine( "Disconnect Complete." );
             }
         }
 
@@ -622,10 +622,10 @@ namespace ChaskisCore
                     }
                     catch( SocketException err )
                     {
-                        StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
+                        StaticLogger.Log.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            StaticLogger.ErrorWriteLine(
+                            StaticLogger.Log.ErrorWriteLine(
                                 "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
                             );
                             return;
@@ -639,10 +639,10 @@ namespace ChaskisCore
                     }
                     catch( IOException err )
                     {
-                        StaticLogger.WriteLine( "IRC Connection closed: " + err.Message );
+                        StaticLogger.Log.WriteLine( "IRC Connection closed: " + err.Message );
                         if( this.KeepReading )
                         {
-                            StaticLogger.ErrorWriteLine(
+                            StaticLogger.Log.ErrorWriteLine(
                                 "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
                             );
                             return;
@@ -658,7 +658,7 @@ namespace ChaskisCore
                     {
                         // Unexpected exception occurred.  The connection probably dropped.
                         // Nothing we can do now except to attempt to try again.
-                        StaticLogger.ErrorWriteLine(
+                        StaticLogger.Log.ErrorWriteLine(
                             "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err.ToString() + Environment.NewLine + "Wait for watchdog to reconnect..."
                         );
                     }
@@ -667,10 +667,10 @@ namespace ChaskisCore
             catch( Exception err )
             {
                 // Fatal Unexpected exception occurred.
-                StaticLogger.ErrorWriteLine(
+                StaticLogger.Log.ErrorWriteLine(
                     "FATAL ERROR: IRC Reader Thread caught unexpected exception!" + Environment.NewLine + err.ToString()
                 );
-                StaticLogger.ErrorWriteLine(
+                StaticLogger.Log.ErrorWriteLine(
                     "If this was because of a watchdog timeout, stand by..."
                 );
             }
@@ -678,7 +678,7 @@ namespace ChaskisCore
 
         private void ConnectionWatchDogEntry()
         {
-            StaticLogger.WriteLine( "Connection Watchdog Started." );
+            StaticLogger.Log.WriteLine( "Connection Watchdog Started." );
             bool keepGoing = true;
             while( keepGoing )
             {
@@ -690,7 +690,7 @@ namespace ChaskisCore
                         this.SendPing( "watchdog" );
                         if( this.connectionWatchDogPongEvent.WaitOne( 60 * 1000 ) == false )
                         {
-                            StaticLogger.WriteLine(
+                            StaticLogger.Log.WriteLine(
                                 "Watch Dog has failed to receive a PONG within 60 seconds, attempting reconnect"
                             );
                             this.AttemptReconnect();
@@ -703,11 +703,11 @@ namespace ChaskisCore
                 }
                 catch( Exception e )
                 {
-                    StaticLogger.ErrorWriteLine( "Connection Watch Dog had an exception:" );
-                    StaticLogger.ErrorWriteLine( e.ToString() );
+                    StaticLogger.Log.ErrorWriteLine( "Connection Watch Dog had an exception:" );
+                    StaticLogger.Log.ErrorWriteLine( e.ToString() );
                 }
             }
-            StaticLogger.WriteLine( "Connection Watchdog Exiting." );
+            StaticLogger.Log.WriteLine( "Connection Watchdog Exiting." );
         }
 
         /// <summary>
@@ -735,7 +735,7 @@ namespace ChaskisCore
             {
                 try
                 {
-                    StaticLogger.WriteLine(
+                    StaticLogger.Log.WriteLine(
                         "Waiting " + timeoutMinutes + " minutes, then attempting reconnect..."
                     );
 
@@ -745,7 +745,7 @@ namespace ChaskisCore
                     // to close the program, return, and we won't attempt to reconnect.
                     if( this.reconnectAbortEvent.WaitOne( timeout ) )
                     {
-                        StaticLogger.WriteLine(
+                        StaticLogger.Log.WriteLine(
                             "Terminate signal detected, aborting reconnect..."
                         );
                         return;
@@ -757,7 +757,7 @@ namespace ChaskisCore
                         timeoutMinutes++;
                     }
 
-                    StaticLogger.WriteLine(
+                    StaticLogger.Log.WriteLine(
                         "Attempting reconnect..."
                     );
 
@@ -766,23 +766,23 @@ namespace ChaskisCore
 
                     if( this.IsConnected )
                     {
-                        StaticLogger.WriteLine(
+                        StaticLogger.Log.WriteLine(
                             "We have restablished connection!"
                         );
                     }
                     else
                     {
-                        StaticLogger.WriteLine(
+                        StaticLogger.Log.WriteLine(
                             "Reconnect failed, trying again."
                         );
                     }
                 }
                 catch( SocketException err )
                 {
-                    StaticLogger.WriteLine( "IRC Connection closed during reconnection: " + err.Message );
+                    StaticLogger.Log.WriteLine( "IRC Connection closed during reconnection: " + err.Message );
                     if( this.KeepReading )
                     {
-                        StaticLogger.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect again..." );
+                        StaticLogger.Log.ErrorWriteLine( "WARNING IRC connection closed, but we weren't terminating.  Trying to reconnect again..." );
                     }
                     else
                     {
@@ -793,7 +793,7 @@ namespace ChaskisCore
                 }
                 catch( Exception e )
                 {
-                    StaticLogger.ErrorWriteLine(
+                    StaticLogger.Log.ErrorWriteLine(
                         "Reconnect failed, got exception trying again." + Environment.NewLine + e.ToString()
                     );
                 }
@@ -810,7 +810,7 @@ namespace ChaskisCore
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
 
-            StaticLogger.ErrorWriteLine( errorMessage.ToString() );
+            StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
     }
 }

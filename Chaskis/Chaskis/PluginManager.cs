@@ -115,7 +115,7 @@ namespace Chaskis
                             )
                         );
 
-                        StaticLogger.WriteLine( "Successfully loaded plugin: " + chaskisPlugin.PluginName );
+                        StaticLogger.Log.WriteLine( "Successfully loaded plugin: " + chaskisPlugin.PluginName );
                     }
                 }
                 catch( Exception e )
@@ -137,7 +137,7 @@ namespace Chaskis
 
                     success = false;
 
-                    StaticLogger.ErrorWriteLine( errorString.ToString() );
+                    StaticLogger.Log.ErrorWriteLine( errorString.ToString() );
                 }
             }
 

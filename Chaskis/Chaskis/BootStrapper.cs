@@ -56,31 +56,31 @@ namespace Chaskis
         /// </summary>
         public void DoBootStrap()
         {
-            StaticLogger.WriteLine( "Using Chaskis root '{0}'", this.chaskisRoot );
-            StaticLogger.WriteLine();
+            StaticLogger.Log.WriteLine( "Using Chaskis root '{0}'", this.chaskisRoot );
+            StaticLogger.Log.WriteLine();
 
-            StaticLogger.WriteLine( "Bootstrapping at location '{0}'", this.bootStrapLocation );
-            StaticLogger.WriteLine();
+            StaticLogger.Log.WriteLine( "Bootstrapping at location '{0}'", this.bootStrapLocation );
+            StaticLogger.Log.WriteLine();
 
-            StaticLogger.WriteLine( "Sample Directory at '{0}'", this.sampleConfigDir );
-            StaticLogger.WriteLine();
+            StaticLogger.Log.WriteLine( "Sample Directory at '{0}'", this.sampleConfigDir );
+            StaticLogger.Log.WriteLine();
 
             CreateDir( this.bootStrapLocation );
 
-            StaticLogger.WriteLine( "Copying main config..." );
+            StaticLogger.Log.WriteLine( "Copying main config..." );
             this.CopyAllSamples( this.sampleConfigDir );
-            StaticLogger.WriteLine( "Copying main config...Done!" );
+            StaticLogger.Log.WriteLine( "Copying main config...Done!" );
 
-            StaticLogger.WriteLine( "Copying Plugin Config..." );
+            StaticLogger.Log.WriteLine( "Copying Plugin Config..." );
             string pluginDir = Path.Combine( this.sampleConfigDir, "Plugins" );
             string[] pluginDirs = Directory.GetDirectories( pluginDir );
             foreach( string plugin in pluginDirs )
             {
                 this.CopyAllSamples( plugin );
             }
-            StaticLogger.WriteLine( "Copying Plugin Config...Done!" );
+            StaticLogger.Log.WriteLine( "Copying Plugin Config...Done!" );
 
-            StaticLogger.WriteLine( "Bootstrapping completed!" );
+            StaticLogger.Log.WriteLine( "Bootstrapping completed!" );
         }
 
         private void CopyAllSamples( string path )
@@ -120,11 +120,11 @@ namespace Chaskis
 
                 if( File.Exists( destinationFile ) )
                 {
-                    StaticLogger.WriteLine( "'{0}' already exists, skipping.", destinationFile );
+                    StaticLogger.Log.WriteLine( "'{0}' already exists, skipping.", destinationFile );
                 }
                 else
                 {
-                    StaticLogger.WriteLine( "Copy '{0}' to '{1}'", filePath, destinationFile );
+                    StaticLogger.Log.WriteLine( "Copy '{0}' to '{1}'", filePath, destinationFile );
                     File.Copy( filePath, destinationFile );
                 }
             }
@@ -136,12 +136,12 @@ namespace Chaskis
             {
                 if( printExistsMsg )
                 {
-                    StaticLogger.WriteLine( "Directory '{0}' exists, skipping creation.", directory );
+                    StaticLogger.Log.WriteLine( "Directory '{0}' exists, skipping creation.", directory );
                 }
             }
             else
             {
-                StaticLogger.WriteLine( "Creating directory '{0}'...", directory );
+                StaticLogger.Log.WriteLine( "Creating directory '{0}'...", directory );
                 Directory.CreateDirectory( directory );
             }
         }

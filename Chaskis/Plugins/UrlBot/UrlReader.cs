@@ -127,12 +127,12 @@ namespace Chaskis.Plugins.UrlBot
                         }
                         else
                         {
-                            StaticLogger.WriteLine( "UrlReader> Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
+                            StaticLogger.Log.WriteLine( "UrlReader> Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
                         }
                     }
                     catch( Exception e )
                     {
-                        StaticLogger.ErrorWriteLine( "UrlReader> Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
+                        StaticLogger.Log.ErrorWriteLine( "UrlReader> Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
                     }
 
                     return response;
