@@ -5,10 +5,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Plugins.UrlBot;
 using NUnit.Framework;
+using SethCS.Basic;
 using SethCS.Extensions;
 
 namespace Tests.Plugins.UrlBot
@@ -19,6 +21,8 @@ namespace Tests.Plugins.UrlBot
         // ---------------- Fields ----------------
 
         private UrlReader reader;
+
+        private GenericLogger logger;
 
         private string urlTestFiles;
 
@@ -48,7 +52,11 @@ namespace Tests.Plugins.UrlBot
         [SetUp]
         public void TestSetup()
         {
-            this.reader = new UrlReader();
+            this.logger = new GenericLogger();
+            this.logger.OnWriteLine += ( s => Console.WriteLine( s ) );
+            this.logger.OnErrorWriteLine += ( s => Console.WriteLine( s ) );
+
+            this.reader = new UrlReader( this.logger );
         }
 
         [TearDown]

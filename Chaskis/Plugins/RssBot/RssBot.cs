@@ -152,8 +152,8 @@ namespace Chaskis.Plugins.RssBot
                         }
                         catch( Exception err )
                         {
-                            StaticLogger.Log.ErrorWriteLine(
-                                "RssBot> An Exception was caught while updating feed {0}:{1}{2}",
+                            initor.Log.ErrorWriteLine(
+                                "An Exception was caught while updating feed {0}:{1}{2}",
                                 reader.FeedTitle,
                                 Environment.NewLine,
                                 err.ToString()

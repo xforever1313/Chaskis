@@ -105,6 +105,16 @@ namespace Chaskis
                         initFunction.Invoke( instance, new object[] { initor } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
 
+                        initor.Log.OnWriteLine += delegate ( string msg )
+                        {
+                            StaticLogger.Log.WriteLine( "{0}> {1}", chaskisPlugin.PluginName, msg );
+                        };
+
+                        initor.Log.OnErrorWriteLine += delegate ( string msg )
+                        {
+                            StaticLogger.Log.ErrorWriteLine( "{0}> {1}", chaskisPlugin.PluginName, msg );
+                        };
+
                         this.plugins.Add(
                             chaskisPlugin.PluginName,
                             new PluginConfig(

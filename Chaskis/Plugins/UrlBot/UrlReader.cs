@@ -41,13 +41,16 @@ namespace Chaskis.Plugins.UrlBot
 
         const string userAgent = "Chakis IRC Bot URL Plugin";
 
+        private GenericLogger logger;
+
         // -------- Constructor --------
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UrlReader()
+        public UrlReader( GenericLogger logger )
         {
+            this.logger = logger;
         }
 
         // -------- Properties --------
@@ -127,12 +130,12 @@ namespace Chaskis.Plugins.UrlBot
                         }
                         else
                         {
-                            StaticLogger.Log.WriteLine( "UrlReader> Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
+                            this.logger.WriteLine( "Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
                         }
                     }
                     catch( Exception e )
                     {
-                        StaticLogger.Log.ErrorWriteLine( "UrlReader> Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
+                        this.logger.ErrorWriteLine( "Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
                     }
 
                     return response;

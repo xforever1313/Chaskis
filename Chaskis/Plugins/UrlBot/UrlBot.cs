@@ -26,7 +26,7 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private readonly UrlReader urlReader;
+        private UrlReader urlReader;
 
         // -------- Constructor --------
 
@@ -35,7 +35,6 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         public UrlBot()
         {
-            this.urlReader = new UrlReader();
             this.handlers = new List<IIrcHandler>();
         }
 
@@ -87,6 +86,8 @@ namespace Chaskis.Plugins.UrlBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            this.urlReader = new UrlReader( initor.Log );
+
             MessageHandler handler = new MessageHandler(
                 ".+",
                 this.HandleMessage

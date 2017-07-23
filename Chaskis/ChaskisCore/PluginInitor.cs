@@ -6,6 +6,7 @@
 //
 
 using System.IO;
+using SethCS.Basic;
 
 namespace ChaskisCore
 {
@@ -24,6 +25,7 @@ namespace ChaskisCore
         /// </summary>
         public PluginInitor()
         {
+            this.Log = new GenericLogger();
         }
 
         // ---------------- Functions ----------------
@@ -58,5 +60,11 @@ namespace ChaskisCore
         /// Your plugin config will live in <see cref="ChaskisConfigPluginRoot"/>/PluginName/config.xml
         /// </summary>
         public string ChaskisConfigPluginRoot => Path.Combine( this.ChaskisConfigRoot, "Plugins" );
+
+        /// <summary>
+        /// Reference to a Log instance for the specific plugin.
+        /// When your plugin needs to log something, it should call this log instance.
+        /// </summary>
+        public GenericLogger Log { get; private set; } 
     }
 }
