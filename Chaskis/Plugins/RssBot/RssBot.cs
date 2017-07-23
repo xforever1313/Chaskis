@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
 using ChaskisCore;
-using SethCS.Basic;
 
 namespace Chaskis.Plugins.RssBot
 {
