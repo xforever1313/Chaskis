@@ -28,4 +28,30 @@ namespace ChaskisCore
         /// </summary>
         ChannelAndPms
     }
+
+    // ---------------- Chaskis Event Enums ----------------
+
+    /// <summary>
+    /// The protocol we are using during a chaskis event.
+    /// </summary>
+    public enum ChaskisEventProtocol
+    {
+        IRC
+    }
+
+    /// <summary>
+    /// Where the event was fired.
+    /// </summary>
+    public enum ChaskisEventSource
+    {
+        /// <summary>
+        /// The event was fired from ChaskisCore.
+        /// </summary>
+        CORE,
+
+        /// <summary>
+        /// The event was fired from a plugin.
+        /// </summary>
+        PLUGIN
+    }
 }
