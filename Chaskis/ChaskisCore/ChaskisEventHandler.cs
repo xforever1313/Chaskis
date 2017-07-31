@@ -22,7 +22,16 @@ namespace ChaskisCore
     {
         // ---------------- Fields ---------------
 
-        private const string chaskisPattern = @"CHASKIS\s+(?<source>CORE|PLUGIN)\s+(?<plugin>\S+)\s+(?<args>.+)";
+        /// <summary>
+        /// Pattern to watch for Chaskis Events.
+        /// </summary>
+        //                                         1                2                       3                        4                5
+        // 1 - Denotes that we are a CHASKIS event.
+        // 2 - Did this event come from the CORE or from a Plugin?
+        // 3 - What fired this event?
+        // 4 - What plugin was the event trying to get the attention of? BCAST for ALL plugins.
+        // 5 - Arguments.
+        private const string chaskisPattern = @"CHASKIS\s+(?<source>CORE|PLUGIN)\s+(?<sourcePlugin>\S+)\s+(?<targetPlugin>\S+)\s+(?<args>.+)";
 
         private static readonly Regex chaskisRegex = new Regex(
             chaskisPattern,
@@ -31,6 +40,7 @@ namespace ChaskisCore
 
         private ChaskisEventSource expectedSource;
         private string expectedPlugin;
+        private string creatorPlugin;
         private Action<ChaskisEventHandlerLineActionArgs> lineAction;
         private Regex argRegex;
 
@@ -45,11 +55,19 @@ namespace ChaskisCore
         /// and only capture events whose arguments match this pattern.
         /// </param>
         /// <param name="expectedProtocol">The protocol we expected.</param>
-        public ChaskisEventHandler(
+        /// <param name="creatorPluginName">The plugin that created this event.</param>
+        internal ChaskisEventHandler(
             string argPattern,
-            ChaskisEventProtocol expectedProtocol,
+            ChaskisEventProtocol? expectedProtocol,
+            string creatorPluginName,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
-        ) : this( argPattern, ChaskisEventSource.CORE, expectedProtocol.ToString(), lineAction )
+        ) : this(
+            argPattern,
+            ChaskisEventSource.CORE,
+            expectedProtocol.HasValue ? expectedProtocol.Value.ToString() : null,
+            creatorPluginName,
+            lineAction
+        )
         {
         }
 
@@ -64,36 +82,49 @@ namespace ChaskisCore
         /// <param name="expectedSource">
         /// The expected source.
         /// </param>
-        /// <param name="expectedPlugin">
+        /// <param name="expectedSourcePlugin">
         /// The expected plugin.
         /// Must be the ToString value of <see cref="ChaskisEventProtocol"/> 
         /// if expectedSource is set to <see cref="ChaskisEventSource.CORE"/>.
         /// </param>
-        public ChaskisEventHandler(
+        /// <param name="creatorPluginName">The plugin that created this event.</param>
+        internal ChaskisEventHandler(
             string argPattern,
             ChaskisEventSource expectedSource,
-            string expectedPlugin,
+            string expectedSourcePlugin,
+            string creatorPluginName,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         )
         {
             if( expectedSource == ChaskisEventSource.CORE )
             {
                 ChaskisEventProtocol protocol;
-                if( Enum.TryParse( expectedPlugin, out protocol ) == false )
+                if( Enum.TryParse( expectedSourcePlugin, out protocol ) == false )
                 {
                     throw new ArgumentException(
-                        "Invalid protocol passed into constructor.  Ensure you want a CORE event. Got: " + expectedPlugin
+                        "Invalid protocol passed into constructor.  Ensure you want a CORE event. Got: " + expectedSourcePlugin
                     );
                 }
             }
 
             ArgumentChecker.IsNotNull( argPattern, nameof( argPattern ) );
             ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
-            ArgumentChecker.StringIsNotNullOrEmpty( expectedPlugin, nameof( expectedPlugin ) );
 
             this.argRegex = new Regex( argPattern );
             this.expectedSource = expectedSource;
-            this.expectedPlugin = expectedPlugin.ToUpper();
+
+            if( expectedSourcePlugin != null )
+            {
+                this.expectedPlugin = expectedSourcePlugin.ToUpper();
+            }
+            else
+            {
+                // Handle events from ALL plugins.
+                this.expectedPlugin = null;
+            }
+
+            this.creatorPlugin = creatorPluginName.ToUpper();
+
             this.lineAction = lineAction;
         }
 
@@ -122,17 +153,25 @@ namespace ChaskisCore
                     if( source == ChaskisEventSource.CORE )
                     {
                         ChaskisEventProtocol protocol;
-                        isMatch &= Enum.TryParse( match.Groups["plugin"].Value, out protocol );
+                        isMatch &= Enum.TryParse( match.Groups["sourcePlugin"].Value, out protocol );
 
                         pluginName = protocol.ToString().ToUpper();
                     }
                     else
                     {
-                        pluginName = match.Groups["plugin"].Value.ToUpper();
+                        pluginName = match.Groups["sourcePlugin"].Value.ToUpper();
                     }
 
                     isMatch &= ( this.expectedSource == source );
-                    isMatch &= ( this.expectedPlugin == pluginName );
+
+                    if( this.expectedPlugin != null )
+                    {
+                        isMatch &= ( this.expectedPlugin == pluginName );
+                    }
+
+                    // Handle event if the event targets this plugin, OR it is a broadcast event.
+                    string targetPlugin = match.Groups["targetPlugin"].Value.ToUpper();
+                    isMatch &= ( ( this.creatorPlugin == targetPlugin ) || ( ChaskisEvent.BroadcastEventStr == targetPlugin ) );
 
                     if( isMatch )
                     {

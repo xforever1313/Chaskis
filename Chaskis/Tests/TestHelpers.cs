@@ -77,6 +77,15 @@ namespace Tests
             "#my_channel"
         }.AsReadOnly();
 
+        public static IReadOnlyList<string> FactoryPluginNames = new List<string>()
+        {
+            "plugin1",
+            "plugin2",
+            "plugin3"
+        }.AsReadOnly();
+
+        private static ChaskisEventFactory factoryInstance;
+
         // ---------------- Functions ----------------
 
         public static IrcConfig GetTestIrcConfig()
@@ -159,6 +168,16 @@ namespace Tests
         public static string ConstructPingString( string response )
         {
             return "PING :" + response;
+        }
+
+        public static ChaskisEventFactory CreateEventFactory()
+        {
+            if( factoryInstance == null )
+            {
+                factoryInstance = ChaskisEventFactory.CreateInstance( new List<string>( FactoryPluginNames ) );
+            }
+
+            return factoryInstance;
         }
     }
 }

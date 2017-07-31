@@ -23,12 +23,24 @@ namespace Tests
 
         private Mock<IIrcWriter> mockWriter;
 
+        private ChaskisEventFactory factoryInstance;
+        private string sourcePluginName;
+        private string creatorPluginName;
+
+        private IChaskisEventCreator creator;
+
         // ---------------- Setup / Teardown ---------------
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
             this.ircConfig = TestHelpers.GetTestIrcConfig();
+            this.factoryInstance = TestHelpers.CreateEventFactory();
+            this.sourcePluginName = "USERLISTBOT";
+
+            string creatorPluginName = TestHelpers.FactoryPluginNames[1];
+            this.creator = this.factoryInstance.EventCreators[creatorPluginName];
+            this.creatorPluginName = creatorPluginName.ToUpper();
         }
 
         [TestFixtureTearDown]
@@ -56,30 +68,41 @@ namespace Tests
         [Test]
         public void InvalidConstructorTest()
         {
-            // Core source must be a valid protocol.
-            Assert.Throws<ArgumentException>(
-                () => new ChaskisEventHandler( ".+", ChaskisEventSource.CORE, "DERP", this.LineAction )
+            // Pattern can not be null.
+            Assert.Throws<ArgumentNullException>(
+                () => this.creator.CreateCoreEventHandler( null, ChaskisEventProtocol.IRC, this.LineAction )
+            );
+            Assert.Throws<ArgumentNullException>(
+                () => this.creator.CreatePluginEventHandler( null, this.LineAction )
+            );
+            Assert.Throws<ArgumentNullException>(
+                () => this.creator.CreatePluginEventHandler( null, this.sourcePluginName, this.LineAction )
             );
 
+            // Line action can not be null.
             Assert.Throws<ArgumentNullException>(
-                () => new ChaskisEventHandler( ".+", ChaskisEventSource.PLUGIN, "DERPBOT", null )
+                () => this.creator.CreateCoreEventHandler( ".+", ChaskisEventProtocol.IRC, null )
             );
-
             Assert.Throws<ArgumentNullException>(
-                () => new ChaskisEventHandler( null, ChaskisEventSource.PLUGIN, "DERPBOT", this.LineAction )
+                () => this.creator.CreatePluginEventHandler( ".+", null )
             );
-
             Assert.Throws<ArgumentNullException>(
-                () => new ChaskisEventHandler( ".+", ChaskisEventSource.PLUGIN, null, this.LineAction )
-            );
-
-            Assert.Throws<ArgumentNullException>(
-                () => new ChaskisEventHandler( ".+", ChaskisEventSource.PLUGIN, string.Empty, this.LineAction )
+                () => this.creator.CreatePluginEventHandler( ".+", this.sourcePluginName, null )
             );
         }
 
+        // Four Possible Cases:
+        //    Chaskis Source SourceName   Target       Arguments
+        // 1. CHASKIS CORE   Protocol     BCAST        ARGS
+        // 2. CHASKIS CORE   PluginName   TargetPlugin ARGS  <- Not possible ATM (Core will ALWAYS Be a bcast).
+        // 3. CHASKIS PLUGIN PluginName   BCAST        ARGS
+        // 4. CHASKIS PLUGIN SourcePlugin TargetPlugin ARGS
+
+        // -------- Case 1 --------
+
         /// <summary>
         /// Tests to ensure we can capture a core event.
+        /// Tests Case 1 from above list.
         /// </summary>
         [Test]
         public void CaptureCoreIrcEvent()
@@ -90,9 +113,9 @@ namespace Tests
                 this.ircConfig.Nick
             );
 
-            string disconnectEventStr = "CHASKIS CORE IRC " + expectedArgs;
+            string disconnectEventStr = "CHASKIS CORE IRC BCAST " + expectedArgs;
 
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
@@ -109,6 +132,7 @@ namespace Tests
 
         /// <summary>
         /// Ensures that if we are not expecting a core event, we ignore it.
+        /// Tests the negative case 1 from the above list.
         /// </summary>
         [Test]
         public void IgnoresCoreIrcEvent()
@@ -119,12 +143,10 @@ namespace Tests
                 this.ircConfig.Nick
             );
 
-            string disconnectEventStr = "CHASKIS CORE IRC " + expectedArgs;
+            string disconnectEventStr = "CHASKIS CORE IRC BCAST " + expectedArgs;
 
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
                 @"USERLIST\s+(?<users>.+)",
-                ChaskisEventSource.PLUGIN,
-                "userlistbot",
                 this.LineAction
             );
 
@@ -135,24 +157,49 @@ namespace Tests
             Assert.IsNull( this.argsCaptured );
         }
 
+        // -------- Case 3 --------
+
         /// <summary>
-        /// Ensures that if we are expecting a plugin event, we capture it.
+        /// Ensures that if we are expecting an any plugin event, we capture it.
+        /// Tests case 3 from list above, but expecting any plugin.
         /// </summary>
         [Test]
-        public void CapturePluginEvent()
+        public void CaptureAnyPluginEvent_Bcast()
         {
-            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
-
-            string disconnectEventStr = "CHASKIS PLUGIN USERLISTBOT " + expectedArgs;
-
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
                 @"USERLIST\s+(?<users>.+)",
-                ChaskisEventSource.PLUGIN,
+                this.LineAction
+            );
+
+            this.DoCase3( handler );
+        }
+
+        /// <summary>
+        /// Ensures that if we are expecting a specfiic target plugin event, we capture it.
+        /// Tests case 3 from list above, but expecting a specific target plugin.
+        /// </summary>
+        [Test]
+        public void CaptureSpecificPluginEvent_Bcast()
+        {
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
                 "userlistbot",
                 this.LineAction
             );
 
-            HandlerArgs handlerArgs = this.CreateHandlerArgs( disconnectEventStr );
+            this.DoCase3( handler );
+        }
+
+        private void DoCase3( ChaskisEventHandler handler )
+        {
+            // In this case, this is UserListBot boardcasting all the users.
+            // We want to capture this, since we might care about it.
+
+            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
+
+            string eventStr = "CHASKIS PLUGIN USERLISTBOT BCAST " + expectedArgs;
+
+            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
 
             handler.HandleEvent( handlerArgs );
 
@@ -163,27 +210,111 @@ namespace Tests
         }
 
         /// <summary>
-        /// Ensures that if we ignore a plugin if we weren't expecting it.
+        /// Ensures that during a bcast, if it is not a plugin we care about,
+        /// we ignore it.
         /// </summary>
         [Test]
-        public void IgnoreWrongPlugin()
+        public void IgnoreSpecificPluginEvent_BCast()
         {
-            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
-
-            string someOtherPluginStr = "CHASKIS PLUGIN SOMEOTHERPLUGIN " + expectedArgs;
-
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
                 @"USERLIST\s+(?<users>.+)",
-                ChaskisEventSource.PLUGIN,
-                "userlistbot",
+                "notmyplugin",
                 this.LineAction
             );
 
-            HandlerArgs handlerArgs = this.CreateHandlerArgs( someOtherPluginStr );
+            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
+
+            string eventStr = "CHASKIS PLUGIN USERLISTBOT BCAST " + expectedArgs;
+
+            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
+
             handler.HandleEvent( handlerArgs );
 
             Assert.IsNull( this.argsCaptured );
         }
+
+        // -------- Case 4 --------
+
+        /// <summary>
+        /// Ensures that if we are expecting an any plugin event, we capture it.
+        /// Tests case 4 from list above, but we are expecting any plugin.
+        /// </summary>
+        [Test]
+        public void CaptureAnyPluginEvent_Specific()
+        {
+            // This will technically work with any Plugin, not just USERLISTBOT.
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
+                this.LineAction
+            );
+
+            this.DoCase4( handler );
+        }
+
+        /// <summary>
+        /// Ensures that if we are expecting an specific plugin event, we capture it.
+        /// Tests case 4 from list above, but we are expecting a specifc plugin.
+        /// </summary>
+        [Test]
+        public void CaptureSpecificPluginEvent_Specific()
+        {
+            // This will only respond to UserListBot.
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
+                "userlistbot",
+                this.LineAction
+            );
+
+            this.DoCase4( handler );
+        }
+
+        private void DoCase4( ChaskisEventHandler handler )
+        {
+            // For this test case, let's pretend our creator plugin asked UserListBot
+            // for a userlist.  This is userlist responding to our creator plugin.
+
+            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
+
+            //                                SourceOfPlugin   EventDestination
+            string eventStr = "CHASKIS PLUGIN USERLISTBOT " + this.creatorPluginName + " " + expectedArgs;
+
+            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
+
+            handler.HandleEvent( handlerArgs );
+
+            Assert.IsNotNull( this.argsCaptured );
+            Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
+            Assert.AreEqual( "USERLISTBOT", this.argsCaptured.PluginName );
+            Assert.AreEqual( "EVERGREEN MARKEM HARRIS", this.argsCaptured.Match.Groups["users"].Value );
+        }
+
+        /// <summary>
+        /// Ensures that if we are waiting for a specific plugin,
+        /// and we don't see it, we don't fire.
+        /// </summary>
+        [Test]
+        public void IgnoreSpecificPluginEvent_Specific()
+        {
+            // This will only respond to notmyplugin, not USERLISTBOT.
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
+                "notmyplugin",
+                this.LineAction
+            );
+
+            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
+
+            //                                SourceOfPlugin   EventDestination
+            string eventStr = "CHASKIS PLUGIN USERLISTBOT " + this.creatorPluginName + " " + expectedArgs;
+
+            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
+
+            handler.HandleEvent( handlerArgs );
+
+            Assert.IsNull( this.argsCaptured );
+        }
+
+        // -------- Ignores --------
 
         /// <summary>
         /// Ensures if we get an unknown protocol/plugin, we don't fire.
@@ -193,11 +324,10 @@ namespace Tests
         {
             string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
 
-            string unknownProtocolString = "CHASKIS UNKNOWN USERLISTBOT " + expectedArgs;
+            string unknownProtocolString = "CHASKIS UNKNOWN USERLISTBOT BCAST " + expectedArgs;
 
-            ChaskisEventHandler handler = new ChaskisEventHandler(
-                @".+",
-                ChaskisEventSource.PLUGIN,
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
                 "userlistbot",
                 this.LineAction
             );
@@ -216,11 +346,10 @@ namespace Tests
         {
             string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
 
-            string messageStr = "CHASKIS PLUGIN USERLISTBOT " + expectedArgs;
+            string messageStr = "CHASKIS PLUGIN USERLISTBOT BCAST " + expectedArgs;
 
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
                 @"SOMETHINGELSE\s+(?<users>.+)",
-                ChaskisEventSource.PLUGIN,
                 "userlistbot",
                 this.LineAction
             );
@@ -231,13 +360,15 @@ namespace Tests
             Assert.IsNull( this.argsCaptured );
         }
 
+        // -------- Ignore non-Chaskis events --------
+
         /// <summary>
         /// Ensures we ignore join.
         /// </summary>
         [Test]
         public void IgnoreJoin()
         {
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
@@ -261,7 +392,7 @@ namespace Tests
         [Test]
         public void IgnorePart()
         {
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
@@ -285,7 +416,7 @@ namespace Tests
         [Test]
         public void IgnoreMessage()
         {
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
@@ -309,7 +440,7 @@ namespace Tests
         [Test]
         public void IgnorePing()
         {
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
@@ -329,7 +460,7 @@ namespace Tests
         [Test]
         public void IgnorePong()
         {
-            ChaskisEventHandler handler = new ChaskisEventHandler(
+            ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
