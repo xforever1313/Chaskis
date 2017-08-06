@@ -199,7 +199,8 @@ namespace ChaskisCore
                                 pluginName,
                                 match.Groups["args"].Value,
                                 this.argRegex,
-                                argMatch
+                                argMatch,
+                                args.IrcWriter
                             );
 
                             this.lineAction( eventArgs );
@@ -222,13 +223,15 @@ namespace ChaskisCore
             string pluginName,
             string eventArgs,
             Regex regex,
-            Match argMatch
+            Match argMatch,
+            IIrcWriter ircWriter
         )
         {
             this.PluginName = pluginName;
             this.EventArgs = eventArgs;
             this.Regex = regex;
             this.Match = argMatch;
+            this.IrcWriter = ircWriter;
         }
 
         // ---------------- Properties ----------------
@@ -252,5 +255,11 @@ namespace ChaskisCore
         /// The regex match that was used to find this event.
         /// </summary>
         public Match Match { get; private set; }
+
+        /// <summary>
+        /// The IRC writer that can be used to send messages to
+        /// the IRC channel.
+        /// </summary>
+        public IIrcWriter IrcWriter { get; private set; }
     }
 }

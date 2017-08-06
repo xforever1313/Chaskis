@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ChaskisCore;
-using SethCS.Basic;
 
 namespace Chaskis.Plugins.WelcomeBot
 {
@@ -37,7 +36,7 @@ namespace Chaskis.Plugins.WelcomeBot
 
         private IChaskisEventSender eventSender;
 
-        private const string karmaQueryResponsePattern = @"QUERY\s+(?<name>\S+)\s+(?<karma>\d+)";
+        private const string karmaQueryResponsePattern = @"QUERY\s+NAME=(?<name>\S+)\s+CHANNEL=(?<channel>\S+)\s+KARMA=(?<karma>\d+)";
 
         // -------- Constructor -------
 
@@ -165,7 +164,7 @@ namespace Chaskis.Plugins.WelcomeBot
 
             ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
                 "karmabot",
-                new List<string>() { "QUERY", response.RemoteUser }
+                new List<string>() { "QUERY", "NAME=" + response.RemoteUser, "CHANNEL=" + response.Channel }
             );
 
             this.eventSender.SendChaskisEvent( e );
@@ -192,9 +191,13 @@ namespace Chaskis.Plugins.WelcomeBot
         {
             Match match = args.Match;
             string user = match.Groups["name"].Value;
+            string channel = match.Groups["channel"].Value;
             int karma = int.Parse( match.Groups["karma"].Value );
 
-            Console.WriteLine( "User " + user + " has " + karma + " karma" );
+            args.IrcWriter.SendMessage(
+                "User " + user + " has " + karma + " karma",
+                channel
+            );
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Chaskis.Plugins.KarmaBot
 
         private IChaskisEventCreator eventCreator;
 
-        private const string chaskisQueryPattern = @"QUERY\s+(?<name>\S+)";
+        private const string chaskisQueryPattern = @"QUERY\s+NAME=(?<name>\S+)\s+CHANNEL=(?<channel>\S+)";
 
         // -------- Constructor --------
 
@@ -242,11 +242,12 @@ namespace Chaskis.Plugins.KarmaBot
         {
             Match match = args.Match;
             string userName = match.Groups["name"].Value;
+            string channel = match.Groups["channel"].Value;
             int karma = await this.dataBase.QueryKarma( userName );
 
             ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
                 args.PluginName,
-                new List<string>() { "QUERY", userName, karma.ToString() }
+                new List<string>() { "QUERY", "NAME=" + userName, "CHANNEL=" + channel, "KARMA=" + karma.ToString() }
             );
 
             this.eventSender.SendChaskisEvent( e );
