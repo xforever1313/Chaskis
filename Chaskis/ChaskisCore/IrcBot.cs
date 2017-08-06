@@ -79,6 +79,11 @@ namespace ChaskisCore
         /// </summary>
         public IChaskisEventScheduler Scheduler => this.ircConnection;
 
+        /// <summary>
+        /// Access to our chaskis event sender.
+        /// </summary>
+        public IChaskisEventSender ChaskisEventSender => this.ircConnection;
+
         // -------- Functions -------
 
         /// <summary>

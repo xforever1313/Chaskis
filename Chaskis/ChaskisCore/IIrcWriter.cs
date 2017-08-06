@@ -57,11 +57,5 @@ namespace ChaskisCore
         /// </summary>
         /// <param name="reason">The reason for parting.</param>
         void SendPart( string reason );
-
-        /// <summary>
-        /// Sends a chaskis event to plugins
-        /// loaded into the bot.
-        /// </summary>
-        void SendChaskisEvent( ChaskisEvent e );
     }
 }

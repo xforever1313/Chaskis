@@ -45,14 +45,14 @@ namespace ChaskisCore
         )
         {
             this.SourceType = sourceType;
-            this.SourcePlugin = sourcePlugin;
+            this.SourcePlugin = sourcePlugin.ToUpper();
             if( destinationPlugin == null )
             {
                 this.DestinationPlugin = BroadcastEventStr;
             }
             else
             {
-                this.DestinationPlugin = destinationPlugin;
+                this.DestinationPlugin = destinationPlugin.ToUpper();
             }
             this.Args = args;
         }

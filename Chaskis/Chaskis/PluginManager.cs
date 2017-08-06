@@ -28,6 +28,8 @@ namespace Chaskis
         /// </summary>
         private Dictionary<string, PluginConfig> plugins;
 
+        private ChaskisEventFactory eventFactory;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -62,6 +64,7 @@ namespace Chaskis
             IList<AssemblyConfig> assemblyList,
             IIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
+            IChaskisEventSender eventSender,
             string chaskisConfigRoot
         )
         {
@@ -96,24 +99,7 @@ namespace Chaskis
                             throw new InvalidCastException( errorString );
                         }
 
-                        PluginInitor initor = new PluginInitor();
-                        initor.PluginPath = assemblyConfig.AssemblyPath;
-                        initor.IrcConfig = ircConfig;
-                        initor.EventScheduler = scheduler;
-                        initor.ChaskisConfigRoot = chaskisConfigRoot;
-
-                        initFunction.Invoke( instance, new object[] { initor } );
                         ChaskisPlugin chaskisPlugin = type.GetCustomAttribute<ChaskisPlugin>();
-
-                        initor.Log.OnWriteLine += delegate ( string msg )
-                        {
-                            StaticLogger.Log.WriteLine( "{0}> {1}", chaskisPlugin.PluginName, msg );
-                        };
-
-                        initor.Log.OnErrorWriteLine += delegate ( string msg )
-                        {
-                            StaticLogger.Log.ErrorWriteLine( "{0}> {1}", chaskisPlugin.PluginName, msg );
-                        };
 
                         this.plugins.Add(
                             chaskisPlugin.PluginName,
@@ -133,6 +119,56 @@ namespace Chaskis
                     StringBuilder errorString = new StringBuilder();
                     errorString.AppendLine( "*************" );
                     errorString.AppendLine( "Warning! Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
+                    errorString.AppendLine( e.Message );
+                    errorString.AppendLine();
+                    errorString.AppendLine( e.StackTrace );
+                    errorString.AppendLine();
+                    if( e.InnerException != null )
+                    {
+                        errorString.AppendLine( "\tInner Exception:" );
+                        errorString.AppendLine( "\t\t" + e.InnerException.Message );
+                        errorString.AppendLine( "\t\t" + e.InnerException.StackTrace );
+                    }
+                    errorString.AppendLine( "*************" );
+
+                    success = false;
+
+                    StaticLogger.Log.ErrorWriteLine( errorString.ToString() );
+                }
+            }
+
+            this.eventFactory = ChaskisEventFactory.CreateInstance( this.plugins.Keys.ToList() );
+            foreach( KeyValuePair<string, PluginConfig> plugin in this.plugins )
+            {
+                try
+                {
+                    PluginInitor initor = new PluginInitor();
+                    initor.PluginPath = plugin.Value.AssemblyPath;
+                    initor.IrcConfig = ircConfig;
+                    initor.EventScheduler = scheduler;
+                    initor.ChaskisEventSender = eventSender;
+                    initor.ChaskisConfigRoot = chaskisConfigRoot;
+                    initor.ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key];
+
+                    initor.Log.OnWriteLine += delegate ( string msg )
+                    {
+                        StaticLogger.Log.WriteLine( "{0}> {1}", plugin.Value.Name, msg );
+                    };
+
+                    initor.Log.OnErrorWriteLine += delegate ( string msg )
+                    {
+                        StaticLogger.Log.ErrorWriteLine( "{0}> {1}", plugin.Value.Name, msg );
+                    };
+
+                    plugin.Value.Plugin.Init( initor );
+
+                    StaticLogger.Log.WriteLine( "Successfully inited plugin: " + plugin.Value.Name );
+                }
+                catch( Exception e )
+                {
+                    StringBuilder errorString = new StringBuilder();
+                    errorString.AppendLine( "*************" );
+                    errorString.AppendLine( "Warning! Error when initing plugin " + plugin.Key + ":" );
                     errorString.AppendLine( e.Message );
                     errorString.AppendLine();
                     errorString.AppendLine( e.StackTrace );

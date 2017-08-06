@@ -14,7 +14,7 @@ using SethCS.Extensions;
 
 namespace ChaskisCore
 {
-    public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler
+    public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler, IChaskisEventSender
     {
         // ---------------- Fields ----------------
 

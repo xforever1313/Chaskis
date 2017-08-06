@@ -130,7 +130,7 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if( manager.LoadPlugins( pluginList, this.ircConfig, this.ircBot.Scheduler, this.chaskisRoot ) )
+            if( manager.LoadPlugins( pluginList, this.ircConfig, this.ircBot.Scheduler, this.ircBot.ChaskisEventSender, this.chaskisRoot ) )
             {
                 this.plugins = manager.Plugins;
                 return true;

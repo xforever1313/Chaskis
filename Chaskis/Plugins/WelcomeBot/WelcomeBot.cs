@@ -7,7 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.WelcomeBot
 {
@@ -30,6 +32,12 @@ namespace Chaskis.Plugins.WelcomeBot
         /// The handlers to return to the main bot.
         /// </summary>
         private List<IIrcHandler> handlers;
+
+        private IChaskisEventCreator eventCreator;
+
+        private IChaskisEventSender eventSender;
+
+        private const string karmaQueryResponsePattern = @"QUERY\s+(?<name>\S+)\s+(?<karma>\d+)";
 
         // -------- Constructor -------
 
@@ -86,8 +94,18 @@ namespace Chaskis.Plugins.WelcomeBot
         {
             if( this.isLoaded == false )
             {
+                this.eventCreator = initor.ChaskisEventCreator;
+                this.eventSender = initor.ChaskisEventSender;
+
+                ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
+                    karmaQueryResponsePattern,
+                    "karmabot",
+                    this.HandleKarmaQuery
+                );
+
                 this.handlers.Add( new JoinHandler( JoinMessage ) );
                 this.handlers.Add( new PartHandler( PartMessage ) );
+                this.handlers.Add( karmaHandler );
                 this.isLoaded = true;
             }
         }
@@ -134,7 +152,7 @@ namespace Chaskis.Plugins.WelcomeBot
         /// </summary>
         /// <param name="writer">The means to write to an IRC channel.</param>
         /// <param name="response">The command from the server.</param>
-        private static void JoinMessage( IIrcWriter writer, IrcResponse response )
+        private void JoinMessage( IIrcWriter writer, IrcResponse response )
         {
             writer.SendMessage(
                 "Greetings " + response.RemoteUser + ", welcome to " + response.Channel + "!",
@@ -144,6 +162,13 @@ namespace Chaskis.Plugins.WelcomeBot
                 response.RemoteUser + " has joined " + response.Channel,
                 response.Channel
             );
+
+            ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
+                "karmabot",
+                new List<string>() { "QUERY", response.RemoteUser }
+            );
+
+            this.eventSender.SendChaskisEvent( e );
         }
 
         /// <summary>
@@ -151,7 +176,7 @@ namespace Chaskis.Plugins.WelcomeBot
         /// </summary>
         /// <param name="writer">The means to write to an IRC channel.</param>
         /// <param name="response">The command from the server.</param>
-        private static void PartMessage( IIrcWriter writer, IrcResponse response )
+        private void PartMessage( IIrcWriter writer, IrcResponse response )
         {
             writer.SendMessage(
                 "Thanks for visiting " + response.Channel + "!  Please come back soon!",
@@ -161,6 +186,15 @@ namespace Chaskis.Plugins.WelcomeBot
                 response.RemoteUser + " has left " + response.Channel,
                 response.Channel
             );
+        }
+
+        private void HandleKarmaQuery( ChaskisEventHandlerLineActionArgs args )
+        {
+            Match match = args.Match;
+            string user = match.Groups["name"].Value;
+            int karma = int.Parse( match.Groups["karma"].Value );
+
+            Console.WriteLine( "User " + user + " has " + karma + " karma" );
         }
     }
 }

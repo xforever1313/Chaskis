@@ -65,7 +65,7 @@ namespace Tests
             );
 
             Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName+ " " + this.targetPluginName + " ARG1 ARG2 ARG3",
+                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + this.targetPluginName.ToUpper() + " ARG1 ARG2 ARG3",
                 e.ToString()
             );
         }
@@ -82,7 +82,7 @@ namespace Tests
             );
 
             Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName + " " + this.targetPluginName,
+                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + this.targetPluginName.ToUpper(),
                 e.ToString()
             );
         }
@@ -98,7 +98,7 @@ namespace Tests
             );
 
             Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName + " " + ChaskisEvent.BroadcastEventStr + " ARG1 ARG2 ARG3",
+                "CHASKIS PLUGIN " + this.pluginName.ToUpper()+ " " + ChaskisEvent.BroadcastEventStr + " ARG1 ARG2 ARG3",
                 e.ToString()
             );
         }
@@ -114,7 +114,7 @@ namespace Tests
             );
 
             Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName + " " + ChaskisEvent.BroadcastEventStr,
+                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + ChaskisEvent.BroadcastEventStr,
                 e.ToString()
             );
         }

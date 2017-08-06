@@ -51,6 +51,16 @@ namespace ChaskisCore
         public IChaskisEventScheduler EventScheduler { get; set; }
 
         /// <summary>
+        /// Allows a plugin to send Chaskis Events.
+        /// </summary>
+        public IChaskisEventSender ChaskisEventSender { get; set; }
+
+        /// <summary>
+        /// Allows the plugin to create Chaskis Events.
+        /// </summary>
+        public IChaskisEventCreator ChaskisEventCreator { get; set; }
+
+        /// <summary>
         /// The root of the directory that contains the configuration.
         /// </summary>
         public string ChaskisConfigRoot { get; set; }

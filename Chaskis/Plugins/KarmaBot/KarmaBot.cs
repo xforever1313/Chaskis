@@ -34,6 +34,12 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         private KarmaBotDatabase dataBase;
 
+        private IChaskisEventSender eventSender;
+
+        private IChaskisEventCreator eventCreator;
+
+        private const string chaskisQueryPattern = @"QUERY\s+(?<name>\S+)";
+
         // -------- Constructor --------
 
         /// <summary>
@@ -109,6 +115,8 @@ namespace Chaskis.Plugins.KarmaBot
 
             this.config = XmlLoader.LoadKarmaBotConfig( configPath );
             this.dataBase = new KarmaBotDatabase( dbPath );
+            this.eventSender = initor.ChaskisEventSender;
+            this.eventCreator = initor.ChaskisEventCreator;
 
             MessageHandler increaseHandler = new MessageHandler(
                 this.config.IncreaseCommandRegex,
@@ -125,9 +133,15 @@ namespace Chaskis.Plugins.KarmaBot
                 HandleQueryCommand
             );
 
+            ChaskisEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
+                chaskisQueryPattern,
+                this.HandleChaskisQueryCommand
+            );
+
             this.handlers.Add( increaseHandler );
             this.handlers.Add( decreaseCommand );
             this.handlers.Add( queryCommand );
+            this.handlers.Add( chaskisQuery );
         }
 
         /// <summary>
@@ -222,6 +236,20 @@ namespace Chaskis.Plugins.KarmaBot
             int karma = await this.dataBase.QueryKarma( userName );
 
             writer.SendMessage( userName + " has " + karma + " karma.", response.Channel );
+        }
+
+        private async void HandleChaskisQueryCommand( ChaskisEventHandlerLineActionArgs args )
+        {
+            Match match = args.Match;
+            string userName = match.Groups["name"].Value;
+            int karma = await this.dataBase.QueryKarma( userName );
+
+            ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
+                args.PluginName,
+                new List<string>() { "QUERY", userName, karma.ToString() }
+            );
+
+            this.eventSender.SendChaskisEvent( e );
         }
     }
 }
