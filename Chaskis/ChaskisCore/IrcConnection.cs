@@ -273,6 +273,7 @@ namespace ChaskisCore
 
             this.IsConnected = true;
 
+            this.AddCoreEvent( "CONNECT TO " + this.Config.Server + " AS " + this.Config.Nick );
             StaticLogger.Log.WriteLine( "Connection made!" );
         }
 
@@ -520,6 +521,8 @@ namespace ChaskisCore
         /// </summary>
         private void DisconnectHelper()
         {
+            this.AddCoreEvent( "DISCONNECTING FROM " + this.Config.Server + " AS " + this.Config.Nick );
+
             // Disconnect.
             this.connection.Close();
 
@@ -530,6 +533,8 @@ namespace ChaskisCore
 
             // We are not connected.
             this.IsConnected = false;
+
+            this.AddCoreEvent( "DISCONNECTED FROM " + this.Config.Server + " AS " + this.Config.Nick );
         }
 
         /// <summary>
@@ -600,6 +605,36 @@ namespace ChaskisCore
         }
 
         /// <summary>
+        /// Adds the given Chaskis to the event queue.
+        /// </summary>
+        public void SendChaskisEvent( ChaskisEvent e )
+        {
+            string s = e.ToString();
+            this.AddStringToParsingQueue( s );
+        }
+
+        private void AddCoreEvent( string args )
+        {
+            ChaskisEvent e = new ChaskisEvent(
+                ChaskisEventSource.CORE,
+                ChaskisEventProtocol.IRC.ToString(),
+                ChaskisEvent.BroadcastEventStr,
+                args.Split( ' ' )
+            );
+
+            this.SendChaskisEvent( e );
+        }
+
+        private void AddStringToParsingQueue( string s )
+        {
+            Action<string> readEvent = this.ReadEvent;
+            if( readEvent != null )
+            {
+                this.eventQueue.AddEvent( () => ReadEvent( s ) );
+            }
+        }
+
+        /// <summary>
         /// The thread that does the reading.
         /// </summary>
         private void ReaderThread()
@@ -614,10 +649,7 @@ namespace ChaskisCore
                         string s = this.ircReader.ReadLine();
                         if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                         {
-                            if( this.ReadEvent != null )
-                            {
-                                this.eventQueue.AddEvent( () => ReadEvent( s ) );
-                            }
+                            this.AddStringToParsingQueue( s );
                         }
                     }
                     catch( SocketException err )
@@ -693,6 +725,7 @@ namespace ChaskisCore
                             StaticLogger.Log.WriteLine(
                                 "Watch Dog has failed to receive a PONG within 60 seconds, attempting reconnect"
                             );
+                            this.AddCoreEvent( "WATCHDOG FAILED" );
                             this.AttemptReconnect();
                         }
                     }
