@@ -107,27 +107,13 @@ namespace Tests
         [Test]
         public void CaptureCoreIrcEvent()
         {
-            string expectedArgs = string.Format(
-                "DISCONNECT FROM {0} AS {1}",
-                this.ircConfig.Server,
-                this.ircConfig.Nick
-            );
-
-            string disconnectEventStr = "CHASKIS CORE IRC BCAST " + expectedArgs;
-
             ChaskisEventHandler handler = this.creator.CreateCoreEventHandler(
                 Regexes.ChaskisIrcDisconnectEvent,
                 ChaskisEventProtocol.IRC,
                 this.LineAction
             );
 
-            HandlerArgs handlerArgs = this.CreateHandlerArgs( disconnectEventStr );
-
-            handler.HandleEvent( handlerArgs );
-
-            Assert.IsNotNull( this.argsCaptured );
-            Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
-            Assert.AreEqual( "IRC", this.argsCaptured.PluginName );
+            this.DoCase1( handler, true );
         }
 
         /// <summary>
@@ -137,6 +123,16 @@ namespace Tests
         [Test]
         public void IgnoresCoreIrcEvent()
         {
+            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
+                @"USERLIST\s+(?<users>.+)",
+                this.LineAction
+            );
+
+            this.DoCase1( handler, false );
+        }
+
+        private void DoCase1( ChaskisEventHandler handler, bool expectSuccess )
+        {
             string expectedArgs = string.Format(
                 "DISCONNECT FROM {0} AS {1}",
                 this.ircConfig.Server,
@@ -145,16 +141,20 @@ namespace Tests
 
             string disconnectEventStr = "CHASKIS CORE IRC BCAST " + expectedArgs;
 
-            ChaskisEventHandler handler = this.creator.CreatePluginEventHandler(
-                @"USERLIST\s+(?<users>.+)",
-                this.LineAction
-            );
-
             HandlerArgs handlerArgs = this.CreateHandlerArgs( disconnectEventStr );
 
             handler.HandleEvent( handlerArgs );
 
-            Assert.IsNull( this.argsCaptured );
+            if( expectSuccess )
+            {
+                Assert.IsNotNull( this.argsCaptured );
+                Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
+                Assert.AreEqual( "IRC", this.argsCaptured.PluginName );
+            }
+            else
+            {
+                Assert.IsNull( this.argsCaptured );
+            }
         }
 
         // -------- Case 3 --------
@@ -162,6 +162,8 @@ namespace Tests
         /// <summary>
         /// Ensures that if we are expecting an any plugin event, we capture it.
         /// Tests case 3 from list above, but expecting any plugin.
+        /// In this case, we expect the event to NOT fire... BCAST events need
+        /// to subscribe to a specific plugin.
         /// </summary>
         [Test]
         public void CaptureAnyPluginEvent_Bcast()
@@ -171,7 +173,7 @@ namespace Tests
                 this.LineAction
             );
 
-            this.DoCase3( handler );
+            this.DoCase3( handler, false );
         }
 
         /// <summary>
@@ -187,27 +189,9 @@ namespace Tests
                 this.LineAction
             );
 
-            this.DoCase3( handler );
+            this.DoCase3( handler, true );
         }
 
-        private void DoCase3( ChaskisEventHandler handler )
-        {
-            // In this case, this is UserListBot boardcasting all the users.
-            // We want to capture this, since we might care about it.
-
-            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
-
-            string eventStr = "CHASKIS PLUGIN USERLISTBOT BCAST " + expectedArgs;
-
-            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
-
-            handler.HandleEvent( handlerArgs );
-
-            Assert.IsNotNull( this.argsCaptured );
-            Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
-            Assert.AreEqual( "USERLISTBOT", this.argsCaptured.PluginName );
-            Assert.AreEqual( "EVERGREEN MARKEM HARRIS", this.argsCaptured.Match.Groups["users"].Value );
-        }
 
         /// <summary>
         /// Ensures that during a bcast, if it is not a plugin we care about,
@@ -222,6 +206,14 @@ namespace Tests
                 this.LineAction
             );
 
+            this.DoCase3( handler, false );
+        }
+
+        private void DoCase3( ChaskisEventHandler handler, bool expectSuccess )
+        {
+            // In this case, this is UserListBot boardcasting all the users.
+            // We want to capture this, since we might care about it.
+
             string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
 
             string eventStr = "CHASKIS PLUGIN USERLISTBOT BCAST " + expectedArgs;
@@ -230,7 +222,17 @@ namespace Tests
 
             handler.HandleEvent( handlerArgs );
 
-            Assert.IsNull( this.argsCaptured );
+            if( expectSuccess )
+            {
+                Assert.IsNotNull( this.argsCaptured );
+                Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
+                Assert.AreEqual( "USERLISTBOT", this.argsCaptured.PluginName );
+                Assert.AreEqual( "EVERGREEN MARKEM HARRIS", this.argsCaptured.Match.Groups["users"].Value );
+            }
+            else
+            {
+                Assert.IsNull( this.argsCaptured );
+            }
         }
 
         // -------- Case 4 --------
@@ -248,7 +250,7 @@ namespace Tests
                 this.LineAction
             );
 
-            this.DoCase4( handler );
+            this.DoCase4( handler, true );
         }
 
         /// <summary>
@@ -265,27 +267,7 @@ namespace Tests
                 this.LineAction
             );
 
-            this.DoCase4( handler );
-        }
-
-        private void DoCase4( ChaskisEventHandler handler )
-        {
-            // For this test case, let's pretend our creator plugin asked UserListBot
-            // for a userlist.  This is userlist responding to our creator plugin.
-
-            string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
-
-            //                                SourceOfPlugin   EventDestination
-            string eventStr = "CHASKIS PLUGIN USERLISTBOT " + this.creatorPluginName + " " + expectedArgs;
-
-            HandlerArgs handlerArgs = this.CreateHandlerArgs( eventStr );
-
-            handler.HandleEvent( handlerArgs );
-
-            Assert.IsNotNull( this.argsCaptured );
-            Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
-            Assert.AreEqual( "USERLISTBOT", this.argsCaptured.PluginName );
-            Assert.AreEqual( "EVERGREEN MARKEM HARRIS", this.argsCaptured.Match.Groups["users"].Value );
+            this.DoCase4( handler, true );
         }
 
         /// <summary>
@@ -302,6 +284,14 @@ namespace Tests
                 this.LineAction
             );
 
+            this.DoCase4( handler, false );
+        }
+
+        private void DoCase4( ChaskisEventHandler handler, bool expectSuccess )
+        {
+            // For this test case, let's pretend our creator plugin asked UserListBot
+            // for a userlist.  This is userlist responding to our creator plugin.
+
             string expectedArgs = "USERLIST EVERGREEN MARKEM HARRIS";
 
             //                                SourceOfPlugin   EventDestination
@@ -311,7 +301,17 @@ namespace Tests
 
             handler.HandleEvent( handlerArgs );
 
-            Assert.IsNull( this.argsCaptured );
+            if( expectSuccess )
+            {
+                Assert.IsNotNull( this.argsCaptured );
+                Assert.AreEqual( expectedArgs, this.argsCaptured.EventArgs );
+                Assert.AreEqual( "USERLISTBOT", this.argsCaptured.PluginName );
+                Assert.AreEqual( "EVERGREEN MARKEM HARRIS", this.argsCaptured.Match.Groups["users"].Value );
+            }
+            else
+            {
+                Assert.IsNull( this.argsCaptured );
+            }
         }
 
         // -------- Ignores --------

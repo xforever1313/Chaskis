@@ -164,14 +164,29 @@ namespace ChaskisCore
 
                     isMatch &= ( this.expectedSource == source );
 
+                    // Handle event if the event targets this plugin, OR it is a broadcast event.
+                    string targetPlugin = match.Groups["targetPlugin"].Value.ToUpper();
+                    isMatch &= ( ( this.creatorPlugin == targetPlugin ) || ( ChaskisEvent.BroadcastEventStr == targetPlugin ) );
+
                     if( this.expectedPlugin != null )
                     {
                         isMatch &= ( this.expectedPlugin == pluginName );
                     }
-
-                    // Handle event if the event targets this plugin, OR it is a broadcast event.
-                    string targetPlugin = match.Groups["targetPlugin"].Value.ToUpper();
-                    isMatch &= ( ( this.creatorPlugin == targetPlugin ) || ( ChaskisEvent.BroadcastEventStr == targetPlugin ) );
+                    // BCast events MUST be subcribed to a specific source plugin.
+                    // Otherwise, what happens if we get something like this:
+                    // CHASKIS PLUGIN Plugin1 BCAST Hello
+                    // CHASKIS PLUGIN Plugin2 BCAST Hello
+                    // BOTH will trigger even though they came from two different
+                    // plugins.  That is a problem...
+                    // For BCAST events, the handler should subscribe to a specific
+                    // source plugin.  This way Plugin1 will trigger one handler,
+                    // while Plugin2 will trigger a different handler.
+                    else if( targetPlugin == ChaskisEvent.BroadcastEventStr )
+                    {
+                        isMatch = false;
+                    }
+                    // Otherwise, if we are not a BCAST, we'll handle the event if our expected plugin
+                    // can be any (is null).
 
                     if( isMatch )
                     {
