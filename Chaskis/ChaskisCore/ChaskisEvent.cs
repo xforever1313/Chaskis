@@ -5,11 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ChaskisCore
 {
@@ -47,6 +44,7 @@ namespace ChaskisCore
             IList<string> args
         )
         {
+            this.SourceType = sourceType;
             this.SourcePlugin = sourcePlugin;
             if( destinationPlugin == null )
             {
@@ -106,7 +104,7 @@ namespace ChaskisCore
 
             // Destination Plugin goes next.  If null, this becomes "BCAST" for broadcast.
             builder.Append( this.DestinationPlugin );
-            builder.Append( "" );
+            builder.Append( " " );
 
             // Last comes the args.
             if( this.Args != null )

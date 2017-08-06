@@ -28,7 +28,7 @@ namespace ChaskisCore
         /// Calling this function at all will result in a <see cref="InvalidOperationException"/>
         /// </summary>
         /// <returns>The single instance of this class.</returns>
-        public static ChaskisEventFactory CreateInstance( IList<string> pluginNameList )
+        public static ChaskisEventFactory CreateInstance( IReadOnlyList<string> pluginNameList )
         {
             if( instance == null )
             {
@@ -47,7 +47,7 @@ namespace ChaskisCore
         /// <summary>
         /// Constructor.
         /// </summary>
-        private ChaskisEventFactory( IList<string> pluginNameList )
+        private ChaskisEventFactory( IReadOnlyList<string> pluginNameList )
         {
             ArgumentChecker.IsNotNull( pluginNameList, nameof( pluginNameList ) );
 
@@ -91,9 +91,9 @@ namespace ChaskisCore
             // ---------------- Functions ----------------
 
             /// <summary>
-            /// <see cref="IChaskisEventCreator.CreateBcastEvent(IList{string})"/>
+            /// <see cref="IChaskisEventCreator.CreateBcastEvent(IReadOnlyList{string})"/>
             /// </summary>
-            public ChaskisEvent CreateBcastEvent( IList<string> args )
+            public ChaskisEvent CreateBcastEvent( IReadOnlyList<string> args )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
 
@@ -106,9 +106,9 @@ namespace ChaskisCore
             }
 
             /// <summary>
-            /// <see cref="IChaskisEventCreator.CreateTargetedEvent(string, IList{string})"/>
+            /// <see cref="IChaskisEventCreator.CreateTargetedEvent(string, IReadOnlyList{string})"/>
             /// </summary>
-            public ChaskisEvent CreateTargetedEvent( string targetPluginName, IList<string> args )
+            public ChaskisEvent CreateTargetedEvent( string targetPluginName, IReadOnlyList<string> args )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
                 ArgumentChecker.StringIsNotNullOrEmpty( targetPluginName, nameof( targetPluginName ) );
@@ -185,7 +185,7 @@ namespace ChaskisCore
         /// </summary>
         /// <param name="args">The args to pass into the plugin.</param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateBcastEvent( IList<string> args );
+        ChaskisEvent CreateBcastEvent( IReadOnlyList<string> args );
 
         /// <summary>
         /// Generates a ChaskisEvent that is meant to be directed to
@@ -194,7 +194,7 @@ namespace ChaskisCore
         /// <param name="targetPluginName">The target plugin name</param>
         /// <param name="args">The args to pass into the plugin.</param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateTargetedEvent( string targetPluginName, IList<string> args );
+        ChaskisEvent CreateTargetedEvent( string targetPluginName, IReadOnlyList<string> args );
 
         /// <summary>
         /// Creates an event handler that waits for a CORE event

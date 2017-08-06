@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AllHandlerTest.cs" />
     <Compile Include="ChaskisEventHandlerTest.cs" />
+    <Compile Include="ChaskisEventTest.cs" />
     <Compile Include="IrcConfigTest.cs" />
     <Compile Include="MessageHandlerTest.cs" />
     <Compile Include="JoinHandlerTest.cs" />
