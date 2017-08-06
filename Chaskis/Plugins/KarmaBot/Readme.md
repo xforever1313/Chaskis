@@ -86,6 +86,22 @@ Sample Output
 [03:33.11] <@SethTestBot> java has had their karma decreased to -1
 ```
 
+Registered Chaskis Events
+--------
+ * Query Karma - Allows another plugin to query a user's Karma.
+    * **Command:** QUERY NAME=userName CHANNEL=#myChannel
+    * **Response:** QUERY NAME=userName CHANNEL=#myChannel KARMA=X
+    * NAME: The thing whose karma to query.
+    * CHANNEL: This simply gets echoed back in the response as is.  Useful in case a plugin is on a per-channel context.
+    * KARMA: Number of karma that userName has as an int.
+
+    * Example:
+      ```
+      :xforever1313!~xforever1313@W.X.Y.Z JOIN #testseth
+      CHASKIS PLUGIN WELCOMEBOT KARMABOT QUERY NAME=xforever1313 CHANNEL=#testseth
+      CHASKIS PLUGIN KARMABOT WELCOMEBOT QUERY NAME=xforever1313 CHANNEL=#testseth KARMA=1
+      ```
+
 Credits
 --------
 

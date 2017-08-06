@@ -36,3 +36,15 @@ Sample Output:
 [03:50.04] Channel Created on: 7:44 PM 6/25/2017
 [03:50.05] <SethTestBot> xforever1313 has joined #testseth
 ```
+
+Optional Dependencies:
+======
+
+ * KarmaBot
+    * If the [KarmaBot](https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/KarmaBot) plugin is enabled, each time a user joins, their karma will be printed out.
+    * Example:
+    ```
+    [04:48.03] * You have joined #testseth
+    [04:48.05] <SethTestBot> xforever1313 has joined #testseth
+    [04:48.06] <SethTestBot> User xforever1313 has 1 karma
+    ```
