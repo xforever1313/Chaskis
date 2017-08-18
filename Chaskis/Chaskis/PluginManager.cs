@@ -83,8 +83,6 @@ namespace Chaskis
 
                     foreach( Type type in types )
                     {
-                        MethodInfo initFunction = type.GetMethod( "Init" );
-
                         // Make instance
                         object instance = Activator.CreateInstance( type );
                         IPlugin plugin = instance as IPlugin;
