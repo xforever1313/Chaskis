@@ -39,9 +39,16 @@ namespace Chaskis.Plugins.CapsWatcher
         /// </summary>
         private readonly Random random;
 
+        //
+        // ([^\w\s]*) - Special Symbols are allowed to be captured.
+        // (:-?[\S]) - Emoticons such as :D :P :p :-p can be captured.
+        // (\s[\S]-?:) - Emoticons such as D: can be captured.
+        // (\s*) - Capture whitespace.
+        // [A-Z]{2,} - Capture all caps... must have a minimum of two caps in a row somewhere.  Numbers can come before and after if needed.
+        // ([A-Z0-9\s]*) - Capture caps/numbers before and after the two capital letters.
         private static readonly Regex capsRegex = new Regex(
-            @"^[\p{P}A-Z]+\s+[\p{P}A-Z\s]+$",
-            RegexOptions.Compiled
+            @"^(((([^\w\s]?)|(:-?[\S])*|(\s[\S]-?:)*|([A-Z0-9\s]*)))*[A-Z]{2,}((([^\w\s]*)|(:-?[\S])*|(\s[\S]-?:)*|([A-Z0-9\s]*)))*|(\s*))+$",
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
         // -------- Constructor --------
@@ -178,18 +185,6 @@ namespace Chaskis.Plugins.CapsWatcher
             {
                 return false;
             }
-            else if( message.Length < 3 )
-            {
-                return false;
-            }
-
-            // Requirements:
-            // 1. Must contain at least one space, otherwise it could be an emoji
-            //    or abbreviation 
-            // 2. Must contain no lowercase characters.
-            // 3. Must be at least 3 characters long... don't want one character
-            //    or emoji's to trigger the bot.
-            // 4. Punctuation is okay.
 
             return capsRegex.IsMatch( message );
         }
