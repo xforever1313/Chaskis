@@ -18,6 +18,7 @@ This bot queries the given RSS Feed in the URL tag every X minutes in the refres
 
 URL - The URL to pull the feed from
 refreshinterval - Minutes before it pulls from it again.
+channel - Which channel(s) to post updates to.  Each feed needs at least one specified.
 
 Note that this will only post updates to the feed starting AFTER the bot starts up.
 Any existing posts on the feed will NOT be posted.
@@ -27,13 +28,15 @@ Any existing posts on the feed will NOT be posted.
    <feed>
         <url>https://www.shendrick.net/atom.xml</url>
         <refreshinterval>60</refreshinterval>
+        <channel>#MyChannel</channel>
     </feed>
     <feed>
         <url>http://thenaterhood.com/feed.xml</url>
         <refreshinterval>30</refreshinterval>
+        <channel>#MyChannel</channel>
+        <channel>#MyOtherChannel</channel>
     </feed>
 </rssbotconfig>
-
 ```
 
 Installing
