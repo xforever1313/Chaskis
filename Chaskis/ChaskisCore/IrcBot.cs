@@ -19,7 +19,7 @@ namespace ChaskisCore
         /// <summary>
         /// Version in the form of a string.
         /// </summary>
-        public const string VersionString = "0.2.0";
+        public const string VersionString = "0.3.0";
 
         /// <summary>
         /// Copyright information.

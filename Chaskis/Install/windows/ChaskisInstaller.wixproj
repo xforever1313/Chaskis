@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.rtf" />
+    <Content Include="Product.wxs.template" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
