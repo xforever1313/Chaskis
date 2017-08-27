@@ -10,6 +10,8 @@ Build Status
 
 [![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/)
 
+[![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/)
+
 About
 --------
 Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.

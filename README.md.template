@@ -10,6 +10,8 @@ Build Status
 
 [![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/)
 
+[![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/)
+
 About
 --------
 {%Description%}
