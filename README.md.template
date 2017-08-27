@@ -12,6 +12,8 @@ Build Status
 
 [![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/)
 
+[![AUR](https://img.shields.io/aur/version/chaskis.svg)](https://aur.archlinux.org/packages/chaskis/)
+
 About
 --------
 {%Description%}
