@@ -20,6 +20,7 @@
         <xs:sequence>
             <xs:element name="url" type="xs:anyURI" minOccurs="1" maxOccurs="1" />
             <xs:element name="refreshinterval" type="xs:int" minOccurs="1" maxOccurs="1" />
+            <xs:element name="channel" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     

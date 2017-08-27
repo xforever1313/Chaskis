@@ -31,11 +31,16 @@ namespace Tests.Plugins.RssBot
 
             RssBotConfig config = XmlLoader.ParseConfig( rssConfig );
 
-            Assert.AreEqual( config.Feeds[0].Url, RssBotTestHelpers.TestUrl1 );
-            Assert.AreEqual( config.Feeds[0].RefreshInterval, RssBotTestHelpers.Interval1 );
+            Assert.AreEqual( RssBotTestHelpers.TestUrl1, config.Feeds[0].Url );
+            Assert.AreEqual( RssBotTestHelpers.Interval1, config.Feeds[0].RefreshInterval );
+            Assert.AreEqual( 1, config.Feeds[0].Channels.Count );
+            Assert.AreEqual( "#MyChannel", config.Feeds[0].Channels[0] );
 
-            Assert.AreEqual( config.Feeds[1].Url, RssBotTestHelpers.TestUrl2 );
-            Assert.AreEqual( config.Feeds[1].RefreshInterval, RssBotTestHelpers.Interval2 );
+            Assert.AreEqual( RssBotTestHelpers.TestUrl2, config.Feeds[1].Url );
+            Assert.AreEqual( RssBotTestHelpers.Interval2, config.Feeds[1].RefreshInterval );
+            Assert.AreEqual( 2, config.Feeds[1].Channels.Count );
+            Assert.AreEqual( "#MyChannel", config.Feeds[1].Channels[0] );
+            Assert.AreEqual( "#MyOtherChannel", config.Feeds[1].Channels[1] );
         }
 
         /// <summary>

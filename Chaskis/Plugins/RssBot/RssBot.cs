@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.RssBot
 {
@@ -22,7 +23,7 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.2.0";
+        public const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -34,6 +35,8 @@ namespace Chaskis.Plugins.RssBot
         private Dictionary<int, FeedReader> feedReaders;
 
         private IChaskisEventScheduler scheduler;
+
+        private GenericLogger pluginLogger;
 
         // ---------------- Constructor ----------------
 
@@ -96,6 +99,8 @@ namespace Chaskis.Plugins.RssBot
                 "RssBotConfig.xml"
             );
 
+            this.pluginLogger = initor.Log;
+
             if( File.Exists( configPath ) == false )
             {
                 throw new FileNotFoundException(
@@ -118,9 +123,13 @@ namespace Chaskis.Plugins.RssBot
                     {
                         try
                         {
+                            this.pluginLogger.WriteLine( "Fetching RSS feed for '" + feed.Url + "'" );
+
                             IList<SyndicationItem> newItems = reader.Update();
                             if( newItems.Count > 0 )
                             {
+                                this.pluginLogger.WriteLine( "Found updates on RSS feed '" + feed.Url + "', sending to channels..." );
+
                                 foreach( SyndicationItem item in newItems )
                                 {
                                     string msg = string.Empty;
@@ -143,10 +152,18 @@ namespace Chaskis.Plugins.RssBot
                                         );
                                     }
 
-                                    writer.SendBroadcastMessage(
-                                        msg
-                                    );
+                                    foreach( string channel in feed.Channels )
+                                    {
+                                        writer.SendMessage(
+                                            msg,
+                                            channel
+                                        );
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                this.pluginLogger.WriteLine( "No updates for RSS feed '" + feed.Url + "'" );
                             }
                         }
                         catch( Exception err )

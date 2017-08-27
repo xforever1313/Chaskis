@@ -67,6 +67,7 @@ namespace Tests.Plugins.RssBot
             Feed feedConfig = new Feed();
             feedConfig.RefreshInterval = TimeSpan.FromMinutes( 1 );
             feedConfig.Url = this.testFeedUri;
+            feedConfig.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
             this.uut = new FeedReader( feedConfig );
         }

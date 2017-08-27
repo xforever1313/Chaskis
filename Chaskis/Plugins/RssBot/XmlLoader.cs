@@ -57,6 +57,10 @@ namespace Chaskis.Plugins.RssBot
                                 long minutes = long.Parse( feedNode.InnerText );
                                 feed.RefreshInterval = TimeSpan.FromMinutes( minutes );
                                 break;
+
+                            case "channel":
+                                feed.AddChannel( feedNode.InnerText );
+                                break;
                         }
                     }
 

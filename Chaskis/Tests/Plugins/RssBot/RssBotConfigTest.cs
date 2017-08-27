@@ -28,12 +28,18 @@ namespace Tests.Plugins.RssBot
             Feed feed1 = new Feed();
             feed1.Url = RssBotTestHelpers.TestUrl1;
             feed1.RefreshInterval = TimeSpan.MaxValue;
+            feed1.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
             Feed clonedFeed = feed1.Clone();
 
             Assert.AreNotSame( feed1, clonedFeed );
             Assert.AreEqual( feed1.Url, clonedFeed.Url );
             Assert.AreEqual( feed1.RefreshInterval, clonedFeed.RefreshInterval );
+            Assert.AreNotSame( feed1.Channels, clonedFeed.Channels );
+            Assert.AreEqual( feed1.Channels[0], clonedFeed.Channels[0] );
+
+            feed1.AddChannel( "#SomeChannel" );
+            Assert.AreNotEqual( feed1.Channels.Count, clonedFeed.Channels.Count );
         }
 
         /// <summary>
@@ -45,6 +51,15 @@ namespace Tests.Plugins.RssBot
             Feed feed = new Feed();
             feed.Url = RssBotTestHelpers.TestUrl1;
             feed.RefreshInterval = TimeSpan.Zero + TimeSpan.FromTicks( 1 ); // Positive is good.
+
+            // Empty Channel
+            {
+                string errorString;
+                Assert.IsFalse( feed.TryValidate( out errorString ) );
+                Assert.IsNotEmpty( errorString );
+            }
+
+            feed.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
             // Good case.
             {
@@ -105,10 +120,12 @@ namespace Tests.Plugins.RssBot
             Feed feed1 = new Feed();
             feed1.Url = RssBotTestHelpers.TestUrl1;
             feed1.RefreshInterval = TimeSpan.Zero + TimeSpan.FromTicks( 1 ); // Positive is good.
+            feed1.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
             Feed feed2 = new Feed();
             feed2.Url = RssBotTestHelpers.TestUrl2;
             feed2.RefreshInterval = TimeSpan.MaxValue;
+            feed2.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
             RssBotConfig config = new RssBotConfig();
 
@@ -126,6 +143,23 @@ namespace Tests.Plugins.RssBot
             // Now add bad feed 1, and we should fail validation.
             config.AddFeed( feed1 );
             Assert.Throws<ValidationException>( () => config.Validate() );
+        }
+
+        /// <summary>
+        /// Ensures the add channels function works as expected.
+        /// </summary>
+        [Test]
+        public void AddChannelsTest()
+        {
+            Feed uut = new Feed();
+            Assert.Throws<ArgumentNullException>( () => uut.AddChannel( null ) );
+            Assert.Throws<ArgumentNullException>( () => uut.AddChannel( string.Empty ) );
+
+            string channel = TestHelpers.GetTestIrcConfig().Channels[0];
+
+            uut.AddChannel( channel );
+            Assert.AreEqual( 1, uut.Channels.Count );
+            Assert.AreEqual( channel, uut.Channels[0] );
         }
     }
 }

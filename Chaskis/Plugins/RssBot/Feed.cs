@@ -6,12 +6,18 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Text;
+using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.RssBot
 {
     public class Feed
     {
+        // ---------------- Fields ----------------
+
+        private List<string> channels;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -21,6 +27,19 @@ namespace Chaskis.Plugins.RssBot
         {
             this.Url = string.Empty;
             this.RefreshInterval = TimeSpan.Zero;
+            this.channels = new List<string>();
+            this.Channels = this.channels.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Copy Constructor.
+        /// </summary>
+        public Feed( Feed feed )
+        {
+            this.Url = feed.Url;
+            this.RefreshInterval = feed.RefreshInterval;
+            this.channels = new List<string>( feed.channels );
+            this.Channels = this.channels.AsReadOnly();
         }
 
         // ---------------- Properties ----------------
@@ -35,7 +54,21 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         public TimeSpan RefreshInterval { get; set; }
 
+        /// <summary>
+        /// Which channels to send feed updates to.
+        /// </summary>
+        public IList<string> Channels { get; set; }
+
         // ---------------- Functions ----------------
+
+        /// <summary>
+        /// Add channel to the <see cref="Channels"/> List.
+        /// </summary>
+        public void AddChannel( string channel )
+        {
+            ArgumentChecker.StringIsNotNullOrEmpty( channel, nameof( channel ) );
+            this.channels.Add( channel );
+        }
 
         /// <summary>
         /// Ensures this feed object was created correctly.
@@ -58,6 +91,11 @@ namespace Chaskis.Plugins.RssBot
                 success = false;
                 errorBuilder.AppendLine( "\t-Refresh interval can not be negative or zero." );
             }
+            if( this.Channels.Count == 0 )
+            {
+                success = false;
+                errorBuilder.AppendLine( "\t-There must be at least one channel specified." );
+            }
 
             if( success )
             {
@@ -76,7 +114,7 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         public Feed Clone()
         {
-            return (Feed)this.MemberwiseClone();
+            return new Feed( this );
         }
     }
 }
