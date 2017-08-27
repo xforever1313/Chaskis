@@ -85,6 +85,9 @@
             <Feature Id="MathBot" Title="Math Bot" Level="1" Description="I can calculate math problems for you!  Addition, subtraction, multiplication, division, modulo, or even boolean logic!">
                 <ComponentGroupRef Id="MathBotComponent" />
             </Feature>
+            <Feature Id="MessageFixerBot" Title="Message Fixer Bot" Level="1" Description="I fix user's messages for them">
+                <ComponentGroupRef Id="MessageFixerBotComponent"/>
+            </Feature>
             <Feature Id="QuoteBot" Title="Quote Bot" Level="1" Description="I save memorable quotes from the IRC channel for you!">
                 <ComponentGroupRef Id="QuoteBotComponent" />
             </Feature>
@@ -128,6 +131,7 @@
                             <Directory Id="KarmaBotX64Folder" Name="x64"/>
                         </Directory>
                         <Directory Id="MathBotFolder" Name="MathBot"/>
+                        <Directory Id="MessageFixerBotFolder" Name="MessageFixerBot"/>
                         <Directory Id="QuoteBotFolder" Name="QuoteBot">
                             <Directory Id="QuoteBotX86Folder" Name="x86"/>
                             <Directory Id="QuoteBotX64Folder" Name="x64"/>
@@ -353,17 +357,29 @@
         </ComponentGroup>
 
         <ComponentGroup Id="MathBotComponent">
-            <!-- CrossChannel.dll -->
+            <!-- MathBot.dll -->
             <Component Guid="{DA759D91-87CF-4011-AB18-C5B62AB13BEA}" Directory="MathBotFolder">
                 <File Source="$(var.MathBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
-            <!-- CrossChannel Readme -->
+            <!-- MathBot Readme -->
             <Component Guid="{6F87FA50-C745-406B-B745-4C165608991A}" Directory="MathBotFolder">
                 <File Id="MathBotReadme" Source="..\..\Plugins\MathBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 
+        <ComponentGroup Id="MessageFixerBotComponent">
+            <!-- MessageFixerBot.dll -->
+            <Component Guid="{CB87A9E2-E8CB-490E-8E94-B1BED7413EE7}" Directory="MessageFixerBotFolder">
+                <File Source="$(var.MessageFixerBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+        
+            <!-- MessageFixerBot Readme -->
+            <Component Guid="{9BB38ED7-2E54-49D1-B3AF-F6030BAAA1EA}" Directory="MessageFixerBotFolder">
+                <File Id="MessageFixerBotReadme" Source="..\..\Plugins\MessageFixerBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+            
         <ComponentGroup Id="QuoteBotComponent">
             <!-- QuoteBot.dll -->
             <Component Guid="{A05D253B-D188-4E5A-B6E1-EAE6A53785BF}" Directory="QuoteBotFolder">
