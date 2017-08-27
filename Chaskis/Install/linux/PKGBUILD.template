@@ -8,10 +8,10 @@ arch=('any')
 url="{%ProjectUrl%}"
 license=('BSL')
 groups=()
-depends=('mono>=4.2.2' 'git' 'nuget')
-makedepends=()
+depends=('mono>=4.2.2')
+makedepends=('nuget' 'git')
 checkdepends=()
-optdepends=()
+optdepends=("sqlite: For some Plugins")
 provides=()
 conflicts=()
 replaces=()
@@ -21,7 +21,7 @@ install=
 changelog=()
 source=("https://github.com/xforever1313/Chaskis/archive/$pkgver.tar.gz")
 noextract=()
-md5sums=('SKIP')
+sha256sums=('PUT THIS IN!')
 validpgpkeys=()
 
 prepare() {
@@ -36,11 +36,8 @@ build() {
 }
 
 check() {
-        #cd "$srcdir/Chaskis-$pkgver"
-        #nuget restore ./Chaskis/Chaskis.sln
-        #nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory ./nunit/
-        #mono ./nunit/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
-        echo "Nothing to check."
+        cd "$srcdir/Chaskis-$pkgver/Chaskis"
+        mono ./packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Tests/bin/Release/Tests.dll
 }
 
 package() {
