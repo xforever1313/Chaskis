@@ -14,7 +14,7 @@ Source0: %{source}
 License: BSL
 Prefix: %{_prefix}
 BuildArch: noarch
-Requires: mono-core
+Requires: mono-devel
 BuildRequires: nuget git mono-devel
 Vendor: {%Author%} <{%AuthorEmail%}>
 Url: {%ProjectUrl%}

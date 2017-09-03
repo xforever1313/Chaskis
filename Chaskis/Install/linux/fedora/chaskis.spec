@@ -14,7 +14,7 @@ Source0: %{source}
 License: BSL
 Prefix: %{_prefix}
 BuildArch: noarch
-Requires: mono-core
+Requires: mono-devel
 BuildRequires: nuget git mono-devel
 Vendor: Seth Hendrick <seth@shendrick.net>
 Url: https://github.com/xforever1313/Chaskis/
