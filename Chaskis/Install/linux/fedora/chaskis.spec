@@ -14,10 +14,15 @@ Source0: %{source}
 License: BSL
 Prefix: %{_prefix}
 BuildArch: noarch
-Requires: mono-devel
+Requires: mono-core
 BuildRequires: nuget git mono-devel
 Vendor: Seth Hendrick <seth@shendrick.net>
 Url: https://github.com/xforever1313/Chaskis/
+
+# RPM, you're not smart, you are not to be trusted with this.
+# Otherwise, it Requires Mono(System.Collections) to be provided, which mono-devel
+# does not provide apparently (lolwut).
+AutoReq: no
 
 %description
 Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
