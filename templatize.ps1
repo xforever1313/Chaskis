@@ -68,7 +68,7 @@ $Summary = "A generic framework written in C# for making IRC Bots."
 
 $FilesToTemplate =(
     (".\Chaskis\Install\windows\Product.wxs.template", ".\Chaskis\Install\windows\Product.wxs"),
-    (".\Chaskis\Install\linux\PKGBUILD.template", ".\Chaskis\Install\linux\PKGBUILD"),
+    (".\Chaskis\Install\linux\arch\PKGBUILD.template", ".\Chaskis\Install\linux\arch\PKGBUILD"),
     (".\Chaskis\Install\chocolatey\template\chaskis.nuspec.template", ".\Chaskis\Install\chocolatey\package\chaskis.nuspec"),
     (".\Chaskis\Install\chocolatey\template\tools\LICENSE.txt.template", ".\Chaskis\Install\chocolatey\package\tools\LICENSE.txt"),
     (".\README.md.template", ".\README.md"),
