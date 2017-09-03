@@ -146,10 +146,10 @@ namespace ChaskisCore
                 true
             );
 
-            this.eventQueue.OnError += EventQueue_OnError;
+            this.eventQueue.OnError += this.EventQueue_OnError;
 
             this.writerQueue = new EventExecutor( false );
-            this.writerQueue.OnError += EventQueue_OnError;
+            this.writerQueue.OnError += this.WriterQueue_OnError;
 
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
@@ -839,6 +839,19 @@ namespace ChaskisCore
 
             errorMessage.WriteLine( "***************" );
             errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
+            errorMessage.WriteLine( err.Message );
+            errorMessage.WriteLine( err.StackTrace );
+            errorMessage.WriteLine( "***************" );
+
+            StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
+        }
+
+        private void WriterQueue_OnError( Exception err )
+        {
+            StringWriter errorMessage = new StringWriter();
+
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( "Caught Exception in Writer Queue Thread:" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
