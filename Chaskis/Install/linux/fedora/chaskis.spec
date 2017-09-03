@@ -41,7 +41,11 @@ mkdir %{_builddir}/%{untardir}
 tar -xvf %{_sourcedir}/%{unmangled_version}.tar.gz -C %{_builddir}/
 cd %{untardir}
 git clone https://github.com/xforever1313/sethcs SethCS
-nuget restore ./Chaskis/Chaskis.sln
+
+# Fedora 26 has a woefully out-of-date version of nuget.
+# We need to grab it ourselves like a savage.
+wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+mono ./nuget.exe restore ./Chaskis/Chaskis.sln
 xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
 
 %install
