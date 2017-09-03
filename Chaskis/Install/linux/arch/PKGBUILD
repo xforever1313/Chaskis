@@ -21,7 +21,7 @@ install=
 changelog=()
 source=("https://github.com/xforever1313/Chaskis/archive/$pkgver.tar.gz")
 noextract=()
-sha256sums=('54C009DE0D22F6C249E7042FBF6A80DB9D723609943CEA67878352BC24340B6F')
+sha256sums=('PUT THIS IN!')
 validpgpkeys=()
 
 prepare() {
