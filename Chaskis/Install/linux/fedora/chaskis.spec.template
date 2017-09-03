@@ -14,10 +14,15 @@ Source0: %{source}
 License: BSL
 Prefix: %{_prefix}
 BuildArch: noarch
-Requires: mono-devel
+Requires: mono-core
 BuildRequires: nuget git mono-devel
 Vendor: {%Author%} <{%AuthorEmail%}>
 Url: {%ProjectUrl%}
+
+# RPM, you're not smart, you are not to be trusted with this.
+# Otherwise, it Requires Mono(System.Collections) to be provided, which mono-devel
+# does not provide apparently (lolwut).
+AutoReq: no
 
 %description
 {%Description%}
