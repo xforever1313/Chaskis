@@ -24,6 +24,9 @@ Url: https://github.com/xforever1313/Chaskis/
 # does not provide apparently (lolwut).
 AutoReq: no
 
+# This probably isn't the correct way to do this... but Fedora doesn't make this easy
+# like Arch (or even Windows) does.
+
 %description
 Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
 
