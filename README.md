@@ -25,6 +25,9 @@ Run the Windows installer.  This will install Chaskis to C:\Program Files\Chaski
 
 ### Linux ###
 
+ * **Arch** - Install with the AUR: ```yaourt -S chaskis```
+ * **Fedora** - You need to download the RPM manually or compile it yourself with the .spec file.  See [#22](https://github.com/xforever1313/Chaskis/issues/22) as to why.
+
 Configuration
 ---------------
 Once Chaskis is installed, run ```Chaskis.exe --bootstrap``` to create an empty configuration in side of your Application Data folder.  On Windows, this is ```C:\Users\you\AppData\Roaming\Chaskis```.  On Linux, this is ```/home/you/.config/Chaskis```.  If you wish to install a default config else where, specify that in the ```--chaskisroot argument``` (e.g. ```Chaskis.exe --bootstrap --chaskisroot=/home/you/chakisconfig```).
