@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml;
 using SethCS.Exceptions;
 
@@ -54,6 +55,11 @@ namespace Chaskis.Plugins.RssBot
         {
             this.feed = FetchFeed();
             this.FeedTitle = this.feed.Title.Text;
+        }
+
+        public Task<IList<SyndicationItem>> UpdateAsync()
+        {
+            return Task.Run( () => { return this.Update(); } );
         }
 
         /// <summary>

@@ -119,13 +119,13 @@ namespace Chaskis.Plugins.RssBot
 
                 int eventId = this.scheduler.ScheduleRecurringEvent(
                     feed.RefreshInterval,
-                    delegate ( IIrcWriter writer )
+                    async delegate ( IIrcWriter writer )
                     {
                         try
                         {
                             this.pluginLogger.WriteLine( "Fetching RSS feed for '" + feed.Url + "'" );
 
-                            IList<SyndicationItem> newItems = reader.Update();
+                            IList<SyndicationItem> newItems = await reader.UpdateAsync();
                             if( newItems.Count > 0 )
                             {
                                 this.pluginLogger.WriteLine( "Found updates on RSS feed '" + feed.Url + "', sending to channels..." );
