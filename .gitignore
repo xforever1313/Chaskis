@@ -50,3 +50,7 @@ OpenCover/
 /Chaskis/RegressionTests/FitNesseRoot/FitNesse
 /Chaskis/RegressionTests/FitNesseRoot/RecentChanges
 /Chaskis/RegressionTests/FitNesseRoot/*/*.zip
+/Chaskis/RegressionTests/FitNesseRoot/*/*/*.zip
+/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*.zip
+/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*.zip
+/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*/*.zip

@@ -5,20 +5,18 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
 
 namespace RegressionTests
 {
     /// <summary>
-    /// This test just ensures our FitNesse environment is working correctly.
+    /// This Fixture is used to ensure our setup is working correctly.
     /// </summary>
     public class HelloWorld : BaseTestContainer
     {
+        /// <summary>
+        /// This test just ensures our FitNesse environment is working correctly.
+        /// </summary>
         public bool IsHelloWorld( string inputLine )
         {
             return string.Equals( inputLine, "Hello World" );
