@@ -46,3 +46,7 @@ OpenCover/
 # IDEs
 .vscode
 
+/Chaskis/RegressionTests/FitNesseRoot/files
+/Chaskis/RegressionTests/FitNesseRoot/FitNesse
+/Chaskis/RegressionTests/FitNesseRoot/RecentChanges
+/Chaskis/RegressionTests/FitNesseRoot/*/*.zip

@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisCliInstaller", "Inst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageFixerBot", "Plugins\MessageFixerBot\MessageFixerBot.csproj", "{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionTests", "RegressionTests\TestFixtures\RegressionTests.csproj", "{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -237,6 +239,14 @@ Global
 		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F6B581-4BBA-4C48-89E9-D5FC3FC4DF7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
