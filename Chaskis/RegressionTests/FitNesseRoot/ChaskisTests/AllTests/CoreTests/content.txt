@@ -1,0 +1,4 @@
+!1 Chaskis Core Tests
+!contents -R2 -g -p -f -h
+
+|>ConnectTest|''Can we connect correctly?''|

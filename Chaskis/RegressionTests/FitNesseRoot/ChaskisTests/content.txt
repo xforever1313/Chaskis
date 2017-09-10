@@ -1,2 +1,13 @@
 !1 Chaskis Tests
 !contents -R2 -g -p -f -h
+
+# Taken from here: https://github.com/imanushin/NetRunner/wiki/Create-the-first-test
+!define COMMAND_PATTERN {%m %p}
+!define TEST_RUNNER {../packages/NetRunner.1.0.11/tools/net45/NetRunner.Executable.exe}
+!path TestFixtures/bin/Debug/RegressionTests.dll
+
+!2 Setup Tests
+|>HelloWorldTest|''Ensures our setup is correct.''|
+
+!2 All Tests
+|>AllTests|''All Chaskis Tests.''|
