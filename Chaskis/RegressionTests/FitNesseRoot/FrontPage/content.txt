@@ -1,0 +1,7 @@
+!1 Welcome to Chaskis's instance of FitNesse!
+!3 ''The fully integrated stand-alone acceptance testing framework and wiki.''
+# Here is a good place to add your first page (WikiWord). For example, MyTopLevelApplicationPage
+
+[[!-Chaskis Tests-!][.ChaskisTests]
+
+!note Release ${FITNESSE_VERSION}
