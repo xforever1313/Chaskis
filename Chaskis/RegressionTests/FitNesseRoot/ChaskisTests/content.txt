@@ -3,7 +3,7 @@
 
 # Taken from here: https://github.com/imanushin/NetRunner/wiki/Create-the-first-test
 !define COMMAND_PATTERN {%m %p}
-!define TEST_RUNNER {../packages/NetRunner.1.0.11/tools/net45/NetRunner.Executable.exe}
+!define TEST_RUNNER {./runner/NetRunner.Executable.exe}
 !path TestFixtures/bin/Debug/RegressionTests.dll
 
 !2 Setup Tests
