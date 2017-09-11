@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- 
+Xml Bot Config.
+
+Use this file to have your bot generate responses based on the commands users give.
+
+command - 
+    The command regex to trigger the response.
+    Accepts usual Chaskis replacement for channel, user, nick:
+    {%channel%} is replaced with the channel name the bot is listening on.
+    {%nick%} is replaced with the bot's nickname
+    {%user%} is replaced with the user who sent the command's user name.
+    
+    For example:
+        !{%nick%} {%channel%} {%user%}
+        will make the command the bot will watch for:
+        !botNick #myChannel someUser.
+        
+    Commands can also do regex groups as a find/replace mechanism.
+    A regex group's value can be sent in the response by having {%groupName%}
+    in the response.
+    
+    For example, having the command:
+        My name is (?<name>\w+) 
+        
+    and a response:
+        Hello {%name%}!
+        
+    will produce this if in chat:
+        <user> My name is user
+        <bot> Hello user!
+
+
+    Tip: If you are doing a command such as !someCommand, put '^' in the front of the command regex.
+         That way, "!command" will be triggered only if "!command" is at the start of the message, not if something
+         like "lol !command" comes through the chat.
+
+response -
+    What the bot responds with when the command is seen in the channel.
+    
+    Any regex groups in the command whose value should be outputted in the response should be tagged
+    like this: {%groupName%}.
+    
+cooldown -
+    How long in SECONDS before the bot responds to the command again.  Defaulted to no cooldown.
+    
+respondto -
+    Does the command only respond to messages in the channel, PMs only, or both.
+    
+    ChannelAndPms - Responds to both messages in the channel and PMs.
+    PmsOnly - Only respond to Private Messages from users.
+    ChannelOnly - Only respond to messages from a channel.
+-->
+<xmlbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd">
+    <message>
+        <command>[Hh]ello {%nick%}</command>
+        <response>Hello {%user%}!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command><![CDATA[[Mm]y\s+name\s+is\s+(?<name>\w+)]]></command>
+        <response>Hello {%name%}!</response>
+        <cooldown>1</cooldown>
+        <respondto>ChannelOnly</respondto>
+    </message>
+    <message>
+        <command>^!{%nick%} {%channel%} {%user%}</command>
+        <response>Hello {%user%}, I am {%nick%} on channel {%channel%}!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command><![CDATA[[Ww]hat is a(?<an>n)? (?<thing>\w+)]]></command>
+        <response>A{%an%} {%thing%} is a thing!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    
+    
+        <!-- Fun ones -->
+    <message>
+        <command>^[Tt][Ee][Ss][Tt]$</command>
+        <response>Test Case Passed!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    
+    <!-- RITLug Plugin -->
+    <message>
+        <command>^!ritlug\s+help$</command>
+        <response>Commands: about bot_config github help plugin_config reddit talks telegram tigeros twitter website</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    
+    <message>
+        <command>^!ritlug\s+about$</command>
+        <response>About RITLug: http://ritlug.com/about.html</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+bot_config$</command>
+        <response>My configuration is here: https://git.ritlug.com/xforever1313/xbotConfig/tree/master</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+github$</command>
+        <response>RITLug's GitHub is here: https://github.com/ritlug</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+plugin_config$</command>
+        <response>The RITLug plugin config is here: https://www.reddit.com/r/RITLUG/</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+reddit$</command>
+        <response>Subreddit: https://www.reddit.com/r/RITLUG/</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+talks$</command>
+        <response>Talks are here: http://ritlug.com/talks/</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+telegram$</command>
+        <response>Telegram channel: https://telegram.me/ritlugclub</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+tigeros$</command>
+        <response>TigerOS info: https://github.com/RITlug/TigerOS</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+twitter$</command>
+        <response>RITLug's twitter is here: https://twitter.com/RITlug</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+    <message>
+        <command>^!ritlug\s+website$</command>
+        <response>RITLug's website is here: http://ritlug.com/</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+</xmlbotconfig>

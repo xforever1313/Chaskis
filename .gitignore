@@ -55,3 +55,4 @@ OpenCover/
 /Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*.zip
 /Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*/*.zip
 /Chaskis/RegressionTests/runner
+/Chaskis/RegressionTests/Environments/TestEnvironment

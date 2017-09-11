@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pluginconfig>
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/CapsWatcher/bin/Debug/CapsWatcher.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/ConsoleOut/bin/Debug/ConsoleOut.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/CrossChannel/bin/Debug/CrossChannel.dll" />
+    <!--<assembly path="{%chaskispath%}/Chaskis/Plugins/IrcLogger/bin/Debug/IrcLogger.dll" />-->
+	<assembly path="{%chaskispath%}/Chaskis/Plugins/WelcomeBot/bin/Debug/WelcomeBot.dll" >
+        <ignorechannel>#testseth2</ignorechannel>
+    </assembly>
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/MessageFixerBot/bin/Debug/MessageFixerBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/ServerDiagnostics/bin/Debug/ServerDiagnostics.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/WeatherBot/bin/Debug/WeatherBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/KarmaBot/bin/Debug/KarmaBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/MathBot/bin/Debug/MathBot.dll">
+        <ignorechannel>#testseth</ignorechannel>
+    </assembly>
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/QuoteBot/bin/Debug/QuoteBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/RssBot/bin/Debug/RssBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/UserListBot/bin/Debug/UserListBot.dll" />
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/UrlBot/bin/Debug/UrlBot.dll" >
+        <ignorechannel>#testseth2</ignorechannel>
+    </assembly>
+    <assembly path="{%chaskispath%}/Chaskis/Plugins/XmlBot/bin/Debug/XmlBot.dll" >
+        <ignorechannel>#testseth2</ignorechannel>
+    </assembly>
+</pluginconfig>
