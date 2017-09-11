@@ -63,7 +63,7 @@ namespace Chaskis
                         chaskis.InitStage4_OpenConnection();
 
                         Console.WriteLine();
-                        Console.ReadKey();
+                        Console.Read();
                     }
                 }
             }

@@ -26,9 +26,9 @@ namespace Chaskis.RegressionTests
 
         public static readonly string RegressionTestDir;
 
-        private string environmentDir;
+        public static readonly string TestEnvironmentDir;
 
-        private string testEnvironmentDir;
+        private static readonly string environmentDir;
 
         private const string defaultEnvironmentName = "DefaultEnvironment";
 
@@ -40,9 +40,7 @@ namespace Chaskis.RegressionTests
 
         public EnvironmentManager()
         {
-            this.environmentDir = Path.Combine( RegressionTestDir, "Environments" );
-            this.testEnvironmentDir = Path.Combine( this.environmentDir, "TestEnvironment" );
-            this.defaultEnvironmentDir = Path.Combine( this.environmentDir, defaultEnvironmentName );
+            this.defaultEnvironmentDir = Path.Combine( environmentDir, defaultEnvironmentName );
 
             this.consoleOut = Logger.GetConsoleOutLog();
 
@@ -64,6 +62,9 @@ namespace Chaskis.RegressionTests
             );
 
             RegressionTestDir = Path.Combine( ChaskisRoot, "RegressionTests" );
+
+            environmentDir = Path.Combine( RegressionTestDir, "Environments" );
+            TestEnvironmentDir = Path.Combine( environmentDir, "TestEnvironment" );
         }
 
         // ---------------- Functions ----------------
@@ -81,15 +82,15 @@ namespace Chaskis.RegressionTests
         {
             this.TeardownEnvironment();
 
-            string envPath = Path.Combine( this.environmentDir, envName );
+            string envPath = Path.Combine( environmentDir, envName );
             if( Directory.Exists( envPath ) == false )
             {
                 throw new DirectoryNotFoundException( envPath + " does not exist!" );
             }
 
-            this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + this.testEnvironmentDir + "..." );
-            DirectoryCopy( envPath, this.testEnvironmentDir, true );
-            this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + this.testEnvironmentDir + "...Done!" );
+            this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + TestEnvironmentDir + "..." );
+            DirectoryCopy( envPath, TestEnvironmentDir, true );
+            this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + TestEnvironmentDir + "...Done!" );
 
             return true;
         }
@@ -99,11 +100,11 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public bool TeardownEnvironment()
         {
-            if( Directory.Exists( this.testEnvironmentDir ) )
+            if( Directory.Exists( TestEnvironmentDir ) )
             {
-                this.consoleOut.WriteLine( "Deleting Test Environment " + this.testEnvironmentDir + "..." );
-                Directory.Delete( this.testEnvironmentDir, true );
-                this.consoleOut.WriteLine( "Deleting Test Environment " + this.testEnvironmentDir + "...Done!" );
+                this.consoleOut.WriteLine( "Deleting Test Environment " + TestEnvironmentDir + "..." );
+                Directory.Delete( TestEnvironmentDir, true );
+                this.consoleOut.WriteLine( "Deleting Test Environment " + TestEnvironmentDir + "...Done!" );
             }
 
             return true;
