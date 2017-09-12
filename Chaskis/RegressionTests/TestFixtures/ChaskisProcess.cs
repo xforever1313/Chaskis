@@ -27,6 +27,8 @@ namespace Chaskis.RegressionTests
         private GenericLogger consoleOutLog;
         private GenericLogger consoleErrorLog;
 
+        private StringBuffer buffer;
+
         private string exeLocation;
 
         // ---------------- Constructor ----------------
@@ -54,6 +56,8 @@ namespace Chaskis.RegressionTests
             this.startInfo.RedirectStandardOutput = true;
             this.startInfo.RedirectStandardError = true;
             this.startInfo.UseShellExecute = false;
+
+            this.buffer = new StringBuffer();
         }
 
         ~ChaskisProcess()
@@ -96,6 +100,7 @@ namespace Chaskis.RegressionTests
             if( string.IsNullOrEmpty( e.Data ) == false )
             {
                 this.consoleOutLog.WriteLine( e.Data );
+                this.buffer.EnqueueString( e.Data );
             }
         }
 
@@ -160,6 +165,28 @@ namespace Chaskis.RegressionTests
             }
 
             return success;
+        }
+
+        /// <summary>
+        /// Waits for a string that matches the given regex pattern to appear.
+        /// </summary>
+        /// <param name="regex">The regex to search for.</param>
+        /// <returns>True if we found a match before the timeout, else false.</returns>
+        public bool WaitForStringFromChaskis( string regex )
+        {
+            return this.WaitForStringFromChaskis( regex, TestConstants.DefaultTimeout );
+        }
+
+        /// <summary>
+        /// Waits for a string that matches the given regex pattern to appear.
+        /// </summary>
+        /// <param name="regex">The regex to search for.</param>
+        /// <param name="timeout">How long to wait before giving up.</param>
+        /// <returns>True if we found a match before the timeout, else false.</returns>
+        public bool WaitForStringFromChaskis( string regex, int timeout )
+        {
+            this.consoleOutLog.WriteLine( "Waiting for string " + regex );
+            return this.buffer.WaitForString( regex, timeout );
         }
     }
 }
