@@ -126,6 +126,33 @@ namespace Tests
         }
 
         /// <summary>
+        /// Ensures we handle all prefixes.
+        /// </summary>
+        [Test]
+        public void JoinPrefixTest()
+        {
+            const string channel = "#somechannel";
+
+            foreach( string prefix in TestHelpers.PrefixTests )
+            {
+                string ircString = prefix + " " + JoinHandler.IrcCommand + " " + channel;
+
+                this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNotNull( this.responseReceived );
+
+                // Part handler has no message.
+                Assert.AreEqual( string.Empty, this.responseReceived.Message );
+
+                // Channels should match.
+                Assert.AreEqual( channel, this.responseReceived.Channel );
+
+                // Nicks should match.
+                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+            }
+        }
+
+        /// <summary>
         /// Ensures that if the bot joins, the event isn't fired.
         /// </summary>
         [Test]

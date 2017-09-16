@@ -111,6 +111,39 @@ namespace Tests
         }
 
         /// <summary>
+        /// Ensures we handle all prefixes.
+        /// </summary>
+        [Test]
+        public void MessagetPrefixTest()
+        {
+            MessageHandler uut = new MessageHandler(
+                @"!bot\s+help",
+                this.MessageFunction
+            );
+
+            const string channel = "#somechannel";
+            const string expectedMessage = "!bot help";
+
+            foreach( string prefix in TestHelpers.PrefixTests )
+            {
+                string ircString = prefix + " " + MessageHandler.IrcCommand + " " + channel + " :" + expectedMessage;
+
+                uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNotNull( this.responseReceived );
+
+                // Part handler has no message.
+                Assert.AreEqual( expectedMessage, this.responseReceived.Message );
+
+                // Channels should match.
+                Assert.AreEqual( channel, this.responseReceived.Channel );
+
+                // Nicks should match.
+                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+            }
+        }
+
+        /// <summary>
         /// Ensures that if a message goes through before the cool down,
         /// it will not be launched.
         /// </summary>

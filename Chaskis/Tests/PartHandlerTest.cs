@@ -104,6 +104,33 @@ namespace Tests
         }
 
         /// <summary>
+        /// Ensures we handle all prefixes.
+        /// </summary>
+        [Test]
+        public void PartPrefixTest()
+        {
+            const string channel = "#somechannel";
+
+            foreach( string prefix in TestHelpers.PrefixTests )
+            {
+                string ircString = prefix + " " + PartHandler.IrcCommand + " " + channel;
+
+                this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+                Assert.IsNotNull( this.responseReceived );
+
+                // Part handler has no message.
+                Assert.AreEqual( string.Empty, this.responseReceived.Message );
+
+                // Channels should match.
+                Assert.AreEqual( channel, this.responseReceived.Channel );
+
+                // Nicks should match.
+                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+            }
+        }
+
+        /// <summary>
         /// Ensures that if a user parts on a strange channel,
         /// the event gets fired.
         /// </summary>

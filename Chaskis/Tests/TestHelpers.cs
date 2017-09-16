@@ -84,6 +84,14 @@ namespace Tests
             "plugin3"
         }.AsReadOnly();
 
+        public static IReadOnlyList<string> PrefixTests = new List<string>()
+        {
+            ":anickname!ausername@blah.org", // Nick, User, Host
+            ":anickname!~ausername@192.168.2.1", // Nick, User with ~, Host
+            ":anickname", // Just a nickname.
+            ":anickname@blah.org" // A nickname with a Host.
+        }.AsReadOnly();
+
         private static ChaskisEventFactory factoryInstance;
 
         // ---------------- Functions ----------------
@@ -121,7 +129,7 @@ namespace Tests
             string message
         )
         {
-            string msg = ":" + remoteUser + "!~" + remoteUser + "@10.0.0.1 " + type + " " + channel;
+            string msg = ":" + remoteUser + "!" + remoteUser + "@10.0.0.1 " + type + " " + channel;
             if( string.IsNullOrEmpty( message ) == false )
             {
                 msg += " :" + message;

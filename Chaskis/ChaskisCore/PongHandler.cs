@@ -20,14 +20,14 @@ namespace ChaskisCore
         /// <summary>
         /// Pattern to watch for after sending a ping.
         /// 
-        /// user: Indicates where our message came from, usually the server URL.
+        /// nickOrServer: Indicates where our message came from, usually the server URL.
         /// server: Indicates where our response came from
         /// response: The response the server sent to us.
         /// </summary>
         private static readonly Regex pattern =
             new Regex(
-                @"^:(?<user>.+)\s+PONG\s+(?<server>.+)\s*:(?<response>.+)",
-                RegexOptions.Compiled
+                Regexes.IrcMessagePrefix + @"\s+PONG\s+(?<server>.+)\s*:(?<response>.+)",
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
         // -------- Constructor --------

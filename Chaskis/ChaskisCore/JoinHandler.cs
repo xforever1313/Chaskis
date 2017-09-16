@@ -30,8 +30,8 @@ namespace ChaskisCore
         /// </summary>
         private static readonly Regex pattern =
             new Regex(
-                @"^:(?<nick>\S+)!~(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>\S+)",
-                RegexOptions.Compiled
+                Regexes.IrcMessagePrefix + @"\s+" + IrcCommand + @"\s+(?<channel>\S+)",
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
         // -------- Constructor --------
@@ -84,7 +84,7 @@ namespace ChaskisCore
             Match match = pattern.Match( args.Line);
             if( match.Success )
             {
-                string remoteUser = match.Groups["nick"].Value;
+                string remoteUser = match.Groups["nickOrServer"].Value;
 
                 // Don't fire if we were the ones to trigger the event.
                 if( remoteUser.ToUpper() == args.IrcConfig.Nick.ToUpper() )

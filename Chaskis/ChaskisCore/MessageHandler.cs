@@ -37,8 +37,8 @@ namespace ChaskisCore
         /// The pattern to search for when a line comes in.
         /// </summary>
         private static readonly Regex pattern = new Regex(
-            @"^:(?<nick>\S+)!(?<user>.+)\s+" + IrcCommand + @"\s+(?<channel>\S+)\s+:(?<theIrcMessage>.+)",
-            RegexOptions.Compiled
+            Regexes.IrcMessagePrefix + @"\s+" + IrcCommand + @"\s+(?<channel>\S+)\s+:(?<theIrcMessage>.+)",
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
         // ---------------- Constructor ----------------
@@ -138,7 +138,7 @@ namespace ChaskisCore
             Match match = pattern.Match( args.Line );
             if( match.Success )
             {
-                string remoteUser = match.Groups["nick"].Value;
+                string remoteUser = match.Groups["nickOrServer"].Value;
                 string channel = match.Groups["channel"].Value;
                 string message = match.Groups["theIrcMessage"].Value;
 

@@ -102,6 +102,7 @@
     <Compile Include="Plugins\WeatherBot\WeatherReporterTest.cs" />
     <Compile Include="Plugins\XmlBot\XmlBotXmlLoaderTest.cs" />
     <Compile Include="PongHandlerTest.cs" />
+    <Compile Include="RegexTests.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="PartHandlerTest.cs" />
     <Compile Include="PingHandlerTest.cs" />
