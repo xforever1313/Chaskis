@@ -126,16 +126,10 @@
                         <Directory Id="CowSayBotFolder" Name="CowSayBot"/>
                         <Directory Id="CrossChannelFolder" Name="CrossChannel"/>
                         <Directory Id="IrcLoggerFolder" Name="IrcLogger"/>
-                        <Directory Id="KarmaBotFolder" Name="KarmaBot">
-                            <Directory Id="KarmaBotX86Folder" Name="x86"/>
-                            <Directory Id="KarmaBotX64Folder" Name="x64"/>
-                        </Directory>
+                        <Directory Id="KarmaBotFolder" Name="KarmaBot" />
                         <Directory Id="MathBotFolder" Name="MathBot"/>
                         <Directory Id="MessageFixerBotFolder" Name="MessageFixerBot"/>
-                        <Directory Id="QuoteBotFolder" Name="QuoteBot">
-                            <Directory Id="QuoteBotX86Folder" Name="x86"/>
-                            <Directory Id="QuoteBotX64Folder" Name="x64"/>
-                        </Directory>
+                        <Directory Id="QuoteBotFolder" Name="QuoteBot"/>
                         <Directory Id="RssBotFolder" Name="RssBot"/>
                         <Directory Id="ServerDiagnosticsFolder" Name="ServerDiagnostics"/>
                         <Directory Id="UrlBotFolder" Name="UrlBot"/>
@@ -285,64 +279,9 @@
                 <File Source="$(var.KarmaBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
-            <!-- EntityFramework.dll -->
-            <Component Guid="{73F5E16E-6BAF-43F3-B945-71003F2FCD0A}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotEntityFramework" Source="$(var.KarmaBot.TargetDir)EntityFramework.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- EntityFramework.SqlServer.dll -->
-            <Component Guid="{013D8B89-90C9-4C0C-A6E0-25BEFFE80EDB}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotEntitySqlServer" Source="$(var.KarmaBot.TargetDir)EntityFramework.SqlServer.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.dll -->
-            <Component Guid="{DF63D489-6F80-443A-88C0-C5C6FA0F7BC0}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotSqliteNet" Source="$(var.KarmaBot.TargetDir)SQLite.Net.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.Platform.Generic.dll -->
-            <Component Guid="{FE677F5D-BD23-4ADB-9BF3-63AB0B23582D}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotGenericSqliteNet" Source="$(var.KarmaBot.TargetDir)SQLite.Net.Platform.Generic.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.Platform.Win32.dll -->
-            <Component Guid="{B679B43E-C3FA-49D0-A9F0-AFC06F1BBF26}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotWin32SqliteNet" Source="$(var.KarmaBot.TargetDir)SQLite.Net.Platform.Win32.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.dll -->
-            <Component Guid="{BDC1D9EA-5AE1-4E99-9A80-3A1C5CF39B75}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotDataSqlite" Source="$(var.KarmaBot.TargetDir)System.Data.SQLite.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.EF6.dll -->
-            <Component Guid="{1D77B484-20DA-4F41-AA5A-A4B625BE7320}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotDataSqliteEf6" Source="$(var.KarmaBot.TargetDir)System.Data.SQLite.EF6.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.Linq.dll -->
-            <Component Guid="{E55F8FC4-DB54-4FC9-8679-F0570FD7C1E5}" Directory="KarmaBotFolder">
-                <File Id="KarmaBotDataLinq" Source="$(var.KarmaBot.TargetDir)System.Data.SQLite.Linq.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x64 SQLite.Interop.dll -->
-            <Component Guid="{D363F993-9EB7-4D9D-98D1-87F2A6CBE5DB}" Directory="KarmaBotX64Folder">
-                <File Id="KarmaBotx64SqliteInterop" Source="$(var.KarmaBot.TargetDir)x64\SQLite.Interop.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x64 sqlite3.dll -->
-            <Component Guid="{C7340D64-C322-4480-823E-FDF63ED99437}" Directory="KarmaBotX64Folder">
-                <File Id="KarmaBotx64Sqlite" Source="$(var.KarmaBot.TargetDir)x64\sqlite3.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x86 SQLite.Interop.dll -->
-            <Component Guid="{16DA3BE6-E5AA-4A96-A22C-B173959ACF98}" Directory="KarmaBotX86Folder">
-                <File Id="KarmaBotx86SqliteInterop" Source="$(var.KarmaBot.TargetDir)x86\SQLite.Interop.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x86 sqlite3.dll -->
-            <Component Guid="{FB119471-ECD4-4DDB-AD2D-23545A361A5D}" Directory="KarmaBotX86Folder">
-                <File Id="KarmaBotx86Sqlite" Source="$(var.KarmaBot.TargetDir)x86\sqlite3.dll" KeyPath="yes"/>
+            <!-- Karmabot Litedb.dll -->
+            <Component Guid="{C7CDB59A-9DAD-4965-A308-46F298F51A93}" Directory="KarmaBotFolder">
+                <File Id="KarmabotLiteDb" Source="$(var.KarmaBot.TargetDir)LiteDB.dll" KeyPath="yes"/>
             </Component>
 
             <!-- KarmaBot Readme -->
@@ -386,64 +325,9 @@
                 <File Source="$(var.QuoteBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
-            <!-- EntityFramework.dll -->
-            <Component Guid="{7E5B2045-A226-481C-A9A5-E2BC53AD52B7}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotEntityFramework" Source="$(var.QuoteBot.TargetDir)EntityFramework.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- EntityFramework.SqlServer.dll -->
-            <Component Guid="{9AA48109-5717-48A3-8D71-E69F108D1E5A}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotEntitySqlServer" Source="$(var.QuoteBot.TargetDir)EntityFramework.SqlServer.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.dll -->
-            <Component Guid="{F8BA4FBD-D1BA-4836-B528-F31D706ED76C}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotSqliteNet" Source="$(var.QuoteBot.TargetDir)SQLite.Net.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.Platform.Generic.dll -->
-            <Component Guid="{17826827-6F42-439D-8C91-0FE1661C92EC}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotGenericSqliteNet" Source="$(var.QuoteBot.TargetDir)SQLite.Net.Platform.Generic.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- SQLite.Net.Platform.Win32.dll -->
-            <Component Guid="{8891B21A-AD00-4069-BED8-13258B17538D}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotWin32SqliteNet" Source="$(var.KarmaBot.TargetDir)SQLite.Net.Platform.Win32.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.dll -->
-            <Component Guid="{6C540765-164E-4EAF-BD38-DC3ECFDB09D5}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotDataSqlite" Source="$(var.QuoteBot.TargetDir)System.Data.SQLite.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.EF6.dll -->
-            <Component Guid="{AEDEE6F8-95CA-49A0-9159-5014EC2ECA3C}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotDataSqliteEf6" Source="$(var.QuoteBot.TargetDir)System.Data.SQLite.EF6.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- System.Data.SQLite.Linq.dll -->
-            <Component Guid="{FB36E3C3-EDBF-4388-ACD8-FF5D8097D57C}" Directory="QuoteBotFolder">
-                <File Id="QuoteBotDataLinq" Source="$(var.QuoteBot.TargetDir)System.Data.SQLite.Linq.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x64 SQLite.Interop.dll -->
-            <Component Guid="{2E282714-17DA-4EC6-8807-8936F7CE3B72}" Directory="QuoteBotX64Folder">
-                <File Id="QuoteBotx64SqliteInterop" Source="$(var.QuoteBot.TargetDir)x64\SQLite.Interop.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x64 sqlite3.dll -->
-            <Component Guid="{C174A20A-A19B-4844-A87D-D2B7215D4DF4}" Directory="QuoteBotX64Folder">
-                <File Id="QuoteBotx64Sqlite" Source="$(var.QuoteBot.TargetDir)x64\sqlite3.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x86 SQLite.Interop.dll -->
-            <Component Guid="{9DC2FD1F-1D94-4CCC-88F8-2A6E2CEE4218}" Directory="QuoteBotX86Folder">
-                <File Id="QuoteBotx86SqliteInterop" Source="$(var.QuoteBot.TargetDir)x86\SQLite.Interop.dll" KeyPath="yes"/>
-            </Component>
-
-            <!-- x86 sqlite3.dll -->
-            <Component Guid="{4C79672C-2953-4F6E-ABCE-0978C1CE8CF5}" Directory="QuoteBotX86Folder">
-                <File Id="QuoteBotx86Sqlite" Source="$(var.QuoteBot.TargetDir)x86\sqlite3.dll" KeyPath="yes"/>
+            <!-- QuoteBot Litedb.dll -->
+            <Component Guid="{40FB197C-7E29-42FB-8A6A-31ABBF5EEA81}" Directory="QuoteBotFolder">
+                <File Id="QuoteBotLiteDb" Source="$(var.QuoteBot.TargetDir)LiteDB.dll" KeyPath="yes"/>
             </Component>
 
             <!-- QuoteBot Readme -->
