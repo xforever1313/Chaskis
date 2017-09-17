@@ -1,0 +1,4 @@
+|'''Send Message'''   |Check this out: https://files.shendrick.net/projects/chaskis/testfiles/urlbot/goodsize.html|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|Title:\s+My Title    |
+|'''Send Message'''   |https://files.shendrick.net/projects/chaskis/testfiles/urlbot/escapedcharacters.html       |'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|Title:\s+<My "Title">|
+|'''Send Message'''   |https://files.shendrick.net/projects/chaskis/testfiles/urlbot/bigsize.html                 |'''To Channel'''|#chaskistest|'''As'''|someuser                                     |
+|'''Wait For String'''|Ignoring\s+URL.+whose\s+file\s+size\s+is\s+\d+                                             |'''From Chaskis'''                                                                  |

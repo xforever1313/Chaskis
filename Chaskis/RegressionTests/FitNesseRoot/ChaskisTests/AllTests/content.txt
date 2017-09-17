@@ -1,6 +1,8 @@
 !1 All Chaskis Tests
 !contents -R2 -g -p -f -h
 
+!define port {10123}
+
 !2 Core Tests
 
 |>CoreTests|''Chaskis Core Tests''|
@@ -8,3 +10,4 @@
 !2 Plugin Tests
 
 |>KarmaBotTests|''Tests the Karma Bot Plugin''|
+|>UrlBotTests|''Tests the Url Bot Plugin''|

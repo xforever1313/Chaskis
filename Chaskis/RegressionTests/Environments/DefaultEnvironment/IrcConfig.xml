@@ -5,12 +5,12 @@
         <channel>#chaskistest</channel>
         <channel>#chaskistest2</channel>
     </channels>
-    <port>6667</port>
+    <port>{%port%}</port>
     <username>chaskisbot</username>
     <nick>chaskisbot</nick>
     <realname>Chaskis Test Bot</realname>
     <password></password>
-    <ratelimit>800</ratelimit>
+    <ratelimit>100</ratelimit>
     <quitmessage>I'm going down!</quitmessage>
     <admins>
         <admin>xforever1313</admin>

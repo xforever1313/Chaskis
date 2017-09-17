@@ -1,0 +1,9 @@
+# Default Environment will work just fine for this suite.
+
+|''' Setup Default Environment '''|${port}|
+
+|''' Start Server '''   |${port}                                                             |
+|''' Start Process '''                                                                       |
+|''' Wait For Connection '''                                                                 |
+|''' Wait For String '''|CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)|'''From Chaskis'''|
+

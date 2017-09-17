@@ -26,6 +26,7 @@ namespace Chaskis.RegressionTests
 
         private GenericLogger consoleOutLog;
         private GenericLogger consoleErrorLog;
+        private GenericLogger testConsoleOutLog;
 
         private StringBuffer buffer;
 
@@ -37,6 +38,7 @@ namespace Chaskis.RegressionTests
         {
             this.consoleOutLog = Logger.GetLogFromContext( "chaskis" );
             this.consoleErrorLog = Logger.GetLogFromContext( "chaskis_error" );
+            this.testConsoleOutLog = Logger.GetLogFromContext( "chaskis_status" );
 
             this.exeLocation = Path.Combine(
                 EnvironmentManager.ChaskisRoot,
@@ -48,8 +50,8 @@ namespace Chaskis.RegressionTests
 
             this.consoleOutLog.WriteLine( "Chaskis.exe Location: " + this.exeLocation );
             this.startInfo = new ProcessStartInfo(
-                this.exeLocation
-                // TODO: Add Args to use Test Environment, not appdata.
+                this.exeLocation,
+                "--chaskisroot=" + EnvironmentManager.TestEnvironmentDir
             );
 
             this.startInfo.RedirectStandardInput = true;
@@ -92,7 +94,7 @@ namespace Chaskis.RegressionTests
             this.process.BeginOutputReadLine();
             this.process.BeginErrorReadLine();
 
-            return true;
+            return ( this.process != null );
         }
 
         private void Process_OutputDataReceived( object sender, DataReceivedEventArgs e )
@@ -134,6 +136,28 @@ namespace Chaskis.RegressionTests
             {
                 this.process.Close();
                 this.process = null;
+            }
+
+            return success;
+        }
+
+        public bool StopOrKillProcess()
+        {
+            return this.StopOrKillProcess( TestConstants.DefaultTimeout );
+        }
+
+        public bool StopOrKillProcess( int timeout )
+        {
+            if( this.process == null )
+            {
+                return true;
+            }
+
+            bool success = this.StopProcess( timeout );
+            if( success == false )
+            {
+                this.testConsoleOutLog.WriteLine( "Could Not Stop Process, killing." );
+                success &= this.KillProcess( timeout );
             }
 
             return success;
@@ -185,7 +209,7 @@ namespace Chaskis.RegressionTests
         /// <returns>True if we found a match before the timeout, else false.</returns>
         public bool WaitForStringFromChaskis( string regex, int timeout )
         {
-            this.consoleOutLog.WriteLine( "Waiting for string " + regex );
+            this.testConsoleOutLog.WriteLine( "Waiting for string " + regex );
             return this.buffer.WaitForString( regex, timeout );
         }
     }

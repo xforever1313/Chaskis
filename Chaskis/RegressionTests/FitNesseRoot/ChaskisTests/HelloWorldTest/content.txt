@@ -1,9 +1,3 @@
 !contents -R2 -g -p -f -h
 
 | ''' Is hello world ''' |Hello World|
-| ''' Setup Default Environment '''|
-
-|'''Start Process'''|
-|''' Wait For String '''|CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)|'''From Chaskis'''|
-|'''Sleep'''|20000|
-|'''Stop Process'''|

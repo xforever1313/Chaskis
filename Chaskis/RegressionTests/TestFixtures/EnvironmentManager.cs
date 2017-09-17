@@ -34,6 +34,8 @@ namespace Chaskis.RegressionTests
 
         private string defaultEnvironmentDir;
 
+        private short port;
+
         private GenericLogger consoleOut;
 
         // ---------------- Constructor ----------------
@@ -69,17 +71,18 @@ namespace Chaskis.RegressionTests
 
         // ---------------- Functions ----------------
 
-        public bool SetupDefaultEnvironment()
+        public bool SetupDefaultEnvironment( short port )
         {
-            return this.SetupEnvironment( defaultEnvironmentName );
+            return this.SetupEnvironment( defaultEnvironmentName, port );
         }
 
         /// <summary>
         /// Sets up the given Environment to use by moving it
         /// to the TestEnvironment Directory.
         /// </summary>
-        public bool SetupEnvironment( string envName )
+        public bool SetupEnvironment( string envName, short port )
         {
+            this.port = port;
             this.TeardownEnvironment();
 
             string envPath = Path.Combine( environmentDir, envName );
@@ -115,7 +118,7 @@ namespace Chaskis.RegressionTests
         /// 
         /// Taken from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
         /// </summary>
-        private static void DirectoryCopy( string sourceDirName, string destDirName, bool copySubDirs )
+        private void DirectoryCopy( string sourceDirName, string destDirName, bool copySubDirs )
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo( sourceDirName );
@@ -143,6 +146,7 @@ namespace Chaskis.RegressionTests
                 {
                     string fileContents = File.ReadAllText( Path.Combine( file.DirectoryName, file.FullName ) );
                     fileContents = fileContents.Replace( "{%chaskispath%}", ChaskisRoot );
+                    fileContents = fileContents.Replace( "{%port%}", this.port.ToString() );
                     File.WriteAllText( temppath, fileContents );
                 }
                 else

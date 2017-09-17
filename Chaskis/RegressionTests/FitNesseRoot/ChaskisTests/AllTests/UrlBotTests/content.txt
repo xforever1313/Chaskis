@@ -1,0 +1,4 @@
+!1 Url Bot Tests
+!contents -R2 -g -p -f -h
+
+|>GetTitleTest|'''Can we get the Title of a valid webpage?'''|

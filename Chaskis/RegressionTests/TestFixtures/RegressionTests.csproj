@@ -50,6 +50,7 @@
     <Compile Include="CommonActions.cs" />
     <Compile Include="EnvironmentManager.cs" />
     <Compile Include="HelloWorld.cs" />
+    <Compile Include="IrcServer.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringBuffer.cs" />
