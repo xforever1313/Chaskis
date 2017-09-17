@@ -1,14 +1,14 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using SQLite.Net;
-using SQLite.Net.Interop;
+using LiteDB;
 
 namespace Chaskis.Plugins.KarmaBot
 {
@@ -20,9 +20,11 @@ namespace Chaskis.Plugins.KarmaBot
         // -------- Fields --------
 
         /// <summary>
-        /// The SQLite connection.
+        /// The db connection.
         /// </summary>
-        private SQLiteConnection sqlite;
+        private LiteDatabase dbConnection;
+
+        private LiteCollection<IrcUser> users;
 
         /// <summary>
         /// Cache for irc users so we don't need to consistently query the database
@@ -38,27 +40,8 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="databaseLocation">The database location.</param>
         public KarmaBotDatabase( string databaseLocation )
         {
-            ISQLitePlatform platform;
-            if( Environment.OSVersion.Platform.Equals( PlatformID.Win32NT ) )
-            {
-                Console.WriteLine( "KarmaBot> Using Win32 Sqlite Platform" );
-                platform = new SQLite.Net.Platform.Win32.SQLitePlatformWin32();
-            }
-            else
-            {
-                // Requires the SQLite.so (shared object) files to be installed.
-                Console.WriteLine( "KarmaBot> Using Generic Sqlite Platform" );
-                platform = new SQLite.Net.Platform.Generic.SQLitePlatformGeneric();
-            }
-
-            this.sqlite = new SQLiteConnection(
-                platform,
-                databaseLocation,
-                SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite
-            );
-
-            this.sqlite.CreateTable<IrcUser>();
-            this.sqlite.Commit();
+            this.dbConnection = new LiteDatabase( databaseLocation );
+            this.users = this.dbConnection.GetCollection<IrcUser>();
 
             this.ircUserCache = new Dictionary<string, IrcUser>();
         }
@@ -194,14 +177,10 @@ namespace Chaskis.Plugins.KarmaBot
         /// <returns>The user from the database.  Null if the user does not exist.</returns>
         private IrcUser QueryUser( string userName )
         {
-            TableQuery<IrcUser> userQuery;
-            lock( this.sqlite )
+            lock( this.users )
             {
-                userQuery =
-                   from u in this.sqlite.Table<IrcUser>() where u.UserName.Equals( userName ) select u;
+                return this.users.FindOne( u => u.UserName.Equals( userName ) );
             }
-
-            return userQuery.FirstOrDefault<IrcUser>();
         }
 
         /// <summary>
@@ -230,10 +209,16 @@ namespace Chaskis.Plugins.KarmaBot
             return Task.Run(
                 delegate ()
                 {
-                    lock( this.sqlite )
+                    lock( this.users )
                     {
-                        this.sqlite.InsertOrReplace( userToSave );
-                        this.sqlite.Commit();
+                        if( this.users.Exists( u => u.UserName.Equals( userToSave.UserName ) ) )
+                        {
+                            this.users.Update( userToSave );
+                        }
+                        else
+                        {
+                            this.users.Insert( userToSave );
+                        }
                     }
                 }
             );
@@ -244,7 +229,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         public void Dispose()
         {
-            this.sqlite.Dispose();
+            this.dbConnection.Dispose();
         }
     }
 }

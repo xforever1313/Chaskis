@@ -98,7 +98,7 @@ namespace Chaskis.Plugins.KarmaBot
 
             string dbPath = Path.Combine(
                 karmaBotRoot,
-                "karmabot.db"
+                "karmabot.ldb"
             );
 
             string configPath = Path.Combine(

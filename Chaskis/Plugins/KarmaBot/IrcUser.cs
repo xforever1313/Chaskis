@@ -1,9 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
-using SQLite.Net.Attributes;
+//
 
 namespace Chaskis.Plugins.KarmaBot
 {
@@ -20,7 +20,6 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         public IrcUser()
         {
-            this.Id = null;
             this.KarmaCount = 0;
             this.UserName = string.Empty;
         }
@@ -28,17 +27,13 @@ namespace Chaskis.Plugins.KarmaBot
         // -------- Properties --------
 
         /// <summary>
-        /// The unique ID for SQLite.
-        /// This MUST be null for InsertOrReplace to work,
-        /// otherwise we'll just consistently insert at row 0.
+        /// The unique ID for the user.
         /// </summary>
-        [PrimaryKey, AutoIncrement]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The number of karma the user has.
         /// </summary>
-        [Indexed]
         public int KarmaCount { get; set; }
 
         /// <summary>
