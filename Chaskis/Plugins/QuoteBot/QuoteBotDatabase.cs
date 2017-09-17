@@ -6,9 +6,10 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using SQLite.Net;
-using SQLite.Net.Interop;
+using LiteDB;
 
 namespace Chaskis.Plugins.QuoteBot
 {
@@ -19,33 +20,19 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// The SQLite connection.
         /// </summary>
-        private SQLiteConnection sqlite;
+        private LiteDatabase dbConnection;
+
+        private LiteCollection<Quote> quotes;
+
+        private Random random;
 
         // ---------------- Constructor ----------------
 
         public QuoteBotDatabase( string databaseLocation )
         {
-            ISQLitePlatform platform;
-            if( Environment.OSVersion.Platform.Equals( PlatformID.Win32NT ) )
-            {
-                Console.WriteLine( "QuoteBot> Using Win32 Sqlite Platform" );
-                platform = new SQLite.Net.Platform.Win32.SQLitePlatformWin32();
-            }
-            else
-            {
-                // Requires the SQLite.so (shared object) files to be installed.
-                Console.WriteLine( "QuoteBot> Using Generic Sqlite Platform" );
-                platform = new SQLite.Net.Platform.Generic.SQLitePlatformGeneric();
-            }
-
-            this.sqlite = new SQLiteConnection(
-                platform,
-                databaseLocation,
-                SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite
-            );
-
-            this.sqlite.CreateTable<Quote>();
-            this.sqlite.Commit();
+            this.dbConnection = new LiteDatabase( databaseLocation );
+            this.quotes = this.dbConnection.GetCollection<Quote>();
+            this.random = new Random();
         }
 
         // ---------------- Functions ----------------
@@ -71,25 +58,14 @@ namespace Chaskis.Plugins.QuoteBot
         /// Adds the given quote object to the sqlite database.
         /// Returns the generated ID.
         /// </summary>
-        /// <param name="quote">The quote to add. ID MUST BE NULL TO ADD.</param>
+        /// <param name="quote">The quote to add.</param>
         /// <returns>The ID that was generated for the quote.</returns>
         public long AddQuote( Quote quote )
         {
-            if( quote.Id != null )
+            lock( this.quotes )
             {
-                throw new ArgumentException( "Quote ID must be null to add to database!" );
-            }
-
-            lock( this.sqlite )
-            {
-                this.sqlite.InsertOrReplace( quote );
-
-                SQLiteCommand cmd = this.sqlite.CreateCommand( "SELECT last_insert_rowid()" );
-                long id = cmd.ExecuteScalar<long>();
-
-                this.sqlite.Commit();
-
-                return id;
+                BsonValue id = this.quotes.Insert( quote );
+                return id.AsInt64;
             }
         }
 
@@ -97,7 +73,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Deletes the given quote based on ID.
         /// Runs in background thread.
         /// </summary>
-        /// <returns>True if the object was delete (1 row was affected).</returns>
+        /// <returns>True if the object was deleted.</returns>
         public Task<bool> DeleteQuoteAsync( long id )
         {
             return Task<bool>.Run(
@@ -111,7 +87,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Deletes the given quote based on ID.
         /// </summary>
-        /// <returns>True if the object was delete (1 row was affected).</returns>
+        /// <returns>True if the object was deleted.</returns>
         public bool DeleteQuote( long id )
         {
             if( id < 0 )
@@ -119,13 +95,10 @@ namespace Chaskis.Plugins.QuoteBot
                 throw new ArgumentOutOfRangeException( "ID must be positive, got " + id );
             }
 
-
-            lock( this.sqlite )
+            lock( this.quotes )
             {
                 // Delete returns rows affected.
-                bool success = this.sqlite.Delete<Quote>( id ) == 1;
-                this.sqlite.Commit();
-
+                bool success = this.quotes.Delete( id );
                 return success;
             }
         }
@@ -134,8 +107,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Gets the quote based on the id.
         /// Runs in background thread.
         /// </summary>
-        /// <exception cref="SQLiteException">If not found (per SQLite-net's documentation).</exception>
-        /// <returns>The found quote.</returns>
+        /// <returns>The found quote.  Null if none were found.</returns>
         public Task<Quote> GetQuoteAsync( long id )
         {
             return Task<Quote>.Run(
@@ -166,17 +138,24 @@ namespace Chaskis.Plugins.QuoteBot
         /// <returns>A random quote.  Null if none are in the database.</returns>
         public Quote GetRandomQuote()
         {
-            lock( this.sqlite )
+            IEnumerable<Quote> ids;
+            lock( this.quotes )
             {
-                return this.sqlite.FindWithQuery<Quote>( "SELECT * FROM Quote WHERE id IN (SELECT id FROM quote ORDER BY RANDOM() LIMIT 1)" );
+                ids = this.quotes.FindAll();
             }
+
+            if( ids.Count() == 0 )
+            {
+                return null;
+            }
+
+            return ids.ElementAt( this.random.Next( 0, ids.Count() ) );
         }
 
         /// <summary>
         /// Gets the quote based on the id.
         /// </summary>
-        /// <exception cref="InvalidOperationException">If not found.</exception>
-        /// <returns>The found quote.</returns>
+        /// <returns>The found quote. Null if we can't find it.</returns>
         public Quote GetQuote( long id )
         {
             if( id < 0 )
@@ -184,9 +163,9 @@ namespace Chaskis.Plugins.QuoteBot
                 throw new ArgumentOutOfRangeException( "ID must be positive, got " + id );
             }
 
-            lock( this.sqlite )
+            lock( this.quotes )
             {
-                return this.sqlite.Get<Quote>( q => q.Id == id );
+                return this.quotes.FindOne( q => q.Id == id );
             }
         }
 
@@ -195,12 +174,9 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         public void Dispose()
         {
-            if( this.sqlite != null )
+            if( this.dbConnection != null )
             {
-                lock( this.sqlite )
-                {
-                    this.sqlite.Dispose();
-                }
+                this.dbConnection.Dispose();
             }
         }
     }

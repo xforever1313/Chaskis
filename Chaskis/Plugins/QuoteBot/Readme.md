@@ -3,7 +3,7 @@
 
 About
 ======
-This bot saves memorable quotes from the IRC channel into a SQLite database.  Users can then query a random quote from the bot, or query a specific quote based on its unique ID.
+This bot saves memorable quotes from the IRC channel into a [LiteDB](http://www.litedb.org/) database.  Users can then query a random quote from the bot, or query a specific quote based on its unique ID.
 
 Configuration
 =====
@@ -66,15 +66,11 @@ Sample Output:
 [09:35.19] <SethTestBot> Quote 2 deleted successfully.
 ```
 
-SQLite database gets saved as Chaskis/Plugins/QuoteBot/quotes.db in your Chaskis Config Root.
+LiteDB database gets saved as Chaskis/Plugins/QuoteBot/quotes.ldb in your Chaskis Config Root.
 
 Credits
 --------
 
- * ### Entity Framework ###
-    * **License:** https://www.microsoft.com/web/webpi/eula/net_library_eula_enu.htm
-    * **Website:** https://msdn.microsoft.com/en-us/library/aa937723(v=vs.113).aspx
-
- * ### SQLite.Net-PCL
-    * **License:** https://raw.githubusercontent.com/oysteinkrog/SQLite.Net-PCL/master/LICENSE.txt
-    * **Website:** https://github.com/oysteinkrog/SQLite.Net-PCL
+ * ### LiteDB ###
+    * **License:** MIT: https://github.com/mbdavid/LiteDB/blob/master/LICENSE
+    * **Website:** http://www.litedb.org/

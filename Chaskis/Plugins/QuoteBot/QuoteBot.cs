@@ -112,7 +112,7 @@ namespace Chaskis.Plugins.QuoteBot
 
             this.quoteBotConfig = XmlLoader.LoadConfig( configPath );
             this.parser = new QuoteBotParser( this.quoteBotConfig );
-            this.db = new QuoteBotDatabase( Path.Combine( quoteBotRoot, "quotes.db" ) );
+            this.db = new QuoteBotDatabase( Path.Combine( quoteBotRoot, "quotes.ldb" ) );
 
             MessageHandler addHandler = new MessageHandler(
                 this.quoteBotConfig.AddCommand,
@@ -350,14 +350,6 @@ namespace Chaskis.Plugins.QuoteBot
                             response.Channel
                         );
                     }
-                }
-                // Error that happens if there are no quotes.
-                catch( InvalidOperationException err )
-                {
-                    writer.SendMessage(
-                        "Error getting quote: " + err.Message.NormalizeWhiteSpace() + ". Are you sure it exists?",
-                        response.Channel
-                    );
                 }
                 catch( Exception err )
                 {

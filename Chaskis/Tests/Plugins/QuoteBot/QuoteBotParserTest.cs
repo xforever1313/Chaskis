@@ -54,10 +54,21 @@ namespace Tests.Plugins.QuoteBot
             {
                 Assert.IsTrue( this.uut.TryParseAddCommand( "!quote add <me> This is a quote!", adder, out quote, out errorString ) );
                 Assert.IsEmpty( errorString );
-                Assert.IsNull( quote.Id );
+                Assert.AreEqual( 0, quote.Id ); // Quote ID will always be zero... its up to the database to determine this value, not this command.
                 Assert.AreEqual( "me", quote.Author );
                 Assert.AreEqual( adder, quote.Adder );
                 Assert.AreEqual( "This is a quote!", quote.QuoteText );
+                Assert.AreNotEqual( DateTime.MinValue, quote.TimeStamp );
+            }
+
+            // Good test 2.
+            {
+                Assert.IsTrue( this.uut.TryParseAddCommand( "!quote add <you> This is some kind of quote!", adder, out quote, out errorString ) );
+                Assert.IsEmpty( errorString );
+                Assert.AreEqual( 0, quote.Id );
+                Assert.AreEqual( "you", quote.Author );
+                Assert.AreEqual( adder, quote.Adder );
+                Assert.AreEqual( "This is some kind of quote!", quote.QuoteText );
                 Assert.AreNotEqual( DateTime.MinValue, quote.TimeStamp );
             }
 

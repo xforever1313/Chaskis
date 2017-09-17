@@ -7,7 +7,6 @@
 
 using System;
 using System.Text;
-using SQLite.Net.Attributes;
 
 namespace Chaskis.Plugins.QuoteBot
 {
@@ -20,7 +19,6 @@ namespace Chaskis.Plugins.QuoteBot
 
         public Quote()
         {
-            this.Id = null;
             this.Author = string.Empty;
             this.QuoteText = string.Empty;
             this.Adder = string.Empty;
@@ -31,16 +29,12 @@ namespace Chaskis.Plugins.QuoteBot
 
         /// <summary>
         /// The ID of the quote in the database.
-        /// Must be null for InsertOrReplace to work,
-        /// otherwise we'll just consistently be modifying row 0.
         /// </summary>
-        [PrimaryKey, AutoIncrement]
-        public long? Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Who said the quote.
         /// </summary>
-        [Indexed]
         public string Author { get; set; }
 
         /// <summary>

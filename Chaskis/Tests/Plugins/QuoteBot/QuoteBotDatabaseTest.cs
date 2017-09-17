@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Plugins.QuoteBot;
@@ -18,7 +17,7 @@ namespace Tests.Plugins.QuoteBot
     {
         // ---------------- Fields ----------------
 
-        private const string dbName = "quotebottest.db";
+        private const string dbName = "quotebottest.ldb";
 
         private QuoteBotDatabase uut;
 
@@ -93,7 +92,7 @@ namespace Tests.Plugins.QuoteBot
                 Assert.DoesNotThrow( () => task.Wait() );
                 Quote gotQuote1 = task.Result;
 
-                Assert.AreEqual( quote1Id, gotQuote1.Id.Value );
+                Assert.AreEqual( quote1Id, gotQuote1.Id );
                 Assert.AreEqual( quote1.Author, gotQuote1.Author );
                 Assert.AreEqual( quote1.QuoteText, gotQuote1.QuoteText );
             }
@@ -103,7 +102,7 @@ namespace Tests.Plugins.QuoteBot
                 Assert.DoesNotThrow( () => task.Wait() );
                 Quote gotQuote2 = task.Result;
 
-                Assert.AreEqual( quote2Id, gotQuote2.Id.Value );
+                Assert.AreEqual( quote2Id, gotQuote2.Id );
                 Assert.AreEqual( quote2.Author, gotQuote2.Author );
                 Assert.AreEqual( quote2.QuoteText, gotQuote2.QuoteText );
             }
@@ -111,7 +110,7 @@ namespace Tests.Plugins.QuoteBot
             // Try non-async
             {
                 Quote gotQuote3 = this.uut.GetQuote( quote3Id );
-                Assert.AreEqual( quote3Id, gotQuote3.Id.Value );
+                Assert.AreEqual( quote3Id, gotQuote3.Id );
                 Assert.AreEqual( quote3.Author, gotQuote3.Author );
                 Assert.AreEqual( quote3.QuoteText, gotQuote3.QuoteText );
             }
@@ -123,9 +122,8 @@ namespace Tests.Plugins.QuoteBot
                 Assert.IsTrue( task.Result );
 
                 Task<Quote> getQuoteTask = this.uut.GetQuoteAsync( quote3Id );
-
-                AggregateException exception = Assert.Throws<AggregateException>( () => getQuoteTask.Wait() );
-                Assert.IsTrue( exception.InnerException.GetType() == typeof( InvalidOperationException ) );
+                getQuoteTask.Wait();
+                Assert.IsNull( getQuoteTask.Result );
 
                 // Try deleting again.
                 task = this.uut.DeleteQuoteAsync( quote3Id );
@@ -136,8 +134,7 @@ namespace Tests.Plugins.QuoteBot
             // Try deleting non-async
             {
                 Assert.IsTrue( this.uut.DeleteQuote( quote1Id ) );
-
-                Assert.Throws<InvalidOperationException>( () => this.uut.GetQuote( quote1Id ) );
+                Assert.IsNull( this.uut.GetQuote( quote1Id ) );
 
                 // Try deleting again.
                 Assert.IsFalse( this.uut.DeleteQuote( quote1Id ) );
@@ -149,7 +146,7 @@ namespace Tests.Plugins.QuoteBot
                 this.uut = new QuoteBotDatabase( dbName );
 
                 Quote gotQuote2 = this.uut.GetQuote( quote2Id );
-                Assert.AreEqual( quote2Id, gotQuote2.Id.Value );
+                Assert.AreEqual( quote2Id, gotQuote2.Id );
                 Assert.AreEqual( quote2.Author, gotQuote2.Author );
                 Assert.AreEqual( quote2.QuoteText, gotQuote2.QuoteText );
             }
@@ -171,9 +168,9 @@ namespace Tests.Plugins.QuoteBot
             {
                 Quote randomQuote = this.uut.GetRandomQuote();
                 Assert.IsTrue(
-                    ( randomQuote.Id.Value == quote1Id ) ||
-                    ( randomQuote.Id.Value == quote2Id ) ||
-                    ( randomQuote.Id.Value == quote3Id )
+                    ( randomQuote.Id == quote1Id ) ||
+                    ( randomQuote.Id == quote2Id ) ||
+                    ( randomQuote.Id == quote3Id )
                 );
             }
 
@@ -184,9 +181,9 @@ namespace Tests.Plugins.QuoteBot
 
                 Quote randomQuote = task.Result;
                 Assert.IsTrue(
-                    ( randomQuote.Id.Value == quote1Id ) ||
-                    ( randomQuote.Id.Value == quote2Id ) ||
-                    ( randomQuote.Id.Value == quote3Id )
+                    ( randomQuote.Id == quote1Id ) ||
+                    ( randomQuote.Id == quote2Id ) ||
+                    ( randomQuote.Id == quote3Id )
                 );
             }
         }
