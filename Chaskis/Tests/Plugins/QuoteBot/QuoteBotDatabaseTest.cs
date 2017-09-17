@@ -73,13 +73,13 @@ namespace Tests.Plugins.QuoteBot
         [Test]
         public void AddGetDeleteTest()
         {
-            long quote1Id = this.uut.AddQuote( quote1 );
-            long quote2Id = this.uut.AddQuote( quote2 );
+            int quote1Id = this.uut.AddQuote( quote1 );
+            int quote2Id = this.uut.AddQuote( quote2 );
 
             // Try async
-            Task<long> addTask = this.uut.AddQuoteAsync( quote3 );
+            Task<int> addTask = this.uut.AddQuoteAsync( quote3 );
             Assert.DoesNotThrow( () => addTask.Wait() );
-            long quote3Id = addTask.Result;
+            int quote3Id = addTask.Result;
 
             // Make sure our IDs are unique.
             Assert.AreNotEqual( quote1Id, quote2Id );
@@ -160,9 +160,9 @@ namespace Tests.Plugins.QuoteBot
                 Assert.IsNull( this.uut.GetRandomQuote() );
             }
 
-            long quote1Id = this.uut.AddQuote( this.quote1 );
-            long quote2Id = this.uut.AddQuote( this.quote2 );
-            long quote3Id = this.uut.AddQuote( this.quote3 );
+            int quote1Id = this.uut.AddQuote( this.quote1 );
+            int quote2Id = this.uut.AddQuote( this.quote2 );
+            int quote3Id = this.uut.AddQuote( this.quote3 );
 
             // Sync
             {

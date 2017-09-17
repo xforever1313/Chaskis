@@ -110,7 +110,7 @@ namespace Tests.Plugins.QuoteBot
         public void ParseDeleteTest()
         {
             string errorString;
-            long quoteId;
+            int quoteId;
 
             // Good test.
             {
@@ -167,7 +167,7 @@ namespace Tests.Plugins.QuoteBot
         public void ParseGetTest()
         {
             string errorString;
-            long quoteId;
+            int quoteId;
 
             // Good test.
             {

@@ -205,7 +205,7 @@ namespace Chaskis.Plugins.QuoteBot
             {
                 try
                 {
-                    long id = await this.db.AddQuoteAsync( quote );
+                    int id = await this.db.AddQuoteAsync( quote );
                     writer.SendMessage(
                         string.Format( "Quote said by {0} added by {1}.  Its ID is {2}.", quote.Author, quote.Adder, id ),
                         response.Channel
@@ -242,7 +242,7 @@ namespace Chaskis.Plugins.QuoteBot
                 return;
             }
 
-            long id;
+            int id;
             string error;
             if( this.parser.TryParseDeleteCommand( response.Message, out id, out error ) )
             {
@@ -330,7 +330,7 @@ namespace Chaskis.Plugins.QuoteBot
         private async void GetHandler( IIrcWriter writer, IrcResponse response )
         {
             string error;
-            long id;
+            int id;
             if( this.parser.TryParseGetCommand( response.Message, out id, out error ) )
             {
                 try

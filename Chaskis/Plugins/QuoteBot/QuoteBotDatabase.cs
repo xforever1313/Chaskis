@@ -42,11 +42,11 @@ namespace Chaskis.Plugins.QuoteBot
         /// Returns the generated ID.
         /// Runs in a background thread.
         /// </summary>
-        /// <param name="quote">The quote to add. ID MUST BE NULL TO ADD.</param>
+        /// <param name="quote">The quote to add.</param>
         /// <returns>The ID that was generated for the quote.</returns>
-        public Task<long> AddQuoteAsync( Quote quote )
+        public Task<int> AddQuoteAsync( Quote quote )
         {
-            return Task<long>.Run(
+            return Task<int>.Run(
                 delegate ()
                 {
                     return this.AddQuote( quote );
@@ -60,12 +60,12 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         /// <param name="quote">The quote to add.</param>
         /// <returns>The ID that was generated for the quote.</returns>
-        public long AddQuote( Quote quote )
+        public int AddQuote( Quote quote )
         {
             lock( this.quotes )
             {
                 BsonValue id = this.quotes.Insert( quote );
-                return id.AsInt64;
+                return id.AsInt32;
             }
         }
 
@@ -74,7 +74,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Runs in background thread.
         /// </summary>
         /// <returns>True if the object was deleted.</returns>
-        public Task<bool> DeleteQuoteAsync( long id )
+        public Task<bool> DeleteQuoteAsync( int id )
         {
             return Task<bool>.Run(
                 delegate ()
@@ -88,7 +88,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Deletes the given quote based on ID.
         /// </summary>
         /// <returns>True if the object was deleted.</returns>
-        public bool DeleteQuote( long id )
+        public bool DeleteQuote( int id )
         {
             if( id < 0 )
             {
@@ -108,7 +108,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Runs in background thread.
         /// </summary>
         /// <returns>The found quote.  Null if none were found.</returns>
-        public Task<Quote> GetQuoteAsync( long id )
+        public Task<Quote> GetQuoteAsync( int id )
         {
             return Task<Quote>.Run(
                 delegate ()
@@ -156,7 +156,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// Gets the quote based on the id.
         /// </summary>
         /// <returns>The found quote. Null if we can't find it.</returns>
-        public Quote GetQuote( long id )
+        public Quote GetQuote( int id )
         {
             if( id < 0 )
             {
