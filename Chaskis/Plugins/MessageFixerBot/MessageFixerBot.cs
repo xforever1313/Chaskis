@@ -131,7 +131,7 @@ namespace Chaskis.Plugins.MessageFixerBot
             if( result.Success )
             {
                 string msg = string.Format(
-                    "@{0}'s updated message: '{1}'",
+                    "{0}'s updated message: '{1}'",
                     response.RemoteUser,
                     result.Message
                 );
