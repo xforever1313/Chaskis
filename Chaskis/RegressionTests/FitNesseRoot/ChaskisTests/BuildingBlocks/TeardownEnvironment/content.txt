@@ -1,0 +1,3 @@
+This Tears down the test Environment by removing all files from it.
+
+|'''Teardown Environment'''|

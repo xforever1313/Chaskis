@@ -5,6 +5,7 @@
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
 !path TestFixtures/bin/Debug/RegressionTests.dll
+!define port {10123}
 
 !2 Setup Tests
 |>HelloWorldTest|''Ensures our setup is correct.''|

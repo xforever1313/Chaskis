@@ -5,12 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
@@ -48,6 +43,11 @@ namespace Chaskis.RegressionTests
             Thread.Sleep( time );
             this.consoleOut.WriteLine( "Sleeping for " + time + "ms...Done!" );
             return true;
+        }
+
+        public void WriteLine( string line )
+        {
+            this.consoleOut.WriteLine( line );
         }
     }
 }

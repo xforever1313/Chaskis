@@ -1,0 +1,4 @@
+|''' Start Server '''   |${port}                                                             |
+|''' Start Process '''                                                                       |
+|''' Wait For Connection '''                                                                 |
+|''' Wait For String '''|CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)|'''From Chaskis'''|

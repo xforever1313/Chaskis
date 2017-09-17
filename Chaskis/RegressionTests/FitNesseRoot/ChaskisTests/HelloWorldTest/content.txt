@@ -1,3 +1,6 @@
 !contents -R2 -g -p -f -h
+This test simply ensures that FitNesse is able to talk to our C# Test Fixtures.
 
-| ''' Is hello world ''' |Hello World|
+If this passes, your Environment is setup correctly
+
+| ''' Is hello world ''' | Hello World |
