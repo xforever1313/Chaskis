@@ -19,7 +19,9 @@ Install Instructions
 ----------------------
 
 ### Windows ###
-Run the Windows installer.  This will install Chaskis to C:\Program Files\Chaskis.  The service will also be installed but NOT enabled.
+Run the Windows [installer](https://files.shendrick.net/projects/chaskis/releases/).  This will install Chaskis to C:\Program Files\Chaskis.  The service will also be installed but NOT enabled.
+
+You can also install via [chocolatey](https://chocolatey.org/packages/chaskis/) by running ```choco install chaskis```.
 
 ### Linux ###
 
