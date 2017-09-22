@@ -1,11 +1,9 @@
 !1 All Chaskis Tests
 !contents -R2 -g -p -f -h
-
 !2 Core Tests
-
-|>CoreTests|''Chaskis Core Tests''|
+| >CoreTests | ''Chaskis Core Tests'' |
 
 !2 Plugin Tests
-
-|>KarmaBotTests|''Tests the Karma Bot Plugin''|
-|>UrlBotTests|''Tests the Url Bot Plugin''|
+| >KarmaBotTests | ''Tests the Karma Bot Plugin'' |
+| >MathBotTests  | ''Tests the Math Bot Plugin'' |
+| >UrlBotTests | ''Tests the Url Bot Plugin'' |

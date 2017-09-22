@@ -1,0 +1,11 @@
+!contents -R2 -g -p -f -h
+
+ * Standard Math:
+|'''Send Message'''|!calc 1+1|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'1\+1'.+'2'|
+|'''Send Message'''|!calc 1*1|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'1\*1'.+'1'|
+|'''Send Message'''|!calc 5/1|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'5/1'.+'5' |
+
+ * Boolean Logic: 
+|'''Send Message'''|!calc true and true |'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'true and true'.+'True'  |
+|'''Send Message'''|!calc true or true  |'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'true or true'.+'True'   |
+|'''Send Message'''|!calc TRUE AND FALSE|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'TRUE AND FALSE'.+'False'|

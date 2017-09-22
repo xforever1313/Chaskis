@@ -2,6 +2,5 @@
 !3 ''The fully integrated stand-alone acceptance testing framework and wiki.''
 # Here is a good place to add your first page (WikiWord). For example, MyTopLevelApplicationPage
 
-[[!-Chaskis Tests-!][.ChaskisTests]
-
+!3 Click here to go to ChaskisTests
 !note Release ${FITNESSE_VERSION}
