@@ -89,7 +89,7 @@ namespace ChaskisCore
         /// <summary>
         /// Event queue.
         /// </summary>
-        private EventExecutor eventQueue;
+        private InterruptibleEventExecutor eventQueue;
 
         /// <summary>
         /// Writer Queue.
@@ -142,13 +142,13 @@ namespace ChaskisCore
             this.keepReadingObject = new object();
             this.KeepReading = false;
 
-            this.eventQueue = new EventExecutor(
-                true
+            this.eventQueue = new InterruptibleEventExecutor(
+                15 * 1000 // Lets start with 15 seconds and see how that works.
             );
 
             this.eventQueue.OnError += this.EventQueue_OnError;
 
-            this.writerQueue = new EventExecutor( false );
+            this.writerQueue = new EventExecutor();
             this.writerQueue.OnError += this.WriterQueue_OnError;
 
             this.ircWriterLock = new object();
@@ -499,8 +499,23 @@ namespace ChaskisCore
 
                 // Execute all remaining events. Any that call into writing to the channel
                 // will be a No-Op as the stream is closed.
-                this.eventQueue.Dispose();
-                this.writerQueue.Dispose();
+                {
+                    ManualResetEvent doneEvent = new ManualResetEvent( false );
+                    this.eventQueue.AddEvent( () => doneEvent.Set() );
+
+                    // Wait for our last event to execute before leaving.
+                    doneEvent.WaitOne();
+                    this.eventQueue.Dispose();
+                }
+
+                {
+                    ManualResetEvent doneEvent = new ManualResetEvent( false );
+                    this.writerQueue.AddEvent( () => doneEvent.Set() );
+
+                    // Wait for our last event to execute before leaving.
+                    doneEvent.WaitOne();
+                    this.writerQueue.Dispose();
+                }
 
                 // Finish disconnecting by closing the connection.
                 DisconnectHelper();
