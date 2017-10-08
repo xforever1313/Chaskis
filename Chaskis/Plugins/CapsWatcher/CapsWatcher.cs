@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using ChaskisCore;
 
@@ -50,6 +51,8 @@ namespace Chaskis.Plugins.CapsWatcher
             @"^(((([^\w\s]?)|(:-?[\S])*|(\s[\S]-?:)*|([A-Z0-9\s]*)))*[A-Z]{2,}((([^\w\s]*)|(:-?[\S])*|(\s[\S]-?:)*|([A-Z0-9\s]*)))*|(\s*))+$",
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
+
+        private Regex ignoreRegex;
 
         // -------- Constructor --------
 
@@ -124,6 +127,7 @@ namespace Chaskis.Plugins.CapsWatcher
             }
 
             this.config = XmlLoader.LoadCapsWatcherConfig( configPath );
+            this.ignoreRegex = new Regex( CollectionToRegex( config.Ignores ), RegexOptions.Compiled | RegexOptions.ExplicitCapture );
 
             MessageHandler handler = new MessageHandler(
                 ".+",
@@ -178,15 +182,51 @@ namespace Chaskis.Plugins.CapsWatcher
         /// </summary>
         /// <param name="message">The message to check.</param>
         /// <returns>True if the message is in all caps, else false.</returns>
-        public static bool CheckForCaps( string message )
+        public static bool CheckForCaps( string message, Regex ignoreList )
         {
-            // First check, make sure the message is at least 3 characters.
+            if( message == null )
+            {
+                return false;
+            }
+
+            // Filter out any ignores.
+            message = ignoreList.Replace( message, string.Empty );
+
+            // First check, make sure we're not empty.
             if( string.IsNullOrEmpty( message ) || string.IsNullOrWhiteSpace( message ) )
             {
                 return false;
             }
 
             return capsRegex.IsMatch( message );
+        }
+
+        public static string CollectionToRegex( IList<string> ignoreList )
+        {
+            if( ignoreList.Count == 0 )
+            {
+                return string.Empty;
+            }
+
+            // Need to order the list so the longest strings come first.
+            // What if we have a regex like this?
+            // (\s*US\s*)|(\s*USA\s*)
+            // and an input of USA USA?
+            // Our replace result will be 'A', thus triggering the bot.
+            // If we switch USA and US, it is not a problem.
+            IOrderedEnumerable<string> sortedList = ignoreList.OrderByDescending( s => s.Length );
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append( @"(\s*" );
+            foreach( string ignore in sortedList )
+            {
+                // Only ignore if the thing is surrounded by whitespace, not other characters (
+                // don't want to ignore ignores within other words).
+                builder.Append( ignore + @"\s*)|(\s*" );
+            }
+
+            builder.Remove( builder.Length - 5, 5 );
+            return builder.ToString();
         }
 
         /// <summary>
@@ -196,7 +236,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <param name="response">The response from the channel.</param>
         private void HandleMessage( IIrcWriter writer, IrcResponse response )
         {
-            if( CheckForCaps( response.Message ) )
+            if( CheckForCaps( response.Message, this.ignoreRegex ) )
             {
                 string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.RemoteUser );
                 writer.SendMessage( msgToSend, response.Channel );

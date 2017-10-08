@@ -22,6 +22,7 @@ namespace Chaskis.Plugins.CapsWatcher
         public CapsWatcherConfig()
         {
             this.Messages = new List<string>();
+            this.Ignores = new List<string>();
         }
 
         // -------- Properties --------
@@ -29,7 +30,16 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <summary>
         /// List of messages to send to an offending user.
         /// </summary>
-        public IList<string> Messages;
+        public IList<string> Messages { get; private set; }
+
+        /// <summary>
+        /// Before messages are checked for caps, these get filted out.
+        /// 
+        /// These can include acronym, or other things that need to be ignored.
+        /// 
+        /// White Space is allowed!
+        /// </summary>
+        public IList<string> Ignores { get; private set; }
 
         /// <summary>
         /// Validates this class.
@@ -54,6 +64,15 @@ namespace Chaskis.Plugins.CapsWatcher
                 {
                     success = false;
                     errorMessage += "\tFound a null or empty message in the message list." + Environment.NewLine;
+                }
+            }
+
+            foreach( string ignore in this.Ignores )
+            {
+                if( string.IsNullOrEmpty( ignore ) )
+                {
+                    success = false;
+                    errorMessage += "\tFound a null or empty ignore in the ignore list." + Environment.NewLine;
                 }
             }
 

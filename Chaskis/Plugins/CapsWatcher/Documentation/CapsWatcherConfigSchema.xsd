@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CapsWatcherConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/capswatcherconfig/2017/capswatcherconfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/capswatcherconfig/2017/capswatcherconfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/capswatcherconfig/2017/capswatcherconfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="capswatcherconfig" type="CapsWatcherConfig"/>
+    <xs:element name="ignores" type="Ignores"/>
+
+    <xs:complexType name="CapsWatcherConfig">
+        <xs:sequence>
+            <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="ignores" type="Ignores" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Ignores">
+        <xs:sequence>
+            <xs:element name="ignore" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

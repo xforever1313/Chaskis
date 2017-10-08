@@ -53,6 +53,10 @@ namespace Tests.Plugins.CapsWatcher
             Assert.AreEqual( "LOUD NOISES!", config.Messages[0] );
             Assert.AreEqual( "@{%user%}: shhhhhhhhhh!", config.Messages[1] );
             Assert.AreEqual( "Contrary to popular belief, caps lock is not cruise control for cool :/", config.Messages[2] );
+
+            Assert.IsTrue( config.Ignores.Contains( "NY" ) );
+            Assert.IsTrue( config.Ignores.Contains( "USA" ) );
+            Assert.IsTrue( config.Ignores.Contains( "US" ) );
         }
 
         /// <summary>

@@ -41,11 +41,12 @@ namespace Tests.Plugins.CapsWatcher
         public void GoodValidateTest()
         {
             this.uut.Messages.Add( "A message" );
-
             Assert.DoesNotThrow( () => this.uut.Validate() );
 
             this.uut.Messages.Add( "Another message" );
+            Assert.DoesNotThrow( () => this.uut.Validate() );
 
+            this.uut.Ignores.Add( "HELLO" );
             Assert.DoesNotThrow( () => this.uut.Validate() );
         }
 
@@ -64,6 +65,13 @@ namespace Tests.Plugins.CapsWatcher
 
             this.uut.Messages.Clear();
             this.uut.Messages.Add( null );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
+
+            this.uut.Ignores.Add( null );
+            Assert.Throws<ValidationException>( () => this.uut.Validate() );
+            this.uut.Ignores.Clear();
+
+            this.uut.Ignores.Add( string.Empty );
             Assert.Throws<ValidationException>( () => this.uut.Validate() );
         }
     }

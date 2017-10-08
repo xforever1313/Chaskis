@@ -4,6 +4,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace Tests.Plugins.CapsWatcher
@@ -11,7 +13,45 @@ namespace Tests.Plugins.CapsWatcher
     [TestFixture]
     public class CapsWatcherTest
     {
-        // -------- Tests --------
+        // ---------------- Fields ----------------
+
+        private List<string> ignores;
+
+        private Regex ignoreRegex;
+
+        // ---------------- Setup / Teardown ----------------
+
+        [TestFixtureSetUp]
+        public void FixtureSetup()
+        {
+            this.ignores = new List<string>();
+            this.ignores.Add( "NY" );
+            this.ignores.Add( "IRC BOT" );
+            this.ignores.Add( "US" );
+            this.ignores.Add( "USA" );
+
+            this.ignoreRegex = new Regex(
+                Chaskis.Plugins.CapsWatcher.CapsWatcher.CollectionToRegex( ignores ),
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture
+            );
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTeardown()
+        {
+        }
+
+        [SetUp]
+        public void TestSetup()
+        {
+        }
+
+        [TearDown]
+        public void TestTeardown()
+        {
+        }
+
+        // ---------------- Tests ----------------
 
         /// <summary>
         /// Ensures the CheckForCaps function is working.
@@ -34,6 +74,12 @@ namespace Tests.Plugins.CapsWatcher
             GoodTest( "123HI21" );
             GoodTest( "HEY" );
             GoodTest( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+
+            // Ignores won't trigger the bot, but ignores WITH non-ignores will!
+            GoodTest( "HI USA!" );
+            GoodTest( "HELLO IRC BOT!" );
+            GoodTest( "HI USA! HI" );
+            GoodTest( "NY USA HELLO USA NY" );
 
             // Two characters should work.
             GoodTest( "HI" );
@@ -65,9 +111,53 @@ namespace Tests.Plugins.CapsWatcher
 
             // Just whitespace should fail.
             BadTest( "      " );
+
+            // Ignores shouldn't work.
+            BadTest( "NY USA US" );
+            BadTest( "NY" );
+            BadTest( "USA" );
+            BadTest( " USA " );
+            BadTest( "USA USA" );
+            BadTest( "IRC BOT" );
+            BadTest( " IRC BOT " );
+            BadTest( "USA IRC BOT" );
         }
 
-        // -------- Test Helpers -------
+        [Test]
+        public void OneIgnoreTest()
+        {
+            List<string> oneIgnore = new List<string>();
+            oneIgnore.Add( "NY" );
+            Regex regex = new Regex(
+                Chaskis.Plugins.CapsWatcher.CapsWatcher.CollectionToRegex( oneIgnore ),
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture
+            );
+
+            this.DoTest( "NY", false, regex );
+            this.DoTest( "NY NY", false, regex );
+            this.DoTest( "NYC NYC", true, regex );
+            this.DoTest( "CNY NYC", true, regex );
+            this.DoTest( "BILL NYE", true, regex ); // NY in middle.
+            this.DoTest( "Bill NYE", false, regex ); // NY in middle.
+            this.DoTest( "NY USA HELLO USA NY", true, regex );
+        }
+
+        [Test]
+        public void NoIgnoreTest()
+        {
+            List<string> noIgnore = new List<string>();
+
+            Regex regex = new Regex(
+                Chaskis.Plugins.CapsWatcher.CapsWatcher.CollectionToRegex( noIgnore ),
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture
+            );
+
+            this.DoTest( "NY", true, regex );
+            this.DoTest( "NY NY", true, regex );
+            this.DoTest( "NY USA HELLO USA NY", true, regex );
+        }
+
+        // ---------------- Test Helpers ----------------
 
         /// <summary>
         /// Ensures the given string is good.
@@ -87,9 +177,9 @@ namespace Tests.Plugins.CapsWatcher
             DoTest( str, false );
         }
 
-        private void DoTest( string str, bool expectSuccess )
+        private void DoTest( string str, bool expectSuccess, Regex ignore = null )
         {
-            bool success = Chaskis.Plugins.CapsWatcher.CapsWatcher.CheckForCaps( str );
+            bool success = Chaskis.Plugins.CapsWatcher.CapsWatcher.CheckForCaps( str, ignore ?? this.ignoreRegex );
             if ( success != expectSuccess )
             {
                 Console.WriteLine( "Caps watcher test failed.  String that failed:" + str );

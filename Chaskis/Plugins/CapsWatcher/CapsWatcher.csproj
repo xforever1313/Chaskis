@@ -53,9 +53,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\SampleCapsWatcherConfig.xml" />
+    <Content Include="Config\SampleCapsWatcherConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Documentation\CapsWatcherConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
