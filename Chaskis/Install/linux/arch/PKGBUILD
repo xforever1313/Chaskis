@@ -1,6 +1,6 @@
 # Maintainer: Seth Hendrick <seth@shendrick.net>
 pkgname=chaskis
-pkgver=0.3.0
+pkgver=0.4.0
 pkgrel=1
 epoch=
 pkgdesc="A generic framework written in C# for making IRC Bots."

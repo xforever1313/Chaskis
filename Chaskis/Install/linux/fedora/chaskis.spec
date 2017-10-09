@@ -1,6 +1,6 @@
 %define name chaskis
-%define version 0.3.0
-%define unmangled_version 0.3.0
+%define version 0.4.0
+%define unmangled_version 0.4.0
 %define release 1
 %define source https://github.com/xforever1313/Chaskis/archive/%{unmangled_version}.tar.gz
 %define untardir Chaskis-%{unmangled_version}
