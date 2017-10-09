@@ -23,7 +23,7 @@ namespace Chaskis.Plugins.CapsWatcher
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.2.1";
+        public const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The handlers for this plugin.

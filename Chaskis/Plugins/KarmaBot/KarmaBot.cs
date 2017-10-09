@@ -17,7 +17,7 @@ namespace Chaskis.Plugins.KarmaBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.2.0";
+        public const string VersionStr = "0.3.0";
 
         /// <summary>
         /// List of handlers.
