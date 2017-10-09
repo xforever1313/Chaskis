@@ -128,6 +128,7 @@ namespace Chaskis.Plugins.CapsWatcher
 
             this.config = XmlLoader.LoadCapsWatcherConfig( configPath );
             this.ignoreRegex = new Regex( CollectionToRegex( config.Ignores ), RegexOptions.Compiled | RegexOptions.ExplicitCapture );
+            this.config.Ignores.Clear(); // No need to eat-up RAM, we won't need this again.
 
             MessageHandler handler = new MessageHandler(
                 ".+",
