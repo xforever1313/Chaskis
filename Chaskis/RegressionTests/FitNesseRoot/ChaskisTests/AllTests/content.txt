@@ -4,6 +4,7 @@
 | >CoreTests | ''Chaskis Core Tests'' |
 
 !2 Plugin Tests
+| >CapsWatcherTests|''Tests the Caps Watcher Plugin''|
 | >KarmaBotTests | ''Tests the Karma Bot Plugin'' |
-| >MathBotTests  | ''Tests the Math Bot Plugin'' |
+| >MathBotTests | ''Tests the Math Bot Plugin'' |
 | >UrlBotTests | ''Tests the Url Bot Plugin'' |

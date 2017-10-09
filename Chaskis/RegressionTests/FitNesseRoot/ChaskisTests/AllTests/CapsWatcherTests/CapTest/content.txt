@@ -1,0 +1,10 @@
+!contents -R2 -g -p -f -h
+
+ * Test Shouting with spaces
+|'''Send Message'''|THIS IS ME SHOUTING|'''To Channel'''|#Chaskistest|'''As'''|Someuser|'''Wait Msg'''|LOUD NOISES!|
+
+ * Test Shouting with no spaces
+|'''Send Message'''|LOL|'''To Channel'''|#Chaskistest|'''As'''|Someuser|'''Wait Msg'''|LOUD NOISES!|
+
+ * Test Shouting with an ingore inside
+|'''Send Message'''|USA IS AWESOME!|'''To Channel'''|#Chaskistest|'''As'''|Someuser|'''Wait Msg'''|LOUD NOISES!|

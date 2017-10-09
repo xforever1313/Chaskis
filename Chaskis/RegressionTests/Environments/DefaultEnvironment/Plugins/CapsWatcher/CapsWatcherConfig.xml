@@ -18,6 +18,7 @@
 -->    
 <capswatcherconfig>
     <message>LOUD NOISES!</message>
-    <message>@{%user%}: shhhhhhhhhh!</message>
-    <message>Contrary to popular belief, caps lock is not cruise control for cool :/</message>
+    <ignores>
+        <ignore>USA</ignore>
+    </ignores>
 </capswatcherconfig>
