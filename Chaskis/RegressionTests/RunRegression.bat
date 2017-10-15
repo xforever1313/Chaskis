@@ -1,0 +1,1 @@
+java -jar fitnesse-standalone.jar -p 10013 -e 1 -c ChaskisTests.AllTests?suite -b TestResults.html
