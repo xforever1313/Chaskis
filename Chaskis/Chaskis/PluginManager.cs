@@ -105,7 +105,8 @@ namespace Chaskis
                                 assemblyConfig.AssemblyPath,
                                 chaskisPlugin.PluginName,
                                 assemblyConfig.BlackListedChannels,
-                                plugin
+                                plugin,
+                                new GenericLogger()
                             )
                         );
 
@@ -147,6 +148,7 @@ namespace Chaskis
                     initor.ChaskisEventSender = eventSender;
                     initor.ChaskisConfigRoot = chaskisConfigRoot;
                     initor.ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key];
+                    initor.Log = plugin.Value.Log;
 
                     initor.Log.OnWriteLine += delegate ( string msg )
                     {

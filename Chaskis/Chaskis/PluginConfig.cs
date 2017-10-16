@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ChaskisCore;
+using SethCS.Basic;
 using SethCS.Exceptions;
 
 namespace Chaskis
@@ -27,7 +28,8 @@ namespace Chaskis
             string path,
             string name,
             IList<string> blacklistedChannels,
-            IPlugin plugin
+            IPlugin plugin,
+            GenericLogger log
         )
         {
             ArgumentChecker.StringIsNotNullOrEmpty( path, nameof( path ) );
@@ -37,6 +39,7 @@ namespace Chaskis
             this.Name = name;
             this.BlackListedChannels = new List<string>( blacklistedChannels ).AsReadOnly();
             this.Plugin = plugin;
+            this.Log = log;
         }
 
         // ---------------- Properties ----------------
@@ -70,5 +73,10 @@ namespace Chaskis
         /// Gets the plugin's handlers.
         /// </summary>
         public IList<IIrcHandler> Handlers { get { return this.Plugin.GetHandlers(); } }
+
+        /// <summary>
+        /// The plugin's associated log.
+        /// </summary>
+        public GenericLogger Log { get; private set; }
     }
 }

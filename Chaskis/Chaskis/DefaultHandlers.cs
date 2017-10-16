@@ -66,6 +66,11 @@ namespace Chaskis
         /// </summary>
         private string adminCommand;
 
+        /// <summary>
+        /// The command for setting the verbosity of a plugin's output.
+        /// </summary>
+        private string debugVerbosityCommand;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -103,6 +108,7 @@ namespace Chaskis
             this.AddAboutHandler();
             this.AddHelpHandler();
             this.AddAdminHandler();
+            this.AddDebugHandlers();
 
             // Must always check for pings.
             this.handlers.Add( new PingHandler() );
@@ -385,6 +391,67 @@ namespace Chaskis
                     response.Channel
                 );
             }
+        }
+
+        // ---- Debug Handlers ----
+
+        private void AddDebugHandlers()
+        {
+            this.debugVerbosityCommand = @"^[!@]" + this.ircConfig.Nick + @":?\s+debug\s+verbosity\s+(?<plugin>\S+)\s+(?<verbose>\d+)";
+
+            MessageHandler handler = new MessageHandler(
+                this.debugVerbosityCommand,
+                this.HandleDebugVerbosityCommand,
+                0,
+                ResponseOptions.PmsOnly // Debug commands will only be with private messages.
+            );
+
+            this.handlers.Add( handler );
+        }
+
+        /// <summary>
+        /// Handles the debug verbosity command.
+        /// </summary>
+        private void HandleDebugVerbosityCommand( IIrcWriter writer, IrcResponse response )
+        {
+            if( this.ircConfig.Admins.Contains( response.RemoteUser ) )
+            {
+                string pluginName = response.Match.Groups["plugin"].Value;
+                string verboseLevel = response.Match.Groups["verbose"].Value;
+
+                string message;
+                int level = 0;
+
+                if( this.plugins.ContainsKey( pluginName ) == false )
+                {
+                    message = string.Format(
+                        "'{0}' is not a plugin that is activated.",
+                        pluginName
+                    );
+                }
+                else if( int.TryParse( verboseLevel, out level ) == false )
+                {
+                    message = string.Format(
+                        "'{0}' is an invalid integer.",
+                        level
+                    );
+                }
+                else
+                {
+                    this.plugins[pluginName].Log.Verbosity = level;
+                    message = string.Format(
+                        "'{0}' log verbosity has been set to '{1}'",
+                        pluginName,
+                        level
+                    );
+                }
+
+                writer.SendMessage(
+                    message,
+                    response.Channel
+                );
+            }
+            // Otherwise, quietly ignore...
         }
     }
 }

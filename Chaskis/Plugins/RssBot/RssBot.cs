@@ -128,7 +128,10 @@ namespace Chaskis.Plugins.RssBot
                             IList<SyndicationItem> newItems = await reader.UpdateAsync();
                             if( newItems.Count > 0 )
                             {
-                                this.pluginLogger.WriteLine( "Found updates on RSS feed '" + feed.Url + "', sending to channels..." );
+                                this.pluginLogger.WriteLine(
+                                    Convert.ToInt32( LogVerbosityLevel.LowVerbosity ),
+                                    "Found updates on RSS feed '" + feed.Url + "', sending to channels..."
+                                );
 
                                 foreach( SyndicationItem item in newItems )
                                 {
@@ -163,7 +166,10 @@ namespace Chaskis.Plugins.RssBot
                             }
                             else
                             {
-                                this.pluginLogger.WriteLine( "No updates for RSS feed '" + feed.Url + "'" );
+                                this.pluginLogger.WriteLine(
+                                    Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
+                                    "No updates for RSS feed '" + feed.Url + "'"
+                                );
                             }
                         }
                         catch( Exception err )

@@ -25,7 +25,6 @@ namespace ChaskisCore
         /// </summary>
         public PluginInitor()
         {
-            this.Log = new GenericLogger();
         }
 
         // ---------------- Functions ----------------
@@ -75,6 +74,6 @@ namespace ChaskisCore
         /// Reference to a Log instance for the specific plugin.
         /// When your plugin needs to log something, it should call this log instance.
         /// </summary>
-        public GenericLogger Log { get; private set; } 
+        public GenericLogger Log { get; set; } 
     }
 }

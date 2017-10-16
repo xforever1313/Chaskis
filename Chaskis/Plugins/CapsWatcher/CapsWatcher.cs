@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.CapsWatcher
 {
@@ -53,6 +54,8 @@ namespace Chaskis.Plugins.CapsWatcher
         );
 
         private Regex ignoreRegex;
+
+        private GenericLogger log;
 
         // -------- Constructor --------
 
@@ -118,6 +121,8 @@ namespace Chaskis.Plugins.CapsWatcher
                 "CapsWatcher",
                 "CapsWatcherConfig.xml"
             );
+
+            this.log = initor.Log;
 
             if( File.Exists( configPath ) == false )
             {
@@ -241,6 +246,13 @@ namespace Chaskis.Plugins.CapsWatcher
             {
                 string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.RemoteUser );
                 writer.SendMessage( msgToSend, response.Channel );
+            }
+            else
+            {
+                this.log.WriteLine(
+                    Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
+                    "Caps check failed for message '" + response.Match + "'"
+                );
             }
         }
     }
