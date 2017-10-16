@@ -209,8 +209,14 @@ namespace Chaskis.RegressionTests
         /// <returns>True if we found a match before the timeout, else false.</returns>
         public bool WaitForStringFromChaskis( string regex, int timeout )
         {
-            this.testConsoleOutLog.WriteLine( "Waiting for string " + regex );
-            return this.buffer.WaitForString( regex, timeout );
+            this.testConsoleOutLog.WriteLine( "Waiting for string '" + regex + "' from Chaskis Process..." );
+            bool success = this.buffer.WaitForString( regex, timeout );
+            this.testConsoleOutLog.WriteLine(
+                "Waiting for string '" + regex + "' from Chaskis Process...{0}",
+                success ? "Done!" : "Fail!"
+            );
+
+            return success;
         }
     }
 }

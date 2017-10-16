@@ -20,5 +20,6 @@
     <message>LOUD NOISES!</message>
     <ignores>
         <ignore>USA</ignore>
+        <ignore>NY</ignore>
     </ignores>
 </capswatcherconfig>
