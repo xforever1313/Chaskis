@@ -344,8 +344,14 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public bool WaitForString( string regex, int timeout )
         {
-            return this.buffer.WaitForString( regex, timeout );
+            this.serverLog.WriteLine( "Waiting for regex " + regex + "..." );
+            bool success = this.buffer.WaitForString( regex, timeout );
+            this.serverLog.WriteLine( "Waiting for regex " + regex + "...{0}", success ? "Done!" : "Fail!" );
+
+            return success;
         }
+
+        // -------- Helpers --------
 
         protected virtual void Dispose( bool disposing )
         {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pluginconfig>
-    <assembly path="{%chaskispath%}/Plugins/CapsWatcher/bin/Debug/CapsWatcher.dll" />
     <assembly path="{%chaskispath%}/Plugins/ConsoleOut/bin/Debug/ConsoleOut.dll" />
+    <assembly path="{%chaskispath%}/Plugins/CapsWatcher/bin/Debug/CapsWatcher.dll" />
     <assembly path="{%chaskispath%}/Plugins/CrossChannel/bin/Debug/CrossChannel.dll" />
     <!--<assembly path="{%chaskispath%}/Plugins/IrcLogger/bin/Debug/IrcLogger.dll" />-->
 	<assembly path="{%chaskispath%}/Plugins/WelcomeBot/bin/Debug/WelcomeBot.dll" />

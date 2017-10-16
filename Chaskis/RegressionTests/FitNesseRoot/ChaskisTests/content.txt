@@ -6,6 +6,8 @@
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
 !path TestFixtures/bin/Debug/RegressionTests.dll
 !define port {10123}
+!define adminuser {adminuser}
+!define botname {chaskisbot}
 
 !2 Setup Tests
 |>HelloWorldTest|''Ensures our setup is correct.''|
