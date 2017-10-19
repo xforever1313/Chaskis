@@ -23,6 +23,7 @@ namespace Chaskis.Plugins.RssBot
         private Feed feedConfig;
 
         private SyndicationFeed feed;
+        private object feedLock;
 
         private const string userAgent = "Chaskis IRC RssBot";
 
@@ -37,6 +38,7 @@ namespace Chaskis.Plugins.RssBot
             ArgumentChecker.IsNotNull( feedConfig, nameof( feedConfig ) );
 
             this.feedConfig = feedConfig.Clone();
+            this.feedLock = new object();
         }
 
         // ---------------- Properties ----------------
@@ -78,16 +80,21 @@ namespace Chaskis.Plugins.RssBot
 
             SyndicationFeed updatedFeed = this.FetchFeed();
 
-            foreach( SyndicationItem item in updatedFeed.Items )
+            // this.feed can be modified by multiple threads if UpdateAsync() is called multiple times...
+            // lock it up.
+            lock( this.feedLock )
             {
-                // If our item does not exist, call OnNewItem.
-                if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
+                foreach( SyndicationItem item in updatedFeed.Items )
                 {
-                    newItems.Add( item );
+                    // If our item does not exist, call OnNewItem.
+                    if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
+                    {
+                        newItems.Add( item );
+                    }
                 }
-            }
 
-            this.feed = updatedFeed;
+                this.feed = updatedFeed;
+            }
 
             newItems.Sort( this.SortByDate );
 
