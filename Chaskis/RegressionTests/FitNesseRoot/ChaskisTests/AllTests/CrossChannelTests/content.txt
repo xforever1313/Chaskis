@@ -1,0 +1,4 @@
+!contents -R2 -g -p -f -h
+
+|>BroadcastTest   |''Tests the broadcast functionality of the Cross Channel plugin''|
+|>CrossChannelTest|''Tests the cross-channel (CC) functionality of the plugin''     |

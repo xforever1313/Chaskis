@@ -1,16 +1,18 @@
 !1 Chaskis Tests
 !contents -R2 -g -p -f -h
-
 # Taken from here: https://github.com/imanushin/NetRunner/wiki/Create-the-first-test
+
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
 !path TestFixtures/bin/Debug/RegressionTests.dll
 !define port {10123}
 !define adminuser {adminuser}
 !define botname {chaskisbot}
+!define channel1 {!-#chaskistest-!}
+!define channel2 {!-#chaskistest2-!}
 
 !2 Setup Tests
-|>HelloWorldTest|''Ensures our setup is correct.''|
+| >HelloWorldTest | ''Ensures our setup is correct.'' |
 
 !2 All Tests
-|>AllTests|''All Chaskis Tests.''|
+| >AllTests | ''All Chaskis Tests.'' |

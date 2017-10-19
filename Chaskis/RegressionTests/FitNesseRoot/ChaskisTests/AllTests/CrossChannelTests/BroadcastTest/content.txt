@@ -1,0 +1,25 @@
+'''Ensures a broadcast sends to all the channels we are connected to.'''
+
+We want to ensure that the username and the original channel appear before the message.
+
+!define testuser {someone}
+
+ * Message with spaces
+|'''Send Message'''    |!broadcast Hello World!               |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|<${testuser}@${channel1}> Hello World!|'''On Channel'''|${channel1}                     |
+|'''Wait For Message'''|<${testuser}@${channel1}> Hello World!|'''On Channel'''|${channel2}                     |
+
+ * Message with no spaces
+|'''Send Message'''    |!broadcast Hello!               |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|<${testuser}@${channel1}> Hello!|'''On Channel'''|${channel1}                     |
+|'''Wait For Message'''|<${testuser}@${channel1}> Hello!|'''On Channel'''|${channel2}                     |
+
+ * Message with numbers
+|'''Send Message'''    |!broadcast 1 + 1 = 2                |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|<${testuser}@${channel1}> 1 \+ 1 = 2|'''On Channel'''|${channel1}                     |
+|'''Wait For Message'''|<${testuser}@${channel1}> 1 \+ 1 = 2|'''On Channel'''|${channel2}                     |
+
+ * Broadcast from a private message
+|'''Send Message'''    |!broadcast Hello World!               |'''To Channel'''|${botname}|'''as'''|${testuser}|
+|'''Wait For Message'''|<${testuser}@${testuser}> Hello World!|'''On Channel'''|${channel1}                    |
+|'''Wait For Message'''|<${testuser}@${testuser}> Hello World!|'''On Channel'''|${channel2}                    |
