@@ -56,6 +56,7 @@ namespace ChaskisCore
         /// if you know what you are doing.
         /// </summary>
         /// <param name="reason">The reason for parting.</param>
-        void SendPart( string reason );
+        /// <param name="channel">The channel to leave.</param>
+        void SendPart( string reason, string channel );
     }
 }

@@ -120,7 +120,10 @@ namespace ChaskisCore
             {
                 try
                 {
-                    this.ircConnection.SendPart( this.IrcConfig.QuitMessage );
+                    foreach( string channel in this.ircConfig.Channels )
+                    {
+                        this.ircConnection.SendPart( this.IrcConfig.QuitMessage, channel );
+                    }
                 }
                 finally
                 {

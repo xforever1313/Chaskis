@@ -402,9 +402,10 @@ namespace ChaskisCore
         /// if you know what you are doing.
         /// </summary>
         /// <param name="reason">The reason for parting.</param>
-        public void SendPart( string reason )
+        /// <param name="channel">Which channel to part from.</param>
+        public void SendPart( string reason, string channel )
         {
-            string partString = string.Format( "PART {0} :{1}", this.Config.Channels, this.Config.QuitMessage );
+            string partString = string.Format( "PART {0} :{1}", channel, this.Config.QuitMessage );
             this.SendRawCmd( partString );
         }
 
