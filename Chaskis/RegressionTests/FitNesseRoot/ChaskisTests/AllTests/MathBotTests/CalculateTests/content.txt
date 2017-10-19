@@ -1,5 +1,3 @@
-!contents -R2 -g -p -f -h
-
  * Standard Math:
 |'''Send Message'''|!calc 1+1|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'1\+1'.+'2'|
 |'''Send Message'''|!calc 1*1|'''To Channel'''|#chaskistest|'''As'''|someuser|'''Wait Msg'''|'1\*1'.+'1'|
