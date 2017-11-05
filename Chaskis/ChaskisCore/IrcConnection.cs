@@ -87,11 +87,6 @@ namespace ChaskisCore
         private bool keepReading;
 
         /// <summary>
-        /// Event queue.
-        /// </summary>
-        private InterruptibleEventExecutor eventQueue;
-
-        /// <summary>
         /// Writer Queue.
         /// </summary>
         private EventExecutor writerQueue;
@@ -121,7 +116,12 @@ namespace ChaskisCore
         /// </summary>
         private AutoResetEvent connectionWatchDogPongEvent;
 
-        bool inited;
+        private bool inited;
+
+        /// <summary>
+        /// TODO: Remove this.
+        /// </summary>
+        private INonDisposableStringParsingQueue parsingQueue;
 
         // -------- Constructor --------
 
@@ -129,7 +129,7 @@ namespace ChaskisCore
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        public IrcConnection( IIrcConfig config )
+        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue )
         {
             this.inited = false;
             this.Config = new ReadOnlyIrcConfig( config );
@@ -142,18 +142,14 @@ namespace ChaskisCore
             this.keepReadingObject = new object();
             this.KeepReading = false;
 
-            this.eventQueue = new InterruptibleEventExecutor(
-                15 * 1000 // Lets start with 15 seconds and see how that works.
-            );
-
-            this.eventQueue.OnError += this.EventQueue_OnError;
-
             this.writerQueue = new EventExecutor();
             this.writerQueue.OnError += this.WriterQueue_OnError;
 
             this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
             this.eventScheduler = new EventScheduler();
+
+            this.parsingQueue = parsingQueue;
         }
 
         // ---------------- Properties ----------------
@@ -201,7 +197,6 @@ namespace ChaskisCore
             {
                 // Start Executing
                 this.writerQueue.Start();
-                this.eventQueue.Start();
 
                 this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
                 this.connectionWatchDogKeepGoing = new ManualResetEvent( false );
@@ -502,15 +497,6 @@ namespace ChaskisCore
                 // will be a No-Op as the stream is closed.
                 {
                     ManualResetEvent doneEvent = new ManualResetEvent( false );
-                    this.eventQueue.AddEvent( () => doneEvent.Set() );
-
-                    // Wait for our last event to execute before leaving.
-                    doneEvent.WaitOne();
-                    this.eventQueue.Dispose();
-                }
-
-                {
-                    ManualResetEvent doneEvent = new ManualResetEvent( false );
                     this.writerQueue.AddEvent( () => doneEvent.Set() );
 
                     // Wait for our last event to execute before leaving.
@@ -560,7 +546,6 @@ namespace ChaskisCore
         public void Dispose()
         {
             Disconnect();
-            this.eventQueue.OnError -= this.EventQueue_OnError;
             this.writerQueue.OnError -= this.EventQueue_OnError;
         }
 
@@ -582,7 +567,7 @@ namespace ChaskisCore
                 interval,
                 delegate ()
                 {
-                    this.eventQueue.AddEvent( () => theAction( this ) );
+                    this.parsingQueue.BeginInvoke( () => theAction( this ) );
                 }
             );
         }
@@ -605,7 +590,7 @@ namespace ChaskisCore
                 delay,
                 delegate ()
                 {
-                    this.eventQueue.AddEvent( () => theAction( this ) );
+                    this.parsingQueue.BeginInvoke( () => theAction( this ) );
                 }
             );
         }
@@ -626,7 +611,7 @@ namespace ChaskisCore
         public void SendChaskisEvent( ChaskisEvent e )
         {
             string s = e.ToString();
-            this.AddStringToParsingQueue( s );
+            this.OnReadLine( s );
         }
 
         private void AddCoreEvent( string args )
@@ -641,13 +626,9 @@ namespace ChaskisCore
             this.SendChaskisEvent( e );
         }
 
-        private void AddStringToParsingQueue( string s )
+        private void OnReadLine( string s )
         {
-            Action<string> readEvent = this.ReadEvent;
-            if( readEvent != null )
-            {
-                this.eventQueue.AddEvent( () => ReadEvent( s ) );
-            }
+            this.ReadEvent?.Invoke( s );
         }
 
         /// <summary>
@@ -665,7 +646,7 @@ namespace ChaskisCore
                         string s = this.ircReader.ReadLine();
                         if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                         {
-                            this.AddStringToParsingQueue( s );
+                            this.OnReadLine( s );
                         }
                     }
                     catch( SocketException err )

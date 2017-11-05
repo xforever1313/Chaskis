@@ -61,6 +61,7 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="Parsing.cs" />
     <Compile Include="Regexes.cs" />
+    <Compile Include="StringParsingQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ChaskisCore.nuspec" />

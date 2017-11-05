@@ -50,6 +50,8 @@ namespace Chaskis
         /// </summary>
         private string chaskisRoot;
 
+        private StringParsingQueue parsingQueue;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -63,6 +65,8 @@ namespace Chaskis
             this.plugins = new Dictionary<string, PluginConfig>();
             this.fullyLoaded = false;
             this.chaskisRoot = chaskisRoot;
+
+            this.parsingQueue = new StringParsingQueue();
         }
 
         /// <summary>
@@ -96,7 +100,7 @@ namespace Chaskis
             StaticLogger.Log.WriteLine( "Using IRC config file '{0}'", ircConfigFile );
 
             this.ircConfig = XmlLoader.ParseIrcConfig( ircConfigFile );
-            this.ircBot = new IrcBot( this.ircConfig );
+            this.ircBot = new IrcBot( this.ircConfig, this.parsingQueue );
         }
 
         /// <summary>
@@ -185,7 +189,11 @@ namespace Chaskis
                 handlers.Add( plugin.Key, plugin.Value );
             }
 
-            this.ircBot.Init( new ReadOnlyDictionary<string, IHandlerConfig>( handlers ) );
+            // Start the parsing queue before we open any connections.
+            // Don't want to miss anything!
+            this.parsingQueue.Start( new ReadOnlyDictionary<string, IHandlerConfig>( handlers ) );
+
+            this.ircBot.Init();
             this.ircBot.Start();
             this.fullyLoaded = true;
         }
@@ -195,20 +203,28 @@ namespace Chaskis
         /// </summary>
         public void Dispose()
         {
-            if( this.fullyLoaded )
+            try
             {
-                foreach( PluginConfig plugin in plugins.Values )
+                if( this.fullyLoaded )
                 {
-                    try
+                    foreach( PluginConfig plugin in plugins.Values )
                     {
-                        plugin.Plugin.Dispose();
+                        try
+                        {
+                            plugin.Plugin.Dispose();
+                        }
+                        catch( Exception err )
+                        {
+                            StaticLogger.Log.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
+                        }
                     }
-                    catch( Exception err )
-                    {
-                        StaticLogger.Log.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
-                    }
+                    this.ircBot.Dispose();
+                    this.parsingQueue.WaitForAllEventsToExecute();
                 }
-                this.ircBot.Dispose();
+            }
+            finally
+            {
+                this.parsingQueue.Dispose();
             }
         }
     }

@@ -6,7 +6,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using SethCS.Basic;
 using SethCS.Exceptions;
 
@@ -37,15 +36,14 @@ namespace ChaskisCore
         private readonly IIrcConfig ircConfig;
 
         /// <summary>
-        /// The handlers
-        /// string is plugin name, value is the list of corresponding handlers. 
-        /// </summary>
-        IReadOnlyDictionary<string, IHandlerConfig> ircHandlers;
-
-        /// <summary>
         /// The IRC Connection.
         /// </summary>
         private readonly IrcConnection ircConnection;
+
+        /// <summary>
+        /// Reference to the global parsing queue.
+        /// </summary>
+        private INonDisposableStringParsingQueue parsingQueue;
 
         // -------- Constructor --------
 
@@ -53,18 +51,19 @@ namespace ChaskisCore
         /// Constructor.
         /// </summary>
         /// <param name="ircConfig">The irc config object to use.  This will be cloned after being passed in.</param>
-        /// <param name="ircHandlers">The line configs to be used in this bot.</param>
-        /// <param name="infoLogEvent">The event to do if we want to log information.</param>
-        /// <param name="errorLogEvent">The event to do if an error occurrs.</param>
-        public IrcBot( IIrcConfig ircConfig )
+        /// <param name="parsingQueue">The global parsing queue we are using.</param>
+        public IrcBot( IIrcConfig ircConfig, INonDisposableStringParsingQueue parsingQueue )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
+            ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
 
             this.ircConfig = ircConfig.Clone();
             this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );
 
-            IrcConnection connection = new IrcConnection( ircConfig );
+            IrcConnection connection = new IrcConnection( ircConfig, parsingQueue );
             this.ircConnection = connection;
+
+            this.parsingQueue = parsingQueue;
         }
 
         // -------- Properties --------
@@ -90,12 +89,8 @@ namespace ChaskisCore
         /// Inits the IRC bot.
         /// </summary>
         /// <param name="ircHandlers">IRC handlers.  Key is the plugin name, value is the corresponding handlers.</param>
-        public void Init( IReadOnlyDictionary<string, IHandlerConfig> ircHandlers )
+        public void Init()
         {
-            ArgumentChecker.IsNotNull( ircHandlers, nameof( ircHandlers ) );
-
-            this.ircHandlers = ircHandlers;
-
             this.ircConnection.Init();
         }
 
@@ -120,15 +115,19 @@ namespace ChaskisCore
             {
                 try
                 {
+                    // Stop reacting to strings from the server, we don't care any more.
+                    this.ircConnection.ReadEvent -= this.IrcConnection_ReadEvent;
+
                     foreach( string channel in this.ircConfig.Channels )
                     {
                         this.ircConnection.SendPart( this.IrcConfig.QuitMessage, channel );
                     }
+
+                    this.parsingQueue.WaitForAllEventsToExecute();
                 }
                 finally
                 {
                     this.ircConnection.Disconnect();
-                    this.ircConnection.ReadEvent -= this.IrcConnection_ReadEvent;
                 }
             }
         }
@@ -140,14 +139,7 @@ namespace ChaskisCore
             args.IrcWriter = this.ircConnection;
             args.Line = line;
 
-            foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
-            {
-                args.BlackListedChannels = handlers.Value.BlackListedChannels;
-                foreach( IIrcHandler handler in handlers.Value.Handlers )
-                {
-                    handler.HandleEvent( args );
-                }
-            }
+            this.parsingQueue.ParseAndRunEvent( args );
         }
     }
 }
