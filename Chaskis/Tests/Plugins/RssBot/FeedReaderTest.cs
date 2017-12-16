@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using Chaskis.Plugins.RssBot;
 using NUnit.Framework;
 using SethCS.Extensions;
@@ -22,6 +21,7 @@ namespace Tests.Plugins.RssBot
         // ---------------- Fields ----------------
 
         private string initFeed;
+        private string initLessItems;
         private string updateFeed;
         private string updateSameAmountFeed;
 
@@ -39,6 +39,10 @@ namespace Tests.Plugins.RssBot
                 Path.Combine( RssBotTestHelpers.RssTestFilesPath, "Reddit_Init.xml" )
             );
 
+            this.initLessItems = Path.GetFullPath(
+                Path.Combine( RssBotTestHelpers.RssTestFilesPath, "Reddit_Init_Less_Items.xml" )
+            );
+
             this.updateFeed = Path.GetFullPath(
                 Path.Combine( RssBotTestHelpers.RssTestFilesPath, "Reddit_Update.xml" )
             );
@@ -46,6 +50,8 @@ namespace Tests.Plugins.RssBot
             this.updateSameAmountFeed = Path.GetFullPath(
                 Path.Combine( RssBotTestHelpers.RssTestFilesPath, "Reddit_Update_Same_Number.xml" )
             );
+
+
 
             this.testFeedPath = Path.GetFullPath(
                 "Test.xml"
@@ -69,7 +75,7 @@ namespace Tests.Plugins.RssBot
             feedConfig.Url = this.testFeedUri;
             feedConfig.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
-            this.uut = new FeedReader( feedConfig );
+            this.uut = new FeedReader( feedConfig, TestHelpers.HttpClient );
         }
 
         [TearDown]
@@ -92,7 +98,24 @@ namespace Tests.Plugins.RssBot
             this.uut.Init();
 
             // Don't change the RSS file, expect no updates to return.
-            IList<SyndicationItem> items = this.uut.Update();
+            IList<SyndicationItem> items = this.uut.UpdateAsync().Result;
+
+            Assert.AreEqual( 0, items.Count );
+        }
+
+        /// <summary>
+        /// What happens if we update our feed, but nothing changes, but we have less items?
+        /// Should get no items.
+        /// </summary>
+        [Test]
+        public void NoNewItemsWithLessItemsTest()
+        {
+            this.uut.Init();
+
+            File.Copy( this.initLessItems, this.testFeedPath, true );
+
+            // Don't change the RSS file, expect no updates to return.
+            IList<SyndicationItem> items = this.uut.UpdateAsync().Result;
 
             Assert.AreEqual( 0, items.Count );
         }
@@ -108,7 +131,7 @@ namespace Tests.Plugins.RssBot
 
             File.Copy( this.updateFeed, this.testFeedPath, true );
 
-            IList<SyndicationItem> items = this.uut.Update();
+            IList<SyndicationItem> items = this.uut.UpdateAsync().Result;
 
             // 3 new items.
             Assert.AreEqual( 3, items.Count );
@@ -154,7 +177,7 @@ namespace Tests.Plugins.RssBot
             }
 
             // Do another update, should get nothing.
-            items = this.uut.Update();
+            items = this.uut.UpdateAsync().Result;
             Assert.AreEqual( 0, items.Count );
         }
 
@@ -169,7 +192,7 @@ namespace Tests.Plugins.RssBot
 
             File.Copy( this.updateSameAmountFeed, this.testFeedPath, true );
 
-            IList<SyndicationItem> items = this.uut.Update();
+            IList<SyndicationItem> items = this.uut.UpdateAsync().Result;
 
             // 3 new items.
             Assert.AreEqual( 3, items.Count );
@@ -215,7 +238,7 @@ namespace Tests.Plugins.RssBot
             }
 
             // Do another update, should get nothing.
-            items = this.uut.Update();
+            items = this.uut.UpdateAsync().Result;
             Assert.AreEqual( 0, items.Count );
         }
     }

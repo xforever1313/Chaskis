@@ -5,10 +5,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
@@ -27,18 +28,23 @@ namespace Chaskis.Plugins.RssBot
 
         private const string userAgent = "Chaskis IRC RssBot";
 
+        private HttpClient httpClient;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="feedConfig">The feed to read.</param>
-        public FeedReader( Feed feedConfig )
+        public FeedReader( Feed feedConfig, HttpClient httpClient )
         {
             ArgumentChecker.IsNotNull( feedConfig, nameof( feedConfig ) );
+            ArgumentChecker.IsNotNull( httpClient, nameof( httpClient ) );
 
             this.feedConfig = feedConfig.Clone();
             this.feedLock = new object();
+
+            this.httpClient = httpClient;
         }
 
         // ---------------- Properties ----------------
@@ -55,13 +61,10 @@ namespace Chaskis.Plugins.RssBot
         /// </summary>
         public void Init()
         {
-            this.feed = FetchFeed();
+            Task<SyndicationFeed> task = this.FetchFeed();
+            task.Wait();
+            this.feed = task.Result;
             this.FeedTitle = this.feed.Title.Text;
-        }
-
-        public Task<IList<SyndicationItem>> UpdateAsync()
-        {
-            return Task.Run( () => { return this.Update(); } );
         }
 
         /// <summary>
@@ -74,11 +77,11 @@ namespace Chaskis.Plugins.RssBot
         /// Items are sorted by last updated time, with the oldest being in
         /// index 0.
         /// </returns>
-        public IList<SyndicationItem> Update()
+        public async Task<IList<SyndicationItem>> UpdateAsync()
         {
             List<SyndicationItem> newItems = new List<SyndicationItem>();
 
-            SyndicationFeed updatedFeed = this.FetchFeed();
+            SyndicationFeed updatedFeed = await this.FetchFeed();
 
             // this.feed can be modified by multiple threads if UpdateAsync() is called multiple times...
             // lock it up.
@@ -101,21 +104,22 @@ namespace Chaskis.Plugins.RssBot
             return newItems;
         }
 
-        private SyndicationFeed FetchFeed()
+        private async Task<SyndicationFeed> FetchFeed()
         {
-            string contents;
-            using( WebClient client = new WebClient() )
+            HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
+            if( response.IsSuccessStatusCode )
             {
-                client.Headers.Add( "user-agent", userAgent );
-                contents = client.DownloadString( this.feedConfig.Url );
-            }
-
-            using( StringReader reader = new StringReader( contents ) )
-            {
-                using( XmlReader xmlReader = XmlReader.Create( reader ) )
+                using( Stream content = await response.Content.ReadAsStreamAsync() )
                 {
-                    return SyndicationFeed.Load( xmlReader );
+                    using( XmlReader xmlReader = XmlReader.Create( content ) )
+                    {
+                        return SyndicationFeed.Load( xmlReader );
+                    }
                 }
+            }
+            else
+            {
+                throw new HttpRequestException( "Error when getting HTTP: " + Environment.NewLine + response.StatusCode );
             }
         }
 

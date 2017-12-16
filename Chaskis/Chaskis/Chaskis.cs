@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -52,6 +53,8 @@ namespace Chaskis
 
         private StringParsingQueue parsingQueue;
 
+        private HttpClient httpClient;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -65,6 +68,8 @@ namespace Chaskis
             this.plugins = new Dictionary<string, PluginConfig>();
             this.fullyLoaded = false;
             this.chaskisRoot = chaskisRoot;
+            this.httpClient = new HttpClient();
+            this.httpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot" );
 
             this.parsingQueue = new StringParsingQueue();
         }
@@ -134,7 +139,15 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
-            if( manager.LoadPlugins( pluginList, this.ircConfig, this.ircBot.Scheduler, this.ircBot.ChaskisEventSender, this.chaskisRoot ) )
+            if( manager.LoadPlugins(
+                    pluginList,
+                    this.ircConfig,
+                    this.ircBot.Scheduler,
+                    this.ircBot.ChaskisEventSender,
+                    this.httpClient,
+                    this.chaskisRoot
+                )
+            )
             {
                 this.plugins = manager.Plugins;
                 return true;
@@ -225,6 +238,7 @@ namespace Chaskis
             finally
             {
                 this.parsingQueue.Dispose();
+                this.httpClient.Dispose();
             }
         }
     }

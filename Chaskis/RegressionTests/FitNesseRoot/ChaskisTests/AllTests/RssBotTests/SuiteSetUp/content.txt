@@ -1,0 +1,10 @@
+|'''Start Http Server'''|${httpport}|
+|'''Map File'''|${chaskis_project_root}Tests/Plugins/RssBot/TestFiles/Reddit_Init.xml|'''To Url'''|/feed.xml|
+
+# Need to use Rss Environment
+
+|'''Setup'''|rssbotenvironment|'''Environment'''|${port}|
+
+
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskis
+

@@ -113,7 +113,7 @@ namespace Chaskis.Plugins.RssBot
             this.rssConfig = XmlLoader.ParseConfig( configPath );
             foreach( Feed feed in this.rssConfig.Feeds )
             {
-                FeedReader reader = new FeedReader( feed );
+                FeedReader reader = new FeedReader( feed, initor.HttpClient );
 
                 reader.Init();
 

@@ -1,0 +1,3 @@
+!contents -R2 -g -p -f -h
+
+| >UpdateTests | '''Does the RSS Bot send messages when required?''' |

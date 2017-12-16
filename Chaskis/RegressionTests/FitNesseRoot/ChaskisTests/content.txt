@@ -6,10 +6,12 @@
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
 !path TestFixtures/bin/Debug/RegressionTests.dll
 !define port {10123}
+!define httpport {32101}
 !define adminuser {adminuser}
 !define botname {chaskisbot}
 !define channel1 {!-#chaskistest-!}
 !define channel2 {!-#chaskistest2-!}
+!define chaskis_project_root {../../../../}
 
 !2 Setup Tests
 | >HelloWorldTest | ''Ensures our setup is correct.'' |

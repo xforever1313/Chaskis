@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using ChaskisCore;
 
 namespace Tests
@@ -93,6 +94,18 @@ namespace Tests
         }.AsReadOnly();
 
         private static ChaskisEventFactory factoryInstance;
+
+        // ---------------- Constructor ----------------
+
+        static TestHelpers()
+        {
+            HttpClient = new HttpClient();
+            HttpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot Unit Tests" );
+        }
+
+        // ---------------- Properties ----------------
+
+        public static HttpClient HttpClient { get; private set; }
 
         // ---------------- Functions ----------------
 

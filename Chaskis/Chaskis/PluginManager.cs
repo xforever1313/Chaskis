@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using ChaskisCore;
@@ -65,6 +66,7 @@ namespace Chaskis
             IIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
             IChaskisEventSender eventSender,
+            HttpClient httpClient,
             string chaskisConfigRoot
         )
         {
@@ -148,6 +150,7 @@ namespace Chaskis
                     initor.ChaskisEventSender = eventSender;
                     initor.ChaskisConfigRoot = chaskisConfigRoot;
                     initor.ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key];
+                    initor.HttpClient = httpClient;
                     initor.Log = plugin.Value.Log;
 
                     initor.Log.OnWriteLine += delegate ( string msg )
@@ -173,11 +176,15 @@ namespace Chaskis
                     errorString.AppendLine();
                     errorString.AppendLine( e.StackTrace );
                     errorString.AppendLine();
-                    if( e.InnerException != null )
+
+                    Exception innerException = e.InnerException;
+
+                    if( innerException != null )
                     {
                         errorString.AppendLine( "\tInner Exception:" );
                         errorString.AppendLine( "\t\t" + e.InnerException.Message );
                         errorString.AppendLine( "\t\t" + e.InnerException.StackTrace );
+                        innerException = innerException.InnerException;
                     }
                     errorString.AppendLine( "*************" );
 

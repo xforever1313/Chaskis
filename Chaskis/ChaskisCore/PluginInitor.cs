@@ -6,6 +6,7 @@
 //
 
 using System.IO;
+using System.Net.Http;
 using SethCS.Basic;
 
 namespace ChaskisCore
@@ -58,6 +59,16 @@ namespace ChaskisCore
         /// Allows the plugin to create Chaskis Events.
         /// </summary>
         public IChaskisEventCreator ChaskisEventCreator { get; set; }
+
+        /// <summary>
+        /// The single HttpClient to use for the IRC Bot.
+        /// </summary>
+        /// <remarks>
+        /// See this article: https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+        /// It is recommended that there is only one instance of HttpClient to be used for the
+        /// entire application, so here is Chaskis's.
+        /// </remarks>
+        public HttpClient HttpClient { get; set; }
 
         /// <summary>
         /// The root of the directory that contains the configuration.
