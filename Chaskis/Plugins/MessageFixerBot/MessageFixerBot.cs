@@ -141,7 +141,7 @@ namespace Chaskis.Plugins.MessageFixerBot
             else if( string.IsNullOrEmpty( result.Message ) == false )
             {
                 string msg = string.Format(
-                    "@{0}: error when trying to fix your message: '{1}'",
+                    "{0}: error when trying to fix your message: '{1}'",
                     response.RemoteUser,
                     result.Message
                 );
