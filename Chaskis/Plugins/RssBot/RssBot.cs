@@ -8,7 +8,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -37,6 +39,8 @@ namespace Chaskis.Plugins.RssBot
         private IChaskisEventScheduler scheduler;
 
         private GenericLogger pluginLogger;
+
+        IList<string> admins;
 
         // ---------------- Constructor ----------------
 
@@ -99,6 +103,8 @@ namespace Chaskis.Plugins.RssBot
                 "RssBotConfig.xml"
             );
 
+            this.admins = initor.IrcConfig.Admins;
+
             this.pluginLogger = initor.Log;
 
             if( File.Exists( configPath ) == false )
@@ -119,72 +125,84 @@ namespace Chaskis.Plugins.RssBot
 
                 int eventId = this.scheduler.ScheduleRecurringEvent(
                     feed.RefreshInterval,
-                    async delegate ( IIrcWriter writer )
+                    delegate ( IIrcWriter writer )
                     {
-                        try
-                        {
-                            this.pluginLogger.WriteLine( "Fetching RSS feed for '" + feed.Url + "'" );
-
-                            IList<SyndicationItem> newItems = await reader.UpdateAsync();
-                            if( newItems.Count > 0 )
-                            {
-                                this.pluginLogger.WriteLine(
-                                    Convert.ToInt32( LogVerbosityLevel.LowVerbosity ),
-                                    "Found updates on RSS feed '" + feed.Url + "', sending to channels..."
-                                );
-
-                                foreach( SyndicationItem item in newItems )
-                                {
-                                    string msg = string.Empty;
-
-                                    if( item.Links.Count > 0 )
-                                    {
-                                        msg = string.Format(
-                                            "{0}: '{1}' {2}",
-                                            reader.FeedTitle,
-                                            item.Title.Text,
-                                            item.Links[0].Uri.ToString()
-                                        );
-                                    }
-                                    else
-                                    {
-                                        msg = string.Format(
-                                            "{0}: '{1}'",
-                                            reader.FeedTitle,
-                                            item.Title.Text
-                                        );
-                                    }
-
-                                    foreach( string channel in feed.Channels )
-                                    {
-                                        writer.SendMessage(
-                                            msg,
-                                            channel
-                                        );
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                this.pluginLogger.WriteLine(
-                                    Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
-                                    "No updates for RSS feed '" + feed.Url + "'"
-                                );
-                            }
-                        }
-                        catch( Exception err )
-                        {
-                            initor.Log.ErrorWriteLine(
-                                "An Exception was caught while updating feed {0}:{1}{2}",
-                                reader.FeedTitle,
-                                Environment.NewLine,
-                                err.ToString()
-                            );
-                        }
+                        CheckForUpdates( reader, writer, feed.Channels );
                     }
                 );
 
                 this.feedReaders.Add( eventId, reader );
+            }
+
+            MessageHandler debugHandler = new MessageHandler(
+                @"!debug\s+rssbot\s+updatefeed\s+(?<url>\S+)",
+                this.HandleDebug
+            );
+
+            this.handlers.Add( debugHandler );
+        }
+
+        private async void CheckForUpdates( FeedReader reader, IIrcWriter writer, IList<string> channels )
+        {
+            try
+            {
+                this.pluginLogger.WriteLine( "Fetching RSS feed for '" + reader.Url + "'" );
+
+                IList<SyndicationItem> newItems = await reader.UpdateAsync();
+                if( newItems.Count > 0 )
+                {
+                    this.pluginLogger.WriteLine(
+                        Convert.ToInt32( LogVerbosityLevel.LowVerbosity ),
+                        "Found updates on RSS feed '" + reader.Url + "', sending to channels..."
+                    );
+
+                    foreach( SyndicationItem item in newItems )
+                    {
+                        string msg = string.Empty;
+
+                        if( item.Links.Count > 0 )
+                        {
+                            msg = string.Format(
+                                "{0}: '{1}' {2}",
+                                reader.FeedTitle,
+                                item.Title.Text,
+                                item.Links[0].Uri.ToString()
+                            );
+                        }
+                        else
+                        {
+                            msg = string.Format(
+                                "{0}: '{1}'",
+                                reader.FeedTitle,
+                                item.Title.Text
+                            );
+                        }
+
+                        foreach( string channel in channels )
+                        {
+                            writer.SendMessage(
+                                msg,
+                                channel
+                            );
+                        }
+                    }
+                }
+                else
+                {
+                    this.pluginLogger.WriteLine(
+                        Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
+                        "No updates for RSS feed '" + reader.Url + "'"
+                    );
+                }
+            }
+            catch( Exception err )
+            {
+                this.pluginLogger.ErrorWriteLine(
+                    "An Exception was caught while updating feed {0}:{1}{2}",
+                    reader.FeedTitle,
+                    Environment.NewLine,
+                    err.ToString()
+                );
             }
         }
 
@@ -197,6 +215,35 @@ namespace Chaskis.Plugins.RssBot
                 this.About + "  Don't like one of the feeds I post?  Yell at my admin!",
                 response.Channel
             );
+        }
+
+        public void HandleDebug( IIrcWriter writer, IrcResponse response )
+        {
+            if( this.admins.Contains( response.RemoteUser ) == false )
+            {
+                // Do Nothing
+                return;
+            }
+
+            Match match = response.Match;
+            string url = match.Groups["url"].Value;
+            FeedReader reader = this.feedReaders.Values.FirstOrDefault( f => f.Url == url );
+            Feed feed = this.rssConfig.Feeds.FirstOrDefault( f => f.Url == url );
+            if( reader != null )
+            {
+                this.CheckForUpdates( reader, writer, feed.Channels );
+                writer.SendMessage(
+                    "Updating feed at URL " + url,
+                    response.RemoteUser
+                );
+            }
+            else
+            {
+                writer.SendMessage(
+                    "Could not find feed that matches URL " + url,
+                    response.RemoteUser
+                );
+            }
         }
 
         /// <summary>

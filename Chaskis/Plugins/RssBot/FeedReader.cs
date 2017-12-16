@@ -45,6 +45,7 @@ namespace Chaskis.Plugins.RssBot
             this.feedLock = new object();
 
             this.httpClient = httpClient;
+            this.Url = feedConfig.Url;
         }
 
         // ---------------- Properties ----------------
@@ -53,6 +54,8 @@ namespace Chaskis.Plugins.RssBot
         /// The title of the feed.  <see cref="string.Empty"/> until Init() is called.
         /// </summary>
         public string FeedTitle { get; private set; }
+
+        public string Url { get; private set; }
 
         // ---------------- Functions ----------------
 

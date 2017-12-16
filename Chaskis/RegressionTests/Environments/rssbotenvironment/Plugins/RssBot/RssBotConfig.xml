@@ -15,7 +15,7 @@ Any existing posts on the feed will NOT be posted.
 <rssbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/rssbotconfig/2017/rssbotconfig.xsd">
    <feed>
         <url>http://127.0.0.1:32101/feed.xml</url>
-        <refreshinterval>1</refreshinterval>
+        <refreshinterval>10000</refreshinterval>
         <channel>#chaskistest</channel>
     </feed>
 </rssbotconfig>

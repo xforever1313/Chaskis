@@ -51,8 +51,6 @@ namespace Tests.Plugins.RssBot
                 Path.Combine( RssBotTestHelpers.RssTestFilesPath, "Reddit_Update_Same_Number.xml" )
             );
 
-
-
             this.testFeedPath = Path.GetFullPath(
                 "Test.xml"
             );

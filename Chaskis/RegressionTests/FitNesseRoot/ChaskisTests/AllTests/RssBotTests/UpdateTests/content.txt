@@ -1,2 +1,13 @@
-!contents -R2 -g -p -f -h
+''Note: It takes 1 minute for the bot to re-query.  We need to wait a least 1 minute.  70 seconds should do.''
 
+ * Ensure if there are no updates, no messages get sent.
+ 
+|'''Send Message'''|!debug rssbot updatefeed http://127.0.0.1:${httpport}/feed.xml|'''to channel'''|${channel1}|'''as'''|${adminuser}|
+| '''Wait For String''' | No\s+updates\s+for\s+RSS\s+feed | '''From Chaskis''' | 10000 |
+
+ * Change our URL to have a feed with less items in it.  Should get no response.
+
+| '''Map File''' | ${chaskis_project_root}Tests/Plugins/RssBot/TestFiles/Reddit_Init_Less_Items.xml | '''To Url''' | /feed.xml |
+
+|'''Send Message'''|!debug rssbot updatefeed http://127.0.0.1:${httpport}/feed.xml|'''to channel'''|${channel1}|'''as'''|${adminuser}|
+| '''Wait For String''' | No\s+updates\s+for\s+RSS\s+feed | '''From Chaskis''' | 10000 |
