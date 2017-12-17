@@ -56,7 +56,7 @@ namespace Tests.Plugins.UrlBot
             this.logger.OnWriteLine += ( s => Console.WriteLine( s ) );
             this.logger.OnErrorWriteLine += ( s => Console.WriteLine( s ) );
 
-            this.reader = new UrlReader( this.logger );
+            this.reader = new UrlReader( this.logger, TestHelpers.HttpClient );
         }
 
         [TearDown]
