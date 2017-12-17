@@ -15,7 +15,11 @@ using SethCS.Extensions;
 
 namespace Tests.Plugins.RssBot
 {
-    [TestFixture]
+    /// <summary>
+    /// Removed as TestFixture as HttpClient does not use RssReaders.
+    /// Replaced with FitNesse tests.
+    /// </summary>
+    //[TestFixture]
     public class FeedReaderTest
     {
         // ---------------- Fields ----------------
@@ -32,7 +36,7 @@ namespace Tests.Plugins.RssBot
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        //[TestFixtureSetUp]
         public void FixtureSetup()
         {
             this.initFeed = Path.GetFullPath(
@@ -58,12 +62,12 @@ namespace Tests.Plugins.RssBot
             this.testFeedUri = SethPath.ToUri( this.testFeedPath );
         }
 
-        [TestFixtureTearDown]
+        //[TestFixtureTearDown]
         public void FixtureTeardown()
         {
         }
 
-        [SetUp]
+        //[SetUp]
         public void TestSetup()
         {
             File.Copy( this.initFeed, this.testFeedPath, true );
@@ -76,7 +80,7 @@ namespace Tests.Plugins.RssBot
             this.uut = new FeedReader( feedConfig, TestHelpers.HttpClient );
         }
 
-        [TearDown]
+        //[TearDown]
         public void TestTearDown()
         {
             if( File.Exists( testFeedPath ) )
@@ -90,7 +94,7 @@ namespace Tests.Plugins.RssBot
         /// <summary>
         /// Does our feed return nothing if there are no updates?
         /// </summary>
-        [Test]
+        //[Test]
         public void NoNewItemsTest()
         {
             this.uut.Init();
@@ -105,7 +109,7 @@ namespace Tests.Plugins.RssBot
         /// What happens if we update our feed, but nothing changes, but we have less items?
         /// Should get no items.
         /// </summary>
-        [Test]
+        //[Test]
         public void NoNewItemsWithLessItemsTest()
         {
             this.uut.Init();
@@ -122,7 +126,7 @@ namespace Tests.Plugins.RssBot
         /// Does our feed return items if there is an update,
         /// and there are more items.
         /// </summary>
-        [Test]
+        //[Test]
         public void NewItemsTest()
         {
             this.uut.Init();
@@ -183,7 +187,7 @@ namespace Tests.Plugins.RssBot
         /// Does our feed return items if there is an update, but there are
         /// the same number of items.
         /// </summary>
-        [Test]
+        //[Test]
         public void NewItemsTest_SameAmount()
         {
             this.uut.Init();
