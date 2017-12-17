@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="IrcLoggerConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/ircloggerconfig/2017/ircloggerconfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/ircloggerconfig/2017/ircloggerconfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/ircloggerconfig/2017/ircloggerconfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="ircloggerconfig" type="IrcLoggerConfig"/>
+    <xs:element name="ignores" type="Ignores"/>
+
+    <xs:complexType name="IrcLoggerConfig">
+        <xs:sequence>
+            <xs:element name="logfilelocation" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="maxnumbermessagesperlog" type="xs:int" minOccurs="0" maxOccurs="1" />
+            <xs:element name="logname" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="ignores" type="Ignores" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Ignores">
+        <xs:sequence>
+            <xs:element name="ignore" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

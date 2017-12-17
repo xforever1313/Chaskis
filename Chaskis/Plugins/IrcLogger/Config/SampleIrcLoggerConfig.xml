@@ -17,9 +17,15 @@
     logname - What to name the logs.  Defaulted to "irclog".  The log name will look like:
               logName.yyyy-MM-dd_HH-mm-ss-ff.log
               Note: The time stamp is the date of file create in UTC.
+              
+    ignores - If an incomming IRC message matches any of these regexes, it is not logged.
 -->
-<ircloggerconfig>
+<ircloggerconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/ircloggerconfig/2017/ircloggerconfig.xsd">
     <logfilelocation></logfilelocation>
-    <maxnumbermessagesperlog></maxnumbermessagesperlog>
+    <maxnumbermessagesperlog>1000</maxnumbermessagesperlog>
     <logname></logname>
+    <ignores>
+        <!-- Ignore pongs -->
+        <ignore><![CDATA[^:\S+\s+PONG\s+\S+\s+:.+$]]></ignore>
+    </ignores>
 </ircloggerconfig>

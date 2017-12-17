@@ -57,6 +57,9 @@
     <Content Include="Config\SampleIrcLoggerConfig.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Documentation\IrcLoggerConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

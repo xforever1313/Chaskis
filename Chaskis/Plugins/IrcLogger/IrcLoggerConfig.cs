@@ -1,7 +1,12 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
+
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Chaskis.Plugins.IrcLogger
 {
@@ -21,6 +26,8 @@ namespace Chaskis.Plugins.IrcLogger
             this.LogFileLocation = null;
             this.MaxNumberMessagesPerLog = 1000;
             this.LogName = null;
+
+            this.IgnoreRegexes = new List<Regex>();
         }
 
         // -------- Properties --------
@@ -47,5 +54,12 @@ namespace Chaskis.Plugins.IrcLogger
         /// string.empty also results in the default value.
         /// </summary>
         public string LogName { get; set; }
+
+        /// <summary>
+        /// If an incoming message matches one of the regexes in this list,
+        /// it will not be logged.  This regex is for the ENTIRE IRC string, not just
+        /// for PRIVMSGS.
+        /// </summary>
+        public IList<Regex> IgnoreRegexes { get; private set; }
     }
 }

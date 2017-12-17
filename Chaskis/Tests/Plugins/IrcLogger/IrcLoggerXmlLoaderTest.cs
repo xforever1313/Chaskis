@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2017.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System.IO;
 using Chaskis.Plugins.IrcLogger;
@@ -46,6 +48,8 @@ namespace Tests.Plugins.IrcLogger
             Assert.AreEqual( string.Empty, config.LogName );
             Assert.AreEqual( string.Empty, config.LogFileLocation );
             Assert.AreEqual( 1000, config.MaxNumberMessagesPerLog );
+            Assert.AreEqual( 1, config.IgnoreRegexes.Count );
+            Assert.AreEqual( @"^:\S+\s+PONG\s+\S+\s+:.+$", config.IgnoreRegexes[0].ToString() );
         }
 
         /// <summary>
@@ -65,6 +69,7 @@ namespace Tests.Plugins.IrcLogger
             Assert.IsNull( config.LogName );
             Assert.IsNull( config.LogFileLocation );
             Assert.AreEqual( 1000, config.MaxNumberMessagesPerLog );
+            Assert.AreEqual( 0, config.IgnoreRegexes.Count );
         }
 
         /// <summary>
@@ -84,6 +89,7 @@ namespace Tests.Plugins.IrcLogger
             Assert.AreEqual( "chaskis", config.LogName );
             Assert.AreEqual( "/home/me/logs/ChaskisLogs", config.LogFileLocation );
             Assert.AreEqual( 90, config.MaxNumberMessagesPerLog );
+            Assert.AreEqual( 0, config.IgnoreRegexes.Count );
         }
     }
 }

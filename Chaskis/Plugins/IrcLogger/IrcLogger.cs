@@ -32,6 +32,8 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         private LogManager logManager;
 
+        private IrcLoggerConfig config;
+
         // -------- Constructor ---------
 
         /// <summary>
@@ -95,7 +97,7 @@ namespace Chaskis.Plugins.IrcLogger
                 "IrcLoggerConfig.xml"
             );
 
-            IrcLoggerConfig config = XmlLoader.LoadIrcLoggerConfig(
+            this.config = XmlLoader.LoadIrcLoggerConfig(
                 configPath
             );
 
@@ -152,7 +154,19 @@ namespace Chaskis.Plugins.IrcLogger
         /// <param name="response">The response from the channel.</param>
         private void HandleLogEvent( IIrcWriter writer, IrcResponse response )
         {
-            this.logManager.LogToFile( response.Message );
+            bool log = true;
+            for( int i = 0; i < ( this.config.IgnoreRegexes.Count ) && log; ++i )
+            {
+                if( config.IgnoreRegexes[i].IsMatch( response.Message ) )
+                {
+                    log = false;
+                }
+            }
+
+            if( log )
+            {
+                this.logManager.LogToFile( response.Message );
+            }
         }
     }
 }
