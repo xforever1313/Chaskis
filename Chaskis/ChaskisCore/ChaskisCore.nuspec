@@ -13,6 +13,7 @@
     <releaseNotes>View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)</releaseNotes>
     <copyright>Copyright © Seth Hendrick 2016-2017</copyright>
     <tags>chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows core</tags>
+    <iconUrl>https://files.shendrick.net/projects/chaskis/assets/icon.png</iconUrl>
   </metadata>
 </package>
 

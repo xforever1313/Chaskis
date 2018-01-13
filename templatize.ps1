@@ -65,6 +65,7 @@ $CopyRight = GetCopyRight
 $Description = GetDescription
 $ReleaseNotes = "View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)"
 $Summary = "A generic framework written in C# for making IRC Bots."
+$IconUrl = "https://files.shendrick.net/projects/chaskis/assets/icon.png"
 
 $FilesToTemplate =(
     (".\Chaskis\Install\windows\Product.wxs.template", ".\Chaskis\Install\windows\Product.wxs"),
@@ -96,6 +97,7 @@ function TemplateFile($filePath, $Output)
     $inputContents = $inputContents.replace("{%Description%}", $Description)
     $inputContents = $inputContents.replace("{%ReleaseNotes%}", $ReleaseNotes)
     $inputContents = $inputContents.replace("{%Summary%}", $Summary)
+    $inputContents = $inputContents.replace("{%IconUrl%}", $IconUrl)
     
     $inputContents | Set-Content $Output
 }

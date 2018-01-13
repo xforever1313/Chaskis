@@ -38,7 +38,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <authors>{%Author%}</authors>
     <!-- projectUrl is required for the community feed -->
     <projectUrl>{%ProjectUrl%}</projectUrl>
-    <!--<iconUrl>http://cdn.rawgit.com/https://github.com/xforever1313/Chaskis/master/icons/chaskis.png</iconUrl>-->
+    <iconUrl>{%IconUrl%}</iconUrl>
     <copyright>{%CopyRight%}</copyright>
     <!-- If there is a license Url available, it is required for the community feed -->
     <licenseUrl>{%LicenseUrl%}</licenseUrl>

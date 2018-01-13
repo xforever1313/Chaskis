@@ -13,5 +13,6 @@
     <releaseNotes>{%ReleaseNotes%}</releaseNotes>
     <copyright>{%CopyRight%}</copyright>
     <tags>{%CoreTags%}</tags>
+    <iconUrl>{%IconUrl%}</iconUrl>
   </metadata>
 </package>

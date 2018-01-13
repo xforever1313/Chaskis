@@ -38,7 +38,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <authors>Seth Hendrick</authors>
     <!-- projectUrl is required for the community feed -->
     <projectUrl>https://github.com/xforever1313/Chaskis/</projectUrl>
-    <!--<iconUrl>http://cdn.rawgit.com/https://github.com/xforever1313/Chaskis/master/icons/chaskis.png</iconUrl>-->
+    <iconUrl>https://files.shendrick.net/projects/chaskis/assets/icon.png</iconUrl>
     <copyright>Copyright © Seth Hendrick 2016-2017</copyright>
     <!-- If there is a license Url available, it is required for the community feed -->
     <licenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</licenseUrl>
