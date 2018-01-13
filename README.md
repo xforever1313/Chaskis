@@ -1,5 +1,4 @@
-[[!Icon](https://files.shendrick.net/projects/chaskis/assets/icon.png)](https://github.com/xforever1313/Chaskis/)
-
+[![Icon](https://files.shendrick.net/projects/chaskis/assets/icon.png)](https://github.com/xforever1313/Chaskis/)
 Chaskis 
 ==========
 A generic framework written in C# for making IRC Bots.
