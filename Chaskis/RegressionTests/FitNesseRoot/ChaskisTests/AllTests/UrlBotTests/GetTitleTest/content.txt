@@ -4,6 +4,10 @@ Get URLs from our file server and make sure their titles are okay.
 
 | '''Send Message''' | Check this out: https://files.shendrick.net/projects/chaskis/testfiles/urlbot/goodsize.html | '''To Channel''' | #chaskistest | '''As''' | someuser | '''Wait Msg''' | Title:\s+My Title |
 
+ * Strange Characters Test
+ 
+| '''Send Message''' | ▄▄▄▄▄▄▄▄▄▄▄ Check this out ===> https://files.shendrick.net/projects/chaskis/testfiles/urlbot/goodsize.html ▄▄▄▄▄▄▄▄▄▄▄ | '''To Channel''' | #chaskistest | '''As''' | someuser | '''Wait Msg''' | Title:\s+My Title |
+
  * Ensure we escape characters correctly (Issue [[#15][https://github.com/xforever1313/Chaskis/issues/15]])
 
 | '''Send Message''' | https://files.shendrick.net/projects/chaskis/testfiles/urlbot/escapedcharacters.html | '''To Channel''' | #chaskistest | '''As''' | someuser | '''Wait Msg''' | Title:\s+<My "Title"> |
