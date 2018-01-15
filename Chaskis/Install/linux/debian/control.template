@@ -1,0 +1,7 @@
+Package: chaskis
+Version: {%ChaskisMainVersion%}
+Maintainer: {%Author%}
+Architecture: all
+Description: {%Summary%}
+Homepage: {%ProjectUrl%}
+Built-Using: mono-complete

@@ -1,0 +1,7 @@
+Package: chaskis
+Version: 0.5.0
+Maintainer: Seth Hendrick
+Architecture: all
+Description: A generic framework written in C# for making IRC Bots.
+Homepage: https://github.com/xforever1313/Chaskis/
+Built-Using: mono-complete
