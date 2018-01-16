@@ -70,6 +70,7 @@ $IconUrl = "https://files.shendrick.net/projects/chaskis/assets/icon.png"
 $FilesToTemplate =(
     (".\Chaskis\Install\windows\Product.wxs.template", ".\Chaskis\Install\windows\Product.wxs"),
     (".\Chaskis\Install\linux\arch\PKGBUILD.template", ".\Chaskis\Install\linux\arch\PKGBUILD"),
+    (".\Chaskis\Install\linux\debian\control.template", ".\Chaskis\Install\linux\debian\control"),
     (".\Chaskis\Install\linux\fedora\chaskis.spec.template", ".\Chaskis\Install\linux\fedora\chaskis.spec"),
     (".\Chaskis\Install\chocolatey\template\chaskis.nuspec.template", ".\Chaskis\Install\chocolatey\package\chaskis.nuspec"),
     (".\Chaskis\Install\chocolatey\template\tools\LICENSE.txt.template", ".\Chaskis\Install\chocolatey\package\tools\LICENSE.txt"),
