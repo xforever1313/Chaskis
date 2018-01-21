@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -103,25 +103,14 @@ namespace ChaskisCore
         /// </summary>
         private ManualResetEvent reconnectAbortEvent;
 
-        /// <summary>
-        /// Connection watch dog: Restarts the connection if
-        /// we can't talk to the server.
-        /// </summary>
-        private Thread connectionWatchDog;
-
-        private ManualResetEvent connectionWatchDogKeepGoing;
-
-        /// <summary>
-        /// Event that gets triggered when we get a pong.
-        /// </summary>
-        private AutoResetEvent connectionWatchDogPongEvent;
-
         private bool inited;
 
         /// <summary>
         /// TODO: Remove this.
         /// </summary>
         private INonDisposableStringParsingQueue parsingQueue;
+
+        private IrcReconnector reconnector;
 
         // -------- Constructor --------
 
@@ -150,6 +139,18 @@ namespace ChaskisCore
             this.eventScheduler = new EventScheduler();
 
             this.parsingQueue = parsingQueue;
+            this.reconnector = new IrcReconnector(
+                () => this.SendPing( "watchdog" ),
+                () =>
+                {
+                    this.AddCoreEvent( "WATCHDOG FAILED" );
+                    this.AttemptReconnect();
+                },
+                60 * 1000
+            );
+
+            this.reconnector.OnMessage += Reconnector_OnMessage;
+            this.reconnector.OnError += Reconnector_OnError;
         }
 
         // ---------------- Properties ----------------
@@ -197,11 +198,7 @@ namespace ChaskisCore
             {
                 // Start Executing
                 this.writerQueue.Start();
-
-                this.connectionWatchDog = new Thread( this.ConnectionWatchDogEntry );
-                this.connectionWatchDogKeepGoing = new ManualResetEvent( false );
-                this.connectionWatchDogPongEvent = new AutoResetEvent( false );
-                this.connectionWatchDog.Start();
+                this.reconnector.Start();
 
                 this.inited = true;
             }
@@ -375,9 +372,7 @@ namespace ChaskisCore
         {
             if( response == "watchdog" )
             {
-                // TODO: Maybe add verbose output?
-                // StaticLogger.WriteLine( "Received Watchdog Pong!" );
-                this.connectionWatchDogPongEvent.Set();
+                this.reconnector.ResetWatchdog();
             }
         }
 
@@ -507,12 +502,7 @@ namespace ChaskisCore
                 // Finish disconnecting by closing the connection.
                 DisconnectHelper();
 
-                this.connectionWatchDogKeepGoing.Set();
-                this.connectionWatchDogPongEvent.Set();
-                this.connectionWatchDog.Interrupt();
-                this.connectionWatchDog.Join();
-                this.connectionWatchDogKeepGoing.Dispose();
-                this.connectionWatchDogPongEvent.Dispose();
+                this.reconnector.Dispose();
 
                 StaticLogger.Log.WriteLine( "Disconnect Complete." );
             }
@@ -547,6 +537,8 @@ namespace ChaskisCore
         {
             Disconnect();
             this.writerQueue.OnError -= this.EventQueue_OnError;
+            this.reconnector.OnMessage -= Reconnector_OnMessage;
+            this.reconnector.OnError -= Reconnector_OnError;
         }
 
         /// <summary>
@@ -703,41 +695,10 @@ namespace ChaskisCore
                     "If this was because of a watchdog timeout, stand by..."
                 );
             }
-        }
-
-        private void ConnectionWatchDogEntry()
-        {
-            StaticLogger.Log.WriteLine( "Connection Watchdog Started." );
-            bool keepGoing = true;
-            while( keepGoing )
+            finally
             {
-                try
-                {
-                    if( this.connectionWatchDogKeepGoing.WaitOne( 60 * 1000 ) == false )
-                    {
-                        // If we timeout, send a ping.  If we do NOT timeout, then we want to wait for a ping.
-                        this.SendPing( "watchdog" );
-                        if( this.connectionWatchDogPongEvent.WaitOne( 60 * 1000 ) == false )
-                        {
-                            StaticLogger.Log.WriteLine(
-                                "Watch Dog has failed to receive a PONG within 60 seconds, attempting reconnect"
-                            );
-                            this.AddCoreEvent( "WATCHDOG FAILED" );
-                            this.AttemptReconnect();
-                        }
-                    }
-                    else
-                    {
-                        keepGoing = false;
-                    }
-                }
-                catch( Exception e )
-                {
-                    StaticLogger.Log.ErrorWriteLine( "Connection Watch Dog had an exception:" );
-                    StaticLogger.Log.ErrorWriteLine( e.ToString() );
-                }
+                StaticLogger.Log.WriteLine( "ReaderThread Exiting" );
             }
-            StaticLogger.Log.WriteLine( "Connection Watchdog Exiting." );
         }
 
         /// <summary>
@@ -854,6 +815,16 @@ namespace ChaskisCore
             errorMessage.WriteLine( "***************" );
 
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
+        }
+
+        private void Reconnector_OnMessage( string obj )
+        {
+            StaticLogger.Log.WriteLine( Convert.ToInt32( LogVerbosityLevel.HighVerbosity ), obj );
+        }
+
+        private void Reconnector_OnError( string obj )
+        {
+            StaticLogger.Log.ErrorWriteLine( Convert.ToInt32( LogVerbosityLevel.NoVerbosity ), obj );
         }
     }
 }

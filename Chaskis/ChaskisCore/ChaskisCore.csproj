@@ -46,6 +46,7 @@
     <Compile Include="IHandlerConfig.cs" />
     <Compile Include="IrcConfig.cs" />
     <Compile Include="ChaskisPlugin.cs" />
+    <Compile Include="IrcReconnector.cs" />
     <Compile Include="PluginInitor.cs" />
     <Compile Include="PongHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
