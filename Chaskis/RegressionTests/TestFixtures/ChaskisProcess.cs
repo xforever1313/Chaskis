@@ -198,7 +198,7 @@ namespace Chaskis.RegressionTests
         /// <returns>True if we found a match before the timeout, else false.</returns>
         public bool WaitForStringFromChaskis( string regex )
         {
-            return this.WaitForStringFromChaskis( regex, TestConstants.DefaultTimeout );
+            return this.WaitForStringFromChaskisWithTimeout( regex, TestConstants.DefaultTimeout );
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Chaskis.RegressionTests
         /// <param name="regex">The regex to search for.</param>
         /// <param name="timeout">How long to wait before giving up.</param>
         /// <returns>True if we found a match before the timeout, else false.</returns>
-        public bool WaitForStringFromChaskis( string regex, int timeout )
+        public bool WaitForStringFromChaskisWithTimeout( string regex, int timeout )
         {
             this.testConsoleOutLog.WriteLine( "Waiting for string '" + regex + "' from Chaskis Process..." );
             bool success = this.buffer.WaitForString( regex, timeout );

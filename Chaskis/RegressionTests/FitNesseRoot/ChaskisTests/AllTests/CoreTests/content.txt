@@ -2,3 +2,4 @@
 !contents -R2 -g -p -f -h
 
 |>ConnectTest|''Can we connect correctly?''|
+|>TaskAbortTest|''If a task takes a long time, does it abort?''|

@@ -247,7 +247,7 @@ namespace Chaskis.RegressionTests
         /// <param name="waitMsg">The message to wait for as a regex.</param>
         public bool SendMessageToChannelAsWaitMsg( string msg, string channel, string nick, string waitMsg )
         {
-            return this.SendMessageToChannelAsWaitMsg( msg, channel, nick, waitMsg, TestConstants.DefaultTimeout );
+            return this.SendMessageToChannelAsWaitMsgWithTimeout( msg, channel, nick, waitMsg, TestConstants.DefaultTimeout );
         }
 
         /// <summary>
@@ -258,10 +258,10 @@ namespace Chaskis.RegressionTests
         /// <param name="nick">The name of the user that send the message.</param>
         /// <param name="waitMsg">The message to wait for as a regex.</param>
         /// <param name="timeout">How long to wait before giving up.</param>
-        public bool SendMessageToChannelAsWaitMsg( string msg, string channel, string nick, string waitMsg, int timeout )
+        public bool SendMessageToChannelAsWaitMsgWithTimeout( string msg, string channel, string nick, string waitMsg, int timeout )
         {
             bool success = this.SendMessageToChannelAs( msg, channel, nick );
-            success &= this.WaitForMessageOnChannel( waitMsg, channel, timeout );
+            success &= this.WaitForMessageOnChannelWithTimeout( waitMsg, channel, timeout );
 
             return success;
         }
@@ -318,15 +318,15 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public bool WaitForMessageOnChannel( string msgRegex, string channel )
         {
-            return this.WaitForMessageOnChannel( msgRegex, channel, TestConstants.DefaultTimeout );
+            return this.WaitForMessageOnChannelWithTimeout( msgRegex, channel, TestConstants.DefaultTimeout );
         }
 
         /// <summary>
         /// Waits for the given PRIVMSG to appear from the chaskis process.
         /// </summary>
-        public bool WaitForMessageOnChannel( string msgRegex, string channel, int timeout )
+        public bool WaitForMessageOnChannelWithTimeout( string msgRegex, string channel, int timeout )
         {
-            return this.WaitForString( "^PRIVMSG " + channel + " :" + msgRegex );
+            return this.WaitForStringWithTimeout( "^PRIVMSG " + channel + " :" + msgRegex, timeout );
         }
 
         /// <summary>
@@ -335,14 +335,14 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public bool WaitForString( string regex )
         {
-            return this.WaitForString( regex, TestConstants.DefaultTimeout );
+            return this.WaitForStringWithTimeout( regex, TestConstants.DefaultTimeout );
         }
 
         /// <summary>
         /// Waits for the given RAW string to come
         /// from the Chaskis process.
         /// </summary>
-        public bool WaitForString( string regex, int timeout )
+        public bool WaitForStringWithTimeout( string regex, int timeout )
         {
             this.serverLog.WriteLine( "Waiting for regex " + regex + "..." );
             bool success = this.buffer.WaitForString( regex, timeout );

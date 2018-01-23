@@ -8,3 +8,4 @@ These are common actions for most tests.
 |'''>StartServerAndChaskis'''|Starts the Server and Chaskis|
 |'''>StopServerAndChaskis'''|Stops the Server and Chaskis|
 |'''>TeardownEnvironment'''|Tears down the Test Environment|
+|'''>SendCanary'''|Sends a canary to the bot to ensure we are still alive|

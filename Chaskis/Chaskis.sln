@@ -63,7 +63,6 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
-		..\SethCS\SethCS\SethCS.projitems*{c7f6b581-4bba-4c48-89e9-d5fc3fc4df7f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|Any CPU = Debug Linux|Any CPU
