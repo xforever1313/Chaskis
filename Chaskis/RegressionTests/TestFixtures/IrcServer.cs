@@ -61,7 +61,7 @@ namespace Chaskis.RegressionTests
 
         private object respondToPingsObject;
 
-        private ManualResetEvent connectedEvent;
+        private AutoResetEvent connectedEvent;
 
         // -------- TCP Client --------
         private TcpListener connection;
@@ -157,7 +157,7 @@ namespace Chaskis.RegressionTests
                 throw new InvalidOperationException( "Connection already made!" );
             }
 
-            this.connectedEvent = new ManualResetEvent( false );
+            this.connectedEvent = new AutoResetEvent( false );
 
             this.connection = new TcpListener(
                 new IPEndPoint( IPAddress.Loopback, port )
@@ -197,6 +197,18 @@ namespace Chaskis.RegressionTests
         }
 
         /// <summary>
+        /// Resets the server connection.
+        /// Needed if the client goes down.
+        /// </summary>
+        public bool ResetServerConnection()
+        {
+            this.connectionReader?.Dispose();
+            this.connectionWriter?.Dispose();
+
+            return true;
+        }
+
+        /// <summary>
         /// Stops the server.
         /// Calls <see cref="Dispose()"/> under the hood.
         /// </summary>
@@ -208,6 +220,7 @@ namespace Chaskis.RegressionTests
             }
 
             this.IsConnected = false;
+            this.ResetServerConnection();
             this.connection?.Stop();
             this.connection = null;
 
@@ -376,36 +389,45 @@ namespace Chaskis.RegressionTests
         private void ReadFromSocket()
         {
             TcpClient client = null;
-            try
+            while( this.IsConnected )
             {
-                client = this.connection.AcceptTcpClient();
-                this.connectionReader = new StreamReader( client.GetStream() );
-                this.connectionWriter = new StreamWriter( client.GetStream() );
-
-                this.connectedEvent.Set();
-
-                while( this.IsConnected )
+                try
                 {
-                    string line = this.connectionReader.ReadLine();
-                    if( string.IsNullOrEmpty( line ) == false )
+                    client = this.connection.AcceptTcpClient();
+                    this.connectionReader = new StreamReader( client.GetStream() );
+                    this.connectionWriter = new StreamWriter( client.GetStream() );
+
+                    this.connectedEvent.Set();
+
+                    while( this.IsConnected )
                     {
-                        this.inCommands.WriteLine( line );
-                        this.buffer.EnqueueString( line );
-                        if( this.RespondToPings )
+                        string line = this.connectionReader.ReadLine();
+                        if( string.IsNullOrEmpty( line ) == false )
                         {
-                            this.RespondToPing( line );
+                            this.inCommands.WriteLine( line );
+                            this.buffer.EnqueueString( line );
+                            if( this.RespondToPings )
+                            {
+                                this.RespondToPing( line );
+                            }
                         }
                     }
                 }
-            }
-            catch( Exception e )
-            {
-                this.serverLog.WriteLine( "Caught Exception in ReaderThread:" + Environment.NewLine + e.ToString() );
-            }
-            finally
-            {
-                this.IsConnected = false;
-                client?.Close();
+                catch( ObjectDisposedException e )
+                {
+                    this.serverLog.WriteLine(
+                        "Caught ObjectDisposedException in Reader Thread.  Connection was probably reset." + Environment.NewLine + e.ToString()
+                    );
+                }
+                catch( Exception e )
+                {
+                    this.serverLog.WriteLine( "Caught Exception in ReaderThread:" + Environment.NewLine + e.ToString() );
+                    this.IsConnected = false;
+                }
+                finally
+                {
+                    client?.Close();
+                }
             }
         }
 

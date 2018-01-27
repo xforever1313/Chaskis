@@ -1,3 +1,15 @@
-!contents -R2 -g -p -f -h
+ * Check to see if we try to reconnect when our watchdog times out
+ 
+|'''Set Ping Response'''|false                                                                                                           |
+|'''Wait For String'''  |PING\s+watchdog                                                           |'''With Timeout'''             |70000|
+|'''Wait For String'''  |CHASKIS\s+CORE\s+IRC\s+BCAST\s+WATCHDOG\s+FAILED                          |'''From Chaskis With Timeout'''|70000|
+|'''Wait For String'''  |CHASKIS\s+CORE\s+IRC\s+BCAST\s+DISCONNECTING\s+FROM\s+.+\s+AS\s+${botname}|'''From Chaskis With Timeout'''|15000|
+|'''Wait For String'''  |CHASKIS\s+CORE\s+IRC\s+BCAST\s+DISCONNECTED\s+FROM\s+.+\s+AS\s+${botname} |'''From Chaskis With Timeout'''|15000|
+|'''Set Ping Response'''|true                                                                                                            |
+|'''Reset Server Connection'''                                                                                                         |
+|'''Wait For String'''  |CHASKIS\s+CORE\s+IRC\s+BCAST\s+ATTEMPTING\s+RECONNECT                     |'''From Chaskis With Timeout'''|70000|
+|''' Wait For Connection '''                                                                                                             |
+|''' Wait For String '''|CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)                         |'''From Chaskis With Timeout'''|15000|
 
-| ''' Is hello world ''' |Hello World|
+ * Test Coms after re-connecting
+|'''Send Message'''|test|'''To Channel'''|${channel1}|'''As'''|${adminuser}|'''Wait Msg'''|Test Case Passed!|

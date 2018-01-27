@@ -748,9 +748,7 @@ namespace ChaskisCore
                         timeoutMinutes++;
                     }
 
-                    StaticLogger.Log.WriteLine(
-                        "Attempting reconnect..."
-                    );
+                    this.AddCoreEvent( "ATTEMPTING RECONNECT" );
 
                     // Try connecting.
                     Connect();
