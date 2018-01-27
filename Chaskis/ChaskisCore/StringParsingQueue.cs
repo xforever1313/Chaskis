@@ -66,7 +66,8 @@ namespace ChaskisCore
         public StringParsingQueue()
         {
             this.eventQueue = new InterruptibleEventExecutor(
-                15 * 1000 // Lets start with 15 seconds and see how that works.
+                15 * 1000, // Lets start with 15 seconds and see how that works.,
+                nameof( StringParsingQueue ) + " Thread"
             );
 
             this.eventQueue.OnError += this.EventQueue_OnError;
@@ -200,7 +201,7 @@ namespace ChaskisCore
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in Parsing Queue Thread:" );
+            errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );

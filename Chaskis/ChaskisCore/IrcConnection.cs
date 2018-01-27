@@ -131,7 +131,7 @@ namespace ChaskisCore
             this.keepReadingObject = new object();
             this.KeepReading = false;
 
-            this.writerQueue = new EventExecutor();
+            this.writerQueue = new EventExecutor( config.Server +  " IRC Writer Queue" );
             this.writerQueue.OnError += this.WriterQueue_OnError;
 
             this.ircWriterLock = new object();
@@ -230,6 +230,7 @@ namespace ChaskisCore
             // Start Reading.
             this.KeepReading = true;
             this.readerThread = new Thread( ReaderThread );
+            this.readerThread.Name = this.Config.Server + " IRC reader thread";
             this.readerThread.Start();
 
             // USER <user> <mode> <unused> <realname>
@@ -794,7 +795,7 @@ namespace ChaskisCore
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in Event Queue Thread:" );
+            errorMessage.WriteLine( "Caught Exception in " +  Thread.CurrentThread.Name + ":" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
@@ -807,7 +808,7 @@ namespace ChaskisCore
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in Writer Queue Thread:" );
+            errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
