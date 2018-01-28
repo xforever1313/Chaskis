@@ -3,3 +3,4 @@
 
 |>ConnectTest|''Can we connect correctly?''|
 |>TaskAbortTest|''If a task takes a long time, does it abort?''|
+|>AsyncAwaitTest|''Ensures the background threads are working correctly.''|

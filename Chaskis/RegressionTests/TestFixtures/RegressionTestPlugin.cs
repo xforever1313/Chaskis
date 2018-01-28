@@ -7,8 +7,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -28,6 +28,8 @@ namespace Chaskis.RegressionTests
         private const string sleepPattern = @"!chaskistest\s+sleep\s+(?<timeMs>\d+)";
         private const string forceSleepPattern = @"!chaskistest\s+force\s+sleep\s+(?<timeMs>\d+)";
         private const string canaryPattern = @"!chaskistest\s+canary";
+        private const string asyncAwaitThreadTestPattern = @"!chaskistest\s+asyncawait\s+threadname";
+        private const string asyncAwaitExceptionTestPattern = @"!chaskistest\s+asyncawait\s+exception";
 
         // ---------------- Constructor ----------------
 
@@ -107,6 +109,24 @@ namespace Chaskis.RegressionTests
 
                 this.handlers.Add( canaryHandler );
             }
+
+            {
+                MessageHandler asyncHandler = new MessageHandler(
+                    asyncAwaitThreadTestPattern,
+                    this.DoAsyncTest
+                );
+
+                this.handlers.Add( asyncHandler );
+            }
+
+            {
+                MessageHandler asyncHandler = new MessageHandler(
+                    asyncAwaitExceptionTestPattern,
+                    this.DoAsyncExceptionTest
+                );
+
+                this.handlers.Add( asyncHandler );
+            }
         }
 
         public void Dispose()
@@ -150,6 +170,34 @@ namespace Chaskis.RegressionTests
             finally
             {
                 this.HandleSleep( writer, response );
+            }
+        }
+
+        private async void DoAsyncTest( IIrcWriter writer, IrcResponse response )
+        {
+            writer.SendMessage( "Starting from " + Thread.CurrentThread.Name, response.Channel );
+
+            string bgThreadName = "NEVER SET!";
+            await Task.Factory.StartNew( () => bgThreadName = Thread.CurrentThread.Name );
+
+            writer.SendMessage( "Background Thread Name: " + bgThreadName + "END", response.Channel );
+            writer.SendMessage( "Finishing from " + Thread.CurrentThread.Name, response.Channel );
+        }
+
+        private async void DoAsyncExceptionTest( IIrcWriter writer, IrcResponse response )
+        {
+            writer.SendMessage( "About to throw Exception" + Thread.CurrentThread.Name, response.Channel );
+
+            try
+            {
+                await Task.Factory.StartNew(
+                    () => { throw new Exception( "Throwing Exception From Background Thread" ); }
+                );
+            }
+            catch( Exception e )
+            {
+                writer.SendMessage( "Caught Exception " + e.Message, response.Channel );
+                throw;
             }
         }
 
