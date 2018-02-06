@@ -1,13 +1,16 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.IO;
 using System.Linq;
 using Chaskis.Plugins.IrcLogger;
 using NUnit.Framework;
+using SethCS.Basic;
 
 namespace Tests.Plugins.IrcLogger
 {
@@ -15,6 +18,8 @@ namespace Tests.Plugins.IrcLogger
     public class LogManagerTest
     {
         // -------- Fields --------
+
+        private GenericLogger log;
 
         /// <summary>
         /// Unit Under Test.
@@ -33,6 +38,9 @@ namespace Tests.Plugins.IrcLogger
         [SetUp]
         public void TestSetup()
         {
+            this.log = new GenericLogger();
+            this.log.OnErrorWriteLine += delegate ( string s ) { Console.Error.WriteLine( s ); };
+
             this.testConfig = new IrcLoggerConfig();
             this.testConfig.LogName = "TestLog";
             this.testConfig.LogFileLocation = testLogDirectory;
@@ -62,7 +70,7 @@ namespace Tests.Plugins.IrcLogger
         [Test]
         public void NullArgumentTest()
         {
-            Assert.Throws<ArgumentNullException>( () => new LogManager( null ) );
+            Assert.Throws<ArgumentNullException>( () => new LogManager( null, log ) );
         }
 
         /// <summary>
@@ -72,13 +80,13 @@ namespace Tests.Plugins.IrcLogger
         public void SingleFileTest()
         {
             this.testConfig.MaxNumberMessagesPerLog = 0;
-            this.uut = new LogManager( this.testConfig );
+            this.uut = new LogManager( this.testConfig, log );
 
             // Ensure no file is currently open.
             Assert.AreEqual( string.Empty, this.uut.CurrentFileName );
             Assert.AreEqual( string.Empty, this.uut.LastFileName );
 
-            this.uut.LogToFile( "Hello World!" );
+            this.uut.SyncLogToFile( "Hello World!" );
 
             // Ensure directory is created.
             Assert.IsTrue( Directory.Exists( testLogDirectory ) );
@@ -92,7 +100,7 @@ namespace Tests.Plugins.IrcLogger
             // Log 2000 more times.  There should still be only 1 file at the end.
             for( int i = 0; i < 2000; ++i )
             {
-                this.uut.LogToFile( "Test " + i );
+                this.uut.SyncLogToFile( "Test " + i );
             }
 
             // Ensure there is one file created, and named correctly.
@@ -111,13 +119,13 @@ namespace Tests.Plugins.IrcLogger
         {
             const int maxMessages = 10;
             this.testConfig.MaxNumberMessagesPerLog = maxMessages;
-            this.uut = new LogManager( this.testConfig );
+            this.uut = new LogManager( this.testConfig, this.log );
 
             // Ensure no file is currently open.
             Assert.AreEqual( string.Empty, this.uut.CurrentFileName );
             Assert.AreEqual( string.Empty, this.uut.LastFileName );
 
-            this.uut.LogToFile( "Hello World!" );
+            this.uut.SyncLogToFile( "Hello World!" );
 
             // Ensure directory is created.
             Assert.IsTrue( Directory.Exists( testLogDirectory ) );
@@ -133,7 +141,7 @@ namespace Tests.Plugins.IrcLogger
             // Log more times more times.  There should still be only 1 file at the end.
             for( int i = 0; i < maxMessages; ++i )
             {
-                this.uut.LogToFile( "Test " + i );
+                this.uut.SyncLogToFile( "Test " + i );
             }
 
             // Ensure there a new file created, and named correctly.
@@ -153,7 +161,7 @@ namespace Tests.Plugins.IrcLogger
             // Log more times more times.  There should still be only 1 file at the end.
             for( int i = 0; i < maxMessages; ++i )
             {
-                this.uut.LogToFile( "Test " + i );
+                this.uut.SyncLogToFile( "Test " + i );
             }
 
             // Ensure there a new file created, and named correctly.

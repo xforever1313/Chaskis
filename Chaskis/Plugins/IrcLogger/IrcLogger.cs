@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -110,7 +110,7 @@ namespace Chaskis.Plugins.IrcLogger
                 config.LogName = "irclog";
             }
 
-            this.logManager = new LogManager( config );
+            this.logManager = new LogManager( config, initor.Log );
 
             AllHandler handler = new AllHandler(
                 this.HandleLogEvent
@@ -165,7 +165,7 @@ namespace Chaskis.Plugins.IrcLogger
 
             if( log )
             {
-                this.logManager.LogToFile( response.Message );
+                this.logManager.AsyncLogToFile( response.Message );
             }
         }
     }

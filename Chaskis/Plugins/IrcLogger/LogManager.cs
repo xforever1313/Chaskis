@@ -1,10 +1,15 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.IO;
+using System.Text;
+using System.Threading;
+using SethCS.Basic;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.IrcLogger
@@ -36,13 +41,23 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         private StreamWriter outFileWriter;
 
+        /// <summary>
+        /// IO to the file system isn't cheap, let's background it.
+        /// </summary>
+        private EventExecutor writerThread;
+
+        private bool isDisposed;
+
+        private GenericLogger statusLog;
+
         // -------- Constructor --------
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="config">The config to use.</param>
-        public LogManager( IrcLoggerConfig config )
+        /// <param name="statusLog">The log to use for reporting status.</param>
+        public LogManager( IrcLoggerConfig config, GenericLogger statusLog )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
@@ -54,6 +69,33 @@ namespace Chaskis.Plugins.IrcLogger
             if( Directory.Exists( config.LogFileLocation ) == false )
             {
                 Directory.CreateDirectory( config.LogFileLocation );
+            }
+
+            this.statusLog = statusLog;
+
+            this.writerThread = new EventExecutor( "IRC Logger" );
+
+            this.writerThread.OnError += WriterThread_OnError;
+
+            this.writerThread.Start();
+            this.isDisposed = false;
+        }
+
+        private void WriterThread_OnError( Exception e )
+        {
+            this.statusLog.ErrorWriteLine(
+                "Caught Exception while writing to file in IRC Logger: " + Environment.NewLine + e.ToString()
+            );
+        }
+
+        ~LogManager()
+        {
+            try
+            {
+                this.Dispose( false );
+            }
+            catch( Exception )
+            {
             }
         }
 
@@ -74,10 +116,27 @@ namespace Chaskis.Plugins.IrcLogger
         // -------- Functions --------
 
         /// <summary>
+        /// Starts writing a message in the background event queue.
+        /// </summary>
+        public void AsyncLogToFile( string message )
+        {
+            this.writerThread.AddEvent( () => this.LogToFileInternal( message ) );
+        }
+
+        /// <summary>
+        /// Only recommended to use during Unit Testing.
+        /// Writes the message to a file in the calling thread.
+        /// </summary>
+        public void SyncLogToFile( string message )
+        {
+            this.LogToFileInternal( message );
+        }
+
+        /// <summary>
         /// Logs the given string to the open file.
         /// </summary>
         /// <param name="message">The message to add.</param>
-        public void LogToFile( string message )
+        private void LogToFileInternal( string message )
         {
             DateTime timeStamp = DateTime.UtcNow;
 
@@ -90,17 +149,20 @@ namespace Chaskis.Plugins.IrcLogger
                 this.outFileWriter.WriteLine( "############################################################" );
             }
 
-            // In case we are writing multiple lines, go line by line through the message
-            // so we have timestamps for each line.
-            using( StringReader reader = new StringReader( message ) )
+            StringBuilder builder = new StringBuilder();
+            foreach( char ch in message )
             {
-                string line = reader.ReadLine();
-                while( line != null )
+                if( char.IsControl( ch ) )
                 {
-                    this.outFileWriter.WriteLine( timeStamp.ToString( "o" ) + "  " + line );
-                    line = reader.ReadLine();
+                    builder.AppendFormat( "[0x{0}]", Convert.ToInt32( ch ).ToString( "X4" ) );
+                }
+                else
+                {
+                    builder.Append( ch );
                 }
             }
+
+            this.outFileWriter.WriteLine( timeStamp.ToString( "o" ) + "  " + builder.ToString() );
 
             ++this.currentLineCount;
 
@@ -111,7 +173,10 @@ namespace Chaskis.Plugins.IrcLogger
                 if( this.currentLineCount >= this.config.MaxNumberMessagesPerLog )
                 {
                     // Spin until we get a new timestamp.
-                    while( DateTime.UtcNow.Equals( timeStamp ) ) { };
+                    while( DateTime.UtcNow.Equals( timeStamp ) )
+                    {
+                        Thread.Sleep( 15 );
+                    };
 
                     timeStamp = DateTime.UtcNow;
 
@@ -200,8 +265,47 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         public void Dispose()
         {
-            // Closes the underlying stream as well.
-            this.outFileWriter?.Dispose();
+            this.Dispose( true );
+            GC.SuppressFinalize( this );
+        }
+
+        protected void Dispose( bool fromDispose )
+        {
+            if( this.isDisposed )
+            {
+                return;
+            }
+
+            try
+            {
+                if( fromDispose )
+                {
+                    ManualResetEvent doneEvent = new ManualResetEvent( false );
+                    this.writerThread.AddEvent( () => doneEvent.Set() );
+
+                    if( doneEvent.WaitOne( 15 * 1000 ) == false )
+                    {
+                        this.statusLog.ErrorWriteLine( "IRC Logger hung for 15 seconds during tear down, giving up." );
+                    }
+
+                    this.writerThread.Dispose();
+
+                    // Closes the underlying stream as well.
+                    this.outFileWriter?.Dispose();
+
+                    this.writerThread.OnError -= this.WriterThread_OnError;
+                }
+                else
+                {
+                    // If we are from the finallizer, forget all the events,
+                    // Just stop the event queue.
+                    this.writerThread.Dispose();
+                }
+            }
+            finally
+            {
+                this.isDisposed = true;
+            }
         }
     }
 }
