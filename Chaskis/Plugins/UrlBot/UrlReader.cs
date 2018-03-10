@@ -8,6 +8,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -100,6 +101,10 @@ namespace Chaskis.Plugins.UrlBot
                 //
                 // Check the content length first so we don't download a massive file.
                 {
+                    // https://stackoverflow.com/questions/19639846/failure-on-httpwebrequest-with-inner-exception-authentication-failed-because-the
+                    // Apparently we need to set this???
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
                     HttpRequestMessage headRequest = new HttpRequestMessage( HttpMethod.Head, url );
                     HttpResponseMessage headResponse = await this.httpClient.SendAsync( headRequest );
 

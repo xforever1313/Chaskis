@@ -191,7 +191,7 @@ namespace Chaskis.RegressionTests
                         }
 
                         this.serverLog.WriteLine(
-                            request.HttpMethod + " from: " + request.UserHostName + " " + request.UserHostAddress + " " + request.RawUrl + " (" + response.StatusCode + ")"
+                            request.HttpMethod + " from: " + request.UserHostName + " " + request.UserHostAddress + " '" + request.UserAgent + "' " + request.RawUrl + " (" + response.StatusCode + ")"
                         );
                     } // End request/response try{}
                     catch( Exception err )
