@@ -12,4 +12,4 @@
 |''' Wait For String '''|CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)                         |'''From Chaskis With Timeout'''|15000|
 
  * Test Coms after re-connecting
-|'''Send Message'''|test|'''To Channel'''|${channel1}|'''As'''|${adminuser}|'''Wait Msg'''|Test Case Passed!|
+!include <ChaskisTests.BuildingBlocks.SendCanary

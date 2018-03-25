@@ -338,7 +338,7 @@ namespace ChaskisCore
                         // CanWrite can return true, this thread can be preempted,
                         // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
                         // to a socket that is closed which is a problem.
-                        if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                        if( ( this.connection == null ) || ( this.connection.Connected == false ) )
                         {
                             return;
                         }
@@ -419,7 +419,7 @@ namespace ChaskisCore
                 {
                     lock( this.ircWriterLock )
                     {
-                        if( ( this.connection == null ) || ( this.connection.GetStream().CanWrite == false ) )
+                        if( ( this.connection == null ) || ( this.connection.Connected == false ) )
                         {
                             return;
                         }
@@ -456,41 +456,21 @@ namespace ChaskisCore
             {
                 StaticLogger.Log.WriteLine( "Disconnecting..." );
 
-                // Stop the reader thread.  This prevents any more events from
-                // being queued.
-
-                // These events must be in in order for this thing to work.
-
-                // 1. Set KeepReading to false.  The abort logic in the Reader
-                //    thread depends on this.
-                this.KeepReading = false;
-
-                // 2. We could be in the reconnecting state.  Trigger that thread to awaken
-                //    if its sleeping between reconnects.  This will cause the thread to return.
-                this.reconnectAbortEvent.Set();
-
-                // 4. Close the TCP stream.  If we are waiting for data to come over TCP from the IRC server,
-                //    we need to close the IRC connection for the reader thread to abort.
-                //
-                //    The ircReader and the ircWriter share the same stream, so closing one will close the other.
-                //    Any calls to SendPong or SendMessageToUser are ignored as the stream's CanWrite will be set to false
-                //    since the stream is closed.
-                //
-                //    We also must lock on the writer lock.  We don't want to close the stream
-                //    while the writer is writing.
-                lock( this.ircWriterLock )
-                {
-                    this.ircReader.Close();
-                }
-
-                // 5. Wait for the reader thread to exit.
-                this.readerThread.Join();
-
-                // Stop all scheduled events.
+                // Stop all scheduled events.  This will prevent any more events
+                // from being queued from this perspective.
                 this.eventScheduler.Dispose();
 
-                // Execute all remaining events. Any that call into writing to the channel
-                // will be a No-Op as the stream is closed.
+                // - Next, prevent the reader thread from adding more events.
+                //   Set KeepReading to false.  The abort logic in the Reader
+                //   thread depends on this.  This will also prevent any more
+                //   events being posted to the string parsing queue.
+                this.KeepReading = false;
+
+                // - We could be in the reconnecting state.  Trigger that thread to awaken
+                //   if its sleeping between reconnects.  This will cause the thread to return.
+                this.reconnectAbortEvent.Set();
+
+                // Drain our writer queue before disconnecting so everything that needs to go out goes out.
                 {
                     ManualResetEvent doneEvent = new ManualResetEvent( false );
                     this.writerQueue.AddEvent( () => doneEvent.Set() );
@@ -500,8 +480,29 @@ namespace ChaskisCore
                     this.writerQueue.Dispose();
                 }
 
+                // - Close the TCP stream.  If we are waiting for data to come over TCP from the IRC server,
+                //   we need to close the IRC connection for the reader thread to abort.
+                //
+                //   The ircReader and the ircWriter share the same stream, so closing one will close the other.
+                //   Any calls to SendPong or SendMessageToUser are ignored as the stream's CanWrite will be set to false
+                //   since the stream is closed.
+                //
+                //   We also must lock on the writer lock.  We don't want to close the stream in the unlikely event
+                //   the writer is writing.
+                lock( this.ircWriterLock )
+                {
+                    this.ircReader.Close();
+                }
+
+                // - Wait for the reader thread to exit.
+                this.readerThread.Join();
+
                 // Finish disconnecting by closing the connection.
-                DisconnectHelper();
+                // Disconnect.
+                lock( this.ircWriterLock )
+                {
+                    DisconnectHelper();
+                }
 
                 this.reconnector.Dispose();
 
@@ -516,7 +517,6 @@ namespace ChaskisCore
         {
             this.AddCoreEvent( "DISCONNECTING FROM " + this.Config.Server + " AS " + this.Config.Nick );
 
-            // Disconnect.
             this.connection.Close();
 
             // Reset everything to null.
@@ -639,7 +639,12 @@ namespace ChaskisCore
                         string s = this.ircReader.ReadLine();
                         if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                         {
-                            this.OnReadLine( s );
+                            // If KeepReading is set to false, we want this thread to exit.
+                            // Do nothing.
+                            if( this.KeepReading )
+                            {
+                                this.OnReadLine( s );
+                            }
                         }
                     }
                     catch( SocketException err )
