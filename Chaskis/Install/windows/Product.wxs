@@ -10,13 +10,13 @@
     -->
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="7C4E2B7F-660A-4B69-B87A-1B5AFA5B4C4E"
+	<Product Id="E39E99D6-F808-4184-9AA7-17DC46944876"
              Name="Chaskis IRC Bot"
              Language="1033"
-             Version="0.5.0"
+             Version="0.6.0"
              Manufacturer="Seth Hendrick"
-             UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"
-        >
+             UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
+
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
         <!-- ================ UI Stuff ================ -->
