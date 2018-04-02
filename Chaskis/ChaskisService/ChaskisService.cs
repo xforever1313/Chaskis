@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
 using SethCS.Basic;
+using SethCS.Extensions;
 
 namespace ChaskisService
 {
@@ -156,8 +157,8 @@ namespace ChaskisService
         /// <param name="msg">The message to log.</param>
         private void LinuxLogInfo( string msg )
         {
-            DateTime timeStamp = DateTime.Now;
-            this.logWriter.WriteLine( timeStamp.ToString( "o" ) + "  MSG>    " + msg );
+            DateTime timeStamp = DateTime.UtcNow;
+            this.logWriter.WriteLine( timeStamp.ToTimeStampString() + "  MSG>    " + msg );
             this.logWriter.Flush();
         }
 

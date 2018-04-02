@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using SethCS.Basic;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.IrcLogger
 {
@@ -162,7 +163,7 @@ namespace Chaskis.Plugins.IrcLogger
                 }
             }
 
-            this.outFileWriter.WriteLine( timeStamp.ToString( "o" ) + "  " + builder.ToString() );
+            this.outFileWriter.WriteLine( timeStamp.ToTimeStampString() + "  " + builder.ToString() );
 
             ++this.currentLineCount;
 
