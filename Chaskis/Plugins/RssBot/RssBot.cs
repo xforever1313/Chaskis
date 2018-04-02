@@ -146,7 +146,10 @@ namespace Chaskis.Plugins.RssBot
         {
             try
             {
-                this.pluginLogger.WriteLine( "Fetching RSS feed for '" + reader.Url + "'" );
+                this.pluginLogger.WriteLine(
+                    "Fetching RSS feed for '" + reader.Url + "'",
+                    Convert.ToInt32( LogVerbosityLevel.LowVerbosity )
+                );
 
                 IList<SyndicationItem> newItems = await reader.UpdateAsync();
                 if( newItems.Count > 0 )
