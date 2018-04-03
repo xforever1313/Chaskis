@@ -91,6 +91,8 @@ namespace ChaskisCore
                 errorMessage.WriteLine( e.Message );
                 errorMessage.WriteLine( e.StackTrace );
                 errorMessage.WriteLine( "***************" );
+
+                StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
             }
         }
 
@@ -150,13 +152,30 @@ namespace ChaskisCore
             this.BeginInvoke(
                 delegate ()
                 {
-                    foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
+                    try
                     {
-                        innerArgs.BlackListedChannels = handlers.Value.BlackListedChannels;
-                        foreach( IIrcHandler handler in handlers.Value.Handlers )
+                        foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
                         {
-                            handler.HandleEvent( innerArgs );
+                            innerArgs.BlackListedChannels = handlers.Value.BlackListedChannels;
+                            foreach( IIrcHandler handler in handlers.Value.Handlers )
+                            {
+                                handler.HandleEvent( innerArgs );
+                            }
                         }
+                    }
+                    catch( Exception e )
+                    {
+                        string line = args.Line ?? "[null]";
+
+                        StringWriter writer = new StringWriter();
+                        writer.WriteLine( "*******************" );
+                        writer.WriteLine( "Caught Exception with line '" + line + "'" );
+                        writer.WriteLine( e.ToString() );
+                        writer.WriteLine( "*******************" );
+
+                        StaticLogger.Log.ErrorWriteLine( writer.ToString() );
+
+                        throw;
                     }
                 }
             );
