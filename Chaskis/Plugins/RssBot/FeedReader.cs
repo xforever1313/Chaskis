@@ -107,23 +107,28 @@ namespace Chaskis.Plugins.RssBot
             return newItems;
         }
 
-        private async Task<SyndicationFeed> FetchFeed()
+        private Task<SyndicationFeed> FetchFeed()
         {
-            HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
-            if( response.IsSuccessStatusCode )
-            {
-                using( Stream content = await response.Content.ReadAsStreamAsync() )
+            return Task.Run(
+                async delegate ()
                 {
-                    using( XmlReader xmlReader = XmlReader.Create( content ) )
+                    HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
+                    if( response.IsSuccessStatusCode )
                     {
-                        return SyndicationFeed.Load( xmlReader );
+                        using( Stream content = await response.Content.ReadAsStreamAsync() )
+                        {
+                            using( XmlReader xmlReader = XmlReader.Create( content ) )
+                            {
+                                return SyndicationFeed.Load( xmlReader );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpRequestException( "Error when getting HTTP: " + Environment.NewLine + response.StatusCode );
                     }
                 }
-            }
-            else
-            {
-                throw new HttpRequestException( "Error when getting HTTP: " + Environment.NewLine + response.StatusCode );
-            }
+            );
         }
 
         private int SortByDate( SyndicationItem item1, SyndicationItem item2 )

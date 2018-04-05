@@ -8,7 +8,6 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -85,62 +84,67 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         /// <param name="url">URL to grab.</param>
         /// <returns>The description from the website's meta tag.</returns>
-        public async Task<UrlResponse> AsyncGetDescription( string url )
+        public Task<UrlResponse> AsyncGetDescription( string url )
         {
-            UrlResponse response = new UrlResponse();
-
-            try
-            {
-                long totalBytes;
-
-                // Get the length of the file we are going to download.
-                // Ignore if its going to be too big.
-                // 
-                // The HEAD method is the same thing as a GET request... the only
-                // difference being the content does not get returned.
-                //
-                // Check the content length first so we don't download a massive file.
+            return Task.Run(
+                async delegate
                 {
-                    // https://stackoverflow.com/questions/19639846/failure-on-httpwebrequest-with-inner-exception-authentication-failed-because-the
-                    // Apparently we need to set this???
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                    UrlResponse response = new UrlResponse();
 
-                    HttpRequestMessage headRequest = new HttpRequestMessage( HttpMethod.Head, url );
-                    HttpResponseMessage headResponse = await this.httpClient.SendAsync( headRequest );
-
-                    // Set to max value if there is no content length.  We'll assume the file is too big
-                    // if its trying to hide this.
-                    totalBytes = headResponse.Content.Headers.ContentLength ?? long.MaxValue;
-                }
-
-                // If th length is too big, ignore.
-                if( totalBytes <= maxFileSize )
-                {
-                    HttpResponseMessage getResponse = await this.httpClient.GetAsync( url );
-
-                    string webResponse = await getResponse.Content.ReadAsStringAsync();
-
-                    HtmlDocument doc = new HtmlDocument();
-                    doc.LoadHtml( webResponse );
-
-                    HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
-                    if( node != null )
+                    try
                     {
-                        // Issue #15: Ensure we decode characters such as &lt; and &gt;
-                        response.Title = WebUtility.HtmlDecode( node.InnerText );
-                    }
-                }
-                else
-                {
-                    this.logger.WriteLine( "Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
-                }
-            }
-            catch( Exception e )
-            {
-                this.logger.ErrorWriteLine( "Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
-            }
+                        long totalBytes;
 
-            return response;
+                        // Get the length of the file we are going to download.
+                        // Ignore if its going to be too big.
+                        // 
+                        // The HEAD method is the same thing as a GET request... the only
+                        // difference being the content does not get returned.
+                        //
+                        // Check the content length first so we don't download a massive file.
+                        {
+                            // https://stackoverflow.com/questions/19639846/failure-on-httpwebrequest-with-inner-exception-authentication-failed-because-the
+                            // Apparently we need to set this???
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+                            HttpRequestMessage headRequest = new HttpRequestMessage( HttpMethod.Head, url );
+                            HttpResponseMessage headResponse = await this.httpClient.SendAsync( headRequest );
+
+                            // Set to max value if there is no content length.  We'll assume the file is too big
+                            // if its trying to hide this.
+                            totalBytes = headResponse.Content.Headers.ContentLength ?? long.MaxValue;
+                        }
+
+                        // If th length is too big, ignore.
+                        if( totalBytes <= maxFileSize )
+                        {
+                            HttpResponseMessage getResponse = await this.httpClient.GetAsync( url );
+
+                            string webResponse = await getResponse.Content.ReadAsStringAsync();
+
+                            HtmlDocument doc = new HtmlDocument();
+                            doc.LoadHtml( webResponse );
+
+                            HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
+                            if( node != null )
+                            {
+                                // Issue #15: Ensure we decode characters such as &lt; and &gt;
+                                response.Title = WebUtility.HtmlDecode( node.InnerText );
+                            }
+                        }
+                        else
+                        {
+                            this.logger.WriteLine( "Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        this.logger.ErrorWriteLine( "Error when getting response from {0}{1}{2}", url, Environment.NewLine, e.ToString() );
+                    }
+
+                    return response;
+                }
+            );
         }
     }
 }
