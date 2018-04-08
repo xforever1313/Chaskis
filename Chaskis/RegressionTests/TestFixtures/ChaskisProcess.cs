@@ -111,6 +111,7 @@ namespace Chaskis.RegressionTests
             if( string.IsNullOrEmpty( e.Data ) == false )
             {
                 this.consoleErrorLog.WriteLine( e.Data );
+                this.buffer.EnqueueString( e.Data );
             }
         }
 

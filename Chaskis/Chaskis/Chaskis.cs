@@ -70,6 +70,7 @@ namespace Chaskis
             this.chaskisRoot = chaskisRoot;
             this.httpClient = new HttpClient();
             this.httpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot" );
+            this.httpClient.Timeout = new TimeSpan( 0, 0, 10 );
 
             this.parsingQueue = new StringParsingQueue();
         }

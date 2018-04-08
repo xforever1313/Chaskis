@@ -1,3 +1,4 @@
 !contents -R2 -g -p -f -h
 
 | >UpdateTests | '''Does the RSS Bot send messages when required?''' |
+| >AbortTests| '''Do we abort if we take to long to do a GET Request?'''|

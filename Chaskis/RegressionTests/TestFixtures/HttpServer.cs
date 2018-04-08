@@ -35,6 +35,7 @@ namespace Chaskis.RegressionTests
 
         public HttpServer()
         {
+            this.HangTime = 0;
             this.fileMap = new Dictionary<string, string>();
             this.serverLog = Logger.GetLogFromContext( "http_server" );
             this.listeningThread = new Thread( this.HandleRequest );
@@ -46,6 +47,8 @@ namespace Chaskis.RegressionTests
         /// Whether or not we are listening.
         /// </summary>
         public bool IsListening { get; private set; }
+
+        public int HangTime { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -98,6 +101,11 @@ namespace Chaskis.RegressionTests
                 this.serverLog.WriteLine( "Stopping HTTP Server...Done!" );
             }
             return true;
+        }
+
+        public void SetHttpServerHangTimeTo( int hangTime )
+        {
+            this.HangTime = hangTime;
         }
 
         public void Dispose()
@@ -158,6 +166,13 @@ namespace Chaskis.RegressionTests
 
                             responseBuffer = File.ReadAllBytes( this.fileMap[url] );
                             code = HttpStatusCode.OK;
+
+                            if( this.HangTime > 0 )
+                            {
+                                this.serverLog.WriteLine( "Hanging for " + this.HangTime + "ms..." );
+                                Thread.Sleep( this.HangTime );
+                                this.serverLog.WriteLine( "Hanging for " + this.HangTime + "ms... Done!" );
+                            }
                         }
                         catch( Exception e )
                         {
