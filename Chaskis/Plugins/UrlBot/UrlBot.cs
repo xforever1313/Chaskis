@@ -19,7 +19,7 @@ namespace Chaskis.Plugins.UrlBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.1";
+        public const string VersionStr = "0.3.2";
 
         /// <summary>
         /// The handlers for this plugin.
