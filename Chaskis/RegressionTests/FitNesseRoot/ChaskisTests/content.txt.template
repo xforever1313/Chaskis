@@ -1,0 +1,37 @@
+!1 Chaskis Tests
+!contents -R2 -g -p -f -h
+# Taken from here: https://github.com/imanushin/NetRunner/wiki/Create-the-first-test
+
+!define COMMAND_PATTERN {%m %p}
+!define TEST_RUNNER {./runner/NetRunner.Executable.exe}
+!path TestFixtures/bin/Debug/RegressionTests.dll
+!define port {10123}
+!define httpport {32101}
+!define adminuser {adminuser}
+!define testuser {nonadminuser}
+!define botname {chaskisbot}
+!define channel1 {!-#chaskistest-!}
+!define channel2 {!-#chaskistest2-!}
+!define chaskis_project_root {../../../../}
+
+# Templatized variables
+!define fullname {{%FullName%}}
+!define chaskis_version {{%ChaskisMainVersion%}}
+!define chaskis_core_version {{%ChaskisCoreVersion%}}
+!define author {{%Author%}}
+!define author_email {{%AuthorEmail%}}
+!define project_url {{%ProjectUrl%}}
+!define license_url {{%LicenseUrl%}}
+!define wiki_url {{%WikiUrl%}}
+!define issue_tracker_url {{%IssueTrackerUrl%}}
+!define copyright {{%CopyRight%}}
+!define icon_url {{%IconUrl%}}
+!define default_plugin_name {{%DefaultPluginName%}}
+!define regression_test_plugin_name {{%RegressionTestPluginName%}}
+!define regression_test_plugin_version {{%RegressionTestPluginVersion%}}
+
+!2 Setup Tests
+| >HelloWorldTest | ''Ensures our setup is correct.'' |
+
+!2 All Tests
+| >AllTests | ''All Chaskis Tests.'' |

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ChaskisCore;
@@ -73,10 +74,25 @@ namespace Chaskis.RegressionTests
 
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            writer.SendMessage(
-                this.About,
-                response.Channel
-            );
+            if( args.Length == 0 )
+            {
+                writer.SendMessage(
+                    "Got help request with no arguments.",
+                    response.Channel
+                );
+            }
+            else
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach( string arg in args )
+                {
+                    builder.Append( arg + " " );
+                }
+                writer.SendMessage(
+                    "Got help request with these args: " + builder.ToString(),
+                    response.Channel
+                );
+            }
         }
 
         public void Init( PluginInitor pluginInit )

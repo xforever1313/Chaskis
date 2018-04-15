@@ -1,0 +1,20 @@
+This test ensures querying the version command works as expected for both the default plugin and other plugins.
+
+ * Ensure we can query the default plugin
+ 
+|'''Send Message'''    |!${botname} version                                          |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|Version\s+of\s+'${default_plugin_name}':\s+${chaskis_version}|'''On Channel'''|${channel1}                     |
+ 
+|'''Send Message'''    |@${botname} version ${default_plugin_name}                   |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|Version\s+of\s+'${default_plugin_name}':\s+${chaskis_version}|'''On Channel'''|${channel1}                     |
+ 
+ * Ensure we can query a specific plugin's version
+
+|'''Send Message'''    |@${botname}: version ${regression_test_plugin_name}                                 |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|Version\s+of\s+'${regression_test_plugin_name}':\s+${regression_test_plugin_version}|'''On Channel'''|${channel1}                     |
+ 
+
+ * Ensure querying a non-existant plugin does not result in a crash
+ 
+|'''Send Message'''    |!${botname}: version herpderp                         |'''To Channel'''|${channel1}|'''as'''|${testuser}|
+|'''Wait For Message'''|'herpderp'\s+is\s+not\s+a\s+plugin\s+I\s+have\s+loaded|'''On Channel'''|${channel1}                     |

@@ -59,10 +59,12 @@ namespace Chaskis
         /// Any errors are logged to the passed in logger.
         /// </summary>
         /// <param name="assemblyList">List of assemblies we are to load.</param>
+        /// <param name="existingPlugins">Already created plugins that do not need to be inited via reflection.</param>
         /// <param name="ircConfig">The irc config we are using.</param>
         /// <param name="chaskisConfigRoot">The root of the chaskis config.</param>
         public bool LoadPlugins(
             IList<AssemblyConfig> assemblyList,
+            IList<PluginConfig> existingPlugins,
             IIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
             IChaskisEventSender eventSender,
@@ -136,6 +138,11 @@ namespace Chaskis
 
                     StaticLogger.Log.ErrorWriteLine( errorString.ToString() );
                 }
+            }
+
+            foreach( PluginConfig existingPlugin in existingPlugins )
+            {
+                this.plugins.Add( existingPlugin.Name, existingPlugin );
             }
 
             this.eventFactory = ChaskisEventFactory.CreateInstance( this.plugins.Keys.ToList() );

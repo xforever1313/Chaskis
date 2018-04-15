@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using ChaskisCore;
 using SethCS.Basic;
 
@@ -140,8 +141,19 @@ namespace Chaskis
 
             PluginManager manager = new PluginManager();
 
+            this.defaultHandlers = new DefaultHandlers();
+            PluginConfig defaultChaskisPlugin = new PluginConfig(
+                Assembly.GetExecutingAssembly().Location,
+                DefaultHandlers.DefaultPluginName,
+                new List<string>(), // No blacklisted channels
+                this.defaultHandlers,
+                new GenericLogger()
+            );
+               
+
             if( manager.LoadPlugins(
                     pluginList,
+                    new List<PluginConfig>() { defaultChaskisPlugin },
                     this.ircConfig,
                     this.ircBot.Scheduler,
                     this.ircBot.ChaskisEventSender,
@@ -172,8 +184,7 @@ namespace Chaskis
                 );
             }
 
-            this.defaultHandlers = new DefaultHandlers( this.ircConfig, this.plugins );
-            this.defaultHandlers.Init();
+            this.defaultHandlers.Init_Stage2( this.plugins );
         }
 
         /// <summary>
@@ -197,7 +208,6 @@ namespace Chaskis
             }
 
             Dictionary<string, IHandlerConfig> handlers = new Dictionary<string, IHandlerConfig>();
-            handlers.Add( "chaskis", this.defaultHandlers );
             foreach( KeyValuePair<string, PluginConfig> plugin in this.plugins )
             {
                 handlers.Add( plugin.Key, plugin.Value );

@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016, 2017, 2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -13,9 +13,14 @@ using ChaskisCore;
 
 namespace Chaskis
 {
-    public class DefaultHandlers : IHandlerConfig
+    [ChaskisPlugin( DefaultPluginName ) ]
+    public class DefaultHandlers : IHandlerConfig, IPlugin
     {
         // ---------------- Fields ----------------
+
+        public const string DefaultPluginName = "chaskis";
+
+        private const string defaultHelpMessage = "Default Commands: 'plugins', 'admins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
 
         /// <summary>
         /// The IRC config to use.
@@ -76,10 +81,8 @@ namespace Chaskis
         /// <summary>
         /// Constructor.
         /// </summary>
-        public DefaultHandlers( IIrcConfig config, IDictionary<string, PluginConfig> plugins )
+        public DefaultHandlers()
         {
-            this.ircConfig = config;
-            this.plugins = plugins;
             this.handlers = new List<IIrcHandler>();
             this.Handlers = this.handlers.AsReadOnly();
             this.BlackListedChannels = new List<string>().AsReadOnly();
@@ -98,10 +101,24 @@ namespace Chaskis
         /// </summary>
         public IList<string> BlackListedChannels { get; private set; }
 
+        public string SourceCodeLocation { get { return "https://github.com/xforever1313/Chaskis"; } }
+
+        public string Version { get { return IrcBot.VersionString; } }
+
+        public string About
+        {
+            get
+            {
+                return "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
+            }
+        }
+
         // ---------------- Functions ----------------
 
-        public void Init()
+        public void Init( PluginInitor pluginInit )
         {
+            this.ircConfig = pluginInit.IrcConfig;
+
             this.AddPluginListHandler();
             this.AddSourceHandler();
             this.AddVersionHandler();
@@ -117,22 +134,87 @@ namespace Chaskis
             this.handlers.Add( new PongHandler() );
         }
 
+        public void Init_Stage2( IDictionary<string, PluginConfig> plugins )
+        {
+            this.plugins = plugins;
+
+            this.pluginListResponse = "List of plugins I am running: ";
+            foreach( string pluginName in this.plugins.Keys )
+            {
+                this.pluginListResponse += pluginName.ToLower() + " ";
+            }
+        }
+
+        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        {
+            if( args.Length == 0 )
+            {
+                // Print default message and return.
+                writer.SendMessage(
+                    defaultHelpMessage,
+                    response.Channel
+                );
+                return;
+            }
+
+            string message;
+            switch( args[0] )
+            {
+                case "plugins":
+                case "pluginlist":
+                    message = "Gets the list of plugins running.";
+                    break;
+
+                case "source":
+                    message = "Gets the source code URL of the given plugin.";
+                    break;
+
+                case "version":
+                    message = "Gets the version of the given plugin.";
+                    break;
+
+                case "about":
+                    message = "Gets information about the given plugin.";
+                    break;
+
+                case "help":
+                    message = "Gets help information about the given plugin.";
+                    break;
+
+                case "admins":
+                    message = "Shows the list of people who are considered admins.";
+                    break;
+
+                default:
+                    message = "Invalid Command!";
+                    break;
+            }
+
+            writer.SendMessage(
+                message,
+                response.Channel
+            );
+        }
+
+        public IList<IIrcHandler> GetHandlers()
+        {
+            return this.handlers.AsReadOnly();
+        }
+
+        public void Dispose()
+        {
+            // Nothing to do.
+        }
+
         // -------- Handlers ---------
 
         // ---- Plugin List Handler ----
 
         private void AddPluginListHandler()
         {
-            this.pluginListResponse = "List of plugins I am running: ";
-            foreach( string pluginName in this.plugins.Keys )
-            {
-                this.pluginListResponse += pluginName.ToLower() + " ";
-            }
-
             MessageHandler pluginListHandler = new MessageHandler(
-                "^[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|list)",
-                HandlePluginListCommand,
-                30
+                "^[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|\s*list)",
+                HandlePluginListCommand
             );
 
             this.handlers.Add( pluginListHandler );
@@ -172,14 +254,15 @@ namespace Chaskis
             Match match = response.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
+
+            if( string.IsNullOrEmpty( pluginName ) )
+            {
+                pluginName = DefaultPluginName;
+            }
+
             if( this.plugins.ContainsKey( pluginName ) )
             {
-                string msg = "Source of the plugin '" + pluginName + "': " + this.plugins[pluginName].Plugin.SourceCodeLocation;
-                writer.SendMessage( msg, response.Channel );
-            }
-            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-            {
-                string msg = "My source code is located here: https://github.com/xforever1313/Chaskis";
+                string msg = "Source of '" + pluginName + "': " + this.plugins[pluginName].Plugin.SourceCodeLocation;
                 writer.SendMessage( msg, response.Channel );
             }
             else
@@ -195,8 +278,7 @@ namespace Chaskis
             this.versionCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
             MessageHandler versionHandler = new MessageHandler(
                 this.versionCommand,
-                this.HandleVersionCommand,
-                3
+                this.HandleVersionCommand
             );
 
             this.handlers.Add( versionHandler );
@@ -212,14 +294,15 @@ namespace Chaskis
             Match match = response.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
+
+            if( string.IsNullOrEmpty( pluginName ) )
+            {
+                pluginName = DefaultPluginName;
+            }
+
             if( this.plugins.ContainsKey( pluginName ) )
             {
-                string msg = "Version of the plugin '" + pluginName + "': " + this.plugins[pluginName].Plugin.Version;
-                writer.SendMessage( msg, response.Channel );
-            }
-            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-            {
-                string msg = "I am running version Chaskis " + Chaskis.VersionStr;
+                string msg = "Version of '" + pluginName + "': " + this.plugins[pluginName].Plugin.Version;
                 writer.SendMessage( msg, response.Channel );
             }
             else
@@ -235,8 +318,7 @@ namespace Chaskis
             this.aboutCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
             MessageHandler aboutHandler = new MessageHandler(
                 this.aboutCommand,
-                this.HandleAboutCommand,
-                3
+                this.HandleAboutCommand
             );
 
             this.handlers.Add( aboutHandler );
@@ -252,14 +334,14 @@ namespace Chaskis
             Match match = response.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
+            if( string.IsNullOrEmpty( pluginName ) )
+            {
+                pluginName = DefaultPluginName;
+            }
+
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "About '" + pluginName + "': " + this.plugins[pluginName].Plugin.About;
-                writer.SendMessage( msg, response.Channel );
-            }
-            else if( ( pluginName == "chaskis" ) || string.IsNullOrEmpty( pluginName ) )
-            {
-                string msg = "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
                 writer.SendMessage( msg, response.Channel );
             }
             else
@@ -324,8 +406,6 @@ namespace Chaskis
         /// <param name="response">The response from the channel.</param>
         private void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
         {
-            const string defaultMessage = "Default Commands: 'plugins', 'admins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
-
             Match match = response.Match;
 
             string argsStr = match.Groups["args"].Value.ToLower();
@@ -334,7 +414,7 @@ namespace Chaskis
             {
                 // Print default message and return.
                 writer.SendMessage(
-                    defaultMessage,
+                    defaultHelpMessage,
                     response.Channel
                 );
                 return;
@@ -343,54 +423,23 @@ namespace Chaskis
             argsStr = Regex.Replace( argsStr, @"\s+", " " ); // Strip multiple white spaces.
             List<string> args = argsStr.Split( ' ' ).ToList();
 
-            if( this.plugins.ContainsKey( args[0] ) )
+            // If the first argument is not a valid plugin name, then the user
+            // must be trying to query the default plugin.
+            // If the first argument IS a valid plugin name, then the user wants
+            // the query the help of that specific plugin.
+            string pluginName;
+            if( this.plugins.ContainsKey( args[0] ) == false )
             {
-                string pluginName = args[0];
-                args.RemoveAt( 0 );
-
-                // Handle the help command for the plugin
-                this.plugins[pluginName].Plugin.HandleHelp( writer, response, args.ToArray() );
+                pluginName = DefaultPluginName;
             }
             else
             {
-                string message;
-                switch( args[0] )
-                {
-                    case "plugins":
-                    case "pluginlist":
-                        message = "Gets the list of plugins running.";
-                        break;
-
-                    case "source":
-                        message = "Gets the source code URL of the given plugin.";
-                        break;
-
-                    case "version":
-                        message = "Gets the version of the given plugin.";
-                        break;
-
-                    case "about":
-                        message = "Gets information about the given plugin.";
-                        break;
-
-                    case "help":
-                        message = "Gets help information about the given plugin.";
-                        break;
-
-                    case "admins":
-                        message = "Shows the list of people who are consided admins.";
-                        break;
-
-                    default:
-                        message = "Invalid default command. " + defaultMessage;
-                        break;
-                }
-
-                writer.SendMessage(
-                    message,
-                    response.Channel
-                );
+                pluginName = args[0];
+                args.RemoveAt( 0 );
             }
+
+            // Handle the help command for the plugin
+            this.plugins[pluginName].Plugin.HandleHelp( writer, response, args.ToArray() );
         }
 
         // ---- Debug Handlers ----

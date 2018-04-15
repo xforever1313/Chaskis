@@ -25,6 +25,36 @@ function GetCoreVersion()
 }
 
 ###
+# Gets the name of the default plugin added when running Chaskis.exe.
+###
+function GetDefaultPluginName()
+{
+    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\Chaskis\DefaultHandlers.cs"
+    $success = $regressionTestPluginFile -match 'public\s+const\s+string\s+DefaultPluginName\s*=\s*"(?<name>\w+)"'
+    return $matches["name"]
+}
+
+###
+# Gets the version of the regression test plugin.
+###
+function GetRegressionTestVersion()
+{
+    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\TestFixtures\RegressionTestPlugin.cs"
+    $success = $regressionTestPluginFile -match 'public\s+const\s+string\s+VersionStr\s+=\s+"(?<version>\d+\.\d+\.\d+)";'
+    return $matches["version"]
+}
+
+###
+# Gets the regression test plugin name.
+###
+function GetRegressionTestPluginName()
+{
+    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\TestFixtures\RegressionTestPlugin.cs"
+    $success = $regressionTestPluginFile -match '\[ChaskisPlugin\( "(?<name>\w+)" \)\]'
+    return $matches["name"]
+}
+
+###
 # Gets copyright information.
 ###
 function GetCopyRight()
@@ -51,6 +81,9 @@ $FullName = "Chaskis IRC Bot"
 $ChaskisMainVersion = GetMainVersion
 $ChaskisCoreVersion = GetCoreVersion
 $License =  Get-Content ".\LICENSE_1_0.txt" | Out-String
+$RegressionTestPluginVersion = GetRegressionTestVersion
+$RegressionTestPluginName = GetRegressionTestPluginName
+$DefaultPluginName = GetDefaultPluginName
 
 $Tags = "chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows"
 $CoreTags = $Tags + " core"
@@ -76,7 +109,8 @@ $FilesToTemplate =(
     (".\Chaskis\Install\chocolatey\template\tools\LICENSE.txt.template", ".\Chaskis\Install\chocolatey\package\tools\LICENSE.txt"),
     (".\README.md.template", ".\README.md"),
     (".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template", ".\Chaskis\ChaskisCore\ChaskisCore.nuspec"),
-    (".\Chaskis\Install\chocolatey\template\tools\chocolateyinstall.ps1.template", ".\Chaskis\Install\chocolatey\package\tools\chocolateyinstall.ps1")
+    (".\Chaskis\Install\chocolatey\template\tools\chocolateyinstall.ps1.template", ".\Chaskis\Install\chocolatey\package\tools\chocolateyinstall.ps1"),
+    (".\Chaskis\RegressionTests\FitNesseRoot\ChaskisTests\content.txt.template", ".\Chaskis\RegressionTests\FitNesseRoot\ChaskisTests\content.txt")
 )
 
 function TemplateFile($filePath, $Output)
@@ -99,6 +133,9 @@ function TemplateFile($filePath, $Output)
     $inputContents = $inputContents.replace("{%ReleaseNotes%}", $ReleaseNotes)
     $inputContents = $inputContents.replace("{%Summary%}", $Summary)
     $inputContents = $inputContents.replace("{%IconUrl%}", $IconUrl)
+    $inputContents = $inputContents.replace("{%RegressionTestPluginName%}", $RegressionTestPluginName)
+    $inputContents = $inputContents.replace("{%RegressionTestPluginVersion%}", $RegressionTestPluginVersion)
+    $inputContents = $inputContents.replace("{%DefaultPluginName%}", $DefaultPluginName)
     
     $inputContents | Set-Content $Output
 }
