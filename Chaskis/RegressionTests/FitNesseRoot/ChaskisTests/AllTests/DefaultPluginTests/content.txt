@@ -1,6 +1,8 @@
 !contents -R2 -g -p -f -h
 
 |>AboutCmdTest     |''Does the about command work as expected?''      |
+|>AdminsCmdTest    |''Does the 'admins' command work as expected?''   |
 |>HelpCmdTest      |''Does the help command work as expected?''       |
 |>PluginListCmdTest|''Does the plugin list command work as expected?''|
+|>SourceCmdTest    |''Does the source command work as expected?''     |
 |>VersionCmdTest   |''Does the version command work as expected?''    |

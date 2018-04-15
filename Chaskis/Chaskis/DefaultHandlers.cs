@@ -101,7 +101,7 @@ namespace Chaskis
         /// </summary>
         public IList<string> BlackListedChannels { get; private set; }
 
-        public string SourceCodeLocation { get { return "https://github.com/xforever1313/Chaskis"; } }
+        public string SourceCodeLocation { get { return "https://github.com/xforever1313/Chaskis/"; } }
 
         public string Version { get { return IrcBot.VersionString; } }
 
@@ -237,8 +237,7 @@ namespace Chaskis
             this.sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
             MessageHandler sourceHandler = new MessageHandler(
                 this.sourceCommand,
-                this.HandleSourceCommand,
-                3
+                this.HandleSourceCommand
             );
 
             this.handlers.Add( sourceHandler );
