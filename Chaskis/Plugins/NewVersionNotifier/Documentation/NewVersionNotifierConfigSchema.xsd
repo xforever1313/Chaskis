@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewVersionNotifierConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="newversionnotifierconfig" type="NewVersionNotifierConfig"/>
+
+    <xs:complexType name="NewVersionNotifierConfig">
+        <xs:sequence>
+            <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="delay" type="xs:int" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

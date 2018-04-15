@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Empty config should result in the default settings -->
+<newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
+</newversionnotifierconfig>

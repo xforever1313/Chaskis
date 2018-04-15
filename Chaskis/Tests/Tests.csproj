@@ -80,6 +80,8 @@
     <Compile Include="Plugins\KarmaBot\KarmaBotConfigTest.cs" />
     <Compile Include="Plugins\KarmaBot\KarmabotXmlLoaderTests.cs" />
     <Compile Include="Plugins\MathBot\MathBotCalculatorTest.cs" />
+    <Compile Include="Plugins\NewVersionNotifier\NewVersionNotifierConfigTests.cs" />
+    <Compile Include="Plugins\NewVersionNotifier\XmlLoaderTests.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteBotConfigTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteBotDatabaseTest.cs" />
     <Compile Include="Plugins\QuoteBot\QuoteBotParserTest.cs" />
@@ -108,6 +110,10 @@
     <Compile Include="AssemblyConfigTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Plugins\NewVersionNotifier\NewVersionNotifier.csproj">
+      <Project>{8e6c2009-28f3-4af5-8a3c-d960e986a7c5}</Project>
+      <Name>NewVersionNotifier</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\CapsWatcher\CapsWatcher.csproj">
       <Project>{a5300647-4b0a-4c23-b714-5350070991fd}</Project>
       <Name>CapsWatcher</Name>
@@ -182,6 +188,9 @@
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\ValidConfig.xml" />
+    <Content Include="Plugins\NewVersionNotifier\TestFiles\BadRoot.xml" />
+    <Content Include="Plugins\NewVersionNotifier\TestFiles\Empty.xml" />
+    <Content Include="Plugins\NewVersionNotifier\TestFiles\ValidFile.xml" />
     <Content Include="Plugins\QuoteBot\TestFiles\EmptyStringConfig.xml" />
     <Content Include="Plugins\QuoteBot\TestFiles\BadRootConfig.xml" />
     <Content Include="Plugins\QuoteBot\TestFiles\GoodConfig.xml" />
