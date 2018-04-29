@@ -1,0 +1,23 @@
+!***> Setup
+
+| '''Setup''' | !-NewVersionNotifierNoFileEnvironment-! | '''Environment''' | ${port} |
+
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskis
+*!
+# Start Test
+
+ * Ensure we get the upgrade message if a file does not exist.
+
+| '''Wait For Message''' | I\s+have\s+been\s+upgraded\s+to\s+version\s+${chaskis_version} | '''On Channel''' | ${channel1} | '''With Timeout''' | 15000 |
+| '''Wait For Message''' | I\s+have\s+been\s+upgraded\s+to\s+version\s+${chaskis_version} | '''On Channel''' | ${channel2} | '''With Timeout''' | 5000 |
+
+ * Ensure the file exists and contains the correct version
+
+| '''Wait For String''' | new_version_notifier's\s+lastversion\.txt\s+file\s+has\s+been\s+updated | '''From Chaskis''' |
+| '''File''' | ${test_environment_path}/Plugins/NewVersionNotifier/lastversion.txt | '''Contains''' | ${chaskis_version} |
+
+!***> Teardown
+
+!include <ChaskisTests.BuildingBlocks.StopServerAndChaskis
+!include <ChaskisTests.BuildingBlocks.TeardownEnvironment
+*!

@@ -10,21 +10,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ChaskisCore;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.NewVersionNotifier
 {
-    [ChaskisPlugin( "new_version_notifier" )]
+    [ChaskisPlugin( PluginName )]
     public class NewVersionNotifier : IPlugin
     {
         // ---------------- Fields ----------------
 
         public const string VersionStr = "0.1.0";
 
+        private const string cacheFileName = "lastversion.txt";
+
+        public const string PluginName = "new_version_notifier";
+
         private string pluginDir;
 
         private IChaskisEventScheduler eventScheduler;
         private IChaskisEventCreator chaskisEventCreator;
         private IChaskisEventSender eventSender;
+        private GenericLogger logger;
 
         private string cachedFilePath;
         private string cachedVersion;
@@ -75,6 +81,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
             this.eventScheduler = initor.EventScheduler;
             this.chaskisEventCreator = initor.ChaskisEventCreator;
             this.eventSender = initor.ChaskisEventSender;
+            this.logger = initor.Log;
 
             this.pluginDir = Path.Combine(
                 initor.ChaskisConfigPluginRoot,
@@ -90,7 +97,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
             this.cachedFilePath = Path.Combine(
                 this.pluginDir,
-                "lastversion.txt"
+                cacheFileName
             );
 
             if( File.Exists( this.cachedFilePath ) == false )
@@ -119,7 +126,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
             this.ircHandlers.Add( eventHandler );
 
             this.eventId = this.eventScheduler.ScheduleEvent(
-                new TimeSpan( 0, 0, 30 ),
+                this.config.Delay,
                 this.OnTimeExpired
             );
         }
@@ -157,18 +164,23 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private async void HandleChaskisEvent( ChaskisEventHandlerLineActionArgs args )
         {
-            try
+            string versString = args.Match.Groups["version"].Value;
+            if( versString.Equals( this.cachedVersion ) == false )
             {
-                string versString = args.Match.Groups["version"].Value;
-                if( versString.Equals( this.cachedVersion ) == false )
-                {
-                    string msg = this.config.Message.Replace( "{%version%}", versString );
-                    args.IrcWriter.SendBroadcastMessage( msg );
-                }
+                string msg = this.config.Message.Replace( "{%version%}", versString );
+                args.IrcWriter.SendBroadcastMessage( msg );
+
+                await Task.Run(
+                    () =>
+                    {
+                        File.WriteAllText( this.cachedFilePath, versString );
+                        this.logger.WriteLine( "{0}'s {1} file has been updated", PluginName, cacheFileName );
+                    }
+                );
             }
-            finally
+            else
             {
-                await Task.Run( () => File.WriteAllText( this.cachedFilePath, this.cachedVersion ) );
+                this.logger.WriteLine( "Bot not updated, skipping message" );
             }
         }
     }

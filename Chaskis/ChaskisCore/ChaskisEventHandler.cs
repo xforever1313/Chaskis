@@ -110,7 +110,7 @@ namespace ChaskisCore
             ArgumentChecker.IsNotNull( argPattern, nameof( argPattern ) );
             ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
 
-            this.argRegex = new Regex( argPattern );
+            this.argRegex = new Regex( argPattern, RegexOptions.IgnoreCase ); // TODO: Maybe add a regex option?
             this.expectedSource = expectedSource;
 
             if( expectedSourcePlugin != null )

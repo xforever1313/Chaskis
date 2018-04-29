@@ -1,10 +1,12 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using NetRunner.ExternalLibrary;
 using SethCS.Basic;
@@ -48,6 +50,25 @@ namespace Chaskis.RegressionTests
         public void WriteLine( string line )
         {
             this.consoleOut.WriteLine( line );
+        }
+
+        public bool FileContains( string fileName, string regex )
+        {
+            if( File.Exists( fileName ) == false )
+            {
+                this.consoleOut.WriteLine( "File '{0}' does not exist!", fileName );
+                return false;
+            }
+
+            string fileContents = File.ReadAllText( fileName );
+            bool success = Regex.IsMatch( fileContents, regex );
+
+            if( success == false )
+            {
+                this.consoleOut.WriteLine( "Could not match regex {0} with file contents {1}", regex, fileContents );
+            }
+
+            return success;
         }
     }
 }

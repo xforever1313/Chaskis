@@ -1,0 +1,5 @@
+!contents -R2 -g -p -f -h
+
+|>DifferentVersionTest|''Tests that we send a message if we updated to a new version''                                        |
+|>NoChangeTest        |''Tests to ensure that NO message is sent out if the version does not change''                         |
+|>NoFileTest          |''Tests to ensure that if the lastsent.txt file is not there, we send the message and create the file''|
