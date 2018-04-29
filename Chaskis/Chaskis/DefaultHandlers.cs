@@ -32,6 +32,9 @@ namespace Chaskis
         /// </summary>
         private IDictionary<string, PluginConfig> plugins;
 
+        private IChaskisEventSender chaskisEventSender;
+        private IChaskisEventCreator chaskisEventCreator;
+
         /// <summary>
         /// IRC handlers we will be using.
         /// </summary>
@@ -103,7 +106,7 @@ namespace Chaskis
 
         public string SourceCodeLocation { get { return "https://github.com/xforever1313/Chaskis/"; } }
 
-        public string Version { get { return IrcBot.VersionString; } }
+        public string Version { get { return Chaskis.VersionStr; } }
 
         public string About
         {
@@ -118,6 +121,8 @@ namespace Chaskis
         public void Init( PluginInitor pluginInit )
         {
             this.ircConfig = pluginInit.IrcConfig;
+            this.chaskisEventCreator = pluginInit.ChaskisEventCreator;
+            this.chaskisEventSender = pluginInit.ChaskisEventSender;
 
             this.AddPluginListHandler();
             this.AddSourceHandler();
@@ -281,6 +286,13 @@ namespace Chaskis
             );
 
             this.handlers.Add( versionHandler );
+
+            ChaskisEventHandler chaskisHandler = this.chaskisEventCreator.CreatePluginEventHandler(
+                @"QUERY=VERSION\s+PLUGIN=(?<pluginName>\w+)",
+                this.HandleChaskisVersionCommand
+            );
+
+            this.handlers.Add( chaskisHandler );
         }
 
         /// <summary>
@@ -308,6 +320,31 @@ namespace Chaskis
             {
                 writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
             }
+        }
+
+        private void HandleChaskisVersionCommand( ChaskisEventHandlerLineActionArgs args )
+        {
+            string pluginName = args.Match.Groups["pluginName"].Value.ToLower();
+
+            List<string> responseArgs = new List<string>();
+            responseArgs.Add( "QUERY=VERSION" );
+            responseArgs.Add( "PLUGIN=" + pluginName.ToUpper() );
+
+            if( this.plugins.ContainsKey( pluginName ) == false )
+            {
+                responseArgs.Add( "ERROR=PLUGIN_NAME_NOT_FOUND" );
+            }
+            else
+            {
+                responseArgs.Add( "VERSION=" + this.plugins[pluginName].Plugin.Version );
+            }
+
+            ChaskisEvent responseEvent = this.chaskisEventCreator.CreateTargetedEvent(
+                args.PluginName,
+                responseArgs
+            );
+
+            this.chaskisEventSender.SendChaskisEvent( responseEvent );
         }
 
         // ---- About Command Handler ----

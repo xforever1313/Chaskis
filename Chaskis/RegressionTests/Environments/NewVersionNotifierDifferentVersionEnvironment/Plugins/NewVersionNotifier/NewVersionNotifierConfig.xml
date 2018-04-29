@@ -1,0 +1,4 @@
+<newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
+    <message>I have been updated to version {%version%}.  Release Notes: https://github.com/xforever1313/Chaskis/releases/tag/{%version%}</message>
+    <delay>10</delay>
+</newversionnotifierconfig>

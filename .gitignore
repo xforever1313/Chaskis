@@ -45,6 +45,7 @@ OpenCover/
 
 # IDEs
 .vscode
+.vs
 
 /Chaskis/RegressionTests/FitNesseRoot/files
 /Chaskis/RegressionTests/FitNesseRoot/FitNesse
