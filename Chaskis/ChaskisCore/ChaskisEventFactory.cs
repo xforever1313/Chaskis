@@ -141,7 +141,6 @@ namespace ChaskisCore
                 );
             }
             public ChaskisEventHandler CreatePluginEventHandler(
-                string argPattern,
                 string expectedSourcePlugin,
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
@@ -245,7 +244,6 @@ namespace ChaskisCore
         /// <param name="lineAction">The action to take when our arg pattern matches.</param>
         /// <returns></returns>
         ChaskisEventHandler CreatePluginEventHandler(
-            string argPattern,
             string expectedSourcePlugin,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         );

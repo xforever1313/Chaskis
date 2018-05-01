@@ -36,8 +36,6 @@ namespace Chaskis.Plugins.WelcomeBot
 
         private IChaskisEventSender eventSender;
 
-        private const string karmaQueryResponsePattern = @"QUERY\s+NAME=(?<name>\S+)\s+CHANNEL=(?<channel>\S+)\s+KARMA=(?<karma>\d+)";
-
         // -------- Constructor -------
 
         /// <summary>
@@ -97,7 +95,6 @@ namespace Chaskis.Plugins.WelcomeBot
                 this.eventSender = initor.ChaskisEventSender;
 
                 ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
-                    karmaQueryResponsePattern,
                     "karmabot",
                     this.HandleKarmaQuery
                 );

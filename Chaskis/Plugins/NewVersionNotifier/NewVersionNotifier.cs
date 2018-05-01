@@ -118,7 +118,6 @@ namespace Chaskis.Plugins.NewVersionNotifier
             }
 
             ChaskisEventHandler eventHandler = this.chaskisEventCreator.CreatePluginEventHandler(
-                @"QUERY=VERSION\s+PLUGIN=chaskis\s+VERSION=(?<version>.+)",
                 "chaskis",
                 this.HandleChaskisEvent
             );
@@ -167,9 +166,22 @@ namespace Chaskis.Plugins.NewVersionNotifier
             this.eventSender.SendChaskisEvent( e );
         }
 
-        private async void HandleChaskisEvent( ChaskisEventHandlerLineActionArgs args )
+        private void HandleChaskisEvent( ChaskisEventHandlerLineActionArgs args )
         {
-            if( args.EventArgs.ContainsKey( "version" ) )
+            if( args.PluginName.Equals( "CHASKIS", StringComparison.InvariantCultureIgnoreCase ) )
+            {
+                this.HandleChaskisPlugin( args );
+            }
+        }
+
+        private async void HandleChaskisPlugin( ChaskisEventHandlerLineActionArgs args )
+        {
+            if( args.EventArgs.ContainsKey( "ERROR" ) )
+            {
+                return;
+            }
+
+            if( args.EventArgs.ContainsKey( "VERSION" ) )
             {
                 string versString = args.EventArgs["VERSION"];
                 if( versString.Equals( this.cachedVersion ) == false )

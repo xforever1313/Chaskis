@@ -613,7 +613,7 @@ namespace ChaskisCore
             ChaskisEvent e = new ChaskisEvent(
                 ChaskisEventSource.CORE,
                 ChaskisEventProtocol.IRC.ToString(),
-                ChaskisEvent.BroadcastEventStr,
+                string.Empty, // For BCAST
                 new Dictionary<string, string>()
                 {
                     ["event_id"] = eventStr,
