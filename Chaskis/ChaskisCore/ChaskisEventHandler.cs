@@ -26,7 +26,7 @@ namespace ChaskisCore
         /// <summary>
         /// Pattern to watch for Chaskis Events.
         /// </summary>
-        private const string chaskisPattern = @"^\<chaskis_event\>.+\</chaskis_event\>$";
+        private const string chaskisPattern = @"^\<\?xml\s+version=""1.0""\s+encoding=""utf-16""\?\>\<chaskis_event.+\</chaskis_event\>$";
 
         private static readonly Regex chaskisRegex = new Regex(
             chaskisPattern,
@@ -131,6 +131,11 @@ namespace ChaskisCore
         /// </summary>
         public void HandleEvent( HandlerArgs args )
         {
+            if( chaskisRegex.IsMatch( args.Line ) == false )
+            {
+                return;
+            }
+
             ChaskisEvent e = ChaskisEvent.FromXml( args.Line );
             string targetPlugin = e.DestinationPlugin;
 
