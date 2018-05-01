@@ -164,7 +164,16 @@ namespace Chaskis.Plugins.WelcomeBot
 
             ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
                 "karmabot",
-                new List<string>() { "QUERY", "NAME=" + response.RemoteUser, "CHANNEL=" + response.Channel }
+                new Dictionary<string, string>()
+                {
+                    ["ACTION"] = "QUERY",
+                    ["NAME"] = response.RemoteUser
+                },
+                new Dictionary<string, string>()
+                {
+                    ["CHANNEL"] = response.Channel,
+                    ["NAME"] = response.RemoteUser
+                }
             );
 
             this.eventSender.SendChaskisEvent( e );
@@ -189,15 +198,25 @@ namespace Chaskis.Plugins.WelcomeBot
 
         private void HandleKarmaQuery( ChaskisEventHandlerLineActionArgs args )
         {
-            Match match = args.Match;
-            string user = match.Groups["name"].Value;
-            string channel = match.Groups["channel"].Value;
-            int karma = int.Parse( match.Groups["karma"].Value );
+            if( args.PluginName == "karmabot" )
+            {
+                this.HandleKarmaBotResponse( args );
+            }
+        }
 
-            args.IrcWriter.SendMessage(
-                "User " + user + " has " + karma + " karma",
-                channel
-            );
+        private void HandleKarmaBotResponse( ChaskisEventHandlerLineActionArgs args )
+        {
+            if( args.EventArgs.ContainsKey( "ERROR" ) == false )
+            {
+                string channel = args.PassThroughArgs["CHANNEL"];
+                string karma = args.EventArgs["KARMA"];
+                string user = args.PassThroughArgs["NAME"];
+
+                args.IrcWriter.SendMessage(
+                    "User " + user + " has " + karma + " karma",
+                    channel
+                );
+            }
         }
     }
 }

@@ -153,9 +153,14 @@ namespace Chaskis.Plugins.NewVersionNotifier
         {
             ChaskisEvent e = this.chaskisEventCreator.CreateTargetedEvent(
                 "chaskis",
-                new List<string>() {
-                    "QUERY=VERSION",
-                    "PLUGIN=chaskis"
+                new Dictionary<string, string>()
+                {
+                    ["QUERY"] = "VERSION",
+                    ["PLUGIN"] = "chaskis"
+                },
+                new Dictionary<string, string>()
+                {
+                    ["CHANNEL"] = string.Empty // TODO.
                 }
             );
 
@@ -164,23 +169,26 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private async void HandleChaskisEvent( ChaskisEventHandlerLineActionArgs args )
         {
-            string versString = args.Match.Groups["version"].Value;
-            if( versString.Equals( this.cachedVersion ) == false )
+            if( args.EventArgs.ContainsKey( "version" ) )
             {
-                string msg = this.config.Message.Replace( "{%version%}", versString );
-                args.IrcWriter.SendBroadcastMessage( msg );
+                string versString = args.EventArgs["VERSION"];
+                if( versString.Equals( this.cachedVersion ) == false )
+                {
+                    string msg = this.config.Message.Replace( "{%version%}", versString );
+                    args.IrcWriter.SendBroadcastMessage( msg );
 
-                await Task.Run(
-                    () =>
-                    {
-                        File.WriteAllText( this.cachedFilePath, versString );
-                        this.logger.WriteLine( "{0}'s {1} file has been updated", PluginName, cacheFileName );
-                    }
-                );
-            }
-            else
-            {
-                this.logger.WriteLine( "Bot not updated, skipping message" );
+                    await Task.Run(
+                        () =>
+                        {
+                            File.WriteAllText( this.cachedFilePath, versString );
+                            this.logger.WriteLine( "{0}'s {1} file has been updated", PluginName, cacheFileName );
+                        }
+                    );
+                }
+                else
+                {
+                    this.logger.WriteLine( "Bot not updated, skipping message" );
+                }
             }
         }
     }

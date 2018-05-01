@@ -38,8 +38,6 @@ namespace Chaskis.Plugins.KarmaBot
 
         private IChaskisEventCreator eventCreator;
 
-        private const string chaskisQueryPattern = @"QUERY\s+NAME=(?<name>\S+)\s+CHANNEL=(?<channel>\S+)";
-
         // -------- Constructor --------
 
         /// <summary>
@@ -134,7 +132,6 @@ namespace Chaskis.Plugins.KarmaBot
             );
 
             ChaskisEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
-                chaskisQueryPattern,
                 this.HandleChaskisQueryCommand
             );
 
@@ -240,17 +237,37 @@ namespace Chaskis.Plugins.KarmaBot
 
         private async void HandleChaskisQueryCommand( ChaskisEventHandlerLineActionArgs args )
         {
-            Match match = args.Match;
-            string userName = match.Groups["name"].Value;
-            string channel = match.Groups["channel"].Value;
-            int karma = await this.dataBase.QueryKarma( userName );
+            Dictionary<string, string> responseArgs = new Dictionary<string, string>();
+            if( args.EventArgs.ContainsKey( "ACTION" ) )
+            {
+                switch( args.EventArgs["ACTION"] )
+                {
+                    case "QUERY":
+                        if( args.EventArgs.ContainsKey( "NAME" ) == false )
+                        {
+                            responseArgs["ERROR"] = "'NAME' argument missing";
+                        }
+                        else
+                        {
+                            string userName = args.EventArgs["NAME"];
+                            int karma = await this.dataBase.QueryKarma( userName );
+                            responseArgs["KARMA"] = karma.ToString();
+                        }
+                        break;
 
-            ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
-                args.PluginName,
-                new List<string>() { "QUERY", "NAME=" + userName, "CHANNEL=" + channel, "KARMA=" + karma.ToString() }
-            );
+                    default:
+                        responseArgs["ERROR"] = "NOT IMPLEMENTED YET";
+                        return;
+                }
 
-            this.eventSender.SendChaskisEvent( e );
+                ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
+                    args.PluginName,
+                    responseArgs,
+                    args.PassThroughArgs
+                );
+
+                this.eventSender.SendChaskisEvent( e );
+            }
         }
     }
 }

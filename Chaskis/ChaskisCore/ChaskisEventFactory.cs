@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -90,10 +90,7 @@ namespace ChaskisCore
 
             // ---------------- Functions ----------------
 
-            /// <summary>
-            /// <see cref="IChaskisEventCreator.CreateBcastEvent(IReadOnlyList{string})"/>
-            /// </summary>
-            public ChaskisEvent CreateBcastEvent( IReadOnlyList<string> args )
+            public ChaskisEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
 
@@ -101,14 +98,12 @@ namespace ChaskisCore
                     ChaskisEventSource.PLUGIN,
                     this.sourcePlugin,
                     null,
-                    new List<string>( args )
+                    new Dictionary<string, string>( args ),
+                    ( passThroughArgs != null ) ? new Dictionary<string, string>( passThroughArgs ) : null
                 );
             }
 
-            /// <summary>
-            /// <see cref="IChaskisEventCreator.CreateTargetedEvent(string, IReadOnlyList{string})"/>
-            /// </summary>
-            public ChaskisEvent CreateTargetedEvent( string targetPluginName, IReadOnlyList<string> args )
+            public ChaskisEvent CreateTargetedEvent( string targetPluginName, IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
                 ArgumentChecker.StringIsNotNullOrEmpty( targetPluginName, nameof( targetPluginName ) );
@@ -117,47 +112,34 @@ namespace ChaskisCore
                     ChaskisEventSource.PLUGIN,
                     this.sourcePlugin,
                     targetPluginName,
-                    new List<string>( args )
+                    new Dictionary<string, string>( args ),
+                    ( passThroughArgs != null ) ? new Dictionary<string, string>( passThroughArgs ) : null
                 );
             }
 
-            /// <summary>
-            /// <see cref="IChaskisEventCreator.CreateCoreEventHandler(string, ChaskisEventProtocol, Action{ChaskisEventHandlerLineActionArgs})"/>
-            /// </summary>
             public ChaskisEventHandler CreateCoreEventHandler(
-                string argPattern,
                 ChaskisEventProtocol? expectedProtocol,
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
             {
                 return new ChaskisEventHandler(
-                    argPattern,
                     expectedProtocol,
                     this.sourcePlugin,
                     lineAction
                 );
             }
 
-            /// <summary>
-            /// <see cref="IChaskisEventCreator.CreatePluginEventHandler(string, Action{ChaskisEventHandlerLineActionArgs})"/>
-            /// </summary>
             public ChaskisEventHandler CreatePluginEventHandler(
-                string argPattern,
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
             {
                 return new ChaskisEventHandler(
-                    argPattern,
                     ChaskisEventSource.PLUGIN,
                     null,
                     this.sourcePlugin,
                     lineAction
                 );
             }
-
-            /// <summary>
-            /// <see cref="IChaskisEventCreator.CreatePluginEventHandler(string, string, Action{ChaskisEventHandlerLineActionArgs})"/>
-            /// </summary>
             public ChaskisEventHandler CreatePluginEventHandler(
                 string argPattern,
                 string expectedSourcePlugin,
@@ -165,7 +147,6 @@ namespace ChaskisCore
             )
             {
                 return new ChaskisEventHandler(
-                    argPattern,
                     ChaskisEventSource.PLUGIN,
                     expectedSourcePlugin,
                     this.sourcePlugin,
@@ -183,18 +164,34 @@ namespace ChaskisCore
         /// 
         /// This does NOT send the event, but simply creates it.
         /// </summary>
-        /// <param name="args">The args to pass into the plugin.</param>
+        /// <param name="args">The args to pass into the plugin.  Key is the argument name, value is the argument's value.</param>
+        /// <param name="passThroughArgs">
+        /// Optional parameter.
+        /// When these arguments are passed in, they are ignored by a plugin that generates a response.
+        /// Instead, they become a part of the response.
+        /// Key is the argument name, value is the argument's value.
+        /// </param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateBcastEvent( IReadOnlyList<string> args );
+        ChaskisEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null );
 
         /// <summary>
         /// Generates a ChaskisEvent that is meant to be directed to
         /// a specfic plugin.
         /// </summary>
         /// <param name="targetPluginName">The target plugin name</param>
-        /// <param name="args">The args to pass into the plugin.</param>
+        /// <param name="args">The args to pass into the plugin.  Key is the argument name, value is the argument's value.</param>
+        /// <param name="passThroughArgs">
+        /// Optional parameter.
+        /// When these arguments are passed in, they are ignored by a plugin that generates a response.
+        /// Instead, they become a part of the response.
+        /// Key is the argument name, value is the argument's value.
+        /// </param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateTargetedEvent( string targetPluginName, IReadOnlyList<string> args );
+        ChaskisEvent CreateTargetedEvent(
+            string targetPluginName,
+            IDictionary<string, string> args,
+            IDictionary<string, string> passThroughArgs = null
+        );
 
         /// <summary>
         /// Creates an event handler that waits for a CORE event
@@ -211,7 +208,6 @@ namespace ChaskisCore
         /// <param name="lineAction">The action to take when our arg pattern matches.</param>
         /// <returns></returns>
         ChaskisEventHandler CreateCoreEventHandler(
-            string argPattern,
             ChaskisEventProtocol? expectedProtocol,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         );
@@ -229,7 +225,6 @@ namespace ChaskisCore
         /// <param name="lineAction">The action to take when our arg pattern matches.</param>
         /// <returns></returns>
         ChaskisEventHandler CreatePluginEventHandler(
-            string argPattern,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         );
 

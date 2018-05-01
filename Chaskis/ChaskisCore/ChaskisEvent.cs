@@ -1,12 +1,14 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Xml;
 
 namespace ChaskisCore
 {
@@ -24,7 +26,79 @@ namespace ChaskisCore
         /// </summary>
         public const string BroadcastEventStr = "BCAST";
 
+        public const string XmlElementName = "chaskis_event";
+
         // ---------------- Constructor ----------------
+
+        internal static ChaskisEvent FromXml( string xmlString )
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml( xmlString );
+
+            ChaskisEvent e = new ChaskisEvent();
+
+            XmlNode rootNode = doc.DocumentElement;
+            if( rootNode.Name != XmlElementName )
+            {
+                throw new XmlException(
+                    "Root XML node should be named \"" + XmlElementName + "\".  Got: " + rootNode.Name
+                );
+            }
+
+            // Get Attributes
+            foreach( XmlAttribute attr in rootNode.Attributes )
+            {
+                switch( attr.Name )
+                {
+                    case "source_type":
+                        ChaskisEventSource sourceType;
+                        if( Enum.TryParse( attr.Value, out sourceType ) )
+                        {
+                            e.SourceType = sourceType;
+                        }
+                        break;
+
+                    case "source_plugin":
+                        e.SourcePlugin = attr.Value;
+                        break;
+
+                    case "dest_plugin":
+                        e.DestinationPlugin = attr.Value;
+                        break;
+                }
+            }
+
+            foreach( XmlNode node in rootNode.ChildNodes )
+            {
+                switch( node.Name )
+                {
+                    case "args":
+                        foreach( XmlNode argNode in node.ChildNodes )
+                        {
+                            e.Args[argNode.Name] = argNode.InnerText;
+                        }
+                        break;
+
+                    case "passthrough_args":
+                        foreach( XmlNode argNode in node.ChildNodes )
+                        {
+                            e.PassThroughArgs[argNode.Name] = argNode.InnerText;
+                        }
+                        break;
+                }
+            }
+
+            return e;
+        }
+
+        private ChaskisEvent()
+        {
+            this.SourceType = ChaskisEventSource.CORE;
+            this.SourcePlugin = string.Empty;
+            this.DestinationPlugin = string.Empty;
+            this.Args = new Dictionary<string, string>();
+            this.PassThroughArgs = new Dictionary<string, string>();
+        }
 
         /// <summary>
         /// Constructor.
@@ -41,7 +115,8 @@ namespace ChaskisCore
             ChaskisEventSource sourceType,
             string sourcePlugin,
             string destinationPlugin,
-            IList<string> args
+            IDictionary<string, string> args,
+            IDictionary<string, string> passThroughArgs = null
         )
         {
             this.SourceType = sourceType;
@@ -55,6 +130,7 @@ namespace ChaskisCore
                 this.DestinationPlugin = destinationPlugin.ToUpper();
             }
             this.Args = args;
+            this.PassThroughArgs = passThroughArgs;
         }
 
         // ---------------- Properties ----------------
@@ -71,52 +147,106 @@ namespace ChaskisCore
 
         /// <summary>
         /// Which plugin are we directing the event to?
-        /// BCAST for a broadcast for all plugins.
+        /// Empty string for a broadcast for all plugins.
         /// </summary>
         public string DestinationPlugin { get; private set; }
 
         /// <summary>
-        /// Arguments for the event.
+        /// Required arguments for the event.
         /// </summary>
-        public IList<string> Args { get; private set; }
+        public IDictionary<string, string> Args { get; private set; }
+
+        /// <summary>
+        /// Arguments that are passed through directly to the response.
+        /// </summary>
+        public IDictionary<string, string> PassThroughArgs { get; private set; }
 
         // ---------------- Functions ----------------
 
         /// <summary>
-        /// Creates the event string.
+        /// Creates the event string, which is <see cref="ToXml"/> in string format.
         /// </summary>
-        /// <returns>CHASKIS PLUGIN SourcePluginName DestPluginName Arg1 Arg2 Arg3</returns>
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder();
-
-            // We are a CHASKIS EVENT.
-            builder.Append( "CHASKIS" );
-            builder.Append( " " );
-
-            // Source type comes next.
-            builder.Append( this.SourceType );
-            builder.Append( " " );
-
-            // Source plugin comes next.
-            builder.Append( this.SourcePlugin );
-            builder.Append( " " );
-
-            // Destination Plugin goes next.  If null, this becomes "BCAST" for broadcast.
-            builder.Append( this.DestinationPlugin );
-            builder.Append( " " );
-
-            // Last comes the args.
-            if( this.Args != null )
+            using( StringWriter stringWriter = new StringWriter() )
             {
-                foreach( string arg in this.Args )
+                XmlDocument doc = this.ToXml();
+                using( XmlTextWriter writer = new XmlTextWriter( stringWriter ) )
                 {
-                    builder.Append( arg );
-                    builder.Append( " " );
+                    writer.Formatting = Formatting.None; // All one line.
+                    doc.Save( writer );
+                }
+
+                return stringWriter.ToString();
+            }
+        }
+
+        public XmlDocument ToXml()
+        {
+            XmlDocument doc = new XmlDocument();
+
+            XmlNode rootNode = doc.DocumentElement;
+
+            XmlNode chaskisNode = doc.CreateElement( XmlElementName );
+
+            // Add Attributes to the chaskis node
+            {
+                {
+                    XmlAttribute sourceType = doc.CreateAttribute( "source_type" );
+                    sourceType.Value = this.SourceType.ToString();
+                    chaskisNode.Attributes.Append( sourceType );
+                }
+
+                {
+                    XmlAttribute sourcePlugin = doc.CreateAttribute( "source_plugin" );
+                    sourcePlugin.Value = this.SourcePlugin;
+                    chaskisNode.Attributes.Append( sourcePlugin );
+                }
+
+                {
+                    XmlAttribute destinationPlugin = doc.CreateAttribute( "dest_plugin" );
+                    destinationPlugin.Value = this.DestinationPlugin;
+                    chaskisNode.Attributes.Append( destinationPlugin );
                 }
             }
 
-            return builder.ToString().TrimEnd();
+            // Add arguments
+            {
+                XmlElement argsNode = doc.CreateElement( "args" );
+
+                if( this.Args != null )
+                {
+                    foreach( KeyValuePair<string, string> args in this.Args )
+                    {
+                        XmlElement argNode = doc.CreateElement( args.Key );
+                        argNode.InnerText = args.Value.ToString();
+                        argsNode.AppendChild( argNode );
+                    }
+                }
+
+                chaskisNode.AppendChild( argsNode );
+            }
+
+            // Add pass-through args
+            {
+                XmlElement passThroughArgs = doc.CreateElement( "passthrough_args" );
+
+                if( this.PassThroughArgs != null )
+                {
+                    foreach( KeyValuePair<string, string> args in this.PassThroughArgs )
+                    {
+                        XmlElement argNode = doc.CreateElement( args.Key );
+                        argNode.InnerText = args.Value.ToString();
+                        passThroughArgs.AppendChild( argNode );
+                    }
+                }
+
+                chaskisNode.AppendChild( passThroughArgs );
+            }
+
+            doc.InsertBefore( chaskisNode, rootNode );
+
+            return doc;
         }
     }
 }

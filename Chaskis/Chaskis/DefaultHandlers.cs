@@ -288,7 +288,6 @@ namespace Chaskis
             this.handlers.Add( versionHandler );
 
             ChaskisEventHandler chaskisHandler = this.chaskisEventCreator.CreatePluginEventHandler(
-                @"QUERY=VERSION\s+PLUGIN=(?<pluginName>\w+)",
                 this.HandleChaskisVersionCommand
             );
 
@@ -324,27 +323,34 @@ namespace Chaskis
 
         private void HandleChaskisVersionCommand( ChaskisEventHandlerLineActionArgs args )
         {
-            string pluginName = args.Match.Groups["pluginName"].Value.ToLower();
-
-            List<string> responseArgs = new List<string>();
-            responseArgs.Add( "QUERY=VERSION" );
-            responseArgs.Add( "PLUGIN=" + pluginName.ToUpper() );
-
-            if( this.plugins.ContainsKey( pluginName ) == false )
+            if( args.EventArgs.ContainsKey( "QUERY" ) && args.EventArgs["QUERY"] == "VERSION" )
             {
-                responseArgs.Add( "ERROR=PLUGIN_NAME_NOT_FOUND" );
-            }
-            else
-            {
-                responseArgs.Add( "VERSION=" + this.plugins[pluginName].Plugin.Version );
-            }
+                Dictionary<string, string> responseArgs = new Dictionary<string, string>();
+                if( args.EventArgs.ContainsKey( "PLUGIN" ) )
+                {
+                    string pluginName = args.EventArgs["PLUGIN"];
+                    if( this.plugins.ContainsKey( pluginName ) )
+                    {
+                        responseArgs["VERSION"] = this.plugins[pluginName].Plugin.Version;
+                    }
+                    else
+                    {
+                        responseArgs["ERROR"] = "Plugin Name Not Found";
+                    }
+                }
+                else
+                {
+                    responseArgs["ERROR"] = "Need Plugin Key";
+                }
 
-            ChaskisEvent responseEvent = this.chaskisEventCreator.CreateTargetedEvent(
-                args.PluginName,
-                responseArgs
-            );
+                ChaskisEvent responseEvent = this.chaskisEventCreator.CreateTargetedEvent(
+                    args.PluginName,
+                    responseArgs,
+                    args.PassThroughArgs
+                );
 
-            this.chaskisEventSender.SendChaskisEvent( responseEvent );
+                this.chaskisEventSender.SendChaskisEvent( responseEvent );
+            }
         }
 
         // ---- About Command Handler ----

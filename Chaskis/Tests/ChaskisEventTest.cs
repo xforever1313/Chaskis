@@ -22,8 +22,8 @@ namespace Tests
         private string pluginName;
         private string targetPluginName;
 
-        private string argStr;
-        private IReadOnlyList<string> expectedArgs;
+        private Dictionary<string, string> expectedArgs;
+        private Dictionary<string, string> expectedPassthroughArgs;
 
         // ---------------- Setup / Teardown ----------------
 
@@ -34,9 +34,13 @@ namespace Tests
             this.pluginName = TestHelpers.FactoryPluginNames[0];
             this.targetPluginName = TestHelpers.FactoryPluginNames[1];
 
+            this.expectedArgs = new Dictionary<string, string>();
+            this.expectedArgs.Add( "arg1", "arg1Value" );
+            this.expectedArgs.Add( "arg2", "arg2Value" );
 
-            argStr = "ARG1 ARG2 ARG3";
-            this.expectedArgs = this.argStr.Split( ' ' );
+            this.expectedPassthroughArgs = new Dictionary<string, string>();
+            this.expectedPassthroughArgs.Add( "earg1", "earg 1 value" );
+            this.expectedPassthroughArgs.Add( "earg2", "earg 2 value" );
         }
 
         // ---------------- Tests ----------------
@@ -61,13 +65,15 @@ namespace Tests
         {
             ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
                 this.targetPluginName,
-                this.expectedArgs
+                this.expectedArgs,
+                this.expectedPassthroughArgs
             );
 
-            Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + this.targetPluginName.ToUpper() + " ARG1 ARG2 ARG3",
-                e.ToString()
-            );
+            string xmlString = e.ToString();
+            Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
+
+            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            this.CompareEvents( e, recreatedEvent );
         }
 
         /// <summary>
@@ -78,13 +84,14 @@ namespace Tests
         {
             ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
                 this.targetPluginName,
-                new List<string>()
+                new Dictionary<string, string>()
             );
 
-            Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + this.targetPluginName.ToUpper(),
-                e.ToString()
-            );
+            string xmlString = e.ToString();
+            Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
+
+            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            this.CompareEvents( e, recreatedEvent );
         }
 
         /// <summary>
@@ -94,13 +101,15 @@ namespace Tests
         public void CreateBCastEvent()
         {
             ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
-                this.expectedArgs
+                this.expectedArgs,
+                this.expectedPassthroughArgs
             );
 
-            Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName.ToUpper()+ " " + ChaskisEvent.BroadcastEventStr + " ARG1 ARG2 ARG3",
-                e.ToString()
-            );
+            string xmlString = e.ToString();
+            Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
+
+            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            this.CompareEvents( e, recreatedEvent );
         }
 
         /// <summary>
@@ -110,13 +119,47 @@ namespace Tests
         public void CreateBCastEventNoArgs()
         {
             ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
-                new List<string>()
+                new Dictionary<string, string>()
             );
 
-            Assert.AreEqual(
-                "CHASKIS PLUGIN " + this.pluginName.ToUpper() + " " + ChaskisEvent.BroadcastEventStr,
-                e.ToString()
-            );
+            string xmlString = e.ToString();
+            Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
+
+            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            this.CompareEvents( e, recreatedEvent );
+        }
+
+        private void CompareEvents( ChaskisEvent expected, ChaskisEvent actual )
+        {
+            Assert.AreEqual( expected.SourceType, actual.SourceType );
+            Assert.AreEqual( expected.SourcePlugin, actual.SourcePlugin );
+            Assert.AreEqual( expected.DestinationPlugin, actual.DestinationPlugin );
+            if( expected.Args == null )
+            {
+                Assert.IsNull( actual.Args );
+            }
+            else
+            {
+                Assert.AreEqual( expected.Args.Count, actual.Args.Count );
+                foreach( KeyValuePair<string, string> arg in expected.Args )
+                {
+                    Assert.AreEqual( arg.Value, actual.Args[arg.Key] );
+                }
+            }
+
+            if( expected.PassThroughArgs == null )
+            {
+                // FromXml will not have a null PassThroughArgs Dictionary.
+                Assert.AreEqual( 0, actual.PassThroughArgs.Count );
+            }
+            else
+            {
+                Assert.AreEqual( expected.PassThroughArgs.Count, actual.PassThroughArgs.Count );
+                foreach( KeyValuePair<string, string> arg in expected.PassThroughArgs )
+                {
+                    Assert.AreEqual( arg.Value, actual.PassThroughArgs[arg.Key] );
+                }
+            }
         }
     }
 }

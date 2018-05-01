@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -266,7 +267,7 @@ namespace ChaskisCore
 
             this.IsConnected = true;
 
-            this.AddCoreEvent( "CONNECT TO " + this.Config.Server + " AS " + this.Config.Nick );
+            this.AddCoreEvent( "CONNECTED" );
             StaticLogger.Log.WriteLine( "Connection made!" );
         }
 
@@ -515,7 +516,7 @@ namespace ChaskisCore
         /// </summary>
         private void DisconnectHelper()
         {
-            this.AddCoreEvent( "DISCONNECTING FROM " + this.Config.Server + " AS " + this.Config.Nick );
+            this.AddCoreEvent( "DISCONNECTING" );
 
             this.connection.Close();
 
@@ -527,7 +528,7 @@ namespace ChaskisCore
             // We are not connected.
             this.IsConnected = false;
 
-            this.AddCoreEvent( "DISCONNECTED FROM " + this.Config.Server + " AS " + this.Config.Nick );
+            this.AddCoreEvent( "DISCONNECTED" );
         }
 
         /// <summary>
@@ -607,13 +608,19 @@ namespace ChaskisCore
             this.OnReadLine( s );
         }
 
-        private void AddCoreEvent( string args )
+        private void AddCoreEvent( string eventStr )
         {
             ChaskisEvent e = new ChaskisEvent(
                 ChaskisEventSource.CORE,
                 ChaskisEventProtocol.IRC.ToString(),
                 ChaskisEvent.BroadcastEventStr,
-                args.Split( ' ' )
+                new Dictionary<string, string>()
+                {
+                    ["event_id"] = eventStr,
+                    ["server"] = this.Config.Server,
+                    ["nick"] = this.Config.Nick
+                },
+                null
             );
 
             this.SendChaskisEvent( e );

@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -25,13 +26,7 @@ namespace ChaskisCore
         /// <summary>
         /// Pattern to watch for Chaskis Events.
         /// </summary>
-        //                                         1                2                       3                        4                5
-        // 1 - Denotes that we are a CHASKIS event.
-        // 2 - Did this event come from the CORE or from a Plugin?
-        // 3 - What fired this event?
-        // 4 - What plugin was the event trying to get the attention of? BCAST for ALL plugins.
-        // 5 - Arguments.
-        private const string chaskisPattern = @"CHASKIS\s+(?<source>CORE|PLUGIN)\s+(?<sourcePlugin>\S+)\s+(?<targetPlugin>\S+)\s+(?<args>.+)";
+        private const string chaskisPattern = @"^\<chaskis_event\>.+\</chaskis_event\>$";
 
         private static readonly Regex chaskisRegex = new Regex(
             chaskisPattern,
@@ -42,7 +37,6 @@ namespace ChaskisCore
         private string expectedPlugin;
         private string creatorPlugin;
         private Action<ChaskisEventHandlerLineActionArgs> lineAction;
-        private Regex argRegex;
 
         // ---------------- Constructor ----------------
 
@@ -57,12 +51,10 @@ namespace ChaskisCore
         /// <param name="expectedProtocol">The protocol we expected.</param>
         /// <param name="creatorPluginName">The plugin that created this event.</param>
         internal ChaskisEventHandler(
-            string argPattern,
             ChaskisEventProtocol? expectedProtocol,
             string creatorPluginName,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         ) : this(
-            argPattern,
             ChaskisEventSource.CORE,
             expectedProtocol.HasValue ? expectedProtocol.Value.ToString() : null,
             creatorPluginName,
@@ -89,7 +81,6 @@ namespace ChaskisCore
         /// </param>
         /// <param name="creatorPluginName">The plugin that created this event.</param>
         internal ChaskisEventHandler(
-            string argPattern,
             ChaskisEventSource expectedSource,
             string expectedSourcePlugin,
             string creatorPluginName,
@@ -107,10 +98,8 @@ namespace ChaskisCore
                 }
             }
 
-            ArgumentChecker.IsNotNull( argPattern, nameof( argPattern ) );
             ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
 
-            this.argRegex = new Regex( argPattern, RegexOptions.IgnoreCase ); // TODO: Maybe add a regex option?
             this.expectedSource = expectedSource;
 
             if( expectedSourcePlugin != null )
@@ -142,71 +131,40 @@ namespace ChaskisCore
         /// </summary>
         public void HandleEvent( HandlerArgs args )
         {
-            Match match = chaskisRegex.Match( args.Line );
-            if( match.Success )
+            ChaskisEvent e = ChaskisEvent.FromXml( args.Line );
+            string targetPlugin = e.DestinationPlugin;
+
+            // We'll handle the event if it is targeted specifically to this plugin, OR it is a broadcast event.
+            bool sendEvent = ( this.creatorPlugin == targetPlugin ) || ( string.IsNullOrEmpty( targetPlugin ) );
+
+            if( this.expectedPlugin != null )
             {
-                ChaskisEventSource source;
-                bool isMatch = Enum.TryParse( match.Groups["source"].Value, out source );
-                if( isMatch )
-                {
-                    string pluginName;
-                    if( source == ChaskisEventSource.CORE )
-                    {
-                        ChaskisEventProtocol protocol;
-                        isMatch &= Enum.TryParse( match.Groups["sourcePlugin"].Value, out protocol );
+                sendEvent &= ( e.SourcePlugin == this.expectedPlugin );
+            }
+            // BCAST Events MUST be subscribed to a specific source plugin.
+            // Otherwise, what happens if this happens (remember, an empty string for dest_plugin is a bcast):
+            // <chaskis_event source_type="PLUGIN" source_plugin="plugin1" dest_plugin="">
+            // <chaskis_event source_type="PLUGIN" source_plugin="plugin2" dest_plugin="">
+            // Both events will trigger even though they came from two different plugins...
+            // That is probably not good.
+            // For BCAST events, the handler should subscribe to a specific source plugin.
+            // This way, plugin1 will trigger one handler, while plugin 2 will
+            // trigger a different handler.
+            else if( string.IsNullOrEmpty( targetPlugin ) )
+            {
+                sendEvent = false;
+            }
 
-                        pluginName = protocol.ToString().ToUpper();
-                    }
-                    else
-                    {
-                        pluginName = match.Groups["sourcePlugin"].Value.ToUpper();
-                    }
+            if( sendEvent )
+            {
+                ChaskisEventHandlerLineActionArgs eventArgs = new ChaskisEventHandlerLineActionArgs(
+                    e.SourcePlugin,
+                    e.Args,
+                    e.PassThroughArgs,
+                    args.IrcWriter
+                );
 
-                    isMatch &= ( this.expectedSource == source );
-
-                    // Handle event if the event targets this plugin, OR it is a broadcast event.
-                    string targetPlugin = match.Groups["targetPlugin"].Value.ToUpper();
-                    isMatch &= ( ( this.creatorPlugin == targetPlugin ) || ( ChaskisEvent.BroadcastEventStr == targetPlugin ) );
-
-                    if( this.expectedPlugin != null )
-                    {
-                        isMatch &= ( this.expectedPlugin == pluginName );
-                    }
-                    // BCast events MUST be subcribed to a specific source plugin.
-                    // Otherwise, what happens if we get something like this:
-                    // CHASKIS PLUGIN Plugin1 BCAST Hello
-                    // CHASKIS PLUGIN Plugin2 BCAST Hello
-                    // BOTH will trigger even though they came from two different
-                    // plugins.  That is a problem...
-                    // For BCAST events, the handler should subscribe to a specific
-                    // source plugin.  This way Plugin1 will trigger one handler,
-                    // while Plugin2 will trigger a different handler.
-                    else if( targetPlugin == ChaskisEvent.BroadcastEventStr )
-                    {
-                        isMatch = false;
-                    }
-                    // Otherwise, if we are not a BCAST, we'll handle the event if our expected plugin
-                    // can be any (is null).
-
-                    if( isMatch )
-                    {
-                        string eventArgsStr = match.Groups["args"].Value;
-                        Match argMatch = this.argRegex.Match( eventArgsStr );
-
-                        if( argMatch.Success )
-                        {
-                            ChaskisEventHandlerLineActionArgs eventArgs = new ChaskisEventHandlerLineActionArgs(
-                                pluginName,
-                                match.Groups["args"].Value,
-                                this.argRegex,
-                                argMatch,
-                                args.IrcWriter
-                            );
-
-                            this.lineAction( eventArgs );
-                        }
-                    }
-                }
+                this.lineAction( eventArgs );
             }
         }
     }
@@ -221,16 +179,14 @@ namespace ChaskisCore
 
         public ChaskisEventHandlerLineActionArgs(
             string pluginName,
-            string eventArgs,
-            Regex regex,
-            Match argMatch,
+            IDictionary<string, string> eventArgs,
+            IDictionary<string, string> passThroughArgs,
             IIrcWriter ircWriter
         )
         {
             this.PluginName = pluginName;
             this.EventArgs = eventArgs;
-            this.Regex = regex;
-            this.Match = argMatch;
+            this.PassThroughArgs = passThroughArgs;
             this.IrcWriter = ircWriter;
         }
 
@@ -244,17 +200,9 @@ namespace ChaskisCore
         /// <summary>
         /// Event args
         /// </summary>
-        public string EventArgs { get; private set; }
+        public IDictionary<string, string> EventArgs { get; private set; }
 
-        /// <summary>
-        /// The regex that was used to find this event.
-        /// </summary>
-        public Regex Regex { get; private set; }
-
-        /// <summary>
-        /// The regex match that was used to find this event.
-        /// </summary>
-        public Match Match { get; private set; }
+        public IDictionary<string, string> PassThroughArgs { get; private set; }
 
         /// <summary>
         /// The IRC writer that can be used to send messages to
