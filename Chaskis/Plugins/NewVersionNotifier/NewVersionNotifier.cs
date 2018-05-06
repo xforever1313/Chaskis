@@ -21,7 +21,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         public const string VersionStr = "0.1.0";
 
-        private const string cacheFileName = "lastversion.txt";
+        private const string cacheFileName = ".lastversion.txt";
 
         public const string PluginName = "new_version_notifier";
 

@@ -13,8 +13,8 @@
 
  * Ensure the file exists and contains the correct version
 
-| '''Wait For String''' | new_version_notifier's\s+lastversion\.txt\s+file\s+has\s+been\s+updated | '''From Chaskis''' |
-| '''File''' | ${test_environment_path}/Plugins/NewVersionNotifier/lastversion.txt | '''Contains''' | ${chaskis_version} |
+| '''Wait For String''' | new_version_notifier's\s+\.lastversion\.txt\s+file\s+has\s+been\s+updated | '''From Chaskis''' |
+| '''File''' | ${test_environment_path}/Plugins/NewVersionNotifier/.lastversion.txt | '''Contains''' | ${chaskis_version} |
 
 !***> Teardown
 

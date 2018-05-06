@@ -111,7 +111,7 @@ $FilesToTemplate =(
     (".\Chaskis\ChaskisCore\ChaskisCore.nuspec.template", ".\Chaskis\ChaskisCore\ChaskisCore.nuspec"),
     (".\Chaskis\Install\chocolatey\template\tools\chocolateyinstall.ps1.template", ".\Chaskis\Install\chocolatey\package\tools\chocolateyinstall.ps1"),
     (".\Chaskis\RegressionTests\FitNesseRoot\ChaskisTests\content.txt.template", ".\Chaskis\RegressionTests\FitNesseRoot\ChaskisTests\content.txt"),
-    (".\Chaskis\RegressionTests\Environments\NewVersionNotifierNoChangeEnvironment\Plugins\NewVersionNotifier\lastversion.txt.template",".\Chaskis\RegressionTests\Environments\NewVersionNotifierNoChangeEnvironment\Plugins\NewVersionNotifier\lastversion.txt")
+    (".\Chaskis\RegressionTests\Environments\NewVersionNotifierNoChangeEnvironment\Plugins\NewVersionNotifier\.lastversion.txt.template",".\Chaskis\RegressionTests\Environments\NewVersionNotifierNoChangeEnvironment\Plugins\NewVersionNotifier\.lastversion.txt")
 )
 
 function TemplateFile($filePath, $Output)

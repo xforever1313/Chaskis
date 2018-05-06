@@ -12,7 +12,7 @@
 
  * Ensure the file exists and still contains the correct version
 
-| '''File''' | ${test_environment_path}/Plugins/NewVersionNotifier/lastversion.txt | '''Contains''' | ${chaskis_version} |
+| '''File''' | ${test_environment_path}/Plugins/NewVersionNotifier/.lastversion.txt | '''Contains''' | ${chaskis_version} |
 
 !***> Teardown
 
