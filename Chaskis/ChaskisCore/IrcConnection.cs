@@ -247,16 +247,6 @@ namespace ChaskisCore
             this.ircWriter.Flush();
             Thread.Sleep( this.Config.RateLimit );
 
-            // Join Channel.
-            // JOIN <channels>
-            // If channel does not exist it will be created.
-            foreach( string channel in this.Config.Channels )
-            {
-                this.ircWriter.WriteLine( "JOIN {0}", channel );
-                this.ircWriter.Flush();
-                Thread.Sleep( this.Config.RateLimit );
-            }
-
             // Tell nickserv we are a bot.
             if( string.IsNullOrEmpty( this.Config.Password ) == false )
             {
@@ -265,10 +255,25 @@ namespace ChaskisCore
                 Thread.Sleep( this.Config.RateLimit );
             }
 
+            // At this point, we are connected, we just simply haven't joined channels yet.
             this.IsConnected = true;
 
-            this.AddCoreEvent( "CONNECTED" );
             StaticLogger.Log.WriteLine( "Connection made!" );
+            this.AddCoreEvent( "CONNECTED" );
+
+            // Join Channel.
+            // JOIN <channels>
+            // If channel does not exist it will be created.
+            foreach( string channel in this.Config.Channels )
+            {
+                this.ircWriter.WriteLine( "JOIN {0}", channel );
+                this.ircWriter.Flush();
+
+                this.AddCoreEvent( "JOIN " + channel );
+                Thread.Sleep( this.Config.RateLimit );
+            }
+
+            this.AddCoreEvent( "FINISHED JOINING CHANNELS" );
         }
 
         /// <summary>

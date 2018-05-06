@@ -58,8 +58,13 @@ namespace Chaskis.RegressionTests
         private object keepReadingObject;
 
         private bool respondToPings;
-
         private object respondToPingsObject;
+
+        private bool respondToJoins;
+        private object respondToJoinsLock;
+
+        private string nickName;
+        private object nickNameLock;
 
         private AutoResetEvent connectedEvent;
 
@@ -83,6 +88,12 @@ namespace Chaskis.RegressionTests
 
             this.respondToPings = true;
             this.respondToPingsObject = new object();
+
+            this.respondToJoins = true;
+            this.respondToJoinsLock = new object();
+
+            this.nickName = string.Empty;
+            this.nickNameLock = new object();
         }
 
         ~IrcServer()
@@ -139,6 +150,42 @@ namespace Chaskis.RegressionTests
                 lock( this.respondToPingsObject )
                 {
                     this.respondToPings = value;
+                }
+            }
+        }
+
+        private bool RespondToJoins
+        {
+            get
+            {
+                lock( this.respondToJoinsLock )
+                {
+                    return this.respondToJoins;
+                }
+            }
+            set
+            {
+                lock( this.respondToJoinsLock )
+                {
+                    this.respondToJoins = value;
+                }
+            }
+        }
+
+        private string NickName
+        {
+            get
+            {
+                lock( this.nickNameLock )
+                {
+                    return this.nickName;
+                }
+            }
+            set
+            {
+                lock( this.nickNameLock )
+                {
+                    this.nickName = value;
                 }
             }
         }
@@ -237,16 +284,24 @@ namespace Chaskis.RegressionTests
             GC.SuppressFinalize( this );
         }
 
+        // -------- Join --------
+
+        /// <summary>
+        /// Do we respond to joins when the client joins a channel?
+        /// </summary>
+        public void SetJoinResponse( bool enable )
+        {
+        }
+
         // -------- Ping / Pong --------
 
         /// <summary>
         /// Do we repond to pings from the client?
         /// Defaulted to true.
         /// </summary>
-        public bool SetPingResponse( bool enable )
+        public void SetPingResponse( bool enable )
         {
             this.RespondToPings = enable;
-            return true;
         }
 
         // -------- Send / Wait Commands --------
@@ -410,6 +465,11 @@ namespace Chaskis.RegressionTests
                             {
                                 this.RespondToPing( line );
                             }
+                            if( this.RespondToJoins )
+                            {
+                                this.RespondToJoin( line );
+                            }
+                            this.HandleNickCommand( line );
                         }
                     }
                 }
@@ -444,6 +504,38 @@ namespace Chaskis.RegressionTests
             if( match.Success )
             {
                 this.SendPong( match.Groups["msg"].Value );
+            }
+        }
+
+        private void HandleNickCommand( string line )
+        {
+            Match match = Regex.Match(
+                line,
+                @"NICK\s+(?<nick>\S+)"
+            );
+            if( match.Success )
+            {
+                this.NickName = match.Groups["nick"].Value;
+            }
+        }
+
+        private void RespondToJoin( string line )
+        {
+            Match match = Regex.Match(
+                line,
+                @"JOIN\s+(?<channel>\S+)"
+            );
+
+            if( match.Success )
+            {
+                string command = string.Format(
+                    ":{0}!~{0}@{1} JOIN {2}",
+                    this.NickName,
+                    new IPAddress( new byte[] { 127, 0, 0, 1 } ), // Just use localhost for now I guess?
+                    match.Groups["channel"]
+                );
+
+                this.SendRawCommand( command );
             }
         }
     }

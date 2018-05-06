@@ -141,7 +141,7 @@ namespace Tests
 
                 Assert.IsNotNull( this.responseReceived );
 
-                // Part handler has no message.
+                // Join handler has no message.
                 Assert.AreEqual( string.Empty, this.responseReceived.Message );
 
                 // Channels should match.
@@ -152,11 +152,8 @@ namespace Tests
             }
         }
 
-        /// <summary>
-        /// Ensures that if the bot joins, the event isn't fired.
-        /// </summary>
         [Test]
-        public void BotJoins()
+        public void BotJoinsWithRespondToSelfDisabled()
         {
             string ircString = TestHelpers.ConstructIrcString(
                 this.ircConfig.Nick,
@@ -168,6 +165,32 @@ namespace Tests
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.IsNull( this.responseReceived );
+        }
+
+        [Test]
+        public void BotJoinsWithRespondToSelfEnabled()
+        {
+            JoinHandler uut = new JoinHandler( this.JoinFunction, true );
+
+            string ircString = TestHelpers.ConstructIrcString(
+                this.ircConfig.Nick,
+                JoinHandler.IrcCommand,
+                this.ircConfig.Channels[0],
+                string.Empty
+            );
+
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNotNull( this.responseReceived );
+
+            // Join handler has no message.
+            Assert.AreEqual( string.Empty, this.responseReceived.Message );
+
+            // Channels should match.
+            Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
+
+            // Nicks should match.
+            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.RemoteUser );
         }
 
         /// <summary>

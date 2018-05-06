@@ -2,7 +2,7 @@
 
 | '''Setup''' | !-NewVersionNotifierDifferentVersionEnvironment-! | '''Environment''' | ${port} |
 
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskis
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitForConnection
 *!
 # Start Test
 

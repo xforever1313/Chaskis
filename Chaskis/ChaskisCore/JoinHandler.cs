@@ -40,12 +40,14 @@ namespace ChaskisCore
         /// Constructor
         /// </summary>
         /// <param name="response">The action to take when a user joins the channel</param>
-        public JoinHandler( Action<IIrcWriter, IrcResponse> response )
+        /// <param name="respondToSelf">Should the bot respond to itself?</param>
+        public JoinHandler( Action<IIrcWriter, IrcResponse> response, bool respondToSelf = false )
         {
             ArgumentChecker.IsNotNull( response, nameof( response ) );
 
             this.JoinAction = response;
             this.KeepHandling = true;
+            this.RespondToSelf = respondToSelf;
         }
 
         // -------- Properties --------
@@ -72,6 +74,11 @@ namespace ChaskisCore
         /// </summary>
         public bool KeepHandling { get; set; }
 
+        /// <summary>
+        /// Does the bot respond to itself joining a channel?
+        /// </summary>
+        public bool RespondToSelf { get; private set; }
+
         // -------- Functions --------
 
         /// <summary>
@@ -87,7 +94,10 @@ namespace ChaskisCore
                 string remoteUser = match.Groups["nickOrServer"].Value;
 
                 // Don't fire if we were the ones to trigger the event.
-                if( remoteUser.ToUpper() == args.IrcConfig.Nick.ToUpper() )
+                if(
+                    remoteUser.Equals( args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) &&
+                    ( this.RespondToSelf == false )
+                )
                 {
                     return;
                 }

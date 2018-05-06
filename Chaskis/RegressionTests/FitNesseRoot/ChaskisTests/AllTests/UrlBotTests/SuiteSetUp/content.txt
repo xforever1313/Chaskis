@@ -2,5 +2,5 @@
 
 !include <ChaskisTests.BuildingBlocks.DefaultEnvironmentCreator
 
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskis
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
 

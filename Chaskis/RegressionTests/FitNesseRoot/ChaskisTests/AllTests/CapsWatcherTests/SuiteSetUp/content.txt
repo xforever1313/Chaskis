@@ -1,6 +1,6 @@
 !include <ChaskisTests.BuildingBlocks.DefaultEnvironmentCreator 
 
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskis
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
 
  * Turn on full verbosity for caps watcher.
  

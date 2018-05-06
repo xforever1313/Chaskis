@@ -27,9 +27,9 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private string pluginDir;
 
-        private IChaskisEventScheduler eventScheduler;
         private IChaskisEventCreator chaskisEventCreator;
         private IChaskisEventSender eventSender;
+        private IIrcConfig ircConfig;
         private GenericLogger logger;
 
         private string cachedFilePath;
@@ -39,13 +39,18 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private List<IIrcHandler> ircHandlers;
 
-        private int eventId;
+        /// <summary>
+        /// A hashset of channels that were already notified of the 
+        /// version update.
+        /// </summary>
+        private HashSet<string> channelsNotified;
 
         // ---------------- Constructor ----------------
 
         public NewVersionNotifier()
         {
             this.ircHandlers = new List<IIrcHandler>();
+            this.channelsNotified = new HashSet<string>();
         }
 
         // ---------------- Properties ----------------
@@ -78,9 +83,9 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         public void Init( PluginInitor initor )
         {
-            this.eventScheduler = initor.EventScheduler;
             this.chaskisEventCreator = initor.ChaskisEventCreator;
             this.eventSender = initor.ChaskisEventSender;
+            this.ircConfig = initor.IrcConfig;
             this.logger = initor.Log;
 
             this.pluginDir = Path.Combine(
@@ -121,13 +126,10 @@ namespace Chaskis.Plugins.NewVersionNotifier
                 "chaskis",
                 this.HandleChaskisEvent
             );
-
             this.ircHandlers.Add( eventHandler );
 
-            this.eventId = this.eventScheduler.ScheduleEvent(
-                this.config.Delay,
-                this.OnTimeExpired
-            );
+            JoinHandler joinHandler = new JoinHandler( this.OnJoinChannel, true );
+            this.ircHandlers.Add( joinHandler );
         }
 
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
@@ -145,25 +147,29 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         public void Dispose()
         {
-            this.eventScheduler.StopEvent( this.eventId );
         }
 
-        private void OnTimeExpired( IIrcWriter writer )
+        private void OnJoinChannel( IIrcWriter writer, IrcResponse response )
         {
-            ChaskisEvent e = this.chaskisEventCreator.CreateTargetedEvent(
-                "chaskis",
-                new Dictionary<string, string>()
-                {
-                    ["QUERY"] = "VERSION",
-                    ["PLUGIN"] = "chaskis"
-                },
-                new Dictionary<string, string>()
-                {
-                    ["CHANNEL"] = string.Empty // TODO.
-                }
-            );
+            if( response.RemoteUser.Equals( this.ircConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
+            {
+                string channel = response.Channel;
 
-            this.eventSender.SendChaskisEvent( e );
+                ChaskisEvent e = this.chaskisEventCreator.CreateTargetedEvent(
+                    "chaskis",
+                    new Dictionary<string, string>()
+                    {
+                        ["QUERY"] = "VERSION",
+                        ["PLUGIN"] = "chaskis"
+                    },
+                    new Dictionary<string, string>()
+                    {
+                        ["CHANNEL"] = channel
+                    }
+                );
+
+                this.eventSender.SendChaskisEvent( e );
+            }
         }
 
         private void HandleChaskisEvent( ChaskisEventHandlerLineActionArgs args )
@@ -183,19 +189,38 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
             if( args.EventArgs.ContainsKey( "VERSION" ) )
             {
+                string channel = args.PassThroughArgs["CHANNEL"];
+                if( this.channelsNotified.Contains( channel ) )
+                {
+                    this.logger.WriteLine(
+                        "Channel {0} already notified of version update, skipping message",
+                        channel
+                    );
+                    return;
+                }
+
                 string versString = args.EventArgs["VERSION"];
                 if( versString.Equals( this.cachedVersion ) == false )
                 {
                     string msg = this.config.Message.Replace( "{%version%}", versString );
-                    args.IrcWriter.SendBroadcastMessage( msg );
+                    args.IrcWriter.SendMessage( msg, channel );
 
-                    await Task.Run(
-                        () =>
-                        {
-                            File.WriteAllText( this.cachedFilePath, versString );
-                            this.logger.WriteLine( "{0}'s {1} file has been updated", PluginName, cacheFileName );
-                        }
-                    );
+                    // Event handlers all happen on one thread,
+                    // which is why we don't need a lock here.
+                    this.channelsNotified.Add( channel );
+                    if( this.channelsNotified.Count == 1 )
+                    {
+                        await Task.Run(
+                            () =>
+                            {
+                                // If our version is new, we need to update the cached file
+                                // so the next time the application runs, we don't
+                                // send an unneeded message.
+                                File.WriteAllText( this.cachedFilePath, versString );
+                                this.logger.WriteLine( "{0}'s {1} file has been updated", PluginName, cacheFileName );
+                            }
+                        );
+                    }
                 }
                 else
                 {
