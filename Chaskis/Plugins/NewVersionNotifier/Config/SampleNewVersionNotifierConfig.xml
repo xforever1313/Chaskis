@@ -4,11 +4,7 @@ This plugin sends a message to all the channels the bot is a member
 of when it first joins the channel if the bot's version changed.
 
 - Message: The message to send.  Must be at least 1 character and not all whitespace.  {%version%} is replaced with the Chaskis version.
-
-- Delay: The time in seconds to wait after first connecting to the IRC Server (NOT THE CHANNEL)
-         before sending the message.
 -->
 <newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
     <message>I have been updated to version {%version%}.  Release Notes: https://github.com/xforever1313/Chaskis/releases/tag/{%version%}</message>
-    <delay>30</delay>
 </newversionnotifierconfig>

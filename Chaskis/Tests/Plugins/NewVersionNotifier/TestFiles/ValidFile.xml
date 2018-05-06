@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
     <message>Test Message</message>
-    <delay>0</delay>
 </newversionnotifierconfig>

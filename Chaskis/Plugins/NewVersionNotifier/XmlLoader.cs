@@ -48,11 +48,6 @@ namespace Chaskis.Plugins.NewVersionNotifier
             {
                 switch( childNode.Name )
                 {
-                    case "delay":
-                        int delaySeconds = int.Parse( childNode.InnerText );
-                        config.Delay = TimeSpan.FromSeconds( delaySeconds );
-                        break;
-
                     case "message":
                         config.Message = childNode.InnerText;
                         break;

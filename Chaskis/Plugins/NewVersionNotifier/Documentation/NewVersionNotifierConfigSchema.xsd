@@ -11,7 +11,6 @@
     <xs:complexType name="NewVersionNotifierConfig">
         <xs:sequence>
             <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="1" />
-            <xs:element name="delay" type="xs:int" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

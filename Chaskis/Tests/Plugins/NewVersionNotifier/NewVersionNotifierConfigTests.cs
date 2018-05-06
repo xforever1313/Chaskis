@@ -50,14 +50,6 @@ namespace Tests.Plugins.NewVersionNotifier
             // Ensure default constructor validates.
             Assert.DoesNotThrow( () => uut.Validate() );
 
-            uut.Delay = TimeSpan.Zero; // This is okay.
-            Assert.DoesNotThrow( () => uut.Validate() );
-
-            // Start changing things.
-            uut.Delay = new TimeSpan( 0, 0, -1 );
-            Assert.Throws<ValidationException>( () => uut.Validate() );
-            uut = new NewVersionNotifierConfig();
-
             uut.Message = null;
             Assert.Throws<ValidationException>( () => uut.Validate() );
 
@@ -82,12 +74,6 @@ namespace Tests.Plugins.NewVersionNotifier
             Assert.AreNotSame( uut1, uut2 );
 
             // Start changing things.
-
-            uut1.Delay = uut2.Delay + new TimeSpan( 1 );
-            Assert.AreNotEqual( uut1, uut2 );
-            Assert.AreNotEqual( uut1.GetHashCode(), uut2.GetHashCode() );
-            uut1.Delay = uut2.Delay;
-
             uut1.Message = uut2.Message + "1";
             Assert.AreNotEqual( uut1, uut2 );
             Assert.AreNotEqual( uut1.GetHashCode(), uut2.GetHashCode() );

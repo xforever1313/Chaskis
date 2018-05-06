@@ -102,7 +102,6 @@ namespace Tests.Plugins.NewVersionNotifier
         {
             NewVersionNotifierConfig expectedConfig = new NewVersionNotifierConfig()
             {
-                Delay = TimeSpan.Zero,
                 Message = "Test Message"
             };
             NewVersionNotifierConfig emptyConfig = XmlLoader.LoadConfig( Path.Combine( testFilesPath, "ValidFile.xml" ) );

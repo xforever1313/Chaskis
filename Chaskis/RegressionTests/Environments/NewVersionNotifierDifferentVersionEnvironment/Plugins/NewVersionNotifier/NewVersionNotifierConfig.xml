@@ -1,4 +1,3 @@
 <newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
     <message>I have been upgraded to version {%version%}.</message>
-    <delay>10</delay>
 </newversionnotifierconfig>
