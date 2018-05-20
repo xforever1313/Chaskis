@@ -6,8 +6,6 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using Plugins.Chaskis.IsItDownBot;
 using SethCS.Exceptions;
