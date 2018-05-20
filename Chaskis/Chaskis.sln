@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionTests", "Regressi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewVersionNotifier", "Plugins\NewVersionNotifier\NewVersionNotifier.csproj", "{8E6C2009-28F3-4AF5-8A3C-D960E986A7C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItDownBot", "Plugins\IsItDownBot\IsItDownBot.csproj", "{683EBFDB-32B0-4815-BC12-F6F1916F3B91}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{501708e7-ac43-4df4-b7bc-6a31074e30d1}*SharedItemsImports = 4
@@ -257,6 +259,14 @@ Global
 		{8E6C2009-28F3-4AF5-8A3C-D960E986A7C5}.Release Linux|Any CPU.Build.0 = Release|Any CPU
 		{8E6C2009-28F3-4AF5-8A3C-D960E986A7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E6C2009-28F3-4AF5-8A3C-D960E986A7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -279,6 +289,7 @@ Global
 		{E140E242-0C4D-4EFC-B423-4492BB01AB91} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{69D4A1C8-F7A7-44EE-B8C6-B3026BDDC6CD} = {ADC1D076-BA86-4137-AAEA-804181341468}
 		{8E6C2009-28F3-4AF5-8A3C-D960E986A7C5} = {ADC1D076-BA86-4137-AAEA-804181341468}
+		{683EBFDB-32B0-4815-BC12-F6F1916F3B91} = {ADC1D076-BA86-4137-AAEA-804181341468}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

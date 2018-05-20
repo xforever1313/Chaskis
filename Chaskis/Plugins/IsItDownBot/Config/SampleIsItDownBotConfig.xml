@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+This is the configuration for the IsItDownBot.  This bot can detect if a website goes down.
+You can either manually inspect websites using a command, or the bot can automatically check to see
+if a website is down at an interval.
+
+commandprefix - The command to use to manually query the status of ANY website.  For example, if this is set to
+                '!isitdown', a user in a channel can use '!isitdown https://google.com' to see if google is up or not.
+                This can not be an empty string.
+                
+websites - Websites to check to see if they are down automatically.
+    url - The url to query.  If this URL does not return a success status, the bot will respond.  Can not be empty string.
+    interval - the interval in MINUTES to check in on a website.  Must be 1 or greater.
+    channel - The channels to send a message to if the website goes down.  Must be 1 or greater.  If no channels are specfied, a message
+              gets sent to ALL channels the bot is in.
+-->
+<isitdownbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/isitdownbotconfig/2018/isitdownbotconfig.xsd">
+    <commandprefix>!isitdown</commandprefix>
+    <websites>
+        <website>
+            <url>https://www.shendrick.net</url>
+            <interval>10</interval>
+            <channel>#channel1</channel>
+            <channel>#channel2</channel>
+        </website>
+        <website>
+            <url>https://github.com</url>
+            <interval>20</interval>
+        </website>
+    </websites>
+</isitdownbotconfig>
