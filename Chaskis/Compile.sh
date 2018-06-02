@@ -1,1 +1,1 @@
-xbuild /p:Configuration=Debug ./Chaskis.sln
+msbuild /p:Configuration=Debug ./Chaskis.sln

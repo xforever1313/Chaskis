@@ -5,5 +5,5 @@ solution: ./Chaskis/Chaskis.sln
 install:
   - nuget restore Chaskis/Chaskis.sln
 script:
-  - xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+  - msbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
   - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Chaskis/Tests/bin/Release/Tests.dll

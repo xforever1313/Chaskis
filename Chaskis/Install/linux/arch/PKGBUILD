@@ -32,7 +32,7 @@ build() {
         cd "$srcdir/Chaskis-$pkgver"
         git clone https://github.com/xforever1313/sethcs SethCS
         nuget restore ./Chaskis/Chaskis.sln
-        xbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+        msbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
 }
 
 check() {

@@ -5,7 +5,7 @@
 chaskisroot=../../../
 
 (cd $chaskisroot && nuget restore ./Chaskis.sln)
-(cd $chaskisroot && exec xbuild /p:Configuration=Release ./Chaskis.sln)
+(cd $chaskisroot && exec msbuild /p:Configuration=Release ./Chaskis.sln)
 
 ###
 # Copy files
