@@ -63,6 +63,29 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyNick.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyPort.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
+    <Content Include="TestFiles\InvalidIrcConfigWithEmptyChannel.xml" />
+    <Content Include="TestFiles\InvalidPluginConfigBadRootNode.xml" />
+    <Content Include="TestFiles\InvalidPluginConfigEmptyPath.xml" />
+    <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithBridgeBots.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithNoRateLimit.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
+    <Content Include="TestFiles\ValidIrcConfigWithThreeChannels.xml" />
+    <Content Include="TestFiles\ValidPluginConfig.xml" />
+    <Content Include="TestFiles\ValidPluginConfigEmpty.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
