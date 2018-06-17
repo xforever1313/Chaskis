@@ -7,9 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using ChaskisCore;
+using SethCS.Basic;
 
-namespace IsItDownBot
+namespace Chaskis.Plugins.IsItDownBot
 {
     [ChaskisPlugin( PluginName )]
     public class IsItDownBot : IPlugin
@@ -20,7 +22,18 @@ namespace IsItDownBot
 
         public const string PluginName = "isitdownbot";
 
+        private IsItDownBotConfig config;
+
+        private GenericLogger logger;
+
+        private List<IIrcHandler> ircHandlers;
+
         // ---------------- Constructor ----------------
+
+        public IsItDownBot()
+        {
+            this.ircHandlers = new List<IIrcHandler>();
+        }
 
         // ---------------- Properties ----------------
 
@@ -50,24 +63,38 @@ namespace IsItDownBot
 
         // ---------------- Functions ----------------
 
-        public void Init( PluginInitor pluginInit )
+        public void Init( PluginInitor initor )
         {
-            throw new NotImplementedException();
+            this.logger = initor.Log;
+
+            string pluginDir = Path.Combine(
+                initor.ChaskisConfigPluginRoot,
+                "IsItDownBot"
+            );
+
+            string configPath = Path.Combine(
+                pluginDir,
+                "IsItDownBotConfig.xml"
+            );
+
+            this.config = XmlLoader.LoadConfig( configPath );
         }
 
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
         {
-            throw new NotImplementedException();
+            writer.SendMessage(
+                "Usage: " + this.config.CommandPrefix + " https://url",
+                response.Channel
+            );
         }
 
         public IList<IIrcHandler> GetHandlers()
         {
-            throw new NotImplementedException();
+            return this.ircHandlers.AsReadOnly();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }

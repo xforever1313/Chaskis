@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="IsItDownBot.cs" />
     <Compile Include="IsItDownBotConfig.cs" />
+    <Compile Include="IsItDownChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ChaskisCore\ChaskisCore.csproj">

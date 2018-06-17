@@ -7,7 +7,7 @@
 
 using System;
 using NUnit.Framework;
-using Plugins.Chaskis.IsItDownBot;
+using Chaskis.Plugins.IsItDownBot;
 using SethCS.Exceptions;
 
 namespace Tests.Plugins.IsItDownBot

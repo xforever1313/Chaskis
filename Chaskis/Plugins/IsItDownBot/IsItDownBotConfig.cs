@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using SethCS.Exceptions;
 
-namespace Plugins.Chaskis.IsItDownBot
+namespace Chaskis.Plugins.IsItDownBot
 {
     public class Website
     {

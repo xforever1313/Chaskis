@@ -38,5 +38,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( IsItDownBot.IsItDownBot.VersionStr )]
-[assembly: AssemblyFileVersion( IsItDownBot.IsItDownBot.VersionStr )]
+[assembly: AssemblyVersion( Chaskis.Plugins.IsItDownBot.IsItDownBot.VersionStr )]
+[assembly: AssemblyFileVersion( Chaskis.Plugins.IsItDownBot.IsItDownBot.VersionStr )]
