@@ -18,7 +18,7 @@ namespace Tests.Plugins.KarmaBot
         /// Directory to the karmabot project.
         /// </summary>
         private static readonly string karmaBotDir = Path.Combine(
-            TestHelpers.TestsBaseDir, "..", "Plugins", "KarmaBot"
+            TestHelpers.ProjectRoot, "Plugins", "KarmaBot"
         );
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <cowsaybotconfig>
     <command><![CDATA[!{%saycmd%} (?<msg>.+)]]></command>
-    <path>../../Plugins/CowSayBot/TestFiles/cowsay</path>
+    <path>../../../Plugins/CowSayBot/TestFiles/cowsay</path>
     <cowsaycooldown>5</cowsaycooldown>
     <cowfiles>
         <cowfile command="cowsay" name="DEFAULT" />

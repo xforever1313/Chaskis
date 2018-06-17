@@ -34,7 +34,7 @@ namespace Tests.Plugins.CowSayBot
             CowSayBotConfig config = XmlLoader.LoadCowSayBotConfig( goodFile );
 
             Assert.AreEqual( @"!{%saycmd%} (?<msg>.+)", config.ListenRegex );
-            Assert.AreEqual( "../../Plugins/CowSayBot/TestFiles/cowsay", config.ExeCommand );
+            Assert.AreEqual( "../../../Plugins/CowSayBot/TestFiles/cowsay", config.ExeCommand );
             Assert.AreEqual( 5, config.CoolDownTimeSeconds );
 
             Assert.AreEqual( 5, config.CowFileInfoList.CommandList.Count );

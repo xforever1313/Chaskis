@@ -62,170 +62,170 @@ namespace Tests.Plugins.KarmaBot
         /// Ensures we can increase the karama of a user.
         /// </summary>
         [Test]
-        public async void IncreaseKarmaTest()
+        public void IncreaseKarmaTest()
         {
             // New user, karma should be 1.
-            int karama = await uut.IncreaseKarma( user1Name );
+            int karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 1, karama );
-            Assert.AreEqual( 1, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 1, uut.QueryKarma( user1Name ).Result );
 
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 2, karama );
-            Assert.AreEqual( 2, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 2, uut.QueryKarma( user1Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 3, karama );
-            Assert.AreEqual( 3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
             // Ensure querying is okay.
-            Assert.AreEqual( 3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
 
             // One more increase, since why not?
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 4, karama );
-            Assert.AreEqual( 4, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 4, uut.QueryKarma( user1Name ).Result );
         }
 
         /// <summary>
         /// Ensures we can increase several user's karma
         /// </summary>
         [Test]
-        public async void IncreaseKarmaMultiUserTest()
+        public void IncreaseKarmaMultiUserTest()
         {
             // New user, karma should be 1.
-            int karama = await uut.IncreaseKarma( user1Name );
+            int karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 1, karama );
-            Assert.AreEqual( 1, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 1, uut.QueryKarma( user1Name ).Result );
 
             // New User, karma should be 1.
-            Assert.AreEqual( 0, await uut.QueryKarma( user2Name ) );
-            karama = await uut.IncreaseKarma( user2Name );
+            Assert.AreEqual( 0, uut.QueryKarma( user2Name ).Result );
+            karama = uut.IncreaseKarma( user2Name ).Result;
             Assert.AreEqual( 1, karama );
-            Assert.AreEqual( 1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( 1, uut.QueryKarma( user2Name ).Result );
 
             // user 1 should be increaesd, but no user 2.
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 2, karama );
-            Assert.AreEqual( 2, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( 1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( 2, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( 1, uut.QueryKarma( user2Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 3, karama );
-            Assert.AreEqual( 3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
 
             // User 2 should be the same
-            Assert.AreEqual( 1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( 1, uut.QueryKarma( user2Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
             // Ensure querying is okay.
-            Assert.AreEqual( 3, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( 1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( 1, uut.QueryKarma( user2Name ).Result );
 
             // One more increase, since why not?
-            karama = await uut.IncreaseKarma( user1Name );
+            karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 4, karama );
-            Assert.AreEqual( 4, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( 1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( 4, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( 1, uut.QueryKarma( user2Name ).Result );
         }
 
         /// <summary>
         /// Ensures we can decrease the karama of a user.
         /// </summary>
         [Test]
-        public async void DecreaseKarmaTest()
+        public void DecreaseKarmaTest()
         {
             // New user, karma should be 1.
-            int karama = await uut.DecreaseKarma( user1Name );
+            int karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -1, karama );
-            Assert.AreEqual( -1, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -1, uut.QueryKarma( user1Name ).Result );
 
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -2, karama );
-            Assert.AreEqual( -2, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -2, uut.QueryKarma( user1Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -3, karama );
-            Assert.AreEqual( -3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
             // Ensure querying is okay.
-            Assert.AreEqual( -3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );
 
             // One more increase, since why not?
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -4, karama );
-            Assert.AreEqual( -4, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -4, uut.QueryKarma( user1Name ).Result );
         }
 
         /// <summary>
         /// Ensures we can decrease several user's karma
         /// </summary>
         [Test]
-        public async void DecreaseKarmaMultiUserTest()
+        public void DecreaseKarmaMultiUserTest()
         {
             // New user, karma should be 1.
-            int karama = await uut.DecreaseKarma( user1Name );
+            int karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -1, karama );
-            Assert.AreEqual( -1, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -1, uut.QueryKarma( user1Name ).Result );
 
             // New User, karma should be 1.
-            Assert.AreEqual( 0, await uut.QueryKarma( user2Name ) );
-            karama = await uut.DecreaseKarma( user2Name );
+            Assert.AreEqual( 0, uut.QueryKarma( user2Name ).Result );
+            karama = uut.DecreaseKarma( user2Name ).Result;
             Assert.AreEqual( -1, karama );
-            Assert.AreEqual( -1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( -1, uut.QueryKarma( user2Name ).Result );
 
             // user 1 should be increaesd, but no user 2.
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -2, karama );
-            Assert.AreEqual( -2, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( -1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( -2, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( -1, uut.QueryKarma( user2Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -3, karama );
-            Assert.AreEqual( -3, await uut.QueryKarma( user1Name ) );
+            Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );
 
             // User 2 should be the same
-            Assert.AreEqual( -1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( -1, uut.QueryKarma( user2Name ).Result );
 
             // Dispose and reopen.
             this.uut.Dispose();
             this.uut = new KarmaBotDatabase( databaseName );
 
             // Ensure querying is okay.
-            Assert.AreEqual( -3, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( -1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( -1, uut.QueryKarma( user2Name ).Result );
 
             // One more increase, since why not?
-            karama = await uut.DecreaseKarma( user1Name );
+            karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -4, karama );
-            Assert.AreEqual( -4, await uut.QueryKarma( user1Name ) );
-            Assert.AreEqual( -1, await uut.QueryKarma( user2Name ) );
+            Assert.AreEqual( -4, uut.QueryKarma( user1Name ).Result );
+            Assert.AreEqual( -1, uut.QueryKarma( user2Name ).Result );
         }
     }
 }

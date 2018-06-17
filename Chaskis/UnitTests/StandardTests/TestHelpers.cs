@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using ChaskisCore;
+using NUnit.Framework;
 
 namespace Tests
 {
@@ -24,6 +25,8 @@ namespace Tests
         /// Path to the base directory of the Tests directory.
         /// </summary>
         public static readonly string TestsBaseDir = Path.Combine(
+            TestContext.CurrentContext.TestDirectory,
+            "..",
             "..",
             ".."
         );
@@ -33,6 +36,7 @@ namespace Tests
         /// </summary>
         public static readonly string ProjectRoot = Path.Combine(
             TestsBaseDir,
+            "..",
             ".."
         );
 
