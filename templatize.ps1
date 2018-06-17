@@ -39,7 +39,7 @@ function GetDefaultPluginName()
 ###
 function GetRegressionTestVersion()
 {
-    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\TestFixtures\RegressionTestPlugin.cs"
+    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\RegressionTestPlugin\RegressionTestPlugin.cs"
     $success = $regressionTestPluginFile -match 'public\s+const\s+string\s+VersionStr\s+=\s+"(?<version>\d+\.\d+\.\d+)";'
     return $matches["version"]
 }
@@ -49,7 +49,7 @@ function GetRegressionTestVersion()
 ###
 function GetRegressionTestPluginName()
 {
-    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\TestFixtures\RegressionTestPlugin.cs"
+    [string]$regressionTestPluginFile = Get-Content ".\Chaskis\RegressionTests\RegressionTestPlugin\RegressionTestPlugin.cs"
     $success = $regressionTestPluginFile -match '\[ChaskisPlugin\( "(?<name>\w+)" \)\]'
     return $matches["name"]
 }

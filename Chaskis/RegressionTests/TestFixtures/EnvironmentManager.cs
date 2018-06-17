@@ -56,6 +56,7 @@ namespace Chaskis.RegressionTests
             // Our working directory is in the bin/Debug folder... need to account for that one...
             ChaskisRoot = Path.GetFullPath(
                 Path.Combine(
+                    "..", // Debug
                     "..", // bin
                     "..", // TestFixtures
                     "..", // RegressionTests

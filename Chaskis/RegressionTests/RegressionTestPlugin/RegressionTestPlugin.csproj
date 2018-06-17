@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj" />
+    <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pluginconfig>
-    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/bin/Debug/ConsoleOut.dll" />
-    <assembly path="{%chaskispath%}/Plugins/CapsWatcher/bin/Debug/CapsWatcher.dll" />
-    <assembly path="{%chaskispath%}/Plugins/CrossChannel/bin/Debug/CrossChannel.dll" />
-    <!--<assembly path="{%chaskispath%}/Plugins/IrcLogger/bin/Debug/IrcLogger.dll" />-->
-	<assembly path="{%chaskispath%}/Plugins/WelcomeBot/bin/Debug/WelcomeBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/MessageFixerBot/bin/Debug/MessageFixerBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/ServerDiagnostics/bin/Debug/ServerDiagnostics.dll" />
-    <assembly path="{%chaskispath%}/Plugins/WeatherBot/bin/Debug/WeatherBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/KarmaBot/bin/Debug/KarmaBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/MathBot/bin/Debug/MathBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/QuoteBot/bin/Debug/QuoteBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/UserListBot/bin/Debug/UserListBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/UrlBot/bin/Debug/UrlBot.dll" />
-    <assembly path="{%chaskispath%}/Plugins/XmlBot/bin/Debug/XmlBot.dll" />
-    <assembly path="{%chaskispath%}/RegressionTests/TestFixtures/bin/Debug/RegressionTests.dll" />
+    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/bin/Debug/netstandard2.0/ConsoleOut.dll" />
+    <assembly path="{%chaskispath%}/Plugins/CapsWatcher/bin/Debug/netstandard2.0/CapsWatcher.dll" />
+    <assembly path="{%chaskispath%}/Plugins/CrossChannel/bin/Debug/netstandard2.0/CrossChannel.dll" />
+    <!--<assembly path="{%chaskispath%}/Plugins/IrcLogger/bin/Debug/netstandard2.0/IrcLogger.dll" />-->
+	<assembly path="{%chaskispath%}/Plugins/WelcomeBot/bin/Debug/netstandard2.0/WelcomeBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/MessageFixerBot/bin/Debug/netstandard2.0/MessageFixerBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/ServerDiagnostics/bin/Debug/netstandard2.0/ServerDiagnostics.dll" />
+    <assembly path="{%chaskispath%}/Plugins/WeatherBot/bin/Debug/netstandard2.0/WeatherBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/KarmaBot/bin/Debug/netstandard2.0/KarmaBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/MathBot/bin/Debug/netstandard2.0/MathBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/QuoteBot/bin/Debug/netstandard2.0/QuoteBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/UserListBot/bin/Debug/netstandard2.0/UserListBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/UrlBot/bin/Debug/netstandard2.0/UrlBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/XmlBot/bin/Debug/netstandard2.0/XmlBot.dll" />
+    <assembly path="{%chaskispath%}/RegressionTests/RegressionTestPlugin/bin/Debug/netstandard2.0/RegressionTestPlugin.dll" />
 </pluginconfig>
