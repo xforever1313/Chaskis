@@ -2,9 +2,14 @@ language: csharp
 
 solution: ./Chaskis/Chaskis.sln
 
+# Chaskis.exe targets the .NET Framework, which mono runs on.
 mono:
  - 5.12.0
 
+# Plugins are powered by Dotnet standard.
+dotnet:
+ - 2.1
+ 
 install:
   - nuget restore Chaskis/Chaskis.sln
 script:
