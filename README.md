@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e38b230bfdee4a7d9992972f37935009)](https://app.codacy.com/app/sethhendrick13/Chaskis?utm_source=github.com&utm_medium=referral&utm_content=xforever1313/Chaskis&utm_campaign=badger)
 [![Icon](https://files.shendrick.net/projects/chaskis/assets/icon.png)](https://github.com/xforever1313/Chaskis/)
 Chaskis 
 ==========
