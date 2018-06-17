@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis.Core", "ChaskisCore\Chaskis.Core.csproj", "{AC2B7B3B-9511-40CD-B676-B8F81BF22594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chaskis.Core", "ChaskisCore\Chaskis.Core.csproj", "{AC2B7B3B-9511-40CD-B676-B8F81BF22594}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject
@@ -46,6 +46,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis", "Chaskis\Chaskis.csproj", "{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisService", "ChaskisService\ChaskisService.csproj", "{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTests", "RegressionTests\TestFixtures\RegressionTests.csproj", "{B2F90902-E087-443D-84B0-D626E617E8D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTestPlugin", "RegressionTests\RegressionTestPlugin\RegressionTestPlugin.csproj", "{5B0E3165-F13E-472A-AEC6-2F611BBB21ED}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -137,6 +141,14 @@ Global
 		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F90902-E087-443D-84B0-D626E617E8D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F90902-E087-443D-84B0-D626E617E8D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F90902-E087-443D-84B0-D626E617E8D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F90902-E087-443D-84B0-D626E617E8D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B0E3165-F13E-472A-AEC6-2F611BBB21ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0E3165-F13E-472A-AEC6-2F611BBB21ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0E3165-F13E-472A-AEC6-2F611BBB21ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0E3165-F13E-472A-AEC6-2F611BBB21ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
