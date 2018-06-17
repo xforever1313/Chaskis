@@ -6,6 +6,7 @@ A generic framework written in C# for making IRC Bots.
 Build Status
 --------------
 [![Build Status](https://travis-ci.org/xforever1313/Chaskis.svg?branch=master)](https://travis-ci.org/xforever1313/Chaskis) [![Build status](https://ci.appveyor.com/api/projects/status/n8sbo1ay6wr2xxyc/branch/master?svg=true)](https://ci.appveyor.com/project/xforever1313/chaskis/branch/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6335dfc7e8dd4fb2b4f4d5ecdaa2519d)](https://www.codacy.com/app/sethhendrick13/Chaskis?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xforever1313/Chaskis&amp;utm_campaign=Badge_Grade)
 
 Packages
 --------------
