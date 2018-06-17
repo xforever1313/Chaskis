@@ -6,6 +6,7 @@
 //
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using ChaskisCore;
 
 // Information about this assembly is defined by the following attributes.
@@ -29,6 +30,9 @@ Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), mes
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
 [assembly: AssemblyVersion( IrcBot.VersionString )]
+
+[assembly: InternalsVisibleTo( "StandardTests" )]
+[assembly: InternalsVisibleTo( "FrameworkTests" )]
 
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
