@@ -39,8 +39,9 @@ before_package:
 
 test:
     assemblies:
+        FrameworkTests.dll
+        StandardTests.dll
 
-        Tests.dll
 notifications:
     - provider: Email
       to:

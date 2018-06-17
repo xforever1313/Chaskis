@@ -2,8 +2,12 @@ language: csharp
 
 solution: ./Chaskis/Chaskis.sln
 
+mono:
+ - 5.6.0
+
 install:
   - nuget restore Chaskis/Chaskis.sln
 script:
-  - msbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Chaskis/Tests/bin/Release/Tests.dll
+  - dotnet build ./Chaskis/Chaskis.sln
+  - dotnet test ./Chaskis/UnitTests/FrameworkTests
+  - dotnet test ./Chaskis/UnitTests/StandardTests
