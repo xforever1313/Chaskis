@@ -43,9 +43,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WelcomeBot", "Plugins\Welco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlBot", "Plugins\XmlBot\XmlBot.csproj", "{B3F4C2D3-8444-410A-9EF6-6D6F02E71245}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis", "Chaskis\Chaskis.csproj", "{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaskisService", "ChaskisService\ChaskisService.csproj", "{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
+		..\SethCS\SethCS\SethCS.projitems*{df28c718-e22f-4c9f-8bd8-b5a13d922e4c}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +129,14 @@ Global
 		{B3F4C2D3-8444-410A-9EF6-6D6F02E71245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3F4C2D3-8444-410A-9EF6-6D6F02E71245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3F4C2D3-8444-410A-9EF6-6D6F02E71245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D8F7036-E5E8-4B14-9889-0140A6FE1F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF28C718-E22F-4C9F-8BD8-B5A13D922E4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
