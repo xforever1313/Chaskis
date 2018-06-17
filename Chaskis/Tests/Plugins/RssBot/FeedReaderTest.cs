@@ -36,7 +36,7 @@ namespace Tests.Plugins.RssBot
 
         // ---------------- Setup / Teardown ----------------
 
-        //[TestFixtureSetUp]
+        //[OneTimeSetUp]
         public void FixtureSetup()
         {
             this.initFeed = Path.GetFullPath(
@@ -62,7 +62,7 @@ namespace Tests.Plugins.RssBot
             this.testFeedUri = SethPath.ToUri( this.testFeedPath );
         }
 
-        //[TestFixtureTearDown]
+        //[OneTimeTearDown]
         public void FixtureTeardown()
         {
         }

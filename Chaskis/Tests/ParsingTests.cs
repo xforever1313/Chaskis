@@ -22,7 +22,7 @@ namespace Tests
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.config = TestHelpers.GetTestIrcConfig();

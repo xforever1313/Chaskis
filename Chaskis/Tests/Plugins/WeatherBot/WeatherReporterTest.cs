@@ -45,7 +45,7 @@ namespace Tests.Plugins.WeatherBot
 
         // -------- Setup / Teardown --------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.invalidZipException = new QueryException(

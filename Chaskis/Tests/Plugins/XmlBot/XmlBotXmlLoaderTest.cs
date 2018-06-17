@@ -43,8 +43,8 @@ namespace Tests.Plugins.XmlBot
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             this.testConfig = TestHelpers.GetTestIrcConfig();
         }

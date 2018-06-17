@@ -21,7 +21,7 @@ namespace Tests.Plugins.CapsWatcher
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.ignores = new List<string>();
@@ -36,7 +36,7 @@ namespace Tests.Plugins.CapsWatcher
             );
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTeardown()
         {
         }

@@ -36,7 +36,7 @@ namespace Tests.Plugins.UrlBot
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.urlTestFiles = Path.GetFullPath(

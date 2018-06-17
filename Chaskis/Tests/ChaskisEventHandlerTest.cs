@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using ChaskisCore;
 using Moq;
 using NUnit.Framework;
@@ -31,8 +30,8 @@ namespace Tests
 
         // ---------------- Setup / Teardown ---------------
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             this.factoryInstance = TestHelpers.CreateEventFactory();
@@ -43,7 +42,7 @@ namespace Tests
             this.creatorPluginName = creatorPluginName.ToUpper();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTeardown()
         {
         }

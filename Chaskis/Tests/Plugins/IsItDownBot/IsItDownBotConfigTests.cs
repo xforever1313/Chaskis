@@ -19,12 +19,12 @@ namespace Tests.Plugins.IsItDownBot
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTeardown()
         {
         }

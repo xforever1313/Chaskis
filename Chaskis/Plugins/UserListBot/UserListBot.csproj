@@ -5,4 +5,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj" />
+  </ItemGroup>
+
 </Project>

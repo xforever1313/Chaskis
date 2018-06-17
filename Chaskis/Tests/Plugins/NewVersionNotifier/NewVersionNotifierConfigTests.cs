@@ -19,13 +19,13 @@ namespace Tests.Plugins.NewVersionNotifier
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
 
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTeardown()
         {
         }

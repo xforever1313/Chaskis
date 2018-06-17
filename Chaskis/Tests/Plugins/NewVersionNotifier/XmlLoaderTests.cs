@@ -24,7 +24,7 @@ namespace Tests.Plugins.NewVersionNotifier
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.sampleConfigPath = Path.Combine(
@@ -42,7 +42,7 @@ namespace Tests.Plugins.NewVersionNotifier
             );
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTeardown()
         {
         }

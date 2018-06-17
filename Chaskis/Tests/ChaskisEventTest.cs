@@ -27,7 +27,7 @@ namespace Tests
 
         // ---------------- Setup / Teardown ----------------
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             this.factory = TestHelpers.CreateEventFactory();
