@@ -9,8 +9,8 @@
     <ProjectGuid>{7EF9586A-1430-4C58-90E6-A656DC762216}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FrameworkTests</RootNamespace>
-    <AssemblyName>FrameworkTests</AssemblyName>
+    <RootNamespace>ChaskisTests</RootNamespace>
+    <AssemblyName>ChaskisTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
