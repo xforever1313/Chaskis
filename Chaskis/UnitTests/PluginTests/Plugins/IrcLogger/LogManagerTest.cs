@@ -31,7 +31,10 @@ namespace Tests.Plugins.IrcLogger
         /// </summary>
         private IrcLoggerConfig testConfig;
 
-        private static readonly string testLogDirectory = Path.Combine( ".", "TestLogs" );
+        private static readonly string testLogDirectory = Path.Combine(
+            TestContext.CurrentContext.TestDirectory,
+            "TestLogs"
+        );
 
         // -------- Setup / Teardown --------
 

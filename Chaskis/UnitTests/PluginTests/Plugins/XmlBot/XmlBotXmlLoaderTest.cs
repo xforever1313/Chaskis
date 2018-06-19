@@ -29,7 +29,7 @@ namespace Tests.Plugins.XmlBot
         );
 
         private static readonly string testFilesDir = Path.Combine(
-            TestHelpers.TestsBaseDir,
+            TestHelpers.PluginTestsDir,
             "Plugins",
             "XmlBot",
             "TestFiles"

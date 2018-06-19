@@ -18,7 +18,7 @@ namespace Tests.Plugins.UserListBot
         /// Path to the test XML files.
         /// </summary>
         private static readonly string testFilesPath = Path.Combine(
-            TestHelpers.TestsBaseDir, "Plugins", "UserListBot", "TestFiles"
+            TestHelpers.PluginTestsDir, "Plugins", "UserListBot", "TestFiles"
         );
 
         // -------- Setup / Teardown --------

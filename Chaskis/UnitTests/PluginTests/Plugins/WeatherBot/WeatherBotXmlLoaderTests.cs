@@ -21,7 +21,7 @@ namespace Tests.Plugins.WeatherBot
         /// Location of the weather bot test files.
         /// </summary>
         private static readonly string testFilesLocation = Path.Combine(
-            TestHelpers.TestsBaseDir,
+            TestHelpers.PluginTestsDir,
             "Plugins",
             "WeatherBot",
             "TestFiles"

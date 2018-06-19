@@ -11,6 +11,7 @@ using System.IO;
 using System.ServiceModel.Syndication;
 using Chaskis.Plugins.RssBot;
 using NUnit.Framework;
+using PluginTests;
 using SethCS.Extensions;
 
 namespace Tests.Plugins.RssBot
@@ -77,7 +78,7 @@ namespace Tests.Plugins.RssBot
             feedConfig.Url = this.testFeedUri;
             feedConfig.AddChannel( TestHelpers.GetTestIrcConfig().Channels[0] );
 
-            this.uut = new FeedReader( feedConfig, TestHelpers.HttpClient );
+            this.uut = new FeedReader( feedConfig, PluginTestHelpers.HttpClient );
         }
 
         //[TearDown]

@@ -35,7 +35,7 @@ namespace Tests.Plugins.NewVersionNotifier
             );
 
             this.testFilesPath = Path.Combine(
-                TestHelpers.TestsBaseDir,
+                TestHelpers.PluginTestsDir,
                 "Plugins",
                 "NewVersionNotifier",
                 "TestFiles"

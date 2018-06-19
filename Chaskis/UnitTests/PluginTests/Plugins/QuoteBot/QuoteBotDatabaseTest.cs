@@ -19,6 +19,11 @@ namespace Tests.Plugins.QuoteBot
 
         private const string dbName = "quotebottest.ldb";
 
+        private static readonly string dbPath = Path.Combine(
+            TestContext.CurrentContext.TestDirectory,
+            dbName
+        );
+
         private QuoteBotDatabase uut;
 
         private Quote quote1;
@@ -31,7 +36,7 @@ namespace Tests.Plugins.QuoteBot
         public void TestSetup()
         {
             this.DeleteDb();
-            this.uut = new QuoteBotDatabase( dbName );
+            this.uut = new QuoteBotDatabase( dbPath );
 
             this.quote1 = new Quote();
             this.quote1.Author = "xforever1313";
@@ -59,9 +64,9 @@ namespace Tests.Plugins.QuoteBot
         /// </summary>
         private void DeleteDb()
         {
-            if( File.Exists( dbName ) )
+            if( File.Exists( dbPath ) )
             {
-                File.Delete( dbName );
+                File.Delete( dbPath );
             }
         }
 
@@ -143,7 +148,7 @@ namespace Tests.Plugins.QuoteBot
             // That just leaves #2.  Close and reconnect.  Make sure #2 is still there.
             {
                 this.uut.Dispose();
-                this.uut = new QuoteBotDatabase( dbName );
+                this.uut = new QuoteBotDatabase( dbPath );
 
                 Quote gotQuote2 = this.uut.GetQuote( quote2Id );
                 Assert.AreEqual( quote2Id, gotQuote2.Id );

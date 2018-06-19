@@ -6,11 +6,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7EF9586A-1430-4C58-90E6-A656DC762216}</ProjectGuid>
+    <ProjectGuid>{28242A6D-6007-436E-9F3E-AD7D5F0580CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChaskisTests</RootNamespace>
-    <AssemblyName>ChaskisTests</AssemblyName>
+    <RootNamespace>CoreTests</RootNamespace>
+    <AssemblyName>CoreTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -34,57 +34,72 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.3.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.8.3\lib\net45\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentParserTest.cs" />
-    <Compile Include="AssemblyConfigTest.cs" />
+    <Compile Include="AllHandlerTest.cs" />
+    <Compile Include="ChaskisEventHandlerTest.cs" />
+    <Compile Include="ChaskisEventTest.cs" />
+    <Compile Include="IrcConfigTest.cs" />
+    <Compile Include="JoinHandlerTest.cs" />
+    <Compile Include="MessageHandlerTest.cs" />
+    <Compile Include="ParsingTests.cs" />
+    <Compile Include="PartHandlerTest.cs" />
+    <Compile Include="PingHandlerTest.cs" />
+    <Compile Include="PongHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlLoaderTests.cs" />
+    <Compile Include="RegexTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj">
       <Project>{ac2b7b3b-9511-40cd-b676-b8f81bf22594}</Project>
       <Name>Chaskis.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Chaskis\Chaskis.csproj">
-      <Project>{5d8f7036-e5e8-4b14-9889-0140a6fe1f5e}</Project>
-      <Name>Chaskis</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyNick.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyPort.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigWithEmptyChannel.xml" />
-    <Content Include="TestFiles\InvalidPluginConfigBadRootNode.xml" />
-    <Content Include="TestFiles\InvalidPluginConfigEmptyPath.xml" />
-    <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithBridgeBots.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithNoRateLimit.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithThreeChannels.xml" />
-    <Content Include="TestFiles\ValidPluginConfig.xml" />
-    <Content Include="TestFiles\ValidPluginConfigEmpty.xml" />
   </ItemGroup>
   <Import Project="..\UnitTests.Common\UnitTests.Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

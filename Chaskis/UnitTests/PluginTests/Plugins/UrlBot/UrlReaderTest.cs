@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Plugins.UrlBot;
 using NUnit.Framework;
+using PluginTests;
 using SethCS.Basic;
 using SethCS.Extensions;
 
@@ -41,7 +42,7 @@ namespace Tests.Plugins.UrlBot
         {
             this.urlTestFiles = Path.GetFullPath(
                 Path.Combine(
-                    TestHelpers.TestsBaseDir,
+                    TestHelpers.PluginTestsDir,
                     "Plugins",
                     "UrlBot",
                     "TestFiles"
@@ -56,7 +57,7 @@ namespace Tests.Plugins.UrlBot
             this.logger.OnWriteLine += ( s => Console.WriteLine( s ) );
             this.logger.OnErrorWriteLine += ( s => Console.WriteLine( s ) );
 
-            this.reader = new UrlReader( this.logger, TestHelpers.HttpClient );
+            this.reader = new UrlReader( this.logger, PluginTestHelpers.HttpClient );
         }
 
         [TearDown]

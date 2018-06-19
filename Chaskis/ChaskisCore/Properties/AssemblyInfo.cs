@@ -31,8 +31,9 @@ Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), mes
 
 [assembly: AssemblyVersion( IrcBot.VersionString )]
 
-[assembly: InternalsVisibleTo( "StandardTests" )]
-[assembly: InternalsVisibleTo( "FrameworkTests" )]
+[assembly: InternalsVisibleTo( "CoreTests" )]
+[assembly: InternalsVisibleTo( "PluginTests" )]
+[assembly: InternalsVisibleTo( "ChaskisTests" )]
 
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.

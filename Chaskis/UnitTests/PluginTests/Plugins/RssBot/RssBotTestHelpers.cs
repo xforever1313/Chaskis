@@ -21,7 +21,7 @@ namespace Tests.Plugins.RssBot
         public static readonly TimeSpan Interval2 = TimeSpan.FromMinutes( 30 );
 
         public static readonly string RssTestFilesPath = Path.Combine(
-            TestHelpers.TestsBaseDir,
+            TestHelpers.PluginTestsDir,
             "Plugins",
             "RssBot",
             "TestFiles"

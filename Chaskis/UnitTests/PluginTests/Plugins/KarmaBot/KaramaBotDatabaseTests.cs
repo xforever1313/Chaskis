@@ -36,15 +36,20 @@ namespace Tests.Plugins.KarmaBot
         /// </summary>
         private KarmaBotDatabase uut;
 
+        private static readonly string databasePath = Path.Combine(
+            TestContext.CurrentContext.TestDirectory,
+            databaseName
+        );
+
         [SetUp]
         public void TestSetUp()
         {
-            if( File.Exists( databaseName ) )
+            if( File.Exists( databasePath ) )
             {
-                File.Delete( databaseName );
+                File.Delete( databasePath );
             }
 
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
         }
 
         [TearDown]
@@ -52,9 +57,9 @@ namespace Tests.Plugins.KarmaBot
         {
             this.uut.Dispose();
 
-            if( File.Exists( databaseName ) )
+            if( File.Exists( databasePath ) )
             {
-                File.Delete( databaseName );
+                File.Delete( databasePath );
             }
         }
 
@@ -75,7 +80,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 3, karama );
@@ -83,7 +88,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             // Ensure querying is okay.
             Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
@@ -119,7 +124,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             karama = uut.IncreaseKarma( user1Name ).Result;
             Assert.AreEqual( 3, karama );
@@ -130,7 +135,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             // Ensure querying is okay.
             Assert.AreEqual( 3, uut.QueryKarma( user1Name ).Result );
@@ -160,7 +165,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -3, karama );
@@ -168,7 +173,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             // Ensure querying is okay.
             Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );
@@ -204,7 +209,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             karama = uut.DecreaseKarma( user1Name ).Result;
             Assert.AreEqual( -3, karama );
@@ -215,7 +220,7 @@ namespace Tests.Plugins.KarmaBot
 
             // Dispose and reopen.
             this.uut.Dispose();
-            this.uut = new KarmaBotDatabase( databaseName );
+            this.uut = new KarmaBotDatabase( databasePath );
 
             // Ensure querying is okay.
             Assert.AreEqual( -3, uut.QueryKarma( user1Name ).Result );

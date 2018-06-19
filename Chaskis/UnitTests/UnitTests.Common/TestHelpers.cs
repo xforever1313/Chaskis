@@ -31,12 +31,26 @@ namespace Tests
             ".."
         );
 
+        public static readonly string ChaskisTestsDir = Path.Combine(
+            TestsBaseDir,
+            "ChaskisTests"
+        );
+
+        public static readonly string PluginTestsDir = Path.Combine(
+            TestsBaseDir,
+            "PluginTests"
+        );
+
+        public static readonly string CoreTestsDir = Path.Combine(
+            TestsBaseDir,
+            "CoreTests"
+        );
+
         /// <summary>
         /// The path to the root of the project.
         /// </summary>
         public static readonly string ProjectRoot = Path.Combine(
             TestsBaseDir,
-            "..",
             ".."
         );
 
@@ -52,13 +66,6 @@ namespace Tests
         /// A bridge bot that is in the channel.
         /// </summary>
         public const string BridgeBotUser = "telegrambot";
-
-        /// <summary>
-        /// Path to the TestFiles directory of the Tests directory.
-        /// </summary>
-        public static readonly string TestFilesDir = Path.Combine(
-            TestsBaseDir, "TestFiles"
-        );
 
         /// <summary>
         /// Strange names to test.
@@ -98,18 +105,6 @@ namespace Tests
         }.AsReadOnly();
 
         private static ChaskisEventFactory factoryInstance;
-
-        // ---------------- Constructor ----------------
-
-        static TestHelpers()
-        {
-            HttpClient = new HttpClient();
-            HttpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot Unit Tests" );
-        }
-
-        // ---------------- Properties ----------------
-
-        public static HttpClient HttpClient { get; private set; }
 
         // ---------------- Functions ----------------
 

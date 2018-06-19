@@ -20,7 +20,7 @@ namespace Tests.Plugins.IrcLogger
         /// Path to this plugin's test files.
         /// </summary>
         private static readonly string testFilesPath = Path.Combine(
-            TestHelpers.TestsBaseDir,
+            TestHelpers.PluginTestsDir,
             "Plugins",
             "IrcLogger",
             "TestFiles"

@@ -22,7 +22,7 @@ namespace Tests.Plugins.QuoteBot
             Path.Combine( TestHelpers.PluginDir, "QuoteBot" );
 
         private static readonly string quoteBotTestDir =
-            Path.Combine( TestHelpers.TestsBaseDir, "Plugins", "QuoteBot" );
+            Path.Combine( TestHelpers.PluginTestsDir, "Plugins", "QuoteBot" );
 
         // ---------------- Tests ----------------
 

@@ -25,7 +25,7 @@ namespace Tests.Plugins.KarmaBot
         /// Directory to the test xml files.
         /// </summary>
         private static readonly string testConfigDir = Path.Combine(
-            TestHelpers.TestsBaseDir, "Plugins", "KarmaBot", "TestFiles"
+            TestHelpers.PluginTestsDir, "Plugins", "KarmaBot", "TestFiles"
         );
 
         // -------- Tests --------

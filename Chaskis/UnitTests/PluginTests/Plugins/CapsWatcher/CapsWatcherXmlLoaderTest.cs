@@ -22,7 +22,7 @@ namespace Tests.Plugins.CapsWatcher
         /// Path to the test XML files.
         /// </summary>
         private static readonly string testFilesPath = Path.Combine(
-            TestHelpers.TestsBaseDir, "Plugins", "CapsWatcher", "TestFiles"
+            TestHelpers.PluginTestsDir, "Plugins", "CapsWatcher", "TestFiles"
         );
 
         // -------- Setup / Teardown --------
