@@ -39,8 +39,9 @@ before_package:
 
 test:
     assemblies:
-        FrameworkTests.dll
-        StandardTests.dll
+        ChaskisTests.dll
+        CoreTests.dll
+        PluginTests.dll
 
 notifications:
     - provider: Email

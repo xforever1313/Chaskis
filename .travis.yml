@@ -12,5 +12,5 @@ install:
 script:
   - msbuild ./Chaskis/Chaskis.sln
   - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/ChaskisTests/bin/Debug/ChaskisTests.dll
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Chaskis/UnitTests/CoreTests/bin/Debug/CoreTests.dll
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Chaskis/UnitTests/PluginTests/bin/Debug/PluginTests.dll
+  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/CoreTests/bin/Debug/CoreTests.dll
+  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/PluginTests/bin/Debug/PluginTests.dll
