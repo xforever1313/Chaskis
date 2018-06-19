@@ -33,6 +33,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <!--
+  For some reason, this is needed for httpclient to work correctly.
+  Quote from https://github.com/dotnet/standard/issues/481#issue-254768258
+  
+  By default, binding redirects aren't added to class library projects. This is problematic for unit testing projects as they are essentially like apps. So in addition to what's outlined in automatic binding redirects you also need to specify GenerateBindingRedirectsOutputType:
+  -->
+  <PropertyGroup>
+      <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Castle.Core.4.3.0\lib\net45\Castle.Core.dll</HintPath>

@@ -33,6 +33,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <!--
+  For some reason, this is needed for httpclient to work correctly.
+  Quote from https://github.com/dotnet/standard/issues/481#issue-254768258
+  
+  By default, binding redirects aren't added to class library projects. This is problematic for unit testing projects as they are essentially like apps. So in addition to what's outlined in automatic binding redirects you also need to specify GenerateBindingRedirectsOutputType:
+  -->
+  <PropertyGroup>
+      <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
