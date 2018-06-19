@@ -113,7 +113,6 @@
     <Content Include="Plugins\CapsWatcher\TestFiles\BadRoot.xml" />
     <Content Include="Plugins\CapsWatcher\TestFiles\EmptyMessage.xml" />
     <Content Include="Plugins\CapsWatcher\TestFiles\NoMessages.xml" />
-    <Content Include="Plugins\CowSayBot\TestFiles\GoodFile.xml" />
     <Content Include="Plugins\IrcLogger\TestFiles\GoodDefault.xml" />
     <Content Include="Plugins\IrcLogger\TestFiles\NoTags.xml" />
     <Content Include="Plugins\KarmaBot\TestFiles\EmptyConfig.xml" />
