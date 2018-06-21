@@ -4,7 +4,7 @@
 
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
-!path TestFixtures/bin/Debug/net46/RegressionTests.dll
+!path TestFixtures/bin/Debug/net461/RegressionTests.dll
 !define port {10123}
 !define httpport {32101}
 !define adminuser {adminuser}
