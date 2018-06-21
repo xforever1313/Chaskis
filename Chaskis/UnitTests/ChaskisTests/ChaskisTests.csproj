@@ -1,108 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
-  <Import Project="..\..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7EF9586A-1430-4C58-90E6-A656DC762216}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChaskisTests</RootNamespace>
-    <AssemblyName>ChaskisTests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>NET461</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <!--
-  For some reason, this is needed for httpclient to work correctly.
-  Quote from https://github.com/dotnet/standard/issues/481#issue-254768258
-  
-  By default, binding redirects aren't added to class library projects. This is problematic for unit testing projects as they are essentially like apps. So in addition to what's outlined in automatic binding redirects you also need to specify GenerateBindingRedirectsOutputType:
-  -->
-  <PropertyGroup>
-      <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+      <PackageReference Include="NUnit" Version="3.10.1" />
+      <PackageReference Include="NUnit.Console" Version="3.8.0" />
+      <PackageReference Include="NUnit.ConsoleRunner" Version="3.8.0" />
+      <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.5.0" />
+      <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.6.0" />
+      <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.5.0" />
+      <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
+      <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ArgumentParserTest.cs" />
-    <Compile Include="AssemblyConfigTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlLoaderTests.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj">
-      <Project>{ac2b7b3b-9511-40cd-b676-b8f81bf22594}</Project>
-      <Name>Chaskis.Core</Name>
+      <Private>true</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Chaskis\Chaskis.csproj">
-      <Project>{5d8f7036-e5e8-4b14-9889-0140a6fe1f5e}</Project>
-      <Name>Chaskis</Name>
+      <Private>true</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\InvalidIrcConfigBadRootNode.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyNick.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyPort.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyRealName.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigEmptyUserName.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigNoChannel.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigNoServer.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigWithEmptyAdmins.xml" />
-    <Content Include="TestFiles\InvalidIrcConfigWithEmptyChannel.xml" />
-    <Content Include="TestFiles\InvalidPluginConfigBadRootNode.xml" />
-    <Content Include="TestFiles\InvalidPluginConfigEmptyPath.xml" />
-    <Content Include="TestFiles\ValidIrcConfigJustChannelServer.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithAdmins.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithBridgeBots.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithEmptyPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithNoPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithNoRateLimit.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithPassword.xml" />
-    <Content Include="TestFiles\ValidIrcConfigWithThreeChannels.xml" />
-    <Content Include="TestFiles\ValidPluginConfig.xml" />
-    <Content Include="TestFiles\ValidPluginConfigEmpty.xml" />
-  </ItemGroup>
-  <Import Project="..\UnitTests.Common\UnitTests.Common.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.10.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
+
 </Project>
