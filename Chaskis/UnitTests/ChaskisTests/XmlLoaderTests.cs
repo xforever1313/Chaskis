@@ -26,7 +26,7 @@ namespace Tests
         /// </summary>
         private static readonly string testXmlFiles =
             Path.Combine(
-                TestContext.CurrentContext.TestDirectory, "..", "..", "TestFiles"
+                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "TestFiles"
             );
 
         /// <summary>

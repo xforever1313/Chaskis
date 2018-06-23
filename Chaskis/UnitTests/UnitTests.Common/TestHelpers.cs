@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using ChaskisCore;
 using NUnit.Framework;
 
@@ -26,6 +25,7 @@ namespace Tests
         /// </summary>
         public static readonly string TestsBaseDir = Path.Combine(
             TestContext.CurrentContext.TestDirectory,
+            "..",
             "..",
             "..",
             ".."
