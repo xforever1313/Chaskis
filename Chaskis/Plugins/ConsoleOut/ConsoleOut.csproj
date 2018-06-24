@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -9,6 +9,14 @@
     <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj">
       <Private>false</Private>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280
+    This will make a warning... we'll deal with it for now
+    -->
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
 </Project>
