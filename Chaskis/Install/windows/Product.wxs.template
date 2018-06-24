@@ -46,7 +46,7 @@
             - Chaskis
                 - bin
                     - Chaskis.exe
-                    - ChaskisCore.dll
+                    - Chaskis.Core.dll
                     - ChaskisService.exe
                 - Plugins
                     - PluginDir
@@ -162,9 +162,9 @@
                 <File Source="$(var.Chaskis.TargetPath)" KeyPath="yes"/>
             </Component>
             
-            <!-- ChaskisCore.dll -->
+            <!-- Chaskis.Core.dll -->
             <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">
-                <File Source="$(var.ChaskisCore.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Core.TargetPath)" KeyPath="yes"/>
             </Component>
             
             <!-- ChaskisService.exe -->

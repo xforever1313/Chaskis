@@ -99,7 +99,7 @@ $Description = GetDescription
 $ReleaseNotes = "View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)"
 $Summary = "A generic framework written in C# for making IRC Bots."
 $IconUrl = "https://files.shendrick.net/projects/chaskis/assets/icon.png"
-$RunTime = "net461"
+$RunTime = "net471"
 
 $FilesToTemplate =(
     (".\Chaskis\Install\windows\Product.wxs.template", ".\Chaskis\Install\windows\Product.wxs"),
