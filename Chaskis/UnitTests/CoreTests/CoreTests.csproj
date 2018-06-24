@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>NET461</TargetFramework>
+    <TargetFramework>net471</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -18,10 +18,10 @@
       <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
       <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
       <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-      <PackageReference Include="Castle.Core" version="4.3.0"  />
-      <PackageReference Include="Moq" version="4.8.3"  />
-      <PackageReference Include="System.Threading.Tasks.Extensions" version="4.3.0"  />
-      <PackageReference Include="System.ValueTuple" version="4.4.0"  />
+      <PackageReference Include="Castle.Core" version="4.3.0" />
+      <PackageReference Include="Moq" version="4.8.3" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" version="4.3.0" />
+      <PackageReference Include="System.ValueTuple" version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
