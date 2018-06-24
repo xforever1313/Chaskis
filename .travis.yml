@@ -7,10 +7,10 @@ mono:
  - 5.12.0
 
 install:
-  - nuget restore Chaskis/Chaskis.sln
+  - nuget install NUnit.ConsoleRunner -o ./ -ExcludeVersion
 
 script:
-  - msbuild ./Chaskis/Chaskis.sln
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/ChaskisTests/bin/Debug/ChaskisTests.dll
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/CoreTests/bin/Debug/CoreTests.dll
-  - mono ./Chaskis/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Chaskis/UnitTests/PluginTests/bin/Debug/PluginTests.dll
+  - msbuild /restore ./Chaskis/Chaskis.sln
+  - mono ./NUnit.ConsoleRunner/tools/nunit3-console.exe ./Chaskis/UnitTests/ChaskisTests/bin/Debug/ChaskisTests.dll
+  - mono ./NUnit.ConsoleRunner/tools/nunit3-console.exe ./Chaskis/UnitTests/CoreTests/bin/Debug/CoreTests.dll
+  - mono ./NUnit.ConsoleRunner/tools/nunit3-console.exe ./Chaskis/UnitTests/PluginTests/bin/Debug/PluginTests.dll

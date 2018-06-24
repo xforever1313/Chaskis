@@ -11,6 +11,12 @@
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Threading" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+    
+    <!--
+    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280
+    This will make a warning... we'll deal with it for now
+    -->
+    <PackageReference Include="NETStandard.Library" Version="2.0.3"/>
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,6 @@ configuration: Release
 
 before_build:
     - git submodule update --init SethCS
-    - nuget restore Chaskis/Chaskis.sln
 
 build:
     parallel: true

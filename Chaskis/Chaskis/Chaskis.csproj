@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChaskisCore\Chaskis.Core.csproj">
-      <Private>false</Private>
+      <Private>true</Private>
     </ProjectReference>
   </ItemGroup>
 
