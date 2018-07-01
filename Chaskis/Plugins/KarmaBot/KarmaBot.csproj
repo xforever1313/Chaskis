@@ -9,10 +9,10 @@
     <PackageReference Include="LiteDB" Version="4.1.4" />
 
     <!--
-    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280
-    This will make a warning... we'll deal with it for now
+    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280.  This happens if the SDK Resolver is not installed. Uncommenting this will allow one to compile, but
+    it will make a warning.
     -->
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />   
+    <!--<PackageReference Include="NETStandard.Library" Version="2.0.3"/>-->
   </ItemGroup>
 
   <ItemGroup>
