@@ -2,14 +2,14 @@ language: csharp
 
 solution: ./Chaskis/Chaskis.sln
 
-# Chaskis.exe targets the .NET Framework, which mono runs on.
-mono:
- - 5.12.0
-
 # Although we are targeting the .NET Framework, since the plugins are all dotnet standard,
 # we need dotnet core installed in order to compile.
 dotnet:
- - 2.1.4
+ - 2.0.0
+
+# Chaskis.exe targets the .NET Framework, which mono runs on.
+mono:
+ - 5.12.0
  
 install:
   - nuget install NUnit.ConsoleRunner -o ./ -ExcludeVersion
