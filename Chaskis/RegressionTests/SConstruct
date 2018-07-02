@@ -1,0 +1,104 @@
+import glob
+import os
+import shutil
+import subprocess
+import sys
+
+###
+# Constants
+###
+
+NET_RUNNER_DIR = "runner"
+
+envBase = Environment()
+envBase['ENV']['PATH']=os.environ['PATH'] # Look in path for tools
+
+targetType = ARGUMENTS.get("target", "Debug")
+exeRunTime = ARGUMENTS.get("exe_run_time", "net471")
+pluginRunTime = ARGUMENTS.get("plugin_runtime", "netstandard2.0")
+
+###
+# Nuget - Install any packages
+###
+
+def NugetBuilder(target, source, env):
+    status = subprocess.call(['nuget', 'install', 'netrunner', '-ExcludeVersion'])
+    return status
+
+envBase.Append(BUILDERS={"Nuget" : Builder(action = NugetBuilder)})
+
+nugetTargets =[
+    os.path.join("NetRunner", "NetRunner.nupkg"),
+    os.path.join("NetRunner", "tools", "net45", "NetRunner.Executable.exe"),
+    os.path.join("NetRunner", "lib", "portable-net4+sl4+wp7+win8", "NetRunner.ExternalLibrary.dll"),
+    os.path.join("NetRunner", "lib", "portable-net4+sl4+wp7+win8", "NetRunner.ExternalLibrary.XML")
+]
+
+nugetTarget = envBase.Nuget(
+    target=nugetTargets,
+    source='fitnesse-standalone.jar'
+)
+
+###
+# Bootstrap - Put the packages in the correct spot.
+###
+
+bootstrapTargetFiles = [
+    os.path.join(NET_RUNNER_DIR, "NetRunner.nupkg"),
+    os.path.join(NET_RUNNER_DIR, "NetRunner.Executable.exe"),
+    os.path.join(NET_RUNNER_DIR, "NetRunner.ExternalLibrary.dll"),
+    os.path.join(NET_RUNNER_DIR, "NetRunner.ExternalLibrary.XML")
+]
+
+bootstrapTarget = []
+
+for i in range(len(bootstrapTargetFiles)):
+    if (".nupkg" in bootstrapTargetFiles[i]):
+        continue
+
+    bootstrapTarget += envBase.Command(
+        bootstrapTargetFiles[i],
+        nugetTargets[i],
+        Copy("$TARGET", "$SOURCE")
+    )
+
+###
+# Installer
+###
+
+def InstallerBuilder(target, source, env):
+    if (os.path.exists("dist")):
+        Execute(Delete("dist"))
+        Execute(Mkdir("dist"))
+    
+    exePath = os.path.join("..", "Install", "ChaskisCliInstaller", "bin", targetType, exeRunTime, "Chaskis.CliInstaller.exe")
+    wixXmlFile = os.path.join("..", "Install", "windows", "Product.wxs")
+    status = subprocess.call([exePath, "..", "dist", wixXmlFile, targetType, exeRunTime, pluginRunTime])
+    return status
+
+# If ANY .dlls or .exes change, we need to re-run the installer.
+expectedExeBinPath = os.path.join('bin', targetType, exeRunTime)
+expectedPluginBinPath = os.path.join('bin', targetType, pluginRunTime)
+fileList = []
+for root, dirs, files in os.walk(".."):
+    for dir in dirs:
+        path = os.path.join(root, dir)
+
+        if ( "UnitTests" in path ) or ( "RegressionTests" in path ):
+            continue;
+
+        if (expectedExeBinPath in path) or (expectedPluginBinPath in path):
+            fileList += glob.glob(os.path.join(path, "*.dll"))
+            fileList += glob.glob(os.path.join(path, "*.exe"))
+
+
+envBase.Append(BUILDERS={"Dist" : Builder(action = InstallerBuilder)})
+
+installTarget = envBase.Dist(
+    target=[os.path.join("dist", "Chaskis", "bin", "Chaskis.exe")],
+    source=fileList
+)
+
+Alias("nuget", nugetTarget)
+Alias("bootstrap", bootstrapTarget)
+Alias("dist", installTarget)
