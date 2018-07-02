@@ -41,10 +41,9 @@ namespace Chaskis.RegressionTests
             this.testConsoleOutLog = Logger.GetLogFromContext( "chaskis_status" );
 
             this.exeLocation = Path.Combine(
-                EnvironmentManager.ChaskisRoot,
+                EnvironmentManager.ChaskisDistDir,
                 "Chaskis",
                 "bin",
-                "Debug",
                 "Chaskis.exe"
             );
 

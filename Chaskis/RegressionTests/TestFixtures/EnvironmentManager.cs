@@ -22,11 +22,16 @@ namespace Chaskis.RegressionTests
     {
         // ---------------- Fields ----------------
 
-        public static readonly string ChaskisRoot;
+        public static readonly string ChaskisProjectRoot;
 
         public static readonly string RegressionTestDir;
 
         public static readonly string TestEnvironmentDir;
+
+        /// <summary>
+        /// The system under test's directory
+        /// </summary>
+        public static readonly string ChaskisDistDir;
 
         private static readonly string environmentDir;
 
@@ -47,14 +52,15 @@ namespace Chaskis.RegressionTests
             this.consoleOut = Logger.GetConsoleOutLog();
 
             this.consoleOut.WriteLine( "Working Directory: " + Directory.GetCurrentDirectory() );
-            this.consoleOut.WriteLine( "Chaskis Root: " + ChaskisRoot );
+            this.consoleOut.WriteLine( "Chaskis Root: " + ChaskisProjectRoot );
             this.consoleOut.WriteLine( "Regression Test Directory: " + RegressionTestDir );
+            this.consoleOut.WriteLine( "System Under Test Directory: " + ChaskisDistDir );
         }
 
         static EnvironmentManager()
         {
             // Our working directory is in the bin/Debug folder... need to account for that one...
-            ChaskisRoot = Path.GetFullPath(
+            ChaskisProjectRoot = Path.GetFullPath(
                 Path.Combine(
                     "..", // Debug
                     "..", // bin
@@ -64,7 +70,9 @@ namespace Chaskis.RegressionTests
                 )
             );
 
-            RegressionTestDir = Path.Combine( ChaskisRoot, "RegressionTests" );
+            RegressionTestDir = Path.Combine( ChaskisProjectRoot, "RegressionTests" );
+
+            ChaskisDistDir = Path.Combine( RegressionTestDir, "dist" );
 
             environmentDir = Path.Combine( RegressionTestDir, "Environments" );
             TestEnvironmentDir = Path.Combine( environmentDir, "TestEnvironment" );
@@ -146,7 +154,8 @@ namespace Chaskis.RegressionTests
                 if( file.Extension.Equals( ".xml", StringComparison.InvariantCultureIgnoreCase ) )
                 {
                     string fileContents = File.ReadAllText( Path.Combine( file.DirectoryName, file.FullName ) );
-                    fileContents = fileContents.Replace( "{%chaskispath%}", ChaskisRoot );
+                    fileContents = fileContents.Replace( "{%chaskispath%}", ChaskisDistDir );
+                    fileContents = fileContents.Replace( "{%regressiontestpath%}", RegressionTestDir );
                     fileContents = fileContents.Replace( "{%port%}", this.port.ToString() );
                     File.WriteAllText( temppath, fileContents );
                 }

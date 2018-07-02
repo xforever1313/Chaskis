@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pluginconfig>
-    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/bin/Debug/netstandard2.0/ConsoleOut.dll" />
-    <assembly path="{%chaskispath%}/Plugins/RssBot/bin/Debug/netstandard2.0/RssBot.dll" />
+    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/ConsoleOut.dll" />
+    <assembly path="{%chaskispath%}/Plugins/RssBot/RssBot.dll" />
 </pluginconfig>

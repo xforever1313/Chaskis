@@ -1,5 +1,6 @@
 import glob
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -16,6 +17,7 @@ envBase['ENV']['PATH']=os.environ['PATH'] # Look in path for tools
 targetType = ARGUMENTS.get("target", "Debug")
 exeRunTime = ARGUMENTS.get("exe_run_time", "net471")
 pluginRunTime = ARGUMENTS.get("plugin_runtime", "netstandard2.0")
+port = ARGUMENTS.get("port", 10013)
 
 ###
 # Nuget - Install any packages
@@ -99,6 +101,68 @@ installTarget = envBase.Dist(
     source=fileList
 )
 
+###
+# Launch Fitnesse
+###
+
+def LaunchFitnesse(target, source, env):
+    process = subprocess.Popen(["java", "-jar", "fitnesse-standalone.jar", "-p", str(port), "-e", "1"])
+
+    input("Press Any Key to Exit...\n\n")
+
+    process.kill()
+
+envBase.Append(BUILDERS={"Fitnesse" : Builder(action=LaunchFitnesse)})
+
+launchFitnesseTarget = envBase.Fitnesse(
+    target="dummy.target",
+    source=installTarget
+)
+
+###
+# Run regression Test
+###
+
+def RunRegressionTest(target, source, env):
+    status = subprocess.call(
+        ["java",
+         "-jar",
+         "fitnesse-standalone.jar",
+         "-p",
+         str(port),
+         "-e",
+         "1",
+         "-c",
+         "ChaskisTests.HelloWorldTest?test",
+         "-b",
+         str(target[0])
+        ]
+    )
+
+    with open(str(target[0]), 'r') as resultFile:
+        contents = resultFile.read()
+
+    contents = re.sub('/files/', 'https://files.shendrick.net/', contents)
+
+    with open(str(target[0]), 'w') as resultFile:
+        resultFile.write(contents)
+
+    return status
+
+envBase.Append(BUILDERS={"Regression" : Builder(action=RunRegressionTest)})
+
+regressionTestTarget = envBase.Regression(
+    target="TestResults.html",
+    source=installTarget
+)
+
+AlwaysBuild(regressionTestTarget)
+
+###
+# Aliases
+###
 Alias("nuget", nugetTarget)
 Alias("bootstrap", bootstrapTarget)
 Alias("dist", installTarget)
+Alias("launch_fitnesse", launchFitnesseTarget)
+Alias("run_regression", regressionTestTarget)

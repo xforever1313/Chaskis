@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pluginconfig>
-    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/bin/Debug/netstandard2.0/ConsoleOut.dll" />
-    <assembly path="{%chaskispath%}/Plugins/NewVersionNotifier/bin/Debug/netstandard2.0/NewVersionNotifier.dll" />
-    <assembly path="{%chaskispath%}/RegressionTests/RegressionTestPlugin/bin/Debug/netstandard2.0/RegressionTestPlugin.dll" />
+    <assembly path="{%chaskispath%}/Plugins/ConsoleOut/ConsoleOut.dll" />
+    <assembly path="{%chaskispath%}/Plugins/NewVersionNotifier/NewVersionNotifier.dll" />
+    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/RegressionTestPlugin.dll" />
 </pluginconfig>
