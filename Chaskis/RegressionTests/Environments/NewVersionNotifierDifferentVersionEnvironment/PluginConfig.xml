@@ -2,5 +2,5 @@
 <pluginconfig>
     <assembly path="{%chaskispath%}/Plugins/ConsoleOut/ConsoleOut.dll" />
     <assembly path="{%chaskispath%}/Plugins/NewVersionNotifier/NewVersionNotifier.dll" />
-    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/RegressionTestPlugin.dll" />
+    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/bin/Debug/netstandard2.0/RegressionTestPlugin.dll" />
 </pluginconfig>

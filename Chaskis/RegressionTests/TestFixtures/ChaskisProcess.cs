@@ -42,7 +42,6 @@ namespace Chaskis.RegressionTests
 
             this.exeLocation = Path.Combine(
                 EnvironmentManager.ChaskisDistDir,
-                "Chaskis",
                 "bin",
                 "Chaskis.exe"
             );

@@ -14,5 +14,5 @@
     <assembly path="{%chaskispath%}/Plugins/UserListBot/UserListBot.dll" />
     <assembly path="{%chaskispath%}/Plugins/UrlBot/UrlBot.dll" />
     <assembly path="{%chaskispath%}/Plugins/XmlBot/XmlBot.dll" />
-    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/RegressionTestPlugin.dll" />
+    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/bin/Debug/netstandard2.0/RegressionTestPlugin.dll" />
 </pluginconfig>

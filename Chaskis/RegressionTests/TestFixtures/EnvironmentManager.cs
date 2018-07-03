@@ -72,7 +72,7 @@ namespace Chaskis.RegressionTests
 
             RegressionTestDir = Path.Combine( ChaskisProjectRoot, "RegressionTests" );
 
-            ChaskisDistDir = Path.Combine( RegressionTestDir, "dist" );
+            ChaskisDistDir = Path.Combine( RegressionTestDir, "dist", "Chaskis" );
 
             environmentDir = Path.Combine( RegressionTestDir, "Environments" );
             TestEnvironmentDir = Path.Combine( environmentDir, "TestEnvironment" );
