@@ -341,7 +341,15 @@ namespace Chaskis.ChaskisCliInstaller
                 else
                 {
                     string f = match.Groups["file"].Value;
-                    fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, this.PluginRunTime, f );
+
+                    if( pluginName == "Chaskis" )
+                    {
+                        fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, this.ExeRunTime, f );
+                    }
+                    else
+                    {
+                        fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, this.PluginRunTime, f );
+                    }
                 }
             }
             else
