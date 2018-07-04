@@ -158,6 +158,8 @@ regressionTestTarget = envBase.Regression(
 
 AlwaysBuild(regressionTestTarget)
 
+Clean(installTarget, "dist")
+
 ###
 # Aliases
 ###
