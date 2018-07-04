@@ -30,8 +30,7 @@ Help(
 '''
 Targets:
 nuget - Installs nuget packages that are not installed during the restore process.
-template - Runs the script the templates various files (Always Builds)
-submodule - Runs "submodule update --init" on the submodules.
+template - Runs the script the templates various files.
 debug - Build debug target (ANY CPU)
 release - Build release target (ANY CPU)
 install - Build install target.  If on Windows, this compiles with WIX.  If on Linux, this builds the .deb.
@@ -50,8 +49,15 @@ codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.
 ###
 envBase = Environment()
 envBase['ENV']['PATH']=os.environ['PATH'] # Look in path for tools
-envBase["REPO_ROOT"] = os.path.join(WORKING_DIRECTORY)
-envBase["SLN_DIR"] = os.path.join(envBase["REPO_ROOT"], 'Chaskis')
+envBase['REPO_ROOT'] = os.path.join(WORKING_DIRECTORY)
+envBase['SLN_DIR'] = os.path.join(envBase["REPO_ROOT"], 'Chaskis')
+envBase['CHASKIS_EXE_DIR'] = os.path.join(envBase['SLN_DIR'], 'Chaskis')
+envBase['CHASKIS_CORE_DIR'] = os.path.join(envBase['SLN_DIR'], 'ChaskisCore')
+envBase['PLUGINS_DIR'] = os.path.join(envBase['SLN_DIR'], 'Plugins')
+envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTests')
+envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
+envBase['PLUGIN_RUNTIME'] = plugin_runtime
+envBase['EXE_RUNTIME'] = exe_runtime
 
 ###
 # SConscripts
@@ -62,4 +68,14 @@ nugetTarget = SConscript(
     exports='envBase'
 )
 
+templateTarget = SConscript(
+    os.path.join(BUILD_SCRIPTS_DIR, 'Templatize.py'),
+    exports='envBase'
+)
+
+###
+# Aliases
+###
+
 Alias('nuget', nugetTarget)
+Alias('template', templateTarget)

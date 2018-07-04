@@ -84,4 +84,3 @@ View release notes here: [https://github.com/xforever1313/Chaskis/releases](http
     <!--Building from Linux? You may need this instead: <file src="tools/**" target="tools" />-->
   </files>
 </package>
-

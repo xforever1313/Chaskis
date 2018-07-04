@@ -66,4 +66,3 @@ cp ./Chaskis/Install/linux/bin/chaskis %{buildroot}%{_bindir}/chaskis
 %{libdir}/Chaskis/*
 %{_bindir}/chaskis
 %{libdir}/systemd/user/chaskis.service
-

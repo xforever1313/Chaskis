@@ -25,7 +25,7 @@
 !define license_url {https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt}
 !define wiki_url {https://github.com/xforever1313/Chaskis/wiki}
 !define issue_tracker_url {https://github.com/xforever1313/Chaskis/issues}
-!define copyright {Copyright © Seth Hendrick 2016-2017}
+!define copyright {Copyright Â© Seth Hendrick 2016-2017}
 !define icon_url {https://files.shendrick.net/projects/chaskis/assets/icon.png}
 !define default_plugin_name {chaskis}
 !define regression_test_plugin_name {chaskistests}
@@ -36,4 +36,3 @@
 
 !2 All Tests
 | >AllTests | ''All Chaskis Tests.'' |
-

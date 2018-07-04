@@ -64,4 +64,3 @@ pre_install() {
 post_remove() {
     return
 }
-
