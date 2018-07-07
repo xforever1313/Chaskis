@@ -47,7 +47,7 @@ core_assembly_info_cs = os.path.join(
 
 def GetMainVersion():
     fileName = chaskis_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'public\s+const\s+string\s+VersionStr\s+=\s+"(?P<version>\d+\.\d+\.\d+)";'
@@ -57,7 +57,7 @@ def GetMainVersion():
 
 def GetCoreVersion():
     fileName = ircbot_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'public\s+const\s+string\s+VersionString\s+=\s+"(?P<version>\d+\.\d+\.\d+)";'
@@ -67,14 +67,14 @@ def GetCoreVersion():
 
 def GetLicense():
     fileName = license_txt
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
     
     return contents
 
 def GetRegressionTestVersion():
     fileName = regression_test_plugin_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'public\s+const\s+string\s+VersionStr\s+=\s+"(?P<version>\d+\.\d+\.\d+)";'
@@ -84,7 +84,7 @@ def GetRegressionTestVersion():
 
 def GetRegressionTestPluginName():
     fileName = regression_test_plugin_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'\[ChaskisPlugin\( "(?P<name>\w+)" \)\]'
@@ -94,7 +94,7 @@ def GetRegressionTestPluginName():
 
 def GetDefaultPluginName():
     fileName = default_handlers_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'public\s+const\s+string\s+DefaultPluginName\s*=\s*"(?P<name>\w+)"'
@@ -104,7 +104,7 @@ def GetDefaultPluginName():
 
 def GetCopyRight():
     fileName = ircbot_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'public\s+const\s+string\s+CopyRight\s+=\s+"(?P<copyright>.+)";'
@@ -114,7 +114,7 @@ def GetCopyRight():
 
 def GetDescription():
     fileName = core_assembly_info_cs
-    with open(fileName, 'r', encoding="utf8") as inFile:
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
     pattern = r'(?ms)(\[assembly:\s+AssemblyDescription\(\s*@"(?P<description>.+)"\s*\)\]\s+//\s+End\s+Description)'
@@ -227,7 +227,7 @@ def Templatize(target, source, env):
 
 
     for template in templates:
-        with open(template[0], 'r', encoding="utf8") as inFile:
+        with io.open(template[0], 'r', encoding="utf8") as inFile:
             try:
                 contents = inFile.read()
             except:
@@ -256,7 +256,7 @@ def Templatize(target, source, env):
         contents = re.sub(r'{%IconUrl%}', IconUrl, contents)
         contents = re.sub(r'{%RunTime%}', RunTime, contents)
 
-        with open(template[1], 'w', encoding="utf8") as outFile:
+        with io.open(template[1], 'w', encoding="utf8") as outFile:
             try:
                 outFile.write(contents)
             except:

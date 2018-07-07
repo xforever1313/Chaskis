@@ -18,8 +18,6 @@ DEFAULT_EXE_RUNTIME = "net471"
 # Arguments
 ###
 
-plugin_runtime = ARGUMENTS.get('plugin_runtime', DEFAULT_PLUGIN_RUNTIME)
-exe_runtime = ARGUMENTS.get('exe_runtime', DEFAULT_EXE_RUNTIME)
 code_coverage = ARGUMENTS.get('codecoverage', '0') == '1'
 restore = ARGUMENTS.get('no_restore', '0') != '1'
 
@@ -39,8 +37,6 @@ run_test - Runs the unit tests.
 regression_test - Runs the regression tests
 
 Arguments:
-plugin_runtime - The plugin runtime we are going to target.  Defaulted to ''' + DEFAULT_PLUGIN_RUNTIME + '''
-exe_runtime - The exe runtime we are going to target.  Defaulted to ''' + DEFAULT_EXE_RUNTIME + '''
 codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.  WINDOWS ONLY!
 no_restore - Set to '1' to skip the restore step while building.
 '''
@@ -59,8 +55,8 @@ envBase['CHASKIS_CORE_DIR'] = os.path.join(envBase['SLN_DIR'], 'ChaskisCore')
 envBase['PLUGINS_DIR'] = os.path.join(envBase['SLN_DIR'], 'Plugins')
 envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTests')
 envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
-envBase['PLUGIN_RUNTIME'] = plugin_runtime
-envBase['EXE_RUNTIME'] = exe_runtime
+envBase['PLUGIN_RUNTIME'] = DEFAULT_PLUGIN_RUNTIME
+envBase['EXE_RUNTIME'] = DEFAULT_EXE_RUNTIME
 envBase['CODE_COVERAGE'] = code_coverage
 envBase['RESTORE'] = restore
 

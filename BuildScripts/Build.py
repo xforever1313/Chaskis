@@ -85,7 +85,7 @@ releaseTargets=[]
 installTargets=[]
 
 for csproj in csprojDirs:
-    with (open(csproj[1], 'r', encoding="UTF-8")) as inFile:
+    with (io.open(csproj[1], 'r', encoding="UTF-8")) as inFile:
         try:
             contents = inFile.read()
             frameworkMatch = frameworkPattern.search(contents)
