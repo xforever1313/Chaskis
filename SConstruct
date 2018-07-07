@@ -13,6 +13,7 @@ WORKING_DIRECTORY = os.getcwd()
 BUILD_SCRIPTS_DIR = os.path.join(WORKING_DIRECTORY, 'BuildScripts')
 DEFAULT_PLUGIN_RUNTIME = "netstandard2.0"
 DEFAULT_EXE_RUNTIME = "net471"
+DEFAULT_PORT=10013
 
 ###
 # Arguments
@@ -20,6 +21,7 @@ DEFAULT_EXE_RUNTIME = "net471"
 
 code_coverage = ARGUMENTS.get('codecoverage', '0') == '1'
 restore = ARGUMENTS.get('no_restore', '0') != '1'
+port = ARGUMENTS.get('port', DEFAULT_PORT)
 
 ###
 # Help
@@ -39,6 +41,7 @@ regression_test - Runs the regression tests
 Arguments:
 codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.  WINDOWS ONLY!
 no_restore - Set to '1' to skip the restore step while building.
+port - The port to use while running regression tests.  Defaulted to ''' + str(DEFAULT_PORT) + '''
 '''
 )
 
@@ -57,10 +60,12 @@ envBase['PLUGINS_DIR'] = os.path.join(envBase['SLN_DIR'], 'Plugins')
 envBase['UNIT_TESTS_DIR'] = os.path.join(envBase['SLN_DIR'], 'UnitTests')
 envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTests')
 envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
+envBase['CLI_INSTALL_DIR'] = os.path.join(envBase['INSTALL_DIR'], 'ChaskisCliInstaller')
 envBase['PLUGIN_RUNTIME'] = DEFAULT_PLUGIN_RUNTIME
 envBase['EXE_RUNTIME'] = DEFAULT_EXE_RUNTIME
 envBase['CODE_COVERAGE'] = code_coverage
 envBase['RESTORE'] = restore
+envBase['PORT'] = port
 
 ###
 # SConscripts
@@ -91,6 +96,19 @@ unitTestTargets = SConscript(
 Depends(unitTestTargets, nugetTarget)
 Depends(unitTestTargets, buildTargets['DEBUG'])
 
+regressionTestTargets = SConscript(
+    os.path.join(envBase['REGRESSION_TEST_DIR'], 'SConscript'),
+    exports='envBase'
+)
+
+launchFitnesseTarget = regressionTestTargets['LAUNCH_FITNESSE']
+regressionTestTarget = regressionTestTargets['REGRESSION_TEST']
+
+# Regression tests depends on Nuget packages to be installed
+# and the Debug build to be there.
+Depends(regressionTestTargets['BOOTSTRAP'], nugetTarget)
+Depends(regressionTestTargets['DIST'], buildTargets['DEBUG'])
+
 ###
 # Aliases
 ###
@@ -101,3 +119,5 @@ Alias('debug', buildTargets['DEBUG'])
 Alias('release', buildTargets['RELEASE'])
 Alias('install', buildTargets['INSTALL'])
 Alias('unit_test', unitTestTargets)
+Alias('launch_fitnesse', launchFitnesseTarget)
+Alias('regression_test', regressionTestTarget)

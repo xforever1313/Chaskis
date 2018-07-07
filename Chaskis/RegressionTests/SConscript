@@ -1,0 +1,198 @@
+from SCons.Script import *
+from SCons.Environment import *
+from SCons.Builder import *
+
+import glob
+import os
+import re
+import subprocess
+import sys
+
+Import('envBase')
+
+testEnv = envBase.Clone()
+
+netRunnerDir = os.path.join(
+    testEnv['REGRESSION_TEST_DIR'],
+    'runner'
+)
+
+sytemUnderTestDir = os.path.join(
+    testEnv['REGRESSION_TEST_DIR'],
+    'dist'
+)
+
+defaultTargetType = 'Debug'
+
+###
+# Bootstrapping - need to move NetRunner into the correct directory.
+###
+nugetSources =[
+    os.path.join(testEnv['PACKAGES'], "NetRunner", "NetRunner.nupkg"),
+    os.path.join(testEnv['PACKAGES'], "NetRunner", "tools", "net45", "NetRunner.Executable.exe"),
+    os.path.join(testEnv['PACKAGES'], "NetRunner", "lib", "portable-net4+sl4+wp7+win8", "NetRunner.ExternalLibrary.dll"),
+    os.path.join(testEnv['PACKAGES'], "NetRunner", "lib", "portable-net4+sl4+wp7+win8", "NetRunner.ExternalLibrary.XML")
+]
+
+bootstrapTargetFiles = [
+    os.path.join(netRunnerDir, "NetRunner.nupkg"),
+    os.path.join(netRunnerDir, "NetRunner.Executable.exe"),
+    os.path.join(netRunnerDir, "NetRunner.ExternalLibrary.dll"),
+    os.path.join(netRunnerDir, "NetRunner.ExternalLibrary.XML")
+]
+
+bootstrapTargets = []
+
+for i in range(len(bootstrapTargetFiles)):
+    if (".nupkg" in bootstrapTargetFiles[i]):
+        continue
+
+    bootstrapTargets += testEnv.Command(
+        bootstrapTargetFiles[i],
+        nugetSources[i],
+        Copy("$TARGET", "$SOURCE")
+    )
+
+###
+# Install System under Test
+###
+
+def InstallerBuilder(target, source, env):
+    if (os.path.exists(sytemUnderTestDir)):
+        Execute(Delete(sytemUnderTestDir))
+        Execute(Mkdir(sytemUnderTestDir))
+    
+    exePath = os.path.join(
+        testEnv['CLI_INSTALL_DIR'],
+        'bin',
+        defaultTargetType,
+        testEnv['EXE_RUNTIME'],
+        'Chaskis.CliInstaller.exe'
+    )
+
+    wixXmlFile = os.path.join(
+        testEnv['INSTALL_DIR'],
+        "windows",
+        "Product.wxs"
+    )
+
+    args = [
+        exePath,
+        testEnv['SLN_DIR'],
+        sytemUnderTestDir,
+        wixXmlFile,
+        defaultTargetType,
+        testEnv['EXE_RUNTIME'],
+        testEnv['PLUGIN_RUNTIME']
+    ]
+
+    status = subprocess.call(args)
+    return status
+
+# If ANY .dlls or .exes change, we need to re-run the installer.
+expectedExeBinPath = os.path.join(
+    'bin',
+    defaultTargetType,
+    testEnv['EXE_RUNTIME']
+)
+expectedPluginBinPath = os.path.join(
+    'bin',
+    defaultTargetType,
+    testEnv['PLUGIN_RUNTIME']
+)
+
+fileList = []
+for root, dirs, files in os.walk(envBase['REPO_ROOT']):
+    for dir in dirs:
+        path = os.path.join(root, dir)
+
+        if ( "UnitTests" in path ) or ( "RegressionTests" in path ):
+            continue;
+
+        if (expectedExeBinPath in path) or (expectedPluginBinPath in path):
+            fileList += glob.glob(os.path.join(path, "*.dll"))
+            fileList += glob.glob(os.path.join(path, "*.exe"))
+
+testEnv.Append(BUILDERS={"Dist" : Builder(action = InstallerBuilder)})
+
+installTarget = testEnv.Dist(
+    target=[os.path.join(sytemUnderTestDir, "Chaskis", "bin", "Chaskis.exe")],
+    source=fileList
+)
+
+Clean(installTarget, sytemUnderTestDir)
+
+###
+# Launch Fitnesse
+###
+
+def LaunchFitnesse(target, source, env):
+    process = subprocess.Popen(
+        ["java", "-jar", "fitnesse-standalone.jar", "-p", str(testEnv['PORT']), "-e", "1"],
+        cwd=testEnv['REGRESSION_TEST_DIR']
+    )
+
+    input("Press Any Key to Exit...\n\n")
+
+    process.kill()
+
+testEnv.Append(BUILDERS={"Fitnesse" : Builder(action=LaunchFitnesse)})
+
+launchFitnesseTarget = testEnv.Fitnesse(
+    target="dummy.target",
+    source=bootstrapTargets + [installTarget]
+)
+
+###
+# Run regression Test
+###
+
+def RunRegressionTest(target, source, env):
+    process = subprocess.Popen(
+        ["java",
+         "-jar",
+         "fitnesse-standalone.jar",
+         "-p",
+         str(testEnv['PORT']),
+         "-e",
+         "1",
+         "-c",
+         "ChaskisTests.AllTests?suite",
+         "-b",
+         os.path.abspath(str(target[0]))
+        ],
+        cwd=testEnv['REGRESSION_TEST_DIR']
+    )
+
+    status = process.wait()
+
+    with open(str(target[0]), 'r') as resultFile:
+        contents = resultFile.read()
+
+    contents = re.sub('/files/', 'https://files.shendrick.net/', contents)
+
+    with open(str(target[0]), 'w') as resultFile:
+        resultFile.write(contents)
+
+    return status
+
+testEnv.Append(BUILDERS={"Regression" : Builder(action=RunRegressionTest)})
+
+regressionTestTarget = testEnv.Regression(
+    target="TestResults.html",
+    source=bootstrapTargets + [installTarget]
+)
+
+AlwaysBuild(regressionTestTarget)
+
+###
+# Targets
+###
+
+publicTargets = {}
+publicTargets['BOOTSTRAP'] = bootstrapTargets
+publicTargets['DIST'] = installTarget
+publicTargets['LAUNCH_FITNESSE'] = launchFitnesseTarget
+publicTargets['REGRESSION_TEST'] = regressionTestTarget
+
+Return('publicTargets')
