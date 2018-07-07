@@ -8,7 +8,7 @@ import subprocess
 Import('envBase')
 nugetEnv = envBase.Clone()
 
-outputDir = os.path.join(nugetEnv['REPO_ROOT'], 'packages')
+outputDir = nugetEnv['PACKAGES']
 
 packageList = [
     'NUnit.ConsoleRunner',

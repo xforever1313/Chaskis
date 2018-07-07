@@ -50,9 +50,11 @@ envBase['ENV']['PATH']=os.environ['PATH'] # Look in path for tools
 envBase['REPO_ROOT'] = os.path.join(WORKING_DIRECTORY)
 envBase['SLN_DIR'] = os.path.join(envBase["REPO_ROOT"], 'Chaskis')
 envBase['SLN'] = os.path.join(envBase["SLN_DIR"], 'Chaskis.sln')
+envBase['PACKAGES'] = os.path.join(envBase["REPO_ROOT"], "packages")
 envBase['CHASKIS_EXE_DIR'] = os.path.join(envBase['SLN_DIR'], 'Chaskis')
 envBase['CHASKIS_CORE_DIR'] = os.path.join(envBase['SLN_DIR'], 'ChaskisCore')
 envBase['PLUGINS_DIR'] = os.path.join(envBase['SLN_DIR'], 'Plugins')
+envBase['UNIT_TESTS_DIR'] = os.path.join(envBase['SLN_DIR'], 'UnitTests')
 envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTests')
 envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
 envBase['PLUGIN_RUNTIME'] = DEFAULT_PLUGIN_RUNTIME
@@ -79,6 +81,16 @@ buildTargets= SConscript(
     exports='envBase'
 )
 
+unitTestTargets = SConscript(
+    os.path.join(BUILD_SCRIPTS_DIR, 'UnitTest.py'),
+    exports='envBase'
+)
+
+# Unit tests depends on Nuget packages to be installed
+# and the Debug build to be there.
+Depends(unitTestTargets, nugetTarget)
+Depends(unitTestTargets, buildTargets['DEBUG'])
+
 ###
 # Aliases
 ###
@@ -88,3 +100,4 @@ Alias('template', templateTarget)
 Alias('debug', buildTargets['DEBUG'])
 Alias('release', buildTargets['RELEASE'])
 Alias('install', buildTargets['INSTALL'])
+Alias('unit_test', unitTestTargets)
