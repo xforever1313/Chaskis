@@ -97,6 +97,8 @@ if (envBase['CODE_COVERAGE']):
         target = targets,
         source=sources
     )
+
+    # TODO: Add ReportGenerator when OpenCover's issues are fixed.
 else:
     unitTestTarget = testEnv.UnitTest(
         target=os.path.join(envBase['REPO_ROOT'], 'TestResult', 'TestResult.xml'),
