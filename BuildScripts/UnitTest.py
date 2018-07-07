@@ -23,6 +23,13 @@ openCoverPath = os.path.join(
     'OpenCover.Console.exe'
 )
 
+reportGeneratorPath = os.path.join(
+    testEnv['PACKAGES'],
+    'ReportGenerator',
+    'tools',
+    'ReportGenerator.exe'
+)
+
 codeCoverageDir = os.path.join(envBase['REPO_ROOT'], 'CodeCoverage')
 
 def RunUnitTest(target, source, env):
@@ -36,7 +43,6 @@ def RunUnitTest(target, source, env):
     return subprocess.call(args)
 
 def RunUnitTestWithCoverage(target, source, env):
-    raise Exception("OpenCover doesn't work with protable pdbs yet.  Can't Execute :(")
     Execute(
         Delete(
             glob.glob( os.path.join( codeCoverageDir, '*' ) )
@@ -66,12 +72,21 @@ def RunUnitTestWithCoverage(target, source, env):
 
     args += ['-output:' + openCoverTarget]
 
-    print (os.getcwd())
-    print (args)
+    return subprocess.call(args)
+
+def GenerateCoverageInfo(target, source, env):
+    index_html = str(target[0])
+
+    args = [reportGeneratorPath]
+
+    args += ['-reports:' + str(source[1])]
+    args += ['-targetdir:' + codeCoverageDir]
+
     return subprocess.call(args)
 
 testEnv.Append(BUILDERS={"UnitTest" : Builder(action=RunUnitTest)})
 testEnv.Append(BUILDERS={"TestCoverage" : Builder(action=RunUnitTestWithCoverage)})
+testEnv.Append(BUILDERS={"CoverageReport" : Builder(action=GenerateCoverageInfo)})
 
 # Get all .csproj files in the Unit Test folder
 csprojs = glob.glob(os.path.join(testEnv['UNIT_TESTS_DIR'], '*', '*.csproj'))
@@ -93,18 +108,23 @@ if (envBase['CODE_COVERAGE']):
         os.path.join(envBase['REPO_ROOT'], 'TestResult', 'TestResult.xml'),
         os.path.join(envBase['REPO_ROOT'], 'CodeCoverage', 'coverage.xml')
     ]
-    unitTestTarget = testEnv.TestCoverage(
+    coverageTarget = testEnv.TestCoverage(
         target = targets,
         source=sources
     )
 
-    # TODO: Add ReportGenerator when OpenCover's issues are fixed.
+    AlwaysBuild(coverageTarget)
+
+    unitTestTarget = testEnv.CoverageReport(
+        target=os.path.join(codeCoverageDir, 'index.html'),
+        source=coverageTarget
+    )
 else:
     unitTestTarget = testEnv.UnitTest(
         target=os.path.join(envBase['REPO_ROOT'], 'TestResult', 'TestResult.xml'),
         source=sources
     )
 
-AlwaysBuild(unitTestTarget)
+    AlwaysBuild(unitTestTarget)
 
 Return('unitTestTarget')
