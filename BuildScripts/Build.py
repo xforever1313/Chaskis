@@ -3,6 +3,8 @@ from SCons.Environment import *
 from SCons.Builder import *
 
 import glob
+import hashlib
+import io
 import platform
 import os
 import re
@@ -14,12 +16,34 @@ def MsBuild(target, source, env):
     flags = env["MSBUILD_FLAGS"]
     return subprocess.call(flags)
 
+def BuildInstallWindows(target, source, env):
+    '''
+    Runs the install build.
+    Also creates a sha256 checksum of the installed object.
+    The install output should be the first target.  The checksum file
+    should be the second one.
+    '''
+    flags = env["MSBUILD_FLAGS"]
+    status = subprocess.call(flags)
+
+    if (status == 0):
+        with io.open(str(target[0]), 'rb') as inFile:
+            readFile = inFile.read()
+            h = hashlib.sha256(readFile)
+            hash = h.hexdigest()
+
+        with io.open(str(target[1]), 'w') as outFile:
+            outFile.write(hash)
+
+    return status
+
 buildEnv = envBase.Clone()
 buildEnv.Append(BUILDERS = {"MsBuild" : Builder(action=MsBuild)})
-
 debugEnv = buildEnv.Clone()
 releaseEnv = buildEnv.Clone()
-installEnv = buildEnv.Clone()
+
+installEnv = envBase.Clone()
+installEnv.Append(BUILDERS={"BuildInstall" : Builder(action=BuildInstallWindows)})
 
 buildOptions = ['msbuild', envBase['SLN'], '/restore:' + str(envBase['RESTORE'])]
 
@@ -105,8 +129,9 @@ for csproj in csprojDirs:
 
     releaseTargets += [releaseTarget]
 
-installTargets = releaseTargets + [
-    os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi')
+installTargets = [
+    os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi'),
+    os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi.sha256')
 ]
 
 def addCleanTargets(buildTarget, targets):
@@ -116,7 +141,12 @@ def addCleanTargets(buildTarget, targets):
 buildTargets = {}
 buildTargets['DEBUG'] = debugEnv.MsBuild(target=debugTargets, source=sources)
 buildTargets['RELEASE'] = releaseEnv.MsBuild(target=releaseTargets, source=sources)
-buildTargets['INSTALL'] = installEnv.MsBuild(target=installTargets, source=sources)
+
+# This will cause MSBuild to run twice if we're building install for windows... once for release, and once for install.
+# Meh, we'll deal with it.  If we simply append the install targets to the release targets,
+# scons gets angry, and will throw up a bunch of warnings.
+# Maybe there's a smarter way to do it, but I can't think of one D:
+buildTargets['INSTALL'] = installEnv.BuildInstall(target=installTargets, source=buildTargets['RELEASE'])
 
 addCleanTargets(buildTargets['DEBUG'], debugTargets)
 addCleanTargets(buildTargets['RELEASE'], releaseTargets)
