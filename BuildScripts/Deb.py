@@ -14,9 +14,10 @@ Import('envBase')
 
 debEnv = envBase.Clone()
 
-debianWorkDir = os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'chaskis')
-debianPkgDir = os.path.join(debianWorkDir, 'DEBIAN')
-debianUsrDir = os.path.join(debianWorkDir, 'usr')
+debianWorkDir = os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'obj')
+debianChaskisDir = os.path.join(debianWorkDir, 'chaskis')
+debianPkgDir = os.path.join(debianChaskisDir, 'DEBIAN')
+debianUsrDir = os.path.join(debianChaskisDir, 'usr')
 debianBinDir = os.path.join(debianUsrDir, 'bin')
 debianLibDir = os.path.join(debianUsrDir, 'lib')
 debianSystemdDir = os.path.join(debianLibDir, 'systemd')
@@ -100,7 +101,7 @@ Clean(chaskisCliTarget, debianWorkDir)
 def CreateDeb(target, source, env):
     process = subprocess.Popen(
         ['dpkg-deb', '--build', 'chaskis'],
-        cwd=env['DEBIAN_INSTALL_DIR']
+        cwd=debianWorkDir
     )
 
     return process.wait()
@@ -108,14 +109,14 @@ def CreateDeb(target, source, env):
 debEnv.Append(BUILDERS = {"Deb" : Builder(action=CreateDeb)})
 
 debTarget = debEnv.Deb(
-    target=os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'chaskis.deb'),
+    target=os.path.join(debianWorkDir, 'chaskis.deb'),
     source=chaskisCliTarget
 )
 
 debTarget = debEnv.Command(
     target = os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'bin', 'chaskis.deb'),
     source=debTarget,
-    action=Move('$TARGET', '$SOURCE')
+    action=Copy('$TARGET', '$SOURCE')
 )
 
 ###
@@ -128,8 +129,8 @@ def Checksum(target, source, env):
         h = hashlib.sha256(readFile)
         hash = h.hexdigest()
 
-    with io.open(str(target[0]), 'w') as outFile:
-        outFile.write(hash)
+    with io.open(str(target[0]), 'w', encoding='utf-8') as outFile:
+        outFile.write(unicode(hash))
 
 debEnv.Append(BUILDERS = {"Checksum" : Builder(action=Checksum)})
 
