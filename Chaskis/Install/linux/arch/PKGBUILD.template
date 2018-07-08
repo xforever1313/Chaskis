@@ -16,7 +16,6 @@ license=('BSL')
 depends=('mono>=5.4.0') # https://docs.microsoft.com/en-us/dotnet/standard/net-standard - .netstandard is implemented in mono 5.4, which is required.
 provides=('chaskis')
 conflicts=('chaskis')
-changelog=("https://github.com/xforever1313/Chaskis/releases/tag/$pkgver")
 source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/linux/debian/chaskis.deb")
 sha256sums=('PUT THIS IN!')
 validpgpkeys=()
@@ -24,8 +23,8 @@ validpgpkeys=()
 package() {
     cd "${srcdir}"
 
-    bsdtar xf data.tar.xf
-    
+    bsdtar xf data.tar.xz
+
     chmod -R g-w usr
     mv usr "${pkgdir}"
 }
