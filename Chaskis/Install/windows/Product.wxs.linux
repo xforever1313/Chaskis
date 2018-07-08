@@ -11,10 +11,10 @@
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
 	<Product Id="89238B6E-E2A6-4090-9711-8C8B7C4E3DE5"
-             Name="{%FullName%}"
+             Name="Chaskis IRC Bot"
              Language="1033"
-             Version="{%ChaskisMainVersion%}"
-             Manufacturer="{%Author%}"
+             Version="0.6.1"
+             Manufacturer="Seth Hendrick"
              UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
 
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
@@ -170,61 +170,8 @@
                 our own crappy version of the C PreProcessor.  Ugh.
             -->
             
-            #if WINDOWS
 
-            <Component Guid="{32719B3A-13CA-43E1-BCB7-8A080F71EA0D}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Data.Common.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{3C7E5AA9-A811-440C-87D7-F4F37AF59CDD}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Diagnostics.StackTrace.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{C0FAF303-3FD7-40F7-9409-EF8B6F792EE8}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Diagnostics.Tracing.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{B0868404-C0A1-4E81-86FD-0856DF0533C7}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Globalization.Extensions.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{016A6FF1-C474-4E0C-A7AF-787D334362E3}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.IO.Compression.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{0316A868-47CD-4990-8094-8DAE6BF6B855}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Net.Http.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{A85AA496-E051-4EC7-9412-9EE4FB122AAA}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Net.Sockets.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{A1E83B47-A21F-4E07-9C3D-1C220A69E8D4}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Runtime.Serialization.Primitives.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{74B4C743-9B12-45F4-8905-AAEAA1903227}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Security.Cryptography.Algorithms.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{D7862696-C969-4FB5-98E1-EFAB1F7B9078}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Security.SecureString.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{87C7A424-971E-4B9E-9418-7D5920EDFC12}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Threading.Overlapped.dll" KeyPath="yes"/>
-            </Component>
-            
-            <Component Guid="{6F639082-8255-4C28-8EF4-CEF73B448113}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)System.Xml.XPath.XDocument.dll" KeyPath="yes"/>
-            </Component>
-            
-            #endif
 
-            #if LINUX
-
-            #endif
 
             <!-- Chaskis.Core.dll -->
             <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">

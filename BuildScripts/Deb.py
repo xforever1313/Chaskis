@@ -68,7 +68,7 @@ def RunCli(target, source, env):
     wixXmlFile = os.path.join(
         env['INSTALL_DIR'],
         "windows",
-        "Product.wxs"
+        "Product.wxs.linux"
     )
 
     args = [

@@ -126,71 +126,96 @@ def GetDescription():
 ###
 # Template List:
 ###
+
+class Template:
+    def __init__(self, source, target, defines):
+        self.Target = target
+        self.Source = source
+        self.Defines = defines
+
 templates = []
 
-product_wxs = (
+product_wxs = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'windows', 'Product.wxs.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'windows', 'Product.wxs')
+    os.path.join(tempEnv['INSTALL_DIR'], 'windows', 'Product.wxs'),
+    ['WINDOWS']
 )
 templates += [product_wxs]
 
-pkgbuild = (
+product_wxs_linux = Template(
+    os.path.join(tempEnv['INSTALL_DIR'], 'windows', 'Product.wxs.template'),
+    os.path.join(tempEnv['INSTALL_DIR'], 'windows', 'Product.wxs.linux'),
+    ['LINUX']
+)
+templates += [product_wxs_linux]
+
+pkgbuild = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'arch', 'PKGBUILD.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'arch', 'PKGBUILD')
+    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'arch', 'PKGBUILD'),
+    []
 )
 templates += [pkgbuild]
 
-debian_control = (
+debian_control = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'debian', 'control.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'debian', 'control')
+    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'debian', 'control'),
+    []
 )
 templates += [debian_control]
 
-fedora_spec = (
+fedora_spec = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'fedora', 'chaskis.spec.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'fedora', 'chaskis.spec')
+    os.path.join(tempEnv['INSTALL_DIR'], 'linux', 'fedora', 'chaskis.spec'),
+    []
 )
 templates += [fedora_spec]
 
-chocolatey_nuspec = (
+chocolatey_nuspec = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'template', 'chaskis.nuspec.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'chaskis.nuspec')
+    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'chaskis.nuspec'),
+    []
 )
 templates += [chocolatey_nuspec]
 
-chocolatey_license = (
+chocolatey_license = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'template', 'tools', 'LICENSE.txt.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'tools', 'LICENSE.txt')
+    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'tools', 'LICENSE.txt'),
+    []
 )
 templates += [chocolatey_license]
 
-chocolatey_install = (
+chocolatey_install = Template(
     os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'template', 'tools', 'chocolateyinstall.ps1.template'),
-    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'tools', 'chocolateyinstall.ps1')
+    os.path.join(tempEnv['INSTALL_DIR'], 'chocolatey', 'package', 'tools', 'chocolateyinstall.ps1'),
+    []
 )
 templates += [chocolatey_install]
 
-readme = (
+readme = Template(
     os.path.join(tempEnv['REPO_ROOT'], 'README.md.template'),
-    os.path.join(tempEnv['REPO_ROOT'], 'README.md')
+    os.path.join(tempEnv['REPO_ROOT'], 'README.md'),
+    []
 )
 templates += [readme]
 
-core_nuspec = (
+core_nuspec = Template(
     os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'ChaskisCore.nuspec.template'),
-    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'ChaskisCore.nuspec')
+    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'ChaskisCore.nuspec'),
+    []
 )
 templates += [core_nuspec]
 
-regression_test_main_page = (
+regression_test_main_page = Template(
     os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'FitNesseRoot', 'ChaskisTests', 'content.txt.template'),
-    os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'FitNesseRoot', 'ChaskisTests', 'content.txt')
+    os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'FitNesseRoot', 'ChaskisTests', 'content.txt'),
+    []
 )
 templates += [regression_test_main_page]
 
-new_version_notifier_test = (
+new_version_notifier_test = Template(
     os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'Environments', 'NewVersionNotifierNoChangeEnvironment', 'Plugins', 'NewVersionNotifier', '.lastversion.txt.template'),
-    os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'Environments', 'NewVersionNotifierNoChangeEnvironment', 'Plugins', 'NewVersionNotifier', '.lastversion.txt')  
+    os.path.join(tempEnv['REGRESSION_TEST_DIR'], 'Environments', 'NewVersionNotifierNoChangeEnvironment', 'Plugins', 'NewVersionNotifier', '.lastversion.txt'),
+    []
 )
 templates += [new_version_notifier_test]
 
@@ -228,11 +253,50 @@ def Templatize(target, source, env):
 
 
     for template in templates:
-        with io.open(template[0], 'r', encoding="utf8") as inFile:
+        with io.open(template.Source, 'r', encoding="utf8") as inFile:
             try:
-                contents = inFile.read()
+                if (len(template.Defines) == 0):
+                    # If we have no defines, just grab the whole file.
+                    contents = inFile.read()
+                else:
+                    contents = ""
+                    # Otherwise, we need to be smart.   If something is defined,
+                    # include the text between the #IF and the #ENDIF.  Otherwise, move on.
+                    # This is bascially a terrible version of the C PreProcessor since WIX doesn't
+                    # like extra attributes.
+                    # This crappy version doesn't currently support nested if statements.
+                    ifRegexes = []
+                    for define in template.Defines:
+                        ifRegexes += [re.compile(r'\s*#[iI][fF]\s+' + define)]
+
+                    badRegex = re.compile(r'\s*#[iI][fF]\s+\w+')
+
+                    endRegex = re.compile(r'\s*#[eE][nN][dD][iI][fF]')
+
+                    addLine = True
+                    for line in inFile:
+                        foundIfRegex = False
+                        for r in ifRegexes:
+                            if (bool(r.search(line))):
+                                foundIfRegex = True
+                                break
+
+                        if (foundIfRegex):
+                            addLine = True
+                            continue
+
+                        elif (bool(badRegex.search(line))):
+                            addLine = False
+                            continue
+
+                        elif (bool(endRegex.search(line))):
+                            addLine = True
+                            continue
+                        
+                        elif(addLine):
+                            contents += line
             except:
-                print ("Error when reading from " + template[0])
+                print ("Error when reading from " + template.Source)
                 raise
 
         contents = re.sub(r'{%FullName%}', FullName, contents)
@@ -257,11 +321,11 @@ def Templatize(target, source, env):
         contents = re.sub(r'{%IconUrl%}', IconUrl, contents)
         contents = re.sub(r'{%RunTime%}', RunTime, contents)
 
-        with io.open(template[1], 'w', encoding="utf8") as outFile:
+        with io.open(template.Target, 'w', encoding="utf8") as outFile:
             try:
                 outFile.write(contents)
             except:
-                print ("Error when writing to " + template[1])
+                print ("Error when writing to " + template.Target)
                 raise
         
 tempEnv.Append(BUILDERS={'Template' : Builder(action=Templatize)})
@@ -283,8 +347,8 @@ infoSources = [
 targets = []
 sources = []
 for template in templates:
-    targets += [template[1]]
-    sources += [template[0]]
+    targets += [template.Target]
+    sources += [template.Source]
 
 sources += infoSources
 

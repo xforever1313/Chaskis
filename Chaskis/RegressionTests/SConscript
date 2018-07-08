@@ -4,6 +4,7 @@ from SCons.Builder import *
 
 import glob
 import os
+import platform
 import re
 import subprocess
 import sys
@@ -70,11 +71,18 @@ def InstallerBuilder(target, source, env):
         'Chaskis.CliInstaller.exe'
     )
 
-    wixXmlFile = os.path.join(
-        testEnv['INSTALL_DIR'],
-        "windows",
-        "Product.wxs"
-    )
+    if (any(platform.win32_ver())):
+        wixXmlFile = os.path.join(
+            testEnv['INSTALL_DIR'],
+            "windows",
+            "Product.wxs"
+        )
+    else:
+        wixXmlFile = os.path.join(
+            testEnv['INSTALL_DIR'],
+            "windows",
+            "Product.wxs.linux"
+        )
 
     args = [
         exePath,

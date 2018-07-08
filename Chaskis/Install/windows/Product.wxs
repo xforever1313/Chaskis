@@ -163,7 +163,14 @@
             </Component>
             
             <!-- DLLS required for Chaskis.exe -->
+
+            <!--
+                Different files for different operating systems.  Sadly, wix doesn't
+                allow our own custom XML attributes in the <File> tag, so we need to create
+                our own crappy version of the C PreProcessor.  Ugh.
+            -->
             
+
             <Component Guid="{32719B3A-13CA-43E1-BCB7-8A080F71EA0D}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.TargetDir)System.Data.Common.dll" KeyPath="yes"/>
             </Component>
@@ -212,6 +219,8 @@
                 <File Source="$(var.Chaskis.TargetDir)System.Xml.XPath.XDocument.dll" KeyPath="yes"/>
             </Component>
             
+
+
             <!-- Chaskis.Core.dll -->
             <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.Core.TargetPath)" KeyPath="yes"/>
