@@ -219,10 +219,18 @@
             <Component Guid="{6F639082-8255-4C28-8EF4-CEF73B448113}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.TargetDir)System.Xml.XPath.XDocument.dll" KeyPath="yes"/>
             </Component>
-            
+
             #endif
 
             #if LINUX
+
+            <Component Guid="{16CDCAD0-24FA-4DE6-8E6B-83B5176ADC8D}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Xml.XmlDocument.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{789D753F-3B80-4D71-96B3-0A370ED48A76}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Runtime.dll" KeyPath="yes"/>
+            </Component>
 
             #endif
 

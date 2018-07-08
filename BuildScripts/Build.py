@@ -2,7 +2,6 @@ from SCons.Script import *
 from SCons.Environment import *
 from SCons.Builder import *
 
-import glob
 import hashlib
 import io
 import platform

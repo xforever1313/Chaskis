@@ -218,7 +218,7 @@
             <Component Guid="{6F639082-8255-4C28-8EF4-CEF73B448113}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.TargetDir)System.Xml.XPath.XDocument.dll" KeyPath="yes"/>
             </Component>
-            
+
 
 
             <!-- Chaskis.Core.dll -->
