@@ -4,8 +4,7 @@
 
 chaskisroot=../../../
 
-(cd $chaskisroot && nuget restore ./Chaskis.sln)
-(cd $chaskisroot && exec msbuild /p:Configuration=Release ./Chaskis.sln)
+(cd $chaskisroot && exec msbuild /restore /p:Configuration=Release ./Chaskis.sln)
 
 ###
 # Copy files
@@ -30,7 +29,7 @@ cp ../bin/chaskis $bindir/chaskis
 
 # Everything else
 (cd $chaskisroot &&
-mono ./Install/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./ $libdir ./Install/windows/Product.wxs Release)
+mono ./Install/ChaskisCliInstaller/bin/Release/net471/Chaskis.CliInstaller.exe ./ $libdir ./Install/windows/Product.wxs Release net471 netstandard2.0)
 
 # Control
 cp ./control $debiandir/control

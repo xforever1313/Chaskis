@@ -23,6 +23,10 @@ def BuildInstallWindows(target, source, env):
     The install output should be the first target.  The checksum file
     should be the second one.
     '''
+
+    if(any(platform.win32_ver()) == False):
+        raise Exception('Can only execute this on Windows')
+
     flags = env["MSBUILD_FLAGS"]
     status = subprocess.call(flags)
 

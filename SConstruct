@@ -1,5 +1,6 @@
 import glob
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -60,6 +61,8 @@ envBase['PLUGINS_DIR'] = os.path.join(envBase['SLN_DIR'], 'Plugins')
 envBase['UNIT_TESTS_DIR'] = os.path.join(envBase['SLN_DIR'], 'UnitTests')
 envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTests')
 envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
+envBase['LINUX_INSTALL_DIR'] = os.path.join(envBase['INSTALL_DIR'], 'linux')
+envBase['DEBIAN_INSTALL_DIR'] = os.path.join(envBase['LINUX_INSTALL_DIR'], 'debian')
 envBase['CLI_INSTALL_DIR'] = os.path.join(envBase['INSTALL_DIR'], 'ChaskisCliInstaller')
 envBase['PLUGIN_RUNTIME'] = DEFAULT_PLUGIN_RUNTIME
 envBase['EXE_RUNTIME'] = DEFAULT_EXE_RUNTIME
@@ -85,6 +88,22 @@ buildTargets= SConscript(
     os.path.join(BUILD_SCRIPTS_DIR, "Build.py"),
     exports='envBase'
 )
+
+if (any(platform.win32_ver())):
+    # On Windows, we can just use the install target.
+    installTarget = buildTargets['INSTALL']
+else:
+    # On Linux, we need to generate the .deb file, which requires
+    # Extra steps.
+    installTargets = SConscript(
+        os.path.join(BUILD_SCRIPTS_DIR, 'Deb.py'),
+        exports='envBase'
+    )
+
+    #.deb file depends on the release target to be built first.
+    Depends(installTargets['CLI_TARGET'], buildTargets['RELEASE'])
+
+    installTarget = installTargets['DEB_TARGET']
 
 unitTestTargets = SConscript(
     os.path.join(BUILD_SCRIPTS_DIR, 'UnitTest.py'),
@@ -112,12 +131,11 @@ Depends(regressionTestTargets['DIST'], buildTargets['DEBUG'])
 ###
 # Aliases
 ###
-
 Alias('nuget', nugetTarget)
 Alias('template', templateTarget)
 Alias('debug', buildTargets['DEBUG'])
 Alias('release', buildTargets['RELEASE'])
-Alias('install', buildTargets['INSTALL'])
+Alias('install', installTarget)
 Alias('unit_test', unitTestTargets)
 Alias('launch_fitnesse', launchFitnesseTarget)
 Alias('regression_test', regressionTestTarget)

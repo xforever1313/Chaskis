@@ -2,6 +2,7 @@ from SCons.Script import *
 from SCons.Environment import *
 from SCons.Builder import *
 
+import io
 import os
 import re
 import subprocess
