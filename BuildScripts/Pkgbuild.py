@@ -9,6 +9,8 @@ import os
 import re
 import subprocess
 
+import Common
+
 Import('envBase')
 
 pkgBuildEnv = envBase.Clone()
@@ -81,16 +83,7 @@ makepkgTarget = pkgBuildEnv.Command(
 # Checksum
 ###
 
-def Checksum(target, source, env):
-    with io.open(str(source[0]), 'rb') as inFile:
-        readFile = inFile.read()
-        h = hashlib.sha256(readFile)
-        hash = h.hexdigest()
-
-    with io.open(str(target[0]), 'w', encoding='utf-8') as outFile:
-        outFile.write(unicode(hash))
-
-pkgBuildEnv.Append(BUILDERS={"Checksum" : Builder(action=Checksum)})
+pkgBuildEnv.Append(BUILDERS={"Checksum" : Builder(action=Common.Checksum)})
 
 checksumTarget = pkgBuildEnv.Checksum(
     target=os.path.join(outputFolder, expectedPkgName + '.sha256'),
