@@ -38,6 +38,7 @@ release - Build release target (ANY CPU)
 install - Build install target.  If on Windows, this compiles with WIX.  If on Linux, this builds the .deb.
 run_test - Runs the unit tests.
 regression_test - Runs the regression tests
+pkgbuild - Generates the Arch Linux package.  Can only be ran on Arch Linux systems successfully.
 
 Arguments:
 codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.  WINDOWS ONLY!
@@ -63,6 +64,7 @@ envBase['REGRESSION_TEST_DIR'] = os.path.join(envBase['SLN_DIR'], 'RegressionTes
 envBase['INSTALL_DIR'] = os.path.join(envBase['SLN_DIR'], 'Install')
 envBase['LINUX_INSTALL_DIR'] = os.path.join(envBase['INSTALL_DIR'], 'linux')
 envBase['DEBIAN_INSTALL_DIR'] = os.path.join(envBase['LINUX_INSTALL_DIR'], 'debian')
+envBase['ARCH_INSTALL_DIR'] = os.path.join(envBase['LINUX_INSTALL_DIR'], 'arch')
 envBase['CLI_INSTALL_DIR'] = os.path.join(envBase['INSTALL_DIR'], 'ChaskisCliInstaller')
 envBase['PLUGIN_RUNTIME'] = DEFAULT_PLUGIN_RUNTIME
 envBase['EXE_RUNTIME'] = DEFAULT_EXE_RUNTIME
@@ -128,6 +130,11 @@ regressionTestTarget = regressionTestTargets['REGRESSION_TEST']
 Depends(regressionTestTargets['BOOTSTRAP'], nugetTarget)
 Depends(regressionTestTargets['DIST'], buildTargets['DEBUG'])
 
+pkgBuildTarget = SConscript(
+    os.path.join(BUILD_SCRIPTS_DIR, 'Pkgbuild.py'),
+    exports='envBase'
+)
+
 ###
 # Aliases
 ###
@@ -139,3 +146,4 @@ Alias('install', installTarget)
 Alias('unit_test', unitTestTargets)
 Alias('launch_fitnesse', launchFitnesseTarget)
 Alias('regression_test', regressionTestTarget)
+Alias('pkgbuild', pkgBuildTarget)
