@@ -10,6 +10,7 @@ packages/
 TestResults/
 .sconsign.dblite
 __pycache__/
+*.pyc
 
 # globs
 Makefile.in

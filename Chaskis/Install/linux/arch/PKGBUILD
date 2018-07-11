@@ -17,7 +17,7 @@ depends=('mono>=5.4.0') # https://docs.microsoft.com/en-us/dotnet/standard/net-s
 provides=('chaskis')
 conflicts=('chaskis')
 source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/linux/debian/chaskis.deb")
-sha256sums=('080E55BE7EB5EEF1EDFADFBF76A361ADA9EC29BC21ACD97A8BA290992C3CBDD8')
+sha256sums=('PUT THIS IN!')
 validpgpkeys=()
 
 package() {
