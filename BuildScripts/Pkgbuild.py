@@ -90,6 +90,15 @@ checksumTarget = pkgBuildEnv.Checksum(
     source=makepkgTarget
 )
 
+if (pkgBuildEnv['SAVE_CHECKSUM']):
+    checksumTarget = pkgBuildEnv.Command(
+        target = os.path.join(pkgBuildEnv['SAVED_CHECKSUM_DIR'], expectedPkgName + '.sha256'),
+        source = checksumTarget,
+        action = Copy('$TARGET', '$SOURCE')
+    )
+
+    pkgBuildEnv.NoClean(checksumTarget)
+
 ###
 # .SRCINFO
 ###

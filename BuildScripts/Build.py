@@ -130,14 +130,23 @@ buildTargets['RELEASE'] = releaseEnv.MsBuild(target=releaseTargets, source=sourc
 # scons gets angry, and will throw up a bunch of warnings.
 # Maybe there's a smarter way to do it, but I can't think of one D:
 installTarget = installEnv.BuildInstall(
-    target=os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi'),
-    source=buildTargets['RELEASE']
+    target = os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi'),
+    source = buildTargets['RELEASE']
 )
 
 buildTargets['INSTALL'] = installEnv.Checksum(
-    target=os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi.sha256'),
-    source=installTarget
+    target = os.path.join(envBase['INSTALL_DIR'], 'windows', 'bin', 'x64', 'Release', 'ChaskisInstaller.msi.sha256'),
+    source = installTarget
 )
+
+if (envBase['SAVE_CHECKSUM']):
+    buildTargets['INSTALL'] = envBase.Command(
+        target = os.path.join(envBase['SAVED_CHECKSUM_DIR'], 'ChaskisInstaller.msi.sha256'),
+        source = buildTargets['INSTALL'],
+        action = Copy('$TARGET', '$SOURCE')
+    )
+
+    envBase.NoClean(buildTargets['INSTALL'])
 
 addCleanTargets(buildTargets['DEBUG'], debugTargets)
 addCleanTargets(buildTargets['RELEASE'], releaseTargets)

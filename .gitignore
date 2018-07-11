@@ -9,6 +9,7 @@ TestResult.xml
 packages/
 TestResults/
 .sconsign.dblite
+__pycache__/
 
 # globs
 Makefile.in

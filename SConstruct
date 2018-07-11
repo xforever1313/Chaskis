@@ -23,6 +23,7 @@ DEFAULT_PORT=10013
 code_coverage = ARGUMENTS.get('codecoverage', '0') == '1'
 restore = ARGUMENTS.get('no_restore', '0') != '1'
 port = ARGUMENTS.get('port', DEFAULT_PORT)
+save_checksum = ARGUMENTS.get('save_checksum', '0') == '1'
 
 ###
 # Help
@@ -44,6 +45,7 @@ Arguments:
 codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.  WINDOWS ONLY!
 no_restore - Set to '1' to skip the restore step while building.
 port - The port to use while running regression tests.  Defaulted to ''' + str(DEFAULT_PORT) + '''
+save_checksum - Valid during install or pkgbuild targets.  Saves off the checksum of the generated file in the BuildScripts folder.
 '''
 )
 
@@ -53,6 +55,7 @@ port - The port to use while running regression tests.  Defaulted to ''' + str(D
 envBase = Environment()
 envBase['ENV']['PATH']=os.environ['PATH'] # Look in path for tools
 envBase['REPO_ROOT'] = os.path.join(WORKING_DIRECTORY)
+envBase['SAVED_CHECKSUM_DIR'] = os.path.join(envBase['REPO_ROOT'], 'SavedChecksums')
 envBase['SLN_DIR'] = os.path.join(envBase["REPO_ROOT"], 'Chaskis')
 envBase['SLN'] = os.path.join(envBase["SLN_DIR"], 'Chaskis.sln')
 envBase['PACKAGES'] = os.path.join(envBase["REPO_ROOT"], "packages")
@@ -71,6 +74,7 @@ envBase['EXE_RUNTIME'] = DEFAULT_EXE_RUNTIME
 envBase['CODE_COVERAGE'] = code_coverage
 envBase['RESTORE'] = restore
 envBase['PORT'] = port
+envBase['SAVE_CHECKSUM'] = save_checksum
 
 ###
 # SConscripts

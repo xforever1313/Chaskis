@@ -117,8 +117,8 @@ debTarget = debEnv.Deb(
 
 debTarget = debEnv.Command(
     target = os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'bin', 'chaskis.deb'),
-    source=debTarget,
-    action=Copy('$TARGET', '$SOURCE')
+    source = debTarget,
+    action = Copy('$TARGET', '$SOURCE')
 )
 
 ###
@@ -129,8 +129,17 @@ debEnv.Append(BUILDERS = {"Checksum" : Builder(action=Common.Checksum)})
 
 checksumTarget = debEnv.Checksum(
     target = os.path.join(debEnv['DEBIAN_INSTALL_DIR'], 'bin', 'chaskis.deb.sha256'),
-    source=debTarget
+    source = debTarget
 )
+
+if (debEnv['SAVE_CHECKSUM']):
+    checksumTarget = debEnv.Command(
+        target = os.path.join(debEnv['SAVED_CHECKSUM_DIR'], 'chaskis.deb.sha256'),
+        source = checksumTarget,
+        action = Copy('$TARGET', '$SOURCE')
+    )
+
+    debEnv.NoClean(checksumTarget)
 
 ###
 # Targets to return
