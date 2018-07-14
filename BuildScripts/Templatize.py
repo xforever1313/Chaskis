@@ -46,6 +46,16 @@ core_assembly_info_cs = os.path.join(
     'AssemblyInfo.cs'
 )
 
+debChecksumFile = os.path.join(
+    tempEnv['SAVED_CHECKSUM_DIR'],
+    'chaskis.deb.sha256'
+)
+
+msiChecksumFile = os.path.join(
+    tempEnv['SAVED_CHECKSUM_DIR'],
+    'ChaskisInstaller.msi.sha256'
+)
+
 def GetMainVersion():
     fileName = chaskis_cs
     with io.open(fileName, 'r', encoding="utf8") as inFile:
@@ -122,6 +132,22 @@ def GetDescription():
 
     match = re.search(pattern, contents)
     return match.group('description')
+
+def GetDebChecksum():
+    fileName = debChecksumFile
+    with io.open(fileName, 'r', encoding='utf-8') as inFile:
+        for line in inFile:
+            checksum = line.strip()
+            break
+        return checksum
+
+def GetMsiChecksum():
+    fileName = msiChecksumFile
+    with io.open(fileName, 'r', encoding='utf-8') as inFile:
+        for line in inFile:
+            checksum = line.strip()
+            break
+        return checksum
 
 ###
 # Template List:
@@ -250,7 +276,8 @@ def Templatize(target, source, env):
     Summary = "A generic framework written in C# for making IRC Bots."
     IconUrl = "https://files.shendrick.net/projects/chaskis/assets/icon.png"
     RunTime = tempEnv["EXE_RUNTIME"]
-
+    debCheckSum = GetDebChecksum()
+    msiCheckSum = GetMsiChecksum()
 
     for template in templates:
         with io.open(template.Source, 'r', encoding="utf8") as inFile:
@@ -320,6 +347,8 @@ def Templatize(target, source, env):
         contents = re.sub(r'{%Summary%}', Summary, contents)
         contents = re.sub(r'{%IconUrl%}', IconUrl, contents)
         contents = re.sub(r'{%RunTime%}', RunTime, contents)
+        contents = re.sub(r'{%DebCheckSum%}', debCheckSum, contents)
+        contents = re.sub(r'{%MsiCheckSum%}', msiCheckSum, contents)
 
         with io.open(template.Target, 'w', encoding="utf8") as outFile:
             try:
@@ -341,7 +370,9 @@ infoSources = [
     license_txt,
     regression_test_plugin_cs,
     default_handlers_cs,
-    core_assembly_info_cs
+    core_assembly_info_cs,
+    debChecksumFile,
+    msiChecksumFile
 ]
 
 targets = []
