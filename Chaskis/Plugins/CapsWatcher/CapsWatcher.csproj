@@ -18,10 +18,10 @@
 
   <ItemGroup>
     <!--
-    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280.  This happens if the SDK Resolver is not installed. Uncommenting this will allow one to compile, but
-    it will make a warning.
+    A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280.  This happens if the SDK Resolver is not installed.
+    Setting this condition allow one to compile, but it will make a warning.
     -->
-    <!--<PackageReference Include="NETStandard.Library" Version="2.0.3"/>-->
+    <PackageReference Condition="$(NoDotNet)!=''" Include="NETStandard.Library" Version="2.0.3"/>
   </ItemGroup>
 
 </Project>
