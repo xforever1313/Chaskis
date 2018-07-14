@@ -117,7 +117,7 @@ def CreateSrcInfo(target, source, env):
     status = process.wait()
 
     with io.open(str(target[0]), 'w', encoding='utf-8') as outFile:
-        outFile.write(output)
+        outFile.write(Common.ToUnicodeString(output))
 
     return status
 

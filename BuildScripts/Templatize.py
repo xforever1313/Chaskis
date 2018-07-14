@@ -388,4 +388,7 @@ templateTarget = tempEnv.Template(
     source = sources
 )
 
+for target in targets:
+    tempEnv.NoClean(target)
+
 Return('templateTarget')
