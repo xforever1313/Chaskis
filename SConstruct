@@ -24,6 +24,7 @@ code_coverage = ARGUMENTS.get('codecoverage', '0') == '1'
 restore = ARGUMENTS.get('no_restore', '0') != '1'
 port = ARGUMENTS.get('port', DEFAULT_PORT)
 save_checksum = ARGUMENTS.get('save_checksum', '0') == '1'
+no_dotnet = ARGUMENTS.get('no_dotnet', '0') == '1'
 
 ###
 # Help
@@ -46,6 +47,7 @@ codecoverage - Set to '1' if you want to run code coverage with ReportGenerator.
 no_restore - Set to '1' to skip the restore step while building.
 port - The port to use while running regression tests.  Defaulted to ''' + str(DEFAULT_PORT) + '''
 save_checksum - Valid during install or pkgbuild targets.  Saves off the checksum of the generated file in the BuildScripts folder.
+no_dotnet - Set to 1 if dotnet core's SDK resolover is not installed.  The projects will restore the needed package.
 '''
 )
 
@@ -75,6 +77,7 @@ envBase['CODE_COVERAGE'] = code_coverage
 envBase['RESTORE'] = restore
 envBase['PORT'] = port
 envBase['SAVE_CHECKSUM'] = save_checksum
+envBase['NO_DOTNET'] = no_dotnet
 
 ###
 # SConscripts

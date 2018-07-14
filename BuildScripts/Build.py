@@ -36,6 +36,9 @@ installEnv.Append(BUILDERS={"Checksum" : Builder(action=Common.Checksum)})
 
 buildOptions = ['msbuild', envBase['SLN'], '/restore:' + str(envBase['RESTORE'])]
 
+if (envBase['NO_DOTNET']):
+    buildOptions += ['/p:NoDotNet=true']
+
 debugBuildOptions = buildOptions + ['/p:Configuration=Debug']
 releaseBuildOptions = buildOptions + ['/p:Configuration=Release']
 installBuildOptions = buildOptions + ['/p:Configuration=Install', '/p:Platform=x64']
