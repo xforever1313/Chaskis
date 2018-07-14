@@ -204,6 +204,8 @@ namespace Chaskis.RegressionTests
                 throw new InvalidOperationException( "Connection already made!" );
             }
 
+            this.buffer.FlushQueue();
+
             this.connectedEvent = new AutoResetEvent( false );
 
             this.connection = new TcpListener(

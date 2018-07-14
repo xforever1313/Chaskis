@@ -79,6 +79,8 @@ namespace Chaskis.RegressionTests
         /// <exception cref="InvalidOperationException">If the process is already started.</exception>
         public bool StartProcess()
         {
+            this.buffer.FlushQueue();
+
             if( this.process != null )
             {
                 throw new InvalidOperationException( "Process is already started!" );
