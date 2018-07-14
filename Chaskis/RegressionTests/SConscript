@@ -94,6 +94,9 @@ def InstallerBuilder(target, source, env):
         testEnv['PLUGIN_RUNTIME']
     ]
 
+    if (any(platform.win32_ver()) == False):
+        args = ['mono'] + args
+
     status = subprocess.call(args)
     return status
 
