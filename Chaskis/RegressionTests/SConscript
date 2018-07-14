@@ -120,6 +120,7 @@ for root, dirs, files in os.walk(envBase['REPO_ROOT']):
         if (expectedExeBinPath in path) or (expectedPluginBinPath in path):
             fileList += glob.glob(os.path.join(path, "*.dll"))
             fileList += glob.glob(os.path.join(path, "*.exe"))
+            fileList += glob.glob(os.path.join(path, "*.exe.config"))
 
 testEnv.Append(BUILDERS={"Dist" : Builder(action = InstallerBuilder)})
 

@@ -172,6 +172,10 @@
             
             #if WINDOWS
 
+            <Component Guid="{4526E0DB-A5C2-479E-B223-FEF53FE31D42}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.exe.config" KeyPath="yes"/>
+            </Component>
+
             <Component Guid="{32719B3A-13CA-43E1-BCB7-8A080F71EA0D}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.TargetDir)System.Data.Common.dll" KeyPath="yes"/>
             </Component>
@@ -252,6 +256,10 @@
                     ErrorControl="ignore"
                 />
             <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
+            </Component>
+
+            <Component Guid="{7F86255C-FE41-4164-8CD0-A31EB10BB321}" Directory="BinFolder">
+                <File Source="$(var.ChaskisService.TargetDir)ChaskisService.exe.config" KeyPath="yes"/>
             </Component>
 
             <!-- Sample IRC Config -->
