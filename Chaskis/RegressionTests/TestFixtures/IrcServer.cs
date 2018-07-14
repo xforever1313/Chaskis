@@ -293,6 +293,7 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public void SetJoinResponse( bool enable )
         {
+            this.RespondToJoins = enable;
         }
 
         // -------- Ping / Pong --------
