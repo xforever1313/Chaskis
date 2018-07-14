@@ -1,3 +1,33 @@
 !contents -R2 -g -p -f -h
 
-| ''' Is hello world ''' |Hello World|
+ * Just make sure "chaskis" and the number of karma shows up. Everything else in between we don't care about.
+
+|'''Send Message'''|chaskis++|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*increased\s+.*1|
+
+ * Send to a different channel, the karma should be the same across all channels.
+|'''Send Message'''|++chaskis|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*increased\s+.*2|
+
+ * Subtract Karma.
+|'''Send Message'''|chaskis--|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*decreased\s+.*1|
+ 
+ * And Again, should be 0
+|'''Send Message'''|--chaskis|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*decreased\s+.*0|
+
+ * One more time to ensure we can go negative just fine
+|'''Send Message'''|--chaskis|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*decreased\s+.*-1|
+
+ * Decrease something new right out of the gate, should be -1
+|'''Send Message'''|--java|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|java\s+.*decreased\s+.*-1|
+
+ * Increase with a reason
+|'''Send Message'''|++chaskis for being cool|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+.*increased\s+.*0|
+
+ * Decrease with a reason
+|'''Send Message'''|java-- C# is a better language|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|java\s+.*decreased\s+.*-2|
+
+ * Query
+|'''Send Message'''|!karma chaskis|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|chaskis\s+has\s+0\s+karma|
+|'''Send Message'''|!karma java|'''To Channel'''|${channel2}|'''As'''|${testuser}|'''Wait Msg'''|java\s+has\s+-2\s+karma|
+
+ * Query something that doesn't exist, should report 0
+|'''Send Message'''|!karma something_not_here|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|something_not_here\s+has\s+0\s+karma|
