@@ -19,7 +19,7 @@ matrix:
 
 platform: Any CPU
 
-configuration: Release
+configuration: Install
 
 before_build:
     - git submodule update --init SethCS
@@ -55,3 +55,5 @@ notifications:
 
 artifacts:
     - path: '*.nupkg'
+    - path: '.\Chaskis\Install\*.msi'
+    - path: '.\Chaskis\Install\*.msi.sha256'
