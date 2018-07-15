@@ -1,12 +1,10 @@
-|'''Start Http Server'''|${httpport}|
-|'''Map File'''|${chaskis_project_root}Tests/Plugins/RssBot/TestFiles/Reddit_Init.xml|'''To Url'''|/feed.xml|
+| '''Start Http Server''' | ${httpport} |
+| '''Map File''' | ${chaskis_project_root}!-UnitTests-!/!-StandardTests-!/Plugins/RssBot/TestFiles/Reddit_Init.xml | '''To Url''' | /feed.xml |
 
 # Need to use Rss Environment
 
-|'''Setup'''|rssbotenvironment|'''Environment'''|${port}|
-
+| '''Setup''' | rssbotenvironment | '''Environment''' | ${port} |
 
 !include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
-
-|'''Send Message'''|!${botname} debug verbosity rssbot 3|'''To Channel'''|${botname}|'''As'''|${adminuser}|
-|'''Wait For Message'''|'rssbot'\s+log\s+verbosity\s+has\s+been\s+set\s+to\s+'3'|'''On Channel'''|${adminuser}|
+| '''Send Message''' | !${botname} debug verbosity rssbot 3 | '''To Channel''' | ${botname} | '''As''' | ${adminuser} |
+| '''Wait For Message''' | 'rssbot'\s+log\s+verbosity\s+has\s+been\s+set\s+to\s+'3' | '''On Channel''' | ${adminuser} |

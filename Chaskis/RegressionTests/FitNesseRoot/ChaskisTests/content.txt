@@ -4,7 +4,7 @@
 
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
-!path TestFixtures/bin/Debug/RegressionTests.dll
+!path TestFixtures/bin/Debug/net471/RegressionTests.dll
 !define port {10123}
 !define httpport {32101}
 !define adminuser {adminuser}
@@ -12,8 +12,8 @@
 !define botname {chaskisbot}
 !define channel1 {!-#chaskistest-!}
 !define channel2 {!-#chaskistest2-!}
-!define chaskis_project_root {../../../../}
-!define test_environment_path {../../../Environments/TestEnvironment}
+!define chaskis_project_root {../../../../../}
+!define test_environment_path {../../../../Environments/TestEnvironment}
 
 # Templatized variables
 !define fullname {Chaskis IRC Bot}
@@ -25,7 +25,7 @@
 !define license_url {https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt}
 !define wiki_url {https://github.com/xforever1313/Chaskis/wiki}
 !define issue_tracker_url {https://github.com/xforever1313/Chaskis/issues}
-!define copyright {Copyright © Seth Hendrick 2016-2017}
+!define copyright {Copyright Â© Seth Hendrick 2016-2017}
 !define icon_url {https://files.shendrick.net/projects/chaskis/assets/icon.png}
 !define default_plugin_name {chaskis}
 !define regression_test_plugin_name {chaskistests}
@@ -36,4 +36,3 @@
 
 !2 All Tests
 | >AllTests | ''All Chaskis Tests.'' |
-

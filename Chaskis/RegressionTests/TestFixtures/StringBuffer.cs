@@ -1,20 +1,14 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
-using SethCS.Basic;
 
 namespace Chaskis.RegressionTests
 {
@@ -56,6 +50,14 @@ namespace Chaskis.RegressionTests
         public bool WaitForString( string regex, int timeout )
         {
             return WaitForString( new Regex( regex ), timeout );
+        }
+
+        public void FlushQueue()
+        {
+            while( this.buffer.Count > 0 )
+            {
+                this.buffer.TryDequeue( out string result );
+            }
         }
 
         /// <summary>

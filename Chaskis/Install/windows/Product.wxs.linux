@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+    <!--
+        How to add Plugins
+        
+        1. Add Directory for Plugin and Sample Configuration (if needed).
+        2. Add new feature in the PluginFeature Feature Tag
+        3. Add the files needed in a Component Group (Don't forget to add GUIDs!).
+    -->
+
+    <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
+	<Product Id="89238B6E-E2A6-4090-9711-8C8B7C4E3DE5"
+             Name="Chaskis IRC Bot"
+             Language="1033"
+             Version="0.6.1"
+             Manufacturer="Seth Hendrick"
+             UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
+
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <!-- ================ UI Stuff ================ -->
+
+        <UIRef Id="WixUI_FeatureTree"/>
+        <UIRef Id="WixUI_ErrorProgressText" />
+
+        <!-- Found from https://www.firegiant.com/wix/tutorial/user-interface/ui-wizardry/ -->
+        <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+
+        <!--
+        <WixVariable Id="WixUIBannerBmp" Value="banner.png" />
+        <WixVariable Id="WixUIDialogBmp" Value="path\dialog.bmp" />
+        <WixVariable Id="WixUIExclamationIco" Value="path\exclamation.ico" />
+        <WixVariable Id="WixUIInfoIco" Value="path\information.ico" />
+        <WixVariable Id="WixUINewIco" Value="path\new.ico" />
+        <WixVariable Id="WixUIUpIco" Value="path\up.ico" />
+        -->
+        
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+        <!-- ================ Directories to create ================ -->
+
+        <!--
+        - C:\Program Files
+            - Chaskis
+                - bin
+                    - Chaskis.exe
+                    - Chaskis.Core.dll
+                    - ChaskisService.exe
+                - Plugins
+                    - PluginDir
+                        - Plugin.dll
+                - SampleConfig
+                    - SampleIrcConfig.xml
+                    - SamplePluginConfig.xml
+                    - Plugins
+                        - PluginName
+                            - SamplePluginConfig.xml
+        -->
+        
+        <Feature Id="Core" Title="Chaskis Core" Level="1" Absent="disallow" Description="The core components (Required)">
+			<ComponentGroupRef Id="CoreComponents" />
+		</Feature>
+
+        <Feature Id="PluginFeature" Title="Plugins" Level="1" Description="Which plugins to install.  Note, installing plugins does not activate them.  They just add them to the disk.">
+            <Feature Id="CapsWatcherFeature" Title="Caps Watcher" Level="1" Description="This plugin will yell at users who POST IN ALL CAPS!">
+                <ComponentGroupRef Id="CapsWatcherComponent" />
+            </Feature>
+            <Feature Id="ConsoleOutFeature" Title="Console Out" Level="1" Description="I only print stuff to Console Out on my server. I'm really only good for debugging.">
+                <ComponentGroupRef Id="ConsoleOutComponent" />
+            </Feature>
+            <Feature Id="CowSayBotFeature" Title="Cow Say Bot" Level="1" Description="I echo back messages in the form of a cow saying something.  Cowsay must be install in order for me to work properly.">
+                <ComponentGroupRef Id="CowSayBotComponent" />
+            </Feature>
+            <Feature Id="CrossChannelFeature" Title="Cross Channel" Level="1" Description="I allow a user to send a message to a different channel or broadcast to all channels.">
+                <ComponentGroupRef Id="CrossChannelComponent" />
+            </Feature>
+            <Feature Id="IrcLoggerFeature" Title="IRC Logger" Level="1" Description="I log the IRC chat to the server.">
+                <ComponentGroupRef Id="IrcLoggerComponent" />
+            </Feature>
+            <Feature Id="KarmaBotFeature" Title="Karma Bot" Level="1" Description="I keep track of the karma of users and/or things.  Users of the channel can increase/decrease karma once per message.">
+                <ComponentGroupRef Id="KarmaBotComponent" />
+            </Feature>
+            <Feature Id="MathBot" Title="Math Bot" Level="1" Description="I can calculate math problems for you!  Addition, subtraction, multiplication, division, modulo, or even boolean logic!">
+                <ComponentGroupRef Id="MathBotComponent" />
+            </Feature>
+            <Feature Id="MessageFixerBot" Title="Message Fixer Bot" Level="1" Description="I fix user's messages for them">
+                <ComponentGroupRef Id="MessageFixerBotComponent"/>
+            </Feature>
+            <Feature Id="QuoteBot" Title="Quote Bot" Level="1" Description="I save memorable quotes from the IRC channel for you!">
+                <ComponentGroupRef Id="QuoteBotComponent" />
+            </Feature>
+            <Feature Id="RssBot" Title="Rss Bot" Level="1" Description="I post updates from RSS and ATOM feeds when they get updated.">
+                <ComponentGroupRef Id="RssBotComponent" />
+            </Feature>
+            <Feature Id="ServerDiagnostics" Title="Server Diagnostics" Level="1" Description="Get information about the server I'm running on such as uptime, operating system, number of processors, and time.">
+                <ComponentGroupRef Id="ServerDiagnosticsComponent" />
+            </Feature>
+            <Feature Id="UrlBot" Title="Url Bot" Level="1" Description="When someone posts a URL, I will go to the URL and print its title information. I will ignore sites that do not have a title tag or are over 1Mb large.">
+                <ComponentGroupRef Id="UrlBotComponent" />
+            </Feature>
+            <Feature Id="UserListBot" Title="User List Bot" Level="1" Description="I print a list of users currently in the IRC channel.">
+                <ComponentGroupRef Id="UserListBotComponent" />
+            </Feature>
+            <Feature Id="WeatherBot" Title="Weather Bot" Level="1" Description="I print the weather of the given US zip code.">
+                <ComponentGroupRef Id="WeatherBotComponent" />
+            </Feature>
+            <Feature Id="WelcomeBot" Title="Welcome Bot" Level="1" Description="I welcome people to our channel when they join!">
+                <ComponentGroupRef Id="WelcomeBotComponent" />
+            </Feature>
+            <Feature Id="XmlBot" Title="Xml Bot" Level="1" Description="I am an XML engine that allows people to program my responses based on what is said in the channel.">
+                <ComponentGroupRef Id="XmlBotComponent" />
+            </Feature>
+        </Feature>
+	</Product>
+
+	<Fragment Id="Directories">
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFiles64Folder">
+                <Directory Id="INSTALLFOLDER" Name="Chaskis">
+                    <Directory Id="BinFolder" Name="bin"/>
+                    <Directory Id="PluginsFolder" Name="Plugins">
+                        <Directory Id="CapsWatcherFolder" Name="CapsWatcher"/>
+                        <Directory Id="ConsoleOutFolder" Name="ConsoleOut"/>
+                        <Directory Id="CowSayBotFolder" Name="CowSayBot"/>
+                        <Directory Id="CrossChannelFolder" Name="CrossChannel"/>
+                        <Directory Id="IrcLoggerFolder" Name="IrcLogger"/>
+                        <Directory Id="KarmaBotFolder" Name="KarmaBot" />
+                        <Directory Id="MathBotFolder" Name="MathBot"/>
+                        <Directory Id="MessageFixerBotFolder" Name="MessageFixerBot"/>
+                        <Directory Id="QuoteBotFolder" Name="QuoteBot"/>
+                        <Directory Id="RssBotFolder" Name="RssBot"/>
+                        <Directory Id="ServerDiagnosticsFolder" Name="ServerDiagnostics"/>
+                        <Directory Id="UrlBotFolder" Name="UrlBot"/>
+                        <Directory Id="UserListBotFolder" Name="UserListBot"/>
+                        <Directory Id="WeatherBotFolder" Name="WeatherBot"/>
+                        <Directory Id="WelcomeBotFolder" Name="WelcomeBot"/>
+                        <Directory Id="XmlBotFolder" Name="XmlBot"/>
+                    </Directory>
+                    <Directory Id="SampleConfig" Name="SampleConfig">
+                        <Directory Id="SampleConfigPlugins" Name="Plugins">
+                            <Directory Id="CapsWatcherConfigFolder" Name="CapsWatcher"/>
+                            <Directory Id="CowSayBotConfigFolder" Name="CowSayBot"/>
+                            <Directory Id="IrcLoggerConfigFolder" Name="IrcLogger"/>
+                            <Directory Id="KarmaBotConfigFolder" Name="KarmaBot"/>
+                            <Directory Id="QuoteBotConfigFolder" Name="QuoteBot"/>
+                            <Directory Id="RssBotConfigFolder" Name="RssBot"/>
+                            <Directory Id="ServerDiagnosticsConfigFolder" Name="ServerDiagnostics"/>
+                            <Directory Id="XmlBotConfigFolder" Name="XmlBot"/>
+                        </Directory>
+                    </Directory>
+                </Directory>
+            </Directory>
+        </Directory>
+	</Fragment>
+
+	<Fragment Id="Components">
+        <ComponentGroup Id="CoreComponents">          
+            <!-- Chaskis.exe -->
+            <Component Guid="{E7EAC2D8-C364-4E1C-B78E-B3AAC8BAF5A6}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetPath)" KeyPath="yes"/>
+            </Component>
+            
+            <!-- DLLS required for Chaskis.exe -->
+
+            <!--
+                Different files for different operating systems.  Sadly, wix doesn't
+                allow our own custom XML attributes in the <File> tag, so we need to create
+                our own crappy version of the C PreProcessor.  Ugh.
+            -->
+            
+
+
+            <Component Guid="{16CDCAD0-24FA-4DE6-8E6B-83B5176ADC8D}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Xml.XmlDocument.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{789D753F-3B80-4D71-96B3-0A370ED48A76}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Runtime.dll" KeyPath="yes"/>
+            </Component>
+
+
+            <!-- Chaskis.Core.dll -->
+            <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Core.TargetPath)" KeyPath="yes"/>
+            </Component>
+            
+            <!-- ChaskisService.exe -->
+            <Component Guid="{3FB8D929-4ADC-4B05-87AD-3C424AFE17D8}" Directory="BinFolder">
+                <File Source="$(var.ChaskisService.TargetPath)" KeyPath="yes"/>
+                <ServiceInstall
+                    Id="ServiceInstaller"
+                    Type="ownProcess"
+                    Name="Chaskis"
+                    Description="Generic IRC Bot Framework"
+                    Start="demand"
+                    Account="LocalSystem"
+                    ErrorControl="ignore"
+                />
+            <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
+            </Component>
+
+            <Component Guid="{7F86255C-FE41-4164-8CD0-A31EB10BB321}" Directory="BinFolder">
+                <File Source="$(var.ChaskisService.TargetDir)ChaskisService.exe.config" KeyPath="yes"/>
+            </Component>
+
+            <!-- Sample IRC Config -->
+            <Component Guid="{5CBBDB7E-F900-4E70-9DC5-CD48CC0FC747}" Directory="SampleConfig">
+                <File Source="..\..\Chaskis\Config\SampleIrcConfig.xml" KeyPath="yes"/>
+            </Component>
+
+            <!-- Sample Plugin Config -->
+            <Component Guid="{B47FFBE0-730D-4B28-B186-64069636A4D2}" Directory="SampleConfig">
+                <File Source="..\..\Chaskis\Config\SamplePluginConfig.xml" KeyPath="yes"/>
+            </Component>
+
+            <!-- License -->
+            <Component Guid="{69E918E2-C679-49F2-9EEA-06373A8EA977}" Directory="INSTALLFOLDER">
+                <File Source="..\..\..\LICENSE_1_0.txt" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="CapsWatcherComponent">
+            <!-- CapsWatcher.dll -->
+            <Component Guid="{9DB08E36-5FCA-4B56-B652-D21CF57CEE88}" Directory="CapsWatcherFolder">
+                <File Source="$(var.CapsWatcher.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- CapsWatcher Readme -->
+            <Component Guid="{D3917DEB-8EA0-444D-B5C6-5AF09E851BD9}" Directory="CapsWatcherFolder">
+                <File Id="CapsWatcherReadme" Source="..\..\Plugins\CapsWatcher\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- CapsWatcher Config -->
+            <Component Guid="{1BCFC65E-4BD9-4256-864C-19EFE3DA0F5D}" Directory="CapsWatcherConfigFolder">
+                <File Source="..\..\Plugins\CapsWatcher\Config\SampleCapsWatcherConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="ConsoleOutComponent">
+            <!-- ConsoleOut.dll -->
+            <Component Guid="{EF1C383E-8A99-4D7E-A371-63DF26BE8B76}" Directory="ConsoleOutFolder">
+                <File Source="$(var.ConsoleOut.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- ConsoleOut Readme -->
+            <Component Guid="{EF1FDAB8-8780-4666-A9C4-C3FDC8C116C5}" Directory="ConsoleOutFolder">
+                <File Id="ConsoleOutReadme" Source="..\..\Plugins\ConsoleOut\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="CowSayBotComponent">
+            <!-- CowSayBot.dll -->
+            <Component Guid="{1F6472D6-A665-41A0-9176-4085B48B6288}" Directory="CowSayBotFolder">
+                <File Source="$(var.CowSayBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- CowSayBot Readme -->
+            <Component Guid="{C620F9DD-13C9-4407-A9A2-42781988E493}" Directory="CowSayBotFolder">
+                <File Id="CowSayBotReadme" Source="..\..\Plugins\CowSayBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- CowSayBot Config -->
+            <Component Guid="{558D00A7-7E27-4799-8389-C4225806B2ED}" Directory="CowSayBotConfigFolder">
+                <File Source="..\..\Plugins\CowSayBot\Config\SampleCowSayBotConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="CrossChannelComponent">
+            <!-- CrossChannel.dll -->
+            <Component Guid="{5BA65FAA-518C-454A-9FBB-289F0EBC26CF}" Directory="CrossChannelFolder">
+                <File Source="$(var.CrossChannel.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- CrossChannel Readme -->
+            <Component Guid="{4C022F3B-E222-4893-B8D7-6CCA95050D62}" Directory="CrossChannelFolder">
+                <File Id="CrossChannelReadme" Source="..\..\Plugins\CrossChannel\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="IrcLoggerComponent">
+            <!-- IrcLogger.dll -->
+            <Component Guid="{2010F294-59C9-48C6-B8A5-33AEAED4CC6F}" Directory="IrcLoggerFolder">
+                <File Source="$(var.IrcLogger.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- IrcLogger Readme -->
+            <Component Guid="{542FC792-4897-4259-BE16-146ECE9E8F27}" Directory="IrcLoggerFolder">
+                <File Id="IrcLoggerReadme" Source="..\..\Plugins\IrcLogger\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- IrcLogger Config -->
+            <Component Guid="{FAC520DF-7CD5-4AF0-8A55-9875C53D5B2B}" Directory="IrcLoggerConfigFolder">
+                <File Source="..\..\Plugins\IrcLogger\Config\SampleIrcLoggerConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="KarmaBotComponent">
+            <!-- KarmaBot.dll -->
+            <Component Guid="{29541C2A-D479-4276-BC73-25AF6AD7034A}" Directory="KarmaBotFolder">
+                <File Source="$(var.KarmaBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- Karmabot Litedb.dll -->
+            <Component Guid="{C7CDB59A-9DAD-4965-A308-46F298F51A93}" Directory="KarmaBotFolder">
+                <File Id="KarmabotLiteDb" Source="$(var.KarmaBot.TargetDir)LiteDB.dll" KeyPath="yes"/>
+            </Component>
+
+            <!-- KarmaBot Readme -->
+            <Component Guid="{0528CE23-646D-4D1F-92DB-109C6DF8863D}" Directory="KarmaBotFolder">
+                <File Id="KarmaBotReadme" Source="..\..\Plugins\KarmaBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- KarmaBot Config -->
+            <Component Guid="{017E7A59-6344-455D-8BBB-64ADA01F99BA}" Directory="KarmaBotConfigFolder">
+                <File Source="..\..\Plugins\KarmaBot\Config\SampleKarmaBotConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="MathBotComponent">
+            <!-- MathBot.dll -->
+            <Component Guid="{DA759D91-87CF-4011-AB18-C5B62AB13BEA}" Directory="MathBotFolder">
+                <File Source="$(var.MathBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- MathBot Readme -->
+            <Component Guid="{6F87FA50-C745-406B-B745-4C165608991A}" Directory="MathBotFolder">
+                <File Id="MathBotReadme" Source="..\..\Plugins\MathBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="MessageFixerBotComponent">
+            <!-- MessageFixerBot.dll -->
+            <Component Guid="{CB87A9E2-E8CB-490E-8E94-B1BED7413EE7}" Directory="MessageFixerBotFolder">
+                <File Source="$(var.MessageFixerBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+        
+            <!-- MessageFixerBot Readme -->
+            <Component Guid="{9BB38ED7-2E54-49D1-B3AF-F6030BAAA1EA}" Directory="MessageFixerBotFolder">
+                <File Id="MessageFixerBotReadme" Source="..\..\Plugins\MessageFixerBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+            
+        <ComponentGroup Id="QuoteBotComponent">
+            <!-- QuoteBot.dll -->
+            <Component Guid="{A05D253B-D188-4E5A-B6E1-EAE6A53785BF}" Directory="QuoteBotFolder">
+                <File Source="$(var.QuoteBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- QuoteBot Litedb.dll -->
+            <Component Guid="{40FB197C-7E29-42FB-8A6A-31ABBF5EEA81}" Directory="QuoteBotFolder">
+                <File Id="QuoteBotLiteDb" Source="$(var.QuoteBot.TargetDir)LiteDB.dll" KeyPath="yes"/>
+            </Component>
+
+            <!-- QuoteBot Readme -->
+            <Component Guid="{364C34E4-DED5-4F42-8AAC-CD2B9C2B9569}" Directory="QuoteBotFolder">
+                <File Id="QuoteBotReadme" Source="..\..\Plugins\QuoteBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- QuoteBot Config -->
+            <Component Guid="{A3A5F197-BC25-424A-B456-A2A4C5552647}" Directory="QuoteBotConfigFolder">
+                <File Source="..\..\Plugins\QuoteBot\Config\SampleQuoteBotConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="RssBotComponent">
+            <!-- RssBot.dll -->
+            <Component Guid="{67A5A7B5-C1BB-446A-86A8-29D0037C9724}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- RssBot Readme -->
+            <Component Guid="{0E0C1785-4CED-427B-8476-F44BCC98A59A}" Directory="RssBotFolder">
+                <File Id="RssBotReadme" Source="..\..\Plugins\RssBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- RssBot Config -->
+            <Component Guid="{7747B1ED-DF28-485D-AF52-023F87F0601B}" Directory="RssBotConfigFolder">
+                <File Source="..\..\Plugins\RssBot\Config\SampleRssBotConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="ServerDiagnosticsComponent">
+            <!-- ServerDiagnostics.dll -->
+            <Component Guid="{FF7DFD80-D45C-4A7C-8795-D05AB8B35588}" Directory="ServerDiagnosticsFolder">
+                <File Source="$(var.ServerDiagnostics.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- ServerDiagnostics Readme -->
+            <Component Guid="{67938665-A685-4116-BA56-3969B2C2D05C}" Directory="ServerDiagnosticsFolder">
+                <File Id="ServerDiagnosticsReadme" Source="..\..\Plugins\ServerDiagnostics\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- ServerDiagnostics Config -->
+            <Component Guid="{73E5C3C2-4405-4690-B0EE-FEABC3626B1A}" Directory="ServerDiagnosticsConfigFolder">
+                <File Source="..\..\Plugins\ServerDiagnostics\Config\SampleServerDiagnosticsConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="UrlBotComponent">
+            <!-- UrlBot.dll -->
+            <Component Guid="{F7006A35-9716-4EF3-92B1-ABF93EAECFE2}" Directory="UrlBotFolder">
+                <File Source="$(var.UrlBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- HtmlAgilityPack.dll -->
+            <Component Guid="{42205399-1059-4F4B-BE56-0A1D01FC8EE7}" Directory="UrlBotFolder">
+                <File Source="$(var.UrlBot.TargetDir)HtmlAgilityPack.dll" KeyPath="yes"/>
+            </Component>
+
+            <!-- UrlBot Readme -->
+            <Component Guid="{0711C62F-7E11-4EDB-9558-5DCB7AB029F4}" Directory="UrlBotFolder">
+                <File Id="UrlBotReadme" Source="..\..\Plugins\UrlBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="UserListBotComponent">
+            <!-- UserListBot.dll -->
+            <Component Guid="{A566F1A6-2C8A-48E9-AEE8-2F22BC147258}" Directory="UserListBotFolder">
+                <File Source="$(var.UserListBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- UserListBot Readme -->
+            <Component Guid="{A5AF0979-9533-4F44-953F-C33F832EA393}" Directory="UserListBotFolder">
+                <File Id="UserListBotReadme" Source="..\..\Plugins\UserListBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="WeatherBotComponent">
+            <!-- WeatherBot.dll -->
+            <Component Guid="{AD800B57-3C30-4592-B1C8-B2BF43961A80}" Directory="WeatherBotFolder">
+                <File Source="$(var.WeatherBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- WeatherBot Readme -->
+            <Component Guid="{B8B7B2D9-22BC-46FA-B6D2-08AA6387E4FB}" Directory="WeatherBotFolder">
+                <File Id="WeatherBotReadme" Source="..\..\Plugins\WeatherBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="WelcomeBotComponent">
+            <!-- WelcomeBot.dll -->
+            <Component Guid="{751F25F6-951A-45AE-AC0C-194019BC8B02}" Directory="WelcomeBotFolder">
+                <File Source="$(var.WelcomeBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- WelcomeBot Readme -->
+            <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
+                <File Id="WelcomeBotReadme" Source="..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+
+        <ComponentGroup Id="XmlBotComponent">
+            <!-- XmlBot.dll -->
+            <Component Guid="{B2B16D39-C9D4-4892-A1BA-7D2137CB1F32}" Directory="XmlBotFolder">
+                <File Source="$(var.XmlBot.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- XmlBot Readme -->
+            <Component Guid="{B97515F7-EAD8-4707-9E30-9EA4315D002A}" Directory="XmlBotFolder">
+                <File Id="XmlBotReadme" Source="..\..\Plugins\XmlBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- XmlBot Config -->
+            <Component Guid="{FA3291D0-0C11-4E42-86CA-BFB9C831FC4D}" Directory="XmlBotConfigFolder">
+                <File Source="..\..\Plugins\XmlBot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+	</Fragment>
+</Wix>

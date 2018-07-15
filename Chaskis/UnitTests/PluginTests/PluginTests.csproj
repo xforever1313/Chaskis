@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net471</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    
+    <!-- Required for HttpClient to work in unit tests. https://github.com/aspnet/Hosting/issues/926 -->
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <Import Project="..\UnitTests.Common\UnitTests.Common.projitems" Label="Shared" />
+  
+  <ItemGroup>
+      <PackageReference Include="NUnit" Version="3.10.1" />
+      <PackageReference Include="NUnit.Console" Version="3.8.0" />
+      <PackageReference Include="NUnit.ConsoleRunner" Version="3.8.0" />
+      <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.5.0" />
+      <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.6.0" />
+      <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.5.0" />
+      <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
+      <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+      <PackageReference Include="Castle.Core" version="4.3.0" />
+      <PackageReference Include="Moq" version="4.8.3" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" version="4.3.0" />
+      <PackageReference Include="System.ValueTuple" version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ChaskisCore\Chaskis.Core.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\CapsWatcher\CapsWatcher.csproj">
+      <Name>CapsWatcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\ConsoleOut\ConsoleOut.csproj">
+      <Name>ConsoleOut</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\CowSayBot\CowSayBot.csproj">
+      <Name>CowSayBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\CrossChannel\CrossChannel.csproj">
+      <Name>CrossChannel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\IrcLogger\IrcLogger.csproj">
+      <Name>IrcLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\IsItDownBot\IsItDownBot.csproj">
+      <Name>IsItDownBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\KarmaBot\KarmaBot.csproj">
+      <Name>KarmaBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\MathBot\MathBot.csproj">
+      <Name>MathBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\MessageFixerBot\MessageFixerBot.csproj">
+      <Name>MessageFixerBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\NewVersionNotifier\NewVersionNotifier.csproj">
+      <Name>NewVersionNotifier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\QuoteBot\QuoteBot.csproj">
+      <Name>QuoteBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\RssBot\RssBot.csproj">
+      <Name>RssBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\ServerDiagnostics\ServerDiagnostics.csproj">
+      <Name>ServerDiagnostics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\UrlBot\UrlBot.csproj">
+      <Name>UrlBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\UserListBot\UserListBot.csproj">
+      <Name>UserListBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\WeatherBot\WeatherBot.csproj">
+      <Name>WeatherBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\WelcomeBot\WelcomeBot.csproj">
+      <Name>WelcomeBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\XmlBot\XmlBot.csproj">
+      <Name>XmlBot</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Numerics">
+      <SpecificVersion>false</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -46,7 +46,7 @@
             - Chaskis
                 - bin
                     - Chaskis.exe
-                    - ChaskisCore.dll
+                    - Chaskis.Core.dll
                     - ChaskisService.exe
                 - Plugins
                     - PluginDir
@@ -162,9 +162,72 @@
                 <File Source="$(var.Chaskis.TargetPath)" KeyPath="yes"/>
             </Component>
             
-            <!-- ChaskisCore.dll -->
+            <!-- DLLS required for Chaskis.exe -->
+
+            <!--
+                Different files for different operating systems.  Sadly, wix doesn't
+                allow our own custom XML attributes in the <File> tag, so we need to create
+                our own crappy version of the C PreProcessor.  Ugh.
+            -->
+            
+
+            <Component Guid="{4526E0DB-A5C2-479E-B223-FEF53FE31D42}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.exe.config" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{32719B3A-13CA-43E1-BCB7-8A080F71EA0D}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Data.Common.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{3C7E5AA9-A811-440C-87D7-F4F37AF59CDD}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Diagnostics.StackTrace.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{C0FAF303-3FD7-40F7-9409-EF8B6F792EE8}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Diagnostics.Tracing.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{B0868404-C0A1-4E81-86FD-0856DF0533C7}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Globalization.Extensions.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{016A6FF1-C474-4E0C-A7AF-787D334362E3}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.IO.Compression.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{0316A868-47CD-4990-8094-8DAE6BF6B855}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Net.Http.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{A85AA496-E051-4EC7-9412-9EE4FB122AAA}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Net.Sockets.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{A1E83B47-A21F-4E07-9C3D-1C220A69E8D4}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Runtime.Serialization.Primitives.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{74B4C743-9B12-45F4-8905-AAEAA1903227}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Security.Cryptography.Algorithms.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{D7862696-C969-4FB5-98E1-EFAB1F7B9078}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Security.SecureString.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{87C7A424-971E-4B9E-9418-7D5920EDFC12}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Threading.Overlapped.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{6F639082-8255-4C28-8EF4-CEF73B448113}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Xml.XPath.XDocument.dll" KeyPath="yes"/>
+            </Component>
+
+
+
+            <!-- Chaskis.Core.dll -->
             <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">
-                <File Source="$(var.ChaskisCore.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Core.TargetPath)" KeyPath="yes"/>
             </Component>
             
             <!-- ChaskisService.exe -->
@@ -180,6 +243,10 @@
                     ErrorControl="ignore"
                 />
             <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
+            </Component>
+
+            <Component Guid="{7F86255C-FE41-4164-8CD0-A31EB10BB321}" Directory="BinFolder">
+                <File Source="$(var.ChaskisService.TargetDir)ChaskisService.exe.config" KeyPath="yes"/>
             </Component>
 
             <!-- Sample IRC Config -->
@@ -446,4 +513,3 @@
         </ComponentGroup>
 	</Fragment>
 </Wix>
-

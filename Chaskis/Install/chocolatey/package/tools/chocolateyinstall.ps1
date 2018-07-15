@@ -1,4 +1,4 @@
-
+﻿
 $ErrorActionPreference = 'Stop';
 
 $packageName= $env:ChocolateyPackageName
@@ -25,4 +25,3 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
-

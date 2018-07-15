@@ -4,7 +4,7 @@
 
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {./runner/NetRunner.Executable.exe}
-!path TestFixtures/bin/Debug/RegressionTests.dll
+!path TestFixtures/bin/Debug/{%RunTime%}/RegressionTests.dll
 !define port {10123}
 !define httpport {32101}
 !define adminuser {adminuser}
@@ -12,7 +12,8 @@
 !define botname {chaskisbot}
 !define channel1 {!-#chaskistest-!}
 !define channel2 {!-#chaskistest2-!}
-!define chaskis_project_root {../../../../}
+!define chaskis_project_root {../../../../../}
+!define test_environment_path {../../../../Environments/TestEnvironment}
 
 # Templatized variables
 !define fullname {{%FullName%}}

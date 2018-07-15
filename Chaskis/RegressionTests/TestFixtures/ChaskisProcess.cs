@@ -41,10 +41,8 @@ namespace Chaskis.RegressionTests
             this.testConsoleOutLog = Logger.GetLogFromContext( "chaskis_status" );
 
             this.exeLocation = Path.Combine(
-                EnvironmentManager.ChaskisRoot,
-                "Chaskis",
+                EnvironmentManager.ChaskisDistDir,
                 "bin",
-                "Debug",
                 "Chaskis.exe"
             );
 
@@ -81,6 +79,8 @@ namespace Chaskis.RegressionTests
         /// <exception cref="InvalidOperationException">If the process is already started.</exception>
         public bool StartProcess()
         {
+            this.buffer.FlushQueue();
+
             if( this.process != null )
             {
                 throw new InvalidOperationException( "Process is already started!" );

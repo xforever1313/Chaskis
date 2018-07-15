@@ -8,6 +8,7 @@
 
 !2 Plugin Tests
 |>CapsWatcherTests       |''Tests the Caps Watcher Plugin''         |
+|>ConsoleOutTests        |''Tests the Console Out Plugin''          |
 |>CrossChannelTests      |''Tests the Cross Channel Plugin''        |
 |>KarmaBotTests          |''Tests the Karma Bot Plugin''            |
 |>MathBotTests           |''Tests the Math Bot Plugin''             |

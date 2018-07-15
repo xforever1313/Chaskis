@@ -35,7 +35,7 @@ namespace Chaskis.ChaskisCliInstaller
         /// The install root.  The Chaskis directory will be placed in here.
         /// </param>
         /// <param name="wixFile">The WIX Xml file we'll use to parse and figure out where to install things.</param>
-        public Installer( string slnDir, string rootDir, string wixFile, string target )
+        public Installer( string slnDir, string rootDir, string wixFile, string target, string exeRunTime, string pluginRuntime )
         {
             this.wixArgName = nameof( wixFile );
 
@@ -75,6 +75,9 @@ namespace Chaskis.ChaskisCliInstaller
                 throw new ArgumentException( "Target must be debug or release.  Got " + target, nameof( target ) );
             }
 
+            this.ExeRunTime = exeRunTime.ToLower();
+            this.PluginRunTime = pluginRuntime.ToLower();
+
             this.dirInfo = new Dictionary<string, DirectoryInfo>();
         }
 
@@ -99,6 +102,10 @@ namespace Chaskis.ChaskisCliInstaller
         /// Our solution directory.
         /// </summary>
         public string SlnDir { get; private set; }
+
+        public string ExeRunTime { get; private set; }
+
+        public string PluginRunTime { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -316,25 +323,37 @@ namespace Chaskis.ChaskisCliInstaller
                 {
                     if( pluginName == "Chaskis" )
                     {
-                        fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, "Chaskis.exe" );
+                        fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, this.ExeRunTime, "Chaskis.exe" );
                     }
-                    else if( pluginName == "ChaskisCore" )
+                    else if( pluginName == "Chaskis.Core" )
                     {
-                        fileName = Path.Combine( this.SlnDir, "ChaskisCore", "bin", this.Target, "ChaskisCore.dll" );
+                        fileName = Path.Combine( this.SlnDir, "ChaskisCore", "bin", this.Target, this.PluginRunTime, "Chaskis.Core.dll" );
                     }
                     else if( pluginName == "ChaskisService" )
                     {
-                        fileName = Path.Combine( this.SlnDir, "ChaskisService", "bin", this.Target, "ChaskisService.exe" );
+                        fileName = Path.Combine( this.SlnDir, "ChaskisService", "bin", this.Target, this.ExeRunTime, "ChaskisService.exe" );
                     }
                     else
                     {
-                        fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, pluginName + ".dll" );
+                        fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, this.PluginRunTime, pluginName + ".dll" );
                     }
                 }
                 else
                 {
                     string f = match.Groups["file"].Value;
-                    fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, f );
+
+                    if( pluginName == "Chaskis" )
+                    {
+                        fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, this.ExeRunTime, f );
+                    }
+                    else if( pluginName == "ChaskisService" )
+                    {
+                        fileName = Path.Combine( this.SlnDir, "ChaskisService", "bin", this.Target, this.ExeRunTime, f );
+                    }
+                    else
+                    {
+                        fileName = Path.Combine( this.SlnDir, "Plugins", pluginName, "bin", this.Target, this.PluginRunTime, f );
+                    }
                 }
             }
             else

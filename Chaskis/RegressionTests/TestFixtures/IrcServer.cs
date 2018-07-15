@@ -204,6 +204,8 @@ namespace Chaskis.RegressionTests
                 throw new InvalidOperationException( "Connection already made!" );
             }
 
+            this.buffer.FlushQueue();
+
             this.connectedEvent = new AutoResetEvent( false );
 
             this.connection = new TcpListener(
@@ -291,6 +293,7 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public void SetJoinResponse( bool enable )
         {
+            this.RespondToJoins = enable;
         }
 
         // -------- Ping / Pong --------
