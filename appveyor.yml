@@ -10,6 +10,8 @@ skip_tags: true
 # Environment Config #
 #--------------------#
 
+image: Visual Studio 2017
+
 matrix:
     fast_finish: true # Fail right away if something goes wrong.
 
