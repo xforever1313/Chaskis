@@ -25,6 +25,7 @@ configuration: Install
 
 before_build:
     - git submodule update --init SethCS
+    - msbuild /t:restore Chaskis/Chaskis.sln
 
 build:
     parallel: true
