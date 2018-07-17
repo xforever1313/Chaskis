@@ -48,11 +48,24 @@ for i in range(len(bootstrapTargetFiles)):
     if (".nupkg" in bootstrapTargetFiles[i]):
         continue
 
-    bootstrapTargets += testEnv.Command(
-        bootstrapTargetFiles[i],
-        nugetSources[i],
-        Copy("$TARGET", "$SOURCE")
-    )
+    if (bootstrapTargetFiles[i].endswith('.exe')):
+        theTarget = testEnv.Command(
+            bootstrapTargetFiles[i],
+            nugetSources[i],
+            [
+                Copy("$TARGET", "$SOURCE"),
+                Chmod("$TARGET", 0755)
+            ]
+        )
+
+    else:
+        theTarget = testEnv.Command(
+            bootstrapTargetFiles[i],
+            nugetSources[i],
+            Copy("$TARGET", "$SOURCE")
+        )
+
+    bootstrapTargets += theTarget
 
 ###
 # Install System under Test
