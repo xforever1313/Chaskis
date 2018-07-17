@@ -3,6 +3,7 @@ from SCons.Environment import *
 from SCons.Builder import *
 
 import glob
+import platform
 import os
 import subprocess
 
@@ -39,6 +40,9 @@ def RunUnitTest(target, source, env):
 
     for s in source:
         args += [str(s)]
+
+    if(any(platform.win32_ver()) == False):
+        args = ['mono'] + args
 
     return subprocess.call(args)
 
