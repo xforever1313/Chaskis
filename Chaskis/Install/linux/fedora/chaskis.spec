@@ -44,7 +44,6 @@ chmod -R g-w %{_builddir}/usr
 
 %install
 mv %{_builddir}/usr %{buildroot}/usr
-mv %{_builddir}/usr/bin/chaskis %{buildroot}%{_bindir}/chaskis
 
 %files
 %{libdir}/Chaskis/*
