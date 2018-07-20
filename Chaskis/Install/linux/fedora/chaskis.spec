@@ -27,7 +27,8 @@ Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-bas
 Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
 
 %prep
-wget %{source} -O %{_sourcedir}/chaskis.deb
+# OpenSuse apparently doesn't like Let's Encrypt for some reason, so hence the --no-check-certificate.
+wget %{source} -O %{_sourcedir}/chaskis.deb --no-check-certificate
 
 %check
 cd %{_sourcedir}

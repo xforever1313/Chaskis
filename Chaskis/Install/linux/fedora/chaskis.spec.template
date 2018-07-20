@@ -25,7 +25,8 @@ Url: {%ProjectUrl%}
 {%Description%}
 
 %prep
-wget %{source} -O %{_sourcedir}/chaskis.deb
+# OpenSuse apparently doesn't like Let's Encrypt for some reason, so hence the --no-check-certificate.
+wget %{source} -O %{_sourcedir}/chaskis.deb --no-check-certificate
 
 %check
 cd %{_sourcedir}
