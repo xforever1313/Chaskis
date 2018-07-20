@@ -2,8 +2,7 @@
 %define version 0.6.1
 %define unmangled_version 0.6.1
 %define release 1
-%define source https://github.com/xforever1313/Chaskis/archive/%{unmangled_version}.tar.gz
-%define untardir Chaskis-%{unmangled_version}
+%define source https://files.shendrick.net/projects/chaskis/releases/%{unmangled_version}/linux/debian/chaskis.deb
 %define libdir /usr/lib/
 
 Summary: A generic framework written in C# for making IRC Bots.
@@ -15,17 +14,12 @@ License: BSL
 Prefix: %{_prefix}
 BuildArch: noarch
 Requires: mono-core
-BuildRequires: nuget git mono-devel wget
+BuildRequires: tar wget
 Vendor: Seth Hendrick <seth@shendrick.net>
 Url: https://github.com/xforever1313/Chaskis/
 
-# RPM, you're not smart, you are not to be trusted with this.
-# Otherwise, it Requires Mono(System.Collections) to be provided, which mono-devel
-# does not provide apparently (lolwut).
-AutoReq: no
-
-# This probably isn't the correct way to do this... but Fedora doesn't make this easy
-# like Arch (or even Windows) does.
+# Since there is already a .deb file that we compile and upload to our server,
+# there is no need to recompile.  Just unpack the .deb and call it a day.
 
 %description
 Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
@@ -33,34 +27,24 @@ Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-bas
 Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
 
 %prep
-wget %{source} -O %{_sourcedir}/%{unmangled_version}.tar.gz
+wget %{source} -O %{_sourcedir}/chaskis.deb
 
 %check
-cd %{untardir}/Chaskis
-mono ./packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Tests/bin/Release/Tests.dll
+cd %{_sourcedir}
+echo '080E55BE7EB5EEF1EDFADFBF76A361ADA9EC29BC21ACD97A8BA290992C3CBDD8  chaskis.deb' | sha256sum --check
 
 %build
-mkdir %{_builddir}/%{untardir}
-tar -xvf %{_sourcedir}/%{unmangled_version}.tar.gz -C %{_builddir}/
-cd %{untardir}
-git clone https://github.com/xforever1313/sethcs SethCS
-
-# Fedora 26 has a woefully out-of-date version of nuget.
-# We need to grab it ourselves like a savage.
-wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-mono ./nuget.exe restore ./Chaskis/Chaskis.sln
-msbuild /p:Configuration=Release ./Chaskis/Chaskis.sln
+# unarchive the .deb file.  The .deb file
+# has files that need to be installed in the data.tar.xz file.
+# put that through tar, and everything will end up in a
+# usr directory.
+cd %{_sourcedir}
+ar p %{_sourcedir}/chaskis.deb data.tar.xz | tar xJ -C %{_builddir}
+chmod -R g-w %{_builddir}/usr
 
 %install
-cd %{untardir}
-mkdir -p %{buildroot}%{libdir}
-mono ./Chaskis/Install/ChaskisCliInstaller/bin/Release/ChaskisCliInstaller.exe ./Chaskis %{buildroot}/%{libdir} ./Chaskis/Install/windows/Product.wxs Release
-
-mkdir -p %{buildroot}%{libdir}systemd/user
-cp ./Chaskis/Install/linux/systemd/chaskis.service %{buildroot}%{libdir}/systemd/user/chaskis.service
-
-mkdir -p %{buildroot}%{_bindir}/
-cp ./Chaskis/Install/linux/bin/chaskis %{buildroot}%{_bindir}/chaskis
+mv %{_builddir}/usr %{buildroot}/usr
+mv %{_builddir}/usr/bin/chaskis %{buildroot}%{_bindir}/chaskis
 
 %files
 %{libdir}/Chaskis/*
