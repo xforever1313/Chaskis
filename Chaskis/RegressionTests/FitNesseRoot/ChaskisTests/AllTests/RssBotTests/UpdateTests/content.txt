@@ -5,7 +5,7 @@
 
  * Change our URL to have a feed with new items in it.  Should get a response.
 
-|'''Map File'''|${chaskis_project_root}!-UnitTests-!/!-StandardTests-!/Plugins/RssBot/TestFiles/Reddit_Update.xml|'''To Url'''|/feed.xml|
+|'''Map File'''|${update_xml}|'''To Url'''|/feed.xml|
 
 |'''Send Message'''    |!debug rssbot updatefeed http://127.0.0.1:${httpport}/feed.xml                                                   |'''to channel'''|${channel1}|'''as'''|${adminuser}|
 |'''Wait for Message'''|.+Welcome\s+to\s+/r/csharp!\s+Read\s+this\s+post\s+before\s+submitting\..+                                       |'''On Channel'''|${channel1}                      |
@@ -14,7 +14,7 @@
 
  * Change our URL to have a feed with less items in it.  Should get no response.
 
-|'''Map File'''|${chaskis_project_root}!-UnitTests-!/!-StandardTests-!/Plugins/RssBot/TestFiles/Reddit_Init_Less_Items.xml|'''To Url'''|/feed.xml|
+|'''Map File'''|${update_less_xml}|'''To Url'''|/feed.xml|
 
 |'''Send Message'''   |!debug rssbot updatefeed http://127.0.0.1:${httpport}/feed.xml|'''to channel'''               |${channel1}|'''as'''|${adminuser}|
 |'''Wait For String'''|No\s+updates\s+for\s+RSS\s+feed                               |'''From Chaskis With Timeout'''|10000                            |

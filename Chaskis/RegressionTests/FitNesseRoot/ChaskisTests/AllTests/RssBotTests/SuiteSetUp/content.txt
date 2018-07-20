@@ -1,5 +1,5 @@
 | '''Start Http Server''' | ${httpport} |
-| '''Map File''' | ${chaskis_project_root}!-UnitTests-!/!-StandardTests-!/Plugins/RssBot/TestFiles/Reddit_Init.xml | '''To Url''' | /feed.xml |
+| '''Map File''' | ${init_xml} | '''To Url''' | /feed.xml |
 
 # Need to use Rss Environment
 

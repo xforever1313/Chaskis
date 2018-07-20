@@ -427,6 +427,35 @@
                 <File Source="$(var.RssBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
+            <!-- Required DLLs for RSS Bot -->
+            <Component Guid="{4FA59546-1F17-4D39-B9F1-2AE996D6C72F}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.IO.FileSystem.Primitives.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{7E747007-3492-4983-BECE-B32375A3E543}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.ServiceModel.Syndication.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{EA3CF2D4-0B59-4CDF-97C2-274829D582C4}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.Text.RegularExpressions.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{07D53792-D961-4922-B685-8EA728BB4BD1}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.Threading.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{5B2F4E3E-8810-4BCC-9C96-DF1C8AC977DF}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.Threading.Tasks.Extensions.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{676CA619-DC26-4B61-9B9C-04A84708C7D3}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.Xml.ReaderWriter.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{FC3915F6-D3C4-4D44-B055-1CA1109B3BF6}" Directory="RssBotFolder">
+                <File Source="$(var.RssBot.TargetDir)System.Xml.XmlDocument.dll" KeyPath="yes"/>
+            </Component>
+            
             <!-- RssBot Readme -->
             <Component Guid="{0E0C1785-4CED-427B-8476-F44BCC98A59A}" Directory="RssBotFolder">
                 <File Id="RssBotReadme" Source="..\..\Plugins\RssBot\Readme.md" KeyPath="yes"/>

@@ -13,6 +13,7 @@
 !define channel1 {!-#chaskistest-!}
 !define channel2 {!-#chaskistest2-!}
 !define chaskis_project_root {../../../../../}
+!define unit_test_dir {../../../../../UnitTests}
 !define test_environment_path {../../../../Environments/TestEnvironment}
 
 # Templatized variables
