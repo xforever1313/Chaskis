@@ -11,7 +11,7 @@ Build Status
 Packages
 --------------
 
-[![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/) [![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/) [![AUR](https://img.shields.io/aur/version/chaskis.svg)](https://aur.archlinux.org/packages/chaskis/)
+[![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/) [![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/) [![AUR](https://img.shields.io/aur/version/chaskis.svg)](https://aur.archlinux.org/packages/chaskis/) [![Copr](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/package/chaskis/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/package/chaskis/)
 
 About
 --------
