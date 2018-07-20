@@ -54,7 +54,7 @@ for i in range(len(bootstrapTargetFiles)):
             nugetSources[i],
             [
                 Copy("$TARGET", "$SOURCE"),
-                Chmod("$TARGET", 0755)
+                Chmod("$TARGET", 0o755)
             ]
         )
 
