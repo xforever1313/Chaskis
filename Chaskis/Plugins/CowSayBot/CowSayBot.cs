@@ -221,7 +221,6 @@ namespace Chaskis.Plugins.CowSayBot
                 this.cowSayInfo.Arguments = "-f " + cowFile;
             }
 
-            int exitCode = -1;
             using( Process cowsayProc = Process.Start( cowSayInfo ) )
             {
                 using( StreamReader stdout = cowsayProc.StandardOutput )
@@ -240,10 +239,8 @@ namespace Chaskis.Plugins.CowSayBot
                 {
                     cowsayProc.Kill();
                 }
-                exitCode = cowsayProc.ExitCode;
+                return cowsayProc.ExitCode;
             }
-
-            return exitCode;
         }
 
         /// <summary>

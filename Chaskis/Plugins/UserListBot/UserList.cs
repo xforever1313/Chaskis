@@ -61,7 +61,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Read-only dictionary of users per channel.
         /// </summary>
-        public IReadOnlyDictionary<string, string> UsersPerChannel;
+        public IReadOnlyDictionary<string, string> UsersPerChannel { get; private set; }
 
         // -------- Functions --------
 

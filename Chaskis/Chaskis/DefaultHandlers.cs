@@ -143,11 +143,15 @@ namespace Chaskis
         {
             this.plugins = plugins;
 
-            this.pluginListResponse = "List of plugins I am running: ";
+            StringBuilder builder = new StringBuilder();
+            builder.Append( "List of plugins I am running: " );
             foreach( string pluginName in this.plugins.Keys )
             {
-                this.pluginListResponse += pluginName.ToLower() + " ";
+                builder.Append( pluginName.ToLower() );
+                builder.Append( " " );
             }
+
+            this.pluginListResponse = builder.ToString();
         }
 
         public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
