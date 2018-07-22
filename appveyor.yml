@@ -58,5 +58,5 @@ notifications:
 
 artifacts:
     - path: '*.nupkg'
-    - path: '.\Chaskis\Install\windows\bin\Release\*.msi'
-    - path: '.\Chaskis\Install\windows\bin\Release\*.msi.sha256'
+    - path: '.\Chaskis\Install\windows\bin\x64\Release\*.msi'
+    - path: '.\Chaskis\Install\windows\bin\x64\Release\*.msi.sha256'
