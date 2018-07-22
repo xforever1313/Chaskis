@@ -30,11 +30,6 @@ namespace Chaskis.Plugins.CowSayBot
         // ---- Commands ----
 
         /// <summary>
-        /// Command the user uses to use the default cow.
-        /// </summary>
-        private const string defaultCommand = "cowsay";
-
-        /// <summary>
         /// The handlers for this plugin.
         /// </summary>
         private readonly List<IIrcHandler> handlers;

@@ -71,7 +71,7 @@ namespace Chaskis
                 {
                     this.PrintVersion = true;
                 }
-                else if( arg == "--bootstrap" )
+                else if( arg == bootStrapArg )
                 {
                     this.BootStrap = true;
                 }
