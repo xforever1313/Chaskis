@@ -1,6 +1,4 @@
-# Default Environment will work just fine for this suite.
-
-!include <ChaskisTests.BuildingBlocks.DefaultEnvironmentCreator
+|'''Setup'''|!-UrlBotEnvironment-!|'''Environment'''|${port}|
 
 !include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
 
