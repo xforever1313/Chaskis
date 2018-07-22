@@ -41,9 +41,9 @@ before_package:
 
 test:
     assemblies:
-        ChaskisTests.dll
-        CoreTests.dll
-        PluginTests.dll
+        - ChaskisTests.dll
+        - CoreTests.dll
+        - PluginTests.dll
 
 notifications:
     - provider: Email
@@ -58,5 +58,5 @@ notifications:
 
 artifacts:
     - path: '*.nupkg'
-    - path: '.\Chaskis\Install\*.msi'
-    - path: '.\Chaskis\Install\*.msi.sha256'
+    - path: '.\Chaskis\Install\windows\bin\Release\*.msi'
+    - path: '.\Chaskis\Install\windows\bin\Release\*.msi.sha256'

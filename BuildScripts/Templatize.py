@@ -225,8 +225,8 @@ readme = Template(
 templates += [readme]
 
 core_nuspec = Template(
-    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'ChaskisCore.nuspec.template'),
-    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'ChaskisCore.nuspec'),
+    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'Chaskis.Core.nuspec.template'),
+    os.path.join(tempEnv['CHASKIS_CORE_DIR'], 'Chaskis.Core.nuspec'),
     []
 )
 templates += [core_nuspec]
