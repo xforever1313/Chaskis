@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.CapsWatcher
@@ -50,12 +51,13 @@ namespace Chaskis.Plugins.CapsWatcher
         public void Validate()
         {
             bool success = true;
-            string errorMessage = "Error validating Caps Watcher Config:" + Environment.NewLine;
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.AppendLine( "Error validating Caps Watcher Config:" );
 
             if( this.Messages.Count == 0 )
             {
                 success = false;
-                errorMessage += "\tMessage list can not be empty." + Environment.NewLine;
+                errorMessage.AppendLine( "\tMessage list can not be empty." );
             }
 
             foreach( string msg in this.Messages )
@@ -63,7 +65,7 @@ namespace Chaskis.Plugins.CapsWatcher
                 if( string.IsNullOrEmpty( msg ) )
                 {
                     success = false;
-                    errorMessage += "\tFound a null or empty message in the message list." + Environment.NewLine;
+                    errorMessage.AppendLine( "\tFound a null or empty message in the message list." );
                 }
             }
 
@@ -72,13 +74,13 @@ namespace Chaskis.Plugins.CapsWatcher
                 if( string.IsNullOrEmpty( ignore ) )
                 {
                     success = false;
-                    errorMessage += "\tFound a null or empty ignore in the ignore list." + Environment.NewLine;
+                    errorMessage.AppendLine( "\tFound a null or empty ignore in the ignore list." );
                 }
             }
 
             if( success == false )
             {
-                throw new ValidationException( errorMessage );
+                throw new ValidationException( errorMessage.ToString() );
             }
         }
     }

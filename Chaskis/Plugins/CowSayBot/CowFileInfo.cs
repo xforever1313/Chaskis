@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.CowSayBot
@@ -41,12 +42,13 @@ namespace Chaskis.Plugins.CowSayBot
         /// <exception cref="ValidationException">Thrown when this does not validate.</exception>
         public void Validate()
         {
-            string errors = "Can not validate this CowFileInfo object:" + Environment.NewLine;
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.AppendLine( "Can not validate this CowFileInfo object:" );
             bool success = true;
 
             if( CommandList.Count == 0 )
             {
-                errors += nameof( this.CommandList ) + " can not be empty." + Environment.NewLine;
+                errorMessage.AppendLine( nameof( this.CommandList ) + " can not be empty." );
                 success = false;
             }
             else
@@ -55,12 +57,12 @@ namespace Chaskis.Plugins.CowSayBot
                 {
                     if( string.IsNullOrEmpty( command.Key ) || string.IsNullOrWhiteSpace( command.Key ) )
                     {
-                        errors += "Can not have empty or null command in " + nameof( this.CommandList ) + Environment.NewLine;
+                        errorMessage.AppendLine( "Can not have empty or null command in " + nameof( this.CommandList ) );
                         success = false;
                     }
                     if( string.IsNullOrEmpty( command.Value ) || string.IsNullOrWhiteSpace( command.Value ) )
                     {
-                        errors += "Can not have empty or null cowfile in " + nameof( this.CommandList ) + Environment.NewLine;
+                        errorMessage.AppendLine( "Can not have empty or null cowfile in " + nameof( this.CommandList ) );
                         success = false;
                     }
                 }
@@ -68,7 +70,7 @@ namespace Chaskis.Plugins.CowSayBot
 
             if( success == false )
             {
-                throw new ValidationException( errors );
+                throw new ValidationException( errorMessage.ToString() );
             }
         }
 
