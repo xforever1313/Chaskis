@@ -88,6 +88,9 @@
             <Feature Id="MessageFixerBot" Title="Message Fixer Bot" Level="1" Description="I fix user's messages for them">
                 <ComponentGroupRef Id="MessageFixerBotComponent"/>
             </Feature>
+            <Feature Id="NewVersionNotifier" Title="New Version Notifier" Level="1" Description="I notify channels when I have been upgraded">
+                <ComponentGroupRef Id="NewVersionNotifierComponent"/>
+            </Feature>
             <Feature Id="QuoteBot" Title="Quote Bot" Level="1" Description="I save memorable quotes from the IRC channel for you!">
                 <ComponentGroupRef Id="QuoteBotComponent" />
             </Feature>
@@ -129,6 +132,7 @@
                         <Directory Id="KarmaBotFolder" Name="KarmaBot" />
                         <Directory Id="MathBotFolder" Name="MathBot"/>
                         <Directory Id="MessageFixerBotFolder" Name="MessageFixerBot"/>
+                        <Directory Id="NewVersionNotifierFolder" Name="NewVersionNotifier"/>
                         <Directory Id="QuoteBotFolder" Name="QuoteBot"/>
                         <Directory Id="RssBotFolder" Name="RssBot"/>
                         <Directory Id="ServerDiagnosticsFolder" Name="ServerDiagnostics"/>
@@ -385,7 +389,19 @@
                 <File Id="MessageFixerBotReadme" Source="..\..\Plugins\MessageFixerBot\Readme.md" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
-            
+
+        <ComponentGroup Id="NewVersionNotifierComponent">
+            <!-- NewVersionNotifier.dll -->
+            <Component Guid="{A166D28D-B3ED-452B-9524-C9622BF4A1F3}" Directory="NewVersionNotifierFolder">
+                <File Source="$(var.NewVersionNotifier.TargetPath)" KeyPath="yes"/>
+            </Component>
+
+            <!-- NewVersionNotifier Readme-->
+            <Component Guid="{76F7D0B5-C91A-4135-8379-267FDA9FA910}" Directory="NewVersionNotifierFolder">
+                <File Id="NewVersionNotifierReadme" Source="..\..\Plugins\NewVersionNotifier\Readme.md" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+        
         <ComponentGroup Id="QuoteBotComponent">
             <!-- QuoteBot.dll -->
             <Component Guid="{A05D253B-D188-4E5A-B6E1-EAE6A53785BF}" Directory="QuoteBotFolder">
