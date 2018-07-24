@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Quote bot configuration:
+
+addcommand - The command to add a quote.  
+             Must be a regex that contains groups "user" and "quote".
+             
+deletecommand - The command to delete a quote from the database based on its ID. 
+                Must be a regex that contains an "id" group.
+                
+randomcommand - The command to tell the bot to post a random quote from the database.
+
+getcommand - The command used to get a quote with a specific ID from the database, and post it to the channel.
+             Must be a regex that contains an "id" group.
+             
+Note: Notice for all the commands, there is a '^' in front.  This is important, otherwise a user can do
+      "lololol !quote get 12" and the bot will parse that.  However, if you want that behavior, remove the '^'
+      from the front.
+-->
+<quotebotconfig>
+    <addcommand><![CDATA[^!quote\s+add\s+\<(?<user>\S+)\>\s+(?<quote>.+)]]></addcommand>
+    <deletecommand><![CDATA[^!quote\s+delete\s+(?<id>-?\d+)]]></deletecommand>
+    <randomcommand><![CDATA[^!quote\s+random]]></randomcommand>
+    <getcommand><![CDATA[^!quote\s+(get)?\s*(?<id>-?\d+)]]></getcommand>
+</quotebotconfig>

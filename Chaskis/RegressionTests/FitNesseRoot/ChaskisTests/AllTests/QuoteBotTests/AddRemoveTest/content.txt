@@ -1,0 +1,21 @@
+!define added_quote_1 {Hello World!}
+
+ * To start, ensure if we query a non-existant quote, an error message occurs
+
+|'''Send Message'''|!quote random|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|${random_empty_error}                                                       |
+|'''Send Message'''|!quote get 0 |'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|Can\s+not\s+get\s+quote\s+with\s+id\s+0\.\s+Are\s+you\s+sure\s+it\s+exists\?|
+
+ * Next, ensure if we query a negative number, we get an error message
+|'''Send Message'''|!quote get -1|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|${get_error}|
+
+ * Add a quote, ensure we can't delete it if we are normal user.
+|'''Send Message'''|!quote add <${quoted_user}> ${added_quote_1}|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|${add_success}       |
+|'''Send Message'''|!quote delete 1                             |'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|${remove_admin_error}|
+
+ * Attempt to get the added quote, both directly and randomly.
+|'''Send Message'''|!quote get 1 |'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|'${added_quote_1}'\s+-${quoted_user}\.\s+Added\s+by\s+${testuser}\s+on.+|
+|'''Send Message'''|!quote random|'''To Channel'''|${channel1}|'''As'''|${testuser}|'''Wait Msg'''|'${added_quote_1}'\s+-${quoted_user}\.\s+Added\s+by\s+${testuser}\s+on.+|
+
+ * Delete the quote as an admin user
+|'''Send Message'''|!quote delete 1|'''To Channel'''|${channel1}|'''As'''|${adminuser}|'''Wait Msg'''|Quote\s+1\s+deleted\s+successfully                                          |
+|'''Send Message'''|!quote get 1   |'''To Channel'''|${channel1}|'''As'''|${testuser} |'''Wait Msg'''|Can\s+not\s+get\s+quote\s+with\s+id\s+1\.\s+Are\s+you\s+sure\s+it\s+exists\?|

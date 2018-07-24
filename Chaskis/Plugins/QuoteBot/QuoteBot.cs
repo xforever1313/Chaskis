@@ -354,7 +354,7 @@ namespace Chaskis.Plugins.QuoteBot
                 catch( Exception err )
                 {
                     writer.SendMessage(
-                        "Error getting quote: " + err.Message.NormalizeWhiteSpace(),
+                        "Error when getting quote: " + err.Message.NormalizeWhiteSpace(),
                         response.Channel
                     );
                 }
@@ -362,7 +362,7 @@ namespace Chaskis.Plugins.QuoteBot
             else
             {
                 writer.SendMessage(
-                    "Error getting quote: " + error.NormalizeWhiteSpace(),
+                    "Error when getting quote: " + error.NormalizeWhiteSpace(),
                     response.Channel
                 );
             }

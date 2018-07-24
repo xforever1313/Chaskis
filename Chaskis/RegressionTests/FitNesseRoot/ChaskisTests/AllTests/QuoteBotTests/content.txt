@@ -1,0 +1,13 @@
+!contents -R2 -g -p -f -h
+
+!define add_error {Error\s+when\s+adding\s+quite:\s+}
+!define get_error {Error\s+when\s+getting\s+quote:\s+}
+!define remove_error {Error\s+when\s+deleting\s+quote[:.]\s+}
+!define remove_admin_error {.+You\s+can\s+not\s+delete\s+quotes}
+!define random_error {Error\s+getting\s+random\s+quote:\s+}
+!define random_empty_error {Can\s+not\s+get\s+random\s+quote\.\s+Do\s+we\s+even\s+have\s+any\?}
+
+!define quoted_user {user}
+!define add_success (Quote\s+said\s+by\s+${quoted_user}\s+added\s+by\s+${testuser}\.\s+Its\s+ID\s+is\s+\d+)
+
+|>AddRemoveTest|''Ensures we can add, remove, query quotes''|
