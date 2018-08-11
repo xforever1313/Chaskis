@@ -5,5 +5,8 @@
 !define update_xml (${rss_test_files}/Reddit_Update.xml)
 !define update_less_xml (${rss_test_files}/Reddit_Init_Less_Items.xml)
 
-| >UpdateTests | '''Does the RSS Bot send messages when required?''' |
-| >AbortTests| '''Do we abort if we take to long to do a GET Request?'''|
+!define plugin_name {rssbot}
+
+|>UpdateTests   |'''Does the RSS Bot send messages when required?'''      |
+|>AbortTests    |'''Do we abort if we take to long to do a GET Request?'''|
+|>PluginLoadTest|''Ensures we can load the plugin successfully''          |

@@ -5,6 +5,7 @@ These are common actions for most tests.
 !contents -R2 -g -p -f -h
 
 |'''>DefaultEnvironmentCreator'''|Creates the Default Environment with the Default port|
+|'''>PluginLoadTest'''|Ensures the given plugin loads correctly|
 |'''>StartServerAndChaskis'''|Starts the Server and Chaskis|
 |'''>StopServerAndChaskis'''|Stops the Server and Chaskis|
 |'''>TeardownEnvironment'''|Tears down the Test Environment|

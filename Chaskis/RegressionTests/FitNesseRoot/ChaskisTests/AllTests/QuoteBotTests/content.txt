@@ -10,4 +10,7 @@
 !define quoted_user {user}
 !define add_success (Quote\s+said\s+by\s+${quoted_user}\s+added\s+by\s+${testuser}\.\s+Its\s+ID\s+is\s+\d+)
 
-|>AddRemoveTest|''Ensures we can add, remove, query quotes''|
+!define plugin_name {quotebot}
+
+|>AddRemoveTest |''Ensures we can add, remove, query quotes''   |
+|>PluginLoadTest|''Ensures we can load the plugin successfully''|

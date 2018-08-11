@@ -1,0 +1,14 @@
+!***> Setup
+
+| '''Setup''' | !-NewVersionNotifierDifferentVersionEnvironment-! | '''Environment''' | ${port} |
+
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitForConnection
+*!
+
+!include <ChaskisTests.BuildingBlocks.PluginLoadTest
+
+!***> Teardown
+
+!include <ChaskisTests.BuildingBlocks.StopServerAndChaskis
+!include <ChaskisTests.BuildingBlocks.TeardownEnvironment
+*!

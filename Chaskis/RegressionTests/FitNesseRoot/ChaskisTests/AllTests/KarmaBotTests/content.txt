@@ -1,3 +1,6 @@
 !contents -R2 -g -p -f -h
 
+!define plugin_name {karmabot}
+
 |>IncreaseDecreaseTests|''Ensures Karma Increases and Decreases''|
+|>PluginLoadTests|''Ensures we can load the plugin successfully''|
