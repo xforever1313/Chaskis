@@ -157,9 +157,10 @@ def LaunchFitnesse(target, source, env):
         cwd=testEnv['REGRESSION_TEST_DIR']
     )
 
-    input("Press Any Key to Exit...\n\n")
-
-    process.kill()
+    try:
+        input("Press Any Key to Exit...\n\n")
+    except:
+        process.kill()
 
 testEnv.Append(BUILDERS={"Fitnesse" : Builder(action=LaunchFitnesse)})
 
