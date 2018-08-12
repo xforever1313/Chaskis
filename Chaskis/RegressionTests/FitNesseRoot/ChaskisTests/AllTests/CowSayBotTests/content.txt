@@ -1,0 +1,5 @@
+!contents -R2 -g -p -f -h
+
+!define plugin_name {cowsaybot}
+
+|>PluginLoadTest|''Ensures we can load the plugin successfully''|

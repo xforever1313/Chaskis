@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    This is the configuration file for the irc logger service
+    for Chaskis.
+    
+    For all the settings below, a missing or empty tag results
+    in the default settings.
+    
+    logfilelocation - Where to store the log files.  Defaulted
+                      to a Logs folder inside of 
+                      the plugin directory (AppData/Chaskis/Plugins/IrcLogger/Logs).
+                      
+    maxnumbermessagesperlog - The number of messages from the channel to save in a single log file.
+                              After this number of messages, the old log file will be closed, and a new
+                              one will be opened.  Defaulted to 1000 messages.  Set to 0 for no limit.
+                              
+
+    logname - What to name the logs.  Defaulted to "irclog".  The log name will look like:
+              logName.yyyy-MM-dd_HH-mm-ss-ff.log
+              Note: The time stamp is the date of file create in UTC.
+-->
+<ircloggerconfig>
+    <logfilelocation></logfilelocation>
+    <maxnumbermessagesperlog>70</maxnumbermessagesperlog>
+    <logname></logname>
+</ircloggerconfig>

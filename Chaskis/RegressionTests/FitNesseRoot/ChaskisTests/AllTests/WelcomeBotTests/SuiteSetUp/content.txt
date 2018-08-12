@@ -1,0 +1,3 @@
+|'''Setup'''|!-WelcomeBotEnvironment-!|'''Environment'''|${port}|
+
+!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

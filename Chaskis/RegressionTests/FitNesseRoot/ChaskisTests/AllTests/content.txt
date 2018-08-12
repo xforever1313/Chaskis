@@ -9,11 +9,18 @@
 !2 Plugin Tests
 |>CapsWatcherTests       |''Tests the Caps Watcher Plugin''         |
 |>ConsoleOutTests        |''Tests the Console Out Plugin''          |
+|>CowSayBotTests         |''Tests Cowsay Bot''                      |
 |>CrossChannelTests      |''Tests the Cross Channel Plugin''        |
+|>IrcLoggerTests         |''Tests the IRC Logger Plugin''           |
 |>KarmaBotTests          |''Tests the Karma Bot Plugin''            |
 |>MathBotTests           |''Tests the Math Bot Plugin''             |
+|>MessageFixerBotTests   |''Tests the Message Fixer Bot Plugin''    |
 |>NewVersionNotifierTests|''Tests that New Version Notifier Plugin''|
 |>QuoteBotTests          |''Tests the Quote Bot Plugin''            |
 |>RssBotTests            |''Tests the RSS Bot Plugin''              |
+|>ServerDiagnosticsTests |''Tests the Server Diagnostics Plugin''   |
 |>UrlBotTests            |''Tests the Url Bot Plugin''              |
-
+|>UserListBotTests       |''Tests the User List Bot Plugin''        |
+|>WeatherBotTests        |''Tests the Weather Bot Plugin''          |
+|>WelcomeBotTests        |''Tests the Welcome Bot Plugin''          |
+|>XmlBotTests            |''Tests the XML Bot Plugin''              |
