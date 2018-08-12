@@ -10,7 +10,7 @@
     -->
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="89238B6E-E2A6-4090-9711-8C8B7C4E3DE5"
+	<Product Id="DB5A6CFD-D792-460E-96B9-84D817AB4376"
              Name="{%FullName%}"
              Language="1033"
              Version="{%ChaskisMainVersion%}"

@@ -21,7 +21,7 @@ namespace Chaskis.Plugins.ConsoleOut
     {
         // -------- Fields --------
 
-        public const string VersionStr = "1.0.0";
+        public const string VersionStr = "2.0.0";
 
         /// <summary>
         /// The handlers for this plugin.

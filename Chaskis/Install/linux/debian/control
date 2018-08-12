@@ -1,5 +1,5 @@
 Package: chaskis
-Version: 0.6.1
+Version: 0.7.0
 Maintainer: Seth Hendrick
 Architecture: all
 Description: A generic framework written in C# for making IRC Bots.
