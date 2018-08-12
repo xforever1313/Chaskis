@@ -8,8 +8,9 @@
 |'''Wait For Message'''|Starting\s+from\s+StringParsingQueue\s+Thread|'''On Channel'''|${channel1}|
 
  * Ensure our background thread is NOT the String Parsing Queue Thread
-
-|'''Wait For Message'''|Background\s+Thread\s+Name:\s+END|'''On Channel'''|${channel1}|
+ 
+The thread name can be either empty if on Windows or "Thread Pool Worker" if on Linux.
+|'''Wait For Message'''|Background\s+Thread\s+Name:\s+(Thread\s+Pool\s+Worker)?END|'''On Channel'''|${channel1}|
 
  * Ensure when we return from the await, we are back on the String Parsing Queue Thread.
 
