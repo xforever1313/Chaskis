@@ -19,9 +19,9 @@ chaskis_cs = os.path.join(
     'Chaskis.cs'
 )
 
-ircbot_cs = os.path.join(
+chaskis_core_csproj = os.path.join(
     tempEnv['CHASKIS_CORE_DIR'],
-    'IrcBot.cs'
+    'Chaskis.Core.csproj'
 )
 
 license_txt = os.path.join(
@@ -38,12 +38,6 @@ regression_test_plugin_cs = os.path.join(
 default_handlers_cs = os.path.join(
     tempEnv['CHASKIS_EXE_DIR'],
     'DefaultHandlers.cs'
-)
-
-core_assembly_info_cs = os.path.join(
-    tempEnv['CHASKIS_CORE_DIR'],
-    'Properties',
-    'AssemblyInfo.cs'
 )
 
 debChecksumFile = os.path.join(
@@ -67,11 +61,11 @@ def GetMainVersion():
     return match.group('version')
 
 def GetCoreVersion():
-    fileName = ircbot_cs
+    fileName = chaskis_core_csproj
     with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
-    pattern = r'public\s+const\s+string\s+VersionString\s+=\s+"(?P<version>\d+\.\d+\.\d+)";'
+    pattern = r'\<Version\>(?P<version>\d+\.\d+\.\d+)\</Version\>'
 
     match = re.search(pattern, contents)
     return match.group('version')
@@ -114,24 +108,84 @@ def GetDefaultPluginName():
     return match.group('name')
 
 def GetCopyRight():
-    fileName = ircbot_cs
+    fileName = chaskis_core_csproj
     with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
-    pattern = r'public\s+const\s+string\s+CopyRight\s+=\s+"(?P<copyright>.+)";'
+    pattern = r'\<Copyright\>(?P<copyright>.+)\</Copyright\>'
 
     match = re.search(pattern, contents)
     return match.group('copyright')
 
 def GetDescription():
-    fileName = core_assembly_info_cs
+    fileName = chaskis_core_csproj
     with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
-    pattern = r'(?ms)(\[assembly:\s+AssemblyDescription\(\s*@"(?P<description>.+)"\s*\)\]\s+//\s+End\s+Description)'
+    pattern = r'(?ms)(\<Description\>(?P<description>.+)\</Description\>)'
 
     match = re.search(pattern, contents)
     return match.group('description')
+
+def GetTags():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<PackageTags\>(?P<tags>.+)\</PackageTags\>'
+
+    match = re.search(pattern, contents)
+    return match.group('tags')
+
+def GetAuthor():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<Authors\>(?P<author>.+)\</Authors\>'
+
+    match = re.search(pattern, contents)
+    return match.group('author')
+
+def GetProjectUrl():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<PackageProjectUrl\>(?P<PackageProjectUrl>.+)\</PackageProjectUrl\>'
+
+    match = re.search(pattern, contents)
+    return match.group('PackageProjectUrl')
+
+def GetProjectLicenseUrl():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<PackageLicenseUrl\>(?P<PackageLicenseUrl>.+)\</PackageLicenseUrl\>'
+
+    match = re.search(pattern, contents)
+    return match.group('PackageLicenseUrl')
+
+def GetReleaseNotes():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<PackageReleaseNotes\>(?P<PackageReleaseNotes>.+)\</PackageReleaseNotes\>'
+
+    match = re.search(pattern, contents)
+    return match.group('PackageReleaseNotes')
+
+def GetIconUrl():
+    fileName = chaskis_core_csproj
+    with io.open(fileName, 'r', encoding="utf8") as inFile:
+        contents = inFile.read()
+
+    pattern = r'\<PackageIconUrl\>(?P<PackageIconUrl>.+)\</PackageIconUrl\>'
+
+    match = re.search(pattern, contents)
+    return match.group('PackageIconUrl')
 
 def GetDebChecksum():
     fileName = debChecksumFile
@@ -261,20 +315,20 @@ def Templatize(target, source, env):
     RegressionTestPluginName = GetRegressionTestPluginName()
     DefaultPluginName = GetDefaultPluginName()
 
-    Tags = "chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows"
+    Tags = GetTags()
     CoreTags = Tags + " core"
     MainTags = Tags + " service full installer admin"
-    Author = "Seth Hendrick"
+    Author = GetAuthor()
     AuthorEmail = "seth@shendrick.net"
-    ProjectUrl = "https://github.com/xforever1313/Chaskis/"
-    LicenseUrl = "https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt"
+    ProjectUrl = GetProjectUrl()
+    LicenseUrl = GetProjectLicenseUrl()
     WikiUrl = "https://github.com/xforever1313/Chaskis/wiki"
     IssueTrackerUrl="https://github.com/xforever1313/Chaskis/issues"
     CopyRight = GetCopyRight()
     Description = GetDescription()
-    ReleaseNotes = "View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)"
+    ReleaseNotes = GetReleaseNotes()
     Summary = "A generic framework written in C# for making IRC Bots."
-    IconUrl = "https://files.shendrick.net/projects/chaskis/assets/icon.png"
+    IconUrl = GetIconUrl()
     RunTime = tempEnv["EXE_RUNTIME"]
     debCheckSum = GetDebChecksum()
     msiCheckSum = GetMsiChecksum()
@@ -366,11 +420,10 @@ tempEnv.Append(BUILDERS={'Template' : Builder(action=Templatize)})
 # Sources where we get information from.
 infoSources = [
     chaskis_cs,
-    ircbot_cs,
+    chaskis_core_csproj,
     license_txt,
     regression_test_plugin_cs,
     default_handlers_cs,
-    core_assembly_info_cs,
     debChecksumFile,
     msiChecksumFile
 ]

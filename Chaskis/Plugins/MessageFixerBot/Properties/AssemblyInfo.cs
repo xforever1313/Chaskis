@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -8,17 +8,16 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Chaskis.Plugins.MessageFixerBot;
-using ChaskisCore;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SearchAndReplaceBot")]
+[assembly: AssemblyTitle("MessageFixerBot")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SearchAndReplaceBot")]
-[assembly: AssemblyCopyright( IrcBot.CopyRight )]
+[assembly: AssemblyProduct( "MessageFixerBot" )]
+[assembly: AssemblyCopyright( "Copyright © Seth Hendrick 2017-2018" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

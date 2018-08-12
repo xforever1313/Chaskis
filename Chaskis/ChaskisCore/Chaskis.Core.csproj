@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,4 +23,23 @@
     <PackageReference Condition="$(NoDotNet)!=''" Include="NETStandard.Library" Version="2.0.3"/>
   </ItemGroup>
 
+  <PropertyGroup>
+    <PackageId>ChaskisCore</PackageId>
+    <Version>0.6.1</Version>
+    <Authors>Seth Hendrick</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/xforever1313/Chaskis/</PackageProjectUrl>
+    <PackageIconUrl>https://files.shendrick.net/projects/chaskis/assets/icon.png</PackageIconUrl>
+    <PackageTags>chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows</PackageTags>
+    <Copyright>Copyright © Seth Hendrick 2016-2018</Copyright>
+    <RepositoryUrl>https://github.com/xforever1313/Chaskis.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Description>Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
+
+Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.</Description>
+    <PackageReleaseNotes>View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)</PackageReleaseNotes>
+  </PropertyGroup>
+  
 </Project>

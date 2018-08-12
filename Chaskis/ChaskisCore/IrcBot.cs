@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -16,19 +16,9 @@ namespace ChaskisCore
         // -------- Fields --------
 
         /// <summary>
-        /// Version in the form of a string.
-        /// </summary>
-        public const string VersionString = "0.6.1";
-
-        /// <summary>
-        /// Copyright information.
-        /// </summary>
-        public const string CopyRight = "Copyright © Seth Hendrick 2016-2017";
-
-        /// <summary>
         /// Semantic Version of the bot.
         /// </summary>
-        public static readonly SemanticVersion Version = SemanticVersion.Parse( VersionString );
+        public static readonly SemanticVersion Version;
 
         /// <summary>
         /// The irc config.
@@ -64,6 +54,11 @@ namespace ChaskisCore
             this.ircConnection = connection;
 
             this.parsingQueue = parsingQueue;
+        }
+
+        static IrcBot()
+        {
+            Version = SemanticVersion.Parse( typeof( IrcBot ).Assembly.GetName().Version.ToString() );
         }
 
         // -------- Properties --------

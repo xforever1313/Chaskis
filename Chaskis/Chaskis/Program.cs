@@ -116,8 +116,8 @@ namespace Chaskis
         private static void PrintVersion()
         {
             Console.WriteLine( "Chaskis IRC Bot Version:" );
-            Console.WriteLine( IrcBot.VersionString );
-            Console.WriteLine( "Copyright (C) 2016-2017 Seth Hendrick" );
+            Console.WriteLine( Chaskis.VersionStr );
+            Console.WriteLine( "Copyright (C) 2016-2018 Seth Hendrick" );
             Console.WriteLine();
             Console.WriteLine( "Released under the Boost Software License:" );
             Console.WriteLine( "http://www.boost.org/LICENSE_1_0.txt" );
