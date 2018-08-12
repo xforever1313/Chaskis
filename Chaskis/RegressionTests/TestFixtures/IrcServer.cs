@@ -482,6 +482,22 @@ namespace Chaskis.RegressionTests
                         "Caught ObjectDisposedException in Reader Thread.  Connection was probably reset." + Environment.NewLine + e.ToString()
                     );
                 }
+                catch( SocketException e )
+                {
+                    if ( e.SocketErrorCode == SocketError.Interrupted )
+                    {
+                        this.serverLog.WriteLine(
+                            "Caught Interrupted SocketException in Reader Thread.  Connection was probably reset." + Environment.NewLine + e.ToString()
+                        );
+                    }
+                    else
+                    {
+                        this.serverLog.WriteLine(
+                            "Caught unexpected SocketException in Reader Thread.  ABORT" + Environment.NewLine + e.ToString()
+                        );
+                        this.IsConnected = false;
+                    }
+                }
                 catch( Exception e )
                 {
                     this.serverLog.WriteLine( "Caught Exception in ReaderThread:" + Environment.NewLine + e.ToString() );
