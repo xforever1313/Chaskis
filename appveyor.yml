@@ -34,7 +34,7 @@ build:
    
 before_package:
     - choco pack .\Chaskis\Install\chocolatey\package\chaskis.nuspec
-    - dotnet pack .\Chaskis\ChaskisCore\Chaskis.Core.csproj --no-build --configuration Release --output .\
+    - dotnet pack .\Chaskis\ChaskisCore\Chaskis.Core.csproj --no-build --configuration Release /p:Platform="" --output .\
    
 #-------------#
 # Test Config #
