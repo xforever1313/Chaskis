@@ -159,7 +159,7 @@ def LaunchFitnesse(target, source, env):
 
     try:
         input("Press Any Key to Exit...\n\n")
-    except:
+    finally:
         process.kill()
 
 testEnv.Append(BUILDERS={"Fitnesse" : Builder(action=LaunchFitnesse)})
