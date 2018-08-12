@@ -34,6 +34,7 @@ build:
    
 before_package:
     - choco pack .\Chaskis\Install\chocolatey\package\chaskis.nuspec
+    - nuget pack .\Chaskis\ChaskisCore\Chaskis.Core.nuspec
    
 #-------------#
 # Test Config #
