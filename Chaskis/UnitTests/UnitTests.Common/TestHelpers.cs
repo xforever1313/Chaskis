@@ -117,7 +117,8 @@ namespace Tests
             ircConfig.UserName = "SomeUserName";
             ircConfig.Nick = "SomeNick";
             ircConfig.RealName = "Some Real Name";
-            ircConfig.Password = "Password";
+            ircConfig.ServerPassword = "ServerPassword";
+            ircConfig.NickServPassword = "Password";
             ircConfig.BridgeBots[BridgeBotUser] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
             ircConfig.Admins.Add( "person1" );
             ircConfig.Admins.Add( "person2" );

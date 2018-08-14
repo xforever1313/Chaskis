@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -89,7 +89,11 @@ namespace Tests
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
-            this.ircConfig.Password = "ABadPassword";
+            this.ircConfig.ServerPassword = "SERVER_PASSWORD";
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
+            this.ircConfig.NickServPassword = "ABadPassword";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
@@ -133,7 +137,8 @@ namespace Tests
             Assert.AreEqual( this.ircConfig.UserName, config.UserName );
             Assert.AreEqual( this.ircConfig.Nick, config.Nick );
             Assert.AreEqual( this.ircConfig.RealName, config.RealName );
-            Assert.AreEqual( this.ircConfig.Password, config.Password );
+            Assert.AreEqual( this.ircConfig.ServerPassword, config.ServerPassword );
+            Assert.AreEqual( this.ircConfig.NickServPassword, config.NickServPassword );
             Assert.AreEqual( this.ircConfig.QuitMessage, config.QuitMessage );
             Assert.AreEqual( this.ircConfig.RateLimit, config.RateLimit );
             Assert.AreNotSame( this.ircConfig.BridgeBots, config.BridgeBots ); // Should not be same reference.
@@ -196,10 +201,18 @@ namespace Tests
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
                 {
-                    roConfig.Password = "NewPass";
+                    roConfig.ServerPassword = "NewPass";
                 }
             );
-            Assert.IsTrue( ex.Message.Contains( "Password" ) );
+            Assert.IsTrue( ex.Message.Contains( "ServerPassword" ) );
+
+            ex = Assert.Throws<ReadOnlyException>(
+                delegate ()
+                {
+                    roConfig.NickServPassword = "NewPass";
+                }
+            );
+            Assert.IsTrue( ex.Message.Contains( "NickServPassword" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()
@@ -233,7 +246,13 @@ namespace Tests
             Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
 
             // Empty password should validate
-            this.ircConfig.Password = string.Empty;
+            this.ircConfig.ServerPassword = string.Empty;
+            Assert.DoesNotThrow( () => this.ircConfig.Validate() );
+            Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
+            Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
+
+            // Empty password should validate
+            this.ircConfig.NickServPassword = string.Empty;
             Assert.DoesNotThrow( () => this.ircConfig.Validate() );
             Assert.DoesNotThrow( () => this.ircConfig.Clone().Validate() ); // Tests Interface
             Assert.DoesNotThrow( () => new ReadOnlyIrcConfig( this.ircConfig ).Validate() ); // Tests Read-only
@@ -339,7 +358,7 @@ namespace Tests
         /// <param name="ircConfig">The IRC config object to test.</param>
         /// <param name="interfaceConfig">The interfaced IRC object to test.</param>
         /// <param name="roIrcConfig">The read-only IRC object to test.</param>
-        public void CheckNotEqual( IrcConfig ircConfig, IIrcConfig interfaceConfig, ReadOnlyIrcConfig roIrcConfig )
+        private void CheckNotEqual( IrcConfig ircConfig, IIrcConfig interfaceConfig, ReadOnlyIrcConfig roIrcConfig )
         {
             // Ensure not equals works going from real -> interface
             Assert.AreNotEqual( ircConfig, interfaceConfig );
@@ -364,7 +383,7 @@ namespace Tests
         /// Ensures the given IRCConfig is not valid.
         /// </summary>
         /// <param name="config">The config to check.</param>
-        public void CheckNotValid( IrcConfig config )
+        private void CheckNotValid( IrcConfig config )
         {
             Assert.Throws<ValidationException>( () => config.Validate() );
 

@@ -2,44 +2,73 @@
 <!--
 
 Sample Bot Config.  This tells Chaskis where to connect to,
-ane which channel to watch.
+ane which channel(s) to watch.
 
-Notice the password in this field.  Don't be dumb and commit this file to a senstive area.
-Copy/Paste this elsewhere if needed. Chaskis has command line arguments you can use to point
-to that pasted file instead of having to use the one located in ApplicationData
+Server - The IRC Server to connect to.  Required.
 
-The server and at least one channel are required.
-No field can be an empty string (except for optional fields).  Port can not be negative.
-Password is optional.  quitmesssage is optional.
+Channels - The list of channels to join. At least 1 is required.
 
-Rate Limit is how many milliseconds occur between messages that are sent to the IRC server
-from the bot.  Most servers have flood limiting, and if the bot does not follow it, it can
-get kicked or banned.
+Port - The port to use for the TCP connection.  Can not be negative.  Defaulted to 6667.
 
-Admins are optional.
-These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
-**IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
-The value passed in is the IRC user name.
-Note that casing is ignored.  The config gets read in and set to lowercase.
+UserName - The bot's username.  Required.  This is not the Nickname, and does not show up
+           in the channel to other users.  This can not be changed without reconnecting.
+           This is how the server identifies the bot.
+           
+Nick - The bot's nickname.  Required.  This is what a user sees as the bot's name.
 
-Bridge bots, meanwhile, are IRC bots that bridge other services such as telegram or slack.
-Typically in a channel, bridge bots like this:
+realname - The bot's real (full) name.  Required.
 
-<telegrambot> telegramUser: Hello IRC channel!
-<ircUser> Hello telegramUser!
+serverpasswordfile - A file that contains the server password.
+                     The bot will read the first line of the file,
+                     and make that the server password.  This is NOT NICKSERV's password (used to register
+                     a nickname to a server),
+                     this is the password to actually connect to the server itself.
+                     Leave blank if there is no server password.
+                     This is set to a file so the IRC bot configuration can be shared
+                     without exposing sensitive information.  If the read password from the file
+                     is the empty string (which can happen if the file is empty, OR the first line in the file
+                     is empty), it will be treated as not specifying a password.
+                     
 
-If the channel has bridge bots that you want Chaskis to interact with, you'll need to configure
-those in the commented out <bridgebots> tags.  The botname is the bridge bot's nick name in the channel.   Regexes are allowed
-in the bot name in case the bot disconnects and rejoins and gets a number appended to it for some reason.
-The bot regex, meanwhile, is the pattern the bridge bot will print when a user on the service is bridges
-says something.  For example, in the above example, telegrambot will print out "userName: message" when
-a user in the bridged service says something. So the regex you'll have to give it is
-(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+).  You MUST specify these two groups (bridgeUser and bridgeMessage)
-somewhere inside the botregex for the thing to work.  The bridge user is the username of the person on the
-bridge.  The bridgeMessage is the message they sent.  Chaskis, under the hood, will treat the bridgeUser
-as the nick and the bridgeMessage as the message when processing privmsg events.  Note, if the regex fails
-to match Chaskis will treat the bridge bot as a regular user.
+nickservpasswordfile - A file that contains the NickServ password.  NickServ is a bot that is usually
+                       used to register nicknames.  The first line in this file is read
+                       and sent in a PM to NickServ after joining the server.  Leave
+                       blank to send no such message.
+                       This is set to a file so the IRC bot configuration can be shared
+                       without exposing sensitive information.  If the read password from the file
+                       is the empty string (which can happen if the file is empty, OR the first line in the file
+                       is empty), it will be treated as not specifying a password.
 
+ratelimit - How many milliseconds occur between messages that are sent to the IRC server
+            from the bot.  Most servers have flood limiting, and if the bot does not follow it, it can
+            get kicked or banned.  Can not be negative.
+
+quitemessage - Message to send to the channels just before the bot disconnects from the server.  Optional.
+
+Admins - Optional.
+        These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
+        **IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
+        The value passed in is the IRC user name.
+        Note that casing is ignored.  The config gets read in and set to lowercase.
+
+Bridge bots - Optional.
+              These are IRC bots that bridge other services such as telegram or slack.
+              Typically in a channel, bridge bots like this:
+
+              <telegrambot> telegramUser: Hello IRC channel!
+              <ircUser> Hello telegramUser!
+
+              If the channel has bridge bots that you want Chaskis to interact with, you'll need to configure
+              those in the commented out <bridgebots> tags.  The botname is the bridge bot's nick name in the channel.   Regexes are allowed
+              in the bot name in case the bot disconnects and rejoins and gets a number appended to it for some reason.
+              The bot regex, meanwhile, is the pattern the bridge bot will print when a user on the service is bridges
+              says something.  For example, in the above example, telegrambot will print out "userName: message" when
+              a user in the bridged service says something. So the regex you'll have to give it is
+              (?<bridgeUser>\w+):\s+(?<bridgeMessage>.+).  You MUST specify these two groups (bridgeUser and bridgeMessage)
+              somewhere inside the botregex for the thing to work.  The bridge user is the username of the person on the
+              bridge.  The bridgeMessage is the message they sent.  Chaskis, under the hood, will treat the bridgeUser
+              as the nick and the bridgeMessage as the message when processing privmsg events.  Note, if the regex fails
+              to match Chaskis will treat the bridge bot as a regular user.
 -->
 <ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
 	<server>irc.testdomain.com</server>
@@ -51,7 +80,8 @@ to match Chaskis will treat the bridge bot as a regular user.
 	<username>testbot</username>
 	<nick>testbot</nick>
 	<realname>test bot</realname>
-	<password>apassword</password>
+    <serverpasswordfile>path/to/server/password</serverpasswordfile>
+    <nickservpasswordfile>path/to/nickserv/password</nickservpasswordfile>
     <ratelimit>800</ratelimit>
     <quitmessage>I am being shut down!</quitmessage>
     <admins>

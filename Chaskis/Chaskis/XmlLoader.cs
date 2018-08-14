@@ -58,7 +58,7 @@ namespace Chaskis
 
             foreach( XmlNode childNode in rootNode.ChildNodes )
             {
-                switch( childNode.Name )
+                switch( childNode.Name.ToLower() )
                 {
                     case "server":
                         config.Server = childNode.InnerText;
@@ -132,8 +132,12 @@ namespace Chaskis
                         }
                         break;
 
-                    case "password":
-                        config.Password = childNode.InnerText;
+                    case "serverpasswordfile":
+                        config.ServerPassword = ReadFirstLineOfFile( childNode.InnerText, "Server Password File" );
+                        break;
+
+                    case "nickservpasswordfile":
+                        config.NickServPassword = ReadFirstLineOfFile( childNode.InnerText, "NickServ Password File" );
                         break;
 
                     case "ratelimit":
@@ -145,6 +149,29 @@ namespace Chaskis
             config.Validate();
 
             return config;
+        }
+
+        private static string ReadFirstLineOfFile( string fileName, string context )
+        {
+            if( string.IsNullOrWhiteSpace( fileName ) )
+            {
+                return string.Empty;
+            }
+
+            if( File.Exists( fileName ) == false )
+            {
+                throw new FileNotFoundException(
+                    "Could not find file '" + fileName + "', which is needed for " + context
+                );
+            }
+
+            using( FileStream stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+            {
+                using( StreamReader reader = new StreamReader( stream ) )
+                {
+                    return reader.ReadLine();
+                }
+            }
         }
 
         /// <summary>

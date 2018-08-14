@@ -234,6 +234,16 @@ namespace ChaskisCore
             this.readerThread.Name = this.Config.Server + " IRC reader thread";
             this.readerThread.Start();
 
+            // Per RFC-2812, the server password sets a "connection password".
+            // This MUST be sent before any attempt to set the username and nick name.
+            // Therefore, this is the first command that gets sent.
+            if( string.IsNullOrEmpty( this.Config.ServerPassword ) == false )
+            {
+                this.ircWriter.WriteLine( "PASS {0}", this.Config.ServerPassword );
+                this.ircWriter.Flush();
+                Thread.Sleep( this.Config.RateLimit );
+            }
+
             // USER <user> <mode> <unused> <realname>
             // This command is used at the beginning of a connection to specify the username,
             // real name and initial user modes of the connecting client.
@@ -247,10 +257,11 @@ namespace ChaskisCore
             this.ircWriter.Flush();
             Thread.Sleep( this.Config.RateLimit );
 
-            // Tell nickserv we are a bot.
-            if( string.IsNullOrEmpty( this.Config.Password ) == false )
+            // If the server has a NickServ service, tell nickserv our password
+            // so it registers our bot and does not change its nickname on us.
+            if( string.IsNullOrEmpty( this.Config.NickServPassword ) == false )
             {
-                this.ircWriter.WriteLine( "/msg nickserv identify {0}", this.Config.Password );
+                this.ircWriter.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", this.Config.NickServPassword );
                 this.ircWriter.Flush();
                 Thread.Sleep( this.Config.RateLimit );
             }

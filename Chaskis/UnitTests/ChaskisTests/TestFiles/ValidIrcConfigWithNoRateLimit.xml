@@ -8,6 +8,5 @@
     <username>testbot</username>
     <nick>testbot</nick>
     <realname>test bot</realname>
-    <password>apassword</password>
     <quitmessage>I am being shut down!</quitmessage>
 </ircbotconfig>

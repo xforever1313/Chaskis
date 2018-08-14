@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -50,10 +50,16 @@ namespace ChaskisCore
         string RealName { get; }
 
         /// <summary>
+        /// The password to use to enter the server.
+        /// Leave empty to not authenticate to the server.
+        /// </summary>
+        string ServerPassword { get; }
+
+        /// <summary>
         /// The password to use to register the nick name.
         /// Leave empty to not authenticate.
         /// </summary>
-        string Password { get; }
+        string NickServPassword { get; }
 
         /// <summary>
         /// The quit message when the bot is leaving.
@@ -132,7 +138,8 @@ namespace ChaskisCore
             this.UserName = "SomeIrcBot";
             this.Nick = "SomeIrcBot";
             this.RealName = "Some IRC Bot";
-            this.Password = string.Empty;
+            this.ServerPassword = string.Empty;
+            this.NickServPassword = string.Empty;
             this.BridgeBots = new Dictionary<string, string>();
             this.Admins = new List<string>();
             this.QuitMessage = string.Empty;
@@ -172,10 +179,16 @@ namespace ChaskisCore
         public string RealName { get; set; }
 
         /// <summary>
+        /// The password to use to enter the server.
+        /// Leave empty to not authenticate to the server.
+        /// </summary>
+        public string ServerPassword { get; set; }
+
+        /// <summary>
         /// The password to use to register the nick name.
         /// Leave empty to not authenticate.
         /// </summary>
-        public string Password { get; set; }
+        public string NickServPassword { get; set; }
 
         /// <summary>
         /// The quit message when the bot is leaving.
@@ -364,19 +377,31 @@ namespace ChaskisCore
             }
         }
 
+        public string ServerPassword
+        {
+            get
+            {
+                return this.wrappedConfig.ServerPassword;
+            }
+            set
+            {
+                ThrowException( nameof( this.ServerPassword ) );
+            }
+        }
+
         /// <summary>
         /// The password to use to register the nick name.
         /// Leave empty to not authenticate.
         /// </summary>
-        public string Password
+        public string NickServPassword
         {
             get
             {
-                return this.wrappedConfig.Password;
+                return this.wrappedConfig.NickServPassword;
             }
             set
             {
-                ThrowException( nameof( this.Password ) );
+                ThrowException( nameof( this.NickServPassword ) );
             }
         }
 
@@ -640,7 +665,8 @@ namespace ChaskisCore
                 config.UserName.GetHashCode() +
                 config.Nick.GetHashCode() +
                 config.RealName.GetHashCode() +
-                config.Password.GetHashCode() +
+                config.ServerPassword.GetHashCode() +
+                config.NickServPassword.GetHashCode() +
                 config.QuitMessage.GetHashCode() +
                 config.BridgeBots.GetHashCode() +
                 config.Admins.GetHashCode() +
@@ -665,7 +691,8 @@ namespace ChaskisCore
                 ( config1.UserName == other.UserName ) &&
                 ( config1.Nick == other.Nick ) &&
                 ( config1.RealName == other.RealName ) &&
-                ( config1.Password == other.Password ) &&
+                ( config1.ServerPassword == other.ServerPassword ) &&
+                ( config1.NickServPassword == other.NickServPassword ) &&
                 ( config1.QuitMessage == other.QuitMessage ) &&
                 ( config1.BridgeBots.Count == other.BridgeBots.Count ) &&
                 ( config1.Admins.Count == other.Admins.Count ) &&
