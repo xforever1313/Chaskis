@@ -243,6 +243,10 @@ namespace ChaskisCore
                 this.ircWriter.Flush();
                 Thread.Sleep( this.Config.RateLimit );
             }
+            else
+            {
+                StaticLogger.Log.WriteLine( "No Server Password Specified" );
+            }
 
             // USER <user> <mode> <unused> <realname>
             // This command is used at the beginning of a connection to specify the username,
@@ -264,6 +268,10 @@ namespace ChaskisCore
                 this.ircWriter.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", this.Config.NickServPassword );
                 this.ircWriter.Flush();
                 Thread.Sleep( this.Config.RateLimit );
+            }
+            else
+            {
+                StaticLogger.Log.WriteLine( "No NickServ Specified" );
             }
 
             // At this point, we are connected, we just simply haven't joined channels yet.
