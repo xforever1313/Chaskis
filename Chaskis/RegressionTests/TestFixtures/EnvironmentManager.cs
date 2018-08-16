@@ -157,6 +157,7 @@ namespace Chaskis.RegressionTests
                     fileContents = fileContents.Replace( "{%chaskispath%}", ChaskisDistDir );
                     fileContents = fileContents.Replace( "{%regressiontestpath%}", RegressionTestDir );
                     fileContents = fileContents.Replace( "{%port%}", this.port.ToString() );
+                    fileContents = fileContents.Replace( "{%testenvpath%}", TestEnvironmentDir );
                     File.WriteAllText( temppath, fileContents );
                 }
                 else

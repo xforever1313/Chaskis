@@ -1,7 +1,8 @@
 !1 All Chaskis Tests
 !contents -R2 -g -p -f -h
 !2 Core Tests
-|>CoreTests|''Chaskis Core Tests''|
+|>CoreTests    |''Chaskis Core Tests''                                     |
+|>PasswordTests|''Tests that test the server and NickServ password system''|
 
 !2 Default Plugin Tests
 |>DefaultPluginTests|''Tests the bot's default plugin|

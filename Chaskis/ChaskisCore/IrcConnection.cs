@@ -271,7 +271,7 @@ namespace ChaskisCore
             }
             else
             {
-                StaticLogger.Log.WriteLine( "No NickServ Specified" );
+                StaticLogger.Log.WriteLine( "No NickServ Password Specified" );
             }
 
             // At this point, we are connected, we just simply haven't joined channels yet.
