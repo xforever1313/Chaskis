@@ -32,7 +32,7 @@ wget %{source} -O %{_sourcedir}/chaskis.deb --no-check-certificate
 
 %check
 cd %{_sourcedir}
-echo 'd1f4f939395050089a3d976a4c9b4f5b220ba1a2a3cbc30d3fcc44643bcda265  chaskis.deb' | sha256sum --check
+echo '448130d6e84d43c1752be8be7d23497e11a3ef9458f3986633cceebae0a011d4  chaskis.deb' | sha256sum --check
 
 %build
 # unarchive the .deb file.  The .deb file
