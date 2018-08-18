@@ -7,7 +7,7 @@
 # user having to install all kinds of weird things that are not in the AUR or in pacman.
 
 pkgname=chaskis
-pkgver=0.7.0
+pkgver=0.8.0
 pkgrel=1
 pkgdesc="A generic framework written in C# for making IRC Bots."
 arch=('any')
