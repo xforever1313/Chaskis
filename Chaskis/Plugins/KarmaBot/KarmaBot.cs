@@ -17,12 +17,12 @@ namespace Chaskis.Plugins.KarmaBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.4.0";
+        internal const string VersionStr = "0.4.0";
 
         /// <summary>
         /// List of handlers.
         /// </summary>
-        private List<IIrcHandler> handlers;
+        private readonly List<IIrcHandler> handlers;
 
         /// <summary>
         /// The Karmabot config to use.

@@ -21,7 +21,7 @@ namespace Chaskis.Plugins.MathBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -119,6 +119,7 @@ namespace Chaskis.Plugins.MathBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
 
         /// <summary>

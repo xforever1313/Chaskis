@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.UserListBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -35,7 +35,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// The user list.
         /// </summary>
-        private UserList userList;
+        private readonly UserList userList;
 
         /// <summary>
         /// Whether or not a user queried to for the userlist.
@@ -43,7 +43,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Key is the channel the query came from,
         /// Value whether or not that channel queried or not.
         /// </summary>
-        private Dictionary<string, bool> isQueried;
+        private readonly Dictionary<string, bool> isQueried;
 
         // -------- Constructor --------
 

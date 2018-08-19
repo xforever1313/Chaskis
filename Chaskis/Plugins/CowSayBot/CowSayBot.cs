@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.CowSayBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// Process Start info

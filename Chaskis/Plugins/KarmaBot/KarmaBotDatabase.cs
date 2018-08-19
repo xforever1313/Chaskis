@@ -22,15 +22,15 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// The db connection.
         /// </summary>
-        private LiteDatabase dbConnection;
+        private readonly LiteDatabase dbConnection;
 
-        private LiteCollection<IrcUser> users;
+        private readonly LiteCollection<IrcUser> users;
 
         /// <summary>
         /// Cache for irc users so we don't need to consistently query the database
         /// when someone just wants karma for something.
         /// </summary>
-        private Dictionary<string, IrcUser> ircUserCache;
+        private readonly Dictionary<string, IrcUser> ircUserCache;
 
         // -------- Constructor --------
 

@@ -19,7 +19,7 @@ namespace Chaskis.Plugins.WelcomeBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// Whether or not the plugin is loaded an ready to go.
@@ -29,7 +29,7 @@ namespace Chaskis.Plugins.WelcomeBot
         /// <summary>
         /// The handlers to return to the main bot.
         /// </summary>
-        private List<IIrcHandler> handlers;
+        private readonly List<IIrcHandler> handlers;
 
         private IChaskisEventCreator eventCreator;
 
@@ -138,6 +138,7 @@ namespace Chaskis.Plugins.WelcomeBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
 
         // ---- Handlers ----

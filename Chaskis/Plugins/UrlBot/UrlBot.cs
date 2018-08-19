@@ -19,7 +19,7 @@ namespace Chaskis.Plugins.UrlBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.4.0";
+        internal const string VersionStr = "0.4.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -121,6 +121,7 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
 
         /// <summary>

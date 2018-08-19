@@ -25,7 +25,7 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.5.0";
+        internal const string VersionStr = "0.5.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -34,7 +34,7 @@ namespace Chaskis.Plugins.RssBot
 
         private RssBotConfig rssConfig;
 
-        private Dictionary<int, FeedReader> feedReaders;
+        private readonly Dictionary<int, FeedReader> feedReaders;
 
         private IChaskisEventScheduler scheduler;
 

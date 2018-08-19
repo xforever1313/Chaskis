@@ -55,7 +55,7 @@ namespace Chaskis.Plugins.WeatherBot
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The command to trigger the weather bot.
@@ -65,7 +65,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// List of handlers.
         /// </summary>
-        private List<IIrcHandler> handlers;
+        private readonly List<IIrcHandler> handlers;
 
         /// <summary>
         /// The cooldown for the bot.
@@ -75,7 +75,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Queries for the weather report.
         /// </summary>
-        private WeatherReporter reporter;
+        private readonly WeatherReporter reporter;
 
         // -------- Constructor --------
 
@@ -169,6 +169,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to dispose.
         }
 
         // ---- Handlers ----

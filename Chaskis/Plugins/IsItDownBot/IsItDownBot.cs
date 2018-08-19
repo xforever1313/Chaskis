@@ -18,9 +18,9 @@ namespace Chaskis.Plugins.IsItDownBot
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.1.0";
+        internal const string VersionStr = "0.1.0";
 
-        public const string PluginName = "isitdownbot";
+        internal const string PluginName = "isitdownbot";
 
         private IsItDownBotConfig config;
 
@@ -95,6 +95,7 @@ namespace Chaskis.Plugins.IsItDownBot
 
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
     }
 }

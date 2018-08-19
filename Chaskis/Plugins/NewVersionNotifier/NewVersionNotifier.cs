@@ -19,11 +19,11 @@ namespace Chaskis.Plugins.NewVersionNotifier
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.1.0";
+        internal const string VersionStr = "0.1.0";
 
         private const string cacheFileName = ".lastversion.txt";
 
-        public const string PluginName = "new_version_notifier";
+        internal const string PluginName = "new_version_notifier";
 
         private string pluginDir;
 
@@ -147,6 +147,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
 
         private void OnJoinChannel( IIrcWriter writer, IrcResponse response )

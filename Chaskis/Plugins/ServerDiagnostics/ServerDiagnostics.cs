@@ -18,12 +18,12 @@ namespace Chaskis.Plugins.ServerDiagnostics
     {
         // -------- Fields --------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// List of IRC handlers.
         /// </summary>
-        private List<IIrcHandler> handlerList;
+        private readonly List<IIrcHandler> handlerList;
 
         private ServerDiagnosticsConfig config;
 
@@ -37,7 +37,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// The time stamp of when this plugin was loaded.
         /// </summary>
-        private static DateTime startTime;
+        private readonly DateTime startTime;
 
         // -------- Constructor --------
 
@@ -201,7 +201,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static void HandleUpTimeCmd( IIrcWriter writer, IrcResponse response )
+        private void HandleUpTimeCmd( IIrcWriter writer, IrcResponse response )
         {
             TimeSpan span = DateTime.UtcNow - startTime;
 

@@ -19,7 +19,7 @@ namespace Chaskis.Plugins.XmlBot
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.0";
 
         /// <summary>
         /// The handlers for this plugin.
@@ -124,6 +124,7 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to Dispose.
         }
 
         /// <summary>
