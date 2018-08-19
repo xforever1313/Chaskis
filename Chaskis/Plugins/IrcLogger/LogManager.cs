@@ -25,7 +25,7 @@ namespace Chaskis.Plugins.IrcLogger
         /// <summary>
         /// The configuration to use.
         /// </summary>
-        private IrcLoggerConfig config;
+        private readonly IrcLoggerConfig config;
 
         /// <summary>
         /// The current number of messages written to the log.
@@ -45,11 +45,11 @@ namespace Chaskis.Plugins.IrcLogger
         /// <summary>
         /// IO to the file system isn't cheap, let's background it.
         /// </summary>
-        private EventExecutor writerThread;
+        private readonly EventExecutor writerThread;
 
         private bool isDisposed;
 
-        private GenericLogger statusLog;
+        private readonly GenericLogger statusLog;
 
         // -------- Constructor --------
 

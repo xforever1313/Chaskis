@@ -114,6 +114,7 @@ namespace Chaskis.Plugins.ConsoleOut
         /// </summary>
         public void Dispose()
         {
+            // Nothing to dispose.
         }
     }
 }

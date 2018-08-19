@@ -37,13 +37,13 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private NewVersionNotifierConfig config;
 
-        private List<IIrcHandler> ircHandlers;
+        private readonly List<IIrcHandler> ircHandlers;
 
         /// <summary>
         /// A hashset of channels that were already notified of the 
         /// version update.
         /// </summary>
-        private HashSet<string> channelsNotified;
+        private readonly HashSet<string> channelsNotified;
 
         // ---------------- Constructor ----------------
 

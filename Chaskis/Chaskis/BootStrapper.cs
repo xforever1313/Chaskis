@@ -22,17 +22,17 @@ namespace Chaskis
         /// <summary>
         /// The main chaskis root.
         /// </summary>
-        private string chaskisRoot;
+        private readonly string chaskisRoot;
 
         /// <summary>
         /// The location where we are going to put the default configurations.
         /// </summary>
-        private string bootStrapLocation;
+        private readonly string bootStrapLocation;
 
         /// <summary>
         /// The sample config directory.
         /// </summary>
-        private string sampleConfigDir;
+        private readonly string sampleConfigDir;
 
         // ---------------- Constructor ----------------
 

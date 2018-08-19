@@ -20,7 +20,7 @@ namespace Chaskis.ChaskisCliInstaller
     {
         // ---------------- Fields ----------------
 
-        private Dictionary<string, DirectoryInfo> dirInfo;
+        private readonly Dictionary<string, DirectoryInfo> dirInfo;
 
         private const string parentDir = "INSTALLFOLDER";
 

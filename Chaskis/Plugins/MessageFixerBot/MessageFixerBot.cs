@@ -118,6 +118,7 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// </summary>
         public void Dispose()
         {
+            // Nothing to dispose.
         }
 
         /// <summary>

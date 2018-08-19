@@ -33,7 +33,7 @@ namespace ChaskisCore
         /// <summary>
         /// Reference to the global parsing queue.
         /// </summary>
-        private INonDisposableStringParsingQueue parsingQueue;
+        private readonly INonDisposableStringParsingQueue parsingQueue;
 
         // -------- Constructor --------
 

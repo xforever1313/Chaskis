@@ -47,14 +47,14 @@ namespace Chaskis.Plugins.IsItDownBot
     {
         // ---------------- Fields ----------------
 
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// These are websites that are triggered automatically.
         /// We cache these values so we don't blow up the IRC chat if the status
         /// doesn't change.
         /// </summary>
-        private Dictionary<string, WebsiteStatus> cachedWebsites;
+        private readonly Dictionary<string, WebsiteStatus> cachedWebsites;
 
         // ---------------- Constructor ----------------
 

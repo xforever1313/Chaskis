@@ -33,10 +33,10 @@ namespace ChaskisCore
             RegexOptions.Compiled
         );
 
-        private ChaskisEventSource expectedSource;
-        private string expectedPlugin;
-        private string creatorPlugin;
-        private Action<ChaskisEventHandlerLineActionArgs> lineAction;
+        private readonly ChaskisEventSource expectedSource;
+        private readonly string expectedPlugin;
+        private readonly string creatorPlugin;
+        private readonly Action<ChaskisEventHandlerLineActionArgs> lineAction;
 
         // ---------------- Constructor ----------------
 
