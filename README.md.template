@@ -29,7 +29,7 @@ You can also install via [chocolatey](https://chocolatey.org/packages/chaskis/) 
 
  * **Arch** - Install with the AUR: ```yaourt -S chaskis```
  * **Debian** - [Install](http://www.mono-project.com/download/#download-lin) an up-to-date version of mono, and install the .deb file.
- * **Fedora** - You need to download the RPM manually or compile it yourself with the .spec file.  See [#22](https://github.com/xforever1313/Chaskis/issues/22) as to why.
+ * **Fedora** - Install with [copr](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/) with the commands ```dnf copr enable xforever1313/chaskis``` and ```dnf install chaskis```
 
 Configuration
 ---------------
