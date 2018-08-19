@@ -155,4 +155,4 @@ Alias('launch_fitnesse', launchFitnesseTarget)
 Alias('regression_test', regressionTestTarget)
 Alias('pkgbuild', pkgBuildTarget)
 
-Alias('jenkins', [installTarget, unitTestTargets, regressionTestTarget, pkgBuildTarget])
+Alias('jenkins', [installTarget, unitTestTargets, regressionTestTarget])
