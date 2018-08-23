@@ -70,7 +70,7 @@ namespace ChaskisCore
         /// <summary>
         /// Lock for the IRC writer.
         /// </summary>
-        private object ircWriterLock;
+        private readonly object ircWriterLock;
 
         /// <summary>
         /// Used to read commands.
@@ -90,28 +90,28 @@ namespace ChaskisCore
         /// <summary>
         /// Writer Queue.
         /// </summary>
-        private EventExecutor writerQueue;
+        private readonly EventExecutor writerQueue;
 
-        private EventScheduler eventScheduler;
+        private readonly EventScheduler eventScheduler;
 
         /// <summary>
         /// Used to mutex-protect keepReading.
         /// </summary>
-        private object keepReadingObject;
+        private readonly object keepReadingObject;
 
         /// <summary>
         /// Event to whether or not to abort the reconnection attempt or not.
         /// </summary>
-        private ManualResetEvent reconnectAbortEvent;
+        private readonly ManualResetEvent reconnectAbortEvent;
 
         private bool inited;
 
         /// <summary>
         /// TODO: Remove this.
         /// </summary>
-        private INonDisposableStringParsingQueue parsingQueue;
+        private readonly INonDisposableStringParsingQueue parsingQueue;
 
-        private IrcReconnector reconnector;
+        private readonly IrcReconnector reconnector;
 
         // -------- Constructor --------
 
@@ -717,7 +717,7 @@ namespace ChaskisCore
                         // Unexpected exception occurred.  The connection probably dropped.
                         // Nothing we can do now except to attempt to try again.
                         StaticLogger.Log.ErrorWriteLine(
-                            "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err.ToString() + Environment.NewLine + "Wait for watchdog to reconnect..."
+                            "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err + Environment.NewLine + "Wait for watchdog to reconnect..."
                         );
                     }
                 } // End While
@@ -726,7 +726,7 @@ namespace ChaskisCore
             {
                 // Fatal Unexpected exception occurred.
                 StaticLogger.Log.ErrorWriteLine(
-                    "FATAL ERROR: IRC Reader Thread caught unexpected exception!" + Environment.NewLine + err.ToString()
+                    "FATAL ERROR: IRC Reader Thread caught unexpected exception!" + Environment.NewLine + err
                 );
                 StaticLogger.Log.ErrorWriteLine(
                     "If this was because of a watchdog timeout, stand by..."
@@ -820,7 +820,7 @@ namespace ChaskisCore
                 catch( Exception e )
                 {
                     StaticLogger.Log.ErrorWriteLine(
-                        "Reconnect failed, got exception trying again." + Environment.NewLine + e.ToString()
+                        "Reconnect failed, got exception trying again." + Environment.NewLine + e
                     );
                 }
             } // End While

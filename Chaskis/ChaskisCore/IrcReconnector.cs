@@ -39,15 +39,15 @@ namespace ChaskisCore
 
         // ---------------- Fields ----------------
 
-        private int watchdogTimeout;
+        private readonly int watchdogTimeout;
 
-        private Action testAction;
-        private Action reconnectAction;
+        private readonly Action testAction;
+        private readonly Action reconnectAction;
 
-        private WatchdogTimer watchdog;
+        private readonly WatchdogTimer watchdog;
 
-        private EventExecutor reconnectionThread;
-        private ManualResetEvent testTimer;
+        private readonly EventExecutor reconnectionThread;
+        private readonly ManualResetEvent testTimer;
 
         private bool isStarted;
         private bool isDisposed;

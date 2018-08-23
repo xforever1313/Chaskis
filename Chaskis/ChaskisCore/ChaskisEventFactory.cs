@@ -16,7 +16,7 @@ namespace ChaskisCore
     {
         // ---------------- Fields ----------------
 
-        private Dictionary<string, IChaskisEventCreator> eventCreators;
+        private readonly Dictionary<string, IChaskisEventCreator> eventCreators;
 
         private static ChaskisEventFactory instance;
 

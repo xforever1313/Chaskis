@@ -30,7 +30,7 @@ namespace ChaskisCore
         /// Key is the channel
         /// Value is the timestamp of the last event.
         /// </summary>
-        private Dictionary<string, DateTime> lastEvent;
+        private readonly Dictionary<string, DateTime> lastEvent;
 
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>

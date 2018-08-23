@@ -50,7 +50,7 @@ namespace ChaskisCore
         /// <summary>
         /// Event queue.
         /// </summary>
-        private InterruptibleEventExecutor eventQueue;
+        private readonly InterruptibleEventExecutor eventQueue;
 
         private bool inited;
 
