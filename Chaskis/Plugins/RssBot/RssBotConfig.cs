@@ -15,7 +15,7 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        private List<Feed> feeds;
+        private readonly List<Feed> feeds;
 
         // ---------------- Constructor ----------------
 

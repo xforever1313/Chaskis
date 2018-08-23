@@ -21,14 +21,14 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        private Feed feedConfig;
+        private readonly Feed feedConfig;
 
         private SyndicationFeed feed;
-        private object feedLock;
+        private readonly object feedLock;
 
         private const string userAgent = "Chaskis IRC RssBot";
 
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         // ---------------- Constructor ----------------
 
