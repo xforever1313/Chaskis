@@ -97,6 +97,7 @@ namespace Chaskis.Plugins.IrcLogger
             }
             catch( Exception )
             {
+                // Don't let the GC thread die.
             }
         }
 

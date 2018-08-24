@@ -30,7 +30,7 @@ namespace Chaskis.Plugins.UrlBot
         /// Regex for a URL.
         /// Taken from (and slightly tweaked) from: https://weblogs.asp.net/farazshahkhan/regex-to-find-url-within-text-and-make-them-as-link
         /// </summary>
-        public const string UrlRegex =
+        public static readonly string UrlRegex =
             @"(?<url>(http://|https://|ftp://)([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)";
 
         private static readonly Regex urlRegex = new Regex( UrlRegex, RegexOptions.IgnoreCase | RegexOptions.Compiled );
@@ -40,10 +40,8 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         private const int maxFileSize = 1 * 1000 * 1000;
 
-        const string userAgent = "Chakis IRC Bot URL Plugin";
-
-        private GenericLogger logger;
-        private HttpClient httpClient;
+        private readonly GenericLogger logger;
+        private readonly HttpClient httpClient;
 
         // -------- Constructor --------
 

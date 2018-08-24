@@ -19,14 +19,14 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// What queries the weather.
         /// </summary>
-        private IWeatherQuery weatherQuery;
+        private readonly IWeatherQuery weatherQuery;
 
         /// <summary>
         /// NOAA requests that we do not query the SOAP service more than an hour
         /// at a time.  We will cache our results for an hour in this dictionary.
         /// Key is the zip code, value is the weather report.
         /// </summary>
-        private Dictionary<string, WeatherReport> reportCache;
+        private readonly Dictionary<string, WeatherReport> reportCache;
 
         // -------- Constructor --------
 

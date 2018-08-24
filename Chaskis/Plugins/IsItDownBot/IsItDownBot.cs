@@ -26,7 +26,7 @@ namespace Chaskis.Plugins.IsItDownBot
 
         private GenericLogger logger;
 
-        private List<IIrcHandler> ircHandlers;
+        private readonly List<IIrcHandler> ircHandlers;
 
         // ---------------- Constructor ----------------
 
