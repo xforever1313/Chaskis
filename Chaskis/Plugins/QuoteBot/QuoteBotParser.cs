@@ -15,10 +15,10 @@ namespace Chaskis.Plugins.QuoteBot
     {
         // ---------------- Fields ----------------
 
-        private Regex addRegex;
-        private Regex deleteRegex;
-        private Regex randomRegex;
-        private Regex getRegex;
+        private readonly Regex addRegex;
+        private readonly Regex deleteRegex;
+        private readonly Regex randomRegex;
+        private readonly Regex getRegex;
 
         // ---------------- Constructor ----------------
 

@@ -22,7 +22,7 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private MessageFixer msgFixer;
+        private readonly MessageFixer msgFixer;
 
         // ---------------- Constructor ----------------
 

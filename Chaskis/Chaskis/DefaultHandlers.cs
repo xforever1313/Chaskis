@@ -18,7 +18,7 @@ namespace Chaskis
     {
         // ---------------- Fields ----------------
 
-        public const string DefaultPluginName = "chaskis";
+        internal const string DefaultPluginName = "chaskis";
 
         private const string defaultHelpMessage = "Default Commands: 'plugins', 'admins', 'source [plugin]', 'version [plugin]', 'about [plugin]', 'help [plugin] [arg1] [arg2]...'";
 
@@ -38,7 +38,7 @@ namespace Chaskis
         /// <summary>
         /// IRC handlers we will be using.
         /// </summary>
-        private List<IIrcHandler> handlers;
+        private readonly List<IIrcHandler> handlers;
 
         /// <summary>
         /// The response when a user asks for the plugin list.
