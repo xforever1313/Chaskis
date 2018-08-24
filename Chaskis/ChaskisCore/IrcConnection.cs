@@ -55,7 +55,7 @@ namespace ChaskisCore
         /// any messages the bot produces be more than this, it
         /// will be split and printed to a new line.
         /// </summary>
-        public const int MaximumLength = 400;
+        public static readonly int MaximumLength = 400;
 
         /// <summary>
         /// Connection to the server.
@@ -852,12 +852,12 @@ namespace ChaskisCore
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
 
-        private void Reconnector_OnMessage( string obj )
+        private static void Reconnector_OnMessage( string obj )
         {
             StaticLogger.Log.WriteLine( Convert.ToInt32( LogVerbosityLevel.HighVerbosity ), obj );
         }
 
-        private void Reconnector_OnError( string obj )
+        private static void Reconnector_OnError( string obj )
         {
             StaticLogger.Log.ErrorWriteLine( Convert.ToInt32( LogVerbosityLevel.NoVerbosity ), obj );
         }

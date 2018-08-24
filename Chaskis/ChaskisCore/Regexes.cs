@@ -43,7 +43,7 @@ namespace ChaskisCore
         ///     username - The username of the user.  Optional.
         ///     host - The IP or address of the user.  Optional.
         /// </summary>
-        public const string IrcMessagePrefix =
+        public static readonly string IrcMessagePrefix =
             @"^:(((?<nickOrServer>\S+)!(?<username>\S+)@(?<host>\S+))|" + // All three nick, user, and host.
             @"((?<nickOrServer>\S+)@(?<host>\S+))|"+ // Just nick and host.
             @"((?<nickOrServer>\S+)))"; // Just nick or server.
@@ -55,7 +55,7 @@ namespace ChaskisCore
         ///     server - the Server we connected to
         ///     nick - The user name we connected as.
         /// </summary>
-        public const string ChaskisIrcConnectEvent =
+        public static readonly string ChaskisIrcConnectEvent =
             @"CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)";
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace ChaskisCore
         ///     server - the Server we disconnected from
         ///     nick - The user name we disconnected as.
         /// </summary>
-        public const string ChaskisIrcDisconnectEvent =
+        public static readonly string ChaskisIrcDisconnectEvent =
             @"DISCONNECT\s+FROM\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)";
     }
 }

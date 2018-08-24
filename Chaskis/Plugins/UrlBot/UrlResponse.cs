@@ -11,7 +11,7 @@ namespace Chaskis.Plugins.UrlBot
 {
     public class UrlResponse
     {
-        public const int MaxTitleLength = IrcConnection.MaximumLength;
+        public static readonly int MaxTitleLength = IrcConnection.MaximumLength;
 
         /// <summary>
         /// Constructor.
