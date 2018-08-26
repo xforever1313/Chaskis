@@ -21,7 +21,7 @@ namespace ChaskisCore
         /// <summary>
         /// The irc command that will appear from the server.
         /// </summary>
-        public const string IrcCommand = "PART";
+        public static readonly string IrcCommand = "PART";
 
         // :nickName!~nick@10.0.0.1 PART #testchan
 

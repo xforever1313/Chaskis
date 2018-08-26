@@ -382,8 +382,11 @@ namespace ChaskisCore
         /// <param name="msg">The message to ping the server with.</param>
         public void SendPing( string msg )
         {
-            // TODO: Maybe add verbose output?
-            // StaticLogger.WriteLine( "Sending Ping to server with message '{0}'...", msg );
+            StaticLogger.Log.WriteLine(
+                Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
+                "Sending Ping to server with message '{0}'...",
+                msg
+            );
 
             string pingString = string.Format( "PING {0}", msg );
 

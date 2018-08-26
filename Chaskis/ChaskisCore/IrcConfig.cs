@@ -17,7 +17,7 @@ namespace ChaskisCore
     /// <summary>
     /// Interface for an IrcConfig object.
     /// </summary>
-    public interface IIrcConfig
+    public interface IIrcConfig : IEquatable<IIrcConfig>
     {
         /// <summary>
         /// The server to connect to.
@@ -244,6 +244,11 @@ namespace ChaskisCore
             return IrcConfigHelpers.Equals( this, obj );
         }
 
+        public bool Equals( IIrcConfig other )
+        {
+            return IrcConfigHelpers.Equals( this, other );
+        }
+
         /// <summary>
         /// Just returns the base object's hash code.
         /// </summary>
@@ -276,7 +281,7 @@ namespace ChaskisCore
         /// <summary>
         /// The wrapped config.
         /// </summary>
-        private IIrcConfig wrappedConfig;
+        private readonly IIrcConfig wrappedConfig;
 
         // -------- Constructor --------
 
@@ -473,6 +478,11 @@ namespace ChaskisCore
         public override bool Equals( object obj )
         {
             return IrcConfigHelpers.Equals( this, obj );
+        }
+
+        public bool Equals( IIrcConfig other )
+        {
+            return IrcConfigHelpers.Equals( this, other );
         }
 
         /// <summary>
@@ -684,6 +694,16 @@ namespace ChaskisCore
         {
             IIrcConfig other = config2 as IIrcConfig;
 
+            if( other == null )
+            {
+                return false;
+            }
+
+            return Equals( config1, other );
+        }
+
+        internal static bool Equals( IIrcConfig config1, IIrcConfig other )
+        {
             bool isEqual =
                 ( config1.Server == other.Server ) &&
                 ( config1.Channels.Count == other.Channels.Count ) &&

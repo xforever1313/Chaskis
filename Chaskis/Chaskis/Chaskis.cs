@@ -239,7 +239,7 @@ namespace Chaskis
                         }
                         catch( Exception err )
                         {
-                            StaticLogger.Log.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err.ToString() );
+                            StaticLogger.Log.ErrorWriteLine( "Error when tearing down plugin:" + Environment.NewLine + err );
                         }
                     }
                     this.ircBot.Dispose();

@@ -192,6 +192,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         public void Dispose()
         {
+            // Nothing to dispose.
         }
 
         // ---- Handlers ----

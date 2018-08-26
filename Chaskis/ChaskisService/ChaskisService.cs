@@ -25,7 +25,7 @@ namespace ChaskisService
         private FileStream logFile;
         private StreamWriter logWriter;
 
-        private string rootDir;
+        private readonly string rootDir;
 
         // -------- Constructor --------
 
