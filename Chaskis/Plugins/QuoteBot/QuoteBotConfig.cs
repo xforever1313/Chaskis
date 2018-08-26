@@ -1,16 +1,17 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Text;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.QuoteBot
 {
-    public class QuoteBotConfig
+    public class QuoteBotConfig : IEquatable<QuoteBotConfig>
     {
         // ---------------- Constructor ----------------
 
@@ -98,16 +99,21 @@ namespace Chaskis.Plugins.QuoteBot
         public override bool Equals( object obj )
         {
             QuoteBotConfig other = obj as QuoteBotConfig;
+            return this.Equals( other );
+        }
+
+        public bool Equals( QuoteBotConfig other )
+        {
             if( other == null )
             {
                 return false;
             }
 
             return
-                ( this.AddCommand == other.AddCommand ) &&
-                ( this.DeleteCommand == other.DeleteCommand ) &&
-                ( this.RandomCommand == other.RandomCommand ) &&
-                ( this.GetCommand == other.GetCommand );
+               ( this.AddCommand == other.AddCommand ) &&
+               ( this.DeleteCommand == other.DeleteCommand ) &&
+               ( this.RandomCommand == other.RandomCommand ) &&
+               ( this.GetCommand == other.GetCommand );
         }
 
         public override int GetHashCode()

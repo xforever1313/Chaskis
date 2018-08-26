@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -16,7 +16,7 @@ namespace Chaskis.Plugins.MessageFixerBot
     {
         // ---------------- Fields ----------------
 
-        public const string FilterPattern = @"^s/(?<findpattern>(\\/|[^/])+)/(?<replacestr>(\\/|[^/])+)$";
+        private const string FilterPattern = @"^s/(?<findpattern>(\\/|[^/])+)/(?<replacestr>(\\/|[^/])+)$";
 
         private static readonly Regex filterRegex = new Regex( FilterPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture );
 
@@ -24,7 +24,7 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// Dictionary of the previous message the user sent us.
         /// Key is the user, value is the message.
         /// </summary>
-        private Dictionary<string, string> lastMessages;
+        private readonly Dictionary<string, string> lastMessages;
 
         // ---------------- Constructor ----------------
 

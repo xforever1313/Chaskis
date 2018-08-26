@@ -5,12 +5,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Text;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.NewVersionNotifier
 {
-    public class NewVersionNotifierConfig
+    public class NewVersionNotifierConfig : IEquatable<NewVersionNotifierConfig>
     {
         // ---------------- Fields ----------------
 
@@ -35,6 +36,11 @@ namespace Chaskis.Plugins.NewVersionNotifier
         public override bool Equals( object obj )
         {
             NewVersionNotifierConfig other = obj as NewVersionNotifierConfig;
+            return this.Equals( other );
+        }
+
+        public bool Equals( NewVersionNotifierConfig other )
+        {
             if( other == null )
             {
                 return false;
