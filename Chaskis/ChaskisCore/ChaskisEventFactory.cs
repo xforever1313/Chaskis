@@ -75,7 +75,7 @@ namespace ChaskisCore
         {
             // ---------------- Fields ----------------
 
-            private string sourcePlugin;
+            private readonly string sourcePlugin;
 
             // ---------------- Constructor ----------------
 

@@ -50,11 +50,11 @@ namespace Chaskis
         /// <summary>
         /// The chaskis config root directory.
         /// </summary>
-        private string chaskisRoot;
+        private readonly string chaskisRoot;
 
-        private StringParsingQueue parsingQueue;
+        private readonly StringParsingQueue parsingQueue;
 
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         // ---------------- Constructor ----------------
 

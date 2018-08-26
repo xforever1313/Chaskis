@@ -1,7 +1,9 @@
-﻿//          Copyright Seth Hendrick 2016.
+﻿//
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../../../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
+//
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +26,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Message 353 from here: https://www.alien.net.au/irc/irc2numerics.html
         /// ( '=' / '*' / '@' ) <channel> ' ' : [ '@' / '+' ] <nick> *( ' ' [ '@' / '+' ] <nick> )
         /// </summary>
-        public const string UserNameResponseRegex =
+        internal const string UserNameResponseRegex =
             @"353.+[@=*]\s+(?<channel>[#\w]+)\s+:(?<names>.+)$";
 
         /// <summary>
@@ -34,7 +36,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Message 366 from here: https://www.alien.net.au/irc/irc2numerics.html
         /// <channel> :<info>
         /// </summary>
-        public const string UserNameEndRegex =
+        internal const string UserNameEndRegex =
             @"366.+\s+(?<channel>[#\w]+)\s+:(?<info>.+)$";
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Key is the channel.
         /// Value is a string of the users in the channel.
         /// </summary>
-        private Dictionary<string, string> usersPerChannel;
+        private readonly Dictionary<string, string> usersPerChannel;
 
         // -------- Constructor --------
 

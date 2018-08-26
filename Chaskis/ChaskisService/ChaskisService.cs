@@ -20,7 +20,7 @@ namespace ChaskisService
         /// <summary>
         /// The instance of chaskis.
         /// </summary>
-        private Chaskis.Chaskis chaskis;
+        private readonly Chaskis.Chaskis chaskis;
 
         private FileStream logFile;
         private StreamWriter logWriter;

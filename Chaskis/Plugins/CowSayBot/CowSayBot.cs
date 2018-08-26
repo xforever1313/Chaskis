@@ -51,10 +51,12 @@ namespace Chaskis.Plugins.CowSayBot
         /// </summary>
         public CowSayBot()
         {
-            this.cowSayInfo = new ProcessStartInfo();
-            this.cowSayInfo.RedirectStandardInput = true;
-            this.cowSayInfo.RedirectStandardOutput = true;
-            this.cowSayInfo.UseShellExecute = false;
+            this.cowSayInfo = new ProcessStartInfo
+            {
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
 
             this.handlers = new List<IIrcHandler>();
         }
@@ -197,8 +199,8 @@ namespace Chaskis.Plugins.CowSayBot
             commandRegex = commandRegex.TrimEnd( '|', '(' );
             commandRegex += ")";
 
-            string cowsayRegex = config.ListenRegex.Replace( "{%saycmd%}", commandRegex );
-            return cowsayRegex;
+            string regex = config.ListenRegex.Replace( "{%saycmd%}", commandRegex );
+            return regex;
         }
 
         /// <summary>
@@ -255,8 +257,7 @@ namespace Chaskis.Plugins.CowSayBot
                     cowFile = null;
                 }
 
-                string cowSayedMessage;
-                int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out cowSayedMessage, cowFile );
+                int exitCode = LaunchCowsay( cowMatch.Groups["msg"].Value, out string cowSayedMessage, cowFile );
 
                 if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                 {

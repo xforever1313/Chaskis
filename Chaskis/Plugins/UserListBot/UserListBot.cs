@@ -204,14 +204,14 @@ namespace Chaskis.Plugins.UserListBot
         /// <param name="response">The response from the channel.</param>
         private void HandleEndOfNamesResponse( IIrcWriter writer, IrcResponse response )
         {
-            Tuple<string, string> userList = this.userList.CheckAndHandleEndMessage( response.Message );
-            if( userList != null )
+            Tuple<string, string> foundUsers = this.userList.CheckAndHandleEndMessage( response.Message );
+            if( foundUsers != null )
             {
-                if( this.isQueried.ContainsKey( userList.Item1 ) && this.isQueried[userList.Item1] )
+                if( this.isQueried.ContainsKey( foundUsers.Item1 ) && this.isQueried[foundUsers.Item1] )
                 {
                     writer.SendMessage(
-                        string.Format( "Users in {0}: {1}", userList.Item1, userList.Item2 ),
-                        userList.Item1
+                        string.Format( "Users in {0}: {1}", foundUsers.Item1, foundUsers.Item2 ),
+                        foundUsers.Item1
                     );
                 }
             }

@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -27,7 +27,7 @@ namespace Chaskis
         /// <summary>
         /// The plugins loaded thus far.
         /// </summary>
-        private Dictionary<string, PluginConfig> plugins;
+        private readonly Dictionary<string, PluginConfig> plugins;
 
         private ChaskisEventFactory eventFactory;
 
@@ -150,15 +150,17 @@ namespace Chaskis
             {
                 try
                 {
-                    PluginInitor initor = new PluginInitor();
-                    initor.PluginPath = plugin.Value.AssemblyPath;
-                    initor.IrcConfig = ircConfig;
-                    initor.EventScheduler = scheduler;
-                    initor.ChaskisEventSender = eventSender;
-                    initor.ChaskisConfigRoot = chaskisConfigRoot;
-                    initor.ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key];
-                    initor.HttpClient = httpClient;
-                    initor.Log = plugin.Value.Log;
+                    PluginInitor initor = new PluginInitor
+                    {
+                        PluginPath = plugin.Value.AssemblyPath,
+                        IrcConfig = ircConfig,
+                        EventScheduler = scheduler,
+                        ChaskisEventSender = eventSender,
+                        ChaskisConfigRoot = chaskisConfigRoot,
+                        ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key],
+                        HttpClient = httpClient,
+                        Log = plugin.Value.Log
+                    };
 
                     initor.Log.OnWriteLine += delegate ( string msg )
                     {
