@@ -13,6 +13,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
+    public delegate void MessageHandlerAction( IIrcWriter writer, IrcResponse response );
+
     /// <summary>
     /// Configuration for responding to a message received from IRC.
     /// </summary>
@@ -23,7 +25,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The irc command that will appear from the server.
         /// </summary>
-        public const string IrcCommand = "PRIVMSG";
+        public static readonly string IrcCommand = "PRIVMSG";
 
         /// <summary>
         /// Last time this event was triggered in the channel.
@@ -58,7 +60,7 @@ namespace Chaskis.Core
         /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param>
         public MessageHandler(
             string lineRegex,
-            Action<IIrcWriter, IrcResponse> lineAction,
+            MessageHandlerAction lineAction,
             int coolDown = 0,
             ResponseOptions responseOption = ResponseOptions.ChannelAndPms,
             bool respondToSelf = false
@@ -90,7 +92,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The action that gets triggered when the line regex matches.
         /// </summary>
-        public Action<IIrcWriter, IrcResponse> LineAction { get; private set; }
+        public MessageHandlerAction LineAction { get; private set; }
 
         /// <summary>
         /// How long to wait in seconds between firing events. 0 for no cool down.

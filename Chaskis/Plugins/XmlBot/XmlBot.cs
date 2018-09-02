@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -133,7 +132,7 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         /// <param name="command">The command our bot is listening for.</param>
         /// <param name="response">The response our bot will generate.</param>
-        public static Action<IIrcWriter, IrcResponse> GetMessageHandler( string response, IIrcConfig ircConfig )
+        public static MessageHandlerAction GetMessageHandler( string response, IIrcConfig ircConfig )
         {
             ArgumentChecker.StringIsNotNullOrEmpty( response, nameof( response ) );
 
