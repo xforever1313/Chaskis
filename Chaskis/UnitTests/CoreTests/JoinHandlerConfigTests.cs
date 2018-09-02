@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class AllHandlerConfigTests
+    public class JoinHandlerConfigTests
     {
         // ---------------- Tests ----------------
 
@@ -22,12 +22,12 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void ValidateTest()
         {
-            AllHandlerConfig config = new AllHandlerConfig();
+            JoinHandlerConfig config = new JoinHandlerConfig();
 
-            config.AllAction = null;
+            config.JoinAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.AllAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.JoinAction = delegate ( IIrcWriter writer, IrcResponse response )
             {
             };
 
@@ -37,8 +37,8 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void DeepCopyTest()
         {
-            AllHandlerConfig config1 = new AllHandlerConfig();
-            AllHandlerConfig clone = config1.DeepCopy();
+            JoinHandlerConfig config1 = new JoinHandlerConfig();
+            JoinHandlerConfig clone = config1.DeepCopy();
 
             Assert.AreNotSame( config1, clone );
         }

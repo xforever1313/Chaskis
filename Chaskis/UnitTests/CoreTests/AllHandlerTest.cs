@@ -10,6 +10,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests
 {
@@ -60,6 +61,17 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         // -------- Tests --------
+
+        /// <summary>
+        /// Ensures that if a bad config is passed in, we throw an exception.
+        /// </summary>
+        [Test]
+        public void InvalidConfigTest()
+        {
+            Assert.Throws<ValidationException>(
+                () => new AllHandler( new AllHandlerConfig() )
+            );
+        }
 
         /// <summary>
         /// Ensures that the class is created correctly.

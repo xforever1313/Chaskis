@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +11,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
+    public delegate void JoinHandlerAction( IIrcWriter writer, IrcResponse response );
+
     /// <summary>
     /// Handles the event where someone joins the watched channel.
     /// </summary>
@@ -34,6 +36,8 @@ namespace Chaskis.Core
                 RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
+        private readonly JoinHandlerConfig config;
+
         // -------- Constructor --------
 
         /// <summary>
@@ -41,13 +45,14 @@ namespace Chaskis.Core
         /// </summary>
         /// <param name="response">The action to take when a user joins the channel</param>
         /// <param name="respondToSelf">Should the bot respond to itself?</param>
-        public JoinHandler( Action<IIrcWriter, IrcResponse> response, bool respondToSelf = false )
+        public JoinHandler( JoinHandlerConfig config, bool respondToSelf = false )
         {
-            ArgumentChecker.IsNotNull( response, nameof( response ) );
+            ArgumentChecker.IsNotNull( config, nameof( config ) );
 
-            this.JoinAction = response;
+            config.Validate();
+            this.config = config.DeepCopy();
+
             this.KeepHandling = true;
-            this.RespondToSelf = respondToSelf;
         }
 
         // -------- Properties --------
@@ -55,7 +60,13 @@ namespace Chaskis.Core
         /// <summary>
         /// The action that gets triggered when a user joins.
         /// </summary>
-        public Action<IIrcWriter, IrcResponse> JoinAction { get; private set; }
+        public JoinHandlerAction JoinAction
+        {
+            get
+            {
+                return this.config.JoinAction;
+            }
+        }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.
@@ -77,7 +88,13 @@ namespace Chaskis.Core
         /// <summary>
         /// Does the bot respond to itself joining a channel?
         /// </summary>
-        public bool RespondToSelf { get; private set; }
+        public bool RespondToSelf
+        {
+            get
+            {
+                return this.config.RespondToSelf;
+            }
+        }
 
         // -------- Functions --------
 

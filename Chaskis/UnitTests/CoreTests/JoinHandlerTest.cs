@@ -11,6 +11,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests
 {
@@ -52,10 +53,26 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
-            this.uut = new JoinHandler( this.JoinFunction );
+
+            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+            {
+                JoinAction = this.JoinFunction
+            };
+            this.uut = new JoinHandler( joinHandlerConfig );
         }
 
         // -------- Tests --------
+
+        /// <summary>
+        /// Ensures that if a bad config is passed in, we throw an exception.
+        /// </summary>
+        [Test]
+        public void InvalidConfigTest()
+        {
+            Assert.Throws<ValidationException>(
+                () => new JoinHandler( new JoinHandlerConfig() )
+            );
+        }
 
         /// <summary>
         /// Ensures that the class is created correctly.
@@ -171,7 +188,12 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void BotJoinsWithRespondToSelfEnabled()
         {
-            JoinHandler uut = new JoinHandler( this.JoinFunction, true );
+            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+            {
+                JoinAction = this.JoinFunction,
+                RespondToSelf = true
+            };
+            JoinHandler uut = new JoinHandler( joinHandlerConfig );
 
             string ircString = TestHelpers.ConstructIrcString(
                 this.ircConfig.Nick,

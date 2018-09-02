@@ -98,7 +98,11 @@ namespace Chaskis.Plugins.WelcomeBot
                     this.HandleKarmaQuery
                 );
 
-                this.handlers.Add( new JoinHandler( JoinMessage ) );
+                JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+                {
+                    JoinAction = this.JoinMessage
+                };
+                this.handlers.Add( new JoinHandler( joinHandlerConfig ) );
                 this.handlers.Add( new PartHandler( PartMessage ) );
                 this.handlers.Add( karmaHandler );
                 this.isLoaded = true;

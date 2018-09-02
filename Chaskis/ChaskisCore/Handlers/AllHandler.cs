@@ -17,6 +17,10 @@ namespace Chaskis.Core
     /// </summary>
     public class AllHandler : IIrcHandler
     {
+        // ---------------- Fields ----------------
+
+        private readonly AllHandlerConfig config;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -27,7 +31,9 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
-            this.AllAction = allConfig.AllAction;
+            allConfig.Validate();
+
+            this.config = allConfig.DeepCopy();
             this.KeepHandling = true;
         }
 
@@ -41,7 +47,13 @@ namespace Chaskis.Core
         /// with no parsing.  It is up to the AllAction to parse the channel and user
         /// name if they so desire.
         /// </summary>
-        public AllHandlerAction AllAction { get; private set; }
+        public AllHandlerAction AllAction
+        {
+            get
+            {
+                return this.config.AllAction;
+            }
+        }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.

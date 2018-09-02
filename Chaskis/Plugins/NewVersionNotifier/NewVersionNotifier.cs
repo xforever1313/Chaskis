@@ -128,7 +128,12 @@ namespace Chaskis.Plugins.NewVersionNotifier
             );
             this.ircHandlers.Add( eventHandler );
 
-            JoinHandler joinHandler = new JoinHandler( this.OnJoinChannel, true );
+            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+            {
+                JoinAction = this.OnJoinChannel,
+                RespondToSelf = true
+            };
+            JoinHandler joinHandler = new JoinHandler( joinHandlerConfig );
             this.ircHandlers.Add( joinHandler );
         }
 

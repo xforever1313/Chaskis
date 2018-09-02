@@ -52,5 +52,10 @@ namespace Chaskis.Core
                 throw new ValidationException( errorString.ToString() );
             }
         }
+
+        public AllHandlerConfig DeepCopy()
+        {
+            return (AllHandlerConfig)this.MemberwiseClone();
+        }
     }
 }
