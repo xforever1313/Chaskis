@@ -43,9 +43,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="response">The action to take when a user joins the channel</param>
-        /// <param name="respondToSelf">Should the bot respond to itself?</param>
-        public JoinHandler( JoinHandlerConfig config, bool respondToSelf = false )
+        public JoinHandler( JoinHandlerConfig config )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
