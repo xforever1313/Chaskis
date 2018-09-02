@@ -13,7 +13,7 @@ using System.Threading;
 using SethCS.Basic;
 using SethCS.Extensions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler, IChaskisEventSender
     {

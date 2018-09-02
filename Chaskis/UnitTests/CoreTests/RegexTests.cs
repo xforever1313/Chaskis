@@ -6,7 +6,7 @@
 //
 
 using System.Text.RegularExpressions;
-using ChaskisCore;
+using Chaskis.Core;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.CoreTests

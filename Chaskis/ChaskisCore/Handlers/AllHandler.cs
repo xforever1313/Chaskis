@@ -7,7 +7,7 @@
 
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     public delegate void AllHandlerAction( IIrcWriter writer, IrcResponse response );
 

@@ -11,7 +11,7 @@ using System.Threading;
 using SethCS.Basic;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// This class handles reconnecting the IRC connection.

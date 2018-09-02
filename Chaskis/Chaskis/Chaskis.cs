@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis

@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// This class is arguments that are passed in to our

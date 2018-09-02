@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     public class ChaskisEventFactory
     {

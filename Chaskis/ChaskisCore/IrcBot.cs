@@ -9,7 +9,7 @@ using System;
 using SethCS.Basic;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     public class IrcBot : IDisposable
     {

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface for an IrcConfig object.

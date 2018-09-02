@@ -8,7 +8,7 @@
 using System;
 using System.Text;
 using Chaskis.Plugins.UrlBot;
-using ChaskisCore;
+using Chaskis.Core;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot

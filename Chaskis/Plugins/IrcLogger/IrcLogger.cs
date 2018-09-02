@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 
 namespace Chaskis.Plugins.IrcLogger
 {

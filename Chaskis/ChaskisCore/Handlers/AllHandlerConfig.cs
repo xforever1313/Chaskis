@@ -8,7 +8,7 @@
 using System.Text;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Configuration used for <see cref="AllHandler"/>

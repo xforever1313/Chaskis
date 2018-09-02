@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 using SethCS.Exceptions;
 

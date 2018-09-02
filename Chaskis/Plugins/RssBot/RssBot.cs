@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis.Plugins.RssBot

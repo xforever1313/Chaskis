@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// This class represents an event that can be sent

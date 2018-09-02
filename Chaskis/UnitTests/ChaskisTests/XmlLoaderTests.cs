@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Chaskis;
-using ChaskisCore;
+using Chaskis.Core;
 using NUnit.Framework;
 using SethCS.Exceptions;
 

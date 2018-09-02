@@ -8,7 +8,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Use this attribute on a plugin class, and we'll

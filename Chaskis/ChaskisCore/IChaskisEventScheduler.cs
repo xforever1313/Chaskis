@@ -7,7 +7,7 @@
 
 using System;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface for adding scheduled events to the event queue.

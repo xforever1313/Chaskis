@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using ChaskisCore;
+using Chaskis.Core;
 
 namespace Chaskis
 {

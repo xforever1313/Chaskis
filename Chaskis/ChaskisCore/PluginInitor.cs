@@ -9,7 +9,7 @@ using System.IO;
 using System.Net.Http;
 using SethCS.Basic;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Class that is used to initialize the plugin.

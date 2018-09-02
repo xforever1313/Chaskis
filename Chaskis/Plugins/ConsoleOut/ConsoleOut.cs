@@ -7,7 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using ChaskisCore;
+using Chaskis.Core;
 
 namespace Chaskis.Plugins.ConsoleOut
 {

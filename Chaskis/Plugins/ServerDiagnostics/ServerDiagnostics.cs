@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.ServerDiagnostics

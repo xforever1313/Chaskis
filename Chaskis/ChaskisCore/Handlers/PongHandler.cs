@@ -8,7 +8,7 @@
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Used to handle receiving pongs from a connection.

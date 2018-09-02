@@ -6,7 +6,7 @@
 //
 
 using Chaskis.UnitTests.Common;
-using ChaskisCore;
+using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
 

@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis.Plugins.NewVersionNotifier

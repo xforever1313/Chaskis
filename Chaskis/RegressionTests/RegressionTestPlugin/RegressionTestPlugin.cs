@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis.RegressionTests

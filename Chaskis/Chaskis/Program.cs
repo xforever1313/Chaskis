@@ -7,7 +7,7 @@
 
 using System;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis

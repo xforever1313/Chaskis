@@ -8,7 +8,7 @@
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Most servers will ping the bot using PING

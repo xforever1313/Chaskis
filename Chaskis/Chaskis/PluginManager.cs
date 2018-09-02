@@ -12,7 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis

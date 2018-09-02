@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Implement this interface to create plugins for the Generic IRC bot.

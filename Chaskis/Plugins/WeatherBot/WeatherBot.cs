@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using ChaskisCore;
+using Chaskis.Core;
 
 namespace Chaskis.Plugins.WeatherBot
 {

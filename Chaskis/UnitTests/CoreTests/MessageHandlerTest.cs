@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Chaskis.UnitTests.Common;
-using ChaskisCore;
+using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
 

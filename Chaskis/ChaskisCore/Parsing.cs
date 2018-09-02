@@ -8,7 +8,7 @@
 using System.Text;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     public static class Parsing
     {

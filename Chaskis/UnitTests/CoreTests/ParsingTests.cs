@@ -7,7 +7,7 @@
 
 using System;
 using Chaskis.UnitTests.Common;
-using ChaskisCore;
+using Chaskis.Core;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.CoreTests

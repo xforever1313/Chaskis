@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface on how to write to an IRC channel.

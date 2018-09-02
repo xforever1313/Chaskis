@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Configuration for responding to a message received from IRC.

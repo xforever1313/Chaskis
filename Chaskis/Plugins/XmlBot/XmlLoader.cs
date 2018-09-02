@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.XmlBot

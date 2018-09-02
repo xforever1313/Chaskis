@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface that allows one to send chaskis events

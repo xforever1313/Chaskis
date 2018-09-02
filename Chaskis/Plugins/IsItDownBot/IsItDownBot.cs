@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 using SethCS.Basic;
 
 namespace Chaskis.Plugins.IsItDownBot

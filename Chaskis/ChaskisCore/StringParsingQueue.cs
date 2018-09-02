@@ -11,7 +11,7 @@ using System.IO;
 using System.Threading;
 using SethCS.Basic;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface to the StringParsingQueue that only allows

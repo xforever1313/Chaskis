@@ -9,7 +9,7 @@ using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Handles the event where someone joins the watched channel.

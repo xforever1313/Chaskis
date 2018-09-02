@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Interface for a handler config.

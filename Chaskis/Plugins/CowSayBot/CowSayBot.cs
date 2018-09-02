@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using ChaskisCore;
+using Chaskis.Core;
 
 namespace Chaskis.Plugins.CowSayBot
 {

@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using ChaskisCore;
+using Chaskis.Core;
 using Chaskis.Plugins.XmlBot;
 using Chaskis.UnitTests.Common;
 using NUnit.Framework;

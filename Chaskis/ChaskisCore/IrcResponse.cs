@@ -7,7 +7,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace ChaskisCore
+namespace Chaskis.Core
 {
     /// <summary>
     /// Represents a response from IRC.
