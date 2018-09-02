@@ -23,7 +23,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The irc command that will appear from the server.
         /// </summary>
-        public const string IrcCommand = "JOIN";
+        public static readonly string IrcCommand = "JOIN";
 
         // :nickName!~nick@10.0.0.1 JOIN #testchan
 
