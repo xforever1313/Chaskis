@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using ChaskisCore;
 using NUnit.Framework;
 
-namespace Tests
+namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
     public class RegexTests

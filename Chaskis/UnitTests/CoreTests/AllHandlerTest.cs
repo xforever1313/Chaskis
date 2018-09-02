@@ -6,11 +6,12 @@
 //
 
 using System;
+using Chaskis.UnitTests.Common;
 using ChaskisCore;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
     public class AllHandlerTest

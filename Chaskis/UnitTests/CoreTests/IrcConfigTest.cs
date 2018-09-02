@@ -6,11 +6,12 @@
 //
 
 using System;
+using Chaskis.UnitTests.Common;
 using ChaskisCore;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests
+namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
     public class IrcConfigTest

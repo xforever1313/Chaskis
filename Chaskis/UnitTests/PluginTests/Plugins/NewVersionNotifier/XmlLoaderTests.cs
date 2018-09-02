@@ -5,13 +5,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.IO;
 using System.Xml;
 using Chaskis.Plugins.NewVersionNotifier;
+using Chaskis.UnitTests.Common;
 using NUnit.Framework;
 
-namespace Tests.Plugins.NewVersionNotifier
+namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
 {
     [TestFixture]
     public class XmlLoaderTests

@@ -9,7 +9,7 @@ using Chaskis.Plugins.CapsWatcher;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.CapsWatcher
+namespace Chaskis.UnitTests.PluginTests.Plugins.CapsWatcher
 {
     [TestFixture]
     public class CapsWatcherConfigTest

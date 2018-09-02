@@ -2,7 +2,7 @@
 using Chaskis.Plugins.MathBot;
 using NUnit.Framework;
 
-namespace Tests.Plugins.MathBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.MathBot
 {
     [TestFixture]
     public class MathBotCalculatorTest

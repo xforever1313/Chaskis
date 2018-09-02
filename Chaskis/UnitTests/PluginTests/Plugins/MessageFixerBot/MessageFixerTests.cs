@@ -8,7 +8,7 @@
 using Chaskis.Plugins.MessageFixerBot;
 using NUnit.Framework;
 
-namespace Tests.Plugins.SearchAndReplaceBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.SearchAndReplaceBot
 {
     [TestFixture]
     public class MessageFixerTests

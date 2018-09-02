@@ -14,7 +14,7 @@ using ChaskisCore;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests
+namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
     public class XmlLoaderTests

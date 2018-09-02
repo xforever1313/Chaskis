@@ -10,11 +10,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
 using Chaskis.Plugins.RssBot;
+using Chaskis.UnitTests.Common;
 using NUnit.Framework;
-using PluginTests;
 using SethCS.Extensions;
 
-namespace Tests.Plugins.RssBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.RssBot
 {
     /// <summary>
     /// Removed as TestFixture as HttpClient does not use RssReaders.

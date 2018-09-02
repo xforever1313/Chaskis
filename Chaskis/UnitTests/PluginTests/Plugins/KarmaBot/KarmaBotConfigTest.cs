@@ -10,7 +10,7 @@ using Chaskis.Plugins.KarmaBot;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.KarmaBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
 {
     [TestFixture]
     public class KarmaBotConfigTest

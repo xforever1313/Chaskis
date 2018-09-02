@@ -10,7 +10,7 @@ using NUnit.Framework;
 using Chaskis.Plugins.IsItDownBot;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.IsItDownBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.IsItDownBot
 {
     [TestFixture]
     public class IsItDownBotConfigTests

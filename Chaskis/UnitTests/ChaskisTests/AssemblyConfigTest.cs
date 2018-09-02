@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Chaskis;
 using NUnit.Framework;
 
-namespace Tests
+namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
     public class AssemblyConfigTest

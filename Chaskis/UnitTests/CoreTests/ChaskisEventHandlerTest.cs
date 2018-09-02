@@ -5,11 +5,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using Chaskis.UnitTests.Common;
 using ChaskisCore;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
     public class ChaskisEventHandlerTest

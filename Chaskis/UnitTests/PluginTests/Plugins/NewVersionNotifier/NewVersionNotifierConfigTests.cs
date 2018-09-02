@@ -10,7 +10,7 @@ using Chaskis.Plugins.NewVersionNotifier;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.NewVersionNotifier
+namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
 {
     [TestFixture]
     public class NewVersionNotifierConfigTests

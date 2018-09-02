@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -8,10 +8,11 @@
 using System.IO;
 using System.Xml;
 using Chaskis.Plugins.QuoteBot;
+using Chaskis.UnitTests.Common;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.QuoteBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
     public class QuoteBotXmlLoaderTests

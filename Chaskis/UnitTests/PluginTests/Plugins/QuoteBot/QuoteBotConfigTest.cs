@@ -9,7 +9,7 @@ using Chaskis.Plugins.QuoteBot;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.QuoteBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
     public class QuoteBotConfigTest

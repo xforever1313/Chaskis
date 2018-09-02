@@ -6,7 +6,7 @@
 using Chaskis.Plugins.IrcLogger;
 using NUnit.Framework;
 
-namespace Tests.Plugins.IrcLogger
+namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
 {
     [TestFixture]
     public class IrcLoggerConfigTest

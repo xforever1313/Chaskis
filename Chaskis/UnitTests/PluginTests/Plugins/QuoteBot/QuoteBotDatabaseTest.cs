@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Chaskis.Plugins.QuoteBot;
 using NUnit.Framework;
 
-namespace Tests.Plugins.QuoteBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
     public class QuoteBotDatabaseTest

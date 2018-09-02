@@ -11,7 +11,7 @@ using Chaskis.Plugins.UrlBot;
 using ChaskisCore;
 using NUnit.Framework;
 
-namespace Tests.Plugins.UrlBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot
 {
     [TestFixture]
     public class UrlResponseTest

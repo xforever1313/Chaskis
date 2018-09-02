@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
-namespace Tests.Plugins.CapsWatcher
+namespace Chaskis.UnitTests.PluginTests.Plugins.CapsWatcher
 {
     [TestFixture]
     public class CapsWatcherTest

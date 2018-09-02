@@ -9,7 +9,7 @@ using Chaskis.Plugins.UserListBot;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.UserListBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.UserListBot
 {
     [TestFixture]
     public class UserListBotConfigTest

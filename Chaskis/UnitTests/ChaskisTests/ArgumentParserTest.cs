@@ -5,11 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using Chaskis;
 using NUnit.Framework;
 
-namespace Tests
+namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
     public class ArgumentParserTest
@@ -19,7 +17,7 @@ namespace Tests
         /// <summary>
         /// The test root directory.
         /// </summary>
-        private static readonly string rootDir = Chaskis.Chaskis.DefaultRootDirectory;
+        private static readonly string rootDir = Chaskis.DefaultRootDirectory;
 
         // -------- Tests --------
 

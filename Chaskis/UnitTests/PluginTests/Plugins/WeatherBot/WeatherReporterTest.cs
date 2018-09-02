@@ -11,7 +11,7 @@ using Chaskis.Plugins.WeatherBot;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.Plugins.WeatherBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.WeatherBot
 {
     [TestFixture]
     public class WeatherReporterTest

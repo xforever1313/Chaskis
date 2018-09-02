@@ -9,7 +9,7 @@ using Chaskis.Plugins.CowSayBot;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Tests.Plugins.CowSayBot
+namespace Chaskis.UnitTests.PluginTests.Plugins.CowSayBot
 {
     [TestFixture]
     public class CowFileInfoTest
