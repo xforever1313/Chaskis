@@ -35,10 +35,10 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         [Test]
-        public void DeepCopyTest()
+        public void CloneTest()
         {
             AllHandlerConfig config1 = new AllHandlerConfig();
-            AllHandlerConfig clone = config1.DeepCopy();
+            AllHandlerConfig clone = config1.Clone();
 
             Assert.AreNotSame( config1, clone );
         }

@@ -11,6 +11,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests
 {
@@ -53,10 +54,25 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            this.uut = new PartHandler( PartFunction );
+            PartHandlerConfig config = new PartHandlerConfig()
+            {
+                PartAction = this.PartFunction
+            };
+            this.uut = new PartHandler( config );
         }
 
         // -------- Tests --------
+
+        /// <summary>
+        /// Ensures that if a bad config is passed in, we throw an exception.
+        /// </summary>
+        [Test]
+        public void InvalidConfigTest()
+        {
+            Assert.Throws<ValidationException>(
+                () => new PartHandler( new PartHandlerConfig() )
+            );
+        }
 
         /// <summary>
         /// Ensures that the class is created correctly.

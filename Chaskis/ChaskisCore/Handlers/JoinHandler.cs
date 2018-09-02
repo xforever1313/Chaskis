@@ -48,7 +48,7 @@ namespace Chaskis.Core
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
             config.Validate();
-            this.config = config.DeepCopy();
+            this.config = config.Clone();
 
             this.KeepHandling = true;
         }

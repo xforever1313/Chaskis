@@ -33,7 +33,7 @@ namespace Chaskis.Core
 
             allConfig.Validate();
 
-            this.config = allConfig.DeepCopy();
+            this.config = allConfig.Clone();
             this.KeepHandling = true;
         }
 

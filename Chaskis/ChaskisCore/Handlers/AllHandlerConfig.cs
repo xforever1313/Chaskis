@@ -53,7 +53,7 @@ namespace Chaskis.Core
             }
         }
 
-        public AllHandlerConfig DeepCopy()
+        public AllHandlerConfig Clone()
         {
             return (AllHandlerConfig)this.MemberwiseClone();
         }

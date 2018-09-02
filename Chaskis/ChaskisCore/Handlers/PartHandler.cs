@@ -1,22 +1,23 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
+    public delegate void PartHandlerAction( IIrcWriter writer, IrcResponse response );
+
     /// <summary>
     /// Handles when a user parts.  That is, leaves the channel and logs off.
     /// </summary>
     public class PartHandler : IIrcHandler
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// The irc command that will appear from the server.
@@ -34,26 +35,35 @@ namespace Chaskis.Core
                 RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
-        // -------- Constructor --------
+        private readonly PartHandlerConfig config;
+
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="response">The action to take when a user joins the channel</param>
-        public PartHandler( Action<IIrcWriter, IrcResponse> response )
+        public PartHandler( PartHandlerConfig config )
         {
-            ArgumentChecker.IsNotNull( response, nameof( response ) );
+            ArgumentChecker.IsNotNull( config, nameof( config ) );
 
-            this.PartAction = response;
+            config.Validate();
+
+            this.config = config.Clone();
             this.KeepHandling = true;
         }
 
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// The action that gets triggered when a user Parts from the channel.
         /// </summary>
-        public Action<IIrcWriter, IrcResponse> PartAction { get; private set; }
+        public PartHandlerAction PartAction
+        {
+            get
+            {
+                return this.config.PartAction;
+            }
+        }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.
@@ -72,7 +82,7 @@ namespace Chaskis.Core
         /// </summary>
         public bool KeepHandling { get; set; }
 
-        // -------- Functions --------
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.

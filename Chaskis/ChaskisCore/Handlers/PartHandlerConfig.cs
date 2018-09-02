@@ -10,24 +10,20 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public class JoinHandlerConfig
+    public class PartHandlerConfig
     {
         // ---------------- Constructor ----------------
 
-        public JoinHandlerConfig()
+        public PartHandlerConfig()
         {
-            this.RespondToSelf = false;
         }
 
         // ---------------- Properties ----------------
 
-        public JoinHandlerAction JoinAction { get; set; }
-
         /// <summary>
-        /// Does the bot respond to itself joining a channel?
-        /// Defaulted to false.
+        /// The action that gets triggered when a user Parts from the channel.
         /// </summary>
-        public bool RespondToSelf { get; set; }
+        public PartHandlerAction PartAction { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -35,12 +31,12 @@ namespace Chaskis.Core
         {
             bool success = true;
             StringBuilder errorString = new StringBuilder();
-            errorString.AppendLine( "Errors when validating " + nameof( JoinHandlerConfig ) );
+            errorString.AppendLine( "Errors when validating " + nameof( PartHandlerConfig ) );
 
-            if( this.JoinAction == null )
+            if( this.PartAction == null )
             {
                 success = false;
-                errorString.AppendLine( "\t- " + nameof( this.JoinAction ) + " can not be null" );
+                errorString.AppendLine( "\t- " + nameof( this.PartAction ) + " can not be null" );
             }
 
             if( success == false )
@@ -49,9 +45,9 @@ namespace Chaskis.Core
             }
         }
 
-        public JoinHandlerConfig Clone()
+        public PartHandlerConfig Clone()
         {
-            return (JoinHandlerConfig)this.MemberwiseClone();
+            return (PartHandlerConfig)this.MemberwiseClone();
         }
     }
 }

@@ -103,7 +103,12 @@ namespace Chaskis.Plugins.WelcomeBot
                     JoinAction = this.JoinMessage
                 };
                 this.handlers.Add( new JoinHandler( joinHandlerConfig ) );
-                this.handlers.Add( new PartHandler( PartMessage ) );
+
+                PartHandlerConfig partHandlerConfig = new PartHandlerConfig()
+                {
+                    PartAction = this.PartMessage
+                };
+                this.handlers.Add( new PartHandler( partHandlerConfig ) );
                 this.handlers.Add( karmaHandler );
                 this.isLoaded = true;
             }

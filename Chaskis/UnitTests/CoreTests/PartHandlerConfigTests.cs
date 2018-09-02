@@ -11,8 +11,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests
 {
-    [TestFixture]
-    public class JoinHandlerConfigTests
+    public class PartHandlerConfigTests
     {
         // ---------------- Tests ----------------
 
@@ -22,12 +21,12 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void ValidateTest()
         {
-            JoinHandlerConfig config = new JoinHandlerConfig();
+            PartHandlerConfig config = new PartHandlerConfig();
 
-            config.JoinAction = null;
+            config.PartAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.JoinAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.PartAction = delegate ( IIrcWriter writer, IrcResponse response )
             {
             };
 
@@ -37,8 +36,8 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void CloneTest()
         {
-            JoinHandlerConfig config1 = new JoinHandlerConfig();
-            JoinHandlerConfig clone = config1.Clone();
+            PartHandlerConfig config1 = new PartHandlerConfig();
+            PartHandlerConfig clone = config1.Clone();
 
             Assert.AreNotSame( config1, clone );
         }
