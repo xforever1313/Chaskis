@@ -98,13 +98,13 @@ namespace Chaskis.Plugins.WelcomeBot
                     this.HandleKarmaQuery
                 );
 
-                JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+                JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig
                 {
                     JoinAction = this.JoinMessage
                 };
                 this.handlers.Add( new JoinHandler( joinHandlerConfig ) );
 
-                PartHandlerConfig partHandlerConfig = new PartHandlerConfig()
+                PartHandlerConfig partHandlerConfig = new PartHandlerConfig
                 {
                     PartAction = this.PartMessage
                 };

@@ -81,7 +81,7 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
             {
                 AllAction = delegate ( IIrcWriter writer, IrcResponse response )
                 {

@@ -136,7 +136,7 @@ namespace Chaskis.Plugins.UserListBot
                 this.handlers.Add( userQueryHandler );
             }
             {
-                AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
                 {
                     AllAction = this.HandleNamesResponse
                 };
@@ -145,7 +145,7 @@ namespace Chaskis.Plugins.UserListBot
             }
 
             {
-                AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
                 {
                     AllAction = this.HandleEndOfNamesResponse
                 };

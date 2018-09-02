@@ -54,7 +54,7 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            PartHandlerConfig config = new PartHandlerConfig()
+            PartHandlerConfig config = new PartHandlerConfig
             {
                 PartAction = this.PartFunction
             };

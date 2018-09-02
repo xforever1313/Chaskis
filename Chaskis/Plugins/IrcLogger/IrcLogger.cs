@@ -112,7 +112,7 @@ namespace Chaskis.Plugins.IrcLogger
 
             this.logManager = new LogManager( config, initor.Log );
 
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
             {
                 AllAction = this.HandleLogEvent
             };

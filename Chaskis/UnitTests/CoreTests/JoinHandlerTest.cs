@@ -54,7 +54,7 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig
             {
                 JoinAction = this.JoinFunction
             };
@@ -188,7 +188,7 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void BotJoinsWithRespondToSelfEnabled()
         {
-            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig()
+            JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig
             {
                 JoinAction = this.JoinFunction,
                 RespondToSelf = true

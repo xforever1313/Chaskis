@@ -53,7 +53,7 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
             {
                 AllAction = this.AllFunction
             };
