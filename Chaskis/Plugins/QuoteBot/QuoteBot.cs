@@ -114,29 +114,57 @@ namespace Chaskis.Plugins.QuoteBot
             this.parser = new QuoteBotParser( this.quoteBotConfig );
             this.db = new QuoteBotDatabase( Path.Combine( quoteBotRoot, "quotes.ldb" ) );
 
-            MessageHandler addHandler = new MessageHandler(
-                this.quoteBotConfig.AddCommand,
-                this.AddHandler
-            );
-            this.handlers.Add( addHandler );
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.quoteBotConfig.AddCommand,
+                    LineAction = this.AddHandler
+                };
 
-            MessageHandler deleteHandler = new MessageHandler(
-                this.quoteBotConfig.DeleteCommand,
-                this.DeleteHandler
-            );
-            this.handlers.Add( deleteHandler );
+                MessageHandler addHandler = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( addHandler );
+            }
 
-            MessageHandler randomHandler = new MessageHandler(
-                this.quoteBotConfig.RandomCommand,
-                this.RandomHandler
-            );
-            this.handlers.Add( randomHandler );
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.quoteBotConfig.DeleteCommand,
+                    LineAction = this.DeleteHandler
+                };
 
-            MessageHandler getHandler = new MessageHandler(
-                this.quoteBotConfig.GetCommand,
-                this.GetHandler
-            );
-            this.handlers.Add( getHandler );
+                MessageHandler deleteHandler = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( deleteHandler );
+            }
+
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.quoteBotConfig.RandomCommand,
+                    LineAction = this.RandomHandler
+                };
+
+                MessageHandler randomHandler = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( randomHandler );
+            }
+
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.quoteBotConfig.GetCommand,
+                    LineAction = this.GetHandler
+                };
+
+                MessageHandler getHandler = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( getHandler );
+            }
         }
 
         /// <summary>
@@ -199,9 +227,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private async void AddHandler( IIrcWriter writer, IrcResponse response )
         {
-            Quote quote;
-            string error;
-            if( this.parser.TryParseAddCommand( response.Message, response.RemoteUser, out quote, out error ) )
+            if( this.parser.TryParseAddCommand( response.Message, response.RemoteUser, out Quote quote, out string error ) )
             {
                 try
                 {
@@ -242,9 +268,7 @@ namespace Chaskis.Plugins.QuoteBot
                 return;
             }
 
-            int id;
-            string error;
-            if( this.parser.TryParseDeleteCommand( response.Message, out id, out error ) )
+            if( this.parser.TryParseDeleteCommand( response.Message, out int id, out string error ) )
             {
                 try
                 {
@@ -286,8 +310,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private async void RandomHandler( IIrcWriter writer, IrcResponse response )
         {
-            string error;
-            if( this.parser.TryParseRandomCommand( response.Message, out error ) )
+            if( this.parser.TryParseRandomCommand( response.Message, out string error ) )
             {
                 try
                 {
@@ -329,9 +352,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private async void GetHandler( IIrcWriter writer, IrcResponse response )
         {
-            string error;
-            int id;
-            if( this.parser.TryParseGetCommand( response.Message, out id, out error ) )
+            if( this.parser.TryParseGetCommand( response.Message, out int id, out string error ) )
             {
                 try
                 {

@@ -14,6 +14,7 @@ using NUnit.Framework;
 using System.Xml;
 using System;
 using Moq;
+using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
 {
@@ -189,8 +190,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
         [Test]
         public void FormattingTest()
         {
-            this.DoFormatTest<ArgumentNullException>( "NoCommand.xml" );
-            this.DoFormatTest<ArgumentNullException>( "EmptyCommand.xml" );
+            this.DoFormatTest<ValidationException>( "NoCommand.xml" );
+            this.DoFormatTest<ValidationException>( "EmptyCommand.xml" );
             this.DoFormatTest<ArgumentNullException>( "NoResponse.xml" );
             this.DoFormatTest<ArgumentNullException>( "EmptyResponse.xml" );
             this.DoFormatTest<FormatException>( "BadCooldown.xml" );

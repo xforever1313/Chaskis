@@ -91,6 +91,12 @@ namespace Chaskis.Core
                 errorString.AppendLine( "\t- " + nameof( this.LineAction ) + " can not be null." );
             }
 
+            if( this.CoolDown < 0 )
+            {
+                success = false;
+                errorString.AppendLine( "\t- " + nameof( this.CoolDown ) + " can not be less than 0." );
+            }
+
             if( success == false )
             {
                 throw new ValidationException( errorString.ToString() );

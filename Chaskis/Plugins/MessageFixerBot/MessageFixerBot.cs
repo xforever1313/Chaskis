@@ -85,9 +85,14 @@ namespace Chaskis.Plugins.MessageFixerBot
         {
             // Search for EVERY message.  Our MessageFixer will then determine
             // what to do with it.
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = ".+",
+                LineAction = this.HandleMessage
+            };
+
             MessageHandler handler = new MessageHandler(
-                ".+",
-                this.HandleMessage
+                config
             );
 
             this.handlers.Add( handler );

@@ -134,9 +134,14 @@ namespace Chaskis.Plugins.RssBot
                 this.feedReaders.Add( eventId, reader );
             }
 
+            MessageHandlerConfig msgConfig = new MessageHandlerConfig
+            {
+                LineRegex = @"!debug\s+rssbot\s+updatefeed\s+(?<url>\S+)",
+                LineAction = this.HandleDebug
+            };
+
             MessageHandler debugHandler = new MessageHandler(
-                @"!debug\s+rssbot\s+updatefeed\s+(?<url>\S+)",
-                this.HandleDebug
+                msgConfig
             );
 
             this.handlers.Add( debugHandler );

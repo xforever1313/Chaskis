@@ -11,6 +11,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
+using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests
 {
@@ -57,14 +58,30 @@ namespace Chaskis.UnitTests.CoreTests
         // -------- Tests --------
 
         /// <summary>
+        /// Ensures that if a bad config is passed in, we throw an exception.
+        /// </summary>
+        [Test]
+        public void InvalidConfigTest()
+        {
+            Assert.Throws<ValidationException>(
+                () => new MessageHandler( new MessageHandlerConfig() )
+            );
+        }
+
+        /// <summary>
         /// Ensures that the class is created correctly.
         /// </summary>
         [Test]
         public void ConstructionTest()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             // Keep Handling should be true by default.
@@ -117,9 +134,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void MessagetPrefixTest()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             const string channel = "#somechannel";
@@ -153,10 +175,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot hello";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"(!bot\s+help)|(!bot\s+hello)",
+                LineAction = this.MessageFunction,
+                CoolDown = 10000
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"(!bot\s+help)|(!bot\s+hello)",
-                this.MessageFunction,
-                10000
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
@@ -181,10 +208,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"(!bot\s+help)|(!bot\s+hello)",
+                LineAction = this.MessageFunction,
+                CoolDown = 1
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"(!bot\s+help)|(!bot\s+hello)",
-                this.MessageFunction,
-                1
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], "!bot hello" );
@@ -209,10 +241,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"(!bot\s+help)|(!bot\s+hello)",
+                LineAction = this.MessageFunction,
+                CoolDown = int.MaxValue
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"(!bot\s+help)|(!bot\s+hello)",
-                this.MessageFunction,
-                int.MaxValue
+                config
             );
 
             this.ircConfig.Channels.Add( this.ircConfig.Channels[0] + "2" );
@@ -264,9 +301,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void TestMisMatchedMessage()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             // Does not match pattern.  No response expected.
@@ -284,9 +326,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void BlacklistTest()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             const string channel = "#blacklist";
@@ -312,9 +359,14 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-               this.MessageFunction
+                config
             );
 
             string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
@@ -337,9 +389,14 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircConfig.BridgeBots.Remove( TestHelpers.BridgeBotUser );
             this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser + @"\d*", @"(?<bridgeUser>[\w\d]+):\s+(?<bridgeMessage>.+)" );
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                MessageFunction
+                config
             );
 
             for( int i = 0; i < 5; ++i )
@@ -376,9 +433,14 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircConfig.BridgeBots.Add( TestHelpers.BridgeBotUser, @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
             this.ircConfig.BridgeBots.Add( bridgeBotUser2 + @"\d*", @"\<(?<bridgeUser>[\w\d]+)\>\s+(?<bridgeMessage>.+)" );
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             for( int i = 0; i < 5; ++i )
@@ -429,9 +491,14 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = TestHelpers.BridgeBotUser;
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @".+",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @".+",
-                this.MessageFunction
+                config
             );
 
             string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
@@ -451,9 +518,14 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = remoteUser;
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @".+",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @".+",
-                this.MessageFunction
+                config
             );
 
             string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
@@ -472,9 +544,14 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "hello world!";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             string ircString = this.GenerateMessage( TestHelpers.BridgeBotUser, this.ircConfig.Channels[0], remoteUser + ": " + expectedMessage );
@@ -492,9 +569,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void TestBridgeBotNotBridgedMessage()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+               config
             );
 
             const string expectedMessage = "!bot help";
@@ -514,9 +596,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void TestLiquification()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!{%nick%} {%channel%} {%user%}",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!{%nick%} {%channel%} {%user%}",
-                this.MessageFunction
+                config
             );
 
             string expectedMessage = string.Format(
@@ -542,9 +629,14 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void TestLiquificationWithBridgeBots()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!{%nick%} {%channel%} {%user%}",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!{%nick%} {%channel%} {%user%}",
-                this.MessageFunction
+                config
             );
 
             string expectedMessage = string.Format(
@@ -571,11 +663,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                ResponseOption = ResponseOptions.PmsOnly
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.PmsOnly
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Nick, expectedMessage );
@@ -596,11 +692,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                ResponseOption = ResponseOptions.ChannelOnly
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.ChannelOnly
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Nick, expectedMessage );
@@ -618,11 +718,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                ResponseOption = ResponseOptions.ChannelOnly
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.ChannelOnly
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
@@ -642,11 +746,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                ResponseOption = ResponseOptions.PmsOnly
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.PmsOnly
+                config
             );
 
             string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
@@ -664,12 +772,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                RespondToSelf = true
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.ChannelAndPms,
-                true
+                config
             );
 
             string ircString = this.GenerateMessage( this.ircConfig.Nick, this.ircConfig.Nick, expectedMessage );
@@ -689,12 +800,15 @@ namespace Chaskis.UnitTests.CoreTests
         {
             const string expectedMessage = "!bot help";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction,
+                RespondToSelf = false
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction,
-                0,
-                ResponseOptions.ChannelAndPms,
-                false
+                config
             );
 
             string ircString = this.GenerateMessage( this.ircConfig.Nick, this.ircConfig.Nick, expectedMessage );
@@ -707,9 +821,14 @@ namespace Chaskis.UnitTests.CoreTests
 
         private void DoGoodMessageTest( string user, string channel )
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @"!bot\s+help",
+                LineAction = this.MessageFunction
+            };
+
             MessageHandler uut = new MessageHandler(
-                @"!bot\s+help",
-                this.MessageFunction
+                config
             );
 
             const string expectedMessage = "!bot help";
@@ -747,10 +866,12 @@ namespace Chaskis.UnitTests.CoreTests
 
         private HandlerArgs ConstructArgs( string line )
         {
-            HandlerArgs args = new HandlerArgs();
-            args.Line = line;
-            args.IrcWriter = this.ircWriter.Object;
-            args.IrcConfig = this.ircConfig;
+            HandlerArgs args = new HandlerArgs
+            {
+                Line = line,
+                IrcWriter = this.ircWriter.Object,
+                IrcConfig = this.ircConfig
+            };
 
             return args;
         }

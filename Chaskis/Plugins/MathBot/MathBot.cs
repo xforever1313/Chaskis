@@ -86,9 +86,14 @@ namespace Chaskis.Plugins.MathBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            MessageHandlerConfig msgConfig = new MessageHandlerConfig
+            {
+                LineRegex = handlerRegex,
+                LineAction = MathHandler
+            };
+
             MessageHandler handler = new MessageHandler(
-                handlerRegex,
-                MathHandler
+                msgConfig
             );
 
             this.handlers.Add( handler );

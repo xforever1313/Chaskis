@@ -86,17 +86,31 @@ namespace Chaskis.Plugins.CrossChannel
         {
             this.ircConfig = initor.IrcConfig;
 
-            MessageHandler bcastHandler = new MessageHandler(
-                @"^!broadcast\s+(?<bcastmsg>.+)",
-                this.BroadcastHandler
-            );
-            this.handlers.Add( bcastHandler );
+            {
+                MessageHandlerConfig config = new MessageHandlerConfig
+                {
+                    LineRegex = @"^!broadcast\s+(?<bcastmsg>.+)",
+                    LineAction = this.BroadcastHandler
+                };
 
-            MessageHandler ccHandler = new MessageHandler(
-                @"^!cc\s+\<(?<channel>\S+)\>\s+(?<ccmessage>.+)",
-                this.CCHandler
-            );
-            this.handlers.Add( ccHandler );
+                MessageHandler bcastHandler = new MessageHandler(
+                    config
+                );
+                this.handlers.Add( bcastHandler );
+            }
+
+            {
+                MessageHandlerConfig config = new MessageHandlerConfig
+                {
+                    LineRegex = @"^!cc\s+\<(?<channel>\S+)\>\s+(?<ccmessage>.+)",
+                    LineAction = this.CCHandler
+                };
+
+                MessageHandler ccHandler = new MessageHandler(
+                    config
+                );
+                this.handlers.Add( ccHandler );
+            }
         }
 
         /// <summary>

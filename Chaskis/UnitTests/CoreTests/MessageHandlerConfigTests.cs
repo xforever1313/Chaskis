@@ -56,11 +56,20 @@ namespace Chaskis.UnitTests.CoreTests
             config.LineRegex = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
+            // Cooldown can not be less than 0.
+            config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
+            {
+            };
+            config.LineRegex = @"!bot\s+help";
+            config.CoolDown = -1;
+            Assert.Throws<ValidationException>( () => config.Validate() );
+
             // This should validate.
             config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
             {
             };
             config.LineRegex = @"!bot\s+help";
+            config.CoolDown = 1;
             Assert.DoesNotThrow( () => config.Validate() );
         }
 

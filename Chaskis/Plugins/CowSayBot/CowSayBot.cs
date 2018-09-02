@@ -131,11 +131,16 @@ namespace Chaskis.Plugins.CowSayBot
 
             Console.WriteLine( "CowSayBot: Using Regex '" + this.cowsayRegex + "'" );
 
+            MessageHandlerConfig cowsayHandlerConfig = new MessageHandlerConfig
+            {
+                LineRegex = this.cowsayRegex,
+                LineAction = this.HandleCowsayCommand,
+                CoolDown = (int)cowSayConfig.CoolDownTimeSeconds,
+                ResponseOption = ResponseOptions.ChannelOnly
+            };
+
             IIrcHandler cowSayHandler = new MessageHandler(
-                this.cowsayRegex,
-                HandleCowsayCommand,
-                (int)cowSayConfig.CoolDownTimeSeconds,
-                ResponseOptions.ChannelOnly
+                cowsayHandlerConfig
             );
 
             this.handlers.Add(

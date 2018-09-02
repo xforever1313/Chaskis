@@ -88,9 +88,14 @@ namespace Chaskis.Plugins.UrlBot
         {
             this.urlReader = new UrlReader( initor.Log, initor.HttpClient );
 
+            MessageHandlerConfig msgConfig = new MessageHandlerConfig
+            {
+                LineRegex = ".+",
+                LineAction = this.HandleMessage
+            };
+
             MessageHandler handler = new MessageHandler(
-                ".+",
-                this.HandleMessage
+                msgConfig
             );
 
             this.handlers.Add( handler );

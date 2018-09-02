@@ -122,10 +122,15 @@ namespace Chaskis.Plugins.UserListBot
 
             // User query command:
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.userListConfig.Command,
+                    LineAction = this.HandleGetUsersCommand,
+                    CoolDown = this.userListConfig.Cooldown
+                };
+
                 MessageHandler userQueryHandler = new MessageHandler(
-                    this.userListConfig.Command,
-                    this.HandleGetUsersCommand,
-                    this.userListConfig.Cooldown
+                    msgConfig
                 );
 
                 this.handlers.Add( userQueryHandler );

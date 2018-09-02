@@ -135,9 +135,14 @@ namespace Chaskis.Plugins.CapsWatcher
             this.ignoreRegex = new Regex( CollectionToRegex( config.Ignores ), RegexOptions.Compiled | RegexOptions.ExplicitCapture );
             this.config.Ignores.Clear(); // No need to eat-up RAM, we won't need this again.
 
+            MessageHandlerConfig msgConfig = new MessageHandlerConfig
+            {
+                LineRegex = ".+",
+                LineAction = this.HandleMessage
+            };
+
             MessageHandler handler = new MessageHandler(
-                ".+",
-                this.HandleMessage
+                msgConfig
             );
 
             this.handlers.Add( handler );

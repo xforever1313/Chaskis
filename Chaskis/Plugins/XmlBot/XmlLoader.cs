@@ -44,17 +44,15 @@ namespace Chaskis.Plugins.XmlBot
             {
                 if( messageNode.Name == "message" )
                 {
-                    string command = string.Empty;
+                    MessageHandlerConfig config = new MessageHandlerConfig();
                     string response = string.Empty;
-                    int cooldown = 0;
-                    ResponseOptions responseTo = ResponseOptions.ChannelAndPms;
 
                     foreach( XmlNode messageChild in messageNode.ChildNodes )
                     {
                         switch( messageChild.Name )
                         {
                             case "command":
-                                command = messageChild.InnerText;
+                                config.LineRegex = messageChild.InnerText;
                                 break;
 
                             case "response":
@@ -62,14 +60,14 @@ namespace Chaskis.Plugins.XmlBot
                                 break;
 
                             case "cooldown":
-                                cooldown = int.Parse( messageChild.InnerText );
+                                config.CoolDown = int.Parse( messageChild.InnerText );
                                 break;
 
                             case "respondto":
                                 ResponseOptions option;
                                 if( Enum.TryParse<ResponseOptions>( messageChild.InnerText, out option ) )
                                 {
-                                    responseTo = option;
+                                    config.ResponseOption = option;
                                 }
                                 else
                                 {
@@ -81,11 +79,10 @@ namespace Chaskis.Plugins.XmlBot
                         }
                     }
 
+                    config.LineAction = XmlBot.GetMessageHandler( response, ircConfig );
+
                     MessageHandler handler = new MessageHandler(
-                        command,
-                        XmlBot.GetMessageHandler( response, ircConfig ),
-                        cooldown,
-                        responseTo
+                        config
                     );
 
                     handlers.Add( handler );

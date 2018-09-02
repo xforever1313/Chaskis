@@ -100,45 +100,70 @@ namespace Chaskis.RegressionTests
             this.log = pluginInit.Log;
 
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = sleepPattern,
+                    LineAction = this.HandleSleep
+                };
+
                 MessageHandler sleepHandler = new MessageHandler(
-                    sleepPattern,
-                    this.HandleSleep
+                    msgConfig
                 );
 
                 this.handlers.Add( sleepHandler );
             }
 
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = forceSleepPattern,
+                    LineAction = this.HandleForceSleep
+                };
+
                 MessageHandler forceSleepHandler = new MessageHandler(
-                    sleepPattern,
-                    this.HandleForceSleep
+                    msgConfig
                 );
 
                 this.handlers.Add( forceSleepHandler );
             }
 
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = canaryPattern,
+                    LineAction = this.HandleCanary
+                };
+
                 MessageHandler canaryHandler = new MessageHandler(
-                    canaryPattern,
-                    this.HandleCanary
+                    msgConfig
                 );
 
                 this.handlers.Add( canaryHandler );
             }
 
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = asyncAwaitThreadTestPattern,
+                    LineAction = this.DoAsyncTest
+                };
+
                 MessageHandler asyncHandler = new MessageHandler(
-                    asyncAwaitThreadTestPattern,
-                    this.DoAsyncTest
+                    msgConfig
                 );
 
                 this.handlers.Add( asyncHandler );
             }
 
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = asyncAwaitExceptionTestPattern,
+                    LineAction = this.DoAsyncExceptionTest
+                };
+
                 MessageHandler asyncHandler = new MessageHandler(
-                    asyncAwaitExceptionTestPattern,
-                    this.DoAsyncExceptionTest
+                    msgConfig
                 );
 
                 this.handlers.Add( asyncHandler );

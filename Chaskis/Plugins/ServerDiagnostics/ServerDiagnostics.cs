@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Chaskis.Core;
-using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.ServerDiagnostics
 {
@@ -102,40 +101,60 @@ namespace Chaskis.Plugins.ServerDiagnostics
 
             if( string.IsNullOrEmpty( config.UpTimeCmd ) == false )
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = config.UpTimeCmd,
+                    LineAction = HandleUpTimeCmd,
+                    CoolDown = coolDown
+                };
+
                 MessageHandler utimeHandler = new MessageHandler(
-                    config.UpTimeCmd,
-                    HandleUpTimeCmd,
-                    coolDown
+                    msgConfig
                 );
                 this.handlerList.Add( utimeHandler );
             }
 
             if( string.IsNullOrEmpty( config.OsVersionCmd ) == false )
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = config.OsVersionCmd,
+                    LineAction = HandleOsVersionCmd,
+                    CoolDown = coolDown
+                };
+
                 MessageHandler osHandler = new MessageHandler(
-                    config.OsVersionCmd,
-                    HandleOsVersionCmd,
-                    coolDown
+                    msgConfig
                 );
                 this.handlerList.Add( osHandler );
             }
 
             if( string.IsNullOrEmpty( config.ProcessorCountCmd ) == false )
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = config.ProcessorCountCmd,
+                    LineAction = HandleProcessorCountCmd,
+                    CoolDown = coolDown
+                };
+
                 MessageHandler procCoundHandler = new MessageHandler(
-                    config.ProcessorCountCmd,
-                    HandleProcessorCountCmd,
-                    coolDown
+                    msgConfig
                 );
                 this.handlerList.Add( procCoundHandler );
             }
 
             if( string.IsNullOrEmpty( config.TimeCmd ) == false )
             {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = config.TimeCmd,
+                    LineAction = HandleTimeCmd,
+                    CoolDown = coolDown
+                };
+
                 MessageHandler timeHandler = new MessageHandler(
-                    config.TimeCmd,
-                    HandleTimeCmd,
-                    coolDown
+                    msgConfig
                 );
                 this.handlerList.Add( timeHandler );
             }

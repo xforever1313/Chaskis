@@ -43,6 +43,8 @@ namespace Chaskis.Core
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
+        private readonly MessageHandlerConfig config;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -59,25 +61,14 @@ namespace Chaskis.Core
         /// <param name="responseOption">Whether or not to respond to PMs, only channels, or both.</param>
         /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param>
         public MessageHandler(
-            string lineRegex,
-            MessageHandlerAction lineAction,
-            int coolDown = 0,
-            ResponseOptions responseOption = ResponseOptions.ChannelAndPms,
-            bool respondToSelf = false
+            MessageHandlerConfig config
         )
         {
-            ArgumentChecker.StringIsNotNullOrEmpty( lineRegex, nameof( lineRegex ) );
-            ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
-            if( coolDown < 0 )
-            {
-                throw new ArgumentException( "cool down must be greater than zero", nameof( coolDown ) );
-            }
+            ArgumentChecker.IsNotNull( config, nameof( config ) );
 
-            this.LineRegex = lineRegex;
-            this.LineAction = lineAction;
-            this.CoolDown = coolDown;
-            this.RespondToSelf = respondToSelf;
-            this.ResponseOption = responseOption;
+            config.Validate();
+
+            this.config = config.Clone();
             this.lastEvent = new Dictionary<string, DateTime>();
             this.KeepHandling = true;
         }
@@ -87,29 +78,70 @@ namespace Chaskis.Core
         /// <summary>
         /// The regex to look in IRC Chat that triggers the line action.
         /// </summary>
-        public string LineRegex { get; private set; }
+        public string LineRegex
+        {
+            get
+            {
+                return this.config.LineRegex;
+            }
+        }
+
+        /// <summary>
+        /// What regex options to use with <see cref="LineRegex"/>.
+        /// </summary>
+        public RegexOptions RegexOptions
+        {
+            get
+            {
+                return this.config.RegexOptions;
+            }
+        }
 
         /// <summary>
         /// The action that gets triggered when the line regex matches.
         /// </summary>
-        public MessageHandlerAction LineAction { get; private set; }
+        public MessageHandlerAction LineAction
+        {
+            get
+            {
+                return this.config.LineAction;
+            }
+        }
 
         /// <summary>
         /// How long to wait in seconds between firing events. 0 for no cool down.
         /// This cool down is on a per-channel basis if the bot is in multiple channels.
         /// </summary>
-        public int CoolDown { get; private set; }
+        public int CoolDown
+        {
+            get
+            {
+                return this.config.CoolDown;
+            }
+        }
 
         /// <summary>
         /// Whether or not this bot will respond to private messages or not.
         /// </summary>
-        public ResponseOptions ResponseOption { get; private set; }
+        public ResponseOptions ResponseOption
+        {
+            get
+            {
+                return this.config.ResponseOption;
+            }
+        }
 
         /// <summary>
         /// Whether or not the action will be triggered if the person
         /// who sent the message was this bot.
         /// </summary>
-        public bool RespondToSelf { get; private set; }
+        public bool RespondToSelf
+        {
+            get
+            {
+                return this.config.RespondToSelf;
+            }
+        }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.
@@ -193,7 +225,8 @@ namespace Chaskis.Core
                         remoteUser,
                         args.IrcConfig.Nick,
                         channel
-                    )
+                    ),
+                    this.RegexOptions
                 );
 
                 Match messageMatch = lineRegex.Match( message );

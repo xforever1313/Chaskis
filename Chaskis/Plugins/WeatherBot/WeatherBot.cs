@@ -129,10 +129,15 @@ namespace Chaskis.Plugins.WeatherBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            MessageHandlerConfig msgConfig = new MessageHandlerConfig
+            {
+                LineRegex = weatherCommand,
+                LineAction = HandleWeatherCommand,
+                CoolDown = cooldown
+            };
+
             MessageHandler weatherHandler = new MessageHandler(
-                weatherCommand,
-                HandleWeatherCommand,
-                cooldown
+                msgConfig
             );
 
             this.handlers.Add( weatherHandler );

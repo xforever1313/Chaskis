@@ -221,9 +221,14 @@ namespace Chaskis
 
         private void AddPluginListHandler()
         {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = "^[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|\s*list)",
+                LineAction = this.HandlePluginListCommand
+            };
+
             MessageHandler pluginListHandler = new MessageHandler(
-                "^[!@]" + this.ircConfig.Nick + @":?\s+plugin(s|\s*list)",
-                HandlePluginListCommand
+                config
             );
 
             this.handlers.Add( pluginListHandler );
@@ -244,9 +249,15 @@ namespace Chaskis
         private void AddSourceHandler()
         {
             this.sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
+
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = this.sourceCommand,
+                LineAction = this.HandleSourceCommand
+            };
+
             MessageHandler sourceHandler = new MessageHandler(
-                this.sourceCommand,
-                this.HandleSourceCommand
+                config
             );
 
             this.handlers.Add( sourceHandler );
@@ -284,9 +295,15 @@ namespace Chaskis
         private void AddVersionHandler()
         {
             this.versionCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
+
+            MessageHandlerConfig messageHandlerConfig = new MessageHandlerConfig
+            {
+                LineRegex = this.versionCommand,
+                LineAction = this.HandleVersionCommand
+            };
+
             MessageHandler versionHandler = new MessageHandler(
-                this.versionCommand,
-                this.HandleVersionCommand
+                messageHandlerConfig
             );
 
             this.handlers.Add( versionHandler );
@@ -362,9 +379,15 @@ namespace Chaskis
         private void AddAboutHandler()
         {
             this.aboutCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
+
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = this.aboutCommand,
+                LineAction = this.HandleAboutCommand
+            };
+
             MessageHandler aboutHandler = new MessageHandler(
-                this.aboutCommand,
-                this.HandleAboutCommand
+                config
             );
 
             this.handlers.Add( aboutHandler );
@@ -401,10 +424,14 @@ namespace Chaskis
         {
             this.adminCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+admins";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = this.adminCommand,
+                LineAction = this.HandleAdminCommand
+            };
+
             MessageHandler helpHandler = new MessageHandler(
-                this.adminCommand,
-                this.HandleAdminCommand,
-                0
+                config
             );
 
             this.handlers.Add( helpHandler );
@@ -436,10 +463,15 @@ namespace Chaskis
         private void AddHelpHandler()
         {
             this.helpCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
+
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = this.helpCommand,
+                LineAction = this.HandleHelpCommand
+            };
+
             MessageHandler helpHandler = new MessageHandler(
-                this.helpCommand,
-                this.HandleHelpCommand,
-                0
+                config
             );
 
             this.handlers.Add( helpHandler );
@@ -494,11 +526,15 @@ namespace Chaskis
         {
             this.debugVerbosityCommand = @"^[!@]" + this.ircConfig.Nick + @":?\s+debug\s+verbosity\s+(?<plugin>\S+)\s+(?<verbose>\d+)";
 
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = this.debugVerbosityCommand,
+                LineAction = this.HandleDebugVerbosityCommand,
+                ResponseOption = ResponseOptions.PmsOnly // Debug commands will only be with private messages.
+            };
+
             MessageHandler handler = new MessageHandler(
-                this.debugVerbosityCommand,
-                this.HandleDebugVerbosityCommand,
-                0,
-                ResponseOptions.PmsOnly // Debug commands will only be with private messages.
+                config
             );
 
             this.handlers.Add( handler );

@@ -116,29 +116,51 @@ namespace Chaskis.Plugins.KarmaBot
             this.eventSender = initor.ChaskisEventSender;
             this.eventCreator = initor.ChaskisEventCreator;
 
-            MessageHandler increaseHandler = new MessageHandler(
-                this.config.IncreaseCommandRegex,
-                HandleIncreaseCommand
-            );
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.config.IncreaseCommandRegex,
+                    LineAction = HandleIncreaseCommand
+                };
 
-            MessageHandler decreaseCommand = new MessageHandler(
-                this.config.DecreaseCommandRegex,
-                HandleDecreaseCommand
-            );
+                MessageHandler increaseHandler = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( increaseHandler );
+            }
 
-            MessageHandler queryCommand = new MessageHandler(
-                this.config.QueryCommand,
-                HandleQueryCommand
-            );
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.config.DecreaseCommandRegex,
+                    LineAction = HandleDecreaseCommand
+                };
 
-            ChaskisEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
-                this.HandleChaskisQueryCommand
-            );
+                MessageHandler decreaseCommand = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( decreaseCommand );
+            }
 
-            this.handlers.Add( increaseHandler );
-            this.handlers.Add( decreaseCommand );
-            this.handlers.Add( queryCommand );
-            this.handlers.Add( chaskisQuery );
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = this.config.QueryCommand,
+                    LineAction = HandleQueryCommand
+                };
+
+                MessageHandler queryCommand = new MessageHandler(
+                    msgConfig
+                );
+                this.handlers.Add( queryCommand );
+            }
+
+            {
+                ChaskisEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
+                    this.HandleChaskisQueryCommand
+                );
+                this.handlers.Add( chaskisQuery );
+            }
         }
 
         /// <summary>
