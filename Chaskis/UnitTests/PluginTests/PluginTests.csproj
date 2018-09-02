@@ -8,6 +8,7 @@
     <!-- Required for HttpClient to work in unit tests. https://github.com/aspnet/Hosting/issues/926 -->
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RootNamespace>Chaskis.UnitTests.PluginTests</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
