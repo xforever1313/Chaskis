@@ -45,40 +45,6 @@ namespace Chaskis
         /// </summary>
         private string pluginListResponse;
 
-        // *** IMPORTANT ***
-        // Make sure all the commands start with '^' for the regex.  Otherwise,
-        // someone can do "hello world !mybot plugins" and we will print the plugins.
-
-        /// <summary>
-        /// The command for getting the source of a plugin.
-        /// </summary>
-        private string sourceCommand;
-
-        /// <summary>
-        /// The command for getting the version of a plugin.
-        /// </summary>
-        private string versionCommand;
-
-        /// <summary>
-        /// The command for getting information about a help command.
-        /// </summary>
-        private string aboutCommand;
-
-        /// <summary>
-        /// The command for getting help.
-        /// </summary>
-        private string helpCommand;
-
-        /// <summary>
-        /// The command for getting info on who are admins.
-        /// </summary>
-        private string adminCommand;
-
-        /// <summary>
-        /// The command for setting the verbosity of a plugin's output.
-        /// </summary>
-        private string debugVerbosityCommand;
-
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -248,11 +214,11 @@ namespace Chaskis
 
         private void AddSourceHandler()
         {
-            this.sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
+            string sourceCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+source(\s+(?<pluginName>\w+))?";
 
             MessageHandlerConfig config = new MessageHandlerConfig
             {
-                LineRegex = this.sourceCommand,
+                LineRegex = sourceCommand,
                 LineAction = this.HandleSourceCommand
             };
 
@@ -294,11 +260,11 @@ namespace Chaskis
 
         private void AddVersionHandler()
         {
-            this.versionCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
+            string versionCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+version(\s+(?<pluginName>\w+))?";
 
             MessageHandlerConfig messageHandlerConfig = new MessageHandlerConfig
             {
-                LineRegex = this.versionCommand,
+                LineRegex = versionCommand,
                 LineAction = this.HandleVersionCommand
             };
 
@@ -378,11 +344,11 @@ namespace Chaskis
 
         private void AddAboutHandler()
         {
-            this.aboutCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
+            string aboutCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+about(\s+(?<pluginName>\w+))?";
 
             MessageHandlerConfig config = new MessageHandlerConfig
             {
-                LineRegex = this.aboutCommand,
+                LineRegex = aboutCommand,
                 LineAction = this.HandleAboutCommand
             };
 
@@ -422,11 +388,11 @@ namespace Chaskis
         // ---- Admin Command Handler ----
         private void AddAdminHandler()
         {
-            this.adminCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+admins";
+            string adminCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+admins";
 
             MessageHandlerConfig config = new MessageHandlerConfig
             {
-                LineRegex = this.adminCommand,
+                LineRegex = adminCommand,
                 LineAction = this.HandleAdminCommand
             };
 
@@ -462,11 +428,11 @@ namespace Chaskis
 
         private void AddHelpHandler()
         {
-            this.helpCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
+            string helpCommand = "^[!@]" + this.ircConfig.Nick + @":?\s+help(\s+(?<args>.+))?";
 
             MessageHandlerConfig config = new MessageHandlerConfig
             {
-                LineRegex = this.helpCommand,
+                LineRegex = helpCommand,
                 LineAction = this.HandleHelpCommand
             };
 
@@ -524,11 +490,11 @@ namespace Chaskis
 
         private void AddDebugHandlers()
         {
-            this.debugVerbosityCommand = @"^[!@]" + this.ircConfig.Nick + @":?\s+debug\s+verbosity\s+(?<plugin>\S+)\s+(?<verbose>\d+)";
+            string debugVerbosityCommand = @"^[!@]" + this.ircConfig.Nick + @":?\s+debug\s+verbosity\s+(?<plugin>\S+)\s+(?<verbose>\d+)";
 
             MessageHandlerConfig config = new MessageHandlerConfig
             {
-                LineRegex = this.debugVerbosityCommand,
+                LineRegex = debugVerbosityCommand,
                 LineAction = this.HandleDebugVerbosityCommand,
                 ResponseOption = ResponseOptions.PmsOnly // Debug commands will only be with private messages.
             };
