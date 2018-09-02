@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -81,12 +81,16 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
-            AllHandler handler = new AllHandler(
-                delegate ( IIrcWriter writer, IrcResponse response )
+            AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+            {
+                AllAction = delegate ( IIrcWriter writer, IrcResponse response )
                 {
                     Console.WriteLine( response.Message );
-                    Console.Out.Flush();
                 }
+            };
+
+            AllHandler handler = new AllHandler(
+                allHandlerConfig
             );
 
             this.handlers.Add( handler );

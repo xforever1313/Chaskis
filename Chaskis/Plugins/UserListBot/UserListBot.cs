@@ -131,12 +131,20 @@ namespace Chaskis.Plugins.UserListBot
                 this.handlers.Add( userQueryHandler );
             }
             {
-                AllHandler nameResponseHandler = new AllHandler( HandleNamesResponse );
+                AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+                {
+                    AllAction = this.HandleNamesResponse
+                };
+                AllHandler nameResponseHandler = new AllHandler( allHandlerConfig );
                 this.handlers.Add( nameResponseHandler );
             }
 
             {
-                AllHandler endOfNamesHandler = new AllHandler( HandleEndOfNamesResponse );
+                AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+                {
+                    AllAction = this.HandleEndOfNamesResponse
+                };
+                AllHandler endOfNamesHandler = new AllHandler( allHandlerConfig );
                 this.handlers.Add( endOfNamesHandler );
             }
         }

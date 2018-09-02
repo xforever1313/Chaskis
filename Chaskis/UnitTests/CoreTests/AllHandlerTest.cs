@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -50,7 +50,12 @@ namespace Tests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
-            this.uut = new AllHandler( this.AllFunction );
+
+            AllHandlerConfig allHandlerConfig = new AllHandlerConfig()
+            {
+                AllAction = this.AllFunction
+            };
+            this.uut = new AllHandler( allHandlerConfig );
         }
 
         // -------- Tests --------

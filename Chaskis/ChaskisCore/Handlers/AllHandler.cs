@@ -1,15 +1,16 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using SethCS.Exceptions;
 
 namespace ChaskisCore
 {
+    public delegate void AllHandlerAction( IIrcWriter writer, IrcResponse response );
+
     /// <summary>
     /// This class will fire for ALL IRC messages and pass in the raw
     /// IRC message as the message string.
@@ -22,11 +23,11 @@ namespace ChaskisCore
         /// Constructor
         /// </summary>
         /// <param name="allAction">The action to take when ANY message appears from IRC (JOIN, PART, PRIVMSG, PING, etc).</param>
-        public AllHandler( Action<IIrcWriter, IrcResponse> allAction )
+        public AllHandler( AllHandlerConfig allConfig )
         {
-            ArgumentChecker.IsNotNull( allAction, nameof( allAction ) );
+            ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
-            this.AllAction = allAction;
+            this.AllAction = allConfig.AllAction;
             this.KeepHandling = true;
         }
 
@@ -40,7 +41,7 @@ namespace ChaskisCore
         /// with no parsing.  It is up to the AllAction to parse the channel and user
         /// name if they so desire.
         /// </summary>
-        public Action<IIrcWriter, IrcResponse> AllAction { get; private set; }
+        public AllHandlerAction AllAction { get; private set; }
 
         /// <summary>
         /// Whether or not the handler should keep handling or not.
