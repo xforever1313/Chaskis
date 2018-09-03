@@ -151,6 +151,7 @@
                             <Directory Id="QuoteBotConfigFolder" Name="QuoteBot"/>
                             <Directory Id="RssBotConfigFolder" Name="RssBot"/>
                             <Directory Id="ServerDiagnosticsConfigFolder" Name="ServerDiagnostics"/>
+                            <Directory Id="WelcomeBotConfigFolder" Name="WelcomeBot"/>
                             <Directory Id="XmlBotConfigFolder" Name="XmlBot"/>
                         </Directory>
                     </Directory>
@@ -534,6 +535,11 @@
                 <File Source="$(var.WelcomeBot.TargetPath)" KeyPath="yes"/>
             </Component>
 
+            <!-- WelcomeBot Config -->
+            <Component Guid="{710ABBCF-53C3-42FA-AF38-532D71D015A9}" Directory="WelcomeBotConfigFolder">
+                <File Id="WelcomeBotConfig" Source="..\..\Plugins\WelcomeBot\Config\SampleWelcomeBotConfig.xml" KeyPath="yes"/>
+            </Component>
+            
             <!-- WelcomeBot Readme -->
             <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
                 <File Id="WelcomeBotReadme" Source="..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>

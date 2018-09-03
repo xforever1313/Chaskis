@@ -102,7 +102,7 @@ def GetDefaultPluginName():
     with io.open(fileName, 'r', encoding="utf8") as inFile:
         contents = inFile.read()
 
-    pattern = r'public\s+const\s+string\s+DefaultPluginName\s*=\s*"(?P<name>\w+)"'
+    pattern = r'internal\s+const\s+string\s+DefaultPluginName\s*=\s*"(?P<name>\w+)"'
 
     match = re.search(pattern, contents)
     return match.group('name')
