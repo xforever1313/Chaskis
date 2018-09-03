@@ -27,7 +27,6 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             Assert.IsTrue( uut.EnableJoinMessages );
             Assert.IsTrue( uut.EnableKickMessages );
             Assert.IsTrue( uut.EnablePartMessages );
-            Assert.IsTrue( uut.EnableQuitMessages );
 
             // Anything that depends on other plugins is disabled by default.
             Assert.IsFalse( uut.KarmaBotIntegration );
@@ -52,10 +51,6 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             uut1 = new WelcomeBotConfig();
 
             uut1.EnablePartMessages = ( uut2.EnablePartMessages == false );
-            TestHelpers.NotEqualsTest( uut1, uut2 );
-            uut1 = new WelcomeBotConfig();
-
-            uut1.EnableQuitMessages = ( uut2.EnableQuitMessages == false );
             TestHelpers.NotEqualsTest( uut1, uut2 );
             uut1 = new WelcomeBotConfig();
 

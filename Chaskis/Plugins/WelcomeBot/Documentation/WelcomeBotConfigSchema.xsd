@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="WelcomeBotConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="welcomebotconfig" type="WelcomeBotConfig"/>
+
+    <xs:complexType name="WelcomeBotConfig">
+        <xs:sequence>
+            <xs:element name="joinmessages" type="xs:boolean" />
+            <xs:element name="partmessages" type="xs:boolean" />
+            <xs:element name="kickmessages" type="xs:boolean" />
+            <xs:element name="karmabotintegration" type="xs:boolean" />
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

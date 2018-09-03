@@ -19,7 +19,6 @@ namespace WelcomeBot
             this.EnableJoinMessages = true;
             this.EnablePartMessages = true;
             this.EnableKickMessages = true;
-            this.EnableQuitMessages = true;
             this.KarmaBotIntegration = false;
         }
 
@@ -45,13 +44,6 @@ namespace WelcomeBot
         /// Defaulted to true.
         /// </summary>
         public bool EnableKickMessages { get; set; }
-
-        /// <summary>
-        /// Does the bot report that a user quit?
-        /// 
-        /// Defaulted to true.
-        /// </summary>
-        public bool EnableQuitMessages { get; set; }
 
         /// <summary>
         /// Should WelcomeBot integrate with KarmaBot?
@@ -82,7 +74,6 @@ namespace WelcomeBot
                 ( this.EnableJoinMessages == other.EnableJoinMessages ) &&
                 ( this.EnableKickMessages == other.EnableKickMessages ) &&
                 ( this.EnablePartMessages == other.EnablePartMessages ) &&
-                ( this.EnableQuitMessages == other.EnableQuitMessages ) &&
                 ( this.KarmaBotIntegration == other.KarmaBotIntegration );
         }
 
@@ -92,7 +83,6 @@ namespace WelcomeBot
                 this.EnableJoinMessages.GetHashCode() +
                 this.EnableKickMessages.GetHashCode() +
                 this.EnablePartMessages.GetHashCode() +
-                this.EnableQuitMessages.GetHashCode() +
                 this.KarmaBotIntegration.GetHashCode();
         }
 
@@ -103,7 +93,6 @@ namespace WelcomeBot
             builder.AppendLine( "\t- " + nameof( this.EnableJoinMessages ) + " " + this.EnableJoinMessages );
             builder.AppendLine( "\t- " + nameof( this.EnablePartMessages ) + " " + this.EnablePartMessages );
             builder.AppendLine( "\t- " + nameof( this.EnableKickMessages ) + " " + this.EnableKickMessages );
-            builder.AppendLine( "\t- " + nameof( this.EnableQuitMessages ) + " " + this.EnableQuitMessages );
 
             return builder.ToString();
         }

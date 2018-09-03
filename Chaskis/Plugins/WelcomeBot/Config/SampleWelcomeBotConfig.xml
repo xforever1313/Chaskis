@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+This file is the configuration for Welcome Bot, so users
+can specify what WelcomeBot responds to.
+
+All values should be set to either 'true' to enable the setting
+or 'false' to disable the settings.
+
+joinmessages - If set to 'true', the bot will send a message
+               to the channel that a user has joined the channel.
+               
+partmessages - If set to 'true', the bot will send a message
+               to the channel that a user has left (parted) the channel.
+               
+kickmessages - If set to 'true', the bot will send a message to the
+               channel that a user was kicked from the channel.
+               
+karmabotintegration - If set to 'true', the bot will report a user's Karma
+                      when they join the channel.  joinmessages must be set to 'true'.
+                      The KarmaBot plugin must also be loaded, or nothing will happen.
+                      
+
+Other Notes:
+    - quitmessages is not implemented yet.  The reason why is the QUIT message does not
+      specify a channel like parting does, and it probably isn't desirable for the bot
+      to message ALL channels when someone quits in one channel, but is not in most
+      channels.
+-->    
+
+<welcomebotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd">
+    <joinmessages>true</joinmessages>
+    <partmessages>true</partmessages>
+    <kickmessages>true</kickmessages>
+    <karmabotintegration>false</karmabotintegration>
+</welcomebotconfig>
