@@ -200,5 +200,25 @@ namespace Chaskis.UnitTests.Common
 
             return factoryInstance;
         }
+
+        public static void EqualsTest<T>( T obj1, T obj2 )
+        {
+            Assert.AreEqual( obj1, obj2 );
+            Assert.AreEqual( obj2, obj1 );
+            Assert.AreEqual( obj1.GetHashCode(), obj2.GetHashCode() );
+        }
+
+        public static void NotEqualsTest<T>( T obj1, T obj2 )
+        {
+            Assert.AreNotEqual( obj1, obj2 );
+            Assert.AreNotEqual( obj2, obj1 );
+            Assert.AreNotEqual( obj1.GetHashCode(), obj2.GetHashCode() );
+        }
+
+        public static void CloneTest<T>( T obj1, T obj2 )
+        {
+            EqualsTest( obj1, obj2 );
+            Assert.AreNotSame( obj1, obj2 );
+        }
     }
 }
