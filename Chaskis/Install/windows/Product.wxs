@@ -39,6 +39,9 @@
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes" />
 
+        <Icon Id="icon.ico" SourceFile="..\..\..\Documentation\chaskis.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
         <!-- ================ Directories to create ================ -->
 
         <!--
