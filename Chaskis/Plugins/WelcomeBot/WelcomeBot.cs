@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Chaskis.Core;
 
 namespace Chaskis.Plugins.WelcomeBot
@@ -88,28 +89,58 @@ namespace Chaskis.Plugins.WelcomeBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
+            string configPath = Path.Combine(
+                initor.ChaskisConfigPluginRoot,
+                "WelcomeBot",
+                "WelcomeBotConfig.xml"
+            );
+
+            WelcomeBotConfig config = XmlLoader.LoadConfig( configPath );
+            this.Init( initor, config );
+        }
+
+        /// <summary>
+        /// An initor that is used if we already know the config object.
+        /// </summary>
+        public void Init( PluginInitor initor, WelcomeBotConfig config )
+        {
             if( this.isLoaded == false )
             {
                 this.eventCreator = initor.ChaskisEventCreator;
                 this.eventSender = initor.ChaskisEventSender;
 
-                ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
-                    "karmabot",
-                    this.HandleKarmaQuery
-                );
-
-                JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig
+                if( config.EnableJoinMessages )
                 {
-                    JoinAction = this.JoinMessage
-                };
-                this.handlers.Add( new JoinHandler( joinHandlerConfig ) );
+                    JoinHandlerConfig joinHandlerConfig = new JoinHandlerConfig
+                    {
+                        JoinAction = this.JoinMessage
+                    };
+                    this.handlers.Add( new JoinHandler( joinHandlerConfig ) );
+                }
 
-                PartHandlerConfig partHandlerConfig = new PartHandlerConfig
+                if( config.EnablePartMessages )
                 {
-                    PartAction = this.PartMessage
-                };
-                this.handlers.Add( new PartHandler( partHandlerConfig ) );
-                this.handlers.Add( karmaHandler );
+                    PartHandlerConfig partHandlerConfig = new PartHandlerConfig
+                    {
+                        PartAction = this.PartMessage
+                    };
+                    this.handlers.Add( new PartHandler( partHandlerConfig ) );
+                }
+
+                if( config.EnableKickMessages )
+                {
+                    // TODO.
+                }
+
+                if( config.EnableJoinMessages && config.KarmaBotIntegration )
+                {
+                    ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
+                        "karmabot",
+                        this.HandleKarmaQuery
+                    );
+                    this.handlers.Add( karmaHandler );
+                }
+
                 this.isLoaded = true;
             }
         }
