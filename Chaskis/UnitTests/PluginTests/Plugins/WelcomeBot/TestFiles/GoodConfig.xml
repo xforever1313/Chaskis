@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+This config is the opposite of the default configuration so we know
+the parsing is working as expected, and we are not
+simply using the default values of the WelcomeBotConfig.
+-->
+
+<welcomebotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd">
+    <joinmessages>false</joinmessages>
+    <partmessages>false</partmessages>
+    <kickmessages>false</kickmessages>
+    <karmabotintegration>true</karmabotintegration>
+</welcomebotconfig>

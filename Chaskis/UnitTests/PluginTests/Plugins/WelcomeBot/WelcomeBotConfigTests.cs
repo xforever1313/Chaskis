@@ -5,9 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using Chaskis.Plugins.WelcomeBot;
 using Chaskis.UnitTests.Common;
 using NUnit.Framework;
-using WelcomeBot;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
 {

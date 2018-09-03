@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Ensure if we have a bad root node, we throw an Exception. -->
+
+<derp>
+    <joinmessages>true</joinmessages>
+    <partmessages>true</partmessages>
+    <kickmessages>true</kickmessages>
+    <karmabotintegration>false</karmabotintegration>
+</derp>

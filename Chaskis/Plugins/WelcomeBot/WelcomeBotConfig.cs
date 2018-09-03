@@ -8,7 +8,7 @@
 using System;
 using System.Text;
 
-namespace WelcomeBot
+namespace Chaskis.Plugins.WelcomeBot
 {
     public class WelcomeBotConfig : IEquatable<WelcomeBotConfig>
     {
