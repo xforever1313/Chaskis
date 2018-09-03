@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<welcomebotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/welcomebotconfig/2018/welcomebotconfigschema.xsd">
+    <joinmessages>true</joinmessages>
+    <partmessages>true</partmessages>
+    <kickmessages>true</kickmessages>
+    <karmabotintegration>true</karmabotintegration>
+</welcomebotconfig>
