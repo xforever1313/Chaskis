@@ -243,7 +243,7 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         /// <summary>
-        /// Ensures that if a PRIMSG appears, the join
+        /// Ensures that if a PRIVMSG appears, the join
         /// event isn't fired.
         /// </summary>
         [Test]
@@ -281,6 +281,25 @@ namespace Chaskis.UnitTests.CoreTests
 
             Assert.IsNull( this.responseReceived );
         }
+        
+        /// <summary>
+        /// Ensures that if a KICK appears, the event
+        /// isn't fired.
+        /// </summary>
+        [Test]
+        public void KickAppears()
+        {
+            string ircString = TestHelpers.ConstructKickString(
+                "moderator",
+                "kickeduser",
+                this.ircConfig.Channels[0],
+                "Some Reason"
+            );
+
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
 
         /// <summary>
         /// Ensures that if a PING appears, the join
@@ -291,6 +310,19 @@ namespace Chaskis.UnitTests.CoreTests
         {
             this.uut.HandleEvent(
                 this.ConstructArgs( TestHelpers.ConstructPingString( "12345" ) )
+            );
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
+        /// Ensures that if a PING appears, the join
+        /// event isn't fired.
+        /// </summary>
+        [Test]
+        public void PongAppears()
+        {
+            this.uut.HandleEvent(
+                this.ConstructArgs( TestHelpers.ConstringPongString( "MyServer", "12345" ) )
             );
             Assert.IsNull( this.responseReceived );
         }

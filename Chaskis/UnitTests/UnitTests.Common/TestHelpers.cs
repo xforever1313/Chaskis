@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Chaskis.Core;
 using NUnit.Framework;
 
@@ -149,6 +150,30 @@ namespace Chaskis.UnitTests.Common
             }
 
             return msg;
+        }
+
+        public static string ConstructKickString(
+            string remotedUser,
+            string kickedUser,
+            string channel,
+            string reason = null
+        )
+        {
+            string msg = string.Format(
+                ":{0}!{0}@10.0.0.1 " + KickHandler.IrcCommand + " {1} {2}",
+                remotedUser,
+                channel,
+                kickedUser
+            );
+
+            if( string.IsNullOrEmpty( reason ) == false )
+            {
+                return msg + " :" + reason;
+            }
+            else
+            {
+                return msg;
+            }
         }
 
         /// <summary>

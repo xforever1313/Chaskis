@@ -428,6 +428,21 @@ namespace Chaskis.Core
             this.SendRawCmd( partString );
         }
 
+        public void SendKick( string userToKick, string channel, string reason = null )
+        {
+            string kickString;
+            if( string.IsNullOrWhiteSpace( reason ) )
+            {
+                kickString = string.Format( "KICK {0} {1}", channel, userToKick );
+            }
+            else
+            {
+                kickString = string.Format( "KICK {0} {1} :{2}", channel, userToKick, reason );
+            }
+
+            this.SendRawCmd( kickString );
+        }
+
         /// <summary>
         /// Sends a raw command to the server.
         /// Only use if you REALLY know what you are doing.

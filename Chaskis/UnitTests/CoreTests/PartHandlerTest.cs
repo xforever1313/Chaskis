@@ -251,6 +251,25 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         /// <summary>
+        /// Ensures that if a KICK appears, the event
+        /// isn't fired.
+        /// </summary>
+        [Test]
+        public void KickAppears()
+        {
+            string ircString = TestHelpers.ConstructKickString(
+                "moderator",
+                "kickeduser",
+                this.ircConfig.Channels[0],
+                "Some Reason"
+            );
+
+            this.uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        /// <summary>
         /// Ensures that if a PING appears, the join
         /// event isn't fired.
         /// </summary>
