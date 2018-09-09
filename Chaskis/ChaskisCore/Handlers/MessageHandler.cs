@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
@@ -174,17 +175,18 @@ namespace Chaskis.Core
             {
                 string remoteUser = match.Groups["nickOrServer"].Value;
                 string channel = match.Groups["channel"].Value;
+                string channelLowered = channel.ToLower( CultureInfo.InvariantCulture );
                 string message = match.Groups["theIrcMessage"].Value;
 
-                if( args.BlackListedChannels.Contains( channel.ToLower() ) )
+                if( args.BlackListedChannels.Contains( channelLowered ) )
                 {
                     // Blacklist channel, return.
                     return;
                 }
 
-                if( this.lastEvent.ContainsKey( channel ) == false )
+                if( this.lastEvent.ContainsKey( channelLowered ) == false )
                 {
-                    this.lastEvent[channel] = DateTime.MinValue;
+                    this.lastEvent[channelLowered] = DateTime.MinValue;
                 }
 
                 // If we are a bridge bot, we need to change
@@ -235,19 +237,10 @@ namespace Chaskis.Core
                     return;
                 }
 
-                MessageHandlerArgs response = new MessageHandlerArgs(
-                    args.IrcWriter,
-                    remoteUser,
-                    channel,
-                    message,
-                    lineRegex,
-                    messageMatch
-                );
-
                 // Return right away if the nick name from the remote user is our own.
                 if(
                     ( this.RespondToSelf == false ) &&
-                    string.Equals( response.User, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase )
+                    string.Equals( remoteUser, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase )
                 )
                 {
                     return;
@@ -255,7 +248,7 @@ namespace Chaskis.Core
                 // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
                 else if(
                     ( this.ResponseOption == ResponseOptions.ChannelOnly ) &&
-                    ( args.IrcConfig.Channels.Any( c => c.ToUpper() == response.Channel.ToUpper() ) == false )
+                    ( args.IrcConfig.Channels.Any( c => c.ToLower( CultureInfo.InvariantCulture ) == channelLowered ) == false )
                 )
                 {
                     return;
@@ -263,14 +256,16 @@ namespace Chaskis.Core
                 // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
                 else if(
                     ( this.ResponseOption == ResponseOptions.PmsOnly ) &&
-                    ( string.Equals( response.Channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) == false )
+                    ( string.Equals( channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) == false )
                 )
                 {
                     return;
                 }
                 else
                 {
-                    if( string.Equals( response.Channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
+                    MessageHandlerArgs response;
+
+                    if( string.Equals( channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
                     {
                         // If our response is a PM (channel name matches our bot's)
                         // we need to change our channel to the remote user's
@@ -284,9 +279,20 @@ namespace Chaskis.Core
                             messageMatch
                         );
                     }
+                    else
+                    {
+                        response = new MessageHandlerArgs(
+                            args.IrcWriter,
+                            remoteUser,
+                            channel,
+                            message,
+                            lineRegex,
+                            messageMatch
+                        );
+                    }
 
                     DateTime currentTime = DateTime.UtcNow;
-                    TimeSpan timeSpan = currentTime - this.lastEvent[channel];
+                    TimeSpan timeSpan = currentTime - this.lastEvent[channelLowered];
 
                     // Only fire if our cooldown was long enough. Cooldown of zero means always fire.
                     // Need to explictly say Cooldown == 0 since DateTime.UtcNow has a innacurracy of +/- 15ms.  Therefore,
@@ -294,7 +300,7 @@ namespace Chaskis.Core
                     if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
                     {
                         this.LineAction( args.IrcWriter, response );
-                        this.lastEvent[channel] = currentTime;
+                        this.lastEvent[channelLowered] = currentTime;
                     }
                 }
             }
