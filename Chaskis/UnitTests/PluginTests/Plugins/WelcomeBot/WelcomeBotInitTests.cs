@@ -67,7 +67,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             {
                 uut.Init( this.initor, config );
 
-                Assert.AreEqual( 3, uut.GetHandlers().Count ); // This will be 4 once kicking is implemented.
+                Assert.AreEqual( 4, uut.GetHandlers().Count );
             }
         }
 
@@ -112,7 +112,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             {
                 uut.Init( this.initor, config );
 
-                Assert.AreEqual( 0, uut.GetHandlers().Count ); // This will be 1 once kick is enabled.
+                Assert.AreEqual( 1, uut.GetHandlers().Count );
             }
         }
 

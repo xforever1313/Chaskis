@@ -122,21 +122,26 @@ namespace Chaskis.Plugins.WelcomeBot
                 {
                     PartHandlerConfig partHandlerConfig = new PartHandlerConfig
                     {
-                        PartAction = this.PartMessage
+                        PartAction = PartMessage
                     };
                     this.handlers.Add( new PartHandler( partHandlerConfig ) );
                 }
 
                 if( config.EnableKickMessages )
                 {
-                    // TODO.
+                    KickHandlerConfig kickHandlerConfig = new KickHandlerConfig
+                    {
+                        KickAction = KickMessage
+                    };
+
+                    this.handlers.Add( new KickHandler( kickHandlerConfig ) );
                 }
 
                 if( config.EnableJoinMessages && config.KarmaBotIntegration )
                 {
                     ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
                         "karmabot",
-                        this.HandleKarmaQuery
+                        HandleKarmaQuery
                     );
                     this.handlers.Add( karmaHandler );
                 }
@@ -216,12 +221,37 @@ namespace Chaskis.Plugins.WelcomeBot
             this.eventSender.SendChaskisEvent( e );
         }
 
+        public static void KickMessage( KickHandlerArgs args )
+        {
+            string message;
+
+            if ( string.IsNullOrWhiteSpace( args.Reason ) )
+            {
+                message = string.Format(
+                    "{0} has been kicked by {1}",
+                    args.UserWhoWasKicked,
+                    args.UserWhoSentKick
+                );
+            }
+            else
+            {
+                message = string.Format(
+                   "{0} has been kicked by {1} for reason '{2}'",
+                   args.UserWhoWasKicked,
+                   args.UserWhoSentKick,
+                   args.Reason
+                );
+            }
+
+            args.Writer.SendMessage( message, args.Channel );
+        }
+
         /// <summary>
         /// Ran when someone parts the channel.
         /// </summary>
         /// <param name="writer">The means to write to an IRC channel.</param>
         /// <param name="response">The command from the server.</param>
-        private void PartMessage( IIrcWriter writer, IrcResponse response )
+        private static void PartMessage( IIrcWriter writer, IrcResponse response )
         {
             writer.SendMessage(
                 "Thanks for visiting " + response.Channel + "!  Please come back soon!",
@@ -233,15 +263,15 @@ namespace Chaskis.Plugins.WelcomeBot
             );
         }
 
-        private void HandleKarmaQuery( ChaskisEventHandlerLineActionArgs args )
+        private static void HandleKarmaQuery( ChaskisEventHandlerLineActionArgs args )
         {
             if( args.PluginName == "karmabot" )
             {
-                this.HandleKarmaBotResponse( args );
+                HandleKarmaBotResponse( args );
             }
         }
 
-        private void HandleKarmaBotResponse( ChaskisEventHandlerLineActionArgs args )
+        private static void HandleKarmaBotResponse( ChaskisEventHandlerLineActionArgs args )
         {
             if( args.EventArgs.ContainsKey( "ERROR" ) == false )
             {
