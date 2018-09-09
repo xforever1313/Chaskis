@@ -102,11 +102,11 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 "Usage: !calc " + MathBotCalculator.calculatorRegex,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

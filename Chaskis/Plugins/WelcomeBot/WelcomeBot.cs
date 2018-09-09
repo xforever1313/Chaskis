@@ -153,11 +153,11 @@ namespace Chaskis.Plugins.WelcomeBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 this.About,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

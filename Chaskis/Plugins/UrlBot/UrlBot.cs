@@ -104,11 +104,11 @@ namespace Chaskis.Plugins.UrlBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 this.About,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

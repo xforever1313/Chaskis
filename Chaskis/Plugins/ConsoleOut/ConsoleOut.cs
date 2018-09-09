@@ -99,9 +99,9 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <summary>
         /// Handles help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage( this.About, response.Channel );
+            msgArgs.Writer.SendMessage( this.About, msgArgs.Channel );
         }
 
         /// <summary>

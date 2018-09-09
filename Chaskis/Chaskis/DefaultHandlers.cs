@@ -120,20 +120,20 @@ namespace Chaskis
             this.pluginListResponse = builder.ToString();
         }
 
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            if( args.Length == 0 )
+            if( helpArgs.Length == 0 )
             {
                 // Print default message and return.
-                writer.SendMessage(
+                msgArgs.Writer.SendMessage(
                     defaultHelpMessage,
-                    response.Channel
+                    msgArgs.Channel
                 );
                 return;
             }
 
             string message;
-            switch( args[0] )
+            switch( helpArgs[0] )
             {
                 case "plugins":
                 case "pluginlist":
@@ -165,9 +165,9 @@ namespace Chaskis
                     break;
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 message,
-                response.Channel
+                msgArgs.Channel
             );
         }
 
@@ -471,7 +471,7 @@ namespace Chaskis
             }
 
             // Handle the help command for the plugin
-            this.plugins[pluginName].Plugin.HandleHelp( args.Writer, args, helpArgs.ToArray() );
+            this.plugins[pluginName].Plugin.HandleHelp( args, helpArgs.ToArray() );
         }
 
         // ---- Debug Handlers ----

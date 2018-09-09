@@ -148,7 +148,7 @@ namespace Chaskis.Plugins.CowSayBot
             );
         }
 
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
             StringBuilder builder = new StringBuilder();
             builder.Append( "My avaiable commands are: " );
@@ -166,9 +166,9 @@ namespace Chaskis.Plugins.CowSayBot
                 builder.Remove( 450, builder.Length );
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 builder.ToString(),
-                response.Channel
+                msgArgs.Channel
             );
         }
 

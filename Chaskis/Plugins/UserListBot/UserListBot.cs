@@ -157,7 +157,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
             string message = string.Format(
                 "Usage: '{0}'.  Note I have a cooldown time of {1} seconds.",
@@ -165,9 +165,9 @@ namespace Chaskis.Plugins.UserListBot
                 this.userListConfig.Cooldown.ToString()
             );
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 message,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

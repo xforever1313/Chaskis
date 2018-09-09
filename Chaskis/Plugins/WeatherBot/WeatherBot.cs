@@ -146,7 +146,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Handle help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
             string message = string.Format(
                 "Usage: '{0} zipCode'.  Note I have a cooldown of {1} seconds and only work with US zip codes.",
@@ -154,9 +154,9 @@ namespace Chaskis.Plugins.WeatherBot
                 cooldown
             );
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 message,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

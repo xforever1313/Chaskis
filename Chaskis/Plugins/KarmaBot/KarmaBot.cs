@@ -166,22 +166,22 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            string message = "@" + response.User + ": ";
-            if( args.Length == 0 )
+            string message = "@" + msgArgs.User + ": ";
+            if( helpArgs.Length == 0 )
             {
                 message += "Append 'increase', 'decrease', or 'query' to the help message you just sent to get more information about each command.";
             }
-            else if( args[0] == "increase" )
+            else if( helpArgs[0] == "increase" )
             {
                 message += "To increase a user's karma, you must match this regex: " + this.config.IncreaseCommandRegex;
             }
-            else if( args[0] == "decrease" )
+            else if( helpArgs[0] == "decrease" )
             {
                 message += "To decrease a user's karma, you must match this regex: " + this.config.DecreaseCommandRegex;
             }
-            else if( args[0] == "query" )
+            else if( helpArgs[0] == "query" )
             {
                 message += "To query a user's karma, you must match this regex: " + this.config.QueryCommand;
             }
@@ -190,9 +190,9 @@ namespace Chaskis.Plugins.KarmaBot
                 message += "that is not a valid help command.  I can do 'increase', 'decrease', or 'query'";
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 message,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

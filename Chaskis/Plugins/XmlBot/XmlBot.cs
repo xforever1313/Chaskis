@@ -101,11 +101,11 @@ namespace Chaskis.Plugins.XmlBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 "I just respond to whatever my admin told me to respond to.  They configured me with an XML file.  Blame my admin for anything I say!",
-                response.Channel
+                msgArgs.Channel
             );
         }
 

@@ -163,26 +163,26 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            string message = "@" + response.User + ": ";
-            if( args.Length == 0 )
+            string message = "@" + msgArgs.User + ": ";
+            if( helpArgs.Length == 0 )
             {
                 message += "Append 'uptime', 'os', 'processors', or 'time' to the help message you just sent to get more information about each command.";
             }
-            else if( args[0] == "uptime" )
+            else if( helpArgs[0] == "uptime" )
             {
                 message += "To how long I've been running for, you must match this regex: " + this.config.UpTimeCmd.Replace( "{%nick%}", this.ircConfig.Nick );
             }
-            else if( args[0] == "os" )
+            else if( helpArgs[0] == "os" )
             {
                 message += "To see what os I'm running, you must match this regex: " + this.config.OsVersionCmd.Replace( "{%nick%}", this.ircConfig.Nick );
             }
-            else if( args[0] == "processors" )
+            else if( helpArgs[0] == "processors" )
             {
                 message += "To see how many processors I'm running, you must match this regex: " + this.config.ProcessorCountCmd.Replace( "{%nick%}", this.ircConfig.Nick );
             }
-            else if( args[0] == "time" )
+            else if( helpArgs[0] == "time" )
             {
                 message += "To see the time of my server, you must match this regex: " + this.config.ProcessorCountCmd.Replace( "{%nick%}", this.ircConfig.Nick );
             }
@@ -191,9 +191,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 message += "that is not a valid help command.  I can do 'uptime', 'os', 'processors', or 'time'";
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 message,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

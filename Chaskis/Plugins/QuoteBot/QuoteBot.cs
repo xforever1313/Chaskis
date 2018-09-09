@@ -170,36 +170,36 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append( "@" + response.User + ": " );
+            builder.Append( "@" + msgArgs.User + ": " );
 
-            if( args.Length == 0 )
+            if( helpArgs.Length == 0 )
             {
                 builder.Append( "Append 'add', 'delete', 'random', or 'get' to the help message you just sent to get more information about each command." );
             }
-            else if( args[0] == "add" )
+            else if( helpArgs[0] == "add" )
             {
                 builder.Append( "Adds a quote to the database. Command regex: " + this.quoteBotConfig.AddCommand );
             }
-            else if( args[0] == "delete" )
+            else if( helpArgs[0] == "delete" )
             {
                 builder.Append( "Deletes a quote from the database. Must be a bot admin. Command regex: " + this.quoteBotConfig.DeleteCommand );
             }
-            else if( args[0] == "random" )
+            else if( helpArgs[0] == "random" )
             {
                 builder.Append( "Posts a random quote from the database. Command regex: " + this.quoteBotConfig.RandomCommand );
             }
-            else if( args[0] == "get" )
+            else if( helpArgs[0] == "get" )
             {
                 builder.Append( "Posts the given quote from the database. Command regex: " + this.quoteBotConfig.GetCommand );
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 builder.ToString(),
-                response.Channel
+                msgArgs.Channel
             );
         }
 

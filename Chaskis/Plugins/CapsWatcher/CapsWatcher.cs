@@ -149,13 +149,13 @@ namespace Chaskis.Plugins.CapsWatcher
         }
 
         /// <summary>
-        /// Handles what happens if a user requests help for the plugin/
+        /// Handles what happens if a user requests help for the plugin
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 "Type in all caps to see what happens. Go ahead, I DARE YOU! Messages must contain at least 3 characters and 1 letter for a response.",
-                response.Channel
+                msgArgs.Channel
             );
         }
 

@@ -72,25 +72,25 @@ namespace Chaskis.RegressionTests
             return this.handlers.AsReadOnly();
         }
 
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            if( args.Length == 0 )
+            if( helpArgs.Length == 0 )
             {
-                writer.SendMessage(
+                msgArgs.Writer.SendMessage(
                     "Got help request with no arguments.",
-                    response.Channel
+                    msgArgs.Channel
                 );
             }
             else
             {
                 StringBuilder builder = new StringBuilder();
-                foreach( string arg in args )
+                foreach( string arg in helpArgs )
                 {
                     builder.Append( arg + " " );
                 }
-                writer.SendMessage(
+                msgArgs.Writer.SendMessage(
                     "Got help request with these args: " + builder.ToString(),
-                    response.Channel
+                    msgArgs.Channel
                 );
             }
         }

@@ -116,21 +116,21 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append( "@" + response.User + ": " );
+            builder.Append( "@" + msgArgs.User + ": " );
 
-            if( args.Length == 0 )
+            if( helpArgs.Length == 0 )
             {
                 builder.Append( "Append 'broadcast', or 'cc' to the help message you just sent to get more information about each command." );
             }
-            else if( args[0] == "broadcast" )
+            else if( helpArgs[0] == "broadcast" )
             {
                 builder.Append( "Broadcasts a message to ALL channels I am in. Command: !broadcast Your Message Here."  );
             }
-            else if( args[0] == "cc" )
+            else if( helpArgs[0] == "cc" )
             {
                 builder.Append( "Sends a message to another channel I am in from this one.  Command: !cc <#channelname> Your Message Here." );
             }
@@ -139,9 +139,9 @@ namespace Chaskis.Plugins.CrossChannel
                 builder.Append( "That is not a command I know..." );
             }
 
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 builder.ToString(),
-                response.Channel
+                msgArgs.Channel
             );
         }
 

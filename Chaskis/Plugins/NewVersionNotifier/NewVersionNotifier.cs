@@ -137,11 +137,11 @@ namespace Chaskis.Plugins.NewVersionNotifier
             this.ircHandlers.Add( joinHandler );
         }
 
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 this.About,
-                response.Channel
+                msgArgs.Channel
             );
         }
 

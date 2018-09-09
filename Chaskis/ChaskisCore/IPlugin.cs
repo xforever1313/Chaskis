@@ -67,10 +67,9 @@ namespace Chaskis.Core
         /// everything after "help" is passed in.  Note that an empty string can be passed in if a user only types
         /// "!mybot pluginName help", in which case they want a generic usage message.
         /// </summary>
-        /// <param name="writer">The IRC writer so the plugin can respond to the user.</param>
-        /// <param name="response">Response from the server.</param>
-        /// <param name="args">Any arguments the user passed in.</param>
-        void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args );
+        /// <param name="msgArgs">Message from the server.</param>
+        /// <param name="helpArgs">Any arguments the user passed in.</param>
+        void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs );
 
         /// <summary>
         /// Gets the handlers that should be added to the main bot.

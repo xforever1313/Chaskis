@@ -217,11 +217,11 @@ namespace Chaskis.Plugins.RssBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 this.About + "  Don't like one of the feeds I post?  Yell at my admin!",
-                response.Channel
+                msgArgs.Channel
             );
         }
 

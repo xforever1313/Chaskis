@@ -80,11 +80,11 @@ namespace Chaskis.Plugins.IsItDownBot
             this.config = XmlLoader.LoadConfig( configPath );
         }
 
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 "Usage: " + this.config.CommandPrefix + " https://url",
-                response.Channel
+                msgArgs.Channel
             );
         }
 

@@ -101,11 +101,11 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
         {
-            writer.SendMessage(
+            msgArgs.Writer.SendMessage(
                 "To fix your previous message, send 's/findRegex/replace' to the IRC channel.  I will replace all matches of 'findRegex' in your previous message and replace it with 'replace'. Use '\\/' to escape '/' characters.",
-                response.Channel
+                msgArgs.Channel
             );
         }
 
