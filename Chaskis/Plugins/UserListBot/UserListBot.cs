@@ -157,7 +157,7 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             string message = string.Format(
                 "Usage: '{0}'.  Note I have a cooldown time of {1} seconds.",
@@ -193,7 +193,7 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleGetUsersCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleGetUsersCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendRawCmd( "NAMES " + response.Channel );
             this.isQueried[response.Channel] = true;

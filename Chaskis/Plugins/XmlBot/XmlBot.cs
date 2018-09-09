@@ -101,7 +101,7 @@ namespace Chaskis.Plugins.XmlBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 "I just respond to whatever my admin told me to respond to.  They configured me with an XML file.  Blame my admin for anything I say!",
@@ -138,10 +138,10 @@ namespace Chaskis.Plugins.XmlBot
 
             string innerResponse = response;
 
-            return delegate ( IIrcWriter writer, IrcResponse ircResponse )
+            return delegate ( IIrcWriter writer, MessageHandlerArgs ircResponse )
             {
                 StringBuilder responseToSend = new StringBuilder(
-                    Parsing.LiquefyStringWithIrcConfig( innerResponse, ircResponse.RemoteUser, ircConfig.Nick, ircResponse.Channel )
+                    Parsing.LiquefyStringWithIrcConfig( innerResponse, ircResponse.User, ircConfig.Nick, ircResponse.Channel )
                 );
 
                 foreach( string group in ircResponse.Regex.GetGroupNames() )

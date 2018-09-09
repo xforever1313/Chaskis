@@ -43,21 +43,21 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.Throws<ValidationException>( () => config.Validate() );
 
             // Empty regex should not validate.
-            config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.LineAction = delegate ( IIrcWriter writer, MessageHandlerArgs response )
             {
             };
             config.LineRegex = string.Empty;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
             // Null regex should not validate.
-            config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.LineAction = delegate ( IIrcWriter writer, MessageHandlerArgs response )
             {
             };
             config.LineRegex = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
             // Cooldown can not be less than 0.
-            config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.LineAction = delegate ( IIrcWriter writer, MessageHandlerArgs response )
             {
             };
             config.LineRegex = @"!bot\s+help";
@@ -65,7 +65,7 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.Throws<ValidationException>( () => config.Validate() );
 
             // This should validate.
-            config.LineAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.LineAction = delegate ( IIrcWriter writer, MessageHandlerArgs response )
             {
             };
             config.LineRegex = @"!bot\s+help";

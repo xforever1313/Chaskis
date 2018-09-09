@@ -151,7 +151,7 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <summary>
         /// Handles what happens if a user requests help for the plugin/
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 "Type in all caps to see what happens. Go ahead, I DARE YOU! Messages must contain at least 3 characters and 1 letter for a response.",
@@ -246,11 +246,11 @@ namespace Chaskis.Plugins.CapsWatcher
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleMessage( IIrcWriter writer, IrcResponse response )
+        private void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
         {
             if( CheckForCaps( response.Message, this.ignoreRegex ) )
             {
-                string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.RemoteUser );
+                string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.User );
                 writer.SendMessage( msgToSend, response.Channel );
             }
             else

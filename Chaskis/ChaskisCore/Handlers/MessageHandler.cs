@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void MessageHandlerAction( IIrcWriter writer, IrcResponse response );
+    public delegate void MessageHandlerAction( IIrcWriter writer, MessageHandlerArgs response );
 
     /// <summary>
     /// Configuration for responding to a message received from IRC.
@@ -235,7 +235,8 @@ namespace Chaskis.Core
                     return;
                 }
 
-                IrcResponse response = new IrcResponse(
+                MessageHandlerArgs response = new MessageHandlerArgs(
+                    args.IrcWriter,
                     remoteUser,
                     channel,
                     message,
@@ -246,7 +247,7 @@ namespace Chaskis.Core
                 // Return right away if the nick name from the remote user is our own.
                 if(
                     ( this.RespondToSelf == false ) &&
-                    ( response.RemoteUser.ToUpper() == args.IrcConfig.Nick.ToUpper() )
+                    string.Equals( response.User, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase )
                 )
                 {
                     return;
@@ -262,19 +263,20 @@ namespace Chaskis.Core
                 // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
                 else if(
                     ( this.ResponseOption == ResponseOptions.PmsOnly ) &&
-                    ( response.Channel.ToUpper() != args.IrcConfig.Nick.ToUpper() )
+                    ( string.Equals( response.Channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) == false )
                 )
                 {
                     return;
                 }
                 else
                 {
-                    if( response.Channel.ToUpper() == args.IrcConfig.Nick.ToUpper() )
+                    if( string.Equals( response.Channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
                     {
                         // If our response is a PM (channel name matches our bot's)
                         // we need to change our channel to the remote user's
                         // channel so it gets sent out correctly when handle event is called.
-                        response = new IrcResponse(
+                        response = new MessageHandlerArgs(
+                            args.IrcWriter,
                             remoteUser,
                             remoteUser,
                             message,

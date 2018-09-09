@@ -217,7 +217,7 @@ namespace Chaskis.Plugins.RssBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 this.About + "  Don't like one of the feeds I post?  Yell at my admin!",
@@ -225,9 +225,9 @@ namespace Chaskis.Plugins.RssBot
             );
         }
 
-        public void HandleDebug( IIrcWriter writer, IrcResponse response )
+        public void HandleDebug( IIrcWriter writer, MessageHandlerArgs response )
         {
-            if( this.admins.Contains( response.RemoteUser ) == false )
+            if( this.admins.Contains( response.User ) == false )
             {
                 // Do Nothing
                 return;
@@ -242,14 +242,14 @@ namespace Chaskis.Plugins.RssBot
                 this.CheckForUpdates( reader, writer, feed.Channels );
                 writer.SendMessage(
                     "Updating feed at URL " + url,
-                    response.RemoteUser
+                    response.User
                 );
             }
             else
             {
                 writer.SendMessage(
                     "Could not find feed that matches URL " + url,
-                    response.RemoteUser
+                    response.User
                 );
             }
         }

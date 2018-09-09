@@ -104,7 +104,7 @@ namespace Chaskis.Plugins.UrlBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 this.About,
@@ -134,7 +134,7 @@ namespace Chaskis.Plugins.UrlBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private async void HandleMessage( IIrcWriter writer, IrcResponse response )
+        private async void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
         {
             string url;
             if( UrlReader.TryParseUrl( response.Message, out url ) )

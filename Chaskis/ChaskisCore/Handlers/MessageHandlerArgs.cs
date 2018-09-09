@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -10,22 +10,23 @@ using System.Text.RegularExpressions;
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Represents a response from IRC.
+    /// Arguments that are passed in when <see cref="MessageHandler"/> is triggered.
     /// </summary>
-    public class IrcResponse
+    public class MessageHandlerArgs
     {
         // -------- Constructor --------
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="remoteUser">The user that sent the message.</param>
-        /// <param name="channel">The message that channel was received on.</param>
-        /// <param name="message">The message that was sent.</param>
-        /// <param name="match">The Regex match that was used to get this response, if any.</param>
-        public IrcResponse( string remoteUser, string channel, string message, Regex regex, Match match )
+        public MessageHandlerArgs( 
+            IIrcWriter writer,
+            string user,
+            string channel,
+            string message,
+            Regex regex,
+            Match match
+        )
         {
-            this.RemoteUser = remoteUser;
+            this.Writer = writer;
+            this.User = user;
             this.Channel = channel;
             this.Message = message;
             this.Regex = regex;
@@ -34,10 +35,12 @@ namespace Chaskis.Core
 
         // -------- Properties --------
 
+        public IIrcWriter Writer { get; private set; }
+
         /// <summary>
         /// The user that sent the message.
         /// </summary>
-        public string RemoteUser { get; private set; }
+        public string User { get; private set; }
 
         /// <summary>
         /// The channel that the message was received on.
@@ -49,19 +52,17 @@ namespace Chaskis.Core
         public string Channel { get; private set; }
 
         /// <summary>
-        /// The message that was sent via IRC.  Empty if a Join/Part event.
+        /// The message that was sent via IRC.
         /// </summary>
         public string Message { get; private set; }
         
         /// <summary>
         /// The regex that was used to find this response.
-        /// Null if no regex was used.
         /// </summary>
         public Regex Regex { get; private set; }
 
         /// <summary>
         /// The regex match that was used to find this response.
-        /// Null if no Match was used.
         /// </summary>
         public Match Match { get; private set; }
     }

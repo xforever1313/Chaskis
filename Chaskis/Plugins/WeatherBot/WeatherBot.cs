@@ -146,7 +146,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Handle help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             string message = string.Format(
                 "Usage: '{0} zipCode'.  Note I have a cooldown of {1} seconds and only work with US zip codes.",
@@ -184,7 +184,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
+        private static void HandleHelpCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage(
                 "Valid commands: XXXXX (US Zip Code), help, about, sourcecode.  Each command has a " + cooldown + " second cooldown.",
@@ -197,7 +197,7 @@ namespace Chaskis.Plugins.WeatherBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private async void HandleWeatherCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleWeatherCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string zip = match.Groups["zipCode"].Value;

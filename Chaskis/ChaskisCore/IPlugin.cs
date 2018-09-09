@@ -70,7 +70,7 @@ namespace Chaskis.Core
         /// <param name="writer">The IRC writer so the plugin can respond to the user.</param>
         /// <param name="response">Response from the server.</param>
         /// <param name="args">Any arguments the user passed in.</param>
-        void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args );
+        void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args );
 
         /// <summary>
         /// Gets the handlers that should be added to the main bot.

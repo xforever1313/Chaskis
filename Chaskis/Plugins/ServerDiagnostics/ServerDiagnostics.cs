@@ -163,9 +163,9 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
-            string message = "@" + response.RemoteUser + ": ";
+            string message = "@" + response.User + ": ";
             if( args.Length == 0 )
             {
                 message += "Append 'uptime', 'os', 'processors', or 'time' to the help message you just sent to get more information about each command.";
@@ -221,7 +221,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleUpTimeCmd( IIrcWriter writer, IrcResponse response )
+        private void HandleUpTimeCmd( IIrcWriter writer, MessageHandlerArgs response )
         {
             TimeSpan span = DateTime.UtcNow - startTime;
 
@@ -244,7 +244,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static void HandleOsVersionCmd( IIrcWriter writer, IrcResponse response )
+        private static void HandleOsVersionCmd( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage(
                 "My system is " + Environment.OSVersion.ToString() + ".",
@@ -257,7 +257,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static void HandleProcessorCountCmd( IIrcWriter writer, IrcResponse response )
+        private static void HandleProcessorCountCmd( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage(
                 "My system has " + Environment.ProcessorCount + " processors.",
@@ -270,7 +270,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private static void HandleTimeCmd( IIrcWriter writer, IrcResponse response )
+        private static void HandleTimeCmd( IIrcWriter writer, MessageHandlerArgs response )
         {
             DateTime time = DateTime.UtcNow;
             writer.SendMessage(

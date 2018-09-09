@@ -101,7 +101,7 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 "To fix your previous message, send 's/findRegex/replace' to the IRC channel.  I will replace all matches of 'findRegex' in your previous message and replace it with 'replace'. Use '\\/' to escape '/' characters.",
@@ -131,14 +131,14 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleMessage( IIrcWriter writer, IrcResponse response )
+        private void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
         {
-            MessageFixerResult result = this.msgFixer.RecordNewMessage( response.RemoteUser, response.Message );
+            MessageFixerResult result = this.msgFixer.RecordNewMessage( response.User, response.Message );
             if( result.Success )
             {
                 string msg = string.Format(
                     "{0}'s updated message: '{1}'",
-                    response.RemoteUser,
+                    response.User,
                     result.Message
                 );
 
@@ -148,7 +148,7 @@ namespace Chaskis.Plugins.MessageFixerBot
             {
                 string msg = string.Format(
                     "{0}: error when trying to fix your message: '{1}'",
-                    response.RemoteUser,
+                    response.User,
                     result.Message
                 );
 

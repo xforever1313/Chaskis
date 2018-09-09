@@ -170,11 +170,11 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append( "@" + response.RemoteUser + ": " );
+            builder.Append( "@" + response.User + ": " );
 
             if( args.Length == 0 )
             {
@@ -225,9 +225,9 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the response when the user wants to add a quote.
         /// </summary>
-        private async void AddHandler( IIrcWriter writer, IrcResponse response )
+        private async void AddHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
-            if( this.parser.TryParseAddCommand( response.Message, response.RemoteUser, out Quote quote, out string error ) )
+            if( this.parser.TryParseAddCommand( response.Message, response.User, out Quote quote, out string error ) )
             {
                 try
                 {
@@ -257,12 +257,12 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the response when the user wants to delete a quote.
         /// </summary>
-        private async void DeleteHandler( IIrcWriter writer, IrcResponse response )
+        private async void DeleteHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
-            if( this.ircConfig.Admins.Contains( response.RemoteUser ) == false )
+            if( this.ircConfig.Admins.Contains( response.User ) == false )
             {
                 writer.SendMessage(
-                    "@" + response.RemoteUser + ": you are not a bot admin.  You can not delete quotes.",
+                    "@" + response.User + ": you are not a bot admin.  You can not delete quotes.",
                     response.Channel
                 );
                 return;
@@ -308,7 +308,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the response when the user wants to get a random quote.
         /// </summary>
-        private async void RandomHandler( IIrcWriter writer, IrcResponse response )
+        private async void RandomHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
             if( this.parser.TryParseRandomCommand( response.Message, out string error ) )
             {
@@ -350,7 +350,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// <summary>
         /// Handles the response when the user wants to get a quote.
         /// </summary>
-        private async void GetHandler( IIrcWriter writer, IrcResponse response )
+        private async void GetHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
             if( this.parser.TryParseGetCommand( response.Message, out int id, out string error ) )
             {

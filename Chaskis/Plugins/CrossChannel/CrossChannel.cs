@@ -116,11 +116,11 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append( "@" + response.RemoteUser + ": " );
+            builder.Append( "@" + response.User + ": " );
 
             if( args.Length == 0 )
             {
@@ -167,14 +167,14 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Handles the broadcast command.
         /// </summary>
-        private void BroadcastHandler( IIrcWriter writer, IrcResponse response )
+        private void BroadcastHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string message = match.Groups["bcastmsg"].Value;
 
             string msg = string.Format(
                 "<{0}@{1}> {2}",
-                response.RemoteUser,
+                response.User,
                 response.Channel,
                 message
             );
@@ -185,7 +185,7 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Handles the CC Command.
         /// </summary>
-        private void CCHandler( IIrcWriter writer, IrcResponse response )
+        private void CCHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string channel = match.Groups["channel"].Value.ToLower();
@@ -195,7 +195,7 @@ namespace Chaskis.Plugins.CrossChannel
             {
                 string msg = string.Format(
                     "@{0}: I am not in {1}, sorry :(",
-                    response.RemoteUser,
+                    response.User,
                     channel
                 );
                 writer.SendMessage(
@@ -209,7 +209,7 @@ namespace Chaskis.Plugins.CrossChannel
 
                 string msg = string.Format(
                     "<{0}@{1}> {2}",
-                    response.RemoteUser,
+                    response.User,
                     response.Channel,
                     message
                 );

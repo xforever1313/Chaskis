@@ -33,7 +33,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// <summary>
         /// The response received from the event handler (if any).
         /// </summary>
-        private IrcResponse responseReceived;
+        private MessageHandlerArgs responseReceived;
 
         /// <summary>
         /// The user that joined.
@@ -162,7 +162,7 @@ namespace Chaskis.UnitTests.CoreTests
                 Assert.AreEqual( channel, this.responseReceived.Channel );
 
                 // Nicks should match.
-                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+                Assert.AreEqual( "anickname", this.responseReceived.User );
             }
         }
 
@@ -195,7 +195,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -229,7 +229,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -261,7 +261,7 @@ namespace Chaskis.UnitTests.CoreTests
 
                 Assert.IsNotNull( this.responseReceived );
                 Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel ); // <- Should fire.
-                Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                Assert.AreEqual( remoteUser, this.responseReceived.User );
                 Assert.AreEqual( expectedMessage, this.responseReceived.Message );
                 this.responseReceived = null;
             }
@@ -273,7 +273,7 @@ namespace Chaskis.UnitTests.CoreTests
 
                 Assert.IsNotNull( this.responseReceived );
                 Assert.AreEqual( this.ircConfig.Channels[1], this.responseReceived.Channel ); // <- Should fire.
-                Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                Assert.AreEqual( remoteUser, this.responseReceived.User );
                 Assert.AreEqual( expectedMessage, this.responseReceived.Message );
                 this.responseReceived = null;
             }
@@ -373,7 +373,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -415,7 +415,7 @@ namespace Chaskis.UnitTests.CoreTests
                 uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                 Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-                Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                Assert.AreEqual( remoteUser, this.responseReceived.User );
                 Assert.AreEqual( expectedMessage, this.responseReceived.Message );
             }
         }
@@ -462,7 +462,7 @@ namespace Chaskis.UnitTests.CoreTests
                     uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                     Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-                    Assert.AreEqual( bridgeBotNick, this.responseReceived.RemoteUser );
+                    Assert.AreEqual( bridgeBotNick, this.responseReceived.User );
                     Assert.AreEqual( expectedReceivedMessage, this.responseReceived.Message );
 
                     this.responseReceived = null;
@@ -474,7 +474,7 @@ namespace Chaskis.UnitTests.CoreTests
                     uut.HandleEvent( this.ConstructArgs( ircString ) );
 
                     Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-                    Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+                    Assert.AreEqual( remoteUser, this.responseReceived.User );
                     Assert.AreEqual( expectedMessage, this.responseReceived.Message );
 
                     this.responseReceived = null;
@@ -505,7 +505,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -532,7 +532,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -585,7 +585,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( TestHelpers.BridgeBotUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( TestHelpers.BridgeBotUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -618,7 +618,7 @@ namespace Chaskis.UnitTests.CoreTests
 
             Assert.IsNotNull( this.responseReceived );
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -650,7 +650,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -679,7 +679,7 @@ namespace Chaskis.UnitTests.CoreTests
 
             // Need to set the remote user as the channel so the message goes to the right channel.
             Assert.AreEqual( remoteUser, this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -733,7 +733,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
-            Assert.AreEqual( remoteUser, this.responseReceived.RemoteUser );
+            Assert.AreEqual( remoteUser, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -787,7 +787,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.Channel );
-            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.RemoteUser );
+            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -837,7 +837,7 @@ namespace Chaskis.UnitTests.CoreTests
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 
             Assert.AreEqual( channel, this.responseReceived.Channel );
-            Assert.AreEqual( user, this.responseReceived.RemoteUser );
+            Assert.AreEqual( user, this.responseReceived.User );
             Assert.AreEqual( expectedMessage, this.responseReceived.Message );
         }
 
@@ -858,7 +858,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
-        private void MessageFunction( IIrcWriter writer, IrcResponse response )
+        private void MessageFunction( IIrcWriter writer, MessageHandlerArgs response )
         {
             Assert.AreSame( this.ircWriter.Object, writer );
             this.responseReceived = response;

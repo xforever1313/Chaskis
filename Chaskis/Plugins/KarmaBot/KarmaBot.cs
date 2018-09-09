@@ -166,9 +166,9 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// Handles the help command.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
-            string message = "@" + response.RemoteUser + ": ";
+            string message = "@" + response.User + ": ";
             if( args.Length == 0 )
             {
                 message += "Append 'increase', 'decrease', or 'query' to the help message you just sent to get more information about each command.";
@@ -220,7 +220,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private async void HandleIncreaseCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleIncreaseCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string userName = match.Groups["name"].Value;
@@ -234,7 +234,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private async void HandleDecreaseCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleDecreaseCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string userName = match.Groups["name"].Value;
@@ -248,7 +248,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private async void HandleQueryCommand( IIrcWriter writer, IrcResponse response )
+        private async void HandleQueryCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string userName = match.Groups["name"].Value;

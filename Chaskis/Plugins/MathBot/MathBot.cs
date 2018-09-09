@@ -102,7 +102,7 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// Handles the help message.
         /// </summary>
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             writer.SendMessage(
                 "Usage: !calc " + MathBotCalculator.calculatorRegex,
@@ -132,7 +132,7 @@ namespace Chaskis.Plugins.MathBot
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="response"></param>
-        private static void MathHandler( IIrcWriter writer, IrcResponse response )
+        private static void MathHandler( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
             string expression = match.Groups["expression"].Value;

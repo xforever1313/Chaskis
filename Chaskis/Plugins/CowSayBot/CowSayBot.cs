@@ -148,7 +148,7 @@ namespace Chaskis.Plugins.CowSayBot
             );
         }
 
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             StringBuilder builder = new StringBuilder();
             builder.Append( "My avaiable commands are: " );
@@ -250,7 +250,7 @@ namespace Chaskis.Plugins.CowSayBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleCowsayCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleCowsayCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             try
             {

@@ -120,7 +120,7 @@ namespace Chaskis
             this.pluginListResponse = builder.ToString();
         }
 
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             if( args.Length == 0 )
             {
@@ -205,7 +205,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandlePluginListCommand( IIrcWriter writer, IrcResponse response )
+        private void HandlePluginListCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage( this.pluginListResponse, response.Channel );
         }
@@ -234,7 +234,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleSourceCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleSourceCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
 
@@ -286,7 +286,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleVersionCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleVersionCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
 
@@ -364,7 +364,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleAboutCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleAboutCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
 
@@ -408,7 +408,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleAdminCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleAdminCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             StringBuilder builder = new StringBuilder();
             builder.Append( "People who are admins for me: " );
@@ -448,7 +448,7 @@ namespace Chaskis
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleHelpCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleHelpCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
             Match match = response.Match;
 
@@ -509,9 +509,9 @@ namespace Chaskis
         /// <summary>
         /// Handles the debug verbosity command.
         /// </summary>
-        private void HandleDebugVerbosityCommand( IIrcWriter writer, IrcResponse response )
+        private void HandleDebugVerbosityCommand( IIrcWriter writer, MessageHandlerArgs response )
         {
-            if( this.ircConfig.Admins.Contains( response.RemoteUser ) )
+            if( this.ircConfig.Admins.Contains( response.User ) )
             {
                 string pluginName = response.Match.Groups["plugin"].Value;
                 string verboseLevel = response.Match.Groups["verbose"].Value;

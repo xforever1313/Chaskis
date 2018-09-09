@@ -72,7 +72,7 @@ namespace Chaskis.RegressionTests
             return this.handlers.AsReadOnly();
         }
 
-        public void HandleHelp( IIrcWriter writer, IrcResponse response, string[] args )
+        public void HandleHelp( IIrcWriter writer, MessageHandlerArgs response, string[] args )
         {
             if( args.Length == 0 )
             {
@@ -180,7 +180,7 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Does a Thread.Sleep, but it can be aborted.
         /// </summary>
-        private void HandleSleep( IIrcWriter writer, IrcResponse response )
+        private void HandleSleep( IIrcWriter writer, MessageHandlerArgs response )
         {
             int timeout = int.Parse( response.Match.Groups["timeMs"].Value );
 
@@ -202,7 +202,7 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Does a Thread.Sleep in a finally block, so it will not be interrupted.
         /// </summary>
-        private void HandleForceSleep( IIrcWriter writer, IrcResponse response )
+        private void HandleForceSleep( IIrcWriter writer, MessageHandlerArgs response )
         {
             try
             {
@@ -214,7 +214,7 @@ namespace Chaskis.RegressionTests
             }
         }
 
-        private async void DoAsyncTest( IIrcWriter writer, IrcResponse response )
+        private async void DoAsyncTest( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage( "Starting from " + Thread.CurrentThread.Name, response.Channel );
 
@@ -225,7 +225,7 @@ namespace Chaskis.RegressionTests
             writer.SendMessage( "Finishing from " + Thread.CurrentThread.Name, response.Channel );
         }
 
-        private async void DoAsyncExceptionTest( IIrcWriter writer, IrcResponse response )
+        private async void DoAsyncExceptionTest( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage( "About to throw Exception" + Thread.CurrentThread.Name, response.Channel );
 
@@ -245,7 +245,7 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Used to ensure we are still alive during testing.
         /// </summary>
-        private void HandleCanary( IIrcWriter writer, IrcResponse response )
+        private void HandleCanary( IIrcWriter writer, MessageHandlerArgs response )
         {
             writer.SendMessage(
                 "Canary Alive!",
