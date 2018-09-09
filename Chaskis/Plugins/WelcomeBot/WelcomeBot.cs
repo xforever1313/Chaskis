@@ -228,16 +228,18 @@ namespace Chaskis.Plugins.WelcomeBot
             if ( string.IsNullOrWhiteSpace( args.Reason ) )
             {
                 message = string.Format(
-                    "{0} has been kicked by {1}",
+                    "{0} has been kicked from {1} by {2}",
                     args.UserWhoWasKicked,
+                    args.Channel,
                     args.UserWhoSentKick
                 );
             }
             else
             {
                 message = string.Format(
-                   "{0} has been kicked by {1} for reason '{2}'",
+                   "{0} has been kicked from {1} by {2} for reason '{3}'",
                    args.UserWhoWasKicked,
+                   args.Channel,
                    args.UserWhoSentKick,
                    args.Reason
                 );

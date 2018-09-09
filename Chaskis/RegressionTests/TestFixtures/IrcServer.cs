@@ -366,6 +366,98 @@ namespace Chaskis.RegressionTests
         }
 
         /// <summary>
+        /// Sends a JOIN message from the server
+        /// to the client.
+        /// </summary>
+        /// <param name="user">The user that joined the channel</param>
+        /// <param name="channel">The channel the user joined.</param>
+        public bool SendJoined( string user, string channel )
+        {
+            string msgString = string.Format(
+                ":{0}!{0}@localhost JOIN {1}",
+                user,
+                channel
+            );
+
+            return this.SendRawCommand( msgString );
+        }
+
+        /// <summary>
+        /// Sends a PART message from the server
+        /// to the client.
+        /// </summary>
+        /// <param name="user">The user that parted the channel</param>
+        /// <param name="channel">The channel the user parted.</param>
+        public bool SendPartedFrom( string user, string channel )
+        {
+            string msgString = string.Format(
+                ":{0}!{0}@localhost PART {1}",
+                user,
+                channel
+            );
+
+            return this.SendRawCommand( msgString );
+        }
+
+        /// <summary>
+        /// Sends a PART message from the server
+        /// to the client with a reason.
+        /// </summary>
+        /// <param name="user">The user that parted the channel</param>
+        /// <param name="channel">The channel the user parted.</param>
+        public bool SendPartedFromWithReason( string user, string channel, string reason )
+        {
+            string msgString = string.Format(
+                ":{0}!{0}@localhost PART {1} :{2}",
+                user,
+                channel,
+                reason
+            );
+
+            return this.SendRawCommand( msgString );
+        }
+
+        /// <summary>
+        /// Sends a KICK message from the server
+        /// to the client.
+        /// </summary>
+        /// <param name="kickedUser">The user that was kicked from the channel</param>
+        /// <param name="channel">The channel the user was kicked from.</param>
+        /// <param name="moderator">The user that performed the kicking.</param>
+        public bool SendKickedFromBy( string kickedUser, string channel, string moderator )
+        {
+            string msgString = string.Format(
+                ":{2}!{2}@localhost KICK {1} {0}",
+                kickedUser,
+                channel,
+                moderator
+            );
+
+            return this.SendRawCommand( msgString );
+        }
+
+        /// <summary>
+        /// Sends a KICK message from the server
+        /// to the client with a reason.
+        /// </summary>
+        /// <param name="kickedUser">The user that was kicked from the channel</param>
+        /// <param name="channel">The channel the user was kicked from.</param>
+        /// <param name="moderator">The user that performed the kicking.</param>
+        /// <param name="reason">The reason the user was kicked.</param>
+        public bool SendKickedFromByWithReason( string kickedUser, string channel, string moderator, string reason )
+        {
+            string msgString = string.Format(
+                ":{2}!{2}@localhost KICK {1} {0} :{3}",
+                kickedUser,
+                channel,
+                moderator,
+                reason
+            );
+
+            return this.SendRawCommand( msgString );
+        }
+
+        /// <summary>
         /// Sends the given string AS IS to the chaskis process.
         /// </summary>
         public bool SendRawCommand( string msg )
