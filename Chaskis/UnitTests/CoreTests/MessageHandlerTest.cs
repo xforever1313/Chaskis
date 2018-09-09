@@ -857,11 +857,11 @@ namespace Chaskis.UnitTests.CoreTests
         /// The function that is called
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
-        /// <param name="response">The response from the server.</param>
-        private void MessageFunction( IIrcWriter writer, MessageHandlerArgs response )
+        /// <param name="args">The response from the server.</param>
+        private void MessageFunction( MessageHandlerArgs args )
         {
-            Assert.AreSame( this.ircWriter.Object, writer );
-            this.responseReceived = response;
+            Assert.AreSame( this.ircWriter.Object, args.Writer );
+            this.responseReceived = args;
         }
 
         private HandlerArgs ConstructArgs( string line )

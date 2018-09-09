@@ -244,20 +244,18 @@ namespace Chaskis.Plugins.CapsWatcher
         /// <summary>
         /// Handles a message from the channel.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleMessage( MessageHandlerArgs args )
         {
-            if( CheckForCaps( response.Message, this.ignoreRegex ) )
+            if( CheckForCaps( args.Message, this.ignoreRegex ) )
             {
-                string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), response.User );
-                writer.SendMessage( msgToSend, response.Channel );
+                string msgToSend = Parsing.LiquefyStringWithIrcConfig( SelectMessage(), args.User );
+                args.Writer.SendMessage( msgToSend, args.Channel );
             }
             else
             {
                 this.log.WriteLine(
                     Convert.ToInt32( LogVerbosityLevel.HighVerbosity ),
-                    "Caps check failed for message '" + response.Match + "'"
+                    "Caps check failed for message '" + args.Match + "'"
                 );
             }
         }

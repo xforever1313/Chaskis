@@ -219,9 +219,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// <summary>
         /// Handles the up time command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleUpTimeCmd( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleUpTimeCmd( MessageHandlerArgs args )
         {
             TimeSpan span = DateTime.UtcNow - startTime;
 
@@ -233,49 +231,43 @@ namespace Chaskis.Plugins.ServerDiagnostics
                 span.Seconds
             );
 
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 str,
-                response.Channel
+                args.Channel
             );
         }
 
         /// <summary>
         /// Handles the OS version command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private static void HandleOsVersionCmd( IIrcWriter writer, MessageHandlerArgs response )
+        private static void HandleOsVersionCmd( MessageHandlerArgs args )
         {
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 "My system is " + Environment.OSVersion.ToString() + ".",
-                response.Channel
+                args.Channel
             );
         }
 
         /// <summary>
         /// Handles the processor count command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private static void HandleProcessorCountCmd( IIrcWriter writer, MessageHandlerArgs response )
+        private static void HandleProcessorCountCmd( MessageHandlerArgs args )
         {
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 "My system has " + Environment.ProcessorCount + " processors.",
-                response.Channel
+                args.Channel
             );
         }
 
         /// <summary>
         /// Handles the time command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private static void HandleTimeCmd( IIrcWriter writer, MessageHandlerArgs response )
+        private static void HandleTimeCmd( MessageHandlerArgs args )
         {
             DateTime time = DateTime.UtcNow;
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 "My time is " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC.",
-                response.Channel
+                args.Channel
             );
         }
     }

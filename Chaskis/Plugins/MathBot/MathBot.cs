@@ -130,25 +130,23 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// Handles the response when the user wants to calculate something.
         /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="response"></param>
-        private static void MathHandler( IIrcWriter writer, MessageHandlerArgs response )
+        private static void MathHandler( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string expression = match.Groups["expression"].Value;
             try
             {
                 string answer = MathBotCalculator.Calculate( expression );
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     "'" + expression + "' calculates to '" + answer + "'",
-                    response.Channel
+                    args.Channel
                 );
             }
             catch( Exception )
             {
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     "'" + expression + "' is not something I can calculate :(",
-                    response.Channel
+                    args.Channel
                 );
             }
         }

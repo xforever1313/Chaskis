@@ -132,20 +132,18 @@ namespace Chaskis.Plugins.UrlBot
         /// <summary>
         /// Handles a message from the channel.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private async void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
+        private async void HandleMessage( MessageHandlerArgs args )
         {
             string url;
-            if( UrlReader.TryParseUrl( response.Message, out url ) )
+            if( UrlReader.TryParseUrl( args.Message, out url ) )
             {
                 UrlResponse urlResponse = await this.urlReader.AsyncGetDescription( url );
 
                 if( urlResponse.IsValid )
                 {
-                    writer.SendMessage(
+                    args.Writer.SendMessage(
                         string.Format( "Title: {0}", urlResponse.TitleShortened ),
-                        response.Channel
+                        args.Channel
                     );
                 }
             }

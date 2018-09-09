@@ -191,12 +191,10 @@ namespace Chaskis.Plugins.UserListBot
         /// <summary>
         /// Handles the get users command, which queries the server for the user list.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleGetUsersCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleGetUsersCommand( MessageHandlerArgs args )
         {
-            writer.SendRawCmd( "NAMES " + response.Channel );
-            this.isQueried[response.Channel] = true;
+            args.Writer.SendRawCmd( "NAMES " + args.Channel );
+            this.isQueried[args.Channel] = true;
         }
 
         /// <summary>

@@ -218,43 +218,37 @@ namespace Chaskis.Plugins.KarmaBot
         /// <summary>
         /// Handles the increase command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private async void HandleIncreaseCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private async void HandleIncreaseCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.IncreaseKarma( userName );
 
-            writer.SendMessage( userName + " has had their karma increased to " + karma, response.Channel );
+            args.Writer.SendMessage( userName + " has had their karma increased to " + karma, args.Channel );
         }
 
         /// <summary>
         /// Handles the decrease command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private async void HandleDecreaseCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private async void HandleDecreaseCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.DecreaseKarma( userName );
 
-            writer.SendMessage( userName + " has had their karma decreased to " + karma, response.Channel );
+            args.Writer.SendMessage( userName + " has had their karma decreased to " + karma, args.Channel );
         }
 
         /// <summary>
         /// Handles the query command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private async void HandleQueryCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private async void HandleQueryCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string userName = match.Groups["name"].Value;
             int karma = await this.dataBase.QueryKarma( userName );
 
-            writer.SendMessage( userName + " has " + karma + " karma.", response.Channel );
+            args.Writer.SendMessage( userName + " has " + karma + " karma.", args.Channel );
         }
 
         private async void HandleChaskisQueryCommand( ChaskisEventHandlerLineActionArgs args )

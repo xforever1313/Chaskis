@@ -138,23 +138,23 @@ namespace Chaskis.Plugins.XmlBot
 
             string innerResponse = response;
 
-            return delegate ( IIrcWriter writer, MessageHandlerArgs ircResponse )
+            return delegate ( MessageHandlerArgs args )
             {
                 StringBuilder responseToSend = new StringBuilder(
-                    Parsing.LiquefyStringWithIrcConfig( innerResponse, ircResponse.User, ircConfig.Nick, ircResponse.Channel )
+                    Parsing.LiquefyStringWithIrcConfig( innerResponse, args.User, ircConfig.Nick, args.Channel )
                 );
 
-                foreach( string group in ircResponse.Regex.GetGroupNames() )
+                foreach( string group in args.Regex.GetGroupNames() )
                 {
                     responseToSend.Replace(
                         "{%" + group + "%}",
-                        ircResponse.Match.Groups[group].Value
+                        args.Match.Groups[group].Value
                     );
                 }
 
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     responseToSend.ToString(),
-                    ircResponse.Channel
+                    args.Channel
                 );
             };
         }

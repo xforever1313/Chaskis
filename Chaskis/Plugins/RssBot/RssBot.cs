@@ -225,31 +225,31 @@ namespace Chaskis.Plugins.RssBot
             );
         }
 
-        public void HandleDebug( IIrcWriter writer, MessageHandlerArgs response )
+        public void HandleDebug( MessageHandlerArgs args )
         {
-            if( this.admins.Contains( response.User ) == false )
+            if( this.admins.Contains( args.User ) == false )
             {
                 // Do Nothing
                 return;
             }
 
-            Match match = response.Match;
+            Match match = args.Match;
             string url = match.Groups["url"].Value;
             FeedReader reader = this.feedReaders.Values.FirstOrDefault( f => f.Url == url );
             Feed feed = this.rssConfig.Feeds.FirstOrDefault( f => f.Url == url );
             if( reader != null )
             {
-                this.CheckForUpdates( reader, writer, feed.Channels );
-                writer.SendMessage(
+                this.CheckForUpdates( reader, args.Writer, feed.Channels );
+                args.Writer.SendMessage(
                     "Updating feed at URL " + url,
-                    response.User
+                    args.User
                 );
             }
             else
             {
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     "Could not find feed that matches URL " + url,
-                    response.User
+                    args.User
                 );
             }
         }

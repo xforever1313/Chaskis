@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void MessageHandlerAction( IIrcWriter writer, MessageHandlerArgs response );
+    public delegate void MessageHandlerAction( MessageHandlerArgs response );
 
     /// <summary>
     /// Configuration for responding to a message received from IRC.
@@ -299,7 +299,7 @@ namespace Chaskis.Core
                     // if the action happens too quickly, it can incorrectly not be triggered.
                     if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
                     {
-                        this.LineAction( args.IrcWriter, response );
+                        this.LineAction( response );
                         this.lastEvent[channelLowered] = currentTime;
                     }
                 }

@@ -195,14 +195,12 @@ namespace Chaskis.Plugins.WeatherBot
         /// <summary>
         /// Handles the weather command by doing a GET request to NOAA's API
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private async void HandleWeatherCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private async void HandleWeatherCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string zip = match.Groups["zipCode"].Value;
             string strToWrite = await this.reporter.QueryWeather( zip );
-            writer.SendMessage( strToWrite, response.Channel );
+            args.Writer.SendMessage( strToWrite, args.Channel );
         }
     }
 }

@@ -167,27 +167,27 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Handles the broadcast command.
         /// </summary>
-        private void BroadcastHandler( IIrcWriter writer, MessageHandlerArgs response )
+        private void BroadcastHandler( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string message = match.Groups["bcastmsg"].Value;
 
             string msg = string.Format(
                 "<{0}@{1}> {2}",
-                response.User,
-                response.Channel,
+                args.User,
+                args.Channel,
                 message
             );
 
-            writer.SendBroadcastMessage( msg );
+            args.Writer.SendBroadcastMessage( msg );
         }
 
         /// <summary>
         /// Handles the CC Command.
         /// </summary>
-        private void CCHandler( IIrcWriter writer, MessageHandlerArgs response )
+        private void CCHandler( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
             string channel = match.Groups["channel"].Value.ToLower();
 
             // Can only send a message to a channel we are actually in.
@@ -195,12 +195,12 @@ namespace Chaskis.Plugins.CrossChannel
             {
                 string msg = string.Format(
                     "@{0}: I am not in {1}, sorry :(",
-                    response.User,
+                    args.User,
                     channel
                 );
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     msg,
-                    response.Channel
+                    args.Channel
                 );
             }
             else
@@ -209,12 +209,12 @@ namespace Chaskis.Plugins.CrossChannel
 
                 string msg = string.Format(
                     "<{0}@{1}> {2}",
-                    response.User,
-                    response.Channel,
+                    args.User,
+                    args.Channel,
                     message
                 );
 
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     msg,
                     channel
                 );

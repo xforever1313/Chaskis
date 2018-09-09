@@ -248,13 +248,11 @@ namespace Chaskis.Plugins.CowSayBot
         /// <summary>
         /// Handles the cowsay command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleCowsayCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleCowsayCommand( MessageHandlerArgs args )
         {
             try
             {
-                Match cowMatch = response.Match;
+                Match cowMatch = args.Match;
 
                 string cowFile = this.cowSayConfig.CowFileInfoList.CommandList[cowMatch.Groups["command"].Value];
                 if( cowFile == "DEFAULT" )
@@ -266,7 +264,7 @@ namespace Chaskis.Plugins.CowSayBot
 
                 if( ( string.IsNullOrEmpty( cowSayedMessage ) == false ) && ( exitCode == 0 ) )
                 {
-                    writer.SendMessage( cowSayedMessage, response.Channel );
+                    args.Writer.SendMessage( cowSayedMessage, args.Channel );
                 }
                 else if( exitCode != 0 )
                 {

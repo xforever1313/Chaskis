@@ -180,21 +180,21 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Does a Thread.Sleep, but it can be aborted.
         /// </summary>
-        private void HandleSleep( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleSleep( MessageHandlerArgs args )
         {
-            int timeout = int.Parse( response.Match.Groups["timeMs"].Value );
+            int timeout = int.Parse( args.Match.Groups["timeMs"].Value );
 
-            writer.SendMessage( "Sleeping for " + timeout + "ms...", response.Channel );
+            args.Writer.SendMessage( "Sleeping for " + timeout + "ms...", args.Channel );
 
             try
             {
                 Thread.Sleep( timeout );
 
-                writer.SendMessage( "Starting Sleep for " + timeout + "ms...Done!", response.Channel );
+                args.Writer.SendMessage( "Starting Sleep for " + timeout + "ms...Done!", args.Channel );
             }
             catch( ThreadInterruptedException )
             {
-                writer.SendMessage( "Caught ThreadInterruptedException during sleep.", response.Channel );
+                args.Writer.SendMessage( "Caught ThreadInterruptedException during sleep.", args.Channel );
                 throw;
             }
         }
@@ -202,7 +202,7 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Does a Thread.Sleep in a finally block, so it will not be interrupted.
         /// </summary>
-        private void HandleForceSleep( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleForceSleep( MessageHandlerArgs args )
         {
             try
             {
@@ -210,24 +210,24 @@ namespace Chaskis.RegressionTests
             }
             finally
             {
-                this.HandleSleep( writer, response );
+                this.HandleSleep( args );
             }
         }
 
-        private async void DoAsyncTest( IIrcWriter writer, MessageHandlerArgs response )
+        private async void DoAsyncTest( MessageHandlerArgs args )
         {
-            writer.SendMessage( "Starting from " + Thread.CurrentThread.Name, response.Channel );
+            args.Writer.SendMessage( "Starting from " + Thread.CurrentThread.Name, args.Channel );
 
             string bgThreadName = "NEVER SET!";
             await Task.Factory.StartNew( () => bgThreadName = Thread.CurrentThread.Name );
 
-            writer.SendMessage( "Background Thread Name: " + bgThreadName + "END", response.Channel );
-            writer.SendMessage( "Finishing from " + Thread.CurrentThread.Name, response.Channel );
+            args.Writer.SendMessage( "Background Thread Name: " + bgThreadName + "END", args.Channel );
+            args.Writer.SendMessage( "Finishing from " + Thread.CurrentThread.Name, args.Channel );
         }
 
-        private async void DoAsyncExceptionTest( IIrcWriter writer, MessageHandlerArgs response )
+        private async void DoAsyncExceptionTest( MessageHandlerArgs args )
         {
-            writer.SendMessage( "About to throw Exception" + Thread.CurrentThread.Name, response.Channel );
+            args.Writer.SendMessage( "About to throw Exception" + Thread.CurrentThread.Name, args.Channel );
 
             try
             {
@@ -237,7 +237,7 @@ namespace Chaskis.RegressionTests
             }
             catch( Exception e )
             {
-                writer.SendMessage( "Caught Exception " + e.Message, response.Channel );
+                args.Writer.SendMessage( "Caught Exception " + e.Message, args.Channel );
                 throw;
             }
         }
@@ -245,11 +245,11 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Used to ensure we are still alive during testing.
         /// </summary>
-        private void HandleCanary( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleCanary( MessageHandlerArgs args )
         {
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 "Canary Alive!",
-                response.Channel
+                args.Channel
             );
         }
     }

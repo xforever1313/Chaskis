@@ -203,11 +203,9 @@ namespace Chaskis
         /// <summary>
         /// Handles the "list plugin" command.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandlePluginListCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandlePluginListCommand( MessageHandlerArgs args )
         {
-            writer.SendMessage( this.pluginListResponse, response.Channel );
+            args.Writer.SendMessage( this.pluginListResponse, args.Channel );
         }
 
         // ---- Source Command Handler ----
@@ -232,11 +230,9 @@ namespace Chaskis
         /// <summary>
         /// Handles the source command, which returns the source code of the plugin.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleSourceCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleSourceCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
 
@@ -248,11 +244,11 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "Source of '" + pluginName + "': " + this.plugins[pluginName].Plugin.SourceCodeLocation;
-                writer.SendMessage( msg, response.Channel );
+                args.Writer.SendMessage( msg, args.Channel );
             }
             else
             {
-                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                args.Writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", args.Channel );
             }
         }
 
@@ -284,11 +280,9 @@ namespace Chaskis
         /// <summary>
         /// Handles the version command, which returns the source code of the plugin.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleVersionCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleVersionCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
 
@@ -300,11 +294,11 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "Version of '" + pluginName + "': " + this.plugins[pluginName].Plugin.Version;
-                writer.SendMessage( msg, response.Channel );
+                args.Writer.SendMessage( msg, args.Channel );
             }
             else
             {
-                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                args.Writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", args.Channel );
             }
         }
 
@@ -362,11 +356,9 @@ namespace Chaskis
         /// <summary>
         /// Handles the version command, which returns the source code of the plugin.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleAboutCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleAboutCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
 
             string pluginName = match.Groups["pluginName"].Value.ToLower();
             if( string.IsNullOrEmpty( pluginName ) )
@@ -377,11 +369,11 @@ namespace Chaskis
             if( this.plugins.ContainsKey( pluginName ) )
             {
                 string msg = "About '" + pluginName + "': " + this.plugins[pluginName].Plugin.About;
-                writer.SendMessage( msg, response.Channel );
+                args.Writer.SendMessage( msg, args.Channel );
             }
             else
             {
-                writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", response.Channel );
+                args.Writer.SendMessage( "'" + pluginName + "' is not a plugin I have loaded...", args.Channel );
             }
         }
 
@@ -406,9 +398,7 @@ namespace Chaskis
         /// <summary>
         /// Handles the version command, which returns the source code of the plugin.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleAdminCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleAdminCommand( MessageHandlerArgs args )
         {
             StringBuilder builder = new StringBuilder();
             builder.Append( "People who are admins for me: " );
@@ -418,9 +408,9 @@ namespace Chaskis
                 builder.Append( name + " " );
             }
 
-            writer.SendMessage(
+            args.Writer.SendMessage(
                 builder.ToString(),
-                response.Channel
+                args.Channel
             );
         }
 
@@ -446,44 +436,42 @@ namespace Chaskis
         /// <summary>
         /// Handles the version command, which returns the source code of the plugin.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleHelpCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleHelpCommand( MessageHandlerArgs args )
         {
-            Match match = response.Match;
+            Match match = args.Match;
 
             string argsStr = match.Groups["args"].Value.ToLower();
 
             if( string.IsNullOrEmpty( argsStr ) )
             {
                 // Print default message and return.
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     defaultHelpMessage,
-                    response.Channel
+                    args.Channel
                 );
                 return;
             }
 
             argsStr = Regex.Replace( argsStr, @"\s+", " " ); // Strip multiple white spaces.
-            List<string> args = argsStr.Split( ' ' ).ToList();
+            List<string> helpArgs = argsStr.Split( ' ' ).ToList();
 
             // If the first argument is not a valid plugin name, then the user
             // must be trying to query the default plugin.
             // If the first argument IS a valid plugin name, then the user wants
             // the query the help of that specific plugin.
             string pluginName;
-            if( this.plugins.ContainsKey( args[0] ) == false )
+            if( this.plugins.ContainsKey( helpArgs[0] ) == false )
             {
                 pluginName = DefaultPluginName;
             }
             else
             {
-                pluginName = args[0];
-                args.RemoveAt( 0 );
+                pluginName = helpArgs[0];
+                helpArgs.RemoveAt( 0 );
             }
 
             // Handle the help command for the plugin
-            this.plugins[pluginName].Plugin.HandleHelp( writer, response, args.ToArray() );
+            this.plugins[pluginName].Plugin.HandleHelp( args.Writer, args, helpArgs.ToArray() );
         }
 
         // ---- Debug Handlers ----
@@ -509,12 +497,12 @@ namespace Chaskis
         /// <summary>
         /// Handles the debug verbosity command.
         /// </summary>
-        private void HandleDebugVerbosityCommand( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleDebugVerbosityCommand( MessageHandlerArgs args )
         {
-            if( this.ircConfig.Admins.Contains( response.User ) )
+            if( this.ircConfig.Admins.Contains( args.User ) )
             {
-                string pluginName = response.Match.Groups["plugin"].Value;
-                string verboseLevel = response.Match.Groups["verbose"].Value;
+                string pluginName = args.Match.Groups["plugin"].Value;
+                string verboseLevel = args.Match.Groups["verbose"].Value;
 
                 string message;
                 int level = 0;
@@ -543,9 +531,9 @@ namespace Chaskis
                     );
                 }
 
-                writer.SendMessage(
+                args.Writer.SendMessage(
                     message,
-                    response.Channel
+                    args.Channel
                 );
             }
             // Otherwise, quietly ignore...

@@ -129,30 +129,28 @@ namespace Chaskis.Plugins.MessageFixerBot
         /// <summary>
         /// Handles a message from the channel.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleMessage( IIrcWriter writer, MessageHandlerArgs response )
+        private void HandleMessage( MessageHandlerArgs args )
         {
-            MessageFixerResult result = this.msgFixer.RecordNewMessage( response.User, response.Message );
+            MessageFixerResult result = this.msgFixer.RecordNewMessage( args.User, args.Message );
             if( result.Success )
             {
                 string msg = string.Format(
                     "{0}'s updated message: '{1}'",
-                    response.User,
+                    args.User,
                     result.Message
                 );
 
-                writer.SendMessage( msg, response.Channel );
+                args.Writer.SendMessage( msg, args.Channel );
             }
             else if( string.IsNullOrEmpty( result.Message ) == false )
             {
                 string msg = string.Format(
                     "{0}: error when trying to fix your message: '{1}'",
-                    response.User,
+                    args.User,
                     result.Message
                 );
 
-                writer.SendMessage( msg, response.Channel );
+                args.Writer.SendMessage( msg, args.Channel );
             }
         }
     }
