@@ -26,7 +26,7 @@ namespace Chaskis.UnitTests.CoreTests
             config.PartAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.PartAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.PartAction = delegate ( PartHandlerArgs args )
             {
             };
 

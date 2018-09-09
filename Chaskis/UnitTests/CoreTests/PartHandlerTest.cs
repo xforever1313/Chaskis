@@ -38,7 +38,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// <summary>
         /// The response received from the event handler (if any).
         /// </summary>
-        private IrcResponse responseReceived;
+        private PartHandlerArgs responseReceived;
 
         /// <summary>
         /// The user that parted.
@@ -111,12 +111,22 @@ namespace Chaskis.UnitTests.CoreTests
             this.DoPartSuccess( RemoteUser, this.ircConfig.Channels[0] );
         }
 
+        /// <summary>
+        /// Ensures that if a user parts correctly with a reason, the event gets fired.
+        /// </summary>
+        [Test]
+        public void PartSuccessWithReason()
+        {
+            this.DoPartSuccess( RemoteUser, this.ircConfig.Channels[0], "My Reason" );
+        }
+
         [Test]
         public void PartSuccessWithStrangeNames()
         {
             foreach( string name in TestHelpers.StrangeNames )
             {
                 this.DoPartSuccess( name, this.ircConfig.Channels[0] );
+                this.responseReceived = null;
             }
         }
 
@@ -136,14 +146,16 @@ namespace Chaskis.UnitTests.CoreTests
 
                 Assert.IsNotNull( this.responseReceived );
 
-                // Part handler has no message.
-                Assert.AreEqual( string.Empty, this.responseReceived.Message );
+                // Part handler has no reason.
+                Assert.AreEqual( string.Empty, this.responseReceived.Reason );
 
                 // Channels should match.
                 Assert.AreEqual( channel, this.responseReceived.Channel );
 
                 // Nicks should match.
-                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+                Assert.AreEqual( "anickname", this.responseReceived.User );
+
+                this.responseReceived = null;
             }
         }
 
@@ -157,11 +169,13 @@ namespace Chaskis.UnitTests.CoreTests
             foreach( string channel in TestHelpers.StrangeChannels )
             {
                 this.DoPartSuccess( RemoteUser, channel );
+                this.responseReceived = null;
             }
 
             foreach( string name in TestHelpers.StrangeNames )
             {
                 this.DoPartSuccess( RemoteUser, name );
+                this.responseReceived = null;
             }
         }
 
@@ -284,14 +298,14 @@ namespace Chaskis.UnitTests.CoreTests
 
         // -------- Test Helpers --------
 
-        private void DoPartSuccess( string name, string channel )
+        private void DoPartSuccess( string name, string channel, string reason = null )
         {
             string ircString =
                 TestHelpers.ConstructIrcString(
                     name,
                     PartHandler.IrcCommand,
                     channel,
-                    string.Empty
+                    reason ?? null
                 );
 
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
@@ -299,32 +313,32 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.IsNotNull( this.responseReceived );
 
             // Part handler has no message.
-            Assert.AreEqual( string.Empty, this.responseReceived.Message );
+            Assert.AreEqual( reason ?? string.Empty, this.responseReceived.Reason );
 
             // Channels should match.
             Assert.AreEqual( channel, this.responseReceived.Channel );
 
             // Nicks should match.
-            Assert.AreEqual( name, this.responseReceived.RemoteUser );
+            Assert.AreEqual( name, this.responseReceived.User );
         }
 
         /// <summary>
         /// The function that is called
         /// </summary>
-        /// <param name="writer">The writer that can be written to.</param>
-        /// <param name="response">The response from the server.</param>
-        private void PartFunction( IIrcWriter writer, IrcResponse response )
+        private void PartFunction( PartHandlerArgs args )
         {
-            Assert.AreSame( this.ircWriter.Object, writer );
-            this.responseReceived = response;
+            Assert.AreSame( this.ircWriter.Object, args.Writer );
+            this.responseReceived = args;
         }
 
         private HandlerArgs ConstructArgs( string line )
         {
-            HandlerArgs args = new HandlerArgs();
-            args.Line = line;
-            args.IrcWriter = this.ircWriter.Object;
-            args.IrcConfig = this.ircConfig;
+            HandlerArgs args = new HandlerArgs
+            {
+                Line = line,
+                IrcWriter = this.ircWriter.Object,
+                IrcConfig = this.ircConfig
+            };
 
             return args;
         }

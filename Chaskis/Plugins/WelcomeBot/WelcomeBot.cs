@@ -196,10 +196,6 @@ namespace Chaskis.Plugins.WelcomeBot
         private void JoinMessage( JoinHandlerArgs args )
         {
             args.Writer.SendMessage(
-                "Greetings " + args.User + ", welcome to " + args.Channel + "!",
-                args.User
-            );
-            args.Writer.SendMessage(
                 args.User + " has joined " + args.Channel,
                 args.Channel
             );
@@ -251,18 +247,22 @@ namespace Chaskis.Plugins.WelcomeBot
         /// <summary>
         /// Ran when someone parts the channel.
         /// </summary>
-        /// <param name="writer">The means to write to an IRC channel.</param>
-        /// <param name="response">The command from the server.</param>
-        private static void PartMessage( IIrcWriter writer, IrcResponse response )
+        private static void PartMessage( PartHandlerArgs args )
         {
-            writer.SendMessage(
-                "Thanks for visiting " + response.Channel + "!  Please come back soon!",
-                response.RemoteUser
-            );
-            writer.SendMessage(
-                response.RemoteUser + " has left " + response.Channel,
-                response.Channel
-            );
+            if( string.IsNullOrWhiteSpace( args.Reason ) )
+            {
+                args.Writer.SendMessage(
+                    args.User + " has left " + args.Channel,
+                    args.Channel
+                );
+            }
+            else
+            {
+                args.Writer.SendMessage(
+                    args.User + " has left " + args.Channel + "for reason '" + args.Reason + "'",
+                    args.Channel
+                );
+            }
         }
 
         private static void HandleKarmaQuery( ChaskisEventHandlerLineActionArgs args )

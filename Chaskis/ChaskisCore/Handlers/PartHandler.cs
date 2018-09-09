@@ -10,7 +10,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void PartHandlerAction( IIrcWriter writer, IrcResponse response );
+    public delegate void PartHandlerAction( PartHandlerArgs args );
 
     /// <summary>
     /// Handles when a user parts.  That is, leaves the channel and logs off.
@@ -24,14 +24,14 @@ namespace Chaskis.Core
         /// </summary>
         public static readonly string IrcCommand = "PART";
 
-        // :nickName!~nick@10.0.0.1 PART #testchan
+        // :nickName!~nick@10.0.0.1 PART #channel :optional reason
 
         /// <summary>
         /// The pattern the search for when a line comes in.
         /// </summary>
         private static readonly Regex pattern =
             new Regex(
-                Regexes.IrcMessagePrefix + @"\s+" + IrcCommand + @"\s+(?<channel>\S+)",
+                Regexes.IrcMessagePrefix + @"\s+" + IrcCommand + @"\s+(?<channel>\S+)\s*(:(?<reason>.+))?",
                 RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
@@ -109,15 +109,18 @@ namespace Chaskis.Core
                     return;
                 }
 
-                IrcResponse response = new IrcResponse(
+                string reason = match.Groups["reason"].Value;
+
+                PartHandlerArgs partArgs = new PartHandlerArgs(
+                    args.IrcWriter,
                     remoteUser,
                     channel,
-                    string.Empty,
+                    reason,
                     pattern,
                     match
                 );
 
-                this.PartAction( args.IrcWriter, response );
+                this.PartAction( partArgs );
             }
         }
     }
