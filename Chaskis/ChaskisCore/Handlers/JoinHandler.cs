@@ -11,7 +11,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void JoinHandlerAction( IIrcWriter writer, IrcResponse response );
+    public delegate void JoinHandlerAction( JoinHandlerArgs args );
 
     /// <summary>
     /// Handles the event where someone joins the watched channel.
@@ -124,15 +124,15 @@ namespace Chaskis.Core
                     return;
                 }
 
-                IrcResponse response = new IrcResponse(
+                JoinHandlerArgs joinArgs = new JoinHandlerArgs(
+                    args.IrcWriter,
                     remoteUser,
                     channel,
-                    string.Empty,
                     pattern,
                     match
                 );
 
-                this.JoinAction( args.IrcWriter, response );
+                this.JoinAction( joinArgs );
             }
         }
     }

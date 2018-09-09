@@ -193,15 +193,15 @@ namespace Chaskis.Plugins.WelcomeBot
         /// </summary>
         /// <param name="writer">The means to write to an IRC channel.</param>
         /// <param name="response">The command from the server.</param>
-        private void JoinMessage( IIrcWriter writer, IrcResponse response )
+        private void JoinMessage( JoinHandlerArgs args )
         {
-            writer.SendMessage(
-                "Greetings " + response.RemoteUser + ", welcome to " + response.Channel + "!",
-                response.RemoteUser
+            args.Writer.SendMessage(
+                "Greetings " + args.User + ", welcome to " + args.Channel + "!",
+                args.User
             );
-            writer.SendMessage(
-                response.RemoteUser + " has joined " + response.Channel,
-                response.Channel
+            args.Writer.SendMessage(
+                args.User + " has joined " + args.Channel,
+                args.Channel
             );
 
             ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
@@ -209,12 +209,12 @@ namespace Chaskis.Plugins.WelcomeBot
                 new Dictionary<string, string>()
                 {
                     ["ACTION"] = "QUERY",
-                    ["NAME"] = response.RemoteUser
+                    ["NAME"] = args.User
                 },
                 new Dictionary<string, string>()
                 {
-                    ["CHANNEL"] = response.Channel,
-                    ["NAME"] = response.RemoteUser
+                    ["CHANNEL"] = args.Channel,
+                    ["NAME"] = args.User
                 }
             );
 

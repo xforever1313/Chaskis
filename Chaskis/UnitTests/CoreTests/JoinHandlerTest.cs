@@ -38,7 +38,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// <summary>
         /// The response received from the event handler (if any).
         /// </summary>
-        private IrcResponse responseReceived;
+        private JoinHandlerArgs responseReceived;
 
         /// <summary>
         /// The user that joined.
@@ -159,14 +159,11 @@ namespace Chaskis.UnitTests.CoreTests
 
                 Assert.IsNotNull( this.responseReceived );
 
-                // Join handler has no message.
-                Assert.AreEqual( string.Empty, this.responseReceived.Message );
-
                 // Channels should match.
                 Assert.AreEqual( channel, this.responseReceived.Channel );
 
                 // Nicks should match.
-                Assert.AreEqual( "anickname", this.responseReceived.RemoteUser );
+                Assert.AreEqual( "anickname", this.responseReceived.User );
             }
         }
 
@@ -206,14 +203,11 @@ namespace Chaskis.UnitTests.CoreTests
 
             Assert.IsNotNull( this.responseReceived );
 
-            // Join handler has no message.
-            Assert.AreEqual( string.Empty, this.responseReceived.Message );
-
             // Channels should match.
             Assert.AreEqual( this.ircConfig.Channels[0], this.responseReceived.Channel );
 
             // Nicks should match.
-            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.RemoteUser );
+            Assert.AreEqual( this.ircConfig.Nick, this.responseReceived.User );
         }
 
         /// <summary>
@@ -343,33 +337,30 @@ namespace Chaskis.UnitTests.CoreTests
 
             Assert.IsNotNull( this.responseReceived );
 
-            // Join handler has no message.
-            Assert.AreEqual( string.Empty, this.responseReceived.Message );
-
             // Channels should match.
             Assert.AreEqual( channel, this.responseReceived.Channel );
 
             // Nicks should match.
-            Assert.AreEqual( user, this.responseReceived.RemoteUser );
+            Assert.AreEqual( user, this.responseReceived.User );
         }
 
         /// <summary>
         /// The function that is called
         /// </summary>
-        /// <param name="writer">The writer that can be written to.</param>
-        /// <param name="response">The response from the server.</param>
-        private void JoinFunction( IIrcWriter writer, IrcResponse response )
+        private void JoinFunction( JoinHandlerArgs args )
         {
-            Assert.AreSame( this.ircWriter.Object, writer );
-            this.responseReceived = response;
+            Assert.AreSame( this.ircWriter.Object, args.Writer );
+            this.responseReceived = args;
         }
 
         private HandlerArgs ConstructArgs( string line )
         {
-            HandlerArgs args = new HandlerArgs();
-            args.Line = line;
-            args.IrcWriter = this.ircWriter.Object;
-            args.IrcConfig = this.ircConfig;
+            HandlerArgs args = new HandlerArgs
+            {
+                Line = line,
+                IrcWriter = this.ircWriter.Object,
+                IrcConfig = this.ircConfig
+            };
 
             return args;
         }

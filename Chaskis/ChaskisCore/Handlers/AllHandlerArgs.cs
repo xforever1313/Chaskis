@@ -25,11 +25,11 @@ namespace Chaskis.Core
         /// <summary>
         /// The Writer to use so we can respond to the All Event.
         /// </summary>
-        public IIrcWriter Writer { get; set; }
+        public IIrcWriter Writer { get; private set; }
 
         /// <summary>
         /// The raw line that was read from the server.
         /// </summary>
-        public string Line { get; set; }
+        public string Line { get; private set; }
     }
 }

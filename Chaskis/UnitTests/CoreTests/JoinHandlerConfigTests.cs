@@ -27,7 +27,7 @@ namespace Chaskis.UnitTests.CoreTests
             config.JoinAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.JoinAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.JoinAction = delegate ( JoinHandlerArgs args )
             {
             };
 

@@ -155,11 +155,11 @@ namespace Chaskis.Plugins.NewVersionNotifier
             // Nothing to Dispose.
         }
 
-        private void OnJoinChannel( IIrcWriter writer, IrcResponse response )
+        private void OnJoinChannel( JoinHandlerArgs args )
         {
-            if( response.RemoteUser.Equals( this.ircConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
+            if( args.User.Equals( this.ircConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
             {
-                string channel = response.Channel;
+                string channel = args.Channel;
 
                 ChaskisEvent e = this.chaskisEventCreator.CreateTargetedEvent(
                     "chaskis",
