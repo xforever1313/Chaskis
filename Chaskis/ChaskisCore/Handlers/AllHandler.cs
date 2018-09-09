@@ -9,7 +9,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void AllHandlerAction( IIrcWriter writer, IrcResponse response );
+    public delegate void AllHandlerAction( AllHandlerArgs args );
 
     /// <summary>
     /// This class will fire for ALL IRC messages and pass in the raw
@@ -81,15 +81,9 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            IrcResponse response = new IrcResponse(
-                string.Empty,
-                string.Empty,
-                args.Line,
-                null,
-                null
-            );
+            AllHandlerArgs allArgs = new AllHandlerArgs( args.IrcWriter, args.Line );
 
-            this.AllAction( args.IrcWriter, response );
+            this.AllAction( allArgs );
         }
     }
 }

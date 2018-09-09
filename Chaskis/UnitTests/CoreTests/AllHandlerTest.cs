@@ -37,7 +37,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// <summary>
         /// The response received from the event handler (if any).
         /// </summary>
-        private IrcResponse responseReceived;
+        private AllHandlerArgs responseReceived;
 
         /// <summary>
         /// A user.
@@ -170,10 +170,10 @@ namespace Chaskis.UnitTests.CoreTests
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
-        private void AllFunction( IIrcWriter writer, IrcResponse response )
+        private void AllFunction( AllHandlerArgs args )
         {
-            Assert.AreSame( this.ircWriter.Object, writer );
-            this.responseReceived = response;
+            Assert.AreSame( this.ircWriter.Object, args.Writer );
+            this.responseReceived = args;
         }
 
         /// <summary>
@@ -185,21 +185,17 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.IsNotNull( this.responseReceived );
 
             // Ensure its the raw string.
-            Assert.AreEqual( rawIrcString, this.responseReceived.Message );
-
-            // Channel should be empty, its up to the user to parse it.
-            Assert.AreEqual( string.Empty, this.responseReceived.Channel );
-
-            // Nick should be empty.  Its up to the user to parse it.
-            Assert.AreEqual( string.Empty, this.responseReceived.RemoteUser );
+            Assert.AreEqual( rawIrcString, this.responseReceived.Line );
         }
 
         private HandlerArgs ConstructArgs( string line )
         {
-            HandlerArgs args = new HandlerArgs();
-            args.Line = line;
-            args.IrcWriter = this.ircWriter.Object;
-            args.IrcConfig = this.ircConfig;
+            HandlerArgs args = new HandlerArgs
+            {
+                Line = line,
+                IrcWriter = this.ircWriter.Object,
+                IrcConfig = this.ircConfig
+            };
 
             return args;
         }

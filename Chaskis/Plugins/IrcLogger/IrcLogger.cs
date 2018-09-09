@@ -155,14 +155,12 @@ namespace Chaskis.Plugins.IrcLogger
         /// <summary>
         /// Handles writing an event to the log.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleLogEvent( IIrcWriter writer, IrcResponse response )
+        private void HandleLogEvent( AllHandlerArgs args )
         {
             bool log = true;
             for( int i = 0; i < ( this.config.IgnoreRegexes.Count ) && log; ++i )
             {
-                if( config.IgnoreRegexes[i].IsMatch( response.Message ) )
+                if( config.IgnoreRegexes[i].IsMatch( args.Line ) )
                 {
                     log = false;
                 }
@@ -170,7 +168,7 @@ namespace Chaskis.Plugins.IrcLogger
 
             if( log )
             {
-                this.logManager.AsyncLogToFile( response.Message );
+                this.logManager.AsyncLogToFile( args.Line );
             }
         }
     }

@@ -27,7 +27,7 @@ namespace Chaskis.UnitTests.CoreTests
             config.AllAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.AllAction = delegate ( IIrcWriter writer, IrcResponse response )
+            config.AllAction = delegate ( AllHandlerArgs args )
             {
             };
 

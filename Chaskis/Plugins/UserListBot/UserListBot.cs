@@ -203,11 +203,9 @@ namespace Chaskis.Plugins.UserListBot
         /// Handles the names response from the server.
         /// Adds the names to the list.
         /// </summary>
-        /// <param name="writer">The IRC Writer to write to.</param>
-        /// <param name="response">The response from the channel.</param>
-        private void HandleNamesResponse( IIrcWriter writer, IrcResponse response )
+        private void HandleNamesResponse( AllHandlerArgs args )
         {
-            this.userList.ParseNameResponse( response.Message );
+            this.userList.ParseNameResponse( args.Line );
         }
 
         /// <summary>
@@ -215,14 +213,14 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleEndOfNamesResponse( IIrcWriter writer, IrcResponse response )
+        private void HandleEndOfNamesResponse( AllHandlerArgs args )
         {
-            Tuple<string, string> foundUsers = this.userList.CheckAndHandleEndMessage( response.Message );
+            Tuple<string, string> foundUsers = this.userList.CheckAndHandleEndMessage( args.Line );
             if( foundUsers != null )
             {
                 if( this.isQueried.ContainsKey( foundUsers.Item1 ) && this.isQueried[foundUsers.Item1] )
                 {
-                    writer.SendMessage(
+                    args.Writer.SendMessage(
                         string.Format( "Users in {0}: {1}", foundUsers.Item1, foundUsers.Item2 ),
                         foundUsers.Item1
                     );

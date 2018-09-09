@@ -83,9 +83,9 @@ namespace Chaskis.Plugins.ConsoleOut
         {
             AllHandlerConfig allHandlerConfig = new AllHandlerConfig
             {
-                AllAction = delegate ( IIrcWriter writer, IrcResponse response )
+                AllAction = delegate ( AllHandlerArgs args )
                 {
-                    Console.WriteLine( response.Message );
+                    Console.WriteLine( args.Line );
                 }
             };
 
