@@ -39,5 +39,5 @@ using Chaskis.Plugins.HttpServer;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( HttpServer.VersionStr )]
-[assembly: AssemblyFileVersion( HttpServer.VersionStr )]
+[assembly: AssemblyVersion( HttpServerPlugin.VersionStr )]
+[assembly: AssemblyFileVersion( HttpServerPlugin.VersionStr )]

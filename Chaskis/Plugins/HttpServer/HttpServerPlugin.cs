@@ -12,7 +12,7 @@ using Chaskis.Core;
 namespace Chaskis.Plugins.HttpServer
 {
     [ChaskisPlugin( PluginName )]
-    public class HttpServer : IPlugin
+    public class HttpServerPlugin : IPlugin
     {
         // ---------------- Fields ----------------
 
