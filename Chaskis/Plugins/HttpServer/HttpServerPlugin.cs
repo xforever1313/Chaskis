@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
 using Chaskis.Core;
 
@@ -19,6 +18,8 @@ namespace Chaskis.Plugins.HttpServer
         internal const string VersionStr = "0.1.0";
 
         internal const string PluginName = "httpserver";
+
+        private HttpServer server;
 
         // ---------------- Constructor ----------------
 
@@ -50,11 +51,18 @@ namespace Chaskis.Plugins.HttpServer
 
         public void Init( PluginInitor pluginInit )
         {
-            throw new NotImplementedException();
+            HttpServerConfig config = new HttpServerConfig
+            {
+                Port = 10013
+            };
+
+            this.server = new HttpServer( config );
+            this.server.Start();
         }
 
         public void Dispose()
         {
+            this.server?.Dispose();
         }
 
         public IList<IIrcHandler> GetHandlers()
