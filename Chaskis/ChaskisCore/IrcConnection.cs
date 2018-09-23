@@ -424,7 +424,8 @@ namespace Chaskis.Core
         /// <param name="channel">Which channel to part from.</param>
         public void SendPart( string reason, string channel )
         {
-            string partString = string.Format( "PART {0} :{1}", channel, this.Config.QuitMessage );
+            // TODO: Make reason string more smart if not specified.
+            string partString = string.Format( "PART {0} :{1}", channel, reason ?? this.Config.QuitMessage );
             this.SendRawCmd( partString );
         }
 

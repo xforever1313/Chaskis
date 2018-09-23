@@ -5,8 +5,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Specialized;
+using System.Linq;
 using Chaskis.Core;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.HttpServer
 {
@@ -59,8 +62,193 @@ namespace Chaskis.Plugins.HttpServer
 
         // ---------------- Functions ----------------
 
-        public void HandleResposne( string url, string method, NameValueCollection queryString )
+        public HttpResponseInfo HandleResposne( string url, string method, NameValueCollection queryString )
         {
+            ContentType contentType = ContentType.Xml;
+
+            try
+            {
+                if( queryString.AllKeys.Contains( "format" ) )
+                {
+                    if( Enum.TryParse( queryString["format"], out ContentType parsedType ) == false )
+                    {
+                        return new HttpResponseInfo
+                        {
+                            ContentType = contentType,
+                            Message = "Invalid format: " + queryString["format"],
+                            ResponseStatus = HttpResponseStatus.ClientError
+                        };
+                    }
+                    else
+                    {
+                        contentType = parsedType;
+                    }
+                }
+
+                if( method.EqualsIgnoreCase( "POST" ) == false )
+                {
+                    return new HttpResponseInfo
+                    {
+                        ContentType = contentType,
+                        Message = "Request must be a POST request, nothing else is currently supported.  Got: " + method,
+                        ResponseStatus = HttpResponseStatus.ClientError
+                    };
+                }
+
+                if( this.IsIrcConnected == false )
+                {
+                    // If after all of this, we are not connected, tell the client
+                    // that the bot is not connected.
+                    return new HttpResponseInfo
+                    {
+                        ContentType = contentType,
+                        Message = "IRC Bot not connected, can not send command.",
+                        ResponseStatus = HttpResponseStatus.ServerError
+                    };
+                }
+
+                HttpResponseInfo info = DoRequestAction( url, queryString, contentType );
+
+                return info;
+            }
+            catch( Exception err )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = contentType,
+                    Message = err.Message,
+                    ResponseStatus = HttpResponseStatus.ServerError
+                };
+            }
+        }
+
+        private HttpResponseInfo DoRequestAction( string url, NameValueCollection queryString, ContentType format )
+        {
+            if( url.EqualsIgnoreCase( "/privmsg" ) )
+            {
+                return this.HandlePrivmsgAction( queryString, format );
+            }
+            else if( url.EqualsIgnoreCase( "/kick" ) )
+            {
+                return this.HandleKickAction( queryString, format );
+            }
+            else if( url.EqualsIgnoreCase( "/broadcast" ) || url.EqualsIgnoreCase( "/bcast" ) )
+            {
+                return this.HandleBcastAction( queryString, format );
+            }
+            else if( url.EqualsIgnoreCase( "/part" ) )
+            {
+                return this.HandlePartAction( queryString, format );
+            }
+            else
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Message = "Invalid Action: " + url,
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+        }
+
+        private HttpResponseInfo HandlePrivmsgAction( NameValueCollection queryString, ContentType format )
+        {
+            string channel = queryString["channel"];
+            string message = queryString["message"];
+
+            if( string.IsNullOrWhiteSpace( channel ) || string.IsNullOrWhiteSpace( message ) )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Message = "PRIVMSG is missing either 'channel' or 'message' in the query string.",
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+
+            this.writer.SendMessage( message, channel );
+
+            return new HttpResponseInfo
+            {
+                ContentType = format,
+                Message = string.Format( "Message '{0}' sent to '{1}'", message, channel ),
+                ResponseStatus = HttpResponseStatus.Ok
+            };
+        }
+
+        private HttpResponseInfo HandleKickAction( NameValueCollection queryString, ContentType format )
+        {
+            string user = queryString["user"];
+            string channel = queryString["channel"];
+            string reason = queryString["message"]; // Reason is optional.
+
+            if( string.IsNullOrWhiteSpace( user ) || string.IsNullOrWhiteSpace( channel ) )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Message = "KICK is missing 'user' or 'channel' in the query string.",
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+
+            this.writer.SendKick( user, channel, reason );
+
+            return new HttpResponseInfo
+            {
+                ContentType = format,
+                Message = string.Format( "'{0}' has been kicked from '{1}' for reason '{2}'", user, channel, reason ?? "None" ),
+                ResponseStatus = HttpResponseStatus.ClientError
+            };
+        }
+
+        private HttpResponseInfo HandleBcastAction( NameValueCollection queryString, ContentType format )
+        {
+            string message = queryString["message"];
+
+            if( string.IsNullOrWhiteSpace( message ) )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Message = "BCAST is missing 'message' in the query string.",
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+
+            this.writer.SendBroadcastMessage( message );
+
+            return new HttpResponseInfo
+            {
+                ContentType = format,
+                Message = string.Format( "Message '{0}' sent to all channels.", message ),
+                ResponseStatus = HttpResponseStatus.Ok
+            };
+        }
+
+        private HttpResponseInfo HandlePartAction( NameValueCollection queryString, ContentType format )
+        {
+            string channel = queryString["channel"];
+            string reason = queryString["message"]; // Reason is optional.
+
+            if( string.IsNullOrWhiteSpace( channel ) )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Message = "PART is missing 'channel' in the query string.",
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+
+            this.writer.SendPart( reason, channel );
+
+            return new HttpResponseInfo
+            {
+                ContentType = format,
+                Message = string.Format( "Parted '{0}' for reason '{1}'", channel, reason ?? "None" ),
+                ResponseStatus = HttpResponseStatus.Ok
+            };
         }
     }
 }
