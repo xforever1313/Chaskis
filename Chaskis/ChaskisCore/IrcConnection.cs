@@ -144,7 +144,7 @@ namespace Chaskis.Core
                 () => this.SendPing( "watchdog" ),
                 () =>
                 {
-                    this.AddCoreEvent( "WATCHDOG FAILED" );
+                    this.AddCoreEvent( ChaskisCoreEvents.WatchdogFailed );
                     this.AttemptReconnect();
                 },
                 60 * 1000
@@ -278,7 +278,7 @@ namespace Chaskis.Core
             this.IsConnected = true;
 
             StaticLogger.Log.WriteLine( "Connection made!" );
-            this.AddCoreEvent( "CONNECTED" );
+            this.AddCoreEvent( ChaskisCoreEvents.ConnectionMade );
 
             // Join Channel.
             // JOIN <channels>
@@ -288,11 +288,11 @@ namespace Chaskis.Core
                 this.ircWriter.WriteLine( "JOIN {0}", channel );
                 this.ircWriter.Flush();
 
-                this.AddCoreEvent( "JOIN " + channel );
+                this.AddCoreEvent( ChaskisCoreEvents.JoinChannel + " " + channel );
                 Thread.Sleep( this.Config.RateLimit );
             }
 
-            this.AddCoreEvent( "FINISHED JOINING CHANNELS" );
+            this.AddCoreEvent( ChaskisCoreEvents.FinishedJoiningChannels );
         }
 
         /// <summary>
@@ -558,7 +558,7 @@ namespace Chaskis.Core
         /// </summary>
         private void DisconnectHelper()
         {
-            this.AddCoreEvent( "DISCONNECTING" );
+            this.AddCoreEvent( ChaskisCoreEvents.DisconnectInProgress );
 
             this.connection.Close();
 
@@ -570,7 +570,7 @@ namespace Chaskis.Core
             // We are not connected.
             this.IsConnected = false;
 
-            this.AddCoreEvent( "DISCONNECTED" );
+            this.AddCoreEvent( ChaskisCoreEvents.DisconnectComplete );
         }
 
         /// <summary>
@@ -803,7 +803,7 @@ namespace Chaskis.Core
                         timeoutMinutes++;
                     }
 
-                    this.AddCoreEvent( "ATTEMPTING RECONNECT" );
+                    this.AddCoreEvent( ChaskisCoreEvents.Reconnecting );
 
                     // Try connecting.
                     Connect();

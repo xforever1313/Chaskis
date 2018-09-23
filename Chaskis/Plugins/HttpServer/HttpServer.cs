@@ -6,11 +6,13 @@
 //
 
 using System;
-using System.Text;
+using System.Collections.Specialized;
+using System.IO;
 using System.Net;
-using SethCS.Exceptions;
+using System.Text;
 using System.Threading;
-using SethCS.Basic;
+using System.Web;
+using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.HttpServer
 {
@@ -35,18 +37,16 @@ namespace Chaskis.Plugins.HttpServer
         /// </summary>
         private readonly HttpListener listener;
 
-        private readonly HttpServerConfig config;
+        private readonly HttpResponseHandler responseHandler;
 
         private readonly Thread listenThread;
 
         private bool isListening;
         private readonly object isListeningLock;
 
-        private readonly EventExecutor eventExecutor;
-
         // ---------------- Constructor ----------------
 
-        public HttpServer( HttpServerConfig config )
+        public HttpServer( HttpServerConfig config, HttpResponseHandler responseHandler )
         {
             this.isDisposed = false;
             this.isListening = false;
@@ -54,7 +54,6 @@ namespace Chaskis.Plugins.HttpServer
 
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             config.Validate();
-            this.config = config;
 
             if( HttpListener.IsSupported == false )
             {
@@ -66,11 +65,10 @@ namespace Chaskis.Plugins.HttpServer
             this.listener = new HttpListener();
             this.listener.Prefixes.Add( "http://*:" + config.Port );
 
+            this.responseHandler = responseHandler;
+
             this.listenThread = new Thread( this.HandleRequestThreadEntry );
             this.listenThread.Name = "Http Server Thread";
-
-            this.eventExecutor = new EventExecutor( "HTTP Sever Executor" );
-            this.eventExecutor.OnError += this.FireOnError;
         }
 
         ~HttpServer()
@@ -111,7 +109,6 @@ namespace Chaskis.Plugins.HttpServer
         public void Start()
         {
             this.IsListening = true;
-            this.eventExecutor.Start();
             this.listenThread.Start();
         }
 
@@ -150,9 +147,10 @@ namespace Chaskis.Plugins.HttpServer
                         }
                     }
 
-                    // Handle responses in a separate thread, so this thread can answer any other
-                    // HTTP Requests.
-                    this.eventExecutor.AddEvent( () => this.HandleResponse( context ) );
+                    // Should we do this in a background thread?
+                    // I don't forsee many clients, so I think just one thread is fine.
+                    // If this were 100's of clients, I would reconsider.
+                    this.HandleResponse( context );
                 }
             }
             catch( Exception e )
@@ -161,7 +159,7 @@ namespace Chaskis.Plugins.HttpServer
                 builder.AppendLine( "FATAL EXCEPTION in HttpServer.  Aborting web server, but IRC bot will continue to run." );
                 builder.AppendLine( e.ToString() );
 
-                this.OnStatus?.Invoke( builder.ToString() );
+                this.OnError?.Invoke( builder.ToString() );
             }
             finally
             {
@@ -196,10 +194,6 @@ namespace Chaskis.Plugins.HttpServer
 
                 // Release unmanaged code or threads here
                 this.listenThread.Join();
-                
-                // Event executor does not follow dispose pattern,
-                // so it has unmanaged threads we need to dispose of.
-                this.eventExecutor.Dispose();
             }
             finally
             {
@@ -224,6 +218,12 @@ namespace Chaskis.Plugins.HttpServer
                 // ---- Determine Response and Action to take ----
                 try
                 {
+                    NameValueCollection queryString;
+                    using( StreamReader reader = new StreamReader( request.InputStream ) )
+                    {
+                        queryString = HttpUtility.ParseQueryString( reader.ReadToEnd() );
+                    }
+                    this.responseHandler.HandleResposne( request.RawUrl, request.HttpMethod, queryString );
                 }
                 catch( Exception e )
                 {
@@ -247,8 +247,10 @@ namespace Chaskis.Plugins.HttpServer
 
                         this.OnError?.Invoke( builder.ToString() );
                     }
-
-                    response.Close(); // <- REMEMBER TO CLOSE THIS!
+                    finally
+                    {
+                        response.Close(); // <- REMEMBER TO CLOSE THIS!
+                    }
                 }
             }
             catch( Exception e )

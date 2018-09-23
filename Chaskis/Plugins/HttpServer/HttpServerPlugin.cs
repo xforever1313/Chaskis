@@ -20,8 +20,19 @@ namespace Chaskis.Plugins.HttpServer
         internal const string PluginName = "httpserver";
 
         private HttpServer server;
+        private HttpResponseHandler httpResponseHandler;
+        private HttpServerConfig config;
+
+        private readonly List<IIrcHandler> handlers;
 
         // ---------------- Constructor ----------------
+
+        public HttpServerPlugin()
+        {
+            this.handlers = new List<IIrcHandler>();
+        }
+
+        // ---------------- Properties ----------------
 
         public string SourceCodeLocation
         {
@@ -51,13 +62,17 @@ namespace Chaskis.Plugins.HttpServer
 
         public void Init( PluginInitor pluginInit )
         {
-            HttpServerConfig config = new HttpServerConfig
+            this.config = new HttpServerConfig
             {
                 Port = 10013
             };
 
-            this.server = new HttpServer( config );
-            this.server.Start();
+            IChaskisEventCreator eventCreator = pluginInit.ChaskisEventCreator;
+
+            ChaskisEventHandler coreEvent = eventCreator.CreateCoreEventHandler(
+                ChaskisEventProtocol.IRC,
+                this.OnConnect
+            );
         }
 
         public void Dispose()
@@ -67,9 +82,7 @@ namespace Chaskis.Plugins.HttpServer
 
         public IList<IIrcHandler> GetHandlers()
         {
-            // No handlers that need to happen, everything is driven
-            // through the HTTP interface.
-            return new List<IIrcHandler>();
+            return this.handlers.AsReadOnly();
         }
 
         public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
@@ -78,6 +91,29 @@ namespace Chaskis.Plugins.HttpServer
                 "I have no commands.",
                 msgArgs.Channel
             );
+        }
+
+        private void OnConnect( ChaskisEventHandlerLineActionArgs args )
+        {
+            if( args.EventArgs["event_id"] == ChaskisCoreEvents.ConnectionMade )
+            {
+                if( this.server != null )
+                {
+                    this.httpResponseHandler = new HttpResponseHandler( args.IrcWriter )
+                    {
+                        IsIrcConnected = true
+                    };
+                    this.server = new HttpServer( config, this.httpResponseHandler );
+                    this.server.Start();
+                }
+            }
+            else if( args.EventArgs["event_id"] == ChaskisCoreEvents.DisconnectInProgress )
+            {
+                if( this.httpResponseHandler != null )
+                {
+                    this.httpResponseHandler.IsIrcConnected = false;
+                }
+            }
         }
     }
 }
