@@ -28,6 +28,7 @@ reportGeneratorPath = os.path.join(
     testEnv['PACKAGES'],
     'ReportGenerator',
     'tools',
+    'net47',
     'ReportGenerator.exe'
 )
 
