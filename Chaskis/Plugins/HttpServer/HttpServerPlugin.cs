@@ -6,6 +6,7 @@
 //
 
 using System.Collections.Generic;
+using System.IO;
 using Chaskis.Core;
 
 namespace Chaskis.Plugins.HttpServer
@@ -62,10 +63,12 @@ namespace Chaskis.Plugins.HttpServer
 
         public void Init( PluginInitor pluginInit )
         {
-            this.config = new HttpServerConfig
-            {
-                Port = 10013
-            };
+            string configPath = Path.Combine(
+                pluginInit.PluginDirectory,
+                "HttpServerConfig.xml"
+            );
+
+            this.config = XmlLoader.LoadConfig( configPath );
 
             IChaskisEventCreator eventCreator = pluginInit.ChaskisEventCreator;
 
