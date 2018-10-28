@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<httpserverconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/httpserverconfigschema/2018/HttpServerConfigSchema.xsd">
+    <port>80</port>
+</httpserverconfig>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!-- 
+This plugin allows a user to send an HTTP request to the bot in order to perform
+actions on the channel.
+
+ - Port: Which port to open to accept HTTP requests from.  It is discouraged to put a port
+         that is open outside of your PC, unless you trust everyone on your network.
+         DO NOT put this on a port that is exposed to the internet, unless you want strangers
+         controlling your bot.
+-->
+<httpserverconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/httpserverconfigschema/2018/HttpServerConfigSchema.xsd">
+    <port>10080</port>
+</httpserverconfig>

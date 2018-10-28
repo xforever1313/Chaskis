@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="HttpServerConfigSchema"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/httpserverconfigschema/2018/HttpServerConfigSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/httpserverconfigschema/2018/HttpServerConfigSchema.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/httpserverconfigschema/2018/HttpServerConfigSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="httpserverconfig" type="HttpServerConfig"/>
+    <xs:complexType name="HttpServerConfig">
+        <xs:sequence>
+            <xs:element name="port" type="xs:unsignedShort" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

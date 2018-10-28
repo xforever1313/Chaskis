@@ -49,6 +49,7 @@
     <ProjectReference Include="..\..\Plugins\CrossChannel\CrossChannel.csproj">
       <Name>CrossChannel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\HttpServer\HttpServer.csproj" />
     <ProjectReference Include="..\..\Plugins\IrcLogger\IrcLogger.csproj">
       <Name>IrcLogger</Name>
     </ProjectReference>
