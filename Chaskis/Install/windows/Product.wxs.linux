@@ -79,6 +79,9 @@
             <Feature Id="CrossChannelFeature" Title="Cross Channel" Level="1" Description="I allow a user to send a message to a different channel or broadcast to all channels.">
                 <ComponentGroupRef Id="CrossChannelComponent" />
             </Feature>
+            <Feature Id="HttpServerFeature" Title="HTTP Server" Level="1" Description="I allow HTTP Requests to control the bot remotely.">
+                <ComponentGroupRef Id="HttpServerComponent"/>
+            </Feature>
             <Feature Id="IrcLoggerFeature" Title="IRC Logger" Level="1" Description="I log the IRC chat to the server.">
                 <ComponentGroupRef Id="IrcLoggerComponent" />
             </Feature>
@@ -131,6 +134,7 @@
                         <Directory Id="ConsoleOutFolder" Name="ConsoleOut"/>
                         <Directory Id="CowSayBotFolder" Name="CowSayBot"/>
                         <Directory Id="CrossChannelFolder" Name="CrossChannel"/>
+                        <Directory Id="HttpServerFolder" Name="HttpServer" />
                         <Directory Id="IrcLoggerFolder" Name="IrcLogger"/>
                         <Directory Id="KarmaBotFolder" Name="KarmaBot" />
                         <Directory Id="MathBotFolder" Name="MathBot"/>
@@ -149,6 +153,7 @@
                         <Directory Id="SampleConfigPlugins" Name="Plugins">
                             <Directory Id="CapsWatcherConfigFolder" Name="CapsWatcher"/>
                             <Directory Id="CowSayBotConfigFolder" Name="CowSayBot"/>
+                            <Directory Id="HttpServerConfigFolder" Name="HttpServer"/>
                             <Directory Id="IrcLoggerConfigFolder" Name="IrcLogger"/>
                             <Directory Id="KarmaBotConfigFolder" Name="KarmaBot"/>
                             <Directory Id="QuoteBotConfigFolder" Name="QuoteBot"/>
@@ -287,6 +292,23 @@
             </Component>
         </ComponentGroup>
 
+        <ComponentGroup Id="HttpServerComponent">
+            <!-- HttpServer.dll -->
+            <Component Guid="{3582654C-5690-4B86-95B0-18C2128BDAEB}" Directory="HttpServerFolder">
+                <File Id="$(var.HttpServer.TargetPath)" KeyPath="yes"/>
+            </Component>
+            
+            <!-- HttpServer Readme -->
+            <Component Guid="{8B7C2582-0E8C-4AC4-9A26-7CFE0E070425}" Directory="HttpServerFolder">
+                <File Id="..\..\Plugins\HttpServer\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- HttpServer Config -->
+            <Component Guid="{4574C6A1-81DB-43AA-97E5-06F4A7C06768}" Directory="HttpServerConfigFolder">
+                <File Id="..\..\Plugins\HttpServer\Config\SampleHttpServerConfig.xml" KeyPath="yes"/>
+            </Component>
+        </ComponentGroup>
+        
         <ComponentGroup Id="IrcLoggerComponent">
             <!-- IrcLogger.dll -->
             <Component Guid="{2010F294-59C9-48C6-B8A5-33AEAED4CC6F}" Directory="IrcLoggerFolder">

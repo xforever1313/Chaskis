@@ -92,6 +92,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\HttpServer\HttpServer.csproj">
+      <Name>HttpServer</Name>
+      <Project>{a1075dc2-2b7d-426a-a3df-621f1fe36431}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\Plugins\IrcLogger\IrcLogger.csproj">
       <Name>IrcLogger</Name>
       <Project>{60dfa3f8-e518-482c-a620-e947d13a72e6}</Project>
