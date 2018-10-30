@@ -75,6 +75,7 @@ namespace Chaskis.Plugins.HttpServer
                         return new HttpResponseInfo
                         {
                             ContentType = contentType,
+                            Error = ErrorMessage.InvalidFormat,
                             Message = "Invalid format: " + queryString["format"],
                             ResponseStatus = HttpResponseStatus.ClientError
                         };
@@ -90,6 +91,7 @@ namespace Chaskis.Plugins.HttpServer
                     return new HttpResponseInfo
                     {
                         ContentType = contentType,
+                        Error = ErrorMessage.InvalidMethod,
                         Message = "Request must be a POST request, nothing else is currently supported.  Got: " + method,
                         ResponseStatus = HttpResponseStatus.ClientError
                     };
@@ -102,6 +104,7 @@ namespace Chaskis.Plugins.HttpServer
                     return new HttpResponseInfo
                     {
                         ContentType = contentType,
+                        Error = ErrorMessage.NotConnectedToIrc,
                         Message = "IRC Bot not connected, can not send command.",
                         ResponseStatus = HttpResponseStatus.ServerError
                     };
@@ -116,6 +119,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = contentType,
+                    Error = ErrorMessage.Unknown,
                     Message = err.Message,
                     ResponseStatus = HttpResponseStatus.ServerError
                 };
@@ -145,6 +149,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = format,
+                    Error = ErrorMessage.InvalidUrl,
                     Message = "Invalid Action: " + url,
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
@@ -161,6 +166,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = format,
+                    Error = ErrorMessage.PrivMsgMissingParameters,
                     Message = "PRIVMSG is missing either 'channel' or 'message' in the query string.",
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
@@ -171,6 +177,7 @@ namespace Chaskis.Plugins.HttpServer
             return new HttpResponseInfo
             {
                 ContentType = format,
+                Error = ErrorMessage.None,
                 Message = string.Format( "Message '{0}' sent to '{1}'", message, channel ),
                 ResponseStatus = HttpResponseStatus.Ok
             };
@@ -187,6 +194,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = format,
+                    Error = ErrorMessage.KickMsgMissingParameters,
                     Message = "KICK is missing 'user' or 'channel' in the query string.",
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
@@ -197,8 +205,9 @@ namespace Chaskis.Plugins.HttpServer
             return new HttpResponseInfo
             {
                 ContentType = format,
+                Error = ErrorMessage.None,
                 Message = string.Format( "'{0}' has been kicked from '{1}' for reason '{2}'", user, channel, reason ?? "None" ),
-                ResponseStatus = HttpResponseStatus.ClientError
+                ResponseStatus = HttpResponseStatus.Ok
             };
         }
 
@@ -211,6 +220,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = format,
+                    Error = ErrorMessage.BcastMissingParameters,
                     Message = "BCAST is missing 'message' in the query string.",
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
@@ -221,6 +231,7 @@ namespace Chaskis.Plugins.HttpServer
             return new HttpResponseInfo
             {
                 ContentType = format,
+                Error = ErrorMessage.None,
                 Message = string.Format( "Message '{0}' sent to all channels.", message ),
                 ResponseStatus = HttpResponseStatus.Ok
             };
@@ -236,6 +247,7 @@ namespace Chaskis.Plugins.HttpServer
                 return new HttpResponseInfo
                 {
                     ContentType = format,
+                    Error = ErrorMessage.PartMissingParameters,
                     Message = "PART is missing 'channel' in the query string.",
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
@@ -246,6 +258,7 @@ namespace Chaskis.Plugins.HttpServer
             return new HttpResponseInfo
             {
                 ContentType = format,
+                Error = ErrorMessage.None,
                 Message = string.Format( "Parted '{0}' for reason '{1}'", channel, reason ?? "None" ),
                 ResponseStatus = HttpResponseStatus.Ok
             };

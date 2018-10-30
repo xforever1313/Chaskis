@@ -32,6 +32,11 @@ namespace Chaskis.Plugins.HttpServer
         public HttpResponseStatus ResponseStatus { get; set; }
 
         /// <summary>
+        /// Our internal error message status.
+        /// </summary>
+        public ErrorMessage Error { get; set; }
+
+        /// <summary>
         /// The message we want to tell the client.
         /// </summary>
         public string Message { get; set; }
@@ -107,6 +112,12 @@ namespace Chaskis.Plugins.HttpServer
                 rootNode.AppendChild( statusNode );
             }
 
+            {
+                XmlElement errorMsg = doc.CreateElement( "error_message" );
+                errorMsg.InnerText = this.Error.ToString();
+                rootNode.AppendChild( errorMsg );
+            }
+
             // Create Message Node
             {
                 XmlElement messageNode = doc.CreateElement( "message" );
@@ -130,6 +141,7 @@ namespace Chaskis.Plugins.HttpServer
 
             builder.AppendLine( "Chaskis HTTP Server Response:" );
             builder.AppendLine( "\t- Response Status: " + this.ResponseStatus );
+            builder.AppendLine( "\t- Error Message: " + this.Error );
             builder.AppendLine( "\t- Message: " + this.Message );
 
             return builder.ToString();

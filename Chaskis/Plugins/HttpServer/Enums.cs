@@ -25,6 +25,59 @@ namespace Chaskis.Plugins.HttpServer
         ServerError
     }
 
+    public enum ErrorMessage
+    {
+        /// <summary>
+        /// Unknown error.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        /// No errors to report.
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// Invalid format string specified.
+        /// </summary>
+        InvalidFormat,
+
+        /// <summary>
+        /// Invalid method specified.
+        /// </summary>
+        InvalidMethod,
+
+        /// <summary>
+        /// Invalid URL specified.
+        /// </summary>
+        InvalidUrl,
+
+        /// <summary>
+        /// Not connected to IRC.
+        /// </summary>
+        NotConnectedToIrc,
+
+        /// <summary>
+        /// Private Message is missing parameters.
+        /// </summary>
+        PrivMsgMissingParameters,
+
+        /// <summary>
+        /// Kick message is missing parameters
+        /// </summary>
+        KickMsgMissingParameters,
+
+        /// <summary>
+        /// BCast message is missing parameters.
+        /// </summary>
+        BcastMissingParameters,
+
+        /// <summary>
+        /// Part message is missing parameters.
+        /// </summary>
+        PartMissingParameters
+    }
+
     public enum ContentType
     {
         /// <summary>

@@ -64,7 +64,8 @@ namespace Chaskis.Plugins.HttpServer
         public void Init( PluginInitor pluginInit )
         {
             string configPath = Path.Combine(
-                pluginInit.PluginDirectory,
+                pluginInit.ChaskisConfigPluginRoot,
+                "HttpServer",
                 "HttpServerConfig.xml"
             );
 
