@@ -1,0 +1,6 @@
+!contents -R2 -g -p -f -h
+
+!define plugin_name {httpserver}
+!define http_port {10080}
+
+|>PluginLoadTest|''Ensures that we can properly load the plugin''|
