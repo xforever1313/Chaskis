@@ -3,6 +3,9 @@
 !define plugin_name {httpserver}
 !define http_port {10080}
 
-|>KickPostRequestTest|''Ensures the POST request interface works correctly to KICK a user''|
-|>PluginLoadTest     |''Ensures that we can properly load the plugin''                     |
+|>BcastPostRequestTest  |''Ensures the POST request interface works correctly to send a BCast message''       |
+|>KickPostRequestTest   |''Ensures the POST request interface works correctly to KICK a user''                |
+|>MessagePostRequestTest|''Ensures the POST request interface works correctly to send a message to a channel''|
+|>PartPostRequestTest   |''Ensures the POST request interface works correctly to PART the bot''               |
+|>PluginLoadTest        |''Ensures that we can properly load the plugin''                                     |
 

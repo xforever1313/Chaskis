@@ -1,0 +1,9 @@
+ * Good Case, with channel 1
+ 
+|'''Send post request to'''|http://localhost:${http_port}/privmsg|'''with query'''|message=somemessage&channel=${channel1}|'''Expect'''|OK|
+|'''Wait For String'''     |PRIVMSG\s+${channel1}\s+:somemessage                                                                       |
+
+ * Good Case, with channel 2
+ 
+|'''Send post request to'''|http://localhost:${http_port}/privmsg|'''with query'''|message=somemessage&channel=${channel2}|'''Expect'''|OK|
+|'''Wait For String'''     |PRIVMSG\s+${channel2}\s+:somemessage                                                                       |

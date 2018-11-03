@@ -50,12 +50,13 @@ namespace Chaskis.RegressionTests
             this.startInfo = new ProcessStartInfo(
                 this.exeLocation,
                 "--chaskisroot=" + EnvironmentManager.TestEnvironmentDir
-            );
-
-            this.startInfo.RedirectStandardInput = true;
-            this.startInfo.RedirectStandardOutput = true;
-            this.startInfo.RedirectStandardError = true;
-            this.startInfo.UseShellExecute = false;
+            )
+            {
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
 
             this.buffer = new StringBuffer();
         }
