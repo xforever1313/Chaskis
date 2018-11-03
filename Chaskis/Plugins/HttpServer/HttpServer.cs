@@ -63,7 +63,7 @@ namespace Chaskis.Plugins.HttpServer
             }
 
             this.listener = new HttpListener();
-            this.listener.Prefixes.Add( "http://*:" + config.Port );
+            this.listener.Prefixes.Add( "http://localhost:" + config.Port + "/" );
 
             this.responseHandler = responseHandler;
 
@@ -109,6 +109,7 @@ namespace Chaskis.Plugins.HttpServer
         public void Start()
         {
             this.IsListening = true;
+            this.listener.Start();
             this.listenThread.Start();
         }
 
@@ -215,6 +216,8 @@ namespace Chaskis.Plugins.HttpServer
                 HttpListenerRequest request = context.Request;
                 HttpListenerResponse response = context.Response;
 
+                HttpResponseInfo info = null;
+
                 // ---- Determine Response and Action to take ----
                 try
                 {
@@ -223,7 +226,8 @@ namespace Chaskis.Plugins.HttpServer
                     {
                         queryString = HttpUtility.ParseQueryString( reader.ReadToEnd() );
                     }
-                    this.responseHandler.HandleResposne( request.RawUrl, request.HttpMethod, queryString );
+                    info = this.responseHandler.HandleResposne( request.RawUrl, request.HttpMethod, queryString );
+
                 }
                 catch( Exception e )
                 {
@@ -231,6 +235,14 @@ namespace Chaskis.Plugins.HttpServer
                     builder.AppendLine( "Unexpected Exception while determining HTTP Response:" );
                     builder.AppendLine( e.ToString() );
                     this.OnError?.Invoke( builder.ToString() );
+
+                    info = new HttpResponseInfo
+                    {
+                        ContentType = ContentType.Xml,
+                        Error = ErrorMessage.Unknown,
+                        Message = e.Message,
+                        ResponseStatus = HttpResponseStatus.ServerError
+                    };
                 }
                 finally
                 {
@@ -238,6 +250,10 @@ namespace Chaskis.Plugins.HttpServer
 
                     try
                     {
+                        response.StatusCode = Convert.ToInt32( info.HttpStatusCode );
+                        byte[] buffer = Encoding.UTF8.GetBytes( info.ToString() );
+                        response.ContentLength64 = buffer.LongLength;
+                        response.OutputStream.Write( buffer, 0, buffer.Length );
                     }
                     catch( Exception e )
                     {

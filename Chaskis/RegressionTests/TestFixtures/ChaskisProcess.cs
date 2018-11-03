@@ -22,15 +22,15 @@ namespace Chaskis.RegressionTests
 
         private Process process;
 
-        private ProcessStartInfo startInfo;
+        private readonly ProcessStartInfo startInfo;
 
-        private GenericLogger consoleOutLog;
-        private GenericLogger consoleErrorLog;
-        private GenericLogger testConsoleOutLog;
+        private readonly GenericLogger consoleOutLog;
+        private readonly GenericLogger consoleErrorLog;
+        private readonly GenericLogger testConsoleOutLog;
 
-        private StringBuffer buffer;
+        private readonly StringBuffer buffer;
 
-        private string exeLocation;
+        private readonly string exeLocation;
 
         // ---------------- Constructor ----------------
 

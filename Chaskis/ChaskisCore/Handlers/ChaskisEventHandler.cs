@@ -89,8 +89,7 @@ namespace Chaskis.Core
         {
             if( expectedSource == ChaskisEventSource.CORE )
             {
-                ChaskisEventProtocol protocol;
-                if( Enum.TryParse( expectedSourcePlugin, out protocol ) == false )
+                if( Enum.TryParse( expectedSourcePlugin, out ChaskisEventProtocol protocol ) == false )
                 {
                     throw new ArgumentException(
                         "Invalid protocol passed into constructor.  Ensure you want a CORE event. Got: " + expectedSourcePlugin
@@ -115,6 +114,7 @@ namespace Chaskis.Core
             this.creatorPlugin = creatorPluginName.ToUpper();
 
             this.lineAction = lineAction;
+            this.KeepHandling = true;
         }
 
         // ---------------- Properties ----------------
@@ -135,14 +135,18 @@ namespace Chaskis.Core
             {
                 return;
             }
-
+            
             ChaskisEvent e = ChaskisEvent.FromXml( args.Line );
             string targetPlugin = e.DestinationPlugin;
 
             // We'll handle the event if it is targeted specifically to this plugin, OR it is a broadcast event.
             bool sendEvent = ( this.creatorPlugin == targetPlugin ) || ( string.IsNullOrEmpty( targetPlugin ) );
 
-            if( this.expectedPlugin != null )
+            if( e.SourceType == ChaskisEventSource.CORE )
+            {
+                sendEvent = true;
+            }
+            else if( this.expectedPlugin != null )
             {
                 sendEvent &= ( e.SourcePlugin == this.expectedPlugin );
             }
@@ -155,6 +159,8 @@ namespace Chaskis.Core
             // For BCAST events, the handler should subscribe to a specific source plugin.
             // This way, plugin1 will trigger one handler, while plugin 2 will
             // trigger a different handler.
+            //
+            // The exception to this rule is events from the CORE, which target ALL plugins.
             else if( string.IsNullOrEmpty( targetPlugin ) )
             {
                 sendEvent = false;

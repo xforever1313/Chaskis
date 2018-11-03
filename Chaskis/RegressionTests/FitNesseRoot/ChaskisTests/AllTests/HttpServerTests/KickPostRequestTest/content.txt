@@ -1,0 +1,4 @@
+ * Good Case, with no message
+ 
+|'''Send post request to'''|http://localhost:${http_port}/kick|'''with query'''|user=${testuser}&channel=${channel1}|'''Expect'''|OK|
+|'''Wait For String'''     |KICK\s+${channel1}\s+${testuser}                                                                        |

@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Chaskis.Core;
+using SethCS.Basic;
 
 namespace Chaskis.Plugins.HttpServer
 {
@@ -23,6 +24,7 @@ namespace Chaskis.Plugins.HttpServer
         private HttpServer server;
         private HttpResponseHandler httpResponseHandler;
         private HttpServerConfig config;
+        private GenericLogger log;
 
         private readonly List<IIrcHandler> handlers;
 
@@ -70,6 +72,7 @@ namespace Chaskis.Plugins.HttpServer
             );
 
             this.config = XmlLoader.LoadConfig( configPath );
+            this.log = pluginInit.Log;
 
             IChaskisEventCreator eventCreator = pluginInit.ChaskisEventCreator;
 
@@ -77,11 +80,18 @@ namespace Chaskis.Plugins.HttpServer
                 ChaskisEventProtocol.IRC,
                 this.OnConnect
             );
+
+            this.handlers.Add( coreEvent );
         }
 
         public void Dispose()
         {
-            this.server?.Dispose();
+            if( this.server != null )
+            {
+                this.server.OnStatus -= this.Status;
+                this.server.OnError -= this.ErrorStatus;
+                this.server.Dispose();
+            }
         }
 
         public IList<IIrcHandler> GetHandlers()
@@ -101,14 +111,17 @@ namespace Chaskis.Plugins.HttpServer
         {
             if( args.EventArgs["event_id"] == ChaskisCoreEvents.ConnectionMade )
             {
-                if( this.server != null )
+                if( this.server == null )
                 {
                     this.httpResponseHandler = new HttpResponseHandler( args.IrcWriter )
                     {
                         IsIrcConnected = true
                     };
                     this.server = new HttpServer( config, this.httpResponseHandler );
+                    this.server.OnStatus += this.Status;
+                    this.server.OnError += this.ErrorStatus;
                     this.server.Start();
+                    this.Status( "HTTP Server Started" );
                 }
             }
             else if( args.EventArgs["event_id"] == ChaskisCoreEvents.DisconnectInProgress )
@@ -118,6 +131,16 @@ namespace Chaskis.Plugins.HttpServer
                     this.httpResponseHandler.IsIrcConnected = false;
                 }
             }
+        }
+
+        private void Status( string str )
+        {
+            this.log.WriteLine( str );
+        }
+
+        private void ErrorStatus( string str )
+        {
+            this.log.ErrorWriteLine( str );
         }
     }
 }

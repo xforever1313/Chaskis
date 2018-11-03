@@ -3,4 +3,6 @@
 !define plugin_name {httpserver}
 !define http_port {10080}
 
-|>PluginLoadTest|''Ensures that we can properly load the plugin''|
+|>KickPostRequestTest|''Ensures the POST request interface works correctly to KICK a user''|
+|>PluginLoadTest     |''Ensures that we can properly load the plugin''                     |
+
