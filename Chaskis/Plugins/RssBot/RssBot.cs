@@ -25,7 +25,7 @@ namespace Chaskis.Plugins.RssBot
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.5.0";
+        internal const string VersionStr = "0.5.1";
 
         /// <summary>
         /// The handlers for this plugin.

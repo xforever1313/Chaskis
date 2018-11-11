@@ -15,7 +15,7 @@ namespace Chaskis.Plugins.MessageFixerBot
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.2.0";
+        internal const string VersionStr = "0.2.1";
 
         /// <summary>
         /// The handlers for this plugin.

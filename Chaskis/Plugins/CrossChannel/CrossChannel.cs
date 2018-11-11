@@ -22,7 +22,7 @@ namespace Chaskis.Plugins.CrossChannel
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.1";
 
         /// <summary>
         /// The handlers for this plugin.

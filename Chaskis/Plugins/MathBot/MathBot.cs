@@ -21,7 +21,7 @@ namespace Chaskis.Plugins.MathBot
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.3.0";
+        internal const string VersionStr = "0.3.1";
 
         /// <summary>
         /// The handlers for this plugin.

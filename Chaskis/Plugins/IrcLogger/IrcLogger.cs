@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.IrcLogger
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.4.0";
+        internal const string VersionStr = "0.4.1";
 
         /// <summary>
         /// The handlers for this plugin.
