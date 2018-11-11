@@ -52,9 +52,27 @@ namespace Chaskis.RegressionTests
             }
             FormUrlEncodedContent content = new FormUrlEncodedContent( args );
 
-            this.httpClientLogger.WriteLine( "Setting POST request to '{0}' with query '{1}'", url.ToString(), queryString );
+            this.httpClientLogger.WriteLine( "Sending POST request to '{0}' with query '{1}'", url.ToString(), queryString );
 
             HttpResponseMessage message = client.PostAsync( url, content ).Result;
+
+            string responseMsg = message.Content.ReadAsStringAsync().Result;
+
+            StringBuilder logMessage = new StringBuilder();
+            logMessage.AppendLine( "Response from '" + url.ToString() + "':" );
+            logMessage.AppendLine( "\t- Code: " + message.StatusCode + "; expected: " + statusCode );
+            logMessage.AppendLine( "\t- Response: " + responseMsg );
+
+            this.httpClientLogger.WriteLine( logMessage.ToString() );
+
+            return message.StatusCode == statusCode;
+        }
+
+        public bool SendGetRequestToExpect( string url, HttpStatusCode statusCode )
+        {
+            this.httpClientLogger.WriteLine( "Sending GET request to '{0}'", url );
+
+            HttpResponseMessage message = client.GetAsync( url ).Result;
 
             string responseMsg = message.Content.ReadAsStringAsync().Result;
 

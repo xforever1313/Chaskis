@@ -51,7 +51,14 @@ namespace Chaskis.Plugins.HttpServer
                 switch( this.ResponseStatus )
                 {
                     case HttpResponseStatus.ClientError:
-                        return HttpStatusCode.BadRequest;
+                        if( this.Error == ErrorMessage.InvalidUrl )
+                        {
+                            return HttpStatusCode.NotFound;
+                        }
+                        else
+                        {
+                            return HttpStatusCode.BadRequest;
+                        }
 
                     case HttpResponseStatus.ServerError:
                         return HttpStatusCode.InternalServerError;

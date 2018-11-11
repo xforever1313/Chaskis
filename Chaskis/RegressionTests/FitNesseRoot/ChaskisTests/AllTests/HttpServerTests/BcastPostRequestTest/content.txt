@@ -9,3 +9,8 @@
 |'''Send post request to'''|http://localhost:${http_port}/broadcast|'''with query'''|message=somemessage2|'''Expect'''|OK|
 |'''Wait For String'''     |PRIVMSG\s+${channel1}\s+:somemessage2                                                        |
 |'''Wait For String'''     |PRIVMSG\s+${channel2}\s+:somemessage2                                                        |
+
+ * Bad Case, missing message from query
+ 
+|'''Send post request to'''|http://localhost:${http_port}/bcast    |'''with query'''|lol=somemessage2|'''Expect'''|!-BadRequest-!|
+|'''Send post request to'''|http://localhost:${http_port}/broadcast|'''with query'''|lol=somemessage2|'''Expect'''|!-BadRequest-!|
