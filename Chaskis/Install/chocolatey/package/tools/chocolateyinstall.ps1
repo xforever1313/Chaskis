@@ -17,7 +17,7 @@ $packageArgs = @{
 
   checksum      = ''
   checksumType  = 'sha256'
-  checksum64    = 'b3d70633ae32d0afc5dc642bbe4af4bd705e1673210ceb897928086255f73973'
+  checksum64    = 'dafcf9814f5433dab1f15d252a57ae805ada8f726e4522b937eeee5447312fbc'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""
