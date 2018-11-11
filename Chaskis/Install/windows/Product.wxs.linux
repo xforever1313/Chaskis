@@ -10,10 +10,10 @@
     -->
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="F121798C-3289-4B3E-AB77-83387FE0D5CD"
+	<Product Id="2074FBFB-66CE-41C7-8202-2B34E44BD336"
              Name="Chaskis IRC Bot"
              Language="1033"
-             Version="0.8.0"
+             Version="0.9.0"
              Manufacturer="Seth Hendrick"
              UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
 
@@ -295,17 +295,17 @@
         <ComponentGroup Id="HttpServerComponent">
             <!-- HttpServer.dll -->
             <Component Guid="{3582654C-5690-4B86-95B0-18C2128BDAEB}" Directory="HttpServerFolder">
-                <File Id="$(var.HttpServer.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.HttpServer.TargetPath)" KeyPath="yes"/>
             </Component>
             
             <!-- HttpServer Readme -->
             <Component Guid="{8B7C2582-0E8C-4AC4-9A26-7CFE0E070425}" Directory="HttpServerFolder">
-                <File Id="..\..\Plugins\HttpServer\Readme.md" KeyPath="yes"/>
+                <File Id="HttpServerReadme" Source="..\..\Plugins\HttpServer\Readme.md" KeyPath="yes"/>
             </Component>
 
             <!-- HttpServer Config -->
             <Component Guid="{4574C6A1-81DB-43AA-97E5-06F4A7C06768}" Directory="HttpServerConfigFolder">
-                <File Id="..\..\Plugins\HttpServer\Config\SampleHttpServerConfig.xml" KeyPath="yes"/>
+                <File Source="..\..\Plugins\HttpServer\Config\SampleHttpServerConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
         

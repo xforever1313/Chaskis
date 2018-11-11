@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop';
 $packageName= $env:ChocolateyPackageName
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url        = ''
-$url64      = 'https://files.shendrick.net/projects/chaskis/releases/0.8.0/windows/ChaskisInstaller.msi'
+$url64      = 'https://files.shendrick.net/projects/chaskis/releases/0.9.0/windows/ChaskisInstaller.msi'
 
 $packageArgs = @{
   packageName   = $packageName
