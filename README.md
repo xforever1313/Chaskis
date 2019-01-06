@@ -19,6 +19,11 @@ Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-bas
 
 Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
 
+Live Demo
+---------
+
+You can talk to chaskisbot in our IRC channel on [Freenode](https://webchat.freenode.net/?channels=chaskis) (#chaskis @ irc.freenode.net).  Also, feel free to ask any questions there, someone will answer your questions as soon as possible.
+
 Install Instructions
 ----------------------
 
