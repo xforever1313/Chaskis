@@ -80,6 +80,10 @@ namespace Chaskis
                         config.Port = short.Parse( childNode.InnerText );
                         break;
 
+                    case "usessl":
+                        config.UseSsl = bool.Parse( childNode.InnerText );
+                        break;
+
                     case "username":
                         config.UserName = childNode.InnerText;
                         break;

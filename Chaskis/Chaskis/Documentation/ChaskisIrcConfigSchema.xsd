@@ -17,6 +17,7 @@
             <xs:element name="server" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
             <xs:element name="channels" type="Channels" minOccurs="1" maxOccurs="1"/>
             <xs:element name="port" type="xs:short" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="usessl" type="xs:boolean" minOccurs="0" maxOccurs="1" />
             <xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="nick" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="realname" type="xs:string" minOccurs="1" maxOccurs="1"/>

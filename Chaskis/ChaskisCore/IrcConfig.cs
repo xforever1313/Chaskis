@@ -35,6 +35,11 @@ namespace Chaskis.Core
         short Port { get; }
 
         /// <summary>
+        /// Does the port we want to connect to use SSL?
+        /// </summary>
+        bool UseSsl { get; }
+
+        /// <summary>
         /// The bot's user name.
         /// </summary>
         string UserName { get; }
@@ -135,6 +140,7 @@ namespace Chaskis.Core
             this.Server = string.Empty;
             this.Channels = new List<string>();
             this.Port = 6667; // Default IRC port.
+            this.UseSsl = false; // Defaulted to false.
             this.UserName = "SomeIrcBot";
             this.Nick = "SomeIrcBot";
             this.RealName = "Some IRC Bot";
@@ -162,6 +168,11 @@ namespace Chaskis.Core
         /// The port to connect to.
         /// </summary>
         public short Port { get; set; }
+
+        /// <summary>
+        /// Does the port we want to use do SSL?
+        /// </summary>
+        public bool UseSsl { get; set; }
 
         /// <summary>
         /// The bot's user name.
@@ -334,6 +345,18 @@ namespace Chaskis.Core
             set
             {
                 ThrowException( nameof( this.Port ) );
+            }
+        }
+
+        public bool UseSsl
+        {
+            get
+            {
+                return this.wrappedConfig.UseSsl;
+            }
+            set
+            {
+                ThrowException( nameof( this.UseSsl ) );
             }
         }
 
@@ -672,6 +695,7 @@ namespace Chaskis.Core
                 config.Server.GetHashCode() +
                 config.Channels.GetHashCode() +
                 config.Port.GetHashCode() +
+                config.UseSsl.GetHashCode() +
                 config.UserName.GetHashCode() +
                 config.Nick.GetHashCode() +
                 config.RealName.GetHashCode() +
@@ -708,6 +732,7 @@ namespace Chaskis.Core
                 ( config1.Server == other.Server ) &&
                 ( config1.Channels.Count == other.Channels.Count ) &&
                 ( config1.Port == other.Port ) &&
+                ( config1.UseSsl == other.UseSsl ) &&
                 ( config1.UserName == other.UserName ) &&
                 ( config1.Nick == other.Nick ) &&
                 ( config1.RealName == other.RealName ) &&

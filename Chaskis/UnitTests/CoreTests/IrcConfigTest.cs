@@ -78,6 +78,10 @@ namespace Chaskis.UnitTests.CoreTests
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
+            this.ircConfig.UseSsl = true;
+            CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
+            this.ircConfig = TestHelpers.GetTestIrcConfig();
+
             this.ircConfig.UserName = "Nate";
             CheckNotEqual( this.ircConfig, interfaceIrcConfig, roIrcConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
@@ -135,6 +139,7 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.AreEqual( this.ircConfig.Server, config.Server );
             Assert.AreEqual( this.ircConfig.Channels, config.Channels );
             Assert.AreEqual( this.ircConfig.Port, config.Port );
+            Assert.AreEqual( this.ircConfig.UseSsl, config.UseSsl );
             Assert.AreEqual( this.ircConfig.UserName, config.UserName );
             Assert.AreEqual( this.ircConfig.Nick, config.Nick );
             Assert.AreEqual( this.ircConfig.RealName, config.RealName );
@@ -174,6 +179,14 @@ namespace Chaskis.UnitTests.CoreTests
                 }
             );
             Assert.IsTrue( ex.Message.Contains( "Port" ) );
+
+            ex = Assert.Throws<ReadOnlyException>(
+                delegate ()
+                {
+                    roConfig.UseSsl = true;
+                }
+            );
+            Assert.IsTrue( ex.Message.Contains( "UseSsl" ) );
 
             ex = Assert.Throws<ReadOnlyException>(
                 delegate ()

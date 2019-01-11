@@ -43,6 +43,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.Server = "irc.testdomain.com";
             this.ircConfig.Channels.Add( "#testchannel" );
             this.ircConfig.Port = 6667;
+            this.ircConfig.UseSsl = false;
             this.ircConfig.Nick = "testbot";
             this.ircConfig.UserName = "testbot";
             this.ircConfig.RealName = "test bot";
@@ -97,6 +98,8 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.Admins.Add( "person1" );
             this.ircConfig.Admins.Add( "person2" );
+
+            this.ircConfig.UseSsl = true;
 
             IIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithAdmins.xml" )

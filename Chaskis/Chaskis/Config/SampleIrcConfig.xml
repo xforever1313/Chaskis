@@ -10,6 +10,9 @@ Channels - The list of channels to join. At least 1 is required.
 
 Port - The port to use for the TCP connection.  Can not be negative.  Defaulted to 6667.
 
+usessl - Should the connection to the IRC server be an SSL connection?  Options are true (enable SSL)
+         or false (do not use SSL).  Defaulted to false.
+
 UserName - The bot's username.  Required.  This is not the Nickname, and does not show up
            in the channel to other users.  This can not be changed without reconnecting.
            This is how the server identifies the bot.
@@ -77,6 +80,7 @@ Bridge bots - Optional.
         <channel>#testchannel2</channel>
     </channels>
 	<port>6667</port>
+    <usessl>false</usessl>
 	<username>testbot</username>
 	<nick>testbot</nick>
 	<realname>test bot</realname>

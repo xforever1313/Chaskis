@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading;
 using SethCS.Basic;
@@ -61,6 +62,8 @@ namespace Chaskis.Core
         /// Connection to the server.
         /// </summary>
         private TcpClient connection;
+
+        private SslStream sslStream;
 
         /// <summary>
         /// Used to send commands.
@@ -126,6 +129,7 @@ namespace Chaskis.Core
             this.IsConnected = false;
 
             this.connection = null;
+            this.sslStream = null;
             this.ircWriter = null;
             this.ircReader = null;
 
@@ -225,8 +229,23 @@ namespace Chaskis.Core
 
             // Connect.
             this.connection = new TcpClient( this.Config.Server, this.Config.Port );
-            this.ircWriter = new StreamWriter( this.connection.GetStream() );
-            this.ircReader = new StreamReader( this.connection.GetStream() );
+
+            Stream stream;
+            if( this.Config.UseSsl )
+            {
+                StaticLogger.Log.WriteLine( "Using SSL connection." );
+                this.sslStream = new SslStream( this.connection.GetStream() );
+                this.sslStream.AuthenticateAsClient( this.Config.Server );
+                stream = sslStream;
+            }
+            else
+            {
+                StaticLogger.Log.WriteLine( "WARNING! Using plain text connection." );
+                stream = this.connection.GetStream();
+            }
+
+            this.ircWriter = new StreamWriter( stream );
+            this.ircReader = new StreamReader( stream );
 
             // Start Reading.
             this.KeepReading = true;
@@ -566,6 +585,7 @@ namespace Chaskis.Core
             // Reset everything to null.
             this.ircWriter = null;
             this.ircReader = null;
+            this.sslStream = null;
             this.connection = null;
 
             // We are not connected.

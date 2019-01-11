@@ -115,6 +115,7 @@ namespace Chaskis.UnitTests.Common
             ircConfig.Server = "AServer";
             ircConfig.Channels.Add( "#achannel" );
             ircConfig.Port = 1234;
+            ircConfig.UseSsl = false;
             ircConfig.UserName = "SomeUserName";
             ircConfig.Nick = "SomeNick";
             ircConfig.RealName = "Some Real Name";

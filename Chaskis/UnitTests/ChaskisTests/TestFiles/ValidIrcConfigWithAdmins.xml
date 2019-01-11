@@ -5,6 +5,7 @@
 	    <channel>#testchannel</channel>
     </channels>
 	<port>6667</port>
+    <usessl>true</usessl>
 	<username>testbot</username>
 	<nick>testbot</nick>
 	<realname>test bot</realname>
