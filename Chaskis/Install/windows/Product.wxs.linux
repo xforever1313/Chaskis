@@ -10,10 +10,10 @@
     -->
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="2074FBFB-66CE-41C7-8202-2B34E44BD336"
+	<Product Id="43AB42A8-68ED-49BE-BD73-A40A433A84A2"
              Name="Chaskis IRC Bot"
              Language="1033"
-             Version="0.9.0"
+             Version="0.10.0"
              Manufacturer="Seth Hendrick"
              UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
 
@@ -156,9 +156,11 @@
                             <Directory Id="HttpServerConfigFolder" Name="HttpServer"/>
                             <Directory Id="IrcLoggerConfigFolder" Name="IrcLogger"/>
                             <Directory Id="KarmaBotConfigFolder" Name="KarmaBot"/>
+                            <Directory Id="NewVersionNotifierConfigFolder" Name="NewVersionNotifier"/>
                             <Directory Id="QuoteBotConfigFolder" Name="QuoteBot"/>
                             <Directory Id="RssBotConfigFolder" Name="RssBot"/>
                             <Directory Id="ServerDiagnosticsConfigFolder" Name="ServerDiagnostics"/>
+                            <Directory Id="UserListBotConfigFolder" Name="UserListBot"/>
                             <Directory Id="WelcomeBotConfigFolder" Name="WelcomeBot"/>
                             <Directory Id="XmlBotConfigFolder" Name="XmlBot"/>
                         </Directory>
@@ -382,6 +384,12 @@
             <Component Guid="{76F7D0B5-C91A-4135-8379-267FDA9FA910}" Directory="NewVersionNotifierFolder">
                 <File Id="NewVersionNotifierReadme" Source="..\..\Plugins\NewVersionNotifier\Readme.md" KeyPath="yes"/>
             </Component>
+
+            <!-- NewVersionNotifier Config-->
+            <Component Guid="{9388DA9B-2E2A-426B-B033-7901E483AA58}" Directory="NewVersionNotifierConfigFolder">
+                <File Id="NewVersionNotifierConfig" Source="..\..\Plugins\NewVersionNotifier\Config\SampleNewVersionNotifierConfig.xml" KeyPath="yes"/>
+            </Component>
+
         </ComponentGroup>
         
         <ComponentGroup Id="QuoteBotComponent">
@@ -495,6 +503,11 @@
             <!-- UserListBot Readme -->
             <Component Guid="{A5AF0979-9533-4F44-953F-C33F832EA393}" Directory="UserListBotFolder">
                 <File Id="UserListBotReadme" Source="..\..\Plugins\UserListBot\Readme.md" KeyPath="yes"/>
+            </Component>
+
+            <!-- UserListBot Config -->
+            <Component Guid="{F0C59105-8F89-4AEE-9F23-7DF3B02230E5}" Directory="UserListBotConfigFolder">
+                <File Id="UserListBotConfig" Source="..\..\Plugins\UserListBot\Config\SampleUserListBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
 

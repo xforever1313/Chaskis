@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop';
 $packageName= $env:ChocolateyPackageName
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url        = ''
-$url64      = 'https://files.shendrick.net/projects/chaskis/releases/0.9.0/windows/ChaskisInstaller.msi'
+$url64      = 'https://files.shendrick.net/projects/chaskis/releases/0.10.0/windows/ChaskisInstaller.msi'
 
 $packageArgs = @{
   packageName   = $packageName
@@ -17,7 +17,7 @@ $packageArgs = @{
 
   checksum      = ''
   checksumType  = 'sha256'
-  checksum64    = 'dafcf9814f5433dab1f15d252a57ae805ada8f726e4522b937eeee5447312fbc'
+  checksum64    = '867c0ce273ab10afaf049d86d3bdd9145d220147c314f268ed7c35ca4cd11d6b'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""

@@ -18,15 +18,15 @@
 
 # Templatized variables
 !define fullname {Chaskis IRC Bot}
-!define chaskis_version {0.9.0}
-!define chaskis_core_version {0.9.0}
+!define chaskis_version {0.10.0}
+!define chaskis_core_version {0.10.0}
 !define author {Seth Hendrick}
 !define author_email {seth@shendrick.net}
 !define project_url {https://github.com/xforever1313/Chaskis/}
 !define license_url {https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt}
 !define wiki_url {https://github.com/xforever1313/Chaskis/wiki}
 !define issue_tracker_url {https://github.com/xforever1313/Chaskis/issues}
-!define copyright {Copyright © Seth Hendrick 2016-2018}
+!define copyright {Copyright © Seth Hendrick 2016-2019}
 !define icon_url {https://files.shendrick.net/projects/chaskis/assets/icon.png}
 !define default_plugin_name {chaskis}
 !define regression_test_plugin_name {chaskistests}

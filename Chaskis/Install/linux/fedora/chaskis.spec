@@ -1,6 +1,6 @@
 %define name chaskis
-%define version 0.9.0
-%define unmangled_version 0.9.0
+%define version 0.10.0
+%define unmangled_version 0.10.0
 %define release 1
 %define source https://files.shendrick.net/projects/chaskis/releases/%{unmangled_version}/linux/debian/chaskis.deb
 %define libdir /usr/lib/
