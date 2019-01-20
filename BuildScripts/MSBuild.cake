@@ -1,4 +1,3 @@
-
 /// <summary>
 /// Calls MSBuild to compile Chaskis
 /// </summary>

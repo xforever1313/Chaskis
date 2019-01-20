@@ -11,6 +11,7 @@ TestResults/
 .sconsign.dblite
 __pycache__/
 *.pyc
+tools
 
 # globs
 Makefile.in
