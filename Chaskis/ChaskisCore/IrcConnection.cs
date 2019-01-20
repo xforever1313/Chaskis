@@ -354,10 +354,10 @@ namespace Chaskis.Core
                     lock( this.ircWriterLock )
                     {
                         // This should be in the lock.  If this is before the lock,
-                        // CanWrite can return true, this thread can be preempted,
+                        // IsConnected can return true, this thread can be preempted,
                         // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
                         // to a socket that is closed which is a problem.
-                        if( ( this.connection == null ) || ( this.connection.IsConnected == false ) )
+                        if( this.connection.IsConnected == false )
                         {
                             return;
                         }
@@ -456,7 +456,7 @@ namespace Chaskis.Core
                 {
                     lock( this.ircWriterLock )
                     {
-                        if( ( this.connection == null ) || ( this.connection.IsConnected == false ) )
+                        if( this.connection.IsConnected == false )
                         {
                             return;
                         }
@@ -503,7 +503,8 @@ namespace Chaskis.Core
                 this.KeepReading = false;
 
                 // - We could be in the reconnecting state.  Trigger that thread to awaken
-                //   if its sleeping between reconnects.  This will cause the thread to return.
+                //   if its sleeping between reconnects.
+                //   Since KeepReading is set to false, the reconnection thread wil exit.
                 this.reconnectAbortEvent.Set();
 
                 // Drain our writer queue before disconnecting so everything that needs to go out goes out.
@@ -516,29 +517,7 @@ namespace Chaskis.Core
                     this.writerQueue.Dispose();
                 }
 
-                // - Close the TCP stream.  If we are waiting for data to come over TCP from the IRC server,
-                //   we need to close the IRC connection for the reader thread to abort.
-                //
-                //   The ircReader and the ircWriter share the same stream, so closing one will close the other.
-                //   Any calls to SendPong or SendMessageToUser are ignored as the stream's CanWrite will be set to false
-                //   since the stream is closed.
-                //
-                //   We also must lock on the writer lock.  We don't want to close the stream in the unlikely event
-                //   the writer is writing.
-                lock( this.ircWriterLock )
-                {
-                    this.connection.Disconnect();
-                }
-
-                // - Wait for the reader thread to exit.
-                this.readerThread.Join();
-
-                // Finish disconnecting by closing the connection.
-                // Disconnect.
-                lock( this.ircWriterLock )
-                {
-                    DisconnectHelper();
-                }
+                this.DisconnectHelper();
 
                 this.reconnector.Dispose();
                 this.connection.Dispose();
@@ -552,14 +531,35 @@ namespace Chaskis.Core
         /// </summary>
         private void DisconnectHelper()
         {
-            this.AddCoreEvent( ChaskisCoreEvents.DisconnectInProgress );
+            // First, acquire the ircWriterLock.  This will prevent anything writing to the connection,
+            // as those are also guarded by this lock.
+            // When this lock is released, the connection's IsConnected flag will be set to false, so
+            // all of those writes become no-ops.
+            lock( this.ircWriterLock )
+            {
+                this.AddCoreEvent( ChaskisCoreEvents.DisconnectInProgress );
 
-            this.connection.Disconnect();
+                // - Close the TCP stream.  If we are waiting for data to come over TCP from the IRC server,
+                //   we need to close the IRC connection for the reader thread to abort.
+                this.connection.Disconnect();
 
-            // We are not connected.
-            this.IsConnected = false;
+                // - Once disconnected, the reader thread should exit at some point. A SocketException,
+                //   ObjectDisposedException, or some other kind of Exception should occur, and cause
+                //   the thread to exit.
+                // - Do not set KeepReading to false here; that should only be set by Disconnect().
+                //   If KeepReading is set to true, it means we did not want the connection to go down,
+                //   so it will trigger our reconnection logic.  However, if KeepReading it set to false,
+                //   it means that we WANTED the connection to go down.
 
-            this.AddCoreEvent( ChaskisCoreEvents.DisconnectComplete );
+                // - Wait for the reader thread to exit.
+                this.readerThread.Join();
+                this.readerThread = null; // REMEMBER TO SET THIS TO NULL!!!  Connect() requires this to be null.
+
+                this.AddCoreEvent( ChaskisCoreEvents.DisconnectComplete );
+
+                // We sent our disconnect complete event, we are no longer connected.
+                this.IsConnected = false;
+            }
         }
 
         /// <summary>
@@ -752,14 +752,10 @@ namespace Chaskis.Core
         /// </summary>
         private void AttemptReconnect()
         {
-            // First, acquire the lock for the IRC writer before closing the connection.
-            // We don't want any events to run and try to write to a closed connection.
-            lock( this.ircWriterLock )
-            {
-                this.connection.Disconnect();
-                DisconnectHelper();
-            }
-            // Bad news is when we release the lock, any event that wants to write to the IRC Channel
+            this.DisconnectHelper();
+
+            // Bad news is when we release the ircWriterLock when DisconnectHelper returns, 
+            // any event that wants to write to the IRC Channel
             // will not be.  We *could* cache them by keeping the ircWriterLock until we establish connection again,
             // but then when we rejoin the channel we'll flood it with messages.  That's undesirable.
             // So, when we unblock the thread, any calls to WriteToChannel or SendPong will be a No-Op.  All the events
