@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2018.
+//          Copyright Seth Hendrick 2016-2019.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading;
 using SethCS.Basic;
@@ -58,27 +57,12 @@ namespace Chaskis.Core
         /// </summary>
         public static readonly int MaximumLength = 400;
 
-        /// <summary>
-        /// Connection to the server.
-        /// </summary>
-        private TcpClient connection;
-
-        private SslStream sslStream;
-
-        /// <summary>
-        /// Used to send commands.
-        /// </summary>
-        private StreamWriter ircWriter;
+        private readonly IIrcMac connection;
 
         /// <summary>
         /// Lock for the IRC writer.
         /// </summary>
         private readonly object ircWriterLock;
-
-        /// <summary>
-        /// Used to read commands.
-        /// </summary>
-        private StreamReader ircReader;
 
         /// <summary>
         /// The thread that reads.
@@ -122,16 +106,20 @@ namespace Chaskis.Core
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue )
+        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue, IIrcMac macLayer = null )
         {
             this.inited = false;
             this.Config = new ReadOnlyIrcConfig( config );
             this.IsConnected = false;
 
-            this.connection = null;
-            this.sslStream = null;
-            this.ircWriter = null;
-            this.ircReader = null;
+            if( macLayer == null )
+            {
+                this.connection = new IrcMac( config, StaticLogger.Log );
+            }
+            else
+            {
+                this.connection = macLayer;
+            }
 
             this.keepReadingObject = new object();
             this.KeepReading = false;
@@ -227,30 +215,22 @@ namespace Chaskis.Core
                 );
             }
 
+            if( this.readerThread != null )
+            {
+                throw new InvalidOperationException(
+                    "Somehow our reader thread is not null, this should never happen.  Something went wrong."
+                );
+            }
+
             // Connect.
-            this.connection = new TcpClient( this.Config.Server, this.Config.Port );
-
-            Stream stream;
-            if( this.Config.UseSsl )
-            {
-                StaticLogger.Log.WriteLine( "Using SSL connection." );
-                this.sslStream = new SslStream( this.connection.GetStream() );
-                this.sslStream.AuthenticateAsClient( this.Config.Server );
-                stream = sslStream;
-            }
-            else
-            {
-                StaticLogger.Log.WriteLine( "WARNING! Using plain text connection." );
-                stream = this.connection.GetStream();
-            }
-
-            this.ircWriter = new StreamWriter( stream );
-            this.ircReader = new StreamReader( stream );
+            this.connection.Connect();
 
             // Start Reading.
             this.KeepReading = true;
-            this.readerThread = new Thread( ReaderThread );
-            this.readerThread.Name = this.Config.Server + " IRC reader thread";
+            this.readerThread = new Thread( ReaderThread )
+            {
+                Name = this.Config.Server + " IRC reader thread"
+            };
             this.readerThread.Start();
 
             // Per RFC-2812, the server password sets a "connection password".
@@ -258,8 +238,7 @@ namespace Chaskis.Core
             // Therefore, this is the first command that gets sent.
             if( string.IsNullOrEmpty( this.Config.ServerPassword ) == false )
             {
-                this.ircWriter.WriteLine( "PASS {0}", this.Config.ServerPassword );
-                this.ircWriter.Flush();
+                this.connection.WriteLine( "PASS {0}", this.Config.ServerPassword );
                 Thread.Sleep( this.Config.RateLimit );
             }
             else
@@ -271,21 +250,18 @@ namespace Chaskis.Core
             // This command is used at the beginning of a connection to specify the username,
             // real name and initial user modes of the connecting client.
             // <realname> may contain spaces, and thus must be prefixed with a colon.
-            this.ircWriter.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
-            this.ircWriter.Flush();
+            this.connection.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
             Thread.Sleep( this.Config.RateLimit );
 
             // NICK <nickname>
-            this.ircWriter.WriteLine( "NICK {0}", this.Config.Nick );
-            this.ircWriter.Flush();
+            this.connection.WriteLine( "NICK {0}", this.Config.Nick );
             Thread.Sleep( this.Config.RateLimit );
 
             // If the server has a NickServ service, tell nickserv our password
             // so it registers our bot and does not change its nickname on us.
             if( string.IsNullOrEmpty( this.Config.NickServPassword ) == false )
             {
-                this.ircWriter.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", this.Config.NickServPassword );
-                this.ircWriter.Flush();
+                this.connection.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", this.Config.NickServPassword );
                 Thread.Sleep( this.Config.RateLimit );
             }
             else
@@ -304,8 +280,7 @@ namespace Chaskis.Core
             // If channel does not exist it will be created.
             foreach( string channel in this.Config.Channels )
             {
-                this.ircWriter.WriteLine( "JOIN {0}", channel );
-                this.ircWriter.Flush();
+                this.connection.WriteLine( "JOIN {0}", channel );
 
                 this.AddCoreEvent( ChaskisCoreEvents.JoinChannel + " " + channel );
                 Thread.Sleep( this.Config.RateLimit );
@@ -382,14 +357,13 @@ namespace Chaskis.Core
                         // CanWrite can return true, this thread can be preempted,
                         // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
                         // to a socket that is closed which is a problem.
-                        if( ( this.connection == null ) || ( this.connection.Connected == false ) )
+                        if( ( this.connection == null ) || ( this.connection.IsConnected == false ) )
                         {
                             return;
                         }
 
                         // PRIVMSG < msgtarget > < message >
-                        this.ircWriter.WriteLine( "PRIVMSG {0} :{1}", channel, line );
-                        this.ircWriter.Flush();
+                        this.connection.WriteLine( "PRIVMSG {0} :{1}", channel, line );
                     }
                 } 
             );
@@ -482,13 +456,12 @@ namespace Chaskis.Core
                 {
                     lock( this.ircWriterLock )
                     {
-                        if( ( this.connection == null ) || ( this.connection.Connected == false ) )
+                        if( ( this.connection == null ) || ( this.connection.IsConnected == false ) )
                         {
                             return;
                         }
 
-                        this.ircWriter.WriteLine( cmd );
-                        this.ircWriter.Flush();
+                        this.connection.WriteLine( cmd );
                     }
                 }
             );
@@ -554,7 +527,7 @@ namespace Chaskis.Core
                 //   the writer is writing.
                 lock( this.ircWriterLock )
                 {
-                    this.ircReader.Close();
+                    this.connection.Disconnect();
                 }
 
                 // - Wait for the reader thread to exit.
@@ -568,6 +541,7 @@ namespace Chaskis.Core
                 }
 
                 this.reconnector.Dispose();
+                this.connection.Dispose();
 
                 StaticLogger.Log.WriteLine( "Disconnect Complete." );
             }
@@ -580,13 +554,7 @@ namespace Chaskis.Core
         {
             this.AddCoreEvent( ChaskisCoreEvents.DisconnectInProgress );
 
-            this.connection.Close();
-
-            // Reset everything to null.
-            this.ircWriter = null;
-            this.ircReader = null;
-            this.sslStream = null;
-            this.connection = null;
+            this.connection.Disconnect();
 
             // We are not connected.
             this.IsConnected = false;
@@ -706,7 +674,7 @@ namespace Chaskis.Core
                     try
                     {
                         // ReadLine blocks until we call Close() on the underlying stream.
-                        string s = this.ircReader.ReadLine();
+                        string s = this.connection.ReadLine();
                         if( ( string.IsNullOrWhiteSpace( s ) == false ) && ( string.IsNullOrEmpty( s ) == false ) )
                         {
                             // If KeepReading is set to false, we want this thread to exit.
@@ -754,10 +722,12 @@ namespace Chaskis.Core
                     catch( Exception err )
                     {
                         // Unexpected exception occurred.  The connection probably dropped.
-                        // Nothing we can do now except to attempt to try again.
+                        // Nothing we can do now except to wait for the watch dog to trigger a reconnect..
                         StaticLogger.Log.ErrorWriteLine(
                             "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err + Environment.NewLine + "Wait for watchdog to reconnect..."
                         );
+
+                        return;
                     }
                 } // End While
             }
@@ -786,7 +756,7 @@ namespace Chaskis.Core
             // We don't want any events to run and try to write to a closed connection.
             lock( this.ircWriterLock )
             {
-                this.ircReader.Close(); // Close the IRC Stream.  This also closes the writer as well.
+                this.connection.Disconnect();
                 DisconnectHelper();
             }
             // Bad news is when we release the lock, any event that wants to write to the IRC Channel
