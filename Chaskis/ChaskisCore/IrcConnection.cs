@@ -11,6 +11,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using SethCS.Basic;
+using SethCS.Exceptions;
 using SethCS.Extensions;
 
 namespace Chaskis.Core
@@ -102,24 +103,26 @@ namespace Chaskis.Core
 
         // -------- Constructor --------
 
+        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue ) :
+            this( config, parsingQueue, new IrcMac( config, StaticLogger.Log ) )
+        {
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue, IIrcMac macLayer = null )
+        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue, IIrcMac macLayer )
         {
+            ArgumentChecker.IsNotNull( config, nameof( config ) );
+            ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
+            ArgumentChecker.IsNotNull( macLayer, nameof( macLayer ) );
+
             this.inited = false;
             this.Config = new ReadOnlyIrcConfig( config );
             this.IsConnected = false;
 
-            if( macLayer == null )
-            {
-                this.connection = new IrcMac( config, StaticLogger.Log );
-            }
-            else
-            {
-                this.connection = macLayer;
-            }
+            this.connection = macLayer;
 
             this.keepReadingObject = new object();
             this.KeepReading = false;
