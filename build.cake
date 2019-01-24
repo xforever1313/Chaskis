@@ -8,13 +8,18 @@ string target = Argument( "target", defaultTarget );
 
 DirectoryPath projectRoot = MakeAbsolute( new DirectoryPath( "." ) );
 DirectoryPath sourceRoot = projectRoot.Combine( new DirectoryPath( "Chaskis" ) );
-FilePath solution = sourceRoot.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
 DirectoryPath unitTestDir = sourceRoot.Combine( new DirectoryPath( "UnitTests" ) );
+DirectoryPath installDir = sourceRoot.Combine( new DirectoryPath( "Install" ) );
+
+FilePath solution = sourceRoot.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
 
 bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
 
 // ---------------- Includes ----------------
 
+#addin "Cake.FileHelpers&version=3.1.0"
+
+#load "BuildScripts/Common.cake"
 #load "BuildScripts/MSBuild.cake"
 #load "BuildScripts/UnitTest.cake"
 
@@ -47,6 +52,23 @@ Task( "unit_test" )
 )
 .Description( "Runs all the unit tests (does not run code coverage)." )
 .IsDependentOn( "debug" );
+
+Task( "msi" )
+.Does(
+    () =>
+    {
+        DirectoryPath msiLocation = installDir.Combine( "windows/bin/x64/Release" );
+
+        DoMsBuild( "Install", PlatformTarget.x64 );
+        GenerateSha256(
+            msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" ),
+            msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" )
+        );
+    }
+)
+.Description( "Builds the MSI on Windows." )
+.WithCriteria( isWindows )
+.IsDependentOn( "unit_test" );
 
 Task( "code_coverage" )
 .Does(
