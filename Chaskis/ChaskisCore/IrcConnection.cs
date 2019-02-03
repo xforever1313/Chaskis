@@ -694,49 +694,22 @@ namespace Chaskis.Core
                             }
                         }
                     }
-                    catch( SocketException err )
-                    {
-                        StaticLogger.Log.WriteLine( "IRC Connection closed: " + err.Message );
-                        if( this.KeepReading )
-                        {
-                            StaticLogger.Log.ErrorWriteLine(
-                                "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
-                            );
-                            return;
-                        }
-                        else
-                        {
-                            // We requested the irc connection be closed since KeepReading is false.
-                            // Return, which will terminate this thread.
-                            return;
-                        }
-                    }
-                    catch( IOException err )
-                    {
-                        StaticLogger.Log.WriteLine( "IRC Connection closed: " + err.Message );
-                        if( this.KeepReading )
-                        {
-                            StaticLogger.Log.ErrorWriteLine(
-                                "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
-                            );
-                            return;
-                        }
-                        else
-                        {
-                            // We requested the irc connection be closed since KeepReading is false.
-                            // Return, which will terminate this thread.
-                            return;
-                        }
-                    }
                     catch( Exception err )
                     {
-                        // Unexpected exception occurred.  The connection probably dropped.
-                        // Nothing we can do now except to wait for the watch dog to trigger a reconnect..
-                        StaticLogger.Log.ErrorWriteLine(
-                            "IRC Reader Thread caught unexpected exception:" + Environment.NewLine + err + Environment.NewLine + "Wait for watchdog to reconnect..."
-                        );
-
-                        return;
+                        StaticLogger.Log.WriteLine( "IRC Connection closed: " + err.Message );
+                        if( this.KeepReading )
+                        {
+                            StaticLogger.Log.ErrorWriteLine(
+                                "WARNING IRC connection closed, but we weren't terminating.  Wait for watchdog to reconnect..."
+                            );
+                            return;
+                        }
+                        else
+                        {
+                            // We requested the irc connection be closed since KeepReading is false.
+                            // Return, which will terminate this thread.
+                            return;
+                        }
                     }
                 } // End While
             }
