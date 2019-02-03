@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Text;
 using Chaskis.Core;
 using Chaskis.UnitTests.Common;
@@ -133,6 +134,37 @@ namespace Chaskis.UnitTests.CoreTests
             }
 
             this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures that we try to connect without initing the class first,
+        /// we get an Exception.
+        /// </summary>
+        [Test]
+        public void ConnectWithoutInitTest()
+        {
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                // Do not call connection.Init().
+                Assert.Throws<InvalidOperationException>( () => connection.Connect() );
+                Assert.DoesNotThrow( () => connection.Disconnect() ); // <- Should be a no-op since we are not connected.
+            }
+        }
+
+        /// <summary>
+        /// Ensures that if we try to connect twice, we get an exception.
+        /// </summary>
+        [Test]
+        public void DoubleConnectTest()
+        {
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                this.DoConnect( connection );
+
+                Assert.Throws<InvalidOperationException>( () => connection.Connect() );
+
+                this.DoDisconnect( connection );
+            }
         }
 
         /// <summary>
