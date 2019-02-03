@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Text;
 using Chaskis.Core;
 using Chaskis.UnitTests.Common;
 using Moq;
@@ -29,6 +30,8 @@ namespace Chaskis.UnitTests.CoreTests
         private Mock<IIrcMac> mac;
         private Mock<INonDisposableStringParsingQueue> parsingQueue;
 
+        private IrcConfig defaultConfig;
+
         // ---------------- Setup / Teardown ----------------
 
         [OneTimeSetUp]
@@ -46,6 +49,18 @@ namespace Chaskis.UnitTests.CoreTests
         {
             this.mac = new Mock<IIrcMac>( MockBehavior.Strict );
             this.parsingQueue = new Mock<INonDisposableStringParsingQueue>( MockBehavior.Strict );
+
+            this.defaultConfig = new IrcConfig
+            {
+                Nick = nick,
+                QuitMessage = quitMessage,
+                RealName = realName,
+                UserName = userName,
+                RateLimit = 0
+            };
+
+            defaultConfig.Channels.Add( channel1 );
+            defaultConfig.Channels.Add( channel2 );
         }
 
         [TearDown]
@@ -76,16 +91,9 @@ namespace Chaskis.UnitTests.CoreTests
 
             using( IrcConnection connection = new IrcConnection( ircConfig, this.parsingQueue.Object, this.mac.Object ) )
             {
-                this.SetupConnection();
-                connection.Init();
-                connection.Connect();
-                Assert.IsTrue( connection.IsConnected );
-                Assert.IsTrue( this.mac.Object.IsConnected );
+                this.DoConnect( connection );
 
-                this.SetupDisconnection();
-                connection.Disconnect();
-                Assert.IsFalse( connection.IsConnected );
-                Assert.IsFalse( this.mac.Object.IsConnected );
+                this.DoDisconnect( connection );
             }
 
             this.mac.VerifyAll();
@@ -119,17 +127,9 @@ namespace Chaskis.UnitTests.CoreTests
                     m => m.WriteLine( "PASS {0}", serverPassword )
                 );
 
-                this.SetupConnection();
+                this.DoConnect( connection );
 
-                connection.Init();
-                connection.Connect();
-                Assert.IsTrue( connection.IsConnected );
-                Assert.IsTrue( this.mac.Object.IsConnected );
-
-                this.SetupDisconnection();
-                connection.Disconnect();
-                Assert.IsFalse( connection.IsConnected );
-                Assert.IsFalse( this.mac.Object.IsConnected );
+                this.DoDisconnect( connection );
             }
 
             this.mac.VerifyAll();
@@ -162,17 +162,9 @@ namespace Chaskis.UnitTests.CoreTests
                     m => m.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", nickServPass )
                 );
 
-                this.SetupConnection();
+                this.DoConnect( connection );
 
-                connection.Init();
-                connection.Connect();
-                Assert.IsTrue( connection.IsConnected );
-                Assert.IsTrue( this.mac.Object.IsConnected );
-
-                this.SetupDisconnection();
-                connection.Disconnect();
-                Assert.IsFalse( connection.IsConnected );
-                Assert.IsFalse( this.mac.Object.IsConnected );
+                this.DoDisconnect( connection );
             }
 
             this.mac.VerifyAll();
@@ -210,23 +202,212 @@ namespace Chaskis.UnitTests.CoreTests
                     m => m.WriteLine( "PASS {0}", serverPassword )
                 );
 
-                this.SetupConnection();
+                this.DoConnect( connection );
 
-                connection.Init();
-                connection.Connect();
-                Assert.IsTrue( connection.IsConnected );
-                Assert.IsTrue( this.mac.Object.IsConnected );
-
-                this.SetupDisconnection();
-                connection.Disconnect();
-                Assert.IsFalse( connection.IsConnected );
-                Assert.IsFalse( this.mac.Object.IsConnected );
+                this.DoDisconnect( connection );
             }
 
             this.mac.VerifyAll();
         }
 
-        // ---------------- Tests ----------------
+        /// <summary>
+        /// Ensures our kick command string is formatted correctly if no
+        /// reason is specified.
+        /// </summary>
+        [Test]
+        public void SendKickCommandWithNoReasonTest()
+        {
+            // According to RFC2812, the kick command is:
+            // TheChannel TheUser :reason
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                this.DoConnect( connection );
+
+                this.mac.Setup(
+                    m => m.WriteLine( "KICK " + channel1 + " " + userName )
+                );
+
+                connection.SendKick( userName, channel1 );
+
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures our kick command string is formatted correctly if we specify
+        /// a reason.
+        /// </summary>
+        [Test]
+        public void SendKickCommandWithReasonTest()
+        {
+            // According to RFC2812, the kick command is:
+            // TheChannel TheUser :reason
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                this.DoConnect( connection );
+                this.mac.Setup(
+                    m => m.WriteLine( "KICK " + channel1 + " " + userName + " :Some Reason" )
+                );
+
+                connection.SendKick( userName, channel1, "Some Reason" );
+
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures our broadcast message helper works as expected.
+        /// It should send the same message to all channels the bot is in.
+        /// </summary>
+        [Test]
+        public void SendBroadcastMessageTest()
+        {
+            // According to RFC2812, sending a message's syntax is:
+            // PRIVMSG target :message
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                const string message = "My Message";
+
+                foreach( string channel in this.defaultConfig.Channels )
+                {
+                    this.mac.Setup(
+                        m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message )
+                    );
+                }
+
+                this.DoConnect( connection );
+                connection.SendBroadcastMessage( message );
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures that if we are sending a message, the format
+        /// is correct.
+        /// </summary>
+        [Test]
+        public void SendMessageTest()
+        {
+            // According to RFC2812, sending a message's syntax is:
+            // PRIVMSG target :message
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                const string channel = "seth"; // "Channel" can be a username.
+                const string message = "My Message";
+
+                this.mac.Setup(
+                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message )
+                );
+
+                this.DoConnect( connection );
+                connection.SendMessage( message, channel );
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendLongMessageTest()
+        {
+            StringBuilder msg1Builder = new StringBuilder();
+            for( int i = 0; i < IrcConnection.MaximumLength; ++i )
+            {
+                msg1Builder.Append( "m" );
+            }
+
+            StringBuilder msg2Builder = new StringBuilder();
+            for( int i = 0; i < IrcConnection.MaximumLength - 1; ++i )
+            {
+                msg2Builder.Append( "s" );
+            }
+
+            string message1 = msg1Builder.ToString();
+            string message2 = msg2Builder.ToString();
+
+            // Sanity check.
+            Assert.AreEqual( IrcConnection.MaximumLength, msg1Builder.Length );
+            Assert.AreEqual( IrcConnection.MaximumLength - 1, msg2Builder.Length );
+
+            string fullMessage = message1 + message2;
+
+            // For this test, we will send the full message; we expect it to be split twice.
+            // The first message should end in a <more> to specifiy that the message is not completed yet.
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                const string channel = channel1;
+
+                this.mac.Setup(
+                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message1 + " <more>" )
+                );
+
+                this.mac.Setup(
+                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message2 )
+                );
+
+                this.DoConnect( connection );
+                connection.SendMessage( fullMessage, channel );
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendPingTest()
+        {
+            // According to RFC2812, sending a PING message
+            // looks like:
+            // PING TheMessage
+            // Note that there is no ':' before the message when sending a ping,
+            // that's only when receiving a ping.
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                const string message = "SomePing";
+
+                this.mac.Setup(
+                    m => m.WriteLine( "PING " + message )
+                );
+
+                this.DoConnect( connection );
+                connection.SendPing( message );
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendPongTest()
+        {
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                const string message = "SomePong";
+
+                this.mac.Setup(
+                    m => m.WriteLine( "PONG :" + message )
+                );
+
+                this.DoConnect( connection );
+                connection.SendPong( message );
+                this.DoDisconnect( connection );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        // ---------------- Test Helpers ----------------
 
         private void SetupConnection()
         {
@@ -261,6 +442,16 @@ namespace Chaskis.UnitTests.CoreTests
             );
         }
 
+        private void DoConnect( IrcConnection connection )
+        {
+            this.SetupConnection();
+            connection.Init();
+            connection.Connect();
+
+            Assert.IsTrue( connection.IsConnected );
+            Assert.IsTrue( this.mac.Object.IsConnected );
+        }
+
         private void SetupDisconnection()
         {
             this.mac.Setup(
@@ -277,6 +468,14 @@ namespace Chaskis.UnitTests.CoreTests
             this.mac.Setup(
                 m => m.Dispose()
             );
+        }
+
+        private void DoDisconnect( IrcConnection connection )
+        {
+            this.SetupDisconnection();
+            connection.Disconnect();
+            Assert.IsFalse( connection.IsConnected );
+            Assert.IsFalse( this.mac.Object.IsConnected );
         }
     }
 }

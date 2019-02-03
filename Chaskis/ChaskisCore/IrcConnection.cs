@@ -337,7 +337,7 @@ namespace Chaskis.Core
                             string[] splitString = line.SplitByLength( MaximumLength );
                             for( int i = 0; i < ( splitString.Length - 1 ); ++i )
                             {
-                                this.SendMessageHelper( splitString[i] + "<more>", channel );
+                                this.SendMessageHelper( splitString[i] + " <more>", channel );
                             }
                             this.SendMessageHelper( splitString[splitString.Length - 1], channel );
                         }
