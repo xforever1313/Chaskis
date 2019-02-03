@@ -18,8 +18,8 @@
 
 # Templatized variables
 !define fullname {Chaskis IRC Bot}
-!define chaskis_version {0.10.0}
-!define chaskis_core_version {0.10.0}
+!define chaskis_version {0.10.1}
+!define chaskis_core_version {0.10.1}
 !define author {Seth Hendrick}
 !define author_email {seth@shendrick.net}
 !define project_url {https://github.com/xforever1313/Chaskis/}

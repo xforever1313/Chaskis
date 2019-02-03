@@ -23,7 +23,7 @@ namespace Chaskis
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.10.0";
+        public const string VersionStr = "0.10.1";
 
         /// <summary>
         /// The IRC Bot.
