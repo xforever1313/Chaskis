@@ -26,6 +26,12 @@ namespace Chaskis.Core
         /// </summary>
         public event Action<string> ReadEvent;
 
+        /// <summary>
+        /// Internal event called when the reader thread exits.
+        /// Mainly here for unit testing reasons.
+        /// </summary>
+        internal event Action OnReaderThreadExit;
+
         // Rationale for maximum length:
         // Per this site: http://www.networksorcery.com/enp/protocol/irc.htm
         // The command MUST either be a valid IRC command or a three digit 
@@ -747,6 +753,7 @@ namespace Chaskis.Core
             finally
             {
                 StaticLogger.Log.WriteLine( "ReaderThread Exiting" );
+                this.OnReaderThreadExit?.Invoke();
             }
         }
 

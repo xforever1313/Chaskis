@@ -6,9 +6,12 @@
 //
 
 using System;
+using System.IO;
+using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using Chaskis.Core;
-using Chaskis.UnitTests.Common;
 using Moq;
 using NUnit.Framework;
 
@@ -439,7 +442,103 @@ namespace Chaskis.UnitTests.CoreTests
             this.mac.VerifyAll();
         }
 
+        /// <summary>
+        /// Ensures the reader thread will exit correctly when a <see cref="SocketException"/> happens.
+        /// </summary>
+        [Test]
+        public void ReaderThreadSocketException()
+        {
+            this.DoReaderThreadFailureTest( new SocketException() );
+        }
+
+        /// <summary>
+        /// Ensures the reader thread will exit correctly when a <see cref="IOException"/> happens.
+        /// </summary>
+        [Test]
+        public void ReaderThreadIoException()
+        {
+            this.DoReaderThreadFailureTest( new IOException() );
+        }
+
+        /// <summary>
+        /// Ensures the reader thread will exit correctly when an <see cref="ObjectDisposedException"/> happens.
+        /// </summary>
+        [Test]
+        public void ReaderThreadObjectDisposedException()
+        {
+            this.DoReaderThreadFailureTest( new ObjectDisposedException( "someobject" ) );
+        }
+
+        /// <summary>
+        /// Ensures the reader thread will exit correctly when an <see cref="AggregateException"/> happens.
+        /// </summary>
+        [Test]
+        public void ReaderThreadAggregateException()
+        {
+            this.DoReaderThreadFailureTest( new AggregateException() );
+        }
+
+        /// <summary>
+        /// Ensures the reader thread will exit correctly when any <see cref="Exception"/> happens.
+        /// </summary>
+        [Test]
+        public void ReaderThreadException()
+        {
+            this.DoReaderThreadFailureTest( new Exception( "lol" ) );
+        }
+
         // ---------------- Test Helpers ----------------
+
+        /// <summary>
+        /// This test tests issue that caused issue #29.
+        /// If we catch an Exception we weren't expecting, the reader thread would
+        /// blow up and consistently throw exceptions.
+        /// 
+        /// Now if we get any Exception, we gracefully exit the reader thread and wait
+        /// for the watchdog to reconnect us.  This test case simply tests that the
+        /// reader thread terminates.
+        /// </summary>
+        private void DoReaderThreadFailureTest<T>( T e ) where T : Exception
+        {
+            const string line1 = "Line 1";
+
+            this.mac.SetupSequence(
+                m => m.ReadLine()
+            )
+            .Returns( line1 )
+            .Throws( e );
+
+            StringBuilder messages = new StringBuilder();
+            using( ManualResetEvent readerThreadExitedEvent = new ManualResetEvent( false ) )
+            {
+                using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+                {
+                    void threadExitedAction() { readerThreadExitedEvent.Set(); }
+                    void onReadLineAction( string s ) { messages.AppendLine( s ); }
+
+                    try
+                    {
+                        connection.OnReaderThreadExit += threadExitedAction;
+                        connection.ReadEvent += onReadLineAction;
+
+                        this.DoConnect( connection );
+
+                        Assert.IsTrue( readerThreadExitedEvent.WaitOne( 5000 ) );
+
+                        this.DoDisconnect( connection );
+                    }
+                    finally
+                    {
+                        connection.OnReaderThreadExit -= threadExitedAction;
+                        connection.ReadEvent -= onReadLineAction;
+                    }
+                }
+            }
+
+            // Ensure our line gets called *somewhere*.
+            Assert.IsTrue( Regex.IsMatch( messages.ToString(), @"\s*" + line1 + @"\s*" ) );
+            this.mac.VerifyAll();
+        }
 
         private void SetupConnection()
         {
