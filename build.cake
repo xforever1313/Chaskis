@@ -8,7 +8,6 @@ string target = Argument( "target", defaultTarget );
 
 DirectoryPath projectRoot = MakeAbsolute( new DirectoryPath( "." ) );
 DirectoryPath sourceRoot = projectRoot.Combine( new DirectoryPath( "Chaskis" ) );
-DirectoryPath unitTestDir = sourceRoot.Combine( new DirectoryPath( "UnitTests" ) );
 DirectoryPath installDir = sourceRoot.Combine( new DirectoryPath( "Install" ) );
 
 FilePath solution = sourceRoot.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
@@ -45,9 +44,10 @@ Task( "release" )
 
 Task( "unit_test" )
 .Does(
-    () =>
+    ( context ) =>
     {
-        RunUnitTests();
+        UnitTestRunner runner = new UnitTestRunner( context, projectRoot );
+        runner.RunUnitTests();
     }
 )
 .Description( "Runs all the unit tests (does not run code coverage)." )
@@ -72,9 +72,10 @@ Task( "msi" )
 
 Task( "code_coverage" )
 .Does(
-    () =>
+    ( context ) =>
     {
-        RunCodeCoverage();
+        UnitTestRunner runner = new UnitTestRunner( context, projectRoot );
+        runner.RunCodeCoverage();
     }
 )
 .Description( "Runs code coverage, Windows only." )
