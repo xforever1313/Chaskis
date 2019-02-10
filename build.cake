@@ -76,12 +76,29 @@ Task( "msi" )
 .Does(
     () =>
     {
+        DirectoryPath outputPath = paths.OutputPackages.Combine( "windows" );
+        EnsureDirectoryExists( outputPath );
+        CleanDirectory( outputPath );
+
         DirectoryPath msiLocation = paths.InstallConfigFolder.Combine( "windows/bin/x64/Release" );
+
+        FilePath msiFile = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" );
+        FilePath checksumLocation = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" );
 
         DoMsBuild( "Install", PlatformTarget.x64 );
         GenerateSha256(
-            msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" ),
-            msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" )
+            msiFile,
+            checksumLocation
+        );
+
+        CopyFileToDirectory(
+            msiFile,
+            outputPath
+        );
+
+        CopyFileToDirectory(
+            checksumLocation,
+            outputPath
         );
     }
 )

@@ -13,6 +13,7 @@ __pycache__/
 *.pyc
 tools
 *.sha256
+*.msi
 
 # globs
 Makefile.in
