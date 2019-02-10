@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 // ---------------- Arguments ----------------
 
 const string defaultTarget = "default";
@@ -19,8 +21,27 @@ bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
 #load "BuildScripts/Common.cake"
 #load "BuildScripts/MSBuild.cake"
 #load "BuildScripts/UnitTest.cake"
+#load "BuildScripts/Templatize.cake"
 
 // ---------------- Targets ----------------
+
+Task( "template" )
+.Does(
+    ( context ) =>
+    {
+        TemplateConstants templateConstants = new TemplateConstants(
+            context,
+            paths,
+            frameworkTarget
+        );
+
+        FilesToTemplate files = new FilesToTemplate( paths );
+
+        Templatizer templatizer = new Templatizer( templateConstants, files );
+        templatizer.Template();
+    }
+)
+.Description( "Runs the templator on all template files." );
 
 Task( "debug" )
 .Does(

@@ -19,11 +19,28 @@ public class ImportantPaths
 
         this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
         this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
-        this.InstallConfigFolder = this.SourceFolder.Combine( new DirectoryPath( "Install" ) );
         this.RegressionTestFolder = this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
+        this.FitNesseRoot = this.RegressionTestFolder.Combine( new DirectoryPath( "FitNesseRoot" ) );
         this.UnitTestFolder = this.SourceFolder.Combine( new DirectoryPath( "UnitTests" ) );
 
+        this.InstallConfigFolder = this.SourceFolder.Combine( new DirectoryPath( "Install" ) );
+        this.WindowsInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
+        this.WixConfigFolder = this.WindowsInstallConfigFolder;
+        this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
+        this.ArchLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "arch" ) );
+        this.DebianLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
+        this.FedoraLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
+        this.ChocolateyInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "chocolatey" ) );
+
         this.SolutionPath = this.SourceFolder.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
+        this.ChaskisVersionFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "Chaskis.cs" ) );
+        this.ChaskisCoreVersionFile = this.ChaskisCoreFolder.CombineWithFilePath( new FilePath( "Chaskis.Core.csproj" ) );
+        this.LicenseFile = this.ProjectRoot.CombineWithFilePath( new FilePath( "LICENSE_1_0.txt" ) );
+        this.DefaultPluginFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "DefaultHandlers.cs" ) );
+        this.RegressionTestPluginFile = this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
+
+        this.DebianChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
+        this.MsiChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
     }
 
     // ---------------- Properties ----------------
@@ -78,19 +95,61 @@ public class ImportantPaths
     public DirectoryPath ChaskisCoreFolder { get; private set; }
 
     /// <summary>
-    /// Folder where the various install information lives.
-    /// </summary>
-    public DirectoryPath InstallConfigFolder { get; private set; }
-
-    /// <summary>
     /// Folder where the Regression Tests live.
     /// </summary>
     public DirectoryPath RegressionTestFolder { get; private set; }
 
     /// <summary>
+    /// The FitNesse Root.
+    /// </summary>
+    public DirectoryPath FitNesseRoot { get; private set; }
+
+    /// <summary>
     /// Folder where the Unit Tests live.
     /// </summary>
     public DirectoryPath UnitTestFolder { get; private set; }
+
+    // -------- Install Config Folders --------
+
+    /// <summary>
+    /// Folder where the various install information lives.
+    /// </summary>
+    public DirectoryPath InstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the Windows Install Configs live.
+    /// </summary>
+    public DirectoryPath WindowsInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the MSI configuration lives (powered by WIX).
+    /// </summary>
+    public DirectoryPath WixConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the Linux Install Configs live.
+    /// </summary>
+    public DirectoryPath LinuxInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the Arch Linux Install Configs live.
+    /// </summary>
+    public DirectoryPath ArchLinuxInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the Debian/Ubuntu Linux Install Configs live.
+    /// </summary>
+    public DirectoryPath DebianLinuxInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the Fedora Linux Install Configs live.
+    /// </summary>
+    public DirectoryPath FedoraLinuxInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the chocolatey config lives.
+    /// </summary>
+    public DirectoryPath ChocolateyInstallConfigFolder { get; private set; }
 
     // -------- Important Files --------
 
@@ -99,5 +158,38 @@ public class ImportantPaths
     /// </summary>
     public FilePath SolutionPath { get; private set; }
 
-    // ---------------- Functions ----------------
+    /// <summary>
+    /// File where the Chaskis version can be found.
+    /// </summary>
+    public FilePath ChaskisVersionFile { get; private set; }
+
+    /// <summary>
+    /// File where the Chaskis Core version can be found.
+    /// </summary>
+    public FilePath ChaskisCoreVersionFile { get; private set; }
+
+    /// <summary>
+    /// The License file for this project.
+    /// </summary>
+    public FilePath LicenseFile { get; private set; }
+
+    /// <summary>
+    /// The file for the default Chaskis plugin's main file.
+    /// </summary>
+    public FilePath DefaultPluginFile { get; private set; }
+
+    /// <summary>
+    /// The file for the regression test plugin's main file.
+    /// </summary>
+    public FilePath RegressionTestPluginFile { get; private set; }
+
+    /// <summary>
+    /// The file that contains the .deb saved checksum.
+    /// </summary>
+    public FilePath DebianChecksumFile { get; private set; }
+
+    /// <summary>
+    /// The file that contains the .MSI saved checksum.
+    /// </summary>
+    public FilePath MsiChecksumFile { get; private set; }
 }
