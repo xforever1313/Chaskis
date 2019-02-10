@@ -4,5 +4,5 @@ void GenerateSha256( FilePath source, FilePath output )
 
     string hashStr = hash.ToHex();
     FileWriteText( output, hashStr );
-    Information( "Msi Hash: " + hashStr );
+    Information( "Hash for " + source.GetFilename() + ": " + hashStr );
 }

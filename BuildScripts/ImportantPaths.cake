@@ -16,6 +16,7 @@ public class ImportantPaths
         this.SavedChecksumsFolder = this.ProjectRoot.Combine( new DirectoryPath( "SavedChecksums" ) );
         this.SourceFolder = this.ProjectRoot.Combine( new DirectoryPath( "Chaskis" ) );
         this.UnitTestResultFolder = this.ProjectRoot.Combine( new DirectoryPath( "TestResult" ) );
+        this.OutputPackages = this.ProjectRoot.Combine( new DirectoryPath( "DistPackages" ) );
 
         this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
         this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
@@ -81,6 +82,11 @@ public class ImportantPaths
     /// Where the unit test results get saved.
     /// </summary>
     public DirectoryPath UnitTestResultFolder { get; private set; }
+
+    /// <summary>
+    /// Where to dump packages for distribution.
+    /// </summary>
+    public DirectoryPath OutputPackages { get; private set; }
 
     // -------- Project Folders --------
 

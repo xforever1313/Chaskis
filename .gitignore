@@ -12,6 +12,7 @@ TestResults/
 __pycache__/
 *.pyc
 tools
+*.sha256
 
 # globs
 Makefile.in

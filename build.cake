@@ -101,6 +101,41 @@ Task( "code_coverage" )
 .WithCriteria( isWindows )
 .IsDependentOn( "debug" );
 
+Task( "nuget_pack" )
+.Does(
+    () =>
+    {
+        DirectoryPath outputPath = paths.OutputPackages.Combine( "NuGet" );
+        EnsureDirectoryExists( outputPath );
+        CleanDirectory( outputPath );
+
+        NuGetPackSettings settings = new NuGetPackSettings
+        {
+            OutputDirectory = outputPath,
+            Properties = new Dictionary<string, string>
+            {
+                ["Configuration"] = "Release"
+            }
+        };
+
+        NuGetPack(
+            paths.ChaskisCoreFolder.CombineWithFilePath( "Chaskis.Core.csproj" ),
+            settings
+        );
+
+        FilePath glob = outputPath.CombineWithFilePath( "*.nupkg" );
+        foreach( FilePath file in GetFiles( glob.ToString() ) )
+        {
+            GenerateSha256(
+                file,
+                new FilePath( file.FullPath + ".sha256" )
+            );
+        }
+    }
+)
+.Description( "Creates the Chaskis Core NuGet package. ")
+.IsDependentOn( "release" );
+
 Task( defaultTarget )
 .IsDependentOn( "debug" )
 .Description( "The default target; alias for 'debug'." );
