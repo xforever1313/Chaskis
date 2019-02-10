@@ -105,7 +105,7 @@ Task( "nuget_pack" )
 .Does(
     () =>
     {
-        DirectoryPath outputPath = paths.OutputPackages.Combine( "NuGet" );
+        DirectoryPath outputPath = paths.OutputPackages.Combine( "nuget" );
         EnsureDirectoryExists( outputPath );
         CleanDirectory( outputPath );
 
@@ -135,6 +135,40 @@ Task( "nuget_pack" )
 )
 .Description( "Creates the Chaskis Core NuGet package. ")
 .IsDependentOn( "release" );
+
+Task( "choco_pack" )
+.Does(
+    () =>
+    {
+        DirectoryPath outputPath = paths.OutputPackages.Combine( "chocolatey" );
+        EnsureDirectoryExists( outputPath );
+        CleanDirectory( outputPath );
+
+        DirectoryPath workingPath = paths.ChocolateyInstallConfigFolder.Combine( "package" );
+
+        ChocolateyPackSettings settings = new ChocolateyPackSettings
+        {
+            OutputDirectory = outputPath,
+            WorkingDirectory = workingPath
+        };
+
+        ChocolateyPack(
+            workingPath.CombineWithFilePath( new FilePath( "chaskis.nuspec" ) ),
+            settings
+        );
+
+        FilePath glob = outputPath.CombineWithFilePath( "*.nupkg" );
+        foreach( FilePath file in GetFiles( glob.ToString() ) )
+        {
+            GenerateSha256(
+                file,
+                new FilePath( file.FullPath + ".sha256" )
+            );
+        }
+    }
+)
+.WithCriteria( isWindows )
+.Description( "Creates the Chocolatey Package (Windows Only)." );
 
 Task( defaultTarget )
 .IsDependentOn( "debug" )
