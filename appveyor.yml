@@ -19,8 +19,10 @@ matrix:
 # Build Config #
 #--------------#
 
+install:
+    - git submodule update --init --recursive
+
 build_script:
-    - ps: git submodule update --init SethCS
     - ps: .\build.ps1 --target=appveyor
 
 notifications:
