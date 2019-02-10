@@ -32,6 +32,9 @@ notifications:
       subject: 'Chaskis Build {{status}}'
 
 
+# Cake does this for us.
+test: off
+
 #-----------#
 # Artifacts #
 #-----------#
