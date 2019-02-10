@@ -37,7 +37,11 @@ public class UnitTestRunner
 
     private void RunUnitTestInternal( ICakeContext context )
     {
-        FilePath unitTestResultsOutput = this.paths.UnitTestResultFolder.CombineWithFilePath( new FilePath( "TestResult.xml" ) );
+        DirectoryPath outputPath = this.paths.UnitTestResultFolder;
+        context.EnsureDirectoryExists( outputPath );
+        context.CleanDirectory( outputPath );
+
+        FilePath unitTestResultsOutput = outputPath.CombineWithFilePath( new FilePath( "TestResult.xml" ) );
         NUnit3Result result = new NUnit3Result
         {
             FileName = unitTestResultsOutput
