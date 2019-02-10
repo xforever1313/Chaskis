@@ -23,7 +23,7 @@ before_build:
     - git submodule update --init SethCS
 
 build:
-    - .\build.ps1 --target=appveyor
+    - ps: .\build.ps1 --target=appveyor
 
 notifications:
     - provider: Email
