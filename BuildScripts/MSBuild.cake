@@ -11,8 +11,8 @@ void DoMsBuild( string configuration, PlatformTarget target = PlatformTarget.MSI
         MaxCpuCount = 0,
         PlatformTarget = target,
         Restore = true,
-        WorkingDirectory = sourceRoot
+        WorkingDirectory = paths.SourceFolder
     };
 
-    MSBuild( solution, settings );
+    MSBuild( paths.SolutionPath, settings );
 }

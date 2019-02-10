@@ -6,11 +6,9 @@ string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------
 
-DirectoryPath projectRoot = MakeAbsolute( new DirectoryPath( "." ) );
-DirectoryPath sourceRoot = projectRoot.Combine( new DirectoryPath( "Chaskis" ) );
-DirectoryPath installDir = sourceRoot.Combine( new DirectoryPath( "Install" ) );
+#load "BuildScripts/ImportantPaths.cake"
 
-FilePath solution = sourceRoot.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
+ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
 
 bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
 
@@ -46,7 +44,7 @@ Task( "unit_test" )
 .Does(
     ( context ) =>
     {
-        UnitTestRunner runner = new UnitTestRunner( context, projectRoot );
+        UnitTestRunner runner = new UnitTestRunner( context, paths );
         runner.RunUnitTests();
     }
 )
@@ -57,7 +55,7 @@ Task( "msi" )
 .Does(
     () =>
     {
-        DirectoryPath msiLocation = installDir.Combine( "windows/bin/x64/Release" );
+        DirectoryPath msiLocation = paths.InstallConfigFolder.Combine( "windows/bin/x64/Release" );
 
         DoMsBuild( "Install", PlatformTarget.x64 );
         GenerateSha256(
@@ -74,7 +72,7 @@ Task( "code_coverage" )
 .Does(
     ( context ) =>
     {
-        UnitTestRunner runner = new UnitTestRunner( context, projectRoot );
+        UnitTestRunner runner = new UnitTestRunner( context, paths );
         runner.RunCodeCoverage();
     }
 )

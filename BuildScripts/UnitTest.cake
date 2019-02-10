@@ -7,18 +7,18 @@ public class UnitTestRunner
     // ---------------- Fields ----------------
 
     private readonly ICakeContext cakeContext;
-    private readonly DirectoryPath projectRoot;
+    private readonly ImportantPaths paths;
     private readonly DirectoryPath unitTestDir;
 
     private readonly List<FilePath> testAssemblies;
 
     // ---------------- Constructor ----------------
 
-    public UnitTestRunner( ICakeContext context, DirectoryPath projectRoot )
+    public UnitTestRunner( ICakeContext context, ImportantPaths paths )
     {
         this.cakeContext = context;
-        this.projectRoot = projectRoot;
-        this.unitTestDir = this.projectRoot.Combine( new DirectoryPath( "Chaskis/UnitTests" ) );
+        this.paths = paths;
+        this.unitTestDir = this.paths.UnitTestFolder;
 
         testAssemblies = new List<FilePath>
         {
@@ -37,7 +37,7 @@ public class UnitTestRunner
 
     private void RunUnitTestInternal( ICakeContext context )
     {
-        FilePath unitTestResultsOutput = projectRoot.CombineWithFilePath( new FilePath( "TestResult/TestResult.xml" ) );
+        FilePath unitTestResultsOutput = this.paths.UnitTestResultFolder.CombineWithFilePath( new FilePath( "TestResult.xml" ) );
         NUnit3Result result = new NUnit3Result
         {
             FileName = unitTestResultsOutput
@@ -53,7 +53,7 @@ public class UnitTestRunner
 
     public void RunCodeCoverage()
     {
-        DirectoryPath codeCoveragePath = projectRoot.Combine( new DirectoryPath( "CodeCoverage" ) );
+        DirectoryPath codeCoveragePath = this.paths.CodeCoverageFolder;
         FilePath outputPath = codeCoveragePath.CombineWithFilePath( new FilePath( "coverage.xml" ) );
         this.cakeContext.EnsureDirectoryExists( codeCoveragePath );
         this.cakeContext.CleanDirectory( codeCoveragePath );
