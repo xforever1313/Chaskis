@@ -191,4 +191,11 @@ Task( defaultTarget )
 .IsDependentOn( "debug" )
 .Description( "The default target; alias for 'debug'." );
 
+Task( "appveyor" )
+.IsDependentOn( "unit_test" )
+.IsDependentOn( "nuget_pack" )
+.IsDependentOn( "choco_pack" )
+.IsDependentOn( "msi" )
+.Description( "Runs when building AppVeyor" );
+
 RunTarget( target );
