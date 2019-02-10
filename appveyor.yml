@@ -19,10 +19,8 @@ matrix:
 # Build Config #
 #--------------#
 
-before_build:
-    - git submodule update --init SethCS
-
-build:
+build_script:
+    - ps: git submodule update --init SethCS
     - ps: .\build.ps1 --target=appveyor
 
 notifications:
