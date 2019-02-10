@@ -23,7 +23,14 @@ install:
     - git submodule update --init --recursive
 
 build_script:
-    - ps: .\build.ps1 --target=appveyor
+- ps: >-
+    .\build.ps1 --target=appveyor
+
+    # upload results to AppVeyor
+
+    $wc = New-Object 'System.Net.WebClient'
+    
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit3/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResult\TestResult.xml))
 
 notifications:
     - provider: Email
