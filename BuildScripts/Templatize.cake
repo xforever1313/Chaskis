@@ -15,6 +15,8 @@ public class TemplateConstants
         this.CakeContext = context;
         this.ImportantPaths = paths;
 
+        this.chaskisCoreProjectContents = this.CakeContext.FileReadText( this.ImportantPaths.ChaskisCoreVersionFile );
+
         this.FullName = "Chaskis IRC Bot";
         this.ChaskisVersion = this.GetChaskisVersion();
         this.ChaskisCoreVersion = this.GetChaskisCoreVersion();
@@ -40,8 +42,6 @@ public class TemplateConstants
         this.RunTime = runTime;
         this.DebChecksum = this.GetDebChecksum();
         this.MsiChecksum = this.GetMsiChecksum();
-
-        this.chaskisCoreProjectContents = this.CakeContext.FileReadText( this.ImportantPaths.ChaskisCoreVersionFile );
     }
 
     // ---------------- Properties ----------------
@@ -107,7 +107,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Chaskis Version Regex" );
         }
 
         return match.Groups["version"].Value;
@@ -122,7 +122,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Chaskis Core Version Regex" );
         }
 
         return match.Groups["version"].Value;
@@ -142,7 +142,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Regression Test Version Regex" );
         }
 
         return match.Groups["version"].Value;
@@ -157,7 +157,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Chaskis Plugin Name Regex" );
         }
 
         return match.Groups["name"].Value;
@@ -172,7 +172,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Default Plugin Name Regex" );
         }
 
         return match.Groups["name"].Value;
@@ -187,7 +187,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Package Tags Regex" );
         }
 
         return match.Groups["tags"].Value;
@@ -202,7 +202,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Author Regex" );
         }
 
         return match.Groups["author"].Value;
@@ -217,7 +217,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Project URL Regex" );
         }
 
         return match.Groups["PackageProjectUrl"].Value;
@@ -232,7 +232,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match License URL Regex" );
         }
 
         return match.Groups["PackageLicenseUrl"].Value;
@@ -247,7 +247,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Copyright Regex" );
         }
 
         return match.Groups["copyright"].Value;
@@ -259,11 +259,11 @@ public class TemplateConstants
         Match match = Regex.Match(
             fileContents,
             @"(\<Description\>(?<description>.+)\</Description\>)",
-            RegexOptions.Multiline
+            RegexOptions.Singleline
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Description Regex" );
         }
 
         return match.Groups["description"].Value;
@@ -278,7 +278,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Release Notes Regex" );
         }
 
         return match.Groups["PackageReleaseNotes"].Value;
@@ -293,7 +293,7 @@ public class TemplateConstants
         );
         if ( match.Success == false )
         {
-            throw new ApplicationException( "Could not match Regex" );
+            throw new ApplicationException( "Could not match Icon Url Regex" );
         }
 
         return match.Groups["PackageIconUrl"].Value;
@@ -526,32 +526,30 @@ public class Templatizer
 
     private string DoTemplate( string contents )
     {
-        string newContents = contents;
+        contents = Regex.Replace( contents, @"{%FullName%}", this.constants.FullName );
+        contents = Regex.Replace( contents, @"{%ChaskisMainVersion%}", this.constants.ChaskisVersion );
+        contents = Regex.Replace( contents, @"{%ChaskisCoreVersion%}", this.constants.ChaskisCoreVersion );
+        contents = Regex.Replace( contents, @"{%License%}", this.constants.License );
+        contents = Regex.Replace( contents, @"{%RegressionTestPluginVersion%}", this.constants.RegressionTestPluginVersion );
+        contents = Regex.Replace( contents, @"{%RegressionTestPluginName%}", this.constants.RegressionTestPluginName );
+        contents = Regex.Replace( contents, @"{%DefaultPluginName%}", this.constants.DefaultPluginName );
+        contents = Regex.Replace( contents, @"{%CoreTags%}", this.constants.CoreTags );
+        contents = Regex.Replace( contents, @"{%MainTags%}", this.constants.CliTags );
+        contents = Regex.Replace( contents, @"{%Author%}", this.constants.Author );
+        contents = Regex.Replace( contents, @"{%AuthorEmail%}", this.constants.AuthorEmail );
+        contents = Regex.Replace( contents, @"{%ProjectUrl%}", this.constants.ProjectUrl );
+        contents = Regex.Replace( contents, @"{%LicenseUrl%}", this.constants.LicenseUrl );
+        contents = Regex.Replace( contents, @"{%WikiUrl%}", this.constants.WikiUrl );
+        contents = Regex.Replace( contents, @"{%IssueTrackerUrl%}", this.constants.IssueTrackerUrl );
+        contents = Regex.Replace( contents, @"{%CopyRight%}", this.constants.CopyRight );
+        contents = Regex.Replace( contents, @"{%Description%}", this.constants.Description );
+        contents = Regex.Replace( contents, @"{%ReleaseNotes%}", this.constants.ReleaseNotes );
+        contents = Regex.Replace( contents, @"{%Summary%}", this.constants.Summary );
+        contents = Regex.Replace( contents, @"{%IconUrl%}", this.constants.IconUrl );
+        contents = Regex.Replace( contents, @"{%RunTime%}", this.constants.RunTime );
+        contents = Regex.Replace( contents, @"{%DebCheckSum%}", this.constants.DebChecksum );
+        contents = Regex.Replace( contents, @"{%MsiCheckSum%}", this.constants.MsiChecksum );
 
-        newContents = Regex.Replace( contents, @"{%FullName%}", this.constants.FullName );
-        newContents = Regex.Replace( contents, @"{%ChaskisMainVersion%}", this.constants.ChaskisVersion );
-        newContents = Regex.Replace( contents, @"{%ChaskisCoreVersion%}", this.constants.ChaskisCoreVersion );
-        newContents = Regex.Replace( contents, @"{%License%}", this.constants.License );
-        newContents = Regex.Replace( contents, @"{%RegressionTestPluginVersion%}", this.constants.RegressionTestPluginVersion );
-        newContents = Regex.Replace( contents, @"{%RegressionTestPluginName%}", this.constants.RegressionTestPluginName );
-        newContents = Regex.Replace( contents, @"{%DefaultPluginName%}", this.constants.DefaultPluginName );
-        newContents = Regex.Replace( contents, @"{%CoreTags%}", this.constants.CoreTags );
-        newContents = Regex.Replace( contents, @"{%MainTags%}", this.constants.CliTags );
-        newContents = Regex.Replace( contents, @"{%Author%}", this.constants.Author );
-        newContents = Regex.Replace( contents, @"{%AuthorEmail%}", this.constants.AuthorEmail );
-        newContents = Regex.Replace( contents, @"{%ProjectUrl%}", this.constants.ProjectUrl );
-        newContents = Regex.Replace( contents, @"{%LicenseUrl%}", this.constants.LicenseUrl );
-        newContents = Regex.Replace( contents, @"{%WikiUrl%}", this.constants.WikiUrl );
-        newContents = Regex.Replace( contents, @"{%IssueTrackerUrl%}", this.constants.IssueTrackerUrl );
-        newContents = Regex.Replace( contents, @"{%CopyRight%}", this.constants.CopyRight );
-        newContents = Regex.Replace( contents, @"{%Description%}", this.constants.Description );
-        newContents = Regex.Replace( contents, @"{%ReleaseNotes%}", this.constants.ReleaseNotes );
-        newContents = Regex.Replace( contents, @"{%Summary%}", this.constants.Summary );
-        newContents = Regex.Replace( contents, @"{%IconUrl%}", this.constants.IconUrl );
-        newContents = Regex.Replace( contents, @"{%RunTime%}", this.constants.RunTime );
-        newContents = Regex.Replace( contents, @"{%DebCheckSum%}", this.constants.DebChecksum );
-        newContents = Regex.Replace( contents, @"{%MsiCheckSum%}", this.constants.MsiChecksum );
-
-        return newContents;
+        return contents;
     }
 }
