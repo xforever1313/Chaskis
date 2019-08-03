@@ -318,34 +318,51 @@ namespace Chaskis.Core
         /// <param name="channel">The user or #channel to send the message to.</param>
         public void SendMessage( string msg, string channel )
         {
-            if( this.IsConnected == false )
+            this.SendMessageInternal( msg, channel, string.Empty, string.Empty );
+        }
+
+        /// <summary>
+        /// Sends an IRC action.  This is the equivalent of the '/me' command in many IRC clients.
+        /// Thread-safe.
+        /// Throws InvalidOperationException if not connected.
+        /// </summary>
+        /// <param name="msg">The action in message form the bot is going to take.</param>
+        /// <param name="channel">Which channel to send the action to.</param>
+        public void SendAction( string msg, string channel )
+        {
+            this.SendMessageInternal( msg, channel, "" + Convert.ToChar( 0x01 ) + "ACTION ", "" + Convert.ToChar( 0x01 ) );
+        }
+
+        private void SendMessageInternal( string msg, string channel, string prefix, string suffix )
+        {
+            if ( this.IsConnected == false )
             {
                 throw new InvalidOperationException(
                     "Not connected, can not send command."
                 );
             }
 
-            using( StringReader reader = new StringReader( msg ) )
+            using ( StringReader reader = new StringReader( msg ) )
             {
                 string line;
-                while( ( line = reader.ReadLine() ) != null )
+                while ( ( line = reader.ReadLine() ) != null )
                 {
-                    if( string.IsNullOrEmpty( line ) == false )
+                    if ( string.IsNullOrEmpty( line ) == false )
                     {
-                        if( line.Length <= MaximumLength )
+                        if ( line.Length <= MaximumLength )
                         {
-                            this.SendMessageHelper( line, channel );
+                            this.SendMessageHelper( prefix + line + suffix, channel );
                         }
                         else
                         {
                             // If our length is too great, split it up by our maximum length
                             // and set each split part as a separate message.
                             string[] splitString = line.SplitByLength( MaximumLength );
-                            for( int i = 0; i < ( splitString.Length - 1 ); ++i )
+                            for ( int i = 0; i < ( splitString.Length - 1 ); ++i )
                             {
-                                this.SendMessageHelper( splitString[i] + " <more>", channel );
+                                this.SendMessageHelper( prefix + splitString[i] + " <more>" + suffix, channel );
                             }
-                            this.SendMessageHelper( splitString[splitString.Length - 1], channel );
+                            this.SendMessageHelper( prefix + splitString[splitString.Length - 1] + suffix, channel );
                         }
                     }
                 }

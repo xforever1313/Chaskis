@@ -224,14 +224,14 @@ namespace Chaskis.Plugins.ServerDiagnostics
             TimeSpan span = DateTime.UtcNow - startTime;
 
             string str = string.Format(
-                "I have been running for {0} Day(s), {1} Hour(s), {2} Minute(s), and {3} Second(s).",
+                "has been running for {0} Day(s), {1} Hour(s), {2} Minute(s), and {3} Second(s).",
                 span.Days,
                 span.Hours,
                 span.Minutes,
                 span.Seconds
             );
 
-            args.Writer.SendMessage(
+            args.Writer.SendAction(
                 str,
                 args.Channel
             );
@@ -242,8 +242,8 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         private static void HandleOsVersionCmd( MessageHandlerArgs args )
         {
-            args.Writer.SendMessage(
-                "My system is " + Environment.OSVersion.ToString() + ".",
+            args.Writer.SendAction(
+                "is running on " + Environment.OSVersion.ToString() + ".",
                 args.Channel
             );
         }
@@ -253,8 +253,8 @@ namespace Chaskis.Plugins.ServerDiagnostics
         /// </summary>
         private static void HandleProcessorCountCmd( MessageHandlerArgs args )
         {
-            args.Writer.SendMessage(
-                "My system has " + Environment.ProcessorCount + " processors.",
+            args.Writer.SendAction(
+                "has " + Environment.ProcessorCount + " processors running on its system.",
                 args.Channel
             );
         }
@@ -265,8 +265,8 @@ namespace Chaskis.Plugins.ServerDiagnostics
         private static void HandleTimeCmd( MessageHandlerArgs args )
         {
             DateTime time = DateTime.UtcNow;
-            args.Writer.SendMessage(
-                "My time is " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC.",
+            args.Writer.SendAction(
+                "has its system time set to " + time.ToString( "yyyy-MM-dd hh:mm:ss" ) + " UTC.",
                 args.Channel
             );
         }

@@ -26,6 +26,13 @@ namespace Chaskis.Core
         void SendMessage( string msg, string userNick );
 
         /// <summary>
+        /// Sends an IRC action.  This is the equivalent of the '/me' command in many IRC clients.
+        /// </summary>
+        /// <param name="msg">The action in message form the bot is going to take.</param>
+        /// <param name="channel">Which channel to send the action to.</param>
+        void SendAction( string msg, string channel );
+
+        /// <summary>
         /// Sends a pong using the given response.
         /// </summary>
         /// <param name="response">The response we need to send.</param>
