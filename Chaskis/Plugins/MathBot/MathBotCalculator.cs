@@ -27,7 +27,7 @@ namespace Chaskis.Plugins.MathBot
         /// <summary>
         /// Table used to compute the expression.
         /// </summary>
-        private static DataTable table = new DataTable();
+        private static readonly DataTable table = new DataTable();
 
         /// <summary>
         /// Calculates the given string and returns a string of what its
