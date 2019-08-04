@@ -126,7 +126,7 @@ namespace Chaskis.UnitTests.CoreTests
         {
             string ircString = TestHelpers.ConstructIrcString(
                 remoteUser,
-                MessageHandler.IrcCommand,
+                PrivateMessageHelper.IrcCommand,
                 this.ircConfig.Channels[0],
                 "A message"
             );

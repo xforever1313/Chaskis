@@ -149,7 +149,7 @@ namespace Chaskis.UnitTests.CoreTests
 
             foreach( string prefix in TestHelpers.PrefixTests )
             {
-                string ircString = prefix + " " + MessageHandler.IrcCommand + " " + channel + " :" + expectedMessage;
+                string ircString = prefix + " " + PrivateMessageHelper.IrcCommand + " " + channel + " :" + expectedMessage;
 
                 uut.HandleEvent( this.ConstructArgs( ircString ) );
 

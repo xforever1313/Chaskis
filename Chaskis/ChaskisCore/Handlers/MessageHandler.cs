@@ -27,17 +27,12 @@ namespace Chaskis.Core
 
         private readonly PrivateMessageHelper pmHelper;
 
-        /// <summary>
-        /// The irc command that will appear from the server.
-        /// </summary>
-        public static readonly string IrcCommand = PrivateMessageHelper.IrcCommand;
-
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
         /// The pattern to search for when a line comes in.
         /// </summary>
         private static readonly Regex pattern = new Regex(
-            Regexes.IrcMessagePrefix + @"\s+" + IrcCommand + @"\s+(?<channel>\S+)\s+:(?<theIrcMessage>.+)",
+            Regexes.IrcMessagePrefix + @"\s+" + PrivateMessageHelper.IrcCommand + @"\s+(?<channel>\S+)\s+:(?<theIrcMessage>.+)",
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
