@@ -5,6 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
+
 namespace Chaskis.Core
 {
     public class MessageHandlerConfig : BasePrivateMessageConfig<MessageHandlerConfig, MessageHandlerAction>
@@ -23,6 +25,12 @@ namespace Chaskis.Core
         public override MessageHandlerConfig Clone()
         {
             return (MessageHandlerConfig)this.MemberwiseClone();
+        }
+
+        protected override IEnumerable<string> ValidateChild()
+        {
+            // Nothing to validate.
+            return null;
         }
     }
 }

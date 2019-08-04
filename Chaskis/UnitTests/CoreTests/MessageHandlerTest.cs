@@ -63,7 +63,7 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void InvalidConfigTest()
         {
-            Assert.Throws<ValidationException>(
+            Assert.Throws<ListedValidationException>(
                 () => new MessageHandler( new MessageHandlerConfig() )
             );
         }

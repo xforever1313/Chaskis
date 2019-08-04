@@ -5,9 +5,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Core
 {
@@ -90,34 +92,44 @@ namespace Chaskis.Core
 
         public void Validate()
         {
-            bool success = true;
-            StringBuilder errorString = new StringBuilder();
-            errorString.AppendLine( "Errors when validating private message config:" );
+            List<string> errors = new List<string>();
 
             if ( string.IsNullOrEmpty( this.LineRegex ) )
             {
-                success = false;
-                errorString.AppendLine( "\t- " + nameof( this.LineRegex ) + " can not be null or empty." );
+                errors.Add( nameof( this.LineRegex ) + " can not be null or empty." );
             }
 
             if ( this.LineAction == null )
             {
-                success = false;
-                errorString.AppendLine( "\t- " + nameof( this.LineAction ) + " can not be null." );
+                errors.Add( nameof( this.LineAction ) + " can not be null." );
             }
 
             if ( this.CoolDown < 0 )
             {
-                success = false;
-                errorString.AppendLine( "\t- " + nameof( this.CoolDown ) + " can not be less than 0." );
+                errors.Add( nameof( this.CoolDown ) + " can not be less than 0." );
             }
 
-            if ( success == false )
+            IEnumerable<string> childErrors = this.ValidateChild();
+            if ( childErrors != null )
             {
-                throw new ValidationException( errorString.ToString() );
+                errors.AddRange( childErrors );
+            }
+
+            if ( errors.IsEmpty() == false )
+            {
+                throw new ListedValidationException( "Errors when validating private message config", errors );
             }
         }
 
         public abstract TChildType Clone();
+
+        /// <summary>
+        /// Validate the child's properties, if any.
+        /// </summary>
+        /// <returns>
+        /// A list of strings that are wrong with the child node.
+        /// Return null or an empty list if nothing is wrong.
+        /// </returns>
+        protected abstract IEnumerable<string> ValidateChild();
     }
 }

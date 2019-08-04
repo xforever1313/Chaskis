@@ -5,6 +5,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
+
 namespace Chaskis.Core
 {
     public class ActionHandlerConfig : BasePrivateMessageConfig<ActionHandlerConfig, ActionHandlerAction>
@@ -23,6 +25,12 @@ namespace Chaskis.Core
         public override ActionHandlerConfig Clone()
         {
             return (ActionHandlerConfig)this.MemberwiseClone();
+        }
+
+        protected override IEnumerable<string> ValidateChild()
+        {
+            // Nothing to validate.
+            return null;
         }
     }
 }

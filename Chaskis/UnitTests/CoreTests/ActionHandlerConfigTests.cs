@@ -40,21 +40,21 @@ namespace Chaskis.UnitTests.CoreTests
             // No action should not validate.
             config.LineAction = null;
             config.LineRegex = @"!bot\s+help";
-            Assert.Throws<ValidationException>( () => config.Validate() );
+            Assert.Throws<ListedValidationException>( () => config.Validate() );
 
             // Empty regex should not validate.
             config.LineAction = delegate ( ActionHandlerArgs args )
             {
             };
             config.LineRegex = string.Empty;
-            Assert.Throws<ValidationException>( () => config.Validate() );
+            Assert.Throws<ListedValidationException>( () => config.Validate() );
 
             // Null regex should not validate.
             config.LineAction = delegate ( ActionHandlerArgs args )
             {
             };
             config.LineRegex = null;
-            Assert.Throws<ValidationException>( () => config.Validate() );
+            Assert.Throws<ListedValidationException>( () => config.Validate() );
 
             // Cooldown can not be less than 0.
             config.LineAction = delegate ( ActionHandlerArgs args )
@@ -62,7 +62,7 @@ namespace Chaskis.UnitTests.CoreTests
             };
             config.LineRegex = @"!bot\s+help";
             config.CoolDown = -1;
-            Assert.Throws<ValidationException>( () => config.Validate() );
+            Assert.Throws<ListedValidationException>( () => config.Validate() );
 
             // This should validate.
             config.LineAction = delegate ( ActionHandlerArgs args )

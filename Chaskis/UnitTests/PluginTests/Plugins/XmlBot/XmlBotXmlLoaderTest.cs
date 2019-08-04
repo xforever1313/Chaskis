@@ -190,8 +190,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
         [Test]
         public void FormattingTest()
         {
-            this.DoFormatTest<ValidationException>( "NoCommand.xml" );
-            this.DoFormatTest<ValidationException>( "EmptyCommand.xml" );
+            this.DoFormatTest<ListedValidationException>( "NoCommand.xml" );
+            this.DoFormatTest<ListedValidationException>( "EmptyCommand.xml" );
             this.DoFormatTest<ArgumentNullException>( "NoResponse.xml" );
             this.DoFormatTest<ArgumentNullException>( "EmptyResponse.xml" );
             this.DoFormatTest<FormatException>( "BadCooldown.xml" );
