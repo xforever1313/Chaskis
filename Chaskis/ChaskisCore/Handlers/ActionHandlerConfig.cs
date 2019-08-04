@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Chaskis.Core
 {
-    public class ActionHandlerConfig : BasePrivateMessageConfig<ActionHandlerConfig, ActionHandlerAction>
+    public class ActionHandlerConfig : BasePrivateMessageConfig<ActionHandlerConfig, ActionHandlerAction, ActionHandlerArgs>
     {
         // ---------------- Constructor ----------------
 

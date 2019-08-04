@@ -192,8 +192,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
         {
             this.DoFormatTest<ListedValidationException>( "NoCommand.xml" );
             this.DoFormatTest<ListedValidationException>( "EmptyCommand.xml" );
-            this.DoFormatTest<ArgumentNullException>( "NoResponse.xml" );
-            this.DoFormatTest<ArgumentNullException>( "EmptyResponse.xml" );
+            this.DoFormatTest<ValidationException>( "NoResponse.xml" );
+            this.DoFormatTest<ValidationException>( "EmptyResponse.xml" );
             this.DoFormatTest<FormatException>( "BadCooldown.xml" );
             this.DoFormatTest<FormatException>( "BadRespondTo.xml" );
         }

@@ -11,6 +11,7 @@ using System.IO;
 using System.Xml;
 using Chaskis.Core;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.XmlBot
 {
@@ -42,49 +43,23 @@ namespace Chaskis.Plugins.XmlBot
 
             foreach( XmlNode messageNode in rootNode.ChildNodes )
             {
-                if( messageNode.Name == "message" )
+                IIrcHandler handler = null;
+
+                if ( messageNode.Name.EqualsIgnoreCase( "message" ) )
                 {
                     MessageHandlerConfig config = new MessageHandlerConfig();
-                    string response = string.Empty;
+                    config.Deserialize( messageNode, ircConfig );
+                    handler = new MessageHandler( config );
+                }
+                else if ( messageNode.Name.EqualsIgnoreCase( "action" ) )
+                {
+                    ActionHandlerConfig config = new ActionHandlerConfig();
+                    config.Deserialze( messageNode, ircConfig );
+                    handler = new ActionHandler( config );
+                }
 
-                    foreach( XmlNode messageChild in messageNode.ChildNodes )
-                    {
-                        switch( messageChild.Name )
-                        {
-                            case "command":
-                                config.LineRegex = messageChild.InnerText;
-                                break;
-
-                            case "response":
-                                response = messageChild.InnerText;
-                                break;
-
-                            case "cooldown":
-                                config.CoolDown = int.Parse( messageChild.InnerText );
-                                break;
-
-                            case "respondto":
-                                ResponseOptions option;
-                                if( Enum.TryParse<ResponseOptions>( messageChild.InnerText, out option ) )
-                                {
-                                    config.ResponseOption = option;
-                                }
-                                else
-                                {
-                                    throw new FormatException(
-                                        messageChild.InnerText + " Is not a valid repondto option."
-                                    );
-                                }
-                                break;
-                        }
-                    }
-
-                    config.LineAction = XmlBot.GetMessageHandler( response, ircConfig );
-
-                    MessageHandler handler = new MessageHandler(
-                        config
-                    );
-
+                if ( handler != null )
+                {
                     handlers.Add( handler );
                 }
             }

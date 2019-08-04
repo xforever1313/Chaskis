@@ -12,58 +12,19 @@ namespace Chaskis.Core
     /// <summary>
     /// Arguments that are passed in when <see cref="MessageHandler"/> is triggered.
     /// </summary>
-    public class MessageHandlerArgs
+    public class MessageHandlerArgs : BasePrivateMessageHandlerArgs
     {
         // ---------------- Constructor ----------------
 
-        public MessageHandlerArgs( 
+        public MessageHandlerArgs(
             IIrcWriter writer,
             string user,
             string channel,
             string message,
             Regex regex,
             Match match
-        )
+        ) : base( writer, user, channel, message, regex, match )
         {
-            this.Writer = writer;
-            this.User = user;
-            this.Channel = channel;
-            this.Message = message;
-            this.Regex = regex;
-            this.Match = match;
         }
-
-        // ---------------- Properties ----------------
-
-        public IIrcWriter Writer { get; private set; }
-
-        /// <summary>
-        /// The user that sent the message.
-        /// </summary>
-        public string User { get; private set; }
-
-        /// <summary>
-        /// The channel that the message was received on.
-        /// However, if the message was a PM, then this will become the user
-        /// who sent the message's name (a PM would usually have the channel be this bot's name),
-        /// so we can call the same function for a channel message
-        /// and a private message. 
-        /// </summary>
-        public string Channel { get; private set; }
-
-        /// <summary>
-        /// The message that was sent via IRC.
-        /// </summary>
-        public string Message { get; private set; }
-        
-        /// <summary>
-        /// The regex that was used to find this response.
-        /// </summary>
-        public Regex Regex { get; private set; }
-
-        /// <summary>
-        /// The regex match that was used to find this response.
-        /// </summary>
-        public Match Match { get; private set; }
     }
 }

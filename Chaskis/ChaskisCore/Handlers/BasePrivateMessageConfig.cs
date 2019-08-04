@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,7 +22,9 @@ namespace Chaskis.Core
     /// </summary>
     /// <typeparam name="TChildType">The child class's type.</typeparam>
     /// <typeparam name="TLineActionType">The type for the line action.</typeparam>
-    public abstract class BasePrivateMessageConfig<TChildType, TLineActionType> : IPrivateMessageConfig
+    public abstract class BasePrivateMessageConfig<TChildType, TLineActionType, TLineActionArgs> : IPrivateMessageConfig 
+        where TLineActionType : Delegate
+        where TLineActionArgs : IPrivateMessageHandlerArgs
     {
         // ---------------- Fields ----------------
 
