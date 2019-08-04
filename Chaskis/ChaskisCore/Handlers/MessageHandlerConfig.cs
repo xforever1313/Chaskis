@@ -11,7 +11,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public class MessageHandlerConfig
+    public class MessageHandlerConfig : IPrivateMessageConfig
     {
         // ---------------- Constructor ----------------
 

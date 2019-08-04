@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -24,16 +25,20 @@ namespace Chaskis.Core
         // ---------------- Fields ----------------
 
         /// <summary>
-        /// The irc command that will appear from the server.
-        /// </summary>
-        public static readonly string IrcCommand = "PRIVMSG";
-
-        /// <summary>
         /// Last time this event was triggered in the channel.
         /// Key is the channel
         /// Value is the timestamp of the last event.
         /// </summary>
         private readonly Dictionary<string, DateTime> lastEvent;
+
+        private readonly MessageHandlerConfig config;
+
+        private readonly PrivateMessageHelper pmHelper;
+
+        /// <summary>
+        /// The irc command that will appear from the server.
+        /// </summary>
+        public static readonly string IrcCommand = "PRIVMSG";
 
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
@@ -44,7 +49,7 @@ namespace Chaskis.Core
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
-        private readonly MessageHandlerConfig config;
+        private static readonly IEnumerable<Regex> otherPrivmsgRegexes;
 
         // ---------------- Constructor ----------------
 
@@ -72,6 +77,21 @@ namespace Chaskis.Core
             this.config = config.Clone();
             this.lastEvent = new Dictionary<string, DateTime>();
             this.KeepHandling = true;
+            this.pmHelper = new PrivateMessageHelper( this.config, pattern );
+        }
+
+        static MessageHandler()
+        {
+            Assembly assembly = typeof( MessageHandler ).Assembly;
+            IEnumerable<PrivateMessageAttribute> attrs = assembly.GetCustomAttributes<PrivateMessageAttribute>();
+
+            List<Regex> otherMessageRegexesList = new List<Regex>();
+            foreach ( PrivateMessageAttribute attr in attrs )
+            {
+                otherMessageRegexesList.Add( attr.MessageRegex );
+            }
+
+            otherPrivmsgRegexes = otherMessageRegexesList.AsReadOnly();
         }
 
         // ------------------------ Properties ------------------------
@@ -170,140 +190,56 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            Match match = pattern.Match( args.Line );
-            if( match.Success )
+            PrivateMessageParseResult parseResult = this.pmHelper.ParseAndCheckHandlerArgs( args );
+            if ( parseResult.Success == false )
             {
-                string remoteUser = match.Groups["nickOrServer"].Value;
-                string channel = match.Groups["channel"].Value;
-                string channelLowered = channel.ToLower( CultureInfo.InvariantCulture );
-                string message = match.Groups["theIrcMessage"].Value;
+                return;
+            }
 
-                if( args.BlackListedChannels.Contains( channelLowered ) )
+            // If we are a bridge bot, we need to change
+            // the nick and the channel
+            foreach ( string bridgeBotRegex in args.IrcConfig.BridgeBots.Keys )
+            {
+                Match nameMatch = Regex.Match( parseResult.RemoteUser, bridgeBotRegex );
+                if ( nameMatch.Success )
                 {
-                    // Blacklist channel, return.
-                    return;
-                }
+                    Match bridgeBotMatch = Regex.Match( parseResult.Message, args.IrcConfig.BridgeBots[bridgeBotRegex] );
 
-                if( this.lastEvent.ContainsKey( channelLowered ) == false )
-                {
-                    this.lastEvent[channelLowered] = DateTime.MinValue;
-                }
-
-                // If we are a bridge bot, we need to change
-                // the nick and the channel
-                foreach( string bridgeBotRegex in args.IrcConfig.BridgeBots.Keys )
-                {
-                    Match nameMatch = Regex.Match( remoteUser, bridgeBotRegex );
-                    if( nameMatch.Success )
+                    // If the regex matches, then we'll update the nick and message
+                    // to be whatever came from the bridge.
+                    if ( bridgeBotMatch.Success )
                     {
-                        Match bridgeBotMatch = Regex.Match( message, args.IrcConfig.BridgeBots[bridgeBotRegex] );
+                        string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
+                        string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
 
-                        // If the regex matches, then we'll update the nick and message
-                        // to be whatever came from the bridge.
-                        if( bridgeBotMatch.Success )
+                        // Only change the nick anme and the message if the nick and the message aren't empty.
+                        if ( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
                         {
-                            string newNick = bridgeBotMatch.Groups["bridgeUser"].Value;
-                            string newMessage = bridgeBotMatch.Groups["bridgeMessage"].Value;
-
-                            // Only change the nick anme and the message if the nick and the message aren't empty.
-                            if( ( string.IsNullOrEmpty( newNick ) == false ) && ( string.IsNullOrEmpty( newMessage ) == false ) )
-                            {
-                                remoteUser = newNick;
-                                message = newMessage;
-                            }
-
-                            break;  // We have our message, break out of the loop.
+                            parseResult.RemoteUser = newNick;
+                            parseResult.Message = newMessage;
                         }
-                    }
-                }
 
-                // Take the message from the PRIVMSG and see if it matches the regex this class is watching.
-                // If not, return and do nothing.
-
-                // But first, Liquefy things!
-                Regex lineRegex = new Regex(
-                    Parsing.LiquefyStringWithIrcConfig(
-                        this.LineRegex,
-                        remoteUser,
-                        args.IrcConfig.Nick,
-                        channel
-                    ),
-                    this.RegexOptions
-                );
-
-                Match messageMatch = lineRegex.Match( message );
-                if( messageMatch.Success == false )
-                {
-                    return;
-                }
-
-                // Return right away if the nick name from the remote user is our own.
-                if(
-                    ( this.RespondToSelf == false ) &&
-                    string.Equals( remoteUser, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase )
-                )
-                {
-                    return;
-                }
-                // Return right away if we only wish to respond on the channel we are listening on (ignore PMs).
-                else if(
-                    ( this.ResponseOption == ResponseOptions.ChannelOnly ) &&
-                    ( args.IrcConfig.Channels.Any( c => c.ToLower( CultureInfo.InvariantCulture ) == channelLowered ) == false )
-                )
-                {
-                    return;
-                }
-                // Return right away if we only wish to respond to Private Messages (the channel will be our nick name).
-                else if(
-                    ( this.ResponseOption == ResponseOptions.PmsOnly ) &&
-                    ( string.Equals( channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) == false )
-                )
-                {
-                    return;
-                }
-                else
-                {
-                    MessageHandlerArgs response;
-
-                    if( string.Equals( channel, args.IrcConfig.Nick, StringComparison.InvariantCultureIgnoreCase ) )
-                    {
-                        // If our response is a PM (channel name matches our bot's)
-                        // we need to change our channel to the remote user's
-                        // channel so it gets sent out correctly when handle event is called.
-                        response = new MessageHandlerArgs(
-                            args.IrcWriter,
-                            remoteUser,
-                            remoteUser,
-                            message,
-                            lineRegex,
-                            messageMatch
-                        );
-                    }
-                    else
-                    {
-                        response = new MessageHandlerArgs(
-                            args.IrcWriter,
-                            remoteUser,
-                            channel,
-                            message,
-                            lineRegex,
-                            messageMatch
-                        );
-                    }
-
-                    DateTime currentTime = DateTime.UtcNow;
-                    TimeSpan timeSpan = currentTime - this.lastEvent[channelLowered];
-
-                    // Only fire if our cooldown was long enough. Cooldown of zero means always fire.
-                    // Need to explictly say Cooldown == 0 since DateTime.UtcNow has a innacurracy of +/- 15ms.  Therefore,
-                    // if the action happens too quickly, it can incorrectly not be triggered.
-                    if( ( this.CoolDown == 0 ) || ( timeSpan.TotalSeconds > this.CoolDown ) )
-                    {
-                        this.LineAction( response );
-                        this.lastEvent[channelLowered] = currentTime;
+                        break;  // We have our message, break out of the loop.
                     }
                 }
             }
+
+            PrivateMessageResult pmResult = this.pmHelper.ShouldSend( args, parseResult );
+            if ( pmResult.ShouldSend == false )
+            {
+                return;
+            }
+
+            MessageHandlerArgs response = new MessageHandlerArgs(
+                args.IrcWriter,
+                pmResult.ParseResult.RemoteUser,
+                pmResult.ParseResult.Channel,
+                pmResult.ParseResult.Message,
+                pmResult.Regex,
+                pmResult.Match
+            );
+
+            this.LineAction( response );
         }
     }
 }
