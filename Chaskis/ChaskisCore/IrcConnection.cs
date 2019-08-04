@@ -330,7 +330,7 @@ namespace Chaskis.Core
         /// <param name="channel">Which channel to send the action to.</param>
         public void SendAction( string msg, string channel )
         {
-            this.SendMessageInternal( msg, channel, "" + Convert.ToChar( 0x01 ) + "ACTION ", "" + Convert.ToChar( 0x01 ) );
+            this.SendMessageInternal( msg, channel, "\u0001ACTION ", "\u0001" );
         }
 
         private void SendMessageInternal( string msg, string channel, string prefix, string suffix )

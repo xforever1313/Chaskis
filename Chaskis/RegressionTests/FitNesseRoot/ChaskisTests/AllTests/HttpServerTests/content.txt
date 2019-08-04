@@ -3,6 +3,7 @@
 !define plugin_name {httpserver}
 !define http_port {10080}
 
+|>ActionMessagePostRequestTest|''Ensures the POST request interface works correctly to send an ACTION message to a channel''|
 |>BadRequestTest        |''Ensures sending bad requests to an invalid URL results in the correct error''      |
 |>BcastPostRequestTest  |''Ensures the POST request interface works correctly to send a BCast message''       |
 |>KickPostRequestTest   |''Ensures the POST request interface works correctly to KICK a user''                |

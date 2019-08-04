@@ -128,21 +128,25 @@ namespace Chaskis.Plugins.HttpServer
 
         private HttpResponseInfo DoRequestAction( string url, NameValueCollection queryString, ContentType format )
         {
-            if( url.EqualsIgnoreCase( "/privmsg" ) )
+            if ( url.EqualsIgnoreCase( "/privmsg" ) )
             {
                 return this.HandlePrivmsgAction( queryString, format );
             }
-            else if( url.EqualsIgnoreCase( "/kick" ) )
+            else if ( url.EqualsIgnoreCase( "/kick" ) )
             {
                 return this.HandleKickAction( queryString, format );
             }
-            else if( url.EqualsIgnoreCase( "/broadcast" ) || url.EqualsIgnoreCase( "/bcast" ) )
+            else if ( url.EqualsIgnoreCase( "/broadcast" ) || url.EqualsIgnoreCase( "/bcast" ) )
             {
                 return this.HandleBcastAction( queryString, format );
             }
-            else if( url.EqualsIgnoreCase( "/part" ) )
+            else if ( url.EqualsIgnoreCase( "/part" ) )
             {
                 return this.HandlePartAction( queryString, format );
+            }
+            else if ( url.EqualsIgnoreCase( "/action" ) )
+            {
+                return this.HandlerActionAction( queryString, format );
             }
             else
             {
@@ -154,6 +158,33 @@ namespace Chaskis.Plugins.HttpServer
                     ResponseStatus = HttpResponseStatus.ClientError
                 };
             }
+        }
+
+        private HttpResponseInfo HandlerActionAction( NameValueCollection queryString, ContentType format )
+        {
+            string channel = queryString["channel"];
+            string message = queryString["message"];
+
+            if ( string.IsNullOrWhiteSpace( channel ) || string.IsNullOrWhiteSpace( message ) )
+            {
+                return new HttpResponseInfo
+                {
+                    ContentType = format,
+                    Error = ErrorMessage.PrivMsgMissingParameters,
+                    Message = "PRIVMSG is missing either 'channel' or 'message' in the query string.",
+                    ResponseStatus = HttpResponseStatus.ClientError
+                };
+            }
+
+            this.writer.SendAction( message, channel );
+
+            return new HttpResponseInfo
+            {
+                ContentType = format,
+                Error = ErrorMessage.None,
+                Message = string.Format( "Action '{0}' sent to '{1}'", message, channel ),
+                ResponseStatus = HttpResponseStatus.Ok
+            };
         }
 
         private HttpResponseInfo HandlePrivmsgAction( NameValueCollection queryString, ContentType format )
