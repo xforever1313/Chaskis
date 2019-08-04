@@ -5,13 +5,24 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Chaskis.Core.Handlers
+namespace Chaskis.Core
 {
-    public class ActionHandlerConfig
+    public class ActionHandlerConfig : BasePrivateMessageConfig<ActionHandlerConfig, ActionHandlerAction>
     {
+        // ---------------- Constructor ----------------
+
+        public ActionHandlerConfig() :
+            base()
+        {
+        }
+
+        // ---------------- Properties ----------------
+
+        // ---------------- Functions ----------------
+
+        public override ActionHandlerConfig Clone()
+        {
+            return (ActionHandlerConfig)this.MemberwiseClone();
+        }
     }
 }

@@ -817,6 +817,28 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.IsNull( this.responseReceived );
         }
 
+        [Test]
+        public void IgnoreActionTest()
+        {
+            const string expectedMessage = "\u0001ACTION !bot help\u0001";
+
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @".+", // Take any string so if we weren't filtering out ACTION, it would incorrectly trigger
+                LineAction = this.MessageFunction,
+                RespondToSelf = false
+            };
+
+            MessageHandler uut = new MessageHandler(
+                config
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Channels[0], expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
         // -------- Test Helpers --------
 
         private void DoGoodMessageTest( string user, string channel )

@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2018.
+//          Copyright Seth Hendrick 2016-2019.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -24,13 +23,6 @@ namespace Chaskis.Core
     {
         // ---------------- Fields ----------------
 
-        /// <summary>
-        /// Last time this event was triggered in the channel.
-        /// Key is the channel
-        /// Value is the timestamp of the last event.
-        /// </summary>
-        private readonly Dictionary<string, DateTime> lastEvent;
-
         private readonly MessageHandlerConfig config;
 
         private readonly PrivateMessageHelper pmHelper;
@@ -38,7 +30,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The irc command that will appear from the server.
         /// </summary>
-        public static readonly string IrcCommand = "PRIVMSG";
+        public static readonly string IrcCommand = PrivateMessageHelper.IrcCommand;
 
         // :nickName!~nick@10.0.0.1 PRIVMSG #TestChan :!bot help
         /// <summary>
@@ -56,26 +48,13 @@ namespace Chaskis.Core
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="lineRegex">
-        /// The regex to search for to fire the action.
-        /// For example, if you want !bot help to trigger the action, pass in "!bot\s+help"
-        /// 
-        /// This DOES get Liquified via <see cref="Parsing.LiquefyStringWithIrcConfig(string, string, string, string)'"/>
-        /// </param>
-        /// <param name="lineAction">The action to perform based on the line.</param>
-        /// <param name="coolDown">How long to wait between firing the line action in seconds.  0 for no cooldown.</param>
-        /// <param name="responseOption">Whether or not to respond to PMs, only channels, or both.</param>
-        /// <param name="respondToSelf">Whether or not the bot should respond to lines sent out by itself. Defaulted to false.</param>
-        public MessageHandler(
-            MessageHandlerConfig config
-        )
+        public MessageHandler( MessageHandlerConfig config )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
             config.Validate();
 
             this.config = config.Clone();
-            this.lastEvent = new Dictionary<string, DateTime>();
             this.KeepHandling = true;
             this.pmHelper = new PrivateMessageHelper( this.config, pattern );
         }
@@ -83,18 +62,21 @@ namespace Chaskis.Core
         static MessageHandler()
         {
             Assembly assembly = typeof( MessageHandler ).Assembly;
-            IEnumerable<PrivateMessageAttribute> attrs = assembly.GetCustomAttributes<PrivateMessageAttribute>();
+            IEnumerable<Type> types = from type in assembly.GetTypes()
+                                      where type.IsDefined( typeof( PrivateMessageAttribute ), false )
+                                      select type;
 
             List<Regex> otherMessageRegexesList = new List<Regex>();
-            foreach ( PrivateMessageAttribute attr in attrs )
+            foreach ( Type type in types )
             {
+                PrivateMessageAttribute attr = type.GetCustomAttribute<PrivateMessageAttribute>();
                 otherMessageRegexesList.Add( attr.MessageRegex );
             }
 
             otherPrivmsgRegexes = otherMessageRegexesList.AsReadOnly();
         }
 
-        // ------------------------ Properties ------------------------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// The regex to look in IRC Chat that triggers the line action.
@@ -194,6 +176,16 @@ namespace Chaskis.Core
             if ( parseResult.Success == false )
             {
                 return;
+            }
+
+            // Ensure none of the other PRIVMSG types match for their message.  If they do, THAT handler type
+            // should fire, not this one.
+            foreach ( Regex regex in otherPrivmsgRegexes )
+            {
+                if ( regex.IsMatch( parseResult.Message ) )
+                {
+                    return;
+                }
             }
 
             // If we are a bridge bot, we need to change

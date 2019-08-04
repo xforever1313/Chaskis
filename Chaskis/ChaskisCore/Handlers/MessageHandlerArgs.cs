@@ -14,7 +14,7 @@ namespace Chaskis.Core
     /// </summary>
     public class MessageHandlerArgs
     {
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         public MessageHandlerArgs( 
             IIrcWriter writer,
@@ -33,7 +33,7 @@ namespace Chaskis.Core
             this.Match = match;
         }
 
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         public IIrcWriter Writer { get; private set; }
 
