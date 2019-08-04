@@ -18,7 +18,7 @@ namespace Chaskis.UnitTests.CoreTests
     [TestFixture]
     public class MessageHandlerTest
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// Irc Config to use.
@@ -40,12 +40,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// </summary>
         private const string remoteUser = "remoteuser";
 
-        /// <summary>
-        /// The message the user sends.
-        /// </summary>
-        private const string defaultMessage = "This is a message!";
-
-        // -------- Setup / Teardown --------
+        // ---------------- Setup / Teardown ----------------
 
         [SetUp]
         public void TestSetup()
@@ -55,7 +50,7 @@ namespace Chaskis.UnitTests.CoreTests
             this.responseReceived = null;
         }
 
-        // -------- Tests --------
+        // ---------------- Tests ----------------
 
         /// <summary>
         /// Ensures that if a bad config is passed in, we throw an exception.
@@ -320,7 +315,7 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         /// <summary>
-        /// Ensures that if we get a part from a channel
+        /// Ensures that if we get a message from a channel
         /// that is black-listed, nothing happens.
         /// </summary>
         [Test]
