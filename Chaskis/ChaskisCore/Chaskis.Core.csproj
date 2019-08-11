@@ -40,6 +40,7 @@
 
 Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.</Description>
     <PackageReleaseNotes>View release notes here: [https://github.com/xforever1313/Chaskis/releases](https://github.com/xforever1313/Chaskis/releases)</PackageReleaseNotes>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   
 </Project>
