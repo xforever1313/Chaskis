@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 // ---------------- Arguments ----------------
 
 const string defaultTarget = "default";
-const string frameworkTarget = "net471";
+const string frameworkTarget = "net472";
 string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------
@@ -16,7 +16,7 @@ bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
 
 // ---------------- Includes ----------------
 
-#addin "Cake.FileHelpers&version=3.1.0"
+#addin "Cake.FileHelpers"
 
 #load "BuildScripts/Common.cake"
 #load "BuildScripts/MSBuild.cake"

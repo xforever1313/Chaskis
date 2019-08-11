@@ -7,7 +7,7 @@ solution: ./Chaskis/Chaskis.sln
 dotnet: 2.0.0
 
 # Chaskis.exe targets the .NET Framework, which mono runs on.
-mono: 5.16.0
+mono: 5.18.0
  
 install:
   - nuget install NUnit.ConsoleRunner -o ./ -ExcludeVersion
