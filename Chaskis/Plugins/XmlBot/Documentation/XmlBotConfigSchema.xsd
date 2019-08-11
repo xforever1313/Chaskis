@@ -27,7 +27,7 @@
     <xs:complexType name="Message">
         <xs:sequence>
             <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
             <xs:element name="cooldown" type="xs:int" minOccurs="0" maxOccurs="1"/>
             <xs:element name="respondto" type="RespondTo" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
@@ -36,7 +36,7 @@
   <xs:complexType name="Action">
     <xs:sequence>
       <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
       <xs:element name="cooldown" type="xs:int" minOccurs="0" maxOccurs="1"/>
       <xs:element name="respondto" type="RespondTo" minOccurs="0" maxOccurs="1" />
     </xs:sequence>

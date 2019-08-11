@@ -53,6 +53,8 @@ response -
     Any regex groups in the command whose value should be outputted in the response should be tagged
     like this: {%groupName%}.
     
+    If multiple responses are specified, one will be picked randomly each time the command is triggered.
+
 cooldown -
     How long in SECONDS before the bot responds to the command again.  Defaulted to no cooldown.
     
@@ -67,6 +69,8 @@ respondto -
     <message>
         <command>[Hh]ello {%nick%}</command>
         <response>Hello {%user%}!</response>
+        <response>Greetings {%user%}!</response>
+        <response>Hi {%user%}!</response>
         <cooldown>0</cooldown>
         <respondto>ChannelAndPms</respondto>
     </message>
