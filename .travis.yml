@@ -4,7 +4,7 @@ solution: ./Chaskis/Chaskis.sln
 
 # Although we are targeting the .NET Framework, since the plugins are all dotnet standard,
 # we need dotnet core installed in order to compile.
-dotnet: 2.1.0
+dotnet: 2.0.0
 
 # Chaskis.exe targets the .NET Framework, which mono runs on.
 mono: 5.16.0
