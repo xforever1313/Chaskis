@@ -12,6 +12,7 @@
     <xs:complexType name="XmlBotConfig">
         <xs:sequence>
             <xs:element name="message" type="Message" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="action" type="Action" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
@@ -31,5 +32,14 @@
             <xs:element name="respondto" type="RespondTo" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
-    
+
+  <xs:complexType name="Action">
+    <xs:sequence>
+      <xs:element name="command" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="response" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="cooldown" type="xs:int" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="respondto" type="RespondTo" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
 </xs:schema>

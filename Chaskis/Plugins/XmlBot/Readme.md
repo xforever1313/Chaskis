@@ -88,6 +88,12 @@ respondto -
         <cooldown>0</cooldown>
         <respondto>ChannelAndPms</respondto>
     </message>
+	<action>
+      <command>^sighs$</command>
+      <response>@{%user%} - What's wrong?</response>
+      <cooldown>0</cooldown>
+      <respondto>ChannelAndPms</respondto>
+    </action>
 </xmlbotconfig>
 
 ```
