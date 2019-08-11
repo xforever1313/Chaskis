@@ -172,6 +172,27 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
                     handler3.HandleEvent( this.ConstructArgs( ircString ) );
                 }
             }
+
+            // Slot 4 should be an action handler
+            {
+                ActionHandler handler4 = handlers[4] as ActionHandler;
+                Assert.IsNotNull( handler4 );
+
+                Assert.AreEqual( 0, handler4.CoolDown );
+                Assert.AreEqual( @"^sighs$", handler4.LineRegex );
+                Assert.AreEqual( ResponseOptions.ChannelAndPms, handler4.ResponseOption );
+
+                // Expect a message to go out.
+                {
+                    string expectedMessage = $"@{remoteUser} - What's wrong?";
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
+
+                    string command = "sighs";
+
+                    string ircString = TestHelpers.ConstructActionString( remoteUser, this.testConfig.Channels[0], command );
+                    handler4.HandleEvent( this.ConstructArgs( ircString ) );
+                }
+            }
         }
 
         /// <summary>
