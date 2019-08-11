@@ -56,6 +56,8 @@ respondto -
     <message>
         <command>[Hh]ello {%nick%}</command>
         <response>Hello {%user%}!</response>
+        <response>Greetings {%user%}!</response>
+        <response>Hi {%user%}!</response>
         <cooldown>0</cooldown>
         <respondto>ChannelAndPms</respondto>
     </message>

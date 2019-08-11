@@ -19,7 +19,13 @@ namespace Chaskis.Plugins.XmlBot
     {
         private const string rootXmlElementName = "xmlbotconfig";
 
-        public static IList<IIrcHandler> LoadXmlBotConfig( string file, IIrcConfig ircConfig )
+        /// <summary>
+        /// Converts an XML file to a list of handlers.
+        /// </summary>
+        /// <param name="rng">
+        /// Leave this null to use the default RNG, otherwise pass this in if you want to use your own (e.g. with a different seed)
+        /// </param>
+        public static IList<IIrcHandler> LoadXmlBotConfig( string file, IIrcConfig ircConfig, Random rng = null )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
 
@@ -48,13 +54,13 @@ namespace Chaskis.Plugins.XmlBot
                 if ( messageNode.Name.EqualsIgnoreCase( "message" ) )
                 {
                     MessageHandlerConfig config = new MessageHandlerConfig();
-                    config.Deserialize( messageNode, ircConfig );
+                    config.Deserialize( messageNode, ircConfig, rng );
                     handler = new MessageHandler( config );
                 }
                 else if ( messageNode.Name.EqualsIgnoreCase( "action" ) )
                 {
                     ActionHandlerConfig config = new ActionHandlerConfig();
-                    config.Deserialze( messageNode, ircConfig );
+                    config.Deserialze( messageNode, ircConfig, rng );
                     handler = new ActionHandler( config );
                 }
 

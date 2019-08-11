@@ -77,7 +77,11 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
         [Test]
         public void GoodConfigTest()
         {
-            IList<IIrcHandler> handlers = XmlLoader.LoadXmlBotConfig( goodConfig, this.testConfig );
+            // Let's hope that the pseudo-random numbers are the same for all .NET versions, or this is
+            // going to end pooly.
+            Random random = new Random( 1 );
+
+            IList<IIrcHandler> handlers = XmlLoader.LoadXmlBotConfig( goodConfig, this.testConfig, random );
 
             // Slot 0 should be a Message Handler
             {
@@ -88,12 +92,32 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
                 Assert.AreEqual( "[Hh]ello {%nick%}", handler0.LineRegex );
                 Assert.AreEqual( ResponseOptions.ChannelAndPms, handler0.ResponseOption );
 
-                // Expect a message to go out.
-                string expectedMessage = "Hello " + remoteUser + "!";
-                this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
-
                 string ircString = TestHelpers.ConstructMessageString( remoteUser, this.testConfig.Channels[0], "Hello " + this.testConfig.Nick );
-                handler0.HandleEvent( this.ConstructArgs( ircString ) );
+
+                // Expect a message to go out.
+                {
+                    string expectedMessage = "Hello " + remoteUser + "!";
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
+                    
+                    handler0.HandleEvent( this.ConstructArgs( ircString ) );
+                    this.mockIrcWriter.VerifyAll();
+                }
+
+                {
+                    string expectedMessage = "Hello " + remoteUser + "!";
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
+
+                    handler0.HandleEvent( this.ConstructArgs( ircString ) );
+                    this.mockIrcWriter.VerifyAll();
+                }
+
+                {
+                    string expectedMessage = "Greetings " + remoteUser + "!";
+                    this.mockIrcWriter.Setup( w => w.SendMessage( expectedMessage, this.testConfig.Channels[0] ) );
+
+                    handler0.HandleEvent( this.ConstructArgs( ircString ) );
+                    this.mockIrcWriter.VerifyAll();
+                }
             }
 
             // Slot 1 should be a Message Handler
