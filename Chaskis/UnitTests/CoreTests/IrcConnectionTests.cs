@@ -313,7 +313,7 @@ namespace Chaskis.UnitTests.CoreTests
                 foreach( string channel in this.defaultConfig.Channels )
                 {
                     this.mac.Setup(
-                        m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message )
+                        m => m.WriteLine( $"PRIVMSG {channel} :{message}" )
                     );
                 }
 
@@ -341,7 +341,7 @@ namespace Chaskis.UnitTests.CoreTests
                 const string message = "My Message";
 
                 this.mac.Setup(
-                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message )
+                    m => m.WriteLine( $"PRIVMSG {channel} :{message}" )
                 );
 
                 this.DoConnect( connection );
@@ -383,11 +383,11 @@ namespace Chaskis.UnitTests.CoreTests
                 const string channel = channel1;
 
                 this.mac.Setup(
-                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message1 + " <more>" )
+                    m => m.WriteLine( $"PRIVMSG {channel} :{message1} <more>" )
                 );
 
                 this.mac.Setup(
-                    m => m.WriteLine( "PRIVMSG {0} :{1}", channel, message2 )
+                    m => m.WriteLine( $"PRIVMSG {channel} :{message2}" )
                 );
 
                 this.DoConnect( connection );

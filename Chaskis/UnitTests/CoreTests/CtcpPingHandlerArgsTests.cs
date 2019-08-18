@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class ActionHandlerArgsTests
+    public class CtcpPingHandlerArgsTests
     {
         // ---------------- Tests ----------------
 
@@ -30,7 +30,7 @@ namespace Chaskis.UnitTests.CoreTests
             Regex regex = new Regex( ".+" );
             System.Text.RegularExpressions.Match match = regex.Match( "something" );
 
-            ActionHandlerArgs uut = new ActionHandlerArgs(
+            CtcpPingHandlerArgs uut = new CtcpPingHandlerArgs(
                 writer.Object,
                 user,
                 channel,
