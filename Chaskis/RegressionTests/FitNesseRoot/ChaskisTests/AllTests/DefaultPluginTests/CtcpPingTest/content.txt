@@ -1,0 +1,6 @@
+This test ensure that if we get a CTCP ping, we respond with the correct message
+
+ * Ensure we get a PING response if we get a CTCP ping.  We should send the exact same message back to the user that sent the message.
+ 
+|'''Send Message'''    |!-PING 123456789ABCD-!|'''To Channel'''|${botname}|'''as'''|${testuser}|
+|'''Wait For Notice'''|!-PING 123456789ABCD-!|'''On Channel'''|${testuser}                    |

@@ -2,6 +2,7 @@
 
 |>AboutCmdTest     |''Does the about command work as expected?''      |
 |>AdminsCmdTest    |''Does the 'admins' command work as expected?''   |
+|>CtcpPingTest     |''Do we properly respond to CTCP ping commands?'' |
 |>HelpCmdTest      |''Does the help command work as expected?''       |
 |>PluginListCmdTest|''Does the plugin list command work as expected?''|
 |>SourceCmdTest    |''Does the source command work as expected?''     |

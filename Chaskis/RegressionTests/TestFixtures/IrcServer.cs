@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using NetRunner.ExternalLibrary;
 using SethCS.Basic;
+using SethCS.Extensions;
 
 namespace Chaskis.RegressionTests
 {
@@ -469,7 +470,7 @@ namespace Chaskis.RegressionTests
 
             lock( this.connectionWriter )
             {
-                this.outCommands.WriteLine( msg );
+                this.outCommands.WriteLine( msg.EscapeNonCharacters() );
                 this.connectionWriter.WriteLine( msg );
                 this.connectionWriter.Flush();
             }
@@ -493,6 +494,19 @@ namespace Chaskis.RegressionTests
         }
 
         /// <summary>
+        /// Waits for the given NOTICE to appear from the chaskis process.
+        /// </summary>
+        public bool WaitForNoticeOnChannel( string msgRegex, string channel )
+        {
+            return this.WaitForNoticeOnChannelWithTimeout( msgRegex, channel, TestConstants.DefaultTimeout );
+        }
+
+        public bool WaitForNoticeOnChannelWithTimeout( string msgRegex, string channel, int timeout )
+        {
+            return this.WaitForStringWithTimeout( "^NOTICE " + channel + " :" + msgRegex, timeout );
+        }
+
+        /// <summary>
         /// Waits for the given RAW string to come
         /// from the Chaskis process.
         /// </summary>
@@ -507,9 +521,9 @@ namespace Chaskis.RegressionTests
         /// </summary>
         public bool WaitForStringWithTimeout( string regex, int timeout )
         {
-            this.serverLog.WriteLine( "Waiting for regex " + regex + "..." );
+            this.serverLog.WriteLine( "Waiting for regex " + regex.EscapeNonCharacters() + "..." );
             bool success = this.buffer.WaitForString( regex, timeout );
-            this.serverLog.WriteLine( "Waiting for regex " + regex + "...{0}", success ? "Done!" : "Fail!" );
+            this.serverLog.WriteLine( "Waiting for regex " + regex.EscapeNonCharacters() + "...{0}", success ? "Done!" : "Fail!" );
 
             return success;
         }
