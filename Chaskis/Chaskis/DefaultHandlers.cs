@@ -97,6 +97,7 @@ namespace Chaskis
             this.AddHelpHandler();
             this.AddAdminHandler();
             this.AddDebugHandlers();
+            this.AddCtcpPingHandler();
 
             // Must always check for pings.
             this.handlers.Add( new PingHandler() );
@@ -505,16 +506,14 @@ namespace Chaskis
                 string verboseLevel = args.Match.Groups["verbose"].Value;
 
                 string message;
-                int level = 0;
-
-                if( this.plugins.ContainsKey( pluginName ) == false )
+                if ( this.plugins.ContainsKey( pluginName ) == false )
                 {
                     message = string.Format(
                         "'{0}' is not a plugin that is activated.",
                         pluginName
                     );
                 }
-                else if( int.TryParse( verboseLevel, out level ) == false )
+                else if ( int.TryParse( verboseLevel, out int level ) == false )
                 {
                     message = string.Format(
                         "'{0}' is an invalid integer.",
@@ -537,6 +536,27 @@ namespace Chaskis
                 );
             }
             // Otherwise, quietly ignore...
+        }
+
+        private void AddCtcpPingHandler()
+        {
+            CtcpPingHandlerConfig config = new CtcpPingHandlerConfig
+            {
+                LineRegex = ".+",
+                LineAction = this.HandlerCtcpPingHandler,
+                ResponseOption = ResponseOptions.PmsOnly
+            };
+
+            CtcpPingHandler handler = new CtcpPingHandler( config );
+            this.handlers.Add( handler );
+        }
+
+        private void HandlerCtcpPingHandler( CtcpPingHandlerArgs args )
+        {
+            args.Writer.SendCtcpPong(
+                args.Message,
+                args.Channel
+            );
         }
     }
 }

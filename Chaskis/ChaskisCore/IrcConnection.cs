@@ -318,7 +318,7 @@ namespace Chaskis.Core
         /// <param name="channel">The user or #channel to send the message to.</param>
         public void SendMessage( string msg, string channel )
         {
-            this.SendMessageInternal( msg, channel, string.Empty, string.Empty );
+            this.SendMessageInternal( msg, channel, string.Empty, string.Empty, PrivateMessageHelper.IrcCommand );
         }
 
         /// <summary>
@@ -330,10 +330,35 @@ namespace Chaskis.Core
         /// <param name="channel">Which channel to send the action to.</param>
         public void SendAction( string msg, string channel )
         {
-            this.SendMessageInternal( msg, channel, "\u0001ACTION ", "\u0001" );
+            this.SendMessageInternal( msg, channel, "\u0001ACTION ", "\u0001", PrivateMessageHelper.IrcCommand );
         }
 
-        private void SendMessageInternal( string msg, string channel, string prefix, string suffix )
+        /// <summary>
+        /// Sends the given NOTICE to the given channel.
+        /// Thread-safe.
+        /// Throws InvalidOperationException if not connected.
+        /// </summary>
+        /// <param name="msg">The NOTICE to send.</param>
+        /// <param name="channel">The user or #channel to send the NOTICE to.</param>
+        public void SendNotice( string msg, string channel )
+        {
+            this.SendMessageInternal( msg, channel, string.Empty, string.Empty, "NOTICE" );
+        }
+
+        /// <summary>
+        /// Sends the proper "PONG" response when responding to a CTCP Ping.
+        /// </summary>
+        /// <remarks>
+        /// Under-the-hood, this really sends a CTCP Ping, but with a notice.
+        /// </remarks>
+        /// <param name="msg">The message to tie with the pong, should usually be the same message we got with the ping.</param>
+        /// <param name="userName">The user to send the ping to.</param>
+        public void SendCtcpPong( string msg, string userName )
+        {
+            this.SendMessageInternal( msg, userName, "\u0001PING ", "\u0001", "NOTICE" );
+        }
+
+        private void SendMessageInternal( string msg, string channel, string prefix, string suffix, string type )
         {
             if ( this.IsConnected == false )
             {
@@ -351,7 +376,7 @@ namespace Chaskis.Core
                     {
                         if ( line.Length <= MaximumLength )
                         {
-                            this.SendMessageHelper( prefix + line + suffix, channel );
+                            this.SendMessageHelper( prefix + line + suffix, channel, type );
                         }
                         else
                         {
@@ -360,9 +385,9 @@ namespace Chaskis.Core
                             string[] splitString = line.SplitByLength( MaximumLength );
                             for ( int i = 0; i < ( splitString.Length - 1 ); ++i )
                             {
-                                this.SendMessageHelper( prefix + splitString[i] + " <more>" + suffix, channel );
+                                this.SendMessageHelper( prefix + splitString[i] + " <more>" + suffix, channel, type );
                             }
-                            this.SendMessageHelper( prefix + splitString[splitString.Length - 1] + suffix, channel );
+                            this.SendMessageHelper( prefix + splitString[splitString.Length - 1] + suffix, channel, type );
                         }
                     }
                 }
@@ -372,7 +397,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Adds the given message to our writer queue.
         /// </summary>
-        private void SendMessageHelper( string line, string channel )
+        private void SendMessageHelper( string line, string channel, string msgType )
         {
             this.AddToWriterQueue(
                 delegate ()
@@ -389,7 +414,7 @@ namespace Chaskis.Core
                         }
 
                         // PRIVMSG < msgtarget > < message >
-                        this.connection.WriteLine( "PRIVMSG {0} :{1}", channel, line );
+                        this.connection.WriteLine( $"{msgType} {channel} :{line}" );
                     }
                 } 
             );

@@ -33,6 +33,24 @@ namespace Chaskis.Core
         void SendAction( string msg, string channel );
 
         /// <summary>
+        /// Sends an IRC NOTICE to the channel.
+        /// A NOTICE is similar to a message, except automatic replies
+        /// must never be sent in a reply to NOTICE messages.
+        /// </summary>
+        /// <param name="msg">The message to send.</param>
+        /// <param name="channel">The user (or user name) to send the message to.</param>
+        void SendNotice( string msg, string channel );
+
+        /// <summary>
+        /// Sends a CTCP pong message
+        /// </summary>
+        /// <param name="message">
+        /// The message to send.  This is equal to the message that was received when a ping was received.
+        /// </param>
+        /// <param name="userName">Who to send the PONG to.</param>
+        void SendCtcpPong( string message, string userName );
+
+        /// <summary>
         /// Sends a pong using the given response.
         /// </summary>
         /// <param name="response">The response we need to send.</param>
