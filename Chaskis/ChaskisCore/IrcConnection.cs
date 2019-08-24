@@ -105,7 +105,9 @@ namespace Chaskis.Core
         /// </summary>
         private readonly INonDisposableStringParsingQueue parsingQueue;
 
-        private readonly IrcReconnector reconnector;
+        private const string watchdogStr = "watchdog";
+
+        private readonly IrcWatchdog watchDog;
 
         // -------- Constructor --------
 
@@ -141,18 +143,12 @@ namespace Chaskis.Core
             this.eventScheduler = new EventScheduler();
 
             this.parsingQueue = parsingQueue;
-            this.reconnector = new IrcReconnector(
-                () => this.SendPing( "watchdog" ),
-                () =>
-                {
-                    this.AddCoreEvent( ChaskisCoreEvents.WatchdogFailed );
-                    this.AttemptReconnect();
-                },
+            this.watchDog = new IrcWatchdog(
+                StaticLogger.Log,
+                () => this.SendPing( watchdogStr ),
+                this.Watchdog_OnFailure,
                 60 * 1000
             );
-
-            this.reconnector.OnMessage += Reconnector_OnMessage;
-            this.reconnector.OnError += Reconnector_OnError;
         }
 
         // ---------------- Properties ----------------
@@ -200,8 +196,6 @@ namespace Chaskis.Core
             {
                 // Start Executing
                 this.writerQueue.Start();
-                this.reconnector.Start();
-
                 this.inited = true;
             }
         }
@@ -296,6 +290,16 @@ namespace Chaskis.Core
             }
 
             this.AddCoreEvent( ChaskisCoreEvents.FinishedJoiningChannels );
+
+            // Once we connected, go ahead and start the watchdog.
+            // This will be the only time the watchdog should be started.
+            // This is wrapped in a started check since the watchdog will call
+            // this function when it tries to reconnect, and we don't want to call start
+            // when its already started.
+            if ( this.watchDog.Started == false )
+            {
+                this.watchDog.Start();
+            }
         }
 
         /// <summary>
@@ -443,9 +447,12 @@ namespace Chaskis.Core
         /// <param name="response">The response from the server.</param>
         public void ReceivedPong( string response )
         {
-            if( response == "watchdog" )
+            if( response.EqualsIgnoreCase( watchdogStr ) )
             {
-                this.reconnector.ResetWatchdog();
+                if ( this.watchDog.Started )
+                {
+                    this.watchDog.ResetTimer();
+                }
             }
         }
 
@@ -570,7 +577,7 @@ namespace Chaskis.Core
 
                 this.DisconnectHelper();
 
-                this.reconnector.Dispose();
+                this.watchDog.Dispose();
                 this.connection.Dispose();
 
                 StaticLogger.Log.WriteLine( "Disconnect Complete." );
@@ -621,8 +628,6 @@ namespace Chaskis.Core
         {
             Disconnect();
             this.writerQueue.OnError -= this.EventQueue_OnError;
-            this.reconnector.OnMessage -= Reconnector_OnMessage;
-            this.reconnector.OnError -= Reconnector_OnError;
         }
 
         /// <summary>
@@ -861,7 +866,7 @@ namespace Chaskis.Core
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in " +  Thread.CurrentThread.Name + ":" );
+            errorMessage.WriteLine( "Caught Exception in Event Queue (" +  Thread.CurrentThread.Name + "):" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
@@ -874,7 +879,7 @@ namespace Chaskis.Core
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
+            errorMessage.WriteLine( "Caught Exception in WriterQueue (" + Thread.CurrentThread.Name + "):" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
@@ -882,14 +887,11 @@ namespace Chaskis.Core
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
 
-        private static void Reconnector_OnMessage( string obj )
+        private void Watchdog_OnFailure()
         {
-            StaticLogger.Log.WriteLine( Convert.ToInt32( LogVerbosityLevel.HighVerbosity ), obj );
-        }
-
-        private static void Reconnector_OnError( string obj )
-        {
-            StaticLogger.Log.ErrorWriteLine( Convert.ToInt32( LogVerbosityLevel.NoVerbosity ), obj );
+            this.AddCoreEvent( ChaskisCoreEvents.WatchdogFailed );
+            // This should be the only spot where we attempt a reconnect.
+            this.AttemptReconnect();
         }
     }
 }
