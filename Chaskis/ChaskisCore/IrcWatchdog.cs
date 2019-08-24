@@ -181,6 +181,12 @@ namespace Chaskis.Core
                                 this.failureAction();
                             }
                         }
+
+                        // After doing the test, wait a bit before trying again, but only if are not flagged to stop.
+                        if ( this.KeepGoing )
+                        {
+                            this.watchdogResetEvent.WaitOne( timeout );
+                        }
                     }
                     catch ( ThreadInterruptedException )
                     {
