@@ -1,7 +1,3 @@
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.9.0"
-#tool "nuget:?package=OpenCover&version=4.6.519"
-#tool "nuget:?package=ReportGenerator&version=4.0.10"
-
 public class UnitTestRunner
 {
     // ---------------- Fields ----------------

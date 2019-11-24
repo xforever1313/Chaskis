@@ -8,20 +8,11 @@ string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------
 
-#load "BuildScripts/ImportantPaths.cake"
+#load "BuildScripts/Includes.cake"
 
 ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
 
 bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
-
-// ---------------- Includes ----------------
-
-#addin "Cake.FileHelpers"
-
-#load "BuildScripts/Common.cake"
-#load "BuildScripts/MSBuild.cake"
-#load "BuildScripts/UnitTest.cake"
-#load "BuildScripts/Templatize.cake"
 
 // ---------------- Targets ----------------
 
