@@ -21,6 +21,9 @@ public class ImportantPaths
         this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
         this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
         this.RegressionTestFolder = this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
+        this.RegressionTestRunnerDirectory = this.RegressionTestFolder.Combine( new DirectoryPath( "runner" ) );
+        this.RegressionTestResultsFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "TestResults" ) );
+        this.RegressionTestResultsFile = this.RegressionTestResultsFolder.CombineWithFilePath( new FilePath( "TestResults.html" ) );
         this.FitNesseRoot = this.RegressionTestFolder.Combine( new DirectoryPath( "FitNesseRoot" ) );
         this.UnitTestFolder = this.SourceFolder.Combine( new DirectoryPath( "UnitTests" ) );
 
@@ -104,6 +107,21 @@ public class ImportantPaths
     /// Folder where the Regression Tests live.
     /// </summary>
     public DirectoryPath RegressionTestFolder { get; private set; }
+
+    /// <summary>
+    /// Path to where FitNesse expects the NetRunner executable.
+    /// </summary>
+    public DirectoryPath RegressionTestRunnerDirectory { get; private set; }
+
+    /// <summary>
+    /// Folder to dump the regression test results.
+    /// </summary>
+    public DirectoryPath RegressionTestResultsFolder{ get; private set; }
+
+    /// <summary>
+    /// File to dump the regression test results.
+    /// </summary>
+    public FilePath RegressionTestResultsFile { get; private set; }
 
     /// <summary>
     /// The FitNesse Root.
