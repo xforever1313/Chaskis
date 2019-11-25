@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 
 const string defaultTarget = "default";
 const string frameworkTarget = "net472";
+const string pluginTarget = "netstandard2.0";
 string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------

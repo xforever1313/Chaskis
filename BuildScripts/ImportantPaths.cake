@@ -21,6 +21,7 @@ public class ImportantPaths
         this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
         this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
         this.RegressionTestFolder = this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
+        this.RegressionDistroFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "dist" ) );
         this.RegressionTestRunnerDirectory = this.RegressionTestFolder.Combine( new DirectoryPath( "runner" ) );
         this.RegressionTestResultsFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "TestResults" ) );
         this.RegressionTestResultsFile = this.RegressionTestResultsFolder.CombineWithFilePath( new FilePath( "TestResults.html" ) );
@@ -35,6 +36,7 @@ public class ImportantPaths
         this.DebianLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
         this.FedoraLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
         this.ChocolateyInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "chocolatey" ) );
+        this.CliInstallerProjectFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "ChaskisCliInstaller" ) );
 
         this.SolutionPath = this.SourceFolder.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
         this.ChaskisVersionFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "Chaskis.cs" ) );
@@ -109,6 +111,11 @@ public class ImportantPaths
     public DirectoryPath RegressionTestFolder { get; private set; }
 
     /// <summary>
+    /// Where to make a distro for regression tests.
+    /// </summary>
+    public DirectoryPath RegressionDistroFolder { get; private set; }
+
+    /// <summary>
     /// Path to where FitNesse expects the NetRunner executable.
     /// </summary>
     public DirectoryPath RegressionTestRunnerDirectory { get; private set; }
@@ -174,6 +181,11 @@ public class ImportantPaths
     /// Folder where the chocolatey config lives.
     /// </summary>
     public DirectoryPath ChocolateyInstallConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Folder where the CLI installer lives.
+    /// </summary>
+    public DirectoryPath CliInstallerProjectFolder { get; private set; }
 
     // -------- Important Files --------
 

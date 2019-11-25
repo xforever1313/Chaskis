@@ -14,6 +14,7 @@
 // ---------------- Includes ----------------
 
 #load "Common.cake"
+#load "DistroCreator.cake"
 #load "ImportantPaths.cake"
 #load "MSBuild.cake"
 #load "RegressionTest.cake"

@@ -3,8 +3,8 @@
 # Taken from here: https://github.com/imanushin/NetRunner/wiki/Create-the-first-test
 
 !define COMMAND_PATTERN {%m %p}
-!define TEST_RUNNER {./runner/NetRunner.Executable.exe}
-!path TestFixtures/bin/Debug/net472/RegressionTests.dll
+!define TEST_RUNNER {./Chaskis/RegressionTests/runner/NetRunner.Executable.exe}
+!path Chaskis/RegressionTests/TestFixtures/bin/Debug/net472/RegressionTests.dll
 !define port {10123}
 !define httpport {32101}
 !define adminuser {adminuser}

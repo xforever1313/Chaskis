@@ -174,8 +174,23 @@ Task( bootStrapTask )
         CopyRunnerFile( "NetRunner.ExternalLibrary.dll" );
         CopyRunnerFile( "NetRunner.ExternalLibrary.XML" );
         CopyRunnerFile( "NetRunner.Executable.exe" );
+
+        DistroCreatorConfig distroConfig = new DistroCreatorConfig
+        {
+            IsWindows = isWindows,
+            OutputLocation = paths.RegressionDistroFolder.ToString()
+        };
+
+        DistroCreator distroCreator = new DistroCreator(
+            context,
+            paths,
+            distroConfig
+        );
+        distroCreator.CreateDistro();
     }
-).Description( "Ensures our Environment is ready to run with FitNesse." );
+)
+.Description( "Ensures our Environment is ready to run with FitNesse." )
+.IsDependentOn( "debug" );
 
 Task( "launch_fitnesse" )
 .Does(
@@ -210,12 +225,19 @@ Task( "run_regression" )
         FitnesseConfig config = ArgumentBinder.FromArguments<FitnesseConfig>( context );
         config.Command = "ChaskisTests.AllTests?suite";
 
+        EnsureDirectoryExists( paths.RegressionTestResultsFolder );
+        CleanDirectory( paths.RegressionTestResultsFolder );
+
         int exitCode = -1;
         using( FitnesseRunner runner = new FitnesseRunner( context, paths, config ) )
         {
             runner.StartProcess();
             exitCode = runner.Wait();
         }
+
+        string fileContents = FileReadText( paths.RegressionTestResultsFile );
+        string output = Regex.Replace( fileContents, "/files/", "https://files.shendrick.net/" );
+        FileWriteText( paths.RegressionTestResultsFile, output );
 
         if( exitCode != 0 )
         {
