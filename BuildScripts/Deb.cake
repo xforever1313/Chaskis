@@ -40,13 +40,14 @@ public class DebRunner
 
         this.context.EnsureDirectoryExists( objFolder );
         this.context.CleanDirectory( objFolder );
+        SetDirectoryPermission( objFolder, "755" );
         this.context.EnsureDirectoryExists( outputFolder );
         this.context.CleanDirectory( outputFolder );
 
         // Directory structure:
         // obj
         //  L chaskis
-        //       L DEBIAN
+        //       L DEBIAN (must be 755)
         //            L control (control file)
         //       L bin
         //           L chaskis  (chaskis startup script)
@@ -91,11 +92,11 @@ public class DebRunner
         distroRunner.CreateDistro();
 
         // Lastly, need to package everything up.
-        ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( "--build chaskis" );
+        ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( "--root-owner-group --build chaskis" );
         ProcessSettings settings = new ProcessSettings
         {
             Arguments = arguments,
-            WorkingDirectory = chaskisWorkDir
+            WorkingDirectory = objFolder
         };
         int exitCode = this.context.StartProcess( "dpkg-deb", settings );
         if( exitCode != 0 )
@@ -126,6 +127,10 @@ public class DebRunner
         );
         this.context.EnsureDirectoryExists( combinedPath );
 
+        // All directories should be 755 to be consistent
+        // with the old installation method.
+        SetDirectoryPermission( combinedPath, "755" );
+
         return combinedPath;
     }
 
@@ -133,5 +138,22 @@ public class DebRunner
     {
         this.context.Information( $"Moving '{source}' to '${destination}'" );
         this.context.CopyFileToDirectory( source, destination );
+    }
+
+    private void SetDirectoryPermission( DirectoryPath directory, string chmodValue )
+    {
+        ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( $"{chmodValue} {directory}" );
+        ProcessSettings settings = new ProcessSettings
+        {
+            Arguments = arguments
+        };
+
+        int exitCode = this.context.StartProcess( "chmod", settings );
+        if( exitCode != 0 )
+        {
+            throw new ApplicationException(
+                $"Could not set folder permission on '{directory}', got exit code: " + exitCode
+            );
+        }
     }
 }
