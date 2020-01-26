@@ -32,6 +32,8 @@ public class ImportantPaths
         this.WindowsInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
         this.WixConfigFolder = this.WindowsInstallConfigFolder;
         this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
+        this.LinuxBinFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
+        this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
         this.ArchLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "arch" ) );
         this.DebianLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
         this.FedoraLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
@@ -161,6 +163,17 @@ public class ImportantPaths
     /// Folder where the Linux Install Configs live.
     /// </summary>
     public DirectoryPath LinuxInstallConfigFolder { get; private set; }
+
+    /// <summmary>
+    /// Path to the script that goes in the linux bin folder
+    /// during install.
+    /// </summary>
+    public FilePath LinuxBinFile { get; private set; }
+
+    /// <summary>
+    /// Path to the systemd file.
+    /// </summary>
+    public FilePath SystemdFile { get; private set; }
 
     /// <summary>
     /// Folder where the Arch Linux Install Configs live.

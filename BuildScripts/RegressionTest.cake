@@ -1,4 +1,6 @@
 
+#load "Includes.cake"
+
 public class FitnesseConfig
 {
     // ---------------- Constructor ----------------
@@ -177,7 +179,7 @@ Task( bootStrapTask )
 
         DistroCreatorConfig distroConfig = new DistroCreatorConfig
         {
-            IsWindows = isWindows,
+            IsWindows = IsRunningOnWindows(),
             OutputLocation = paths.RegressionDistroFolder.ToString()
         };
 

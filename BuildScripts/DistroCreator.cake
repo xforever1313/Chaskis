@@ -1,3 +1,5 @@
+#load "Includes.cake"
+
 public class DistroCreatorConfig
 {
     // ---------------- Constructor ----------------
@@ -7,6 +9,8 @@ public class DistroCreatorConfig
     public bool IsWindows { get; set; }
 
     public string OutputLocation { get; set; }
+
+    public string Target { get; set; } = "Debug";
 }
 
 public class DistroCreator
@@ -51,7 +55,7 @@ public class DistroCreator
 
     public void CreateDistro()
     {
-        const string target = "Debug";
+        string target = this.config.Target;
         this.context.EnsureDirectoryExists( this.output );
         this.context.CleanDirectory( this.output );
 

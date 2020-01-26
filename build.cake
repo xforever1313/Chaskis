@@ -1,10 +1,6 @@
-using System.Text.RegularExpressions;
-
 // ---------------- Arguments ----------------
 
 const string defaultTarget = "default";
-const string frameworkTarget = "net472";
-const string pluginTarget = "netstandard2.0";
 string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------
@@ -13,7 +9,7 @@ string target = Argument( "target", defaultTarget );
 
 ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
 
-bool isWindows = ( Environment.OSVersion.Platform == PlatformID.Win32NT );
+bool isWindows = IsRunningOnWindows();
 
 // ---------------- Targets ----------------
 
@@ -66,7 +62,7 @@ Task( "unit_test" )
 
 Task( "msi" )
 .Does(
-    () =>
+    ( context ) =>
     {
         DirectoryPath outputPath = paths.OutputPackages.Combine( "windows" );
         EnsureDirectoryExists( outputPath );
@@ -79,6 +75,7 @@ Task( "msi" )
 
         DoMsBuild( "Install", PlatformTarget.x64 );
         GenerateSha256(
+            context,
             msiFile,
             checksumLocation
         );
@@ -112,7 +109,7 @@ Task( "code_coverage" )
 
 Task( "nuget_pack" )
 .Does(
-    () =>
+    ( context ) =>
     {
         DirectoryPath outputPath = paths.OutputPackages.Combine( "nuget" );
         EnsureDirectoryExists( outputPath );
@@ -136,6 +133,7 @@ Task( "nuget_pack" )
         foreach( FilePath file in GetFiles( glob.ToString() ) )
         {
             GenerateSha256(
+                context,
                 file,
                 new FilePath( file.FullPath + ".sha256" )
             );
@@ -147,7 +145,7 @@ Task( "nuget_pack" )
 
 Task( "choco_pack" )
 .Does(
-    () =>
+    ( context ) =>
     {
         DirectoryPath outputPath = paths.OutputPackages.Combine( "chocolatey" );
         EnsureDirectoryExists( outputPath );
@@ -170,6 +168,7 @@ Task( "choco_pack" )
         foreach( FilePath file in GetFiles( glob.ToString() ) )
         {
             GenerateSha256(
+                context,
                 file,
                 new FilePath( file.FullPath + ".sha256" )
             );
@@ -178,6 +177,15 @@ Task( "choco_pack" )
 )
 .WithCriteria( isWindows )
 .Description( "Creates the Chocolatey Package (Windows Only)." );
+
+Task( "debian_pack" )
+.Does(
+    ( context ) =>
+    {
+        DebRunner runner = new DebRunner( context, paths );
+        runner.BuildDeb();
+    }
+).IsDependentOn( "release" );
 
 Task( defaultTarget )
 .IsDependentOn( "debug" )
