@@ -10,4 +10,8 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Posix-4.5" Version="4.5.0" />
+  </ItemGroup>
 </Project>

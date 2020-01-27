@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Mono.Unix;
 
 namespace Chaskis.ChaskisCliInstaller
 {
@@ -182,6 +183,18 @@ namespace Chaskis.ChaskisCliInstaller
                 if( Directory.Exists( Path.GetDirectoryName( destDir ) ) == false )
                 {
                     Directory.CreateDirectory( Path.GetDirectoryName( destDir ) );
+
+                    if(
+                        ( Environment.OSVersion.Platform == PlatformID.Unix ) ||
+                        ( Environment.OSVersion.Platform == PlatformID.MacOSX )
+                    )
+                    {
+                        UnixFileInfo info = new UnixFileInfo( destDir );
+                        info.FileAccessPermissions =
+                            FileAccessPermissions.UserReadWriteExecute |
+                            FileAccessPermissions.GroupRead | FileAccessPermissions.GroupExecute |
+                            FileAccessPermissions.OtherRead | FileAccessPermissions.OtherExecute;
+                    }
                 }
                 File.Copy( file.Item1, destDir, true );
             }
