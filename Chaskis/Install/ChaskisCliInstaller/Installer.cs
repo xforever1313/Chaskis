@@ -182,14 +182,15 @@ namespace Chaskis.ChaskisCliInstaller
                 this.Status( "Copy " + file.Item1 + "\tto\t" + destDir );
                 if( Directory.Exists( Path.GetDirectoryName( destDir ) ) == false )
                 {
-                    Directory.CreateDirectory( Path.GetDirectoryName( destDir ) );
+                    string fullName = Path.GetDirectoryName( destDir );
+                    Directory.CreateDirectory( fullName );
 
                     if(
                         ( Environment.OSVersion.Platform == PlatformID.Unix ) ||
                         ( Environment.OSVersion.Platform == PlatformID.MacOSX )
                     )
                     {
-                        UnixFileInfo info = new UnixFileInfo( destDir );
+                        UnixFileInfo info = new UnixFileInfo( fullName );
                         info.FileAccessPermissions =
                             FileAccessPermissions.UserReadWriteExecute |
                             FileAccessPermissions.GroupRead | FileAccessPermissions.GroupExecute |
