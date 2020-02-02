@@ -57,6 +57,10 @@ namespace Chaskis.Service
                     await Task.Delay( -1, stoppingToken );
                 }
             }
+            catch( TaskCanceledException )
+            {
+                StaticLogger.Log.WriteLine( "Starting Shutdown Sequence" );
+            }
             catch( Exception e )
             {
                 StaticLogger.Log.ErrorWriteLine( "FATAL ERROR:" + Environment.NewLine + e.ToString() );
