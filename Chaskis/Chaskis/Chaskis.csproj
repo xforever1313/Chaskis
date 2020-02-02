@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
@@ -15,10 +15,6 @@
     <ProjectReference Include="..\ChaskisCore\Chaskis.Core.csproj">
       <Private>true</Private>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
 
 </Project>

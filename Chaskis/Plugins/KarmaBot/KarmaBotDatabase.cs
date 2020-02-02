@@ -24,7 +24,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         private readonly LiteDatabase dbConnection;
 
-        private readonly LiteCollection<IrcUser> users;
+        private readonly ILiteCollection<IrcUser> users;
 
         /// <summary>
         /// Cache for irc users so we don't need to consistently query the database
@@ -73,9 +73,11 @@ namespace Chaskis.Plugins.KarmaBot
             // If the user is null, it means it doesn't exist in the database yet; create a new one
             if( user == null )
             {
-                user = new IrcUser();
-                user.KarmaCount = 0;
-                user.UserName = userName;
+                user = new IrcUser
+                {
+                    KarmaCount = 0,
+                    UserName = userName
+                };
             }
 
             // Decrease the karma of the user, but only if it doesn't cause an underflow, otherwise, leave it alone.
@@ -116,9 +118,11 @@ namespace Chaskis.Plugins.KarmaBot
             // If the user is null, it means it doesn't exist in the database yet; create a new one
             if( user == null )
             {
-                user = new IrcUser();
-                user.KarmaCount = 0;
-                user.UserName = userName;
+                user = new IrcUser
+                {
+                    KarmaCount = 0,
+                    UserName = userName
+                };
             }
 
             // Decrease the karma of the user, but only if it doesn't cause an underflow, otherwise, leave it alone.
@@ -156,10 +160,12 @@ namespace Chaskis.Plugins.KarmaBot
                 {
                     // If no karma exists for this user, return 0.  But first, add it to the cache so
                     // we don't waste time querying things.
-                    user = new IrcUser();
-                    user.UserName = userName;
-                    user.KarmaCount = 0;
-                    user.Id = -1; // Not in database, its database ID is -1.
+                    user = new IrcUser
+                    {
+                        UserName = userName,
+                        KarmaCount = 0,
+                        Id = -1 // Not in database, its database ID is -1.
+                    };
                 }
 
                 // Add user to karma cache.

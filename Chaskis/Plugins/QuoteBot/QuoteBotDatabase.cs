@@ -22,7 +22,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private readonly LiteDatabase dbConnection;
 
-        private readonly LiteCollection<Quote> quotes;
+        private readonly ILiteCollection<Quote> quotes;
 
         private readonly Random random;
 
