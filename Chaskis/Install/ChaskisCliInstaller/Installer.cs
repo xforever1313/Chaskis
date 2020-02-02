@@ -176,28 +176,48 @@ namespace Chaskis.ChaskisCliInstaller
                 throw new ArgumentException( "No ComponentGroup fragments found...", this.wixArgName );
             }
 
+
+
             foreach( Tuple<string, string> file in files )
             {
-                string destDir = Path.Combine( this.RootDir, file.Item2 );
-                this.Status( "Copy " + file.Item1 + "\tto\t" + destDir );
-                if( Directory.Exists( Path.GetDirectoryName( destDir ) ) == false )
-                {
-                    string fullName = Path.GetDirectoryName( destDir );
-                    Directory.CreateDirectory( fullName );
+                string filePath = Path.Combine( this.RootDir, file.Item2 );
+                string dirPath = Path.GetDirectoryName( filePath );
 
-                    if(
-                        ( Environment.OSVersion.Platform == PlatformID.Unix ) ||
-                        ( Environment.OSVersion.Platform == PlatformID.MacOSX )
-                    )
-                    {
-                        UnixFileInfo info = new UnixFileInfo( fullName );
-                        info.FileAccessPermissions =
-                            FileAccessPermissions.UserReadWriteExecute |
-                            FileAccessPermissions.GroupRead | FileAccessPermissions.GroupExecute |
-                            FileAccessPermissions.OtherRead | FileAccessPermissions.OtherExecute;
-                    }
+                // Create any missing parent directories first.
+                System.IO.DirectoryInfo info = new System.IO.DirectoryInfo( dirPath );
+                System.IO.DirectoryInfo parentInfo = info.Parent;
+                while( parentInfo != null )
+                {
+                    CreateDirectoryHelper( parentInfo.FullName );
+                    parentInfo = parentInfo.Parent;
                 }
-                File.Copy( file.Item1, destDir, true );
+
+                // Now create the new directory.
+                CreateDirectoryHelper( dirPath );
+
+                this.Status( "Copy " + file.Item1 + "\tto\t" + filePath );
+                File.Copy( file.Item1, filePath, true );
+            }
+        }
+
+        private void CreateDirectoryHelper( string dirPath )
+        {
+            if( Directory.Exists( dirPath ) == false )
+            {
+                this.Status( "Create directory: " + dirPath );
+                Directory.CreateDirectory( dirPath );
+
+                if(
+                    ( Environment.OSVersion.Platform == PlatformID.Unix ) ||
+                    ( Environment.OSVersion.Platform == PlatformID.MacOSX )
+                )
+                {
+                    UnixFileInfo info = new UnixFileInfo( dirPath );
+                    info.FileAccessPermissions =
+                        FileAccessPermissions.UserReadWriteExecute |
+                        FileAccessPermissions.GroupRead | FileAccessPermissions.GroupExecute |
+                        FileAccessPermissions.OtherRead | FileAccessPermissions.OtherExecute;
+                }
             }
         }
 

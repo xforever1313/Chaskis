@@ -142,18 +142,6 @@ public class DebRunner
 
     private void SetDirectoryPermission( DirectoryPath directory, string chmodValue )
     {
-        ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( $"{chmodValue} {directory}" );
-        ProcessSettings settings = new ProcessSettings
-        {
-            Arguments = arguments
-        };
-
-        int exitCode = this.context.StartProcess( "chmod", settings );
-        if( exitCode != 0 )
-        {
-            throw new ApplicationException(
-                $"Could not set folder permission on '{directory}', got exit code: " + exitCode
-            );
-        }
+        this.context.SetDirectoryPermission( directory, chmodValue );
     }
 }

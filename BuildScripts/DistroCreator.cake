@@ -58,6 +58,10 @@ public class DistroCreator
         string target = this.config.Target;
         this.context.EnsureDirectoryExists( this.output );
         this.context.CleanDirectory( this.output );
+        if( this.context.IsRunningOnWindows() == false )
+        {
+            this.context.SetDirectoryPermission( this.output, "755" );
+        }
 
         FilePath cliInstallerPath = this.paths.CliInstallerProjectFolder.CombineWithFilePath(
             $"bin/{target}/{frameworkTarget}/Chaskis.CliInstaller.exe"

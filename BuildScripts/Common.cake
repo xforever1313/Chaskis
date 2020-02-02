@@ -6,3 +6,20 @@ public static void GenerateSha256( this ICakeContext context, FilePath source, F
     context.FileWriteText( output, hashStr );
     context.Information( "Hash for " + source.GetFilename() + ": " + hashStr );
 }
+
+public static void SetDirectoryPermission( this ICakeContext context, DirectoryPath directory, string chmodValue )
+{
+    ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( $"{chmodValue} {directory}" );
+    ProcessSettings settings = new ProcessSettings
+    {
+        Arguments = arguments
+    };
+
+    int exitCode = context.StartProcess( "chmod", settings );
+    if( exitCode != 0 )
+    {
+        throw new ApplicationException(
+            $"Could not set folder permission on '{directory}', got exit code: " + exitCode
+        );
+    }
+}
