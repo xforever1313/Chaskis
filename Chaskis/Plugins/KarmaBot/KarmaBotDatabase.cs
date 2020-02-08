@@ -24,7 +24,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         private readonly LiteDatabase dbConnection;
 
-        private readonly ILiteCollection<IrcUser> users;
+        private readonly LiteCollection<IrcUser> users;
 
         /// <summary>
         /// Cache for irc users so we don't need to consistently query the database

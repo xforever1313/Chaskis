@@ -81,7 +81,8 @@ public class UnitTestRunner
         OpenCoverSettings settings = new OpenCoverSettings
         {
             Register = "user",
-            ReturnTargetCodeOffset = 0
+            ReturnTargetCodeOffset = 0,
+            OldStyle = true // This is needed or MissingMethodExceptions get thrown everywhere for some reason.
         }
         .WithFilter( "+[*]Chaskis*" );
 

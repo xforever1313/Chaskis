@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="5.0.0" />
+    <PackageReference Include="LiteDB" Version="4.1.4" />
 
     <!--
     A way to work around the issue in MSBuild reported here: https://github.com/mono/mono/issues/9280.  This happens if the SDK Resolver is not installed.

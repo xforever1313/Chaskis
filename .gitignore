@@ -34,6 +34,7 @@ autom4te.cache/
 *.tar.gz
 tarballs/
 test-results/
+TestResult/
 *.nupkg
 Thumbs.db
 
