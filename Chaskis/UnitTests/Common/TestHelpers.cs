@@ -28,7 +28,6 @@ namespace Chaskis.UnitTests.Common
             TestContext.CurrentContext.TestDirectory,
             "..",
             "..",
-            "..",
             ".."
         );
 

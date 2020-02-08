@@ -26,7 +26,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         /// </summary>
         private static readonly string testXmlFiles =
             Path.Combine(
-                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "TestFiles"
+                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "ChaskisTests", "TestFiles"
             );
 
         /// <summary>
