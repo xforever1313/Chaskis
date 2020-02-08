@@ -15,12 +15,15 @@
   <Import Project="..\UnitTests.Common\UnitTests.Common.projitems" Label="Shared" />
   
   <ItemGroup>
-      <PackageReference Include="NUnit" Version="3.10.1" />
-      <PackageReference Include="NUnit.Console" Version="3.8.0" />
-      <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-      <PackageReference Include="Castle.Core" version="4.3.0" />
-      <PackageReference Include="Moq" version="4.8.3" />
-      <PackageReference Include="System.Threading.Tasks.Extensions" version="4.3.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+      <PackageReference Include="NUnit" Version="3.12.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Castle.Core" version="4.4.0" />
+      <PackageReference Include="Moq" version="4.13.1" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" version="4.5.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ public class UnitTestRunner
     private readonly ImportantPaths paths;
     private readonly DirectoryPath unitTestDir;
 
-    private readonly List<FilePath> testAssemblies;
+    private readonly List<FilePath> testProjects;
 
     // ---------------- Constructor ----------------
 
@@ -16,11 +16,11 @@ public class UnitTestRunner
         this.paths = paths;
         this.unitTestDir = this.paths.UnitTestFolder;
 
-        testAssemblies = new List<FilePath>
+        this.testProjects = new List<FilePath>
         {
-            unitTestDir.CombineWithFilePath( new FilePath( "ChaskisTests/bin/Debug/" + frameworkTarget + "/ChaskisTests.dll" ) ),
-            unitTestDir.CombineWithFilePath( new FilePath( "CoreTests/bin/Debug/" + frameworkTarget + "/CoreTests.dll" ) ),
-            unitTestDir.CombineWithFilePath( new FilePath( "PluginTests/bin/Debug/" + frameworkTarget + "/PluginTests.dll" ) )
+            unitTestDir.CombineWithFilePath( new FilePath( "ChaskisTests/ChaskisTests.csproj" ) ),
+            unitTestDir.CombineWithFilePath( new FilePath( "CoreTests/CoreTests.csproj" ) ),
+            unitTestDir.CombineWithFilePath( new FilePath( "PluginTests/PluginTests.csproj" ) )
         };
     }
 
@@ -37,18 +37,38 @@ public class UnitTestRunner
         context.EnsureDirectoryExists( outputPath );
         context.CleanDirectory( outputPath );
 
-        FilePath unitTestResultsOutput = outputPath.CombineWithFilePath( new FilePath( "TestResult.xml" ) );
-        NUnit3Result result = new NUnit3Result
+        List<Exception> failures = new List<Exception>();
+        foreach( FilePath project in this.testProjects )
         {
-            FileName = unitTestResultsOutput
-        };
+            FilePath resultFile = new FilePath(
+                outputPath.CombineWithFilePath( project.GetFilenameWithoutExtension() ).ToString() + ".xml"
+            );
 
-        NUnit3Settings settings = new NUnit3Settings
+            DotNetCoreTestSettings settings = new DotNetCoreTestSettings
+            {
+                NoBuild = true,
+                NoRestore = true,
+                Configuration = "Debug",
+                ResultsDirectory = outputPath,
+                VSTestReportPath = resultFile
+            };
+
+            context.Information( $"Running unit tests for '{project.ToString()}'..." );
+            try
+            {
+                context.DotNetCoreTest( project.ToString(), settings );
+            }
+            catch ( Exception e )
+            {
+                failures.Add( e );
+            }
+            context.Information( $"Running unit tests for '{project.ToString()}'...Done!" );
+        }
+
+        if( failures.Count != 0 )
         {
-            Results = new List<NUnit3Result>{ result }
-        };
-
-        context.NUnit3( testAssemblies, settings );
+            throw new AggregateException( "Unit tests failed!", failures );
+        }
     }
 
     public void RunCodeCoverage()
