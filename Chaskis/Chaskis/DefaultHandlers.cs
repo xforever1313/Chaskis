@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Chaskis.Core;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     [ChaskisPlugin( DefaultPluginName ) ]
     public class DefaultHandlers : IHandlerConfig, IPlugin

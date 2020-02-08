@@ -8,7 +8,7 @@
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// Parses the arguments for this program.

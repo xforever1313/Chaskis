@@ -10,6 +10,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
+using Chaskis.Plugins.CrossChannel;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.CrossChannel
 {
@@ -22,7 +23,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.CrossChannel
 
         private IrcConfig ircConfig;
 
-        private Chaskis.Plugins.CrossChannel.CrossChannel uut;
+        private CrossChannelPlugin uut;
 
         private const string remoteUser = "auser";
 
@@ -35,7 +36,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.CrossChannel
             this.ircConfig = TestHelpers.GetTestIrcConfig();
             this.ircConfig.Channels.Add( "#channel2" );
 
-            this.uut = new Chaskis.Plugins.CrossChannel.CrossChannel();
+            this.uut = new CrossChannelPlugin();
 
             PluginInitor initor = new PluginInitor();
             initor.IrcConfig = this.ircConfig;

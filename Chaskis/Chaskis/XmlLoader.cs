@@ -10,7 +10,7 @@ using System.IO;
 using System.Xml;
 using Chaskis.Core;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// Loads XML files and returns objects based on the contents.

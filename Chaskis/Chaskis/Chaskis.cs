@@ -14,7 +14,7 @@ using System.Reflection;
 using Chaskis.Core;
 using SethCS.Basic;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// The main class.

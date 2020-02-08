@@ -18,7 +18,7 @@ namespace Chaskis.Plugins.CrossChannel
     /// to another.
     /// </summary>
     [ChaskisPlugin( "crosschannel" )]
-    public class CrossChannel : IPlugin
+    public class CrossChannelPlugin : IPlugin
     {
         // ---------------- Fields ----------------
 
@@ -36,7 +36,7 @@ namespace Chaskis.Plugins.CrossChannel
         /// <summary>
         /// Constructor
         /// </summary>
-        public CrossChannel()
+        public CrossChannelPlugin()
         {
             this.handlers = new List<IIrcHandler>();
         }

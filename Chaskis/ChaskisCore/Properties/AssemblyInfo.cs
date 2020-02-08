@@ -8,6 +8,4 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo( "CoreTests" )]
-[assembly: InternalsVisibleTo( "PluginTests" )]
-[assembly: InternalsVisibleTo( "ChaskisTests" )]
+[assembly: InternalsVisibleTo( "Chaskis.UnitTests" )]

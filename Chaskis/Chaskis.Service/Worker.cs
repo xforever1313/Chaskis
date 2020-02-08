@@ -28,7 +28,7 @@ namespace Chaskis.Service
         public Worker( ILogger<Worker> logger )
         {
             this.logger = logger;
-            this.rootDir = Chaskis.DefaultRootDirectory;
+            this.rootDir = Cli.Chaskis.DefaultRootDirectory;
         }
 
         // ---------------- Functions ----------------
@@ -40,7 +40,7 @@ namespace Chaskis.Service
                 StaticLogger.Log.OnWriteLine += this.LogInfo;
                 StaticLogger.Log.OnErrorWriteLine += this.LogError;
 
-                using( Chaskis chaskis = new Chaskis( this.rootDir ) )
+                using( Cli.Chaskis chaskis = new Cli.Chaskis( this.rootDir ) )
                 {
                     chaskis.InitState1_LoadIrcConfig();
 

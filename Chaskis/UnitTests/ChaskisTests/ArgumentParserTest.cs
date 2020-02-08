@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using Chaskis.Cli;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.ChaskisTests
@@ -17,7 +18,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         /// <summary>
         /// The test root directory.
         /// </summary>
-        private static readonly string rootDir = Chaskis.DefaultRootDirectory;
+        private static readonly string rootDir = Cli.Chaskis.DefaultRootDirectory;
 
         // -------- Tests --------
 

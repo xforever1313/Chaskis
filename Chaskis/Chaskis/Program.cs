@@ -10,7 +10,7 @@ using System.IO;
 using Chaskis.Core;
 using SethCS.Basic;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     internal static class MainClass
     {
