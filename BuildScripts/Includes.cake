@@ -35,5 +35,5 @@ using System.Text.RegularExpressions;
 
 // ---------------- Globals ----------------
 
-const string frameworkTarget = "net472";
+const string frameworkTarget = "netcoreapp3.1";
 const string pluginTarget = "netstandard2.0";

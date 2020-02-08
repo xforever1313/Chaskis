@@ -73,7 +73,7 @@ Task( "msi" )
         FilePath msiFile = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" );
         FilePath checksumLocation = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" );
 
-        DoMsBuild( "Install", PlatformTarget.x64 );
+        DoMsBuild( "Install" );
         GenerateSha256(
             context,
             msiFile,

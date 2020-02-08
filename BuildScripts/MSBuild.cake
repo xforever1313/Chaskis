@@ -2,17 +2,19 @@
 /// Calls MSBuild to compile Chaskis
 /// </summary>
 /// <param name="configuration">The configuration to use (e.g. Debug, Release, etc.).</param>
-/// <param name="target">The platform target to compile. Defaulted to MSIL (ANY CPU).</param>
-void DoMsBuild( string configuration, PlatformTarget target = PlatformTarget.MSIL )
+void DoMsBuild( string configuration )
 {
-    MSBuildSettings settings = new MSBuildSettings
+    DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings
     {
-        Configuration = configuration,
-        MaxCpuCount = 0,
-        PlatformTarget = target,
-        Restore = true,
         WorkingDirectory = paths.SourceFolder
+    }
+    .SetMaxCpuCount( System.Environment.ProcessorCount )
+    .SetConfiguration( configuration );
+
+    DotNetCoreBuildSettings settings = new DotNetCoreBuildSettings
+    {
+        MSBuildSettings = msBuildSettings
     };
 
-    MSBuild( paths.SolutionPath, settings );
+    DotNetCoreBuild( paths.SolutionPath.ToString(), settings );
 }
