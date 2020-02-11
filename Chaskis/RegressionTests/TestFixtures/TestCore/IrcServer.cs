@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -11,16 +11,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 using SethCS.Extensions;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     /// <summary>
     /// This class emulates an IRC server that Chaskis will talk to.
     /// </summary>
-    public class IrcServer : BaseTestContainer, IDisposable
+    public class IrcServer : IDisposable
     {
         // ---------------- Fields ----------------
 
@@ -29,19 +28,19 @@ namespace Chaskis.RegressionTests
         /// <summary>
         /// Commands sent out from server.
         /// </summary>
-        private GenericLogger outCommands;
+        private readonly GenericLogger outCommands;
 
         /// <summary>
         /// Commands sent in to server.
         /// </summary>
-        private GenericLogger inCommands;
+        private readonly GenericLogger inCommands;
 
         /// <summary>
         /// Log for the server.
         /// </summary>
-        private GenericLogger serverLog;
+        private readonly GenericLogger serverLog;
 
-        private StringBuffer buffer;
+        private readonly StringBuffer buffer;
 
         /// <summary>
         /// The thread that reads.
@@ -59,13 +58,13 @@ namespace Chaskis.RegressionTests
         private object keepReadingObject;
 
         private bool respondToPings;
-        private object respondToPingsObject;
+        private readonly object respondToPingsObject;
 
         private bool respondToJoins;
-        private object respondToJoinsLock;
+        private readonly object respondToJoinsLock;
 
         private string nickName;
-        private object nickNameLock;
+        private readonly object nickNameLock;
 
         private AutoResetEvent connectedEvent;
 

@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     /// <summary>
     /// This class enqueues strings and has methods that search for strings.
@@ -22,7 +22,7 @@ namespace Chaskis.RegressionTests
     {
         // ---------------- Fields ----------------
 
-        private ConcurrentQueue<string> buffer;
+        private readonly ConcurrentQueue<string> buffer;
 
         // ---------------- Constructor ----------------
 

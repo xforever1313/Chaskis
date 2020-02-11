@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017-2018.
+//          Copyright Seth Hendrick 2017-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -8,28 +8,27 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     /// <summary>
     /// This class contains common actions all tests of ANY project can use.
     /// </summary>
-    public class CommonActions : BaseTestContainer
+    public static class CommonActions
     {
         // ---------------- Fields ----------------
 
-        private GenericLogger consoleOut;
+        private static readonly GenericLogger consoleOut;
 
         // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public CommonActions()
+        static CommonActions()
         {
-            this.consoleOut = Logger.GetConsoleOutLog();
+            consoleOut = Logger.GetConsoleOutLog();
         }
 
         // ---------------- Functions ----------------
@@ -39,24 +38,24 @@ namespace Chaskis.RegressionTests
         /// </summary>
         /// <param name="time">How long to sleep for in milliseconds.</param>
         /// <returns>Always returns true.</returns>
-        public bool Sleep( int time )
+        public static bool Sleep( int time )
         {
-            this.consoleOut.WriteLine( "Sleeping for " + time + "ms..." );
+            consoleOut.WriteLine( "Sleeping for " + time + "ms..." );
             Thread.Sleep( time );
-            this.consoleOut.WriteLine( "Sleeping for " + time + "ms...Done!" );
+            consoleOut.WriteLine( "Sleeping for " + time + "ms...Done!" );
             return true;
         }
 
-        public void WriteLine( string line )
+        public static void WriteLine( string line )
         {
-            this.consoleOut.WriteLine( line );
+            consoleOut.WriteLine( line );
         }
 
-        public bool FileContains( string fileName, string regex )
+        public static bool FileContains( string fileName, string regex )
         {
             if( File.Exists( fileName ) == false )
             {
-                this.consoleOut.WriteLine( "File '{0}' does not exist!", fileName );
+                consoleOut.WriteLine( "File '{0}' does not exist!", fileName );
                 return false;
             }
 
@@ -65,7 +64,7 @@ namespace Chaskis.RegressionTests
 
             if( success == false )
             {
-                this.consoleOut.WriteLine( "Could not match regex {0} with file contents {1}", regex, fileContents );
+                consoleOut.WriteLine( "Could not match regex {0} with file contents {1}", regex, fileContents );
             }
 
             return success;

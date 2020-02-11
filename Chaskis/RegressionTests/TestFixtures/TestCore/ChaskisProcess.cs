@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -8,19 +8,20 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     /// <summary>
     /// This represents the instance of Chaskis.
     /// </summary>
-    public class ChaskisProcess : BaseTestContainer
+    public class ChaskisProcess : IDisposable
     {
         // ---------------- Fields ----------------
 
         private Process process;
+
+        private bool isDisposed;
 
         private readonly ProcessStartInfo startInfo;
 
@@ -34,14 +35,14 @@ namespace Chaskis.RegressionTests
 
         // ---------------- Constructor ----------------
 
-        public ChaskisProcess()
+        public ChaskisProcess( string distDir, string environmentDir )
         {
             this.consoleOutLog = Logger.GetLogFromContext( "chaskis" );
             this.consoleErrorLog = Logger.GetLogFromContext( "chaskis_error" );
             this.testConsoleOutLog = Logger.GetLogFromContext( "chaskis_status" );
 
             this.exeLocation = Path.Combine(
-                EnvironmentManager.ChaskisDistDir,
+                distDir,
                 "bin",
                 "Chaskis.exe"
             );
@@ -49,7 +50,7 @@ namespace Chaskis.RegressionTests
             this.consoleOutLog.WriteLine( "Chaskis.exe Location: " + this.exeLocation );
             this.startInfo = new ProcessStartInfo(
                 this.exeLocation,
-                "--chaskisroot=" + EnvironmentManager.TestEnvironmentDir
+                "--chaskisroot=" + environmentDir
             )
             {
                 RedirectStandardInput = true,
@@ -59,13 +60,15 @@ namespace Chaskis.RegressionTests
             };
 
             this.buffer = new StringBuffer();
+
+            this.isDisposed = false;
         }
 
         ~ChaskisProcess()
         {
             try
             {
-                this.process?.Kill();
+                this.Dispose( false );
             }
             catch( Exception )
             {
@@ -73,6 +76,29 @@ namespace Chaskis.RegressionTests
         }
 
         // ---------------- Functions ----------------
+
+        public void Dispose()
+        {
+            this.Dispose( true );
+            GC.SuppressFinalize( this );
+        }
+
+        protected void Dispose( bool fromDispose )
+        {
+            if( this.isDisposed == false )
+            {
+                // Release unmanaged code here.
+                this.process?.Kill();
+
+                if( fromDispose )
+                {
+                    // Release managed code here.
+                    this.process?.Dispose();
+                }
+
+                this.isDisposed = true;
+            }
+        }
 
         /// <summary>
         /// Starts the Chaskis Process using the Test Environment.

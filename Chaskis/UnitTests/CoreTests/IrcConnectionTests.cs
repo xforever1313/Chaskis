@@ -536,7 +536,8 @@ namespace Chaskis.UnitTests.CoreTests
             }
 
             // Ensure our line gets called *somewhere*.
-            Assert.IsTrue( Regex.IsMatch( messages.ToString(), @"\s*" + line1 + @"\s*" ) );
+            bool success = Regex.IsMatch( messages.ToString(), @"\s*" + line1 + @"\s*" );
+            Assert.IsTrue( success, "Expected: " + line1 + ", actual: " + messages.ToString() );
             this.mac.VerifyAll();
         }
 

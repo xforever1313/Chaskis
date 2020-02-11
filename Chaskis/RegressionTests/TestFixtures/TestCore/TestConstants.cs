@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     public static class TestConstants
     {

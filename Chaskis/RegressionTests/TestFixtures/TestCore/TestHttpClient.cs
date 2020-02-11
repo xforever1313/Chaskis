@@ -11,12 +11,11 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
-    public class TestHttpClient : BaseTestContainer
+    public class TestHttpClient
     {
         // ----------------- Fields -----------------
 

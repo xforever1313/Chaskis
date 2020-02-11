@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -11,25 +11,24 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
-    public class HttpServer : BaseTestContainer, IDisposable
+    public class HttpServer : IDisposable
     {
         // ---------------- Fields ----------------
 
-        private GenericLogger serverLog;
+        private readonly GenericLogger serverLog;
 
-        private Dictionary<string, string> fileMap;
+        private readonly Dictionary<string, string> fileMap;
 
         /// <summary>
         /// Reference to http listener.
         /// </summary>
         private HttpListener listener;
 
-        private Thread listeningThread;
+        private readonly Thread listeningThread;
 
         // ---------------- Constructor ----------------
 

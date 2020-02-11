@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2017.
+//          Copyright Seth Hendrick 2017-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -7,10 +7,9 @@
 
 using System;
 using System.IO;
-using NetRunner.ExternalLibrary;
 using SethCS.Basic;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     /// <summary>
     /// This manages Chaskis Test Environments.
@@ -18,50 +17,27 @@ namespace Chaskis.RegressionTests
     /// Each time we run a test, we want to make sure our Environment is prestine.
     /// So we do our work in a Test Environment and delete it on teardown.
     /// </summary>
-    public class EnvironmentManager : BaseTestContainer
+    public class EnvironmentManager : IDisposable
     {
         // ---------------- Fields ----------------
 
-        public static readonly string ChaskisProjectRoot;
-
-        public static readonly string RegressionTestDir;
-
-        public static readonly string TestEnvironmentDir;
-
-        /// <summary>
-        /// The system under test's directory
-        /// </summary>
-        public static readonly string ChaskisDistDir;
-
-        private static readonly string environmentDir;
+        private readonly string environmentDir;
 
         private const string defaultEnvironmentName = "DefaultEnvironment";
 
-        private string defaultEnvironmentDir;
+        private ushort port;
 
-        private short port;
-
-        private GenericLogger consoleOut;
+        private readonly GenericLogger consoleOut;
 
         // ---------------- Constructor ----------------
 
-        public EnvironmentManager()
+        public EnvironmentManager( string testDllFolder )
         {
-            this.defaultEnvironmentDir = Path.Combine( environmentDir, defaultEnvironmentName );
-
-            this.consoleOut = Logger.GetConsoleOutLog();
-
-            this.consoleOut.WriteLine( "Working Directory: " + Directory.GetCurrentDirectory() );
-            this.consoleOut.WriteLine( "Chaskis Root: " + ChaskisProjectRoot );
-            this.consoleOut.WriteLine( "Regression Test Directory: " + RegressionTestDir );
-            this.consoleOut.WriteLine( "System Under Test Directory: " + ChaskisDistDir );
-        }
-
-        static EnvironmentManager()
-        {
-            // Our working directory is in the bin/Debug folder... need to account for that one...
-            ChaskisProjectRoot = Path.GetFullPath(
+            // Our working directory is in the bin/Debug/netcoreapp folder... need to account for that one...
+            this.ChaskisProjectRoot = Path.GetFullPath(
                 Path.Combine(
+                    testDllFolder,
+                    "..", // netcoreapp.
                     "..", // Debug
                     "..", // bin
                     "..", // TestFixtures
@@ -70,26 +46,55 @@ namespace Chaskis.RegressionTests
                 )
             );
 
-            RegressionTestDir = Path.Combine( ChaskisProjectRoot, "RegressionTests" );
+            this.RegressionTestDir = Path.Combine( this.ChaskisProjectRoot, "RegressionTests" );
 
-            ChaskisDistDir = Path.Combine( RegressionTestDir, "dist", "Chaskis" );
+            this.ChaskisDistDir = Path.Combine( this.RegressionTestDir, "dist", "Chaskis" );
 
-            environmentDir = Path.Combine( RegressionTestDir, "Environments" );
-            TestEnvironmentDir = Path.Combine( environmentDir, "TestEnvironment" );
+            this.environmentDir = Path.Combine( this.RegressionTestDir, "Environments" );
+            this.TestEnvironmentDir = Path.Combine( this.environmentDir, "TestEnvironment" );
+
+            this.consoleOut = Logger.GetConsoleOutLog();
+
+            this.consoleOut.WriteLine( "Working Directory: " + Directory.GetCurrentDirectory() );
+            this.consoleOut.WriteLine( "Chaskis Root: " + this.ChaskisProjectRoot );
+            this.consoleOut.WriteLine( "Regression Test Directory: " + this.RegressionTestDir );
+            this.consoleOut.WriteLine( "System Under Test Directory: " + this.ChaskisDistDir );
         }
+
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// Path to the folder that contains the SLN file.
+        /// </summary>
+        public string ChaskisProjectRoot { get; private set; }
+
+        /// <summary>
+        /// Path to the folder that contains regression tests.
+        /// </summary>
+        public string RegressionTestDir { get; private set; }
+
+        /// <summary>
+        /// Path to the folder that contains the test environments.
+        /// </summary>
+        public string TestEnvironmentDir { get; private set; }
+
+        /// <summary>
+        /// The system under test's directory
+        /// </summary>
+        public string ChaskisDistDir { get; private set; }
 
         // ---------------- Functions ----------------
 
-        public bool SetupDefaultEnvironment( short port )
+        public void SetupDefaultEnvironment( ushort port )
         {
-            return this.SetupEnvironment( defaultEnvironmentName, port );
+            this.SetupEnvironment( defaultEnvironmentName, port );
         }
 
         /// <summary>
         /// Sets up the given Environment to use by moving it
         /// to the TestEnvironment Directory.
         /// </summary>
-        public bool SetupEnvironment( string envName, short port )
+        public void SetupEnvironment( string envName, ushort port )
         {
             this.port = port;
             this.TeardownEnvironment();
@@ -103,14 +108,12 @@ namespace Chaskis.RegressionTests
             this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + TestEnvironmentDir + "..." );
             DirectoryCopy( envPath, TestEnvironmentDir, true );
             this.consoleOut.WriteLine( "Copying Environment " + envPath + " to " + TestEnvironmentDir + "...Done!" );
-
-            return true;
         }
 
         /// <summary>
         /// Removes the test Environment, if it exists.
         /// </summary>
-        public bool TeardownEnvironment()
+        public void TeardownEnvironment()
         {
             if( Directory.Exists( TestEnvironmentDir ) )
             {
@@ -118,8 +121,11 @@ namespace Chaskis.RegressionTests
                 Directory.Delete( TestEnvironmentDir, true );
                 this.consoleOut.WriteLine( "Deleting Test Environment " + TestEnvironmentDir + "...Done!" );
             }
+        }
 
-            return true;
+        public void Dispose()
+        {
+            this.TeardownEnvironment();
         }
 
         /// <summary>
@@ -141,7 +147,7 @@ namespace Chaskis.RegressionTests
 
             DirectoryInfo[] dirs = dir.GetDirectories();
             // If the destination directory doesn't exist, create it.
-            if( !Directory.Exists( destDirName ) )
+            if( Directory.Exists( destDirName ) == false )
             {
                 Directory.CreateDirectory( destDirName );
             }

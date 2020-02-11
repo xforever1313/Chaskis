@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using SethCS.Basic;
 using SethCS.Extensions;
 
-namespace Chaskis.RegressionTests
+namespace Chaskis.RegressionTests.TestCore
 {
     public class Logger
     {
-        private Dictionary<string, GenericLogger> logs;
+        private readonly Dictionary<string, GenericLogger> logs;
 
-        private static Logger instance;
+        private static readonly Logger instance;
 
         // ---------------- Constructor ----------------
 
