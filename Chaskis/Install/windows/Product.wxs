@@ -10,14 +10,15 @@
     -->
 
     <!-- Product ID must change with each new version.  The upgrade code must stay the same -->
-	<Product Id="2C769DC8-3E76-47D8-BE90-E70BA6969C80"
+    <Product Id="2C769DC8-3E76-47D8-BE90-E70BA6969C80"
              Name="Chaskis IRC Bot"
              Language="1033"
              Version="0.10.1"
              Manufacturer="Seth Hendrick"
-             UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524"> <!-- DO NOT TOUCH -->
+             UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524">
+        <!-- DO NOT TOUCH -->
 
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
         <!-- ================ UI Stuff ================ -->
 
@@ -35,9 +36,9 @@
         <WixVariable Id="WixUINewIco" Value="path\new.ico" />
         <WixVariable Id="WixUIUpIco" Value="path\up.ico" />
         -->
-        
+
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate EmbedCab="yes" />
+        <MediaTemplate EmbedCab="yes" />
 
         <Icon Id="icon.ico" SourceFile="..\..\..\Documentation\chaskis.ico"/>
         <Property Id="ARPPRODUCTICON" Value="icon.ico" />
@@ -50,7 +51,7 @@
                 - bin
                     - Chaskis.exe
                     - Chaskis.Core.dll
-                    - ChaskisService.exe
+                    - Chaskis.Service.exe
                 - Plugins
                     - PluginDir
                         - Plugin.dll
@@ -61,10 +62,10 @@
                         - PluginName
                             - SamplePluginConfig.xml
         -->
-        
+
         <Feature Id="Core" Title="Chaskis Core" Level="1" Absent="disallow" Description="The core components (Required)">
-			<ComponentGroupRef Id="CoreComponents" />
-		</Feature>
+            <ComponentGroupRef Id="CoreComponents" />
+        </Feature>
 
         <Feature Id="PluginFeature" Title="Plugins" Level="1" Description="Which plugins to install.  Note, installing plugins does not activate them.  They just add them to the disk.">
             <Feature Id="CapsWatcherFeature" Title="Caps Watcher" Level="1" Description="This plugin will yell at users who POST IN ALL CAPS!">
@@ -122,13 +123,22 @@
                 <ComponentGroupRef Id="XmlBotComponent" />
             </Feature>
         </Feature>
-	</Product>
+    </Product>
 
-	<Fragment Id="Directories">
+    <Fragment Id="Directories">
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="ProgramFiles64Folder">
                 <Directory Id="INSTALLFOLDER" Name="Chaskis">
-                    <Directory Id="BinFolder" Name="bin"/>
+                    <Directory Id="BinFolder" Name="bin">
+                        <Directory Id="BinRuntimeFolder" Name="runtimes">
+                            <Directory Id="BinRuntimeWinFolder" Name="win">
+                                <Directory Id="BinRuntimeWinLibFolder" Name="lib">
+                                    <Directory Id="BinRuntimeWinLibCoreAppFolder" Name="netcoreapp2.0"/>
+                                    <Directory Id="BinRuntimeWinLibStandardFolder" Name="netstandard2.0"/>
+                                </Directory>
+                            </Directory>
+                        </Directory>
+                    </Directory>
                     <Directory Id="PluginsFolder" Name="Plugins">
                         <Directory Id="CapsWatcherFolder" Name="CapsWatcher"/>
                         <Directory Id="ConsoleOutFolder" Name="ConsoleOut"/>
@@ -168,38 +178,42 @@
                 </Directory>
             </Directory>
         </Directory>
-	</Fragment>
+    </Fragment>
 
-	<Fragment Id="Components">
-        <ComponentGroup Id="CoreComponents">          
+    <Fragment Id="Components">
+        <ComponentGroup Id="CoreComponents">
+
+            <!-- 
+              For the executables, they are completely different between Linux and Windows.
+              One thing that seems to be important, however, is the deps.json files must be included with the install,
+              or bad things will happen.
+            -->
+
             <!-- Chaskis.exe -->
             <Component Guid="{E7EAC2D8-C364-4E1C-B78E-B3AAC8BAF5A6}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.exe" KeyPath="yes"/>
             </Component>
-            
-            <!-- DLLS required for Chaskis.exe -->
-
-            <!--
-                Different files for different operating systems.  Sadly, wix doesn't
-                allow our own custom XML attributes in the <File> tag, so we need to create
-                our own crappy version of the C PreProcessor.  Ugh.
-            -->
-            
 
             <Component Guid="{4526E0DB-A5C2-479E-B223-FEF53FE31D42}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)Chaskis.exe.config" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.dll" KeyPath="yes"/>
             </Component>
 
+            <Component Guid="{285D243E-2311-46B0-8E84-95E48856A37E}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.deps.json" KeyPath="yes"/>
+            </Component>
 
+            <Component Guid="{5D6419B5-D88F-4F28-8D20-CEF0347C31F5}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)Chaskis.runtimeconfig.json" KeyPath="yes"/>
+            </Component>
 
             <!-- Chaskis.Core.dll -->
             <Component Guid="{09BD6EB9-95A6-4497-9113-F8199B4A634D}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.Core.TargetPath)" KeyPath="yes"/>
             </Component>
-            
-            <!-- ChaskisService.exe -->
+
+            <!-- Chaskis.Service -->
             <Component Guid="{3FB8D929-4ADC-4B05-87AD-3C424AFE17D8}" Directory="BinFolder">
-                <File Source="$(var.ChaskisService.TargetPath)" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service.exe" KeyPath="yes"/>
                 <ServiceInstall
                     Id="ServiceInstaller"
                     Type="ownProcess"
@@ -208,13 +222,153 @@
                     Start="demand"
                     Account="LocalSystem"
                     ErrorControl="ignore"
-                />
-            <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
+               />
+               <ServiceControl Id="ChaskisServiceControl" Name="Chaskis" Stop="both" Wait="yes" Remove="uninstall" />
             </Component>
 
-            <Component Guid="{7F86255C-FE41-4164-8CD0-A31EB10BB321}" Directory="BinFolder">
-                <File Source="$(var.ChaskisService.TargetDir)ChaskisService.exe.config" KeyPath="yes"/>
+            <Component Guid="{957D6F2B-A0A7-481C-B68E-576F24E2BD25}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)appsettings.json" KeyPath="yes"/>
             </Component>
+
+            <Component Guid="{88BFCB00-E4D1-4EA7-BA2E-49E121D88DF9}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service.deps.json" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{8139D3FC-88AF-4513-8D76-04F98C1193DA}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{0E31BF5B-77FB-4854-B397-69E0C7090CDE}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service.runtimeconfig.json" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{0ff8d47d-e4ab-4bb0-87a0-71a6b160bf17}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.Abstractions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{5b8d64b3-cddc-4295-9fbf-e00958a37184}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.Binder.dll" KeyPath="yes"/>      
+            </Component>
+
+            <Component Guid="{9266e2c7-b8ca-44de-88ea-7ce1d53a241f}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.CommandLine.dll" KeyPath="yes"/> 
+            </Component>
+                
+            <Component Guid="{fc68b720-a015-4e82-b0d2-325c282c8ab6}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.dll" KeyPath="yes"/>
+            </Component>
+                
+            <Component Guid="{f5ee9d32-a3a1-4783-a202-7dd3de441843}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.EnvironmentVariables.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{3e90e913-2de7-4788-b948-03b0b6c70ba2}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.FileExtensions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{836920be-8bf7-463c-a202-b8db0d0b9b3e}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.Json.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{1d4c3680-14df-4eff-ad0d-18384b748cf7}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Configuration.UserSecrets.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{b79d71d9-c206-4acc-98c0-5529017e66da}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.DependencyInjection.Abstractions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{302a6c80-c314-40c9-afba-ead49a709d57}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.DependencyInjection.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{80b7a3d9-1d05-4317-84da-27e83422b3a0}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.FileProviders.Abstractions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{4dfe6d7c-0d75-45c2-9580-7dc64c6e427e}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.FileProviders.Physical.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{5a30f9c6-a47b-4bac-8597-5467ea517a70}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.FileSystemGlobbing.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{04330714-4638-4e0b-8ab9-731f7092382b}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Hosting.Abstractions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{c710d5e8-ff8d-4cd8-9fcb-ecacd50f17e7}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Hosting.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{babfd3c1-eb71-49a4-a7eb-6bbe80a2e342}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Hosting.Systemd.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{d977c639-7347-442f-adc3-294f4af974cf}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Hosting.WindowsServices.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{9f02a707-bb11-4a24-b4bd-b60b0019b789}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.Abstractions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{752a741a-7420-485d-95ae-c7c24e304ec3}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.Configuration.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{3e846abf-a16e-444e-b738-b1cf2f7415f0}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.Console.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{36fb629e-019d-4dc0-b6e3-31d35e06e51f}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.Debug.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{8ebeeddc-0122-4fbb-9ac7-75aa079246da}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{f099dce3-ef48-48b2-8926-c2a02e9247fd}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.EventLog.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{e3a2df63-d96c-49ea-9300-d917ac48defd}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Logging.EventSource.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{9a8e1b32-8547-47b7-b790-dedef7b74ac2}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Options.ConfigurationExtensions.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{829e9b72-0620-4455-8126-e1d4488c7223}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Options.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{c71434bc-23ef-4d88-a224-1a501f2c57fa}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Extensions.Primitives.dll" KeyPath="yes"/>
+            </Component>
+
+                
+            <Component Guid="{7de123d6-c2fc-4a78-bd68-a288d7f939f9}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)System.Diagnostics.EventLog.dll" KeyPath="yes"/>
+            </Component>
+
+            <Component Guid="{305b7a1e-bc30-425d-a581-a1560fb4e50f}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.Service.TargetDir)System.ServiceProcess.ServiceController.dll" KeyPath="yes"/>
+            </Component>
+
+
+            
+            <Component Guid="{80628D21-2B8D-4660-8CBE-07E86DB8551B}" Directory="BinRuntimeWinLibCoreAppFolder">
+                <File Id="Netcore_System_Diagnostics_EventLog_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\win\lib\netcoreapp2.0\System.Diagnostics.EventLog.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{9D4305D5-FA0B-4B7F-963A-82426079CC9A}" Directory="BinRuntimeWinLibStandardFolder">
+                <File Id="NetStandard_System_ServiceProcess_ServiceController_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\win\lib\netstandard2.0\System.ServiceProcess.ServiceController.dll" KeyPath="yes"/>
+            </Component>
+            
 
             <!-- Sample IRC Config -->
             <Component Guid="{5CBBDB7E-F900-4E70-9DC5-CD48CC0FC747}" Directory="SampleConfig">
@@ -295,7 +449,7 @@
             <Component Guid="{3582654C-5690-4B86-95B0-18C2128BDAEB}" Directory="HttpServerFolder">
                 <File Source="$(var.HttpServer.TargetPath)" KeyPath="yes"/>
             </Component>
-            
+
             <!-- HttpServer Readme -->
             <Component Guid="{8B7C2582-0E8C-4AC4-9A26-7CFE0E070425}" Directory="HttpServerFolder">
                 <File Id="HttpServerReadme" Source="..\..\Plugins\HttpServer\Readme.md" KeyPath="yes"/>
@@ -306,7 +460,7 @@
                 <File Source="..\..\Plugins\HttpServer\Config\SampleHttpServerConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
-        
+
         <ComponentGroup Id="IrcLoggerComponent">
             <!-- IrcLogger.dll -->
             <Component Guid="{2010F294-59C9-48C6-B8A5-33AEAED4CC6F}" Directory="IrcLoggerFolder">
@@ -363,7 +517,7 @@
             <Component Guid="{CB87A9E2-E8CB-490E-8E94-B1BED7413EE7}" Directory="MessageFixerBotFolder">
                 <File Source="$(var.MessageFixerBot.TargetPath)" KeyPath="yes"/>
             </Component>
-        
+
             <!-- MessageFixerBot Readme -->
             <Component Guid="{9BB38ED7-2E54-49D1-B3AF-F6030BAAA1EA}" Directory="MessageFixerBotFolder">
                 <File Id="MessageFixerBotReadme" Source="..\..\Plugins\MessageFixerBot\Readme.md" KeyPath="yes"/>
@@ -387,7 +541,7 @@
             </Component>
 
         </ComponentGroup>
-        
+
         <ComponentGroup Id="QuoteBotComponent">
             <!-- QuoteBot.dll -->
             <Component Guid="{A05D253B-D188-4E5A-B6E1-EAE6A53785BF}" Directory="QuoteBotFolder">
@@ -424,27 +578,27 @@
             <Component Guid="{7E747007-3492-4983-BECE-B32375A3E543}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.ServiceModel.Syndication.dll" KeyPath="yes"/>
             </Component>
-            
+
             <Component Guid="{EA3CF2D4-0B59-4CDF-97C2-274829D582C4}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.Text.RegularExpressions.dll" KeyPath="yes"/>
             </Component>
-            
+
             <Component Guid="{07D53792-D961-4922-B685-8EA728BB4BD1}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.Threading.dll" KeyPath="yes"/>
             </Component>
-            
+
             <Component Guid="{5B2F4E3E-8810-4BCC-9C96-DF1C8AC977DF}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.Threading.Tasks.Extensions.dll" KeyPath="yes"/>
             </Component>
-            
+
             <Component Guid="{676CA619-DC26-4B61-9B9C-04A84708C7D3}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.Xml.ReaderWriter.dll" KeyPath="yes"/>
             </Component>
-            
+
             <Component Guid="{FC3915F6-D3C4-4D44-B055-1CA1109B3BF6}" Directory="RssBotFolder">
                 <File Source="$(var.RssBot.TargetDir)System.Xml.XmlDocument.dll" KeyPath="yes"/>
             </Component>
-            
+
             <!-- RssBot Readme -->
             <Component Guid="{0E0C1785-4CED-427B-8476-F44BCC98A59A}" Directory="RssBotFolder">
                 <File Id="RssBotReadme" Source="..\..\Plugins\RssBot\Readme.md" KeyPath="yes"/>
@@ -529,7 +683,7 @@
             <Component Guid="{710ABBCF-53C3-42FA-AF38-532D71D015A9}" Directory="WelcomeBotConfigFolder">
                 <File Id="WelcomeBotConfig" Source="..\..\Plugins\WelcomeBot\Config\SampleWelcomeBotConfig.xml" KeyPath="yes"/>
             </Component>
-            
+
             <!-- WelcomeBot Readme -->
             <Component Guid="{1CC2060E-BB0A-4655-9C9D-8018D2351F98}" Directory="WelcomeBotFolder">
                 <File Id="WelcomeBotReadme" Source="..\..\Plugins\WelcomeBot\Readme.md" KeyPath="yes"/>
@@ -552,5 +706,5 @@
                 <File Source="..\..\Plugins\XmlBot\Config\SampleXmlBotConfig.xml" KeyPath="yes"/>
             </Component>
         </ComponentGroup>
-	</Fragment>
+    </Fragment>
 </Wix>
