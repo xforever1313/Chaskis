@@ -73,7 +73,19 @@ Task( "msi" )
         FilePath msiFile = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" );
         FilePath checksumLocation = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" );
 
-        DoMsBuild( "Install" );
+        MSBuildSettings settings = new MSBuildSettings
+        {
+            Configuration = "Install",
+            MaxCpuCount = 0,
+            PlatformTarget = PlatformTarget.x64,
+            Restore = true,
+            WorkingDirectory = paths.SourceFolder
+        };
+
+        // For WiX, need to call MSBuild, not dotnet core build.  Wix doesn't work with dotnet core.
+        // Its... probably fine??
+        MSBuild( paths.SolutionPath, settings );
+
         GenerateSha256(
             context,
             msiFile,

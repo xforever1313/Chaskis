@@ -185,7 +185,7 @@
 
             <!-- Chaskis.exe -->
             <Component Guid="{E7EAC2D8-C364-4E1C-B78E-B3AAC8BAF5A6}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.TargetDir)Chaskis.exe" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.TargetDir)Chaskis" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{4526E0DB-A5C2-479E-B223-FEF53FE31D42}" Directory="BinFolder">
@@ -207,7 +207,7 @@
 
             <!-- Chaskis.Service -->
             <Component Guid="{3FB8D929-4ADC-4B05-87AD-3C424AFE17D8}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service.exe" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Service.TargetDir)Chaskis.Service" KeyPath="yes"/>
                 <ServiceInstall
                     Id="ServiceInstaller"
                     Type="ownProcess"
