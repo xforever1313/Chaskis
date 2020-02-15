@@ -1,4 +1,0 @@
- * Send a command to the client from the server.  The console should print out as is.
-
-|'''Send Raw Command''' |:localhost PONG localhost :myPong                 |
-|'''Wait For String'''|:localhost PONG localhost :myPong|'''From Chaskis'''|

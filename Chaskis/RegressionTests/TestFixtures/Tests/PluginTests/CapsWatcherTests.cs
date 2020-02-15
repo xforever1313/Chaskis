@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
@@ -69,17 +68,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         [Test]
         public void DoPluginLoadTest()
         {
-            this.testFrame.IrcServer.SendMessageToChannelAs(
-                "!chaskisbot plugins",
-                TestConstants.Channel1,
-                TestConstants.NormalUser
-            );
-
-
-            this.testFrame.IrcServer.WaitForMessageOnChannel(
-                @"List\s+of\s+plugins\s+I\s+am\s+running:\s+.*capswatcher.*",
-                TestConstants.Channel1
-            ).FailIfFalse( "Did not find capswatcher in list of plugins" );
+            CommonPluginTests.DoPluginLoadTest( this.testFrame, "capswatcher" );
         }
 
         /// <summary>
