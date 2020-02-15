@@ -1,3 +1,0 @@
-|'''Setup'''|!-XmlBotEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

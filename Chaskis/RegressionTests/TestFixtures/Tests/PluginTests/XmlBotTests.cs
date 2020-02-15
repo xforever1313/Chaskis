@@ -10,8 +10,7 @@ using NUnit.Framework;
 
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
-    [TestFixture]
-    public class ConsoleOutTests
+    class XmlBotTests
     {
         // ---------------- Fields ----------------
 
@@ -26,7 +25,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
 
             ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
             {
-                Environment = "ConsoleOutEnvironment"
+                Environment = "XmlBotEnvironment"
             };
 
             this.testFrame.PerformFixtureSetup( fixtureConfig );
@@ -56,19 +55,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         [Test]
         public void DoPluginLoadTest()
         {
-            CommonPluginTests.DoPluginLoadTest( this.testFrame, "consoleout" );
-        }
-
-        /// <summary>
-        /// Ensures we get all output to the console when we get a message
-        /// from the server.
-        /// </summary>
-        [Test]
-        public void ConsoleTest()
-        {
-            const string cmd = ":localhost PONG localhost :myPong";
-            this.testFrame.IrcServer.SendRawCommand( cmd );
-            this.testFrame.ProcessRunner.WaitForStringFromChaskis( cmd ).FailIfFalse( "Did not print to console." );
+            CommonPluginTests.DoPluginLoadTest( this.testFrame, "xmlbot" );
         }
     }
 }
