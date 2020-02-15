@@ -5,10 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Chaskis.RegressionTests.TestCore
 {
     public class ChaskisFixtureConfig
@@ -18,6 +14,7 @@ namespace Chaskis.RegressionTests.TestCore
         public ChaskisFixtureConfig()
         {
             this.Environment = null;
+            this.Port = 10123;
         }
 
         // ---------------- Properties ----------------
@@ -28,6 +25,9 @@ namespace Chaskis.RegressionTests.TestCore
         /// </summary>
         public string Environment { get; set; }
 
+        /// <summary>
+        /// Port used to talk between the server and the client.
+        /// </summary>
         public ushort Port { get; set; }
     }
 }

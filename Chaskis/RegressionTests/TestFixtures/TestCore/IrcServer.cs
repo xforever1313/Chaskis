@@ -197,7 +197,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Starts the server on the given port.
         /// </summary>
-        public bool StartServer( short port )
+        public bool StartServer( ushort port )
         {
             if( this.connection != null )
             {

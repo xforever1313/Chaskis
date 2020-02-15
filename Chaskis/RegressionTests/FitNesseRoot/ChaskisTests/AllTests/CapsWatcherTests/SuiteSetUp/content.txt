@@ -1,8 +1,0 @@
-|'''Setup'''|!-CapsWatcherEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
-
- * Turn on full verbosity for caps watcher.
- 
-|'''Send Message'''    |!${botname} debug verbosity capswatcher 3                    |'''To Channel'''|${botname}|'''As'''|${adminuser}|
-|'''Wait For Message'''|'capswatcher'\s+log\s+verbosity\s+has\s+been\s+set\s+to\s+'3'|'''On Channel'''|${adminuser}                    |

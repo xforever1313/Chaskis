@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using SethCS.Basic;
 using SethCS.Extensions;
 
@@ -46,10 +47,12 @@ namespace Chaskis.RegressionTests.TestCore
                     logger.OnWriteLine += delegate ( string line )
                     {
                         Console.Write(
-                            "{0}\t{1}>\t{2}",
-                            DateTime.Now.ToTimeStampString(),
-                            context,
-                            line
+                            string.Format(
+                                "{0}\t{1}>\t{2}",
+                                DateTime.Now.ToTimeStampString(),
+                                context,
+                                line
+                            )
                         );
                         Console.Out.Flush();
                     };

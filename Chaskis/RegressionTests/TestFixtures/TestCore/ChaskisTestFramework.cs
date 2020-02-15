@@ -6,12 +6,15 @@
 //
 
 using NUnit.Framework;
+using SethCS.Basic;
 
 namespace Chaskis.RegressionTests.TestCore
 {
     public class ChaskisTestFramework
     {
         // ---------------- Fields ----------------
+
+        private readonly GenericLogger testStateLog;
 
         private readonly EnvironmentManager envManager;
 
@@ -29,6 +32,7 @@ namespace Chaskis.RegressionTests.TestCore
             this.HttpServer = new HttpServer();
             this.HttpClient = new TestHttpClient();
             this.IrcServer = new IrcServer();
+            this.testStateLog = Logger.GetLogFromContext( "TestState" );
         }
 
         // ---------------- Properties ----------------
@@ -44,6 +48,15 @@ namespace Chaskis.RegressionTests.TestCore
         // ---------------- Functions ----------------
 
         public void PerformFixtureSetup( ChaskisFixtureConfig config = null )
+        {
+            Step.Run(
+                this.testStateLog,
+                "Running Fixture Setup",
+                () => PerformFixtureSetupInternal( config )
+            );
+        }
+
+        private void PerformFixtureSetupInternal( ChaskisFixtureConfig config  )
         {
             if( config == null )
             {
@@ -63,12 +76,49 @@ namespace Chaskis.RegressionTests.TestCore
 
             // ---------------- Start Server ----------------
 
+            Step.Run(
+                "Starting server",
+                () => this.IrcServer.StartServer( config.Port )
+            );
+
             // ---------------- Start Process ----------------
 
-            this.ProcessRunner = new ChaskisProcess( this.envManager.ChaskisDistDir, this.envManager.TestEnvironmentDir );
+            Step.Run(
+                "Starting Client",
+                () =>
+                {
+                    this.ProcessRunner = new ChaskisProcess( this.envManager.ChaskisDistDir, this.envManager.TestEnvironmentDir );
+                    this.ProcessRunner.StartProcess();
+                }
+            );
+
+            // ---------------- Wait to join ----------------
+
+            Step.Run(
+                "Waiting for client to connect to server",
+                () => this.IrcServer.WaitForConnection().FailIfFalse( "Server never got IRC connection" )
+            );
+
+            Step.Run(
+                "Wait for client to join channels",
+                () =>
+                {
+                    this.ProcessRunner.WaitForStringFromChaskis(
+                        @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>FINISHED\s+JOINING\s+CHANNELS</event_id><server>(?<server>\S+)</server><nick>(?<nick>\S+)</nick></args><passthrough_args\s+/></chaskis_event>"
+                    );
+                }
+            );
         }
 
         public void PerformFixtureTeardown()
+        {
+            Step.Run(
+                this.testStateLog,
+                "Running Fixture Teardown",
+                () => PerformFixtureTeardowInternal()
+            );
+        }
+        private void PerformFixtureTeardowInternal()
         {
             try
             {
@@ -81,11 +131,30 @@ namespace Chaskis.RegressionTests.TestCore
                 this.envManager.Dispose();
             }
         }
+
         public void PerformTestSetup()
+        {
+            Step.Run(
+                this.testStateLog,
+                "Running Test Setup",
+                () => PerformTestSetupInternal()
+            );
+        }
+
+        private void PerformTestSetupInternal()
         {
         }
 
         public void PerformTestTeardown()
+        {
+            Step.Run(
+                this.testStateLog,
+                "Running Test Teardown",
+                () => PerformTestTeardownInternal()
+            );
+        }
+
+        public void PerformTestTeardownInternal()
         {
         }
     }

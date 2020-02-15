@@ -15,10 +15,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
-
   <Import Project="..\..\..\SethCS\SethCS\SethCS.projitems" Label="Shared" />
 
 </Project>

@@ -36,8 +36,7 @@ namespace Chaskis.RegressionTests.TestCore
             // Our working directory is in the bin/Debug/netcoreapp folder... need to account for that one...
             this.ChaskisProjectRoot = Path.GetFullPath(
                 Path.Combine(
-                    testDllFolder,
-                    "..", // netcoreapp.
+                    testDllFolder, // netcoreapp.
                     "..", // Debug
                     "..", // bin
                     "..", // TestFixtures
