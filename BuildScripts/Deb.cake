@@ -79,7 +79,6 @@ public class DebRunner
         // in the usr/lib/Chaskis folder.
         DistroCreatorConfig distroConfig = new DistroCreatorConfig
         {
-            IsWindows = this.context.IsRunningOnWindows(),
             OutputLocation = usrLibFolder.ToString(),
             Target = "Release"
         };

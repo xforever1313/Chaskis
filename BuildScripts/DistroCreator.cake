@@ -6,8 +6,6 @@ public class DistroCreatorConfig
 
     // ---------------- Properties ----------------
 
-    public bool IsWindows { get; set; }
-
     public string OutputLocation { get; set; }
 
     public string Target { get; set; } = "Debug";
@@ -37,7 +35,7 @@ public class DistroCreator
         this.config = config;
 
         this.output = new DirectoryPath( this.config.OutputLocation );
-        if( this.config.IsWindows )
+        if( this.context.IsRunningOnWindows() )
         {
             this.wixFile = this.paths.WixConfigFolder.CombineWithFilePath(
                 new FilePath( "Product.wxs" )
@@ -64,7 +62,7 @@ public class DistroCreator
         }
 
         FilePath cliInstallerPath = this.paths.CliInstallerProjectFolder.CombineWithFilePath(
-            $"bin/{target}/{frameworkTarget}/Chaskis.CliInstaller.exe"
+            $"bin/{target}/{frameworkTarget}/Chaskis.CliInstaller"
         );
 
         string arguments = 
@@ -72,34 +70,28 @@ public class DistroCreator
 
         string exeName;
 
-        if( this.config.IsWindows )
+        if( this.context.IsRunningOnWindows() )
         {
-            exeName = cliInstallerPath.ToString();
+            exeName = cliInstallerPath.ToString() + ".exe";
         }
         else
         {
-            exeName = "mono";
-            arguments = $"\"{cliInstallerPath.ToString()}\" " + arguments;
+            exeName = cliInstallerPath.ToString();
         }
 
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        this.context.Information( $"Starting CLI Installer at '{exeName}' with arguments: '{arguments}'" );
+
+        ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+        ProcessSettings settings = new ProcessSettings
         {
-            Arguments = arguments,
-            CreateNoWindow = true,
-            FileName = exeName,
-            UseShellExecute = false
+            Arguments = argumentsBuilder
         };
-
-        using( Process process = Process.Start( startInfo ) )
+        int exitCode = this.context.StartProcess( exeName, settings );
+        if( exitCode != 0 )
         {
-            process.WaitForExit();
-
-            if( process.ExitCode != 0 )
-            {
-                throw new ApplicationException(
-                    "Error when creating distro.  Got error: " + process.ExitCode
-                );
-            }
+            throw new ApplicationException(
+                "Error when creating distro.  Got error: " + exitCode
+            );
         }
     }
 }

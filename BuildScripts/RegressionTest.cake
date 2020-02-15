@@ -153,33 +153,14 @@ public class FitnesseRunner : IDisposable
     }
 }
 
-const string bootStrapTask = "bootstrap_fitnesse";
+const string bootStrapTask = "bootstrap_regression_tests";
 
 Task( bootStrapTask )
 .Does(
     ( context ) =>
     {
-        void CopyRunnerFile( string fileName )
-        {
-            FilePath path = paths.RegressionTestRunnerDirectory.CombineWithFilePath( File( fileName ) );
-            if( FileExists( path ) == false )
-            {
-                CopyFile(
-                    context.Tools.Resolve( fileName ),
-                    path
-                );
-            }
-        }
-
-        EnsureDirectoryExists( paths.RegressionTestRunnerDirectory );
-
-        CopyRunnerFile( "NetRunner.ExternalLibrary.dll" );
-        CopyRunnerFile( "NetRunner.ExternalLibrary.XML" );
-        CopyRunnerFile( "NetRunner.Executable.exe" );
-
         DistroCreatorConfig distroConfig = new DistroCreatorConfig
         {
-            IsWindows = IsRunningOnWindows(),
             OutputLocation = paths.RegressionDistroFolder.ToString()
         };
 
@@ -191,7 +172,7 @@ Task( bootStrapTask )
         distroCreator.CreateDistro();
     }
 )
-.Description( "Ensures our Environment is ready to run with FitNesse." )
+.Description( "Creates the distro for the regression tests." )
 .IsDependentOn( "debug" );
 
 Task( "launch_fitnesse" )
