@@ -1,3 +1,0 @@
-|'''Setup'''|!-WeatherBotEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

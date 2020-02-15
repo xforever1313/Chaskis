@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class XmlBotTests
+    public class WeatherBotTests
     {
         // ---------------- Fields ----------------
 
@@ -26,7 +26,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
 
             ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
             {
-                Environment = "XmlBotEnvironment"
+                Environment = "WeatherBotEnvironment"
             };
 
             this.testFrame.PerformFixtureSetup( fixtureConfig );
@@ -56,7 +56,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         [Test]
         public void DoPluginLoadTest()
         {
-            CommonPluginTests.DoPluginLoadTest( this.testFrame, "xmlbot" );
+            CommonPluginTests.DoPluginLoadTest( this.testFrame, "weatherbot" );
         }
     }
 }
