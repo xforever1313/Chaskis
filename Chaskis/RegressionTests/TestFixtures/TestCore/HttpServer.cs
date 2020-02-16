@@ -54,7 +54,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Starts the server on the given port.
         /// </summary>
-        public bool StartHttpServer( short port )
+        public void StartHttpServer( short port )
         {
             if( this.IsListening )
             {
@@ -77,17 +77,14 @@ namespace Chaskis.RegressionTests.TestCore
             this.IsListening = true;
 
             this.serverLog.WriteLine( "Starting HTTP Server on port " + port  + "...Done!" );
-
-            return true;
         }
 
-        public bool MapFileToUrl( string filePath, string url )
+        public void MapFileToUrl( string filePath, string url )
         {
             this.fileMap[url] = filePath;
-            return true;
         }
 
-        public bool StopHttpServer()
+        public void StopHttpServer()
         {
             if( this.IsListening )
             {
@@ -99,7 +96,6 @@ namespace Chaskis.RegressionTests.TestCore
 
                 this.serverLog.WriteLine( "Stopping HTTP Server...Done!" );
             }
-            return true;
         }
 
         public void SetHttpServerHangTimeTo( int hangTime )

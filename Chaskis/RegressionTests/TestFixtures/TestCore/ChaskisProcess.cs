@@ -104,7 +104,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// Starts the Chaskis Process using the Test Environment.
         /// </summary>
         /// <exception cref="InvalidOperationException">If the process is already started.</exception>
-        public bool StartProcess()
+        public void StartProcess()
         {
             this.buffer.FlushQueue();
 
@@ -120,8 +120,6 @@ namespace Chaskis.RegressionTests.TestCore
             this.process.Start();
             this.process.BeginOutputReadLine();
             this.process.BeginErrorReadLine();
-
-            return ( this.process != null );
         }
 
         private void Process_OutputDataReceived( object sender, DataReceivedEventArgs e )
@@ -142,16 +140,11 @@ namespace Chaskis.RegressionTests.TestCore
             }
         }
 
-        public bool StopProcess()
-        {
-            return this.StopProcess( TestConstants.DefaultTimeout );
-        }
-
         /// <summary>
         /// Stops the process.
         /// </summary>
         /// <exception cref="InvalidOperationException">If the process is not started.</exception>
-        public bool StopProcess( int timeout )
+        public bool StopProcess( int timeout = TestConstants.DefaultTimeout )
         {
             if( this.process == null )
             {
@@ -169,12 +162,7 @@ namespace Chaskis.RegressionTests.TestCore
             return success;
         }
 
-        public bool StopOrKillProcess()
-        {
-            return this.StopOrKillProcess( TestConstants.DefaultTimeout );
-        }
-
-        public bool StopOrKillProcess( int timeout )
+        public bool StopOrKillProcess( int timeout = TestConstants.DefaultTimeout )
         {
             if( this.process == null )
             {
@@ -189,11 +177,6 @@ namespace Chaskis.RegressionTests.TestCore
             }
 
             return success;
-        }
-
-        public bool KillProcess()
-        {
-            return this.KillProcess( TestConstants.DefaultTimeout );
         }
 
         /// <summary>
@@ -223,19 +206,9 @@ namespace Chaskis.RegressionTests.TestCore
         /// Waits for a string that matches the given regex pattern to appear.
         /// </summary>
         /// <param name="regex">The regex to search for.</param>
-        /// <returns>True if we found a match before the timeout, else false.</returns>
-        public bool WaitForStringFromChaskis( string regex )
-        {
-            return this.WaitForStringFromChaskisWithTimeout( regex, TestConstants.DefaultTimeout );
-        }
-
-        /// <summary>
-        /// Waits for a string that matches the given regex pattern to appear.
-        /// </summary>
-        /// <param name="regex">The regex to search for.</param>
         /// <param name="timeout">How long to wait before giving up.</param>
         /// <returns>True if we found a match before the timeout, else false.</returns>
-        public bool WaitForStringFromChaskisWithTimeout( string regex, int timeout )
+        public bool WaitForStringFromChaskis( string regex, int timeout = TestConstants.DefaultTimeout )
         {
             this.testConsoleOutLog.WriteLine( "Waiting for string '" + regex + "' from Chaskis Process..." );
             bool success = this.buffer.WaitForString( regex, timeout );

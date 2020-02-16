@@ -197,7 +197,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Starts the server on the given port.
         /// </summary>
-        public bool StartServer( ushort port )
+        public void StartServer( ushort port )
         {
             if( this.connection != null )
             {
@@ -218,22 +218,12 @@ namespace Chaskis.RegressionTests.TestCore
             this.readerThread.Start();
 
             this.serverLog.WriteLine( "Listening for connection on port " + port );
-
-            return true;
         }
 
         /// <summary>
         /// Waits until a client connects to the server.
         /// </summary>
-        public bool WaitForConnection()
-        {
-            return this.WaitForConnection( 30 * 1000 );
-        }
-
-        /// <summary>
-        /// Waits until a client connects to the server.
-        /// </summary>
-        public bool WaitForConnection( int timeout )
+        public bool WaitForConnection( int timeout = 30 * 1000 )
         {
             this.serverLog.WriteLine( "Waiting for connection on port..." );
             bool success = this.connectedEvent.WaitOne( timeout );
@@ -249,19 +239,17 @@ namespace Chaskis.RegressionTests.TestCore
         /// Resets the server connection.
         /// Needed if the client goes down.
         /// </summary>
-        public bool ResetServerConnection()
+        public void ResetServerConnection()
         {
             this.connectionReader?.Dispose();
             this.connectionWriter?.Dispose();
-
-            return true;
         }
 
         /// <summary>
         /// Stops the server.
         /// Calls <see cref="Dispose()"/> under the hood.
         /// </summary>
-        public bool StopServer()
+        public void StopServer()
         {
             if( this.connection == null )
             {
@@ -274,7 +262,6 @@ namespace Chaskis.RegressionTests.TestCore
             this.connection = null;
 
             this.readerThread?.Join();
-            return true;
         }
 
         /// <summary>
@@ -310,18 +297,6 @@ namespace Chaskis.RegressionTests.TestCore
         // -------- Send / Wait Commands --------
 
         /// <summary>
-        /// Sends a message from a specific channel.  Waits for a specific response from chaskis.
-        /// </summary>
-        /// <param name="msg">The message</param>
-        /// <param name="channel">The channel to send to</param>
-        /// <param name="nick">The name of the user that send the message.</param>
-        /// <param name="waitMsg">The message to wait for as a regex.</param>
-        public bool SendMessageToChannelAsWaitMsg( string msg, string channel, string nick, string waitMsg )
-        {
-            return this.SendMessageToChannelAsWaitMsgWithTimeout( msg, channel, nick, waitMsg, TestConstants.DefaultTimeout );
-        }
-
-        /// <summary>
         /// Sends a message from a specific channel.
         /// </summary>
         /// <param name="msg">The message</param>
@@ -329,10 +304,10 @@ namespace Chaskis.RegressionTests.TestCore
         /// <param name="nick">The name of the user that send the message.</param>
         /// <param name="waitMsg">The message to wait for as a regex.</param>
         /// <param name="timeout">How long to wait before giving up.</param>
-        public bool SendMessageToChannelAsWaitMsgWithTimeout( string msg, string channel, string nick, string waitMsg, int timeout )
+        public bool SendMessageToChannelAsWaitMsg( string msg, string channel, string nick, string waitMsg, int timeout = TestConstants.DefaultTimeout )
         {
-            bool success = this.SendMessageToChannelAs( msg, channel, nick );
-            success &= this.WaitForMessageOnChannelWithTimeout( waitMsg, channel, timeout );
+            this.SendMessageToChannelAs( msg, channel, nick );
+            bool success = this.WaitForMessageOnChannel( waitMsg, channel, timeout );
 
             return success;
         }
@@ -343,7 +318,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <param name="msg">The message</param>
         /// <param name="channel">The channel to send to</param>
         /// <param name="nick">The name of the user that send the message.</param>
-        public bool SendMessageToChannelAs( string msg, string channel, string nick )
+        public void SendMessageToChannelAs( string msg, string channel, string nick )
         {
             string msgString = string.Format(
                 ":{0}!{0}@localhost PRIVMSG {1} :{2}",
@@ -352,15 +327,15 @@ namespace Chaskis.RegressionTests.TestCore
                 msg
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
         /// Sends a PONG to chaskis.
         /// </summary>
-        public bool SendPong( string response )
+        public void SendPong( string response )
         {
-            return this.SendRawCommand(
+            this.SendRawCommand(
                 ":localhost PONG :" + response
             );
         }
@@ -371,7 +346,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// </summary>
         /// <param name="user">The user that joined the channel</param>
         /// <param name="channel">The channel the user joined.</param>
-        public bool SendJoined( string user, string channel )
+        public void SendJoined( string user, string channel )
         {
             string msgString = string.Format(
                 ":{0}!{0}@localhost JOIN {1}",
@@ -379,7 +354,7 @@ namespace Chaskis.RegressionTests.TestCore
                 channel
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
@@ -388,7 +363,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// </summary>
         /// <param name="user">The user that parted the channel</param>
         /// <param name="channel">The channel the user parted.</param>
-        public bool SendPartedFrom( string user, string channel )
+        public void SendPartedFrom( string user, string channel )
         {
             string msgString = string.Format(
                 ":{0}!{0}@localhost PART {1}",
@@ -396,7 +371,7 @@ namespace Chaskis.RegressionTests.TestCore
                 channel
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
@@ -405,7 +380,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// </summary>
         /// <param name="user">The user that parted the channel</param>
         /// <param name="channel">The channel the user parted.</param>
-        public bool SendPartedFromWithReason( string user, string channel, string reason )
+        public void SendPartedFromWithReason( string user, string channel, string reason )
         {
             string msgString = string.Format(
                 ":{0}!{0}@localhost PART {1} :{2}",
@@ -414,7 +389,7 @@ namespace Chaskis.RegressionTests.TestCore
                 reason
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
@@ -424,7 +399,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <param name="kickedUser">The user that was kicked from the channel</param>
         /// <param name="channel">The channel the user was kicked from.</param>
         /// <param name="moderator">The user that performed the kicking.</param>
-        public bool SendKickedFromBy( string kickedUser, string channel, string moderator )
+        public void SendKickedFromBy( string kickedUser, string channel, string moderator )
         {
             string msgString = string.Format(
                 ":{2}!{2}@localhost KICK {1} {0}",
@@ -433,7 +408,7 @@ namespace Chaskis.RegressionTests.TestCore
                 moderator
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
@@ -444,7 +419,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <param name="channel">The channel the user was kicked from.</param>
         /// <param name="moderator">The user that performed the kicking.</param>
         /// <param name="reason">The reason the user was kicked.</param>
-        public bool SendKickedFromByWithReason( string kickedUser, string channel, string moderator, string reason )
+        public void SendKickedFromByWithReason( string kickedUser, string channel, string moderator, string reason )
         {
             string msgString = string.Format(
                 ":{2}!{2}@localhost KICK {1} {0} :{3}",
@@ -454,13 +429,13 @@ namespace Chaskis.RegressionTests.TestCore
                 reason
             );
 
-            return this.SendRawCommand( msgString );
+            this.SendRawCommand( msgString );
         }
 
         /// <summary>
         /// Sends the given string AS IS to the chaskis process.
         /// </summary>
-        public bool SendRawCommand( string msg )
+        public void SendRawCommand( string msg )
         {
             if( this.connectionWriter == null )
             {
@@ -473,52 +448,29 @@ namespace Chaskis.RegressionTests.TestCore
                 this.connectionWriter.WriteLine( msg );
                 this.connectionWriter.Flush();
             }
-            return true;
         }
 
         /// <summary>
         /// Waits for the given PRIVMSG to appear from the chaskis process.
         /// </summary>
-        public bool WaitForMessageOnChannel( string msgRegex, string channel )
+        public bool WaitForMessageOnChannel( string msgRegex, string channel, int timeout = TestConstants.DefaultTimeout )
         {
-            return this.WaitForMessageOnChannelWithTimeout( msgRegex, channel, TestConstants.DefaultTimeout );
-        }
-
-        /// <summary>
-        /// Waits for the given PRIVMSG to appear from the chaskis process.
-        /// </summary>
-        public bool WaitForMessageOnChannelWithTimeout( string msgRegex, string channel, int timeout )
-        {
-            return this.WaitForStringWithTimeout( "^PRIVMSG " + channel + " :" + msgRegex, timeout );
+            return this.WaitForString( "^PRIVMSG " + channel + " :" + msgRegex, timeout );
         }
 
         /// <summary>
         /// Waits for the given NOTICE to appear from the chaskis process.
         /// </summary>
-        public bool WaitForNoticeOnChannel( string msgRegex, string channel )
+        public bool WaitForNoticeOnChannel( string msgRegex, string channel, int timeout = TestConstants.DefaultTimeout )
         {
-            return this.WaitForNoticeOnChannelWithTimeout( msgRegex, channel, TestConstants.DefaultTimeout );
-        }
-
-        public bool WaitForNoticeOnChannelWithTimeout( string msgRegex, string channel, int timeout )
-        {
-            return this.WaitForStringWithTimeout( "^NOTICE " + channel + " :" + msgRegex, timeout );
+            return this.WaitForString( "^NOTICE " + channel + " :" + msgRegex, timeout );
         }
 
         /// <summary>
         /// Waits for the given RAW string to come
         /// from the Chaskis process.
         /// </summary>
-        public bool WaitForString( string regex )
-        {
-            return this.WaitForStringWithTimeout( regex, TestConstants.DefaultTimeout );
-        }
-
-        /// <summary>
-        /// Waits for the given RAW string to come
-        /// from the Chaskis process.
-        /// </summary>
-        public bool WaitForStringWithTimeout( string regex, int timeout )
+        public bool WaitForString( string regex, int timeout = TestConstants.DefaultTimeout )
         {
             this.serverLog.WriteLine( "Waiting for regex " + regex.EscapeNonCharacters() + "..." );
             bool success = this.buffer.WaitForString( regex, timeout );

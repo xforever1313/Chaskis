@@ -174,7 +174,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
                 TestConstants.Channel1,
                 TestConstants.NormalUser,
                 "LOUD NOISES!"
-            );
+            ).FailIfFalse( "Did not get Caps watcher response" );
         }
 
         private void ExpectBotToIgnoreMessages( IEnumerable<string> messages )
