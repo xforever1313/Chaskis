@@ -1,8 +1,0 @@
- * Part with no reason
-
-|'''Send'''            |${testuser}                           |'''Parted From'''    |${channel1}|
-|'''Wait For Message'''|${testuser}\s+has\s+left\s+${channel1}|'''On Channel'''|${channel1}|
-
- * Part with reason
- 
- Not Implemented Yet!

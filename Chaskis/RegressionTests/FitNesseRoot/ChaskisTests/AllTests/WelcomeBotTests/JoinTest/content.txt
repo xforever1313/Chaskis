@@ -1,2 +1,0 @@
-|'''Send'''            |${testuser}                            |'''Joined'''    |${channel1}|
-|'''Wait For Message'''|${testuser}\s+has\s+joined\s+${channel1}|'''On Channel'''|${channel1}|
