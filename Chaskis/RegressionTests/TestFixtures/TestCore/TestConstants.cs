@@ -15,6 +15,8 @@ namespace Chaskis.RegressionTests.TestCore
 {
     public static class TestConstants
     {
+        // ---------------- Fields ----------------
+
         /// <summary>
         /// Default timeout: 8 seconds.
         /// </summary>
@@ -44,5 +46,21 @@ namespace Chaskis.RegressionTests.TestCore
         /// Name of the second channel the bot is in.
         /// </summary>
         internal const string Channel2 = "#chaskistest2";
+
+        /// <summary>
+        /// List of all of the channels the bot is in.
+        /// </summary>
+        internal static readonly IReadOnlyList<string> JoinedChannels;
+
+        // ---------------- Constructors ----------------
+
+        static TestConstants()
+        {
+            JoinedChannels = new List<string>
+            {
+                Channel1,
+                Channel2
+            }.AsReadOnly();
+        }
     }
 }

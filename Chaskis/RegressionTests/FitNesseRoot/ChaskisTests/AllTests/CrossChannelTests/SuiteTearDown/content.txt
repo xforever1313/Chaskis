@@ -1,3 +1,0 @@
-!include <ChaskisTests.BuildingBlocks.StopServerAndChaskis
-
-!include <ChaskisTests.BuildingBlocks.TeardownEnvironment 

@@ -1,3 +1,0 @@
-|'''Setup'''|!-CrossChannelEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

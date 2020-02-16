@@ -41,7 +41,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
             this.testFrame.IrcServer.WaitForMessageOnChannel(
                 @"'capswatcher'\s+log\s+verbosity\s+has\s+been\s+set\s+to\s+'3'",
                 TestConstants.AdminUserName
-            );
+            ).FailIfFalse( "Could not set verbosity" );
         }
 
         [OneTimeTearDown]
