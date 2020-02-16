@@ -16,8 +16,6 @@ namespace Chaskis.RegressionTests.TestCore
 
         private readonly GenericLogger testStateLog;
 
-        private readonly EnvironmentManager envManager;
-
         // ---------------- Constructor ----------------
 
         public ChaskisTestFramework() :
@@ -27,7 +25,7 @@ namespace Chaskis.RegressionTests.TestCore
 
         public ChaskisTestFramework( string dllFolderPath )
         {
-            this.envManager = new EnvironmentManager( dllFolderPath );
+            this.EnvironmentManager = new EnvironmentManager( dllFolderPath );
 
             this.HttpServer = new HttpServer();
             this.HttpClient = new TestHttpClient();
@@ -36,6 +34,8 @@ namespace Chaskis.RegressionTests.TestCore
         }
 
         // ---------------- Properties ----------------
+
+        public EnvironmentManager EnvironmentManager { get; private set; }
 
         public ChaskisProcess ProcessRunner { get; private set; }
 
@@ -67,11 +67,11 @@ namespace Chaskis.RegressionTests.TestCore
 
             if( config.Environment == null )
             {
-                this.envManager.SetupDefaultEnvironment( config.Port );
+                this.EnvironmentManager.SetupDefaultEnvironment( config.Port );
             }
             else
             {
-                this.envManager.SetupEnvironment( config.Environment, config.Port );
+                this.EnvironmentManager.SetupEnvironment( config.Environment, config.Port );
             }
 
             // ---------------- Start Server ----------------
@@ -87,7 +87,7 @@ namespace Chaskis.RegressionTests.TestCore
                 "Starting Client",
                 () =>
                 {
-                    this.ProcessRunner = new ChaskisProcess( this.envManager.ChaskisDistDir, this.envManager.TestEnvironmentDir );
+                    this.ProcessRunner = new ChaskisProcess( (string)this.EnvironmentManager.ChaskisDistDir, (string)this.EnvironmentManager.TestEnvironmentDir );
                     this.ProcessRunner.StartProcess();
                 }
             );
@@ -100,12 +100,23 @@ namespace Chaskis.RegressionTests.TestCore
             );
 
             Step.Run(
-                "Wait for client to join channels",
+                "Wait for client to finish connecting.",
                 () =>
                 {
-                    this.ProcessRunner.WaitForStringFromChaskis(
-                        @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>FINISHED\s+JOINING\s+CHANNELS</event_id><server>(?<server>\S+)</server><nick>(?<nick>\S+)</nick></args><passthrough_args\s+/></chaskis_event>"
-                    ).FailIfFalse( "Did not get joined channel event" );
+                    if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForConnected )
+                    {
+                        this.ProcessRunner.WaitForStringFromChaskis(
+                            @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>CONNECTED</event_id><server>(?<server>\S+)</server><nick>(?<nick>\S+)</nick></args><passthrough_args\s*/></chaskis_event>"
+                        ).FailIfFalse( "Did not connected event" );
+                    }
+                    else if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForFinishJoiningChannels )
+                    {
+                        this.ProcessRunner.WaitForStringFromChaskis(
+                            @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>FINISHED\s+JOINING\s+CHANNELS</event_id><server>(?<server>\S+)</server><nick>(?<nick>\S+)</nick></args><passthrough_args\s+/></chaskis_event>"
+                        ).FailIfFalse( "Did not get joined channel event" );
+                    }
+
+                    // Else, do nothing.
                 }
             );
         }
@@ -128,7 +139,7 @@ namespace Chaskis.RegressionTests.TestCore
             }
             finally
             {
-                this.envManager.Dispose();
+                this.EnvironmentManager.Dispose();
             }
         }
 

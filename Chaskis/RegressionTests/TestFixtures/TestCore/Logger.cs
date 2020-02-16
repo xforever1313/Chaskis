@@ -7,7 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using NUnit.Framework;
 using SethCS.Basic;
 using SethCS.Extensions;
 
@@ -44,17 +44,10 @@ namespace Chaskis.RegressionTests.TestCore
                 if( instance.logs.ContainsKey( context ) == false )
                 {
                     GenericLogger logger = new GenericLogger();
+                    string contextInternal = context;
                     logger.OnWriteLine += delegate ( string line )
                     {
-                        Console.Write(
-                            string.Format(
-                                "{0}\t{1}>\t{2}",
-                                DateTime.Now.ToTimeStampString(),
-                                context,
-                                line
-                            )
-                        );
-                        Console.Out.Flush();
+                        GenericLogger_OnWriteLine( line, contextInternal );
                     };
                     instance.logs[context] = logger;
                 }
@@ -69,6 +62,19 @@ namespace Chaskis.RegressionTests.TestCore
         public static GenericLogger GetConsoleOutLog()
         {
             return GetLogFromContext( "Console Out" );
+        }
+
+        private static void GenericLogger_OnWriteLine( string line, string context )
+        {
+            TestContext.Out.Write(
+                string.Format(
+                    "{0}\t{1}>\t{2}",
+                    DateTime.Now.ToTimeStampString(),
+                    context,
+                    line
+                )
+            );
+            TestContext.Out.Flush();
         }
     }
 }

@@ -7,6 +7,27 @@
 
 namespace Chaskis.RegressionTests.TestCore
 {
+    /// <summary>
+    /// In the fixture setup, how long should we wait for?
+    /// </summary>
+    public enum ConnectionWaitMode
+    {
+        /// <summary>
+        /// Do not wait for a connection status.
+        /// </summary>
+        DoNotWait,
+
+        /// <summary>
+        /// Wait until we get a connection status, do not wait to join channels.
+        /// </summary>
+        WaitForConnected,
+
+        /// <summary>
+        /// Wait until we finish joining all channels.
+        /// </summary>
+        WaitForFinishJoiningChannels
+    }
+
     public class ChaskisFixtureConfig
     {
         // ---------------- Constructor ----------------
@@ -15,6 +36,7 @@ namespace Chaskis.RegressionTests.TestCore
         {
             this.Environment = null;
             this.Port = 10123;
+            this.ConnectionWaitMode = ConnectionWaitMode.WaitForFinishJoiningChannels;
         }
 
         // ---------------- Properties ----------------
@@ -29,5 +51,10 @@ namespace Chaskis.RegressionTests.TestCore
         /// Port used to talk between the server and the client.
         /// </summary>
         public ushort Port { get; set; }
+
+        /// <summary>
+        /// How to know when we are done connecting.  Defaulted to <seealso cref="ConnectionWaitMode.WaitForFinishJoiningChannels"/>
+        /// </summary>
+        public ConnectionWaitMode ConnectionWaitMode { get; set; }
     }
 }

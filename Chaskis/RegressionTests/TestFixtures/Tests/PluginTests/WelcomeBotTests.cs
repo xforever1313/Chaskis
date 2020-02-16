@@ -42,11 +42,13 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
             this.testFrame?.PerformFixtureTeardown();
         }
 
+        [SetUp]
         public void TestSetup()
         {
             this.testFrame.PerformTestSetup();
         }
 
+        [TearDown]
         public void TestTeardown()
         {
             this.testFrame.PerformTestTeardown();

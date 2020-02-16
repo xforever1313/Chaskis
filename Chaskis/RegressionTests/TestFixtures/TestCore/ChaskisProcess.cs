@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using SethCS.Basic;
 
 namespace Chaskis.RegressionTests.TestCore
@@ -32,6 +33,8 @@ namespace Chaskis.RegressionTests.TestCore
         private readonly StringBuffer buffer;
 
         private readonly string exeLocation;
+        private readonly string dllLocation;
+        private readonly string exeFile;
 
         // ---------------- Constructor ----------------
 
@@ -43,13 +46,32 @@ namespace Chaskis.RegressionTests.TestCore
 
             this.exeLocation = Path.Combine(
                 distDir,
-                "bin",
-                "Chaskis.exe"
+                "bin"
             );
 
-            this.consoleOutLog.WriteLine( "Chaskis.exe Location: " + this.exeLocation );
+            this.dllLocation = Path.Combine(
+                exeLocation,
+                "Chaskis.dll"
+            );
+
+            string exeString;
+            if( Environment.OSVersion.Platform == PlatformID.Win32NT )
+            {
+                exeString = ".exe";
+            }
+            else
+            {
+                exeString = string.Empty;
+            }
+
+            this.exeFile = Path.Combine(
+                exeLocation,
+                "Chaskis" + exeString
+            );
+
+            this.consoleOutLog.WriteLine( "Chaskis.exe Location: " + this.exeFile );
             this.startInfo = new ProcessStartInfo(
-                this.exeLocation,
+                this.exeFile,
                 "--chaskisroot=" + environmentDir
             )
             {
@@ -72,6 +94,19 @@ namespace Chaskis.RegressionTests.TestCore
             }
             catch( Exception )
             {
+            }
+        }
+
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// Gets a copy of the Chaskis exe version.
+        /// </summary>
+        public Version ChaskisExeVersion
+        {
+            get
+            {
+                return AssemblyName.GetAssemblyName( this.dllLocation ).Version;
             }
         }
 
