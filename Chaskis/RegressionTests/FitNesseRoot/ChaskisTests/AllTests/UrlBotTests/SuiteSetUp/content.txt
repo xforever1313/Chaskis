@@ -1,4 +1,0 @@
-|'''Setup'''|!-UrlBotEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
-
