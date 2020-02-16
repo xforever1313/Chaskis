@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
 
-namespace Chaskis.RegressionTests.Tests.PluginTests.NewVersionNotifier
+namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     // Need multiple test fixtures since the environment is for each fixture.
 
@@ -20,183 +20,186 @@ namespace Chaskis.RegressionTests.Tests.PluginTests.NewVersionNotifier
         ChaskisTestFramework TestFrame { get; }
     }
 
-    /// <summary>
-    /// Tests ensures that if we have a different version number than the previous release,
-    /// do we send the correct message?
-    /// </summary>
-    [TestFixture]
-    public class DifferentVersionTests : INewVersionNotifierTestFixture
-    {
-        // ---------------- Fields ----------------
-
-        // ---------------- Setup / Teardown ----------------
-
-        [OneTimeSetUp]
-        public void FixtureSetup()
+    public class NewVersionNotifier
+    { 
+        /// <summary>
+        /// Tests ensures that if we have a different version number than the previous release,
+        /// do we send the correct message?
+        /// </summary>
+        [TestFixture]
+        public class DifferentVersionTests : INewVersionNotifierTestFixture
         {
-            this.TestFrame = new ChaskisTestFramework();
+            // ---------------- Fields ----------------
 
-            ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+            // ---------------- Setup / Teardown ----------------
+
+            [OneTimeSetUp]
+            public void FixtureSetup()
             {
-                Environment = "NewVersionNotifierDifferentVersionEnvironment",
-                ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
-            };
+                this.TestFrame = new ChaskisTestFramework();
 
-            this.TestFrame.PerformFixtureSetup( fixtureConfig );
-        }
+                ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+                {
+                    Environment = "NewVersionNotifierDifferentVersionEnvironment",
+                    ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
+                };
 
-        [OneTimeTearDown]
-        public void FixtureTeardown()
-        {
-            this.TestFrame?.PerformFixtureTeardown();
-        }
+                this.TestFrame.PerformFixtureSetup( fixtureConfig );
+            }
 
-        [SetUp]
-        public void TestSetup()
-        {
-            this.TestFrame.PerformTestSetup();
-        }
-
-        [TearDown]
-        public void TestTeardown()
-        {
-            this.TestFrame.PerformTestTeardown();
-        }
-
-        // ---------------- Properties ----------------
-
-        public ChaskisTestFramework TestFrame { get; private set; }
-
-        // ---------------- Tests ----------------
-
-        [Test]
-        public void NewVersionMessageTest()
-        {
-            this.DoNewVersionTest();
-        }
-    }
-
-    /// <summary>
-    /// Tests ensures that if we no version file, we get a message.
-    /// </summary>
-    [TestFixture]
-    public class NoVersionFileTests : INewVersionNotifierTestFixture
-    {
-        // ---------------- Fields ----------------
-
-        // ---------------- Setup / Teardown ----------------
-
-        [OneTimeSetUp]
-        public void FixtureSetup()
-        {
-            this.TestFrame = new ChaskisTestFramework();
-
-            ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+            [OneTimeTearDown]
+            public void FixtureTeardown()
             {
-                Environment = "NewVersionNotifierNoFileEnvironment",
-                ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
-            };
+                this.TestFrame?.PerformFixtureTeardown();
+            }
 
-            this.TestFrame.PerformFixtureSetup( fixtureConfig );
-        }
-
-        [OneTimeTearDown]
-        public void FixtureTeardown()
-        {
-            this.TestFrame?.PerformFixtureTeardown();
-        }
-
-        [SetUp]
-        public void TestSetup()
-        {
-            this.TestFrame.PerformTestSetup();
-        }
-
-        [TearDown]
-        public void TestTeardown()
-        {
-            this.TestFrame.PerformTestTeardown();
-        }
-
-        // ---------------- Properties ----------------
-
-        public ChaskisTestFramework TestFrame { get; private set; }
-
-        // ---------------- Tests ----------------
-
-        [Test]
-        public void NewVersionMessageTest()
-        {
-            this.DoNewVersionTest();
-        }
-    }
-
-    /// <summary>
-    /// Tests ensures that if the version does NOT change, no message goes out.
-    /// </summary>
-    [TestFixture]
-    public class NoVersionChangeTests : INewVersionNotifierTestFixture
-    {
-        // ---------------- Fields ----------------
-
-        // ---------------- Setup / Teardown ----------------
-
-        [OneTimeSetUp]
-        public void FixtureSetup()
-        {
-            this.TestFrame = new ChaskisTestFramework();
-
-            ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+            [SetUp]
+            public void TestSetup()
             {
-                Environment = "NewVersionNotifierNoChangeEnvironment",
-                ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
-            };
+                this.TestFrame.PerformTestSetup();
+            }
 
-            this.TestFrame.PerformFixtureSetup( fixtureConfig );
+            [TearDown]
+            public void TestTeardown()
+            {
+                this.TestFrame.PerformTestTeardown();
+            }
+
+            // ---------------- Properties ----------------
+
+            public ChaskisTestFramework TestFrame { get; private set; }
+
+            // ---------------- Tests ----------------
+
+            [Test]
+            public void NewVersionMessageTest()
+            {
+                this.DoNewVersionTest();
+            }
         }
-
-        [OneTimeTearDown]
-        public void FixtureTeardown()
-        {
-            this.TestFrame?.PerformFixtureTeardown();
-        }
-
-        [SetUp]
-        public void TestSetup()
-        {
-            this.TestFrame.PerformTestSetup();
-        }
-
-        [TearDown]
-        public void TestTeardown()
-        {
-            this.TestFrame.PerformTestTeardown();
-        }
-
-        // ---------------- Properties ----------------
-
-        public ChaskisTestFramework TestFrame { get; private set; }
-
-        // ---------------- Tests ----------------
 
         /// <summary>
-        /// Ensures if there is no change, we do not send a message.
+        /// Tests ensures that if we no version file, we get a message.
         /// </summary>
-        [Test]
-        public void DoNotSendMessageTest()
+        [TestFixture]
+        public class NoVersionFileTests : INewVersionNotifierTestFixture
         {
-            this.TestFrame.ProcessRunner.WaitForStringFromChaskis(
-                @"Bot\s+not\s+updated,\s+skipping\s+message",
-                20 * 1000
-            ).FailIfFalse( "Did not get ignore message" );
+            // ---------------- Fields ----------------
 
-            this.CheckFileVersion( this.GetChaskisVersion() );
+            // ---------------- Setup / Teardown ----------------
+
+            [OneTimeSetUp]
+            public void FixtureSetup()
+            {
+                this.TestFrame = new ChaskisTestFramework();
+
+                ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+                {
+                    Environment = "NewVersionNotifierNoFileEnvironment",
+                    ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
+                };
+
+                this.TestFrame.PerformFixtureSetup( fixtureConfig );
+            }
+
+            [OneTimeTearDown]
+            public void FixtureTeardown()
+            {
+                this.TestFrame?.PerformFixtureTeardown();
+            }
+
+            [SetUp]
+            public void TestSetup()
+            {
+                this.TestFrame.PerformTestSetup();
+            }
+
+            [TearDown]
+            public void TestTeardown()
+            {
+                this.TestFrame.PerformTestTeardown();
+            }
+
+            // ---------------- Properties ----------------
+
+            public ChaskisTestFramework TestFrame { get; private set; }
+
+            // ---------------- Tests ----------------
+
+            [Test]
+            public void NewVersionMessageTest()
+            {
+                this.DoNewVersionTest();
+            }
         }
 
-        [Test]
-        public void PluginLoadTest()
+        /// <summary>
+        /// Tests ensures that if the version does NOT change, no message goes out.
+        /// </summary>
+        [TestFixture]
+        public class NoVersionChangeTests : INewVersionNotifierTestFixture
         {
-            CommonPluginTests.DoPluginLoadTest( this.TestFrame, "new_version_notifier" );
+            // ---------------- Fields ----------------
+
+            // ---------------- Setup / Teardown ----------------
+
+            [OneTimeSetUp]
+            public void FixtureSetup()
+            {
+                this.TestFrame = new ChaskisTestFramework();
+
+                ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+                {
+                    Environment = "NewVersionNotifierNoChangeEnvironment",
+                    ConnectionWaitMode = ConnectionWaitMode.WaitForConnected
+                };
+
+                this.TestFrame.PerformFixtureSetup( fixtureConfig );
+            }
+
+            [OneTimeTearDown]
+            public void FixtureTeardown()
+            {
+                this.TestFrame?.PerformFixtureTeardown();
+            }
+
+            [SetUp]
+            public void TestSetup()
+            {
+                this.TestFrame.PerformTestSetup();
+            }
+
+            [TearDown]
+            public void TestTeardown()
+            {
+                this.TestFrame.PerformTestTeardown();
+            }
+
+            // ---------------- Properties ----------------
+
+            public ChaskisTestFramework TestFrame { get; private set; }
+
+            // ---------------- Tests ----------------
+
+            /// <summary>
+            /// Ensures if there is no change, we do not send a message.
+            /// </summary>
+            [Test]
+            public void DoNotSendMessageTest()
+            {
+                this.TestFrame.ProcessRunner.WaitForStringFromChaskis(
+                    @"Bot\s+not\s+updated,\s+skipping\s+message",
+                    20 * 1000
+                ).FailIfFalse( "Did not get ignore message" );
+
+                this.CheckFileVersion( this.GetChaskisVersion() );
+            }
+
+            [Test]
+            public void PluginLoadTest()
+            {
+                CommonPluginTests.DoPluginLoadTest( this.TestFrame, "new_version_notifier" );
+            }
         }
     }
 
@@ -236,10 +239,10 @@ namespace Chaskis.RegressionTests.Tests.PluginTests.NewVersionNotifier
                 "Ensure file got updated",
                 () =>
                 {
-                    // Wait for the notification, and then read the file and ensure the version got saved correctly.
-                    fixture.TestFrame.ProcessRunner.WaitForStringFromChaskis(
-                        @"new_version_notifier's\s+\.lastversion\.txt\s+file\s+has\s+been\s+updated"
-                    ).FailIfFalse( "Did not get notification that the file got updated" );
+                        // Wait for the notification, and then read the file and ensure the version got saved correctly.
+                        fixture.TestFrame.ProcessRunner.WaitForStringFromChaskis(
+                                @"new_version_notifier's\s+\.lastversion\.txt\s+file\s+has\s+been\s+updated"
+                            ).FailIfFalse( "Did not get notification that the file got updated" );
 
                     fixture.CheckFileVersion( versString );
                 }
