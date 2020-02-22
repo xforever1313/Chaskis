@@ -1,3 +1,0 @@
-|'''Setup'''|!-KarmaBotEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels
