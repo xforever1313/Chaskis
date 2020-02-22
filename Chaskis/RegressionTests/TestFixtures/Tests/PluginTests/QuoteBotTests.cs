@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class KarmaBotTests
+    public class QuoteBotTests
     {
         // ---------------- Fields ----------------
 
@@ -26,7 +26,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
 
             ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
             {
-                Environment = "KarmaBotEnvironment"
+                Environment = "QuoteBotEnvironment"
             };
 
             this.testFrame.PerformFixtureSetup( fixtureConfig );
@@ -58,139 +58,102 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         [Test]
         public void DoPluginLoadTest()
         {
-            CommonPluginTests.DoPluginLoadTest( this.testFrame, "karmabot" );
+            CommonPluginTests.DoPluginLoadTest( this.testFrame, "quotebot" );
+        }
+
+        /// <summary>
+        /// Ensure if we query a negative number, we get an error message.
+        /// </summary>
+        [Test]
+        public void NegativeQuoteTest()
+        {
+            this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
+                "!quote get -1",
+                TestConstants.Channel1,
+                TestConstants.NormalUser,
+                @"Error\s+when\s+getting\s+quote:\s+"
+            ).FailIfFalse( "Did not get expected response" );
         }
 
         [Test]
-        public void IncreaseDecreaseTest()
+        public void AddRemoveTest()
         {
             Step.Run(
-                "Just make sure 'chaskis' and the number of karma shows up. Everything else in between we don't care about",
+                "To start, ensure if we query a non-existant quote, an error message occurs",
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "chaskis++",
+                        "!quote random",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"chaskis\s+.*increased\s+.*1"
-                    ).FailIfFalse( "Did not get expected response" );
-                }
-            );
-
-            Step.Run(
-                "Send to a different channel, the karma should be the same across all channels",
-                () =>
-                {
-                    this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "++chaskis",
-                        TestConstants.Channel2,
-                        TestConstants.NormalUser,
-                        @"chaskis\s+.*increased\s+.*2"
-                    ).FailIfFalse( "Did not get expected response" );
-                }
-            );
-
-            Step.Run(
-                "Subtract Karma",
-                () =>
-                {
-                    this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "chaskis--",
-                        TestConstants.Channel2,
-                        TestConstants.NormalUser,
-                        @"chaskis\s+.*decreased\s+.*1"
+                        @"Can\s+not\s+get\s+random\s+quote\.\s+Do\s+we\s+even\s+have\s+any\?"
                     ).FailIfFalse( "Did not get expected response" );
 
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "--chaskis",
+                        "!quote get 0",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"chaskis\s+.*decreased\s+.*0"
+                        @"Can\s+not\s+get\s+quote\s+with\s+id\s+0\.\s+Are\s+you\s+sure\s+it\s+exists\?"
                     ).FailIfFalse( "Did not get expected response" );
                 }
             );
 
             Step.Run(
-                "Decrease one more time to ensure we can go negative just fine",
+                "Add a quote, ensure we can't delete it if we are normal user",
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "--chaskis",
+                        "!quote add <user> Hello World!",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"chaskis\s+.*decreased\s+.*-1"
+                        @"Quote\s+said\s+by\s+user\s+added\s+by\s+nonadminuser\.\s+Its\s+ID\s+is\s+\d+"
                     ).FailIfFalse( "Did not get expected response" );
-                }
-            );
 
-            Step.Run(
-                "Decrease something new right out of the gate, should be -1",
-                () =>
-                {
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "--java",
-                        TestConstants.Channel2,
-                        TestConstants.NormalUser,
-                        @"java\s+.*decreased\s+.*-1"
-                    ).FailIfFalse( "Did not get expected response" );
-                }
-            );
-
-            Step.Run(
-                "Increase with a reason",
-                () =>
-                {
-                    this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "++chaskis for being cool",
-                        TestConstants.Channel2,
-                        TestConstants.NormalUser,
-                        @"chaskis\s+.*increased\s+.*0"
-                    ).FailIfFalse( "Did not get expected response" );
-                }
-            );
-
-            Step.Run(
-                "Decrease with a reason",
-                () =>
-                {
-                    this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "java-- C# is a better language",
+                        "!quote delete 1",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"java\s+.*decreased\s+.*-2"
+                        @".+You\s+can\s+not\s+delete\s+quotes"
                     ).FailIfFalse( "Did not get expected response" );
                 }
             );
 
             Step.Run(
-                "Query",
+                "Attempt to get the added quote, both directly and randomly",
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "!karma chaskis",
+                        "!quote get 1",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"chaskis\s+has\s+0\s+karma"
+                        @"'Hello World!'\s+-user\.\s+Added\s+by\s+nonadminuser\s+on.+"
                     ).FailIfFalse( "Did not get expected response" );
 
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "!karma java",
+                        "!quote random",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"java\s+has\s+-2\s+karma"
+                        @"'Hello World!'\s+-user\.\s+Added\s+by\s+nonadminuser\s+on.+"
                     ).FailIfFalse( "Did not get expected response" );
                 }
             );
 
             Step.Run(
-                "Query something that doesn't exist, should report 0",
+                "Delete the quote as an admin user",
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        "!karma something_not_here",
+                        "!quote delete 1",
+                        TestConstants.Channel1,
+                        TestConstants.AdminUserName,
+                        @"Quote\s+1\s+deleted\s+successfully"
+                    ).FailIfFalse( "Did not get expected response" );
+
+                    this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
+                        "!quote get 1",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
-                        @"something_not_here\s+has\s+0\s+karma"
+                        @"Can\s+not\s+get\s+quote\s+with\s+id\s+1\.\s+Are\s+you\s+sure\s+it\s+exists\?"
                     ).FailIfFalse( "Did not get expected response" );
                 }
             );
