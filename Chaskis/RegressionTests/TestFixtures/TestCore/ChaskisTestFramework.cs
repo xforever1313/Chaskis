@@ -87,7 +87,7 @@ namespace Chaskis.RegressionTests.TestCore
                 "Starting Client",
                 () =>
                 {
-                    this.ProcessRunner = new ChaskisProcess( (string)this.EnvironmentManager.ChaskisDistDir, (string)this.EnvironmentManager.TestEnvironmentDir );
+                    this.ProcessRunner = new ChaskisProcess( this.EnvironmentManager.ChaskisDistDir, this.EnvironmentManager.TestEnvironmentDir );
                     this.ProcessRunner.StartProcess();
                 }
             );

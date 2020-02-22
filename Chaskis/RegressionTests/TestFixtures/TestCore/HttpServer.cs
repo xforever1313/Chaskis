@@ -54,7 +54,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Starts the server on the given port.
         /// </summary>
-        public void StartHttpServer( short port )
+        public void StartHttpServer( ushort port )
         {
             if( this.IsListening )
             {
@@ -124,7 +124,12 @@ namespace Chaskis.RegressionTests.TestCore
                     HttpListenerContext context = null;
                     try
                     {
-                        context = listener.GetContext();
+                        // Apparently, HttpListener.Stop() may not be working correctly in dotnet 3
+                        // when used with GetContext().
+                        // The milestone for this fix is 5.0.  So until then, use GetContextAsync().Result.
+                        //
+                        // https://github.com/dotnet/runtime/issues/25497
+                        context = listener.GetContextAsync().Result;
                     }
                     catch( HttpListenerException err )
                     {
@@ -217,7 +222,7 @@ namespace Chaskis.RegressionTests.TestCore
             catch( Exception e )
             {
                 this.serverLog.WriteLine( "**********" );
-                this.serverLog.WriteLine( "FATAL Exception in HTTP Listener.  Aborting web server, but the picframe will still run: " + e.Message );
+                this.serverLog.WriteLine( "FATAL Exception in HTTP Listener.  Aborting web server: " + e.Message );
                 this.serverLog.WriteLine( e.StackTrace );
                 this.serverLog.WriteLine( "**********" );
             }

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NUnit.Framework;
 using SethCS.Basic;
 using SethCS.Extensions;
@@ -66,15 +67,16 @@ namespace Chaskis.RegressionTests.TestCore
 
         private static void GenericLogger_OnWriteLine( string line, string context )
         {
-            TestContext.Out.Write(
-                string.Format(
-                    "{0}\t{1}>\t{2}",
-                    DateTime.Now.ToTimeStampString(),
-                    context,
-                    line
-                )
+            string msg = string.Format(
+                "{0}\t{1}>\t{2}",
+                DateTime.Now.ToTimeStampString(),
+                context,
+                line
             );
+
+            TestContext.Out.Write( msg );
             TestContext.Out.Flush();
+            Debug.Write( msg );
         }
     }
 }
