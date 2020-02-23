@@ -63,7 +63,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAs(
-                        $"!{TestConstants.RegressionTestPluginName} asyncawait threadname",
+                        $"!{TestConstants.RegressionTestCommandPrefix} asyncawait threadname",
                         TestConstants.Channel1,
                         TestConstants.NormalUser
                     );
@@ -117,7 +117,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAs(
-                        $"!{TestConstants.RegressionTestPluginName} asyncawait exception",
+                        $"!{TestConstants.RegressionTestCommandPrefix} asyncawait exception",
                         TestConstants.Channel1,
                         TestConstants.NormalUser
                     );

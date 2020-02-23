@@ -48,9 +48,14 @@ namespace Chaskis.RegressionTests.TestCore
         internal const string Channel2 = "#chaskistest2";
 
         /// <summary>
+        /// Command prefix for chaskis regression tests
+        /// </summary>
+        internal const string RegressionTestCommandPrefix = "chaskistest";
+
+        /// <summary>
         /// Name of the regression test plugin.
         /// </summary>
-        internal const string RegressionTestPluginName = "chaskistest";
+        internal const string RegressionTestPluginName = "chaskistests";
 
         /// <summary>
         /// List of all of the channels the bot is in.

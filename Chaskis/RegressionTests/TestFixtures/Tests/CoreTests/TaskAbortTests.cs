@@ -68,7 +68,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 () =>
                 {
                     this.testFrame.IrcServer.SendMessageToChannelAs(
-                        $"!{TestConstants.RegressionTestPluginName} sleep {timeout}",
+                        $"!{TestConstants.RegressionTestCommandPrefix} sleep {timeout}",
                         TestConstants.Channel1,
                         TestConstants.NormalUser
                     );

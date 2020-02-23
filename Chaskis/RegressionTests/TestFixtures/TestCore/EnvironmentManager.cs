@@ -46,6 +46,14 @@ namespace Chaskis.RegressionTests.TestCore
             );
 
             this.RegressionTestDir = Path.Combine( this.ChaskisProjectRoot, "RegressionTests" );
+            this.RegressionTestDllPath = Path.Combine(
+                this.RegressionTestDir,
+                "RegressionTestPlugin",
+                "bin",
+                "Debug",
+                "netstandard2.0",
+                "RegressionTestPlugin.dll"
+            );
 
             this.ChaskisDistDir = Path.Combine( this.RegressionTestDir, "dist", "Chaskis" );
 
@@ -71,6 +79,11 @@ namespace Chaskis.RegressionTests.TestCore
         /// Path to the folder that contains regression tests.
         /// </summary>
         public string RegressionTestDir { get; private set; }
+
+        /// <summary>
+        /// Path to the regression tests dll.
+        /// </summary>
+        public string RegressionTestDllPath { get; private set; }
 
         /// <summary>
         /// Path to the folder that contains the test environments.

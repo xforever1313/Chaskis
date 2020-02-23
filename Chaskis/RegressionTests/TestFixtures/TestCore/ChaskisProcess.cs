@@ -110,6 +110,18 @@ namespace Chaskis.RegressionTests.TestCore
             }
         }
 
+        /// <summary>
+        /// String representation of the exe version.
+        /// </summary>
+        public string ChaskisExeVersionStr
+        {
+            get
+            {
+                Version vers = this.ChaskisExeVersion;
+                return vers.ToString( 3 );
+            }
+        }
+
         // ---------------- Functions ----------------
 
         public void Dispose()
