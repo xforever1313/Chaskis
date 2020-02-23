@@ -9,6 +9,13 @@ namespace Chaskis.RegressionTests.TestCore
 {
     public static class CommonTests
     {
+        public static void WaitForClientToConnect( this ChaskisProcess processRunner )
+        {
+            processRunner.WaitForStringFromChaskis(
+                @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>CONNECTED</event_id><server>(?<server>\S+)</server><nick>chaskisbot</nick></args><passthrough_args /></chaskis_event>"
+            ).FailIfFalse( "Did not connected event" );
+        }
+
         public static void WaitToFinishJoiningChannels( this ChaskisProcess processRunner )
         {
             processRunner.WaitForStringFromChaskis(

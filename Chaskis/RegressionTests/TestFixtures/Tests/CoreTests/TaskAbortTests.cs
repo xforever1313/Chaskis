@@ -82,7 +82,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                         @"Caught\s+ThreadInterruptedException\s+during\s+sleep",
                         TestConstants.Channel1,
                         timeout
-                    );
+                    ).FailIfFalse( "Did not interrupted message" );
                 }
             );
 
