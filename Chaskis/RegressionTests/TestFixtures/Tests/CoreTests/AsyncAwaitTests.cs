@@ -5,9 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
 
