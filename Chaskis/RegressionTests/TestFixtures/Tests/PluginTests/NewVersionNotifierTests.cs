@@ -192,7 +192,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
                     20 * 1000
                 ).FailIfFalse( "Did not get ignore message" );
 
-                this.CheckFileVersion( this.TestFrame.ProcessRunner.ChaskisExeVersionStr );
+                this.CheckFileVersion( ChaskisConstants.ExpectedChaskisExeVersion );
             }
 
             [Test]
@@ -207,7 +207,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
     {
         public static void DoNewVersionTest( this INewVersionNotifierTestFixture fixture )
         {
-            string versString = fixture.TestFrame.ProcessRunner.ChaskisExeVersionStr;
+            string versString = ChaskisConstants.ExpectedChaskisExeVersion;
 
             string expectedStr = @"I\s+have\s+been\s+upgraded\s+to\s+version\s+" + Regex.Escape( versString );
 

@@ -392,7 +392,13 @@ public class FilesToTemplate
             new FileToTemplate(
                 this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "Environments/NewVersionNotifierNoChangeEnvironment/Plugins/NewVersionNotifier/.lastversion.txt.template" ) ),
                 this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "Environments/NewVersionNotifierNoChangeEnvironment/Plugins/NewVersionNotifier/.lastversion.txt" ) )
-            )
+            ),
+            
+            // Chaskis Constants for Regression Tests
+            new FileToTemplate(
+                this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "TestFixtures/TestCore/ChaskisConstants.cs.template" ) ),
+                this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "TestFixtures/TestCore/ChaskisConstants.cs" ) )
+            ),
         };
 
         this.TemplateFiles = files.AsReadOnly();

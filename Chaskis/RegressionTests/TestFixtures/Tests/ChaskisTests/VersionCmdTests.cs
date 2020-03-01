@@ -64,7 +64,7 @@ namespace Chaskis.RegressionTests.Tests.ChaskisTests
                 "Ensure we can query the CLI version",
                 () =>
                 {
-                    string expectedResponse = @"Version\s+of\s+'chaskis':\s+" + Regex.Escape( this.testFrame.ProcessRunner.ChaskisExeVersionStr );
+                    string expectedResponse = @"Version\s+of\s+'chaskis':\s+" + Regex.Escape( ChaskisConstants.ExpectedChaskisExeVersion );
 
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
                         $"!{TestConstants.BotName} version",
@@ -94,12 +94,12 @@ namespace Chaskis.RegressionTests.Tests.ChaskisTests
                 "Ensure we can query a specific plugin's version",
                 () =>
                 {
-                    string vers = AssemblyName.GetAssemblyName( this.testFrame.EnvironmentManager.RegressionTestDllPath ).Version.ToString( 3 );
+                    string vers = ChaskisConstants.ExpectedRegressionTestPluginVersion;
 
-                    string expectedResponse = @"Version\s+of\s+'" + TestConstants.RegressionTestPluginName + @"':\s+" + Regex.Escape( vers );
+                    string expectedResponse = @"Version\s+of\s+'" + ChaskisConstants.ExpectedRegressionTestPluginName + @"':\s+" + Regex.Escape( vers );
 
                     this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                        $"!{TestConstants.BotName} version {TestConstants.RegressionTestPluginName}",
+                        $"!{TestConstants.BotName} version {ChaskisConstants.ExpectedRegressionTestPluginName}",
                         TestConstants.Channel1,
                         TestConstants.NormalUser,
                         expectedResponse

@@ -97,31 +97,6 @@ namespace Chaskis.RegressionTests.TestCore
             }
         }
 
-        // ---------------- Properties ----------------
-
-        /// <summary>
-        /// Gets a copy of the Chaskis exe version.
-        /// </summary>
-        public Version ChaskisExeVersion
-        {
-            get
-            {
-                return AssemblyName.GetAssemblyName( this.dllLocation ).Version;
-            }
-        }
-
-        /// <summary>
-        /// String representation of the exe version.
-        /// </summary>
-        public string ChaskisExeVersionStr
-        {
-            get
-            {
-                Version vers = this.ChaskisExeVersion;
-                return vers.ToString( 3 );
-            }
-        }
-
         // ---------------- Functions ----------------
 
         public void Dispose()
