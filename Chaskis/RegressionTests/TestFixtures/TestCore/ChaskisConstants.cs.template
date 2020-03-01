@@ -43,5 +43,10 @@ namespace Chaskis.RegressionTests.TestCore
         /// Expected URL to the project (GitHub).
         /// </summary>
         internal const string ExpectedProjectUrl = "{%ProjectUrl%}";
+
+        /// <summary>
+        /// Expected URL Chaskis's License File on GitHub.
+        /// </summary>
+		internal const string ExpectedLicenseUrl = "{%LicenseUrl%}";
     }
 }

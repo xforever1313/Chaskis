@@ -78,7 +78,7 @@ namespace Chaskis.Cli
         {
             get
             {
-                return "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
+                return "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0: https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt";
             }
         }
 

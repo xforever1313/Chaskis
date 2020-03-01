@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.ChaskisTests
 {
     [TestFixture]
-    public class SourceCmdTests
+    public class AboutCmdTests
     {
         // ---------------- Fields ----------------
 
@@ -57,42 +57,48 @@ namespace Chaskis.RegressionTests.Tests.ChaskisTests
         /// Ensure if we query without a plugin specified, we get the main Chaskis source.
         /// </summary>
         [Test]
-        public void MainSourceTest()
+        public void MainAboutTest()
         {
             this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                $"!{TestConstants.BotName} source",
+                $"!{TestConstants.BotName} about",
                 TestConstants.Channel1,
                 TestConstants.NormalUser,
-                @"Source\s+of\s+'" + ChaskisConstants.ExpectedDefaultPluginName + @"':\s+" + Regex.Escape( ChaskisConstants.ExpectedProjectUrl )
-            ).FailIfFalse( "Did not get source response" );
+                // We don't care what the about message is for the default plugin,
+                // as long as it starts with "About", and has the license
+                // information in it.
+                @"About\s+'" + ChaskisConstants.ExpectedDefaultPluginName + @"':.+" + Regex.Escape( ChaskisConstants.ExpectedLicenseUrl )
+            ).FailIfFalse( "Did not get about response" );
         }
 
         /// <summary>
         /// Ensure if we query the default plugin, we get the main Chaskis source.
         /// </summary>
         [Test]
-        public void DefaultPluginSourceTest()
+        public void DefaultPluginAboutTest()
         {
             this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                $"!{TestConstants.BotName} source {ChaskisConstants.ExpectedDefaultPluginName}",
+                $"@{TestConstants.BotName} about {ChaskisConstants.ExpectedDefaultPluginName}",
                 TestConstants.Channel1,
                 TestConstants.NormalUser,
-                @"Source\s+of\s+'" + ChaskisConstants.ExpectedDefaultPluginName + @"':\s+" + Regex.Escape( ChaskisConstants.ExpectedProjectUrl )
-            ).FailIfFalse( "Did not get source response" );
+                // We don't care what the about message is for the default plugin,
+                // as long as it starts with "About", and has the license
+                // information in it.
+                @"About\s+'" + ChaskisConstants.ExpectedDefaultPluginName + @"':.+" + Regex.Escape( ChaskisConstants.ExpectedLicenseUrl )
+            ).FailIfFalse( "Did not get about response" );
         }
 
         /// <summary>
         /// Ensure if we query a specific plugin, we get that plugin's source.
         /// </summary>
         [Test]
-        public void QueryPluginSourceTest()
+        public void QueryPluginAboutTest()
         {
             this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                $"!{TestConstants.BotName} source {ChaskisConstants.ExpectedRegressionTestPluginName}",
+                $"!{TestConstants.BotName} about {ChaskisConstants.ExpectedRegressionTestPluginName}",
                 TestConstants.Channel1,
                 TestConstants.NormalUser,
-                @"Source\s+of\s+'" + ChaskisConstants.ExpectedRegressionTestPluginName + @"':\s+" + Regex.Escape( ChaskisConstants.ExpectedProjectUrl ) + "tree/master/Chaskis/RegressionTests/TestFixtures"
-            ).FailIfFalse( "Did not get source response" );
+                @"About\s+'" + ChaskisConstants.ExpectedRegressionTestPluginName + "':.+Regression Tests"
+            ).FailIfFalse( "Did not get about response" );
         }
 
         /// <summary>
@@ -102,10 +108,10 @@ namespace Chaskis.RegressionTests.Tests.ChaskisTests
         public void DoNonExistantPluginTest()
         {
             this.testFrame.IrcServer.SendMessageToChannelAsWaitMsg(
-                $"!{TestConstants.BotName} source herpderp",
+                $"@{TestConstants.BotName}: about loldne",
                 TestConstants.Channel1,
                 TestConstants.NormalUser,
-                @"'herpderp'\s+is\s+not\s+a\s+plugin\s+I\s+have\s+loaded"
+                @"'loldne'\s+is\s+not\s+a\s+plugin\s+I\s+have\s+loaded"
             ).FailIfFalse( "Did not get error response." );
         }
     }

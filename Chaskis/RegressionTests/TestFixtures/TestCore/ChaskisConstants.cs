@@ -43,5 +43,10 @@ namespace Chaskis.RegressionTests.TestCore
         /// Expected URL to the project (GitHub).
         /// </summary>
         internal const string ExpectedProjectUrl = "https://github.com/xforever1313/Chaskis/";
+
+        /// <summary>
+        /// Expected URL Chaskis's License File on GitHub.
+        /// </summary>
+		internal const string ExpectedLicenseUrl = "https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt";
     }
 }
