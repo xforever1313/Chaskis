@@ -1,1 +1,0 @@
-|''' Wait For String '''|<chaskis_event source_type="CORE" source_plugin="IRC" dest_plugin=""><args><event_id>CONNECTED</event_id><server>(?<server>\S+)</server><nick>(?<nick>\S+)</nick></args><passthrough_args\s*/></chaskis_event>|'''From Chaskis'''|
