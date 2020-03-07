@@ -129,6 +129,7 @@ namespace Chaskis.RegressionTests.TestCore
         {
             try
             {
+                this.ProcessRunner?.StopOrKillProcess();
                 this.ProcessRunner?.Dispose();
                 this.HttpServer?.Dispose();
                 this.IrcServer?.Dispose();

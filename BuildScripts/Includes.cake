@@ -30,6 +30,7 @@ using System.Text.RegularExpressions;
 #load "ImportantPaths.cake"
 #load "MSBuild.cake"
 #load "RegressionTest.cake"
+#load "TestRunner.cake"
 #load "Templatize.cake"
 #load "UnitTest.cake"
 

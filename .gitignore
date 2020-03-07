@@ -54,14 +54,5 @@ OpenCover/
 .vscode
 .vs
 
-/Chaskis/RegressionTests/FitNesseRoot/files
-/Chaskis/RegressionTests/FitNesseRoot/FitNesse
-/Chaskis/RegressionTests/FitNesseRoot/RecentChanges
-/Chaskis/RegressionTests/FitNesseRoot/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*/*.zip
-/Chaskis/RegressionTests/runner
 /Chaskis/RegressionTests/Environments/TestEnvironment
-/Chaskis/RegressionTests/TestResults.html
+

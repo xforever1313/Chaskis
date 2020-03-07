@@ -31,6 +31,8 @@ Task( "template" )
 )
 .Description( "Runs the templator on all template files." );
 
+// -------- Build Targets --------
+
 Task( "debug" )
 .Does(
     () =>
@@ -49,16 +51,78 @@ Task( "release" )
 )
 .Description( "Builds Chaskis with Release turned on." );
 
+// -------- Test Targets --------
+
 Task( "unit_test" )
 .Does(
     ( context ) =>
     {
         UnitTestRunner runner = new UnitTestRunner( context, paths );
-        runner.RunUnitTests();
+        runner.RunTests();
     }
 )
 .Description( "Runs all the unit tests (does not run code coverage)." )
 .IsDependentOn( "debug" );
+
+Task( "unit_test_code_coverage" )
+.Does(
+    ( context ) =>
+    {
+        UnitTestRunner runner = new UnitTestRunner( context, paths );
+        runner.RunCodeCoverage();
+    }
+)
+.Description( "Runs code coverage, Windows only." )
+.WithCriteria( isWindows )
+.IsDependentOn( "debug" );
+
+const string bootStrapTask = "bootstrap_regression_tests";
+
+Task( bootStrapTask )
+.Does(
+    ( context ) =>
+    {
+        DistroCreatorConfig distroConfig = new DistroCreatorConfig
+        {
+            OutputLocation = paths.RegressionDistroFolder.ToString()
+        };
+
+        DistroCreator distroCreator = new DistroCreator(
+            context,
+            paths,
+            distroConfig
+        );
+        distroCreator.CreateDistro();
+    }
+)
+.Description( "Creates the distro for the regression tests." )
+.IsDependentOn( "debug" );
+
+Task( "regression_test" )
+.Does(
+    ( context ) =>
+    {
+        RegressionTestRunner runner = new RegressionTestRunner( context, paths );
+        runner.RunTests();
+    }
+).Description(
+    "Runs all regression tests."
+).IsDependentOn( bootStrapTask );
+
+// Need to figure out paths first...
+//Task( "regression_test_code_coverage" )
+//.Does(
+//    ( context ) =>
+//    {
+//        RegressionTestRunner runner = new RegressionTestRunner( context, paths );
+//        runner.RunCodeCoverage();
+//    }
+//).Description(
+//    "Runs all regression tests with code coverage."
+//).IsDependentOn( bootStrapTask )
+//.WithCriteria( isWindows );
+
+// -------- Package Targets --------
 
 Task( "msi" )
 .Does(
@@ -106,18 +170,6 @@ Task( "msi" )
 .Description( "Builds the MSI on Windows." )
 .WithCriteria( isWindows )
 .IsDependentOn( "unit_test" );
-
-Task( "code_coverage" )
-.Does(
-    ( context ) =>
-    {
-        UnitTestRunner runner = new UnitTestRunner( context, paths );
-        runner.RunCodeCoverage();
-    }
-)
-.Description( "Runs code coverage, Windows only." )
-.WithCriteria( isWindows )
-.IsDependentOn( "debug" );
 
 Task( "nuget_pack" )
 .Does(
