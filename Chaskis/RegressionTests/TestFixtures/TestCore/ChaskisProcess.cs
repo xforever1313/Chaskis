@@ -173,7 +173,7 @@ namespace Chaskis.RegressionTests.TestCore
                 throw new InvalidOperationException( "There is no process to stop!" );
             }
 
-            this.process.StandardInput.Write( Environment.NewLine );
+            this.process.StandardInput.WriteLine( "q" );
             bool success = this.process.WaitForExit( timeout );
             if( success )
             {

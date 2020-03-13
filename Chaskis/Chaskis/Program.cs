@@ -28,21 +28,25 @@ namespace Chaskis.Cli
 
     internal static class MainClass
     {
-        private static CancellationTokenSource token;
-
         public static int Main( string[] args )
         {
             try
             {
-                token = new CancellationTokenSource();
-                Console.CancelKeyPress += Console_CancelKeyPress;
+                using( CancellationTokenSource token = new CancellationTokenSource() )
+                {
+                    CliMain main = new CliMain();
+                    Task task = main.RunChaskis( args, token.Token );
 
-                CliMain main = new CliMain();
-                Task task = main.RunChaskis( args, token.Token );
-                task.Wait();
+                    Console.WriteLine( "Press any key to quit" );
+                    Console.Read();
 
-                // No error if there were no exceptions.
-                return 0;
+                    token.Cancel();
+
+                    task.Wait();
+
+                    // No error if there were no exceptions.
+                    return 0;
+                }
             }
             catch( ArgumentException )
             {
@@ -58,24 +62,6 @@ namespace Chaskis.Cli
             {
                 Console.WriteLine( "FATAL ERROR:" + Environment.NewLine + err.Message );
                 return -1;
-            }
-            finally
-            {
-                Console.CancelKeyPress -= Console_CancelKeyPress;
-                token?.Dispose();
-            }
-        }
-
-        private static void Console_CancelKeyPress( object sender, ConsoleCancelEventArgs e )
-        {
-            // If we are CTRL+C, we should stop the process,
-            // but let things clean up first.  If we get CTRL+BREAK,
-            // let the process be killed without cleaning up.
-            if( e.SpecialKey == ConsoleSpecialKey.ControlC )
-            {
-                Console.WriteLine( "Got CTRL+C, gracefully cleaning up process." );
-                e.Cancel = true;
-                token.Cancel();
             }
         }
     }
