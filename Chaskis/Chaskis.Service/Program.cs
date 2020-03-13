@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SethCS.Extensions;
 
 namespace Chaskis.Service
 {
@@ -34,13 +35,21 @@ namespace Chaskis.Service
 
             IHostBuilder hostBuilder = Host.CreateDefaultBuilder( args );
 
-            if( Environment.OSVersion.Platform == PlatformID.Win32NT )
+            bool isDocker = Environment.UserName.EqualsIgnoreCase( "ContainerUser" );
+            if( isDocker )
             {
-                hostBuilder = hostBuilder.UseWindowsService();
+                Console.WriteLine( "Docker Environment Detected" );
             }
             else
             {
-                hostBuilder = hostBuilder.UseSystemd();
+                if( Environment.OSVersion.Platform == PlatformID.Win32NT )
+                {
+                    hostBuilder = hostBuilder.UseWindowsService();
+                }
+                else
+                {
+                    hostBuilder = hostBuilder.UseSystemd();
+                }
             }
 
             return hostBuilder.ConfigureServices(
