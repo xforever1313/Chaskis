@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,6 +14,15 @@ namespace Chaskis.Service
 {
     public class Program
     {
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// Save off args so we can pass it into the Chaskis Main.
+        /// </summary>
+        public static IReadOnlyList<string> Args { get; private set; }
+
+        // ---------------- Functions ----------------
+
         public static void Main( string[] args )
         {
             CreateHostBuilder( args ).Build().Run();
@@ -20,6 +30,8 @@ namespace Chaskis.Service
 
         public static IHostBuilder CreateHostBuilder( string[] args )
         {
+            Args = args;
+
             IHostBuilder hostBuilder = Host.CreateDefaultBuilder( args );
 
             if( Environment.OSVersion.Platform == PlatformID.Win32NT )

@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -49,13 +50,13 @@ namespace Chaskis.Cli
         /// </summary>
         /// <param name="args">Arguments to parse</param>
         /// <param name="defaultRootDir">Where the DEFAULT root of the config directory is.</param>
-        public ArgumentParser( string[] args, string defaultRootDir )
+        public ArgumentParser( IEnumerable<string> args, string defaultRootDir )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
             ArgumentChecker.StringIsNotNullOrEmpty( defaultRootDir, nameof( defaultRootDir ) );
 
             this.ChaskisRoot = defaultRootDir;
-            this.FailOnPluginFailure = false;
+            this.FailOnPluginFailure = true;
             this.IsValid = true;
 
             foreach( string arg in args )

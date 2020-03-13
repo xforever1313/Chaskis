@@ -85,6 +85,8 @@ namespace Chaskis.Cli
                 Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
                 "Chaskis"
             );
+            
+            StaticLogger.Log.WriteLine( "Default root directory: " + DefaultRootDirectory );
         }
 
         // ---------------- Properties ----------------
