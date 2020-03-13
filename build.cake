@@ -5,9 +5,9 @@ string target = Argument( "target", defaultTarget );
 
 // ---------------- Globals ----------------
 
-#load "BuildScripts/Includes.cake"
-
 ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
+
+#load "BuildScripts/Includes.cake"
 
 bool isWindows = IsRunningOnWindows();
 
@@ -170,6 +170,28 @@ Task( "msi" )
 .Description( "Builds the MSI on Windows." )
 .WithCriteria( isWindows )
 .IsDependentOn( "unit_test" );
+
+Task( "make_distro" )
+.Does(
+    ( context ) =>
+    {
+        string output = Argument( "output", string.Empty );
+        if( string.IsNullOrWhiteSpace( output ) )
+        {
+            throw new ArgumentNullException( nameof( output ), "Output must be specified" );
+        }
+
+        DistroCreatorConfig config = new DistroCreatorConfig
+        {
+            OutputLocation = output,
+            Target = "Release"
+        };
+
+        DistroCreator creator = new DistroCreator( context, paths, config );
+        creator.CreateDistro();
+    }
+).Description( "Runs the Chaskis CLI installer and puts a disto in the specified location (using arguemnt 'output')" )
+.IsDependentOn( "Release" );
 
 Task( "nuget_pack" )
 .Does(

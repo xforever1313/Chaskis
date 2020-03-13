@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SethCS.Basic;
 using SethCS.Exceptions;
 
 namespace Chaskis.Cli
@@ -110,6 +111,7 @@ namespace Chaskis.Cli
                 else
                 {
                     this.IsValid = false;
+                    StaticLogger.Log.ErrorWriteLine( "Unknown Argument: " + arg );
                 }
             }
         }

@@ -26,6 +26,9 @@ namespace Chaskis.Cli
         {
             try
             {
+                StaticLogger.Log.OnWriteLine += LogInfo;
+                StaticLogger.Log.OnErrorWriteLine += LogError;
+
                 ArgumentParser parser = new ArgumentParser( args, Chaskis.DefaultRootDirectory );
 
                 if( parser.IsValid == false )
@@ -43,9 +46,6 @@ namespace Chaskis.Cli
                     PrintVersion();
                     return;
                 }
-
-                StaticLogger.Log.OnWriteLine += LogInfo;
-                StaticLogger.Log.OnErrorWriteLine += LogError;
 
                 if( parser.BootStrap )
                 {

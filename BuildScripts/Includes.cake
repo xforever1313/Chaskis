@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 
 #load "Common.cake"
 #load "Deb.cake"
+#load "Docker.cake"
 #load "DistroCreator.cake"
 #load "ImportantPaths.cake"
 #load "MSBuild.cake"
