@@ -36,10 +36,6 @@ namespace Chaskis.Service
             {
                 await this.main.RunChaskis( Program.Args, stoppingToken );
             }
-            catch( TaskCanceledException )
-            {
-                logger.LogInformation( "Starting Shutdown Sequence" );
-            }
             catch( Exception e )
             {
                 logger.LogError( "FATAL ERROR:" + Environment.NewLine + e.ToString() );

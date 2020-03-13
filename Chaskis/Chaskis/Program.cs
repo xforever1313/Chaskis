@@ -37,8 +37,13 @@ namespace Chaskis.Cli
                     CliMain main = new CliMain();
                     Task task = main.RunChaskis( args, token.Token );
 
-                    Console.WriteLine( "Press any key to quit" );
-                    Console.Read();
+                    // In case we got arguments for help or version,
+                    // only do this if our task is still doing things.
+                    if( task.IsCompleted == false )
+                    {
+                        Console.WriteLine( "Press any key to quit" );
+                        Console.Read();
+                    }
 
                     token.Cancel();
 

@@ -66,7 +66,15 @@ namespace Chaskis.Cli
                         chaskis.InitStage4_OpenConnection();
 
                         Console.WriteLine();
-                        await Task.Delay( -1, cancelToken );
+
+                        try
+                        {
+                            await Task.Delay( -1, cancelToken );
+                        }
+                        catch( TaskCanceledException )
+                        {
+                            StaticLogger.Log.WriteLine( "Shutdown Requested" );
+                        }
                     }
                 }
             }
