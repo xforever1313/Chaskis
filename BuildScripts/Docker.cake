@@ -1,4 +1,4 @@
-Task( "build_windows_docker" )
+var buildWindowsRuntimeTask = Task( "build_windows_docker" )
 .Does(
     ( context ) =>
     {
@@ -29,5 +29,8 @@ Task( "build_windows_docker" )
         }
     }
 )
-.Description( "Builds the Windows Runtime Docker Container" )
-.IsDependentOn( "Release" );
+.Description( "Builds the Windows Runtime Docker Container" );
+if( isJenkins == false )
+{
+    buildWindowsRuntimeTask.IsDependentOn( "Release" );
+}

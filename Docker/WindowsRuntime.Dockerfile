@@ -1,5 +1,5 @@
 # Build with "docker build -t chaskis.windows -f .\Docker\WindowsRuntime.Dockerfile ." from the root directory.
-# This assumes there is 
+# This assumes there is a distro created.
 
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 

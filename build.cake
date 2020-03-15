@@ -7,9 +7,13 @@ string target = Argument( "target", defaultTarget );
 
 ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
 
-#load "BuildScripts/Includes.cake"
-
 bool isWindows = IsRunningOnWindows();
+
+// If we are in a Jenkins Environment, we'll assume Jenkins builds all of the stuff in the correct order
+// since its starting from an empty repo.
+bool isJenkins = Environment.UserName == "ContainerUser";
+
+#load "BuildScripts/Includes.cake"
 
 // ---------------- Targets ----------------
 
@@ -53,7 +57,7 @@ Task( "release" )
 
 // -------- Test Targets --------
 
-Task( "unit_test" )
+var unitTestTask = Task( "unit_test" )
 .Does(
     ( context ) =>
     {
@@ -61,10 +65,13 @@ Task( "unit_test" )
         runner.RunTests();
     }
 )
-.Description( "Runs all the unit tests (does not run code coverage)." )
-.IsDependentOn( "debug" );
+.Description( "Runs all the unit tests (does not run code coverage)." );
+if( isJenkins == false )
+{
+    unitTestTask.IsDependentOn( "debug" );
+}
 
-Task( "unit_test_code_coverage" )
+var unitTestCoverageTask = Task( "unit_test_code_coverage" )
 .Does(
     ( context ) =>
     {
@@ -73,12 +80,15 @@ Task( "unit_test_code_coverage" )
     }
 )
 .Description( "Runs code coverage, Windows only." )
-.WithCriteria( isWindows )
-.IsDependentOn( "debug" );
+.WithCriteria( isWindows );
+if( isJenkins == false )
+{
+    unitTestCoverageTask.IsDependentOn( "debug" );
+}
 
-const string bootStrapTask = "bootstrap_regression_tests";
+const string bootStrapTaskName = "bootstrap_regression_tests";
 
-Task( bootStrapTask )
+var bootStrapTask = Task( bootStrapTaskName )
 .Does(
     ( context ) =>
     {
@@ -95,8 +105,11 @@ Task( bootStrapTask )
         distroCreator.CreateDistro();
     }
 )
-.Description( "Creates the distro for the regression tests." )
-.IsDependentOn( "debug" );
+.Description( "Creates the distro for the regression tests." );
+if( isJenkins == false )
+{
+    bootStrapTask.IsDependentOn( "debug" );
+}
 
 Task( "regression_test" )
 .Does(
@@ -107,7 +120,7 @@ Task( "regression_test" )
     }
 ).Description(
     "Runs all regression tests."
-).IsDependentOn( bootStrapTask );
+).IsDependentOn( bootStrapTaskName );
 
 // Need to figure out paths first...
 //Task( "regression_test_code_coverage" )
@@ -119,12 +132,12 @@ Task( "regression_test" )
 //    }
 //).Description(
 //    "Runs all regression tests with code coverage."
-//).IsDependentOn( bootStrapTask )
+//).IsDependentOn( bootStrapTaskName )
 //.WithCriteria( isWindows );
 
 // -------- Package Targets --------
 
-Task( "msi" )
+var msiTask = Task( "msi" )
 .Does(
     ( context ) =>
     {
@@ -168,10 +181,13 @@ Task( "msi" )
     }
 )
 .Description( "Builds the MSI on Windows." )
-.WithCriteria( isWindows )
-.IsDependentOn( "unit_test" );
+.WithCriteria( isWindows );
+if( isJenkins == false )
+{
+    msiTask.IsDependentOn( "unit_test" );
+}
 
-Task( "make_distro" )
+var makeDistroTask = Task( "make_distro" )
 .Does(
     ( context ) =>
     {
@@ -190,10 +206,13 @@ Task( "make_distro" )
         DistroCreator creator = new DistroCreator( context, paths, config );
         creator.CreateDistro();
     }
-).Description( "Runs the Chaskis CLI installer and puts a disto in the specified location (using arguemnt 'output')" )
-.IsDependentOn( "Release" );
+).Description( "Runs the Chaskis CLI installer and puts a disto in the specified location (using arguemnt 'output')" );
+if( isJenkins == false )
+{
+    makeDistroTask.IsDependentOn( "Release" );
+}
 
-Task( "nuget_pack" )
+var nugetPackTask = Task( "nuget_pack" )
 .Does(
     ( context ) =>
     {
@@ -226,8 +245,11 @@ Task( "nuget_pack" )
         }
     }
 )
-.Description( "Creates the Chaskis Core NuGet package. ")
-.IsDependentOn( "release" );
+.Description( "Creates the Chaskis Core NuGet package. ");
+if( isJenkins == false )
+{
+    nugetPackTask.IsDependentOn( "release" );
+}
 
 Task( "choco_pack" )
 .Does(
@@ -264,14 +286,18 @@ Task( "choco_pack" )
 .WithCriteria( isWindows )
 .Description( "Creates the Chocolatey Package (Windows Only)." );
 
-Task( "debian_pack" )
+var debianPackTask = Task( "debian_pack" )
 .Does(
     ( context ) =>
     {
         DebRunner runner = new DebRunner( context, paths );
         runner.BuildDeb();
     }
-).IsDependentOn( "release" );
+);
+if( isJenkins == false )
+{
+    debianPackTask.IsDependentOn( "release" );
+}
 
 Task( defaultTarget )
 .IsDependentOn( "debug" )
