@@ -3,11 +3,10 @@
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
+RUN mkdir "c:\\Cake"
+RUN dotnet tool install --tool-path c:\\Cake Cake.Tool
+
 # Switch to unelevated user.
 USER ContainerUser
 
-# Tools are installed on a per-user basis, need to
-# install Cake.Tool after switching users.
-RUN dotnet tool install -g Cake.Tool
-
-ENTRYPOINT [ "dotnet", "cake" ]
+ENTRYPOINT [ "c:\\Cake\\dotnet-cake" ]
