@@ -28,6 +28,10 @@ RUN "rmdir /S /Q c:\\workdir"
 
 # Now, install everything we need!
 RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "dotnetcore-sdk" ]
+
+# Opt-out of dotnet telemetry
+RUN ["setx", "DOTNET_CLI_TELEMETRY_OPTOUT", "1", "/M"]
+
 RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "NuGet.CommandLine" ]
 
 # For WiX.
@@ -43,6 +47,7 @@ RUN dotnet tool install --tool-path c:\\Cake Cake.Tool
 # Switch to unelevated user.
 USER ContainerUser
 
-RUN ["dotnet", "--version"]
+# So dotnet runs once and doesn't print out that annoying telemetry message.
+RUN "dotnet || echo done"
 
 ENTRYPOINT [ "c:\\Cake\\dotnet-cake" ]
