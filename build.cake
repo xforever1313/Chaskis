@@ -159,6 +159,11 @@ var msiTask = Task( "msi" )
             WorkingDirectory = paths.SourceFolder
         };
 
+        if( isJenkins )
+        {
+            settings.NodeReuse = false;
+        }
+
         // For WiX, need to call MSBuild, not dotnet core build.  Wix doesn't work with dotnet core.
         // Its... probably fine??
         MSBuild( paths.SolutionPath, settings );
