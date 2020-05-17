@@ -8,6 +8,11 @@
 // For intellisense in VS Code
 #tool nuget:?package=Cake.Bakery&version=0.4.1
 
+// So we can copy over to our docker build container
+// Note: if the version changes, it will need to changed
+// in the docker file as well.
+#tool nuget:?package=NuGet.CommandLine&version=5.5.1
+
 // For unit tests
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.9.0
 #tool nuget:?package=OpenCover&version=4.6.519
