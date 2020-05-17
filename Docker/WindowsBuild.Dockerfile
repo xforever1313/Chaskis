@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019-amd64
 # - Dotnet SDK
 # - WiX toolset
 # - NuGet
+# - MsBuild
 
 # But first, we need to (safely) install Chocolatey.
 # We could download the powershell script and run it,
@@ -34,6 +35,9 @@ RUN ["setx", "DOTNET_CLI_TELEMETRY_OPTOUT", "1", "/M"]
 
 RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "NuGet.CommandLine" ]
 
+# Corefx (a dependency of VS Tools) requires a reboot.  Ignore those, and ignore the exit code that gets returned (3010 means requires reboot)
+RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "--ignoredetectedreboot", "--ignorepackagecodes", "visualstudio2019buildtools" ]
+
 # For WiX.
 RUN ["c:\\windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe", "-Command", "{Install-WindowsFeature Net-Framework-Core}"]
 # RUN "C:\\ProgramData\\chocolatey\\choco.exe install -y --allow-empty-checksums --ignore-package-exit-codes DotNet3.5 || echo done"
@@ -46,8 +50,5 @@ RUN dotnet tool install --tool-path c:\\Cake Cake.Tool
 
 # Switch to unelevated user.
 USER ContainerUser
-
-# So dotnet runs once and doesn't print out that annoying telemetry message.
-RUN "dotnet || echo done"
 
 ENTRYPOINT [ "c:\\Cake\\dotnet-cake" ]
