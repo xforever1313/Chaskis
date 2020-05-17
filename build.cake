@@ -163,6 +163,7 @@ var msiTask = Task( "msi" )
         {
             settings.NodeReuse = false;
             settings.Verbosity = Verbosity.Verbose;
+            settings.ToolVersion = MSBuildToolVersion.VS2019;
         }
 
         // For WiX, need to call MSBuild, not dotnet core build.  Wix doesn't work with dotnet core.
