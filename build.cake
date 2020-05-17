@@ -162,6 +162,7 @@ var msiTask = Task( "msi" )
         if( isJenkins )
         {
             settings.NodeReuse = false;
+            settings.Verbosity = Verbosity.Verbose;
         }
 
         // For WiX, need to call MSBuild, not dotnet core build.  Wix doesn't work with dotnet core.
@@ -189,7 +190,7 @@ var msiTask = Task( "msi" )
 .WithCriteria( isWindows );
 if( isJenkins == false )
 {
-    msiTask.IsDependentOn( "unit_test" );
+    //msiTask.IsDependentOn( "unit_test" );
 }
 
 var makeDistroTask = Task( "make_distro" )
