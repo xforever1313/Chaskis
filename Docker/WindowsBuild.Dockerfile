@@ -19,6 +19,8 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019-amd64
 # So, let's put that over to the container, install chocolatey, then
 # delete everything
 
+# -- Bootstrap --
+
 RUN mkdir "c:\\workdir"
 COPY "tools\\NuGet.CommandLine.5.5.1\\tools\\NuGet.exe" "c:\\workdir\\NuGet.exe"
 
@@ -27,11 +29,18 @@ RUN ["c:\\windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe", "c:\\work
 
 RUN "rmdir /S /Q c:\\workdir"
 
+# -- Install --
+
+ARG sdk_version="3.1.202"
+
 # Now, install everything we need!
-RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "dotnetcore-sdk" ]
+RUN "C:\\ProgramData\\chocolatey\\choco.exe install -y --version %sdk_version% dotnetcore-sdk"
 
 # Opt-out of dotnet telemetry
 RUN ["setx", "DOTNET_CLI_TELEMETRY_OPTOUT", "1", "/M"]
+
+# Set SDK path
+RUN "setx MSBuildSDKsPath "C:\\Program Files\\dotnet\\sdk\\%sdk_version%\\Sdks" /M"
 
 RUN [ "C:\\ProgramData\\chocolatey\\choco.exe", "install", "-y", "NuGet.CommandLine" ]
 
