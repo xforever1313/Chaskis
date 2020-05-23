@@ -61,11 +61,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpServer", "Plugins\HttpS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chaskis.Service", "Chaskis.Service\Chaskis.Service.csproj", "{3D7581F6-F735-4B44-9B70-EB879CCBF94D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaskis.UnitTests", "UnitTests\Chaskis.UnitTests.csproj", "{C00195BE-6BEF-4648-9093-5F6244EE3616}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chaskis.UnitTests", "UnitTests\Chaskis.UnitTests.csproj", "{C00195BE-6BEF-4648-9093-5F6244EE3616}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
+		..\SethCS\SethCS\SethCS.projitems*{ac2b7b3b-9511-40cd-b676-b8f81bf22594}*SharedItemsImports = 5
+		..\SethCS\SethCS\SethCS.projitems*{b2f90902-e087-443d-84b0-d626e617e8d4}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
