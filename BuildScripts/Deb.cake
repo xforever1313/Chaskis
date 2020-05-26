@@ -27,15 +27,14 @@ public class DebRunner
 
         // We will be creating the .deb file in the Debian install directory.
         // Like with building C# Assemblies, we will do all of the work
-        // in the obj folder, and the final outputs will be in the bin
-        // folder.
+        // in the obj folder.
 
-        // First, create and obj and bin folders, and ensure they are clean.
+        // First, create and obj and output folders, and ensure they are clean.
         DirectoryPath objFolder = this.paths.DebianLinuxInstallConfigFolder.Combine(
             new DirectoryPath( "obj" )
         );
-        DirectoryPath outputFolder = this.paths.DebianLinuxInstallConfigFolder.Combine(
-            new DirectoryPath( "bin" )
+        DirectoryPath outputFolder = this.paths.OutputPackages.Combine(
+            new DirectoryPath( "debian" )
         );
 
         this.context.EnsureDirectoryExists( objFolder );
