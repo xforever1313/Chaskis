@@ -11,7 +11,9 @@ bool isWindows = IsRunningOnWindows();
 
 // If we are in a Jenkins Environment, we'll assume Jenkins builds all of the stuff in the correct order
 // since its starting from an empty repo.
-bool isJenkins = Environment.UserName == "ContainerUser";
+bool isJenkins = 
+    ( Environment.UserName.ToLower() == "containeruser" ) ||
+    ( Environment.UserName.ToLower() == "jenknode" );
 
 #load "BuildScripts/Includes.cake"
 
@@ -191,7 +193,7 @@ var msiTask = Task( "msi" )
 .WithCriteria( isWindows );
 if( isJenkins == false )
 {
-    //msiTask.IsDependentOn( "unit_test" );
+    msiTask.IsDependentOn( "unit_test" );
 }
 
 var makeDistroTask = Task( "make_distro" )
