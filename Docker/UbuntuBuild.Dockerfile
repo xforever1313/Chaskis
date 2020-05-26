@@ -21,7 +21,4 @@ RUN apt -y autoclean
 RUN mkdir /cake/
 RUN dotnet tool install --tool-path /cake/ Cake.Tool
 
-# Switch to unelevated user.
-USER ContainerUser
-
 ENTRYPOINT [ "/cake/dotnet-cake" ]
