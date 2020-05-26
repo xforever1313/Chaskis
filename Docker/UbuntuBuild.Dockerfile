@@ -17,12 +17,11 @@ RUN rm packages-microsoft-prod.deb
 RUN apt -y clean
 RUN apt -y autoclean
 
-# Install cake
-RUN mkdir /cake/
-RUN dotnet tool install --tool-path /cake/ Cake.Tool
-
 # Make unelevated user
-RUN useradd -M ContainerUser
+RUN useradd --home /home/ContainerUser/ --create-home ContainerUser
 USER ContainerUser
 
-ENTRYPOINT [ "/cake/dotnet-cake" ]
+# Install cake
+RUN dotnet tool install --tool-path /home/ContainerUser/cake/ Cake.Tool
+
+ENTRYPOINT [ "/home/ContainerUser/cake/dotnet-cake" ]
