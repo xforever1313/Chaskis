@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.IO;
 using NUnit.Framework;
 using SethCS.Basic;
 
@@ -15,6 +16,9 @@ namespace Chaskis.RegressionTests.TestCore
         // ---------------- Fields ----------------
 
         private readonly GenericLogger testStateLog;
+
+        private FileStream logFile;
+        private StreamWriter logWriter;
 
         // ---------------- Constructor ----------------
 
@@ -47,6 +51,8 @@ namespace Chaskis.RegressionTests.TestCore
 
         // ---------------- Functions ----------------
 
+        // -------- Setup / Teardown --------
+
         public void PerformFixtureSetup( ChaskisFixtureConfig config = null )
         {
             Step.Run(
@@ -62,6 +68,8 @@ namespace Chaskis.RegressionTests.TestCore
             {
                 config = new ChaskisFixtureConfig();
             }
+
+            SetupLog();
 
             // ---------------- Setup Environment ----------------
 
@@ -137,6 +145,9 @@ namespace Chaskis.RegressionTests.TestCore
             finally
             {
                 this.EnvironmentManager.Dispose();
+                Logger.OnWriteLine -= this.Logger_OnWriteLine;
+                this.logWriter?.Dispose();
+                this.logFile?.Dispose();
             }
         }
 
@@ -162,8 +173,42 @@ namespace Chaskis.RegressionTests.TestCore
             );
         }
 
-        public void PerformTestTeardownInternal()
+        private void PerformTestTeardownInternal()
         {
+        }
+
+        // -------- Helper Functions --------
+
+        private void SetupLog()
+        {
+            string logPath = Path.Combine(
+                this.EnvironmentManager.ChaskisProjectRoot,
+                "..",
+                "TestResults",
+                "RegressionTests",
+                "Logs"
+            );
+
+            if( Directory.Exists( logPath ) == false )
+            {
+                Directory.CreateDirectory( logPath );
+            }
+
+            string fileName = Path.Combine(
+                logPath,
+                TestContext.CurrentContext.Test.Name + ".log"
+            );
+
+            this.logFile = new FileStream( fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite );
+            this.logWriter = new StreamWriter( this.logFile );
+
+            Logger.OnWriteLine += this.Logger_OnWriteLine;
+        }
+
+        private void Logger_OnWriteLine( string obj )
+        {
+            this.logWriter.Write( obj );
+            this.logWriter.Flush();
         }
     }
 }

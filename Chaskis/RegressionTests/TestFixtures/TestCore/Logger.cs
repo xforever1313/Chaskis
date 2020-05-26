@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using SethCS.Basic;
 using SethCS.Extensions;
@@ -16,6 +17,12 @@ namespace Chaskis.RegressionTests.TestCore
 {
     public class Logger
     {
+        // ---------------- Events ----------------
+
+        public static event Action<string> OnWriteLine;
+
+        // ---------------- Fields ----------------
+
         private readonly Dictionary<string, GenericLogger> logs;
 
         private static readonly Logger instance;
@@ -77,6 +84,7 @@ namespace Chaskis.RegressionTests.TestCore
             TestContext.Out.Write( msg );
             TestContext.Out.Flush();
             Debug.Write( msg );
+            OnWriteLine?.Invoke( msg );
         }
     }
 }
