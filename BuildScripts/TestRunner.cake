@@ -10,7 +10,12 @@ public class TestRunner
 
     // ---------------- Constructor ----------------
 
-    public TestRunner( ICakeContext context, ImportantPaths paths, string testContext, FilePath testCsProjectPath )
+    public TestRunner(
+        ICakeContext context,
+        ImportantPaths paths,
+        string testContext,
+        FilePath testCsProjectPath
+    )
     {
         this.cakeContext = context;
         this.paths = paths;
@@ -36,6 +41,7 @@ public class TestRunner
         DotNetCoreTestSettings settings = new DotNetCoreTestSettings
         {
             NoBuild = true,
+            NoRestore = true,
             Configuration = "Debug",
             ResultsDirectory = this.resultsDir,
             VSTestReportPath = resultFile,
@@ -43,11 +49,14 @@ public class TestRunner
         };
 
         // Need to restore to download the TestHost, which is a NuGet package.
-        settings.NoRestore = false;
+
+        context.Information( "Restoring..." );
+        context.DotNetCoreRestore( this.testProject.ToString() );
+        context.Information( "Restoring... Done!" );
 
         context.Information( "Running Tests..." );
         context.DotNetCoreTest( this.testProject.ToString(), settings );
-        context.Information( "Running Tests...Done!" );
+        context.Information( "Running Tests... Done!" );
     }
 
     public void RunCodeCoverage()
