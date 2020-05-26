@@ -72,7 +72,7 @@ namespace Chaskis.RegressionTests.TestCore
             this.consoleOutLog.WriteLine( "Chaskis.exe Location: " + this.exeFile );
             this.startInfo = new ProcessStartInfo(
                 this.exeFile,
-                "--chaskisroot=" + environmentDir
+                $"--chaskisroot=\"{environmentDir}\""
             )
             {
                 RedirectStandardInput = true,
