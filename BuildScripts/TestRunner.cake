@@ -36,12 +36,14 @@ public class TestRunner
         DotNetCoreTestSettings settings = new DotNetCoreTestSettings
         {
             NoBuild = true,
-            NoRestore = true,
             Configuration = "Debug",
             ResultsDirectory = this.resultsDir,
             VSTestReportPath = resultFile,
             Verbosity = DotNetCoreVerbosity.Normal
         };
+
+        // Need to restore to download the TestHost, which is a NuGet package.
+        settings.NoRestore = false;
 
         context.Information( "Running Tests..." );
         context.DotNetCoreTest( this.testProject.ToString(), settings );
