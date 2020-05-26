@@ -164,7 +164,7 @@ var msiTask = Task( "msi" )
         if( isJenkins )
         {
             settings.NodeReuse = false;
-            settings.Verbosity = Verbosity.Verbose;
+            settings.Verbosity = Verbosity.Normal;
             settings.ToolVersion = MSBuildToolVersion.VS2019;
         }
 
