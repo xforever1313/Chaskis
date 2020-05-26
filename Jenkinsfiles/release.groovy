@@ -39,6 +39,10 @@ def distFolder = "dist";
 def buildDistFolder = ".\\Chaskis\\distPackages"; // Where builds post their dists.
 def archiveFolder = "archives";
 
+def UbuntuBuildImageName()
+{
+    return "chaskis.build.ubuntu";
+}
 
 def UseWindowsDockerForBuild()
 {
@@ -70,6 +74,15 @@ def CallCakeOnWindows( String cmd )
     {
         bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake ${cmd}"
     }
+}
+
+def CallCakeOnLinux( String cmd )
+{
+    // Mount to the container user's home directory so there are no permission issues.
+    bat "docker run --mount type=bind,source=\"${pwd()}\\Chaskis\",target=/home/ContainerUser/chaskis/ -i ${UbuntuBuildImageName()} /home/ContainerUser/chaskis/build.cake ${cmd}"
+
+    // Sleep for 5 seconds to give containers a chance to cleanup.
+    WindowsSleep( 5 );
 }
 
 def CleanWindowsDirectory( String path )
@@ -242,6 +255,88 @@ pipeline
                     }
                 }
             }
+            when
+            {
+                expression
+                {
+                    return true;
+                }
+            }
         }// End Windows
+        stage( "Linux" )
+        {
+            stages
+            {
+                stage( 'setup' )
+                {
+                    steps
+                    {
+                        bat "cd Chaskis && git clean -dfx"
+                    }
+                }
+                stage( 'Make Linux Build Container' )
+                {
+                    steps
+                    {
+                        // Make the Linux build docker container.
+                        bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -SwitchLinuxEngine';
+                        WindowsSleep( 10 ); // Give some time to switch.
+                        bat "docker build -t ${UbuntuBuildImageName()} -f .\\Chaskis\\Docker\\UbuntuBuild.Dockerfile .\\Chaskis";
+                    }
+                }
+                stage( 'build_debug' )
+                {
+                    steps
+                    {
+                        // Build Debug
+                        CallCakeOnLinux( "--target=debug" );
+                    }
+                }
+                stage( 'unit_test' )
+                {
+                    steps
+                    {
+                        CallCakeOnLinux( "--target=unit_test" );
+                    }
+                    post
+                    {
+                        always
+                        {
+                            ParseTestResults( "Chaskis\\TestResults\\UnitTests\\*.xml" );
+                        }
+                    }
+                }
+                stage( 'regression_test' )
+                {
+                    steps
+                    {
+                        CallCakeOnLinux( "--target=regression_test" );
+                    }
+                    post
+                    {
+                        always
+                        {
+                            ParseTestResults( "Chaskis\\TestResults\\RegressionTests\\*.xml" );
+                            bat "MOVE .\\Chaskis\\TestResults\\RegressionTests\\Logs .\\${archiveFolder}\\linux_regression_logs";
+                            archiveArtifacts "${archiveFolder}\\linux_regression_logs\\*.log";
+                        }
+                    }
+                }
+                stage( 'build_release' )
+                {
+                    steps
+                    {
+                        CallCakeOnLinux( "--target=release" );
+                    }
+                }
+                stage( 'make_deb' )
+                {
+                    steps
+                    {
+                        CallCakeOnLinux( "--target=debian_pack" );
+                    }
+                }
+            }
+        }
     }
 }
