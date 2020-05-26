@@ -35,6 +35,11 @@
 //   You can have it start automatically by setting the Startup Type to "Automatic".
 // - Also make sure the "Docker Desktop Service" is also running.
 
+def distFolder = "dist";
+def buildDistFolder = ".\\Chaskis\\distPackages"; // Where builds post their dists.
+def archiveFolder = "archives";
+
+
 def UseWindowsDockerForBuild()
 {
     // Can't quite get the Windows build container working to generate .MSI's.  May need to wait for the next generation of WiX to be
@@ -65,6 +70,12 @@ def CallCakeOnWindows( String cmd )
     {
         bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake ${cmd}"
     }
+}
+
+def CleanWindowsDirectory( String path )
+{
+    bat "IF EXIST \"${path}\" rmdir /S /Q \"${path}\""
+    bat "mkdir \"${path}\""
 }
 
 def RunProcessIgnoreError( String cmd )
@@ -131,23 +142,24 @@ pipeline
                     {
                         bat "dotnet tool update Cake.Tool --tool-path .\\Cake"
                         bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake --showdescription"
+                        CleanWindowsDirectory( pwd() + "\\${distFolder}" );
+                        CleanWindowsDirectory( pwd() + "\\${archiveFolder}" );
                     }
                 }
                 stage( 'make_build_container' )
                 {
-                    when
-                    {
-                        expression
-                        {
-                            return UseWindowsDockerForBuild();
-                        }
-                    }
                     steps
                     {
                         // Make the Windows build docker container.
                         bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -Version';
                         bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -SwitchWindowsEngine';
-                        bat "docker build -t chaskis.build.windows -f .\\Chaskis\\Docker\\WindowsBuild.Dockerfile .\\Chaskis";
+                        script
+                        {
+                            if( UseWindowsDockerForBuild() )
+                            {
+                                bat "docker build -t chaskis.build.windows -f .\\Chaskis\\Docker\\WindowsBuild.Dockerfile .\\Chaskis";
+                            }
+                        }
                     }
                 }
                 stage( 'build_debug' )
@@ -182,7 +194,9 @@ pipeline
                     {
                         always
                         {
-                            ParseTestResults( "Chaskis\\TestResults\\RegressionTests\\*.xml" )
+                            ParseTestResults( "Chaskis\\TestResults\\RegressionTests\\*.xml" );
+                            bat "MOVE .\\Chaskis\\TestResults\\RegressionTests\\Logs .\\${archiveFolder}\\windows_regression_logs";
+                            archiveArtifacts "${archiveFolder}\\windows_regression_logs\\*.log";
                         }
                     }
                 }
@@ -214,7 +228,20 @@ pipeline
                         bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake --target=build_windows_docker"
                     }
                 }
+                stage( 'Archive' )
+                {
+                    steps
+                    {
+                        // No need for Docker to stick around, delete.
+                        bat "rmdir /S /Q ${buildDistFolder}\\windows\\docker"
+
+                        // Move binaries over so they can be posted online.
+                        bat "MOVE ${buildDistFolder}\\windows .\\${distFolder}\\windows"
+                        bat "MOVE ${buildDistFolder}\\chocolatey .\\${distFolder}\\chocolatey"
+                        bat "MOVE ${buildDistFolder}\\nuget .\\${distFolder}\\nuget"
+                    }
+                }
             }
-        }
+        }// End Windows
     }
 }
