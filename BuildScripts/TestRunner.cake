@@ -43,7 +43,9 @@ public class TestRunner
             Verbosity = DotNetCoreVerbosity.Normal
         };
 
+        context.Information( "Running Tests..." );
         context.DotNetCoreTest( this.testProject.ToString(), settings );
+        context.Information( "Running Tests...Done!" );
     }
 
     public void RunCodeCoverage()
