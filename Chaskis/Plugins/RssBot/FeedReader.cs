@@ -26,8 +26,6 @@ namespace Chaskis.Plugins.RssBot
         private SyndicationFeed feed;
         private readonly object feedLock;
 
-        private const string userAgent = "Chaskis IRC RssBot";
-
         private readonly HttpClient httpClient;
 
         // ---------------- Constructor ----------------
@@ -84,7 +82,7 @@ namespace Chaskis.Plugins.RssBot
         {
             List<SyndicationItem> newItems = new List<SyndicationItem>();
 
-            SyndicationFeed updatedFeed = await this.FetchFeed();
+            SyndicationFeed updatedFeed = await this.FetchFeedAsync();
 
             // this.feed can be modified by multiple threads if UpdateAsync() is called multiple times...
             // lock it up.
@@ -107,28 +105,28 @@ namespace Chaskis.Plugins.RssBot
             return newItems;
         }
 
-        private Task<SyndicationFeed> FetchFeed()
+        private async Task<SyndicationFeed> FetchFeed()
         {
-            return Task.Run(
-                async delegate ()
+            HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
+            if( response.IsSuccessStatusCode )
+            {
+                using( Stream content = await response.Content.ReadAsStreamAsync() )
                 {
-                    HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
-                    if( response.IsSuccessStatusCode )
+                    using( XmlReader xmlReader = XmlReader.Create( content ) )
                     {
-                        using( Stream content = await response.Content.ReadAsStreamAsync() )
-                        {
-                            using( XmlReader xmlReader = XmlReader.Create( content ) )
-                            {
-                                return SyndicationFeed.Load( xmlReader );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new HttpRequestException( "Error when getting HTTP: " + Environment.NewLine + response.StatusCode );
+                        return SyndicationFeed.Load( xmlReader );
                     }
                 }
-            );
+            }
+            else
+            {
+                throw new HttpRequestException( "Error when getting HTTP: " + Environment.NewLine + response.StatusCode );
+            }
+        }
+
+        private Task<SyndicationFeed> FetchFeedAsync()
+        {
+            return Task.Run( () => FetchFeed() );
         }
 
         private int SortByDate( SyndicationItem item1, SyndicationItem item2 )

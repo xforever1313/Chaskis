@@ -154,44 +154,6 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
             );
         }
 
-        /// <summary>
-        /// Ensures if the server response hangs, we get an abort exception.
-        /// </summary>
-        [Test]
-        public void AbortTest()
-        {
-            Step.Run(
-                "Try an update.  We expect an exception to occur due to a timeout",
-                () =>
-                {
-                    this.testFrame.HttpServer.SetHttpServerHangTimeTo( 15 * 1000 );
-
-                    this.TriggerUpdate();
-
-                    this.testFrame.ProcessRunner.WaitForStringFromChaskis(
-                        @"An\s+Exception\s+was\s+caught\s+while\s+updating\s+feed",
-                        20 * 1000
-                    ).FailIfFalse( "Did not get exception message" );
-
-                    this.testFrame.ProcessRunner.WaitForStringFromChaskis(
-                        @"System\.Threading\.Tasks\.TaskCanceledException",
-                        5 * 1000
-                    ).FailIfFalse( "Did not get TaskCanceledException" );
-                }
-            );
-
-            Step.Run(
-                "Ensure we didn't break anything, do another update as a sanity check",
-                () =>
-                {
-                    this.testFrame.HttpServer.SetHttpServerHangTimeTo( 0 );
-
-                    this.TriggerUpdate();
-                    this.WaitForNoUpdatesMessage();
-                }
-            );
-        }
-
         // ---------------- Test Helpers ----------------
 
         private void TriggerUpdate()

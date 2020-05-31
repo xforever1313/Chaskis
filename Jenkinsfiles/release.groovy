@@ -333,7 +333,7 @@ pipeline
                 {
                     steps
                     {
-                        CallCakeOnLinux( "--target=debian_pack" );
+                        CallCakeOnLinux( "--target=debian_pack --deb_build_dir=/home/ContainerUser/deb" );
                     }
                 }
             }

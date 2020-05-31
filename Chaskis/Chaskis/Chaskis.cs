@@ -71,7 +71,8 @@ namespace Chaskis.Cli
             this.chaskisRoot = chaskisRoot;
             this.httpClient = new HttpClient();
             this.httpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot" );
-            this.httpClient.Timeout = new TimeSpan( 0, 0, 10 );
+            // Leave the default timeout.  This was set to 10 seconds, but that may not be correct.
+            // It takes 15 seconds for DNS to timeout, so a 10 second timeout probably doesn't make a ton of sense.
 
             this.parsingQueue = new StringParsingQueue();
         }
