@@ -81,7 +81,13 @@ namespace Chaskis.RegressionTests.TestCore
 
         public void MapFileToUrl( string filePath, string url )
         {
-            this.fileMap[url] = filePath;
+            Step.Run(
+                $"Mapping local file '{filePath}' to URL '{url}'",
+                () =>
+                {
+                    this.fileMap[url] = filePath;
+                }
+            );
         }
 
         public void StopHttpServer()

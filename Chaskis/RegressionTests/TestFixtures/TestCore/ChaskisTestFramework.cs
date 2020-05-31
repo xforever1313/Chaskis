@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.IO;
 using NUnit.Framework;
 using SethCS.Basic;
@@ -69,7 +70,10 @@ namespace Chaskis.RegressionTests.TestCore
                 config = new ChaskisFixtureConfig();
             }
 
-            SetupLog();
+            if( this.logFile == null )
+            {
+                SetupLog();
+            }
 
             // ---------------- Setup Environment ----------------
 
@@ -179,8 +183,15 @@ namespace Chaskis.RegressionTests.TestCore
 
         // -------- Helper Functions --------
 
-        private void SetupLog()
+        public void SetupLog()
         {
+            if( this.logFile != null )
+            {
+                throw new InvalidOperationException(
+                    "Logfile already created"
+                );
+            }
+
             string logPath = Path.Combine(
                 this.EnvironmentManager.ChaskisProjectRoot,
                 "..",

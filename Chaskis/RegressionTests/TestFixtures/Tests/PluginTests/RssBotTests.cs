@@ -32,6 +32,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         public void FixtureSetup()
         {
             this.testFrame = new ChaskisTestFramework();
+            this.testFrame.SetupLog();
 
             ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
             {
