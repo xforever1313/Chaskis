@@ -299,7 +299,8 @@ var debianPackTask = Task( "debian_pack" )
 .Does(
     ( context ) =>
     {
-        DebRunner runner = new DebRunner( context, paths );
+        string buildDir = Argument( "deb_build_dir", string.Empty );
+        DebRunner runner = new DebRunner( context, paths, buildDir );
         runner.BuildDeb();
     }
 );
