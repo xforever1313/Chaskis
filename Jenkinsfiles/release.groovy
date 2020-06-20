@@ -343,6 +343,14 @@ pipeline
                         bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake --target=build_ubuntu_docker";
                     }
                 }
+                stage( 'Archive' )
+                {
+                    steps
+                    {
+                        // Move binaries over so they can be posted online.
+                        bat "MOVE ${buildDistFolder}\\debian .\\${distFolder}\\debian"
+                    }
+                }
             }
         }
     }

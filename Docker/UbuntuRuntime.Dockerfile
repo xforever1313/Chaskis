@@ -28,6 +28,4 @@ RUN ["rm", "/tmp/chaskis.deb"]
 USER chaskis
 RUN mkdir /chaskis/.config
 
-RUN ls -la /usr/lib/Chaskis/bin/
-
-ENTRYPOINT [ "dotnet", "/usr/lib/Chaskis/bin/Chaskis.Service.dll" ]
+ENTRYPOINT [ "/usr/lib/Chaskis/bin/Chaskis.Service" ]
