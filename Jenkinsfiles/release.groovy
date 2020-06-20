@@ -336,6 +336,13 @@ pipeline
                         CallCakeOnLinux( "--target=debian_pack --deb_build_dir=/home/ContainerUser/deb" );
                     }
                 }
+                stage( 'make_runtime_container' )
+                {
+                    steps
+                    {
+                        bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake --target=build_ubuntu_docker";
+                    }
+                }
             }
         }
     }

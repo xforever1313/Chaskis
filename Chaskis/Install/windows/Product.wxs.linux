@@ -131,6 +131,12 @@
                 <Directory Id="INSTALLFOLDER" Name="Chaskis">
                     <Directory Id="BinFolder" Name="bin">
                         <Directory Id="BinRuntimeFolder" Name="runtimes">
+                            <Directory Id="BinRuntimeUnixFolder" Name="unix">
+                                <Directory Id="BinRuntimeUnixLibFolder" Name="lib">
+                                    <Directory Id="BinRuntimeUnixLibCoreAppFolder" Name="netcoreapp2.1"/>
+                                    <Directory Id="BinRuntimeUnixLibStandardFolder" Name="netstandard2.0"/>
+                                </Directory>
+                            </Directory>
                         </Directory>
                     </Directory>
                     <Directory Id="PluginsFolder" Name="Plugins">
@@ -367,6 +373,16 @@
                 <File Source="$(var.Chaskis.Service.TargetDir)System.Security.Principal.Windows.dll" KeyPath="yes"/>
             </Component>
             
+
+
+
+            <Component Guid="{b927314d-e31c-4256-862d-442bd6c78daf}" Directory="BinRuntimeUnixLibCoreAppFolder">
+                <File Id="Netcore_System_Security_Principal_Windows_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{60a301d9-d79c-4300-aa10-2638c9d8f174}" Directory="BinRuntimeUnixLibStandardFolder">
+                <File Id="NetStandard_Microsoft_Win32_Registry_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes"/>
+            </Component>
 
 
             <!-- Sample IRC Config -->

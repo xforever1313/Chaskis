@@ -139,6 +139,14 @@
                                 </Directory>
                             </Directory>
                             #endif
+                            #if LINUX
+                            <Directory Id="BinRuntimeUnixFolder" Name="unix">
+                                <Directory Id="BinRuntimeUnixLibFolder" Name="lib">
+                                    <Directory Id="BinRuntimeUnixLibCoreAppFolder" Name="netcoreapp2.1"/>
+                                    <Directory Id="BinRuntimeUnixLibStandardFolder" Name="netstandard2.0"/>
+                                </Directory>
+                            </Directory>
+                            #endif
                         </Directory>
                     </Directory>
                     <Directory Id="PluginsFolder" Name="Plugins">
@@ -400,6 +408,18 @@
                 <File Id="NetStandard_System_ServiceProcess_ServiceController_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\win\lib\netstandard2.0\System.ServiceProcess.ServiceController.dll" KeyPath="yes"/>
             </Component>
             
+            #endif
+
+            #if LINUX
+
+            <Component Guid="{b927314d-e31c-4256-862d-442bd6c78daf}" Directory="BinRuntimeUnixLibCoreAppFolder">
+                <File Id="Netcore_System_Security_Principal_Windows_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll" KeyPath="yes"/>
+            </Component>
+            
+            <Component Guid="{60a301d9-d79c-4300-aa10-2638c9d8f174}" Directory="BinRuntimeUnixLibStandardFolder">
+                <File Id="NetStandard_System_ServiceProcess_ServiceController_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes"/>
+            </Component>
+
             #endif
 
             <!-- Sample IRC Config -->

@@ -370,6 +370,7 @@
             </Component>
             
 
+
             <!-- Sample IRC Config -->
             <Component Guid="{5CBBDB7E-F900-4E70-9DC5-CD48CC0FC747}" Directory="SampleConfig">
                 <File Source="..\..\Chaskis\Config\SampleIrcConfig.xml" KeyPath="yes"/>
