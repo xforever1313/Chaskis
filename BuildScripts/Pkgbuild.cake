@@ -12,6 +12,8 @@ public class PkgBuildRunner
 
     private readonly FilePath pkgFile;
 
+    private readonly FilePath srcInfoFile;
+
     // ---------------- Constructor ----------------
 
     public PkgBuildRunner( ICakeContext context, ImportantPaths paths )
@@ -25,6 +27,10 @@ public class PkgBuildRunner
 
         this.pkgFile = this.paths.ArchLinuxInstallConfigFolder.CombineWithFilePath(
             new FilePath( "PKGBUILD" )
+        );
+
+        this.srcInfoFile = this.workDir.CombineWithFilePath(
+            new FilePath( ".SRCINFO" )
         );
     }
 
@@ -55,10 +61,31 @@ public class PkgBuildRunner
         // into the obj folder.
         this.CopyFile( this.pkgFile, this.workDir );
         this.BuildPkgFile();
+        this.BuildSrcInfo();
+
+        FilePath glob = new FilePath( "*.pkg.tar.xz" );
+        FilePathCollection files = this.context.GetFiles( this.workDir.CombineWithFilePath( glob ).ToString() );
+
+        if( files.Count != 1 )
+        {
+            throw new ApplicationException( "Found 2 files to glob, something weird happened. Got: " + files.Count );
+        }
+
+        FilePath pkgFile = files.First();
+        this.context.Information( "Arch Pkg: " + pkgFile.ToString() );
+
+        FilePath sha256File = new FilePath( pkgFile.ToString() + ".sha256" );
+        this.context.GenerateSha256( pkgFile, sha256File );
+
+        this.CopyFile( pkgFile, outputFolder );
+        this.CopyFile( sha256File, outputFolder );
+        this.CopyFile( this.srcInfoFile, outputFolder );
     }
 
     private void BuildPkgFile()
     {
+        this.context.Information( "Building PKG file..." );
+
         ProcessSettings settings = new ProcessSettings
         {
             WorkingDirectory = this.workDir
@@ -67,9 +94,39 @@ public class PkgBuildRunner
         if( exitCode != 0 )
         {
             throw new ApplicationException(
-                "Could not package deb, got exit code: " + exitCode
+                "Could not package for Arch Linux, got exit code: " + exitCode
             );
         }
+
+        this.context.Information( "Building PKG file... Done!" );
+    }
+
+    private void BuildSrcInfo()
+    {
+        this.context.Information( "Building .SRCINFO file..." );
+
+        string arguments = "--printsrcinfo";
+        ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+
+        ProcessSettings settings = new ProcessSettings
+        {
+            Arguments = argumentsBuilder,
+            WorkingDirectory = this.workDir,
+            RedirectStandardOutput = true
+        };
+
+        IEnumerable<string> stdOut;
+        int exitCode = this.context.StartProcess( "makepkg", settings, out stdOut );
+        if( exitCode != 0 )
+        {
+            throw new ApplicationException(
+                "Could not make SRCINFO, got exit code: " + exitCode
+            );
+        }
+
+        System.IO.File.WriteAllLines( this.srcInfoFile.ToString(), stdOut );
+
+        this.context.Information( "Building .SRCINFO file... Done!" );
     }
 
     private void CopyFile( FilePath source, DirectoryPath destination )

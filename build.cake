@@ -313,6 +313,15 @@ Task( defaultTarget )
 .IsDependentOn( "debug" )
 .Description( "The default target; alias for 'debug'." );
 
+var archPackTask = Task( "pkgbuild" )
+.Does(
+    ( context ) =>
+    {
+        PkgBuildRunner runner = new PkgBuildRunner( context, paths );
+        runner.BuildArchPkg();
+    }
+).Description( "Creates the PKGBUILD on Arch Linux" );
+
 Task( "appveyor" )
 .IsDependentOn( "unit_test" )
 .IsDependentOn( "nuget_pack" )
