@@ -30,7 +30,7 @@ build_script:
 
     $wc = New-Object 'System.Net.WebClient'
     
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit3/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResult\Chaskis.UnitTests.xml))
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit3/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResults\UnitTests\Chaskis.UnitTests.xml))
 
 notifications:
     - provider: Email
@@ -50,4 +50,4 @@ artifacts:
     - path: 'DistPackages\chocolatey\*.*'
     - path: 'DistPackages\nuget\*.*'
     - path: 'DistPackages\windows\*.*'
-    - path: 'TestResult\*.xml'
+    - path: 'TestResults\UnitTests\*.xml'
