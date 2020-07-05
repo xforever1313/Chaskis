@@ -4,4 +4,4 @@ Maintainer: Seth Hendrick
 Architecture: all
 Description: A generic framework written in C# for making IRC Bots.
 Homepage: https://github.com/xforever1313/Chaskis/
-Built-Using: mono-complete
+Built-Using: dotnet-sdk-3.1
