@@ -1,6 +1,6 @@
 // ---------------- Addins ----------------
 
-#addin nuget:?package=Cake.ArgumentBinder&version=0.1.2
+#addin nuget:?package=Cake.ArgumentBinder&version=0.2.2
 #addin nuget:?package=Cake.FileHelpers&version=3.2.1
 
 // ---------------- Tools ----------------
@@ -40,6 +40,7 @@ using System.Text.RegularExpressions;
 #load "TestRunner.cake"
 #load "Templatize.cake"
 #load "UnitTest.cake"
+#load "VersionDump.cake"
 
 // ---------------- Globals ----------------
 

@@ -322,6 +322,15 @@ var archPackTask = Task( "pkgbuild" )
     }
 ).Description( "Creates the PKGBUILD on Arch Linux" );
 
+Task( "dump_version" )
+.Does(
+    ( context ) =>
+    {
+        VersionDumpRunner runner = new VersionDumpRunner( context, paths );
+        runner.DumpVersion();
+    }
+).DescriptionFromArguments<VersionDumpSettings>( "Dumps the version of Chaskis to a file" );
+
 Task( "appveyor" )
 .IsDependentOn( "unit_test" )
 .IsDependentOn( "nuget_pack" )
