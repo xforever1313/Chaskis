@@ -71,15 +71,16 @@ public class PkgBuildRunner
             throw new ApplicationException( "Found 2 files to glob, something weird happened. Got: " + files.Count );
         }
 
-        FilePath pkgFile = files.First();
-        this.context.Information( "Arch Pkg: " + pkgFile.ToString() );
+        FilePath buildPackageFile = files.First();
+        this.context.Information( "Arch Pkg: " + buildPackageFile.ToString() );
 
-        FilePath sha256File = new FilePath( pkgFile.ToString() + ".sha256" );
-        this.context.GenerateSha256( pkgFile, sha256File );
+        FilePath sha256File = new FilePath( buildPackageFile.ToString() + ".sha256" );
+        this.context.GenerateSha256( buildPackageFile, sha256File );
 
-        this.CopyFile( pkgFile, outputFolder );
+        this.CopyFile( buildPackageFile, outputFolder );
         this.CopyFile( sha256File, outputFolder );
         this.CopyFile( this.srcInfoFile, outputFolder );
+        this.CopyFile( this.pkgFile, outputFolder );
     }
 
     private void BuildPkgFile()

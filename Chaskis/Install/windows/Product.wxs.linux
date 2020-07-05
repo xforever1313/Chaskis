@@ -13,7 +13,7 @@
     <Product Id="2C769DC8-3E76-47D8-BE90-E70BA6969C80"
              Name="Chaskis IRC Bot"
              Language="1033"
-             Version="0.10.1"
+             Version="0.20.0"
              Manufacturer="Seth Hendrick"
              UpgradeCode="03E2F9BC-D817-4E4B-A957-AC54566F4524">
         <!-- DO NOT TOUCH -->
