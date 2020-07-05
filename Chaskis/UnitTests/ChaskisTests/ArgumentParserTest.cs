@@ -1,10 +1,11 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2017.
+//          Copyright Seth Hendrick 2016-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using Chaskis.Cli;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.ChaskisTests
@@ -17,7 +18,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         /// <summary>
         /// The test root directory.
         /// </summary>
-        private static readonly string rootDir = Chaskis.DefaultRootDirectory;
+        private static readonly string rootDir = Cli.Chaskis.DefaultRootDirectory;
 
         // -------- Tests --------
 
@@ -31,7 +32,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
@@ -50,7 +51,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
                 Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsFalse( uut.FailOnPluginFailure );
+                Assert.IsTrue( uut.FailOnPluginFailure );
                 Assert.IsTrue( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
                 Assert.IsFalse( uut.BootStrap );
@@ -68,7 +69,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsTrue( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
@@ -106,7 +107,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
                 Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsFalse( uut.FailOnPluginFailure );
+                Assert.IsTrue( uut.FailOnPluginFailure );
                 Assert.IsFalse( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
                 Assert.IsFalse( uut.IsValid );
@@ -124,7 +125,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, differentRoot );
             Assert.AreEqual( differentRoot, uut.ChaskisRoot );
-            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
@@ -141,7 +142,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsFalse( uut.FailOnPluginFailure );
+            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsTrue( uut.BootStrap );

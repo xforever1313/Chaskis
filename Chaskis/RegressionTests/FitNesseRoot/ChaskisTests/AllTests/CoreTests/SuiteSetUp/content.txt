@@ -1,3 +1,0 @@
-!include <ChaskisTests.BuildingBlocks.DefaultEnvironmentCreator 
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

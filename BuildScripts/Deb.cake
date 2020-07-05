@@ -8,12 +8,32 @@ public class DebRunner
 
     private readonly ImportantPaths paths;
 
+    private readonly DirectoryPath objFolder;
+
     // ---------------- Constructor ----------------
 
-    public DebRunner( ICakeContext context, ImportantPaths paths )
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="buildPath">
+    /// Path to build the .DEB file (can't build it on NTFS as it doesn't handle
+    /// file permissions correctly).
+    /// </param>
+    public DebRunner( ICakeContext context, ImportantPaths paths, string buildPath )
     {
         this.context = context;
         this.paths = paths;
+
+        if( string.IsNullOrWhiteSpace( buildPath ) )
+        {
+            this.objFolder = this.paths.DebianLinuxInstallConfigFolder.Combine(
+                new DirectoryPath( "obj" )
+            );
+        }
+        else
+        {
+            this.objFolder = new DirectoryPath( buildPath );
+        }
     }
 
     // ---------------- Functions ----------------
@@ -27,20 +47,16 @@ public class DebRunner
 
         // We will be creating the .deb file in the Debian install directory.
         // Like with building C# Assemblies, we will do all of the work
-        // in the obj folder, and the final outputs will be in the bin
-        // folder.
+        // in the obj folder.
 
-        // First, create and obj and bin folders, and ensure they are clean.
-        DirectoryPath objFolder = this.paths.DebianLinuxInstallConfigFolder.Combine(
-            new DirectoryPath( "obj" )
-        );
-        DirectoryPath outputFolder = this.paths.DebianLinuxInstallConfigFolder.Combine(
-            new DirectoryPath( "bin" )
+        // First, create and obj and output folders, and ensure they are clean.
+        DirectoryPath outputFolder = this.paths.OutputPackages.Combine(
+            new DirectoryPath( "debian" )
         );
 
-        this.context.EnsureDirectoryExists( objFolder );
-        this.context.CleanDirectory( objFolder );
-        SetDirectoryPermission( objFolder, "755" );
+        this.context.EnsureDirectoryExists( this.objFolder );
+        this.context.CleanDirectory( this.objFolder );
+        SetDirectoryPermission( this.objFolder, "755" );
         this.context.EnsureDirectoryExists( outputFolder );
         this.context.CleanDirectory( outputFolder );
 
@@ -65,7 +81,7 @@ public class DebRunner
         DirectoryPath usrFolder = CombineAndCreateDirectory( chaskisWorkDir, "usr" );
         DirectoryPath usrLibFolder = CombineAndCreateDirectory( usrFolder, "lib" );
         DirectoryPath systemdFolder = CombineAndCreateDirectory( usrLibFolder, "systemd" );
-        DirectoryPath systemdUserFolder = CombineAndCreateDirectory( systemdFolder, "user" );       
+        DirectoryPath systemdUserFolder = CombineAndCreateDirectory( systemdFolder, "user" );
 
         // Move the linux files around.
         FilePath controlFile = this.paths.DebianLinuxInstallConfigFolder.CombineWithFilePath(
@@ -79,7 +95,6 @@ public class DebRunner
         // in the usr/lib/Chaskis folder.
         DistroCreatorConfig distroConfig = new DistroCreatorConfig
         {
-            IsWindows = this.context.IsRunningOnWindows(),
             OutputLocation = usrLibFolder.ToString(),
             Target = "Release"
         };

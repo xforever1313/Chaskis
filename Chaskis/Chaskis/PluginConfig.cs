@@ -11,7 +11,7 @@ using Chaskis.Core;
 using SethCS.Basic;
 using SethCS.Exceptions;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// This class represents information about a plugin.

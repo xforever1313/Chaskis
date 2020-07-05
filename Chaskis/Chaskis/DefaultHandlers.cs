@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Chaskis.Core;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     [ChaskisPlugin( DefaultPluginName ) ]
     public class DefaultHandlers : IHandlerConfig, IPlugin
@@ -78,7 +78,7 @@ namespace Chaskis
         {
             get
             {
-                return "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0 http://www.boost.org/LICENSE_1_0.txt.";
+                return "I am running chaskis, a plugin-based IRC framework written in C#.  Released under the Boost Software License V1.0: https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt";
             }
         }
 

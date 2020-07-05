@@ -4,4 +4,4 @@ Maintainer: {%Author%}
 Architecture: all
 Description: {%Summary%}
 Homepage: {%ProjectUrl%}
-Built-Using: mono-complete
+Built-Using: dotnet-sdk-3.1

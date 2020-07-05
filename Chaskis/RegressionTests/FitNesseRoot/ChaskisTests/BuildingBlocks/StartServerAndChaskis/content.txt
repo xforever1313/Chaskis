@@ -1,3 +1,0 @@
-|''' Start Server '''   |${port}                                                                                                                                                                                                                 |
-|''' Start Process '''                                                                                                                                                                                                                           |
-|''' Wait For Connection '''                                                                                                                                                                                                                     |

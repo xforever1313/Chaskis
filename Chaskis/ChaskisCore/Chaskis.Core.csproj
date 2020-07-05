@@ -25,7 +25,7 @@
 
   <PropertyGroup>
     <PackageId>ChaskisCore</PackageId>
-    <Version>0.10.1</Version>
+    <Version>0.20.0</Version>
     <Authors>Seth Hendrick</Authors>
     <Company />
     <PackageLicenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</PackageLicenseUrl>

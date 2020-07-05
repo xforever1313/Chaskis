@@ -1,4 +1,0 @@
-!contents -R2 -g -p -f -h
-
-|>PasswordTest  |''Ensures that if we do have a password specified, we do send the PASS command''      |
-|>NoPasswordTest|''Ensures that if we don't have a password specified, we don't send the PASS command''|

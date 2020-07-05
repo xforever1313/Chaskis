@@ -14,7 +14,7 @@ using System.Reflection;
 using Chaskis.Core;
 using SethCS.Basic;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// The main class.
@@ -23,7 +23,7 @@ namespace Chaskis
     {
         // ---------------- Fields ----------------
 
-        public const string VersionStr = "0.10.1";
+        public const string VersionStr = "0.20.0";
 
         /// <summary>
         /// The IRC Bot.
@@ -71,7 +71,8 @@ namespace Chaskis
             this.chaskisRoot = chaskisRoot;
             this.httpClient = new HttpClient();
             this.httpClient.DefaultRequestHeaders.Add( "User-Agent", "Chaskis IRC Bot" );
-            this.httpClient.Timeout = new TimeSpan( 0, 0, 10 );
+            // Leave the default timeout.  This was set to 10 seconds, but that may not be correct.
+            // It takes 15 seconds for DNS to timeout, so a 10 second timeout probably doesn't make a ton of sense.
 
             this.parsingQueue = new StringParsingQueue();
         }
@@ -85,6 +86,8 @@ namespace Chaskis
                 Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
                 "Chaskis"
             );
+            
+            StaticLogger.Log.WriteLine( "Default root directory: " + DefaultRootDirectory );
         }
 
         // ---------------- Properties ----------------

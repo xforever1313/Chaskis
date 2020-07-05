@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SethCS.Exceptions;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// Contains information about an assembly.

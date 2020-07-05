@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using Chaskis;
+using Chaskis.Cli;
 using Chaskis.Core;
 using NUnit.Framework;
 using SethCS.Exceptions;
@@ -26,7 +26,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         /// </summary>
         private static readonly string testXmlFiles =
             Path.Combine(
-                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "TestFiles"
+                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "ChaskisTests", "TestFiles"
             );
 
         /// <summary>

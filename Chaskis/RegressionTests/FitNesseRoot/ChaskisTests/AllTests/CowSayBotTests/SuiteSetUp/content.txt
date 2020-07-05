@@ -1,3 +1,0 @@
-|'''Setup'''|!-CowSayBotEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

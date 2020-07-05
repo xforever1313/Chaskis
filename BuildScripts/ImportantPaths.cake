@@ -11,26 +11,23 @@ public class ImportantPaths
         this.ProjectRoot = projectRoot;
 
         this.BuildScriptFolder = this.ProjectRoot.Combine( new DirectoryPath( "BuildScripts" ) );
-        this.CodeCoverageFolder = this.ProjectRoot.Combine( new DirectoryPath( "CodeCoverage" ) );
         this.DocumentationFolder = this.ProjectRoot.Combine( new DirectoryPath( "Documentation" ) );
         this.SavedChecksumsFolder = this.ProjectRoot.Combine( new DirectoryPath( "SavedChecksums" ) );
         this.SourceFolder = this.ProjectRoot.Combine( new DirectoryPath( "Chaskis" ) );
-        this.UnitTestResultFolder = this.ProjectRoot.Combine( new DirectoryPath( "TestResult" ) );
+        this.TestResultFolder = this.ProjectRoot.Combine( new DirectoryPath( "TestResults" ) );
         this.OutputPackages = this.ProjectRoot.Combine( new DirectoryPath( "DistPackages" ) );
 
         this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
         this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
         this.RegressionTestFolder = this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
+        this.RegressionTestProjectFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "TestFixtures" ) );
         this.RegressionDistroFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "dist" ) );
-        this.RegressionTestRunnerDirectory = this.RegressionTestFolder.Combine( new DirectoryPath( "runner" ) );
-        this.RegressionTestResultsFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "TestResults" ) );
-        this.RegressionTestResultsFile = this.RegressionTestResultsFolder.CombineWithFilePath( new FilePath( "TestResults.html" ) );
-        this.FitNesseRoot = this.RegressionTestFolder.Combine( new DirectoryPath( "FitNesseRoot" ) );
         this.UnitTestFolder = this.SourceFolder.Combine( new DirectoryPath( "UnitTests" ) );
 
         this.InstallConfigFolder = this.SourceFolder.Combine( new DirectoryPath( "Install" ) );
         this.WindowsInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
         this.WixConfigFolder = this.WindowsInstallConfigFolder;
+        this.WindowsWixFile = this.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs" ) );
         this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
         this.LinuxBinFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
         this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
@@ -66,11 +63,6 @@ public class ImportantPaths
     public DirectoryPath BuildScriptFolder { get; private set; }
 
     /// <summary>
-    /// Directory where code coverage data gets put.
-    /// </summary>
-    public DirectoryPath CodeCoverageFolder { get; private set; }
-
-    /// <summary>
     /// Directory where project-level documentation lives.
     /// </summary>
     public DirectoryPath DocumentationFolder { get; private set; }
@@ -88,7 +80,7 @@ public class ImportantPaths
     /// <summary>
     /// Where the unit test results get saved.
     /// </summary>
-    public DirectoryPath UnitTestResultFolder { get; private set; }
+    public DirectoryPath TestResultFolder { get; private set; }
 
     /// <summary>
     /// Where to dump packages for distribution.
@@ -113,29 +105,14 @@ public class ImportantPaths
     public DirectoryPath RegressionTestFolder { get; private set; }
 
     /// <summary>
+    /// Folder where the regression test project is.
+    /// </summary>
+    public DirectoryPath RegressionTestProjectFolder { get; private set; }
+
+    /// <summary>
     /// Where to make a distro for regression tests.
     /// </summary>
     public DirectoryPath RegressionDistroFolder { get; private set; }
-
-    /// <summary>
-    /// Path to where FitNesse expects the NetRunner executable.
-    /// </summary>
-    public DirectoryPath RegressionTestRunnerDirectory { get; private set; }
-
-    /// <summary>
-    /// Folder to dump the regression test results.
-    /// </summary>
-    public DirectoryPath RegressionTestResultsFolder{ get; private set; }
-
-    /// <summary>
-    /// File to dump the regression test results.
-    /// </summary>
-    public FilePath RegressionTestResultsFile { get; private set; }
-
-    /// <summary>
-    /// The FitNesse Root.
-    /// </summary>
-    public DirectoryPath FitNesseRoot { get; private set; }
 
     /// <summary>
     /// Folder where the Unit Tests live.
@@ -158,6 +135,11 @@ public class ImportantPaths
     /// Folder where the MSI configuration lives (powered by WIX).
     /// </summary>
     public DirectoryPath WixConfigFolder { get; private set; }
+
+    /// <summary>
+    /// Path to the WIX windows directory.
+    /// </summary>
+    public FilePath WindowsWixFile { get; private set; }
 
     /// <summary>
     /// Folder where the Linux Install Configs live.

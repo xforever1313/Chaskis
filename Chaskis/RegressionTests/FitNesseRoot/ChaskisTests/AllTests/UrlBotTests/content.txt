@@ -1,7 +1,0 @@
-!1 Url Bot Tests
-!contents -R2 -g -p -f -h
-
-!define plugin_name {urlbot}
-
-|>GetTitleTest  |'''Can we get the Title of a valid webpage?''' |
-|>PluginLoadTest|''Ensures we can load the plugin successfully''|

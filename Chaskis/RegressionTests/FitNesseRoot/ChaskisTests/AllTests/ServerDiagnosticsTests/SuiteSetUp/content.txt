@@ -1,3 +1,0 @@
-|'''Setup'''|!-ServerDiagnosticsEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

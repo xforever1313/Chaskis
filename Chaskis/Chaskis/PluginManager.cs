@@ -15,7 +15,7 @@ using System.Text;
 using Chaskis.Core;
 using SethCS.Basic;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// This class loads plugins.

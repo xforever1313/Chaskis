@@ -34,6 +34,7 @@ autom4te.cache/
 *.tar.gz
 tarballs/
 test-results/
+TestResult/
 *.nupkg
 Thumbs.db
 
@@ -53,14 +54,6 @@ OpenCover/
 .vscode
 .vs
 
-/Chaskis/RegressionTests/FitNesseRoot/files
-/Chaskis/RegressionTests/FitNesseRoot/FitNesse
-/Chaskis/RegressionTests/FitNesseRoot/RecentChanges
-/Chaskis/RegressionTests/FitNesseRoot/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*.zip
-/Chaskis/RegressionTests/FitNesseRoot/*/*/*/*/*/*.zip
-/Chaskis/RegressionTests/runner
+DistPackages/
 /Chaskis/RegressionTests/Environments/TestEnvironment
-/Chaskis/RegressionTests/TestResults.html
+

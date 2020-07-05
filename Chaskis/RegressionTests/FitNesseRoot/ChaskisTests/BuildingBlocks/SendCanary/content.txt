@@ -1,3 +1,0 @@
- * Ensure we are still alive
-|'''Send Message'''    |!chaskistest canary|'''To Channel'''|${channel1}|'''as'''|${testuser}|
-|'''Wait For Message'''|Canary\s+Alive!|'''On Channel'''|${channel1}                     |

@@ -1,3 +1,0 @@
-|'''Setup'''|!-IrcLoggerEnvironment-!|'''Environment'''|${port}|
-
-!include <ChaskisTests.BuildingBlocks.StartServerAndChaskisWaitJoinChannels

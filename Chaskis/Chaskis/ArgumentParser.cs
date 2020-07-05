@@ -5,10 +5,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SethCS.Basic;
 using SethCS.Exceptions;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// Parses the arguments for this program.
@@ -49,13 +51,13 @@ namespace Chaskis
         /// </summary>
         /// <param name="args">Arguments to parse</param>
         /// <param name="defaultRootDir">Where the DEFAULT root of the config directory is.</param>
-        public ArgumentParser( string[] args, string defaultRootDir )
+        public ArgumentParser( IEnumerable<string> args, string defaultRootDir )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
             ArgumentChecker.StringIsNotNullOrEmpty( defaultRootDir, nameof( defaultRootDir ) );
 
             this.ChaskisRoot = defaultRootDir;
-            this.FailOnPluginFailure = false;
+            this.FailOnPluginFailure = true;
             this.IsValid = true;
 
             foreach( string arg in args )
@@ -109,6 +111,7 @@ namespace Chaskis
                 else
                 {
                     this.IsValid = false;
+                    StaticLogger.Log.ErrorWriteLine( "Unknown Argument: " + arg );
                 }
             }
         }

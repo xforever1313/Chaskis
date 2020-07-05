@@ -27,6 +27,8 @@ namespace Chaskis.ChaskisCliInstaller
 
         private readonly string wixArgName;
 
+        private readonly string exeString;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -57,6 +59,15 @@ namespace Chaskis.ChaskisCliInstaller
             if( File.Exists( wixFile ) == false )
             {
                 throw new FileNotFoundException( "File " + wixFile + " does not exist." );
+            }
+
+            if( Environment.OSVersion.Platform == PlatformID.Win32NT )
+            {
+                this.exeString = ".exe";
+            }
+            else
+            {
+                this.exeString = string.Empty;
             }
 
             this.SlnDir = Path.GetFullPath( slnDir );
@@ -353,19 +364,14 @@ namespace Chaskis.ChaskisCliInstaller
             if( match.Success )
             {
                 string pluginName = match.Groups["plugin"].Value;
+
+                // At the moment, only plugins and Core use TargetPath, .exes used to, but Wix confused those with the .dlls,
+                // not the .exes, so we swapped .exe to use targetDir instead.
                 if( match.Groups["target"].Value == "TargetPath" )
                 {
-                    if( pluginName == "Chaskis" )
-                    {
-                        fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, this.ExeRunTime, "Chaskis.exe" );
-                    }
-                    else if( pluginName == "Chaskis.Core" )
+                    if( pluginName == "Chaskis.Core" )
                     {
                         fileName = Path.Combine( this.SlnDir, "ChaskisCore", "bin", this.Target, this.PluginRunTime, "Chaskis.Core.dll" );
-                    }
-                    else if( pluginName == "ChaskisService" )
-                    {
-                        fileName = Path.Combine( this.SlnDir, "ChaskisService", "bin", this.Target, this.ExeRunTime, "ChaskisService.exe" );
                     }
                     else
                     {
@@ -380,9 +386,9 @@ namespace Chaskis.ChaskisCliInstaller
                     {
                         fileName = Path.Combine( this.SlnDir, "Chaskis", "bin", this.Target, this.ExeRunTime, f );
                     }
-                    else if( pluginName == "ChaskisService" )
+                    else if( pluginName == "Chaskis.Service" )
                     {
-                        fileName = Path.Combine( this.SlnDir, "ChaskisService", "bin", this.Target, this.ExeRunTime, f );
+                        fileName = Path.Combine( this.SlnDir, "Chaskis.Service", "bin", this.Target, this.ExeRunTime, f );
                     }
                     else
                     {

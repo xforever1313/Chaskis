@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using SethCS.Basic;
 
-namespace Chaskis
+namespace Chaskis.Cli
 {
     /// <summary>
     /// This class bootstraps a directory with default configurations.

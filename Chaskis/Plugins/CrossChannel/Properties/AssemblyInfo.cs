@@ -39,5 +39,5 @@ using Chaskis.Plugins.CrossChannel;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( CrossChannel.VersionStr )]
-[assembly: AssemblyFileVersion( CrossChannel.VersionStr )]
+[assembly: AssemblyVersion( CrossChannelPlugin.VersionStr )]
+[assembly: AssemblyFileVersion( CrossChannelPlugin.VersionStr )]

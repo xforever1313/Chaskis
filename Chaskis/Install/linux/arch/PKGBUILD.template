@@ -13,7 +13,7 @@ pkgdesc="{%Summary%}"
 arch=('any')
 url="{%ProjectUrl%}"
 license=('BSL')
-depends=('mono>=5.4.0') # https://docs.microsoft.com/en-us/dotnet/standard/net-standard - .netstandard is implemented in mono 5.4, which is required.
+depends=('dotnet-runtime>=3.1.0')
 provides=('chaskis')
 conflicts=('chaskis')
 source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/linux/debian/chaskis.deb")

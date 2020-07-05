@@ -382,17 +382,17 @@ public class FilesToTemplate
                 this.paths.ProjectRoot.CombineWithFilePath( new FilePath( "README.md" ) )
             ),
 
-            // FitNesseRoot
-            new FileToTemplate(
-                this.paths.FitNesseRoot.CombineWithFilePath( new FilePath( "ChaskisTests/content.txt.template" ) ),
-                this.paths.FitNesseRoot.CombineWithFilePath( new FilePath( "ChaskisTests/content.txt" ) )
-            ),
-
             // New Version Notifier
             new FileToTemplate(
                 this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "Environments/NewVersionNotifierNoChangeEnvironment/Plugins/NewVersionNotifier/.lastversion.txt.template" ) ),
                 this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "Environments/NewVersionNotifierNoChangeEnvironment/Plugins/NewVersionNotifier/.lastversion.txt" ) )
-            )
+            ),
+            
+            // Chaskis Constants for Regression Tests
+            new FileToTemplate(
+                this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "TestFixtures/TestCore/ChaskisConstants.cs.template" ) ),
+                this.paths.RegressionTestFolder.CombineWithFilePath( new FilePath( "TestFixtures/TestCore/ChaskisConstants.cs" ) )
+            ),
         };
 
         this.TemplateFiles = files.AsReadOnly();

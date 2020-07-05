@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-Chaskis.Service-2F890A12-BD27-4873-A672-874A508596E4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChaskisCore\Chaskis.Core.csproj" />
+    <ProjectReference Include="..\Chaskis\Chaskis.csproj" />
+  </ItemGroup>
+</Project>

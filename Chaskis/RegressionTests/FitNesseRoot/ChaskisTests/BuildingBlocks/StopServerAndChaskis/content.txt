@@ -1,7 +1,0 @@
-This stops the Chaskis process and Stops the Server.
-
-This will fail if the process doesn't gracefully stop, and we need to kill it.
-|'''Stop Or Kill Process'''|
-
-Gracefully Stop our server.
-|'''Stop Server'''         |
