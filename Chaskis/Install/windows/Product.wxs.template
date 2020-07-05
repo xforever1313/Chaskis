@@ -417,7 +417,7 @@
             </Component>
             
             <Component Guid="{60a301d9-d79c-4300-aa10-2638c9d8f174}" Directory="BinRuntimeUnixLibStandardFolder">
-                <File Id="NetStandard_System_ServiceProcess_ServiceController_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes"/>
+                <File Id="NetStandard_Microsoft_Win32_Registry_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes"/>
             </Component>
 
             #endif
