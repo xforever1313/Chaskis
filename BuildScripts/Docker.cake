@@ -1,3 +1,6 @@
+const string windowsDockerImageName = "xforever1313/chaskis.windows";
+const string ubuntuDockerImageName = "xforever1313/chaskis.ubuntu";
+
 var buildWindowsRuntimeTask = Task( "build_windows_docker" )
 .Does(
     ( context ) =>
@@ -14,19 +17,10 @@ var buildWindowsRuntimeTask = Task( "build_windows_docker" )
         DistroCreator creator = new DistroCreator( context, paths, config );
         creator.CreateDistro();
 
-        string arguments = "build -t chaskis.windows -f .\\Docker\\WindowsRuntime.Dockerfile .";
-        ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-        ProcessSettings settings = new ProcessSettings
-        {
-            Arguments = argumentsBuilder
-        };
-        int exitCode = StartProcess( "docker", settings );
-        if( exitCode != 0 )
-        {
-            throw new ApplicationException(
-                "Error when running docker.  Got error: " + exitCode
-            );
-        }
+        Information( "Running Docker..." );
+        BuildDockerImage( windowsDockerImageName, ".\\Docker\\WindowsRuntime.Dockerfile" );
+        TagDocker( context, windowsDockerImageName );
+        Information( "Running Docker... Done!" );
     }
 )
 .Description( "Builds the Windows Runtime Docker Container" );
@@ -37,26 +31,54 @@ if( isJenkins == false )
 
 var buildUbuntuRuntimeTask = Task( "build_ubuntu_docker" )
 .Does(
-    () =>
+    ( context ) =>
     {
-        string arguments = "build -t chaskis.ubuntu -f .\\Docker\\UbuntuRuntime.Dockerfile .";
-        ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-        ProcessSettings settings = new ProcessSettings
-        {
-            Arguments = argumentsBuilder
-        };
-        int exitCode = StartProcess( "docker", settings );
-        if( exitCode != 0 )
-        {
-            throw new ApplicationException(
-                "Error when running docker.  Got error: " + exitCode
-            );
-        }
+        BuildDockerImage( ubuntuDockerImageName, "./Docker/UbuntuRuntime.Dockerfile" );
+        TagDocker( context, ubuntuDockerImageName );
     }
 ).Description( "Builds the Ubuntu Runtime Docker Container" );
 
 if( isJenkins == false )
 {
-    // DO NOT COMMIT THIS COMMENTED OUT
-    //buildUbuntuRuntimeTask.IsDependentOn( "debian_pack" );
+    buildUbuntuRuntimeTask.IsDependentOn( "debian_pack" );
+}
+
+private void BuildDockerImage( string imageName, string dockerFile )
+{
+    string arguments = $"build -t {imageName} -f {dockerFile} .";
+    ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+    ProcessSettings settings = new ProcessSettings
+    {
+        Arguments = argumentsBuilder
+    };
+    int exitCode = StartProcess( "docker", settings );
+    if( exitCode != 0 )
+    {
+        throw new ApplicationException(
+            "Error when running docker to build.  Got error: " + exitCode
+        );
+    }
+}
+
+private void TagDocker( ICakeContext context, string imageName )
+{
+    TemplateConstants templateConstants = new TemplateConstants(
+        context,
+        paths,
+        frameworkTarget
+    );
+
+    string arguments = $"tag {imageName}:latest {imageName}:{templateConstants.ChaskisVersion}";
+    ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+    ProcessSettings settings = new ProcessSettings
+    {
+        Arguments = argumentsBuilder
+    };
+    int exitCode = StartProcess( "docker", settings );
+    if( exitCode != 0 )
+    {
+        throw new ApplicationException(
+            "Error when running docker to tag.  Got error: " + exitCode
+        );
+    }
 }
