@@ -36,7 +36,7 @@
 // - Also make sure the "Docker Desktop Service" is also running.
 
 def distFolder = "dist"; // Staging to before we push to the website.
-def buildDistFolder = ".\\Chaskis\\distPackages"; // Where builds post their dists.
+def buildDistFolder = ".\\Chaskis\\DistPackages"; // Where builds post their dists.
 def archiveFolder = "archives";
 def websiteCreds = "shendrick.net";
 def aurCreds = "aur";
@@ -332,7 +332,7 @@ pipeline
                     {
                         // Chocolatey needs the checksum to be updated.
                         // This file will be reverted during the Linux stage, but restored later during the deploy stage.
-                        bat "COPY -Y ${buildDistFolder}\\windows\\ChaskisInstaller.msi.sha256 .\\Chaskis\\SavedChecksums\\ChaskisInstaller.msi.sha256"
+                        bat "COPY /Y ${buildDistFolder}\\windows\\ChaskisInstaller.msi.sha256 .\\Chaskis\\SavedChecksums\\ChaskisInstaller.msi.sha256"
                         CallCakeOnBuildMachine( "--target=template" );
                         CallCakeOnWindows( "--target=choco_pack" );
                     }
@@ -479,8 +479,8 @@ pipeline
                     steps
                     {
                         // When deploying, we need to make sure all checksums are up-to-date.
-                        bat "COPY -Y ${distFolder}\\windows\\ChaskisInstaller.msi.sha256 .\\Chaskis\\SavedChecksums\\ChaskisInstaller.msi.sha256";
-                        bat "COPY -Y ${distFolder}\\debian\\chaskis.deb.sha256 .\\Chaskis\\SavedChecksums\\chaskis.deb.sha256";
+                        bat "COPY /Y ${distFolder}\\windows\\ChaskisInstaller.msi.sha256 .\\Chaskis\\SavedChecksums\\ChaskisInstaller.msi.sha256";
+                        bat "COPY /Y ${distFolder}\\debian\\chaskis.deb.sha256 .\\Chaskis\\SavedChecksums\\chaskis.deb.sha256";
                         CallCakeOnBuildMachine( "--target=template" );
                     }
                 }
