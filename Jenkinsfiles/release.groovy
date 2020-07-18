@@ -38,8 +38,16 @@
 def distFolder = "dist"; // Staging to before we push to the website.
 def buildDistFolder = ".\\Chaskis\\DistPackages"; // Where builds post their dists.
 def archiveFolder = "archives";
-def websiteCreds = "shendrick.net";
-def aurCreds = "aur";
+
+def GetWebsiteCredsId()
+{
+    return "shendrick.net";
+}
+
+def GetAurCredsId()
+{
+    return "aur";
+}
 
 def UbuntuBuildImageName()
 {
@@ -69,6 +77,14 @@ def WindowsSleep( Integer seconds )
 }
 
 ///
+/// Calls cake on the Jenkins Agent, with no docker container.
+///
+def CallCakeOnBuildMachine( String cmd )
+{
+    bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake ${cmd}"
+}
+
+///
 /// Calls cake in the Windows docker container (or locally if there is no Docker container for Windows.)
 ///
 def CallCakeOnWindows( String cmd )
@@ -82,7 +98,7 @@ def CallCakeOnWindows( String cmd )
     }
     else
     {
-        bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake ${cmd}"
+        CallCakeOnBuildMachine( cmd );
     }
 }
 
@@ -104,18 +120,10 @@ def CallCakeOnUbuntu( String cmd )
 def CallCakeOnArchLinux( String cmd )
 {
     // Mount to the container user's home directory so there are no permission issues.
-    bat "docker run --mount type=bind,source=\"${pwd()}\\Chaskis\",target=/home/ContainerUser/chaskis/ -i ${ArchBuildImageName()} /home/containeruser/chaskis/build.cake ${cmd}"
+    bat "docker run --mount type=bind,source=\"${pwd()}\\Chaskis\",target=/home/containeruser/chaskis/ -i ${ArchBuildImageName()} /home/containeruser/chaskis/build.cake ${cmd}"
 
     // Sleep for 5 seconds to give containers a chance to cleanup.
     WindowsSleep( 5 );
-}
-
-///
-/// Calls cake on the Jenkins Agent, with no docker container.
-///
-def CallCakeOnBuildMachine( String cmd )
-{
-    bat ".\\Cake\\dotnet-cake.exe .\\Chaskis\\build.cake ${cmd}"
 }
 
 def CleanWindowsDirectory( String path )
@@ -136,6 +144,11 @@ def RunProcessIgnoreError( String cmd )
     }
 }
 
+def WaitForDockerReboot()
+{
+    CallCakeOnBuildMachine( "--target=wait_for_docker_to_start" );
+}
+
 def GetVersFile()
 {
     return "version.txt";
@@ -143,7 +156,7 @@ def GetVersFile()
 
 def GetChaskisVersion()
 {
-    return readfile( GetVersFile() );
+    return readFile( GetVersFile() );
 }
 
 def ParseTestResults( String filePattern )
@@ -161,27 +174,51 @@ def ParseTestResults( String filePattern )
     ]
 }
 
+///
+/// Apparently when Jenkins copies the SSH key to the secrets folder, it
+/// doesn't restrict the permissoins enough >_>.
+/// Taken from : https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open
+///
+def SetupPrivateKey( String keyPath )
+{
+    // Remove Inheritance
+    bat "icacls \"${keyPath}\" /c /t /Inheritance:d";
+
+    // Set ownership to the current user
+    bat "icacls \"${keyPath}\" /c /t /Grant ${UserName}:F";
+
+    // Remove all users except for the current user.
+    bat "icacls \"${keyPath}\" /c /t /Remove Administrator \"Authenticated Users\" BUILTIN\\Administrators BUILTIN Everyone System Users";
+
+    // Verify (for debugging in the log if needed)
+    bat "icacls \"${keyPath}\""
+}
+
 def PostDirectoryToWebsite( String localDirectory )
 {
     withCredentials(
         [sshUserPrivateKey(
-            credentialsId: websiteCreds,
-            usernameVariable: "ssh_user"
+            credentialsId: GetWebsiteCredsId(),
+            usernameVariable: "SSHUSER",
+            keyFileVariable: "WEBSITE_KEY" // <- Note: WEBSITE_KEY must be in all quotes below, or SCP won't work if the path has whitespace.
         )]
     )
     {
-        def releaseLocation = "/home/${ssh_user}/files.shendrick.net/projects/chaskis/releases/${GetChaskisVersion()}/";
-        sshagent(credentials:[websiteCreds])
-        {
-            // Upload everything to the release folder.
-            bat "scp -r -o StrictHostKeyChecking=no ${localDirectory} ${ssh_user}@shendrick.net:${releaseLocation}";
+        def releaseLocation = "/home/${SSHUSER}/files.shendrick.net/projects/chaskis/releases/${GetChaskisVersion()}/";
 
-            // Make all uploaded directories 755
-            bat "ssh -o StrictHostKeyChecking=no ${ssh_user}@shendrick.net find ${releaseLocation} -type d -exec chmod 755 {} +";
+        SetupPrivateKey( WEBSITE_KEY );
 
-            // Make all uploaded files 644
-            bat "ssh -o StrictHostKeyChecking=no ${ssh_user}@shendrick.net find ${releaseLocation} -type f -exec chmod 644 {} +"
-        }
+        String verbose = "-v"; // Make "-v" for verbose mode.
+        String options = "-o BatchMode=yes -o StrictHostKeyChecking=no -i \"${WEBSITE_KEY}\"";
+
+        // Upload everything to the release folder.
+        bat "scp ${verbose} -r ${options} ${localDirectory} ${SSHUSER}@shendrick.net:${releaseLocation}";
+
+        // Make all uploaded directories 755
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net find ${releaseLocation} -type d -exec chmod 755 {} +";
+
+        // Make all uploaded files 644
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net find ${releaseLocation} -type f -exec chmod 644 {} +"
     }
 }
 
@@ -190,14 +227,12 @@ def GitPush( String repoLocation, String credId )
     withCredentials(
         [sshUserPrivateKey(
             credentialsId: credId,
-            usernameVariable: "ssh_user"
+            usernameVariable: "SSHUSER",
+            keyFileVariable: "GIT_KEY"
         )]
     )
     {
-        sshagent(credentials:[credId])
-        {
-            bat "cd ${repoLocation} && git push";
-        }
+        bat "cd ${repoLocation} && ssh -o BatchMode=yes -i \"${GIT_KEY}\" git push";
     }
 }
 
@@ -213,6 +248,8 @@ pipeline
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
         booleanParam( name: "Deploy", defaultValue: true, description: "Should we deploy?" );
+        booleanParam( name: "UploadToWebsite", defaultValue: true, description: "Should files be uploaded to the website?" );
+        booleanParam( name: "CleanUp", defaultValue: true, description: "Should we clean up the workspace first?" );
     }
     stages
     {
@@ -234,6 +271,13 @@ pipeline
                     userRemoteConfigs: [[url: 'https://github.com/xforever1313/Chaskis.git']]
                 ]
             }
+            when
+            {
+                expression
+                {
+                    return params.CleanUp;
+                }
+            }
         }
         stage( 'setup' )
         {
@@ -244,6 +288,13 @@ pipeline
                 CleanWindowsDirectory( pwd() + "\\${distFolder}" );
                 CleanWindowsDirectory( pwd() + "\\${archiveFolder}" );
                 CallCakeOnBuildMachine( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
+            }
+            when
+            {
+                expression
+                {
+                    return params.CleanUp;
+                }
             }
         }
         stage( 'Windows' )
@@ -257,7 +308,7 @@ pipeline
                         // Make the Windows build docker container.
                         bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -Version';
                         bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -SwitchWindowsEngine';
-                        WindowsSleep( 10 ); // Wait to switch.
+                        WaitForDockerReboot(); // Wait to switch.
                         script
                         {
                             if( UseWindowsDockerForBuild() )
@@ -383,7 +434,7 @@ pipeline
                     {
                         // Make the Linux build docker container.
                         bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -SwitchLinuxEngine';
-                        WindowsSleep( 10 ); // Give some time to switch.
+                        WaitForDockerReboot(); // Give some time to switch.
                         bat "docker build -t ${UbuntuBuildImageName()} -f .\\Chaskis\\Docker\\UbuntuBuild.Dockerfile .\\Chaskis";
                     }
                 }
@@ -491,6 +542,13 @@ pipeline
                         // PKGBUILD for Arch Linux requires files be deployed to the website first.
                         PostDirectoryToWebsite( distFolder );
                     }
+                    when
+                    {
+                        expression
+                        {
+                            return params.UploadToWebsite;
+                        }
+                    }
                 }
                 stage( 'Arch Linux Deploy' )
                 {
@@ -498,7 +556,7 @@ pipeline
                     {
                         // Build the Arch Linux Docker image so we can make the PKGBUILD file.
                         // Because arch sources change *all the time*, need to build from scratch.
-                        bat "docker build -t ${ArchBuildImageName()} -f .\\Chaskis\\Docker\\ArchLinux.Dockerfile .\\Chaskis";
+                        bat "docker build -t ${ArchBuildImageName()} -f .\\Chaskis\\Docker\\ArchBuild.Dockerfile .\\Chaskis";
 
                         // Run Cake in the docker image to make the PKGBUILD file.
                         CallCakeOnArchLinux( "--target=pkgbuild" ); 
@@ -519,7 +577,7 @@ pipeline
                                 [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]
                             ],
                             submoduleCfg: [],
-                            userRemoteConfigs: [[credentialsId: aurCreds, url: 'ssh://aur@aur.archlinux.org/chaskis.git']]
+                            userRemoteConfigs: [[credentialsId: GetAurCredsId(), url: 'ssh://aur@aur.archlinux.org/chaskis.git']]
                         ]
 
                         // Copy over the SRCINFO and PKGBUILD files.
@@ -536,7 +594,7 @@ pipeline
                     steps
                     {
                         bat "cd Chaskis && git commit -a -m \"Deployed Version ${GetChaskisVersion()}\"";
-                        // GitPush( "Chaskis", websiteCreds );
+                        // GitPush( "Chaskis", GetWebsiteCredsId() );
                     }
                 }
                 stage( 'Deploy NuGet' )
