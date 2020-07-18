@@ -18,14 +18,16 @@ RUN apt -y clean
 RUN apt -y autoclean
 
 # Create user who does not have root access.
-RUN useradd -d /chaskis -m chaskis
-RUN chown -R chaskis:chaskis /chaskis
+# Chaskis looks at the username to determine if we are in a container or not
+# We look for containeruser to be specific.
+RUN useradd -d /chaskis -m containeruser
+RUN chown -R containeruser:containeruser /chaskis
 
 COPY ./DistPackages/debian/chaskis.deb /tmp/chaskis.deb
 RUN apt -y install /tmp/chaskis.deb
 RUN ["rm", "/tmp/chaskis.deb"]
 
-USER chaskis
+USER containeruser
 RUN mkdir /chaskis/.config
 
 ENTRYPOINT [ "/usr/lib/Chaskis/bin/Chaskis.Service" ]
