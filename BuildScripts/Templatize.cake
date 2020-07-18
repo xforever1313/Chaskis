@@ -344,7 +344,11 @@ public class FilesToTemplate
             new FileToTemplate(
                 this.paths.ArchLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "PKGBUILD.template" ) ),
                 this.paths.ArchLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "PKGBUILD" ) )
-            ),
+            )
+            {
+                // Arch linux PKGBUILD must be \n, not \r\n.
+                LineEnding = "\n"
+            },
 
             // Debian Control File
             new FileToTemplate(
@@ -425,6 +429,8 @@ public class FileToTemplate
         {
             this.Defines = defines;
         }
+
+        this.LineEnding = null;
     }
 
     // ---------------- Properties ----------------
@@ -434,6 +440,14 @@ public class FileToTemplate
     public FilePath Output { get; private set; }
 
     public IReadOnlyList<string> Defines { get; private set; }
+
+    /// <summary>
+    /// After templating the file, all line endings
+    /// with this string.
+    ///
+    /// Leave null to not replace.
+    /// </summary>
+    public string LineEnding { get; set; }
 }
 
 public class Templatizer
@@ -518,6 +532,11 @@ public class Templatizer
                     }
                 }
                 contents = this.DoTemplate( builder.ToString() );
+            }
+
+            if( file.LineEnding != null )
+            {
+                contents = Regex.Replace( contents, Environment.NewLine, file.LineEnding );
             }
 
             this.context.FileWriteText( file.Output, contents );
