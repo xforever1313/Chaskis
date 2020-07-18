@@ -1,4 +1,7 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
 # PKGBUILD files MUST be LF not CRLF.
 # Force them to be checked out as such.
-PKGBUILD eol=lf
-PKGBUILD.template eol=lf
+PKGBUILD text eol=lf
+PKGBUILD.template text eol=lf
