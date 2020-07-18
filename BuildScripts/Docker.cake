@@ -1,6 +1,46 @@
 const string windowsDockerImageName = "xforever1313/chaskis.windows";
 const string ubuntuDockerImageName = "xforever1313/chaskis.ubuntu";
 
+Task( "wait_for_docker_to_start" )
+.Does(
+    () =>
+    {
+        string arguments = $"images ls";
+        ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+        ProcessSettings settings = new ProcessSettings
+        {
+            Arguments = argumentsBuilder
+        };
+
+        const int waitTimeSeconds = 10;
+        const int maxTries = 12;
+        bool success = false;
+        for( int i = 1; ( i <= maxTries ) && ( success == false ); ++i )
+        {
+            Information( $"Waiting for Docker to start.  Attempt {i}/{maxTries}." );
+
+            int exitCode = StartProcess( "docker", settings );
+            success = ( exitCode == 0 );
+
+            if( success == false )
+            {
+                Information( $"Attempt {i} failed, trying again in {waitTimeSeconds} seconds." );
+                Thread.Sleep( TimeSpan.FromSeconds( waitTimeSeconds ) );
+            }
+        }
+
+        if( success == false )
+        {
+            throw new TimeoutException(
+                "Docker did not start within time limit."
+            );
+        }
+
+        Information( string.Empty );
+        Information( "Docker is back!" );
+    }
+).Description( "When docker switches containers, it goes down for a bit.  This target waits 2 minutes for it to come back." );
+
 var buildWindowsRuntimeTask = Task( "build_windows_docker" )
 .Does(
     ( context ) =>

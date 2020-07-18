@@ -18,14 +18,12 @@
 #tool nuget:?package=OpenCover&version=4.6.519
 #tool nuget:?package=ReportGenerator&version=4.0.10
 
-// For regression tests
-#tool nuget:?package=NetRunner&version=1.0.11
-
 // ---------------- Using Statements ----------------
 
 using Cake.ArgumentBinder;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 // ---------------- Includes ----------------
 
