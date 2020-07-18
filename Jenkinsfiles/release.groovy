@@ -233,7 +233,7 @@ def GitCommit( String workingDir, String message, Boolean toggleIgnoreLineEnding
     bat "cd \"${workingDir}\" && git commit -a -m \"${message}\"";
 }
 
-def GitPush( String repoLocation, String credId )
+def GitPush( String repoLocation, String credId, String url )
 {
     withCredentials(
         [sshUserPrivateKey(
@@ -243,7 +243,9 @@ def GitPush( String repoLocation, String credId )
         )]
     )
     {
-        bat "cd ${repoLocation} && ssh -o BatchMode=yes -i \"${GIT_KEY}\" git push";
+        SetupPrivateKey( GIT_KEY );
+
+        bat "cd ${repoLocation} && ssh -o BatchMode=yes -i \"${GIT_KEY}\" git push ${url}";
     }
 }
 
@@ -619,7 +621,7 @@ pipeline
 
                         // Commit && Push.
                         GitCommit( "chaskis_aur", "Deployed Version ${GetChaskisVersion()}", true );
-                        //GitPush( "chaskis_aur", aurCreds );
+                        GitPush( "chaskis_aur", GetAurCredsId() );
                     }
                 }
                 stage( 'Commit' )
@@ -627,7 +629,7 @@ pipeline
                     steps
                     {
                         GitCommit( "Chaskis", "Deployed Version ${GetChaskisVersion()}", false );
-                        // GitPush( "Chaskis", GetWebsiteCredsId() );
+                        GitPush( "Chaskis", GetWebsiteCredsId() );
                     }
                 }
                 stage( 'Deploy NuGet' )
@@ -636,8 +638,7 @@ pipeline
                     {
                         withCredentials([string(credentialsId: 'chaskiscore_nuget_deploy', variable: 'nuget_api_key')])
                         {
-                            // bat "nuget push ${distFolder}\\nuget\\*.nupkg ${nuget_api_key}";
-                            WindowsSleep( 1 );
+                            bat "nuget push ${distFolder}\\nuget\\*.nupkg ${nuget_api_key}";
                         }
                     }
                 }
@@ -647,8 +648,7 @@ pipeline
                     {
                         withCredentials([string(credentialsId: 'choco_api_key', variable: 'choco_api_key')])
                         {
-                            // bat "choco push ${distFolder}\\chocolatey\\*.nupkg -k ${choco_api_key}";
-                            WindowsSleep( 1 );
+                            bat "choco push ${distFolder}\\chocolatey\\*.nupkg -k ${choco_api_key}";
                         }
                     }
                 }
