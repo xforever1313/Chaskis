@@ -1,0 +1,4 @@
+# PKGBUILD files MUST be LF not CRLF.
+# Force them to be checked out as such.
+PKGBUILD eol=lf
+PKGBUILD.template eol=lf
