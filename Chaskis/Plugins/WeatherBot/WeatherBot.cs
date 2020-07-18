@@ -55,7 +55,7 @@ namespace Chaskis.Plugins.WeatherBot
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.3.1";
+        internal const string VersionStr = "0.3.2";
 
         /// <summary>
         /// The command to trigger the weather bot.

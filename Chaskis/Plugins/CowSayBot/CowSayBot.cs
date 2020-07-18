@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2018.
+//          Copyright Seth Hendrick 2016-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.CowSayBot
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.3.1";
+        internal const string VersionStr = "0.3.2";
 
         /// <summary>
         /// Process Start info

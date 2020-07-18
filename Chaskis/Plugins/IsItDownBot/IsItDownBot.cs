@@ -18,7 +18,7 @@ namespace Chaskis.Plugins.IsItDownBot
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.1.1";
+        internal const string VersionStr = "0.1.2";
 
         internal const string PluginName = "isitdownbot";
 
