@@ -222,6 +222,17 @@ def PostDirectoryToWebsite( String localDirectory )
     }
 }
 
+def GitCommit( String workingDir, String message, Boolean toggleIgnoreLineEndings )
+{
+    if( toggleIgnoreLineEndings )
+    {
+        bat "cd \"${workingDir}\" && git config core.autocrlf false";
+    }
+    bat "cd \"${workingDir}\" && git config user.email \"seth@shendrick.net\"";
+    bat "cd \"${workingDir}\" && git config user.name \"Seth Hendrick\"";
+    bat "cd \"${workingDir}\" && git commit -a -m \"${message}\"";
+}
+
 def GitPush( String repoLocation, String credId )
 {
     withCredentials(
@@ -578,7 +589,14 @@ pipeline
 
                         // Move binaries over so they can be posted online.
                         bat "MOVE ${buildDistFolder}\\arch_linux .\\${distFolder}\\arch_linux";
-                        PostDirectoryToWebsite( ".\\${distFolder}\\arch_linux" );
+
+                        script
+                        {
+                            if( params.UploadToWebsite )
+                            {
+                                PostDirectoryToWebsite( ".\\${distFolder}\\arch_linux" );
+                            }
+                        }
 
                         // Clone the AUR git repo.
                         checkout poll: false, scm: [
@@ -592,15 +610,15 @@ pipeline
                                 [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]
                             ],
                             submoduleCfg: [],
-                            userRemoteConfigs: [[credentialsId: GetAurCredsId(), url: 'ssh://aur@aur.archlinux.org/chaskis.git']]
+                            userRemoteConfigs: [[url: 'https://aur.archlinux.org/chaskis.git']]
                         ]
 
                         // Copy over the SRCINFO and PKGBUILD files.
-                        bat "COPY /Y ${distFolder}\\arch_linx\\.SRCINFO .\\chaskis_aur\\.SRCINFO";
-                        bat "COPY /Y ${distFolder}\\arch_linx\\PKGBUILD .\\chaskis_aur\\PKGBUILD";
+                        bat "COPY /Y ${distFolder}\\arch_linux\\.SRCINFO .\\chaskis_aur\\.SRCINFO";
+                        bat "COPY /Y ${distFolder}\\arch_linux\\PKGBUILD .\\chaskis_aur\\PKGBUILD";
 
                         // Commit && Push.
-                        bat "cd chaskis_aur && git commit -a -m \"Deployed Version ${GetChaskisVersion()}\"";
+                        GitCommit( "chaskis_aur", "Deployed Version ${GetChaskisVersion()}", true );
                         //GitPush( "chaskis_aur", aurCreds );
                     }
                 }
@@ -608,7 +626,7 @@ pipeline
                 {
                     steps
                     {
-                        bat "cd Chaskis && git commit -a -m \"Deployed Version ${GetChaskisVersion()}\"";
+                        GitCommit( "Chaskis", "Deployed Version ${GetChaskisVersion()}", false );
                         // GitPush( "Chaskis", GetWebsiteCredsId() );
                     }
                 }
