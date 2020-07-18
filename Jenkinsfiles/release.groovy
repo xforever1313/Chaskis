@@ -246,6 +246,7 @@ pipeline
     {
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
+        booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
         booleanParam( name: "Deploy", defaultValue: true, description: "Should we deploy?" );
         booleanParam( name: "UploadToWebsite", defaultValue: true, description: "Should files be uploaded to the website?" );
@@ -331,6 +332,13 @@ pipeline
                     steps
                     {
                         CallCakeOnWindows( "--target=unit_test" );
+                    }
+                    when
+                    {
+                        expression
+                        {
+                            return params.RunUnitTests;
+                        }
                     }
                     post
                     {
@@ -451,6 +459,13 @@ pipeline
                     steps
                     {
                         CallCakeOnUbuntu( "--target=unit_test" );
+                    }
+                    when
+                    {
+                        expression
+                        {
+                            return params.RunUnitTests;
+                        }
                     }
                     post
                     {

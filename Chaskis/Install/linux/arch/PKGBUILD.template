@@ -16,7 +16,7 @@ license=('BSL')
 depends=('dotnet-runtime>=3.1.0')
 provides=('chaskis')
 conflicts=('chaskis')
-source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/linux/debian/chaskis.deb")
+source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/debian/chaskis.deb")
 sha256sums=('{%DebCheckSum%}')
 validpgpkeys=()
 
