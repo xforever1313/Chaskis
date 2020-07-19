@@ -244,8 +244,8 @@ def GitPush( String repoLocation, String credId, String url )
     )
     {
         SetupPrivateKey( GIT_KEY );
-        bat "cd \"${repoLocation}\" && git config core.sshCommand 'ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i \"${GIT_KEY}\"'";
-        bat "cd \"${repoLocation}\" && git push ${url}";
+        bat "cd \"${repoLocation}\" && git config core.sshCommand \"ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i \\\"${GIT_KEY}\\\"\"";
+        bat "cd \"${repoLocation}\" && git push ${url} HEAD:master";
     }
 }
 
@@ -264,6 +264,7 @@ pipeline
         booleanParam( name: "Deploy", defaultValue: true, description: "Should we deploy?" );
         booleanParam( name: "UploadToWebsite", defaultValue: true, description: "Should files be uploaded to the website?" );
         booleanParam( name: "CleanUp", defaultValue: true, description: "Should we clean up the workspace first?" );
+        booleanParam( name: "Push", defaultValue: true, description: "Should we push everything to third party services?" );
     }
     stages
     {
@@ -621,7 +622,6 @@ pipeline
 
                         // Commit && Push.
                         GitCommit( "chaskis_aur", "Deployed Version ${GetChaskisVersion()}", true );
-                        GitPush( "chaskis_aur", GetAurCredsId() );
                     }
                 }
                 stage( 'Commit' )
@@ -629,7 +629,33 @@ pipeline
                     steps
                     {
                         GitCommit( "Chaskis", "Deployed Version ${GetChaskisVersion()}", false );
-                        GitPush( "Chaskis", GetWebsiteCredsId() );
+                    }
+                }
+            }
+            when
+            {
+                expression
+                {
+                    return params.Deploy;
+                }
+            }
+        } // End Deploy
+        stage( "Push" )
+        {
+            stages
+            {
+                stage( "push_github" )
+                {
+                    steps
+                    {
+                        GitPush( "Chaskis", GetWebsiteCredsId(), "git@github.com:xforever1313/Chaskis.git" );
+                    }
+                }
+                stage( "push_aur" )
+                {
+                    steps
+                    {
+                        GitPush( "chaskis_aur", GetAurCredsId(), "ssh://aur@aur.archlinux.org/chaskis.git" );
                     }
                 }
                 stage( 'Deploy NuGet' )
@@ -648,7 +674,7 @@ pipeline
                     {
                         withCredentials([string(credentialsId: 'choco_api_key', variable: 'choco_api_key')])
                         {
-                            bat "choco push ${distFolder}\\chocolatey\\*.nupkg -k ${choco_api_key}";
+                            bat "choco push ${distFolder}\\chocolatey\\*.nupkg -k ${choco_api_key} --source https://push.chocolatey.org/";
                         }
                     }
                 }
@@ -657,9 +683,9 @@ pipeline
             {
                 expression
                 {
-                    return params.Deploy;
+                    return params.Push;
                 }
             }
-        } // End Deploy
+        }
     }
 }
