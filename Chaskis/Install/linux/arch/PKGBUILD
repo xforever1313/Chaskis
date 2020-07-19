@@ -17,7 +17,7 @@ depends=('dotnet-runtime>=3.1.0')
 provides=('chaskis')
 conflicts=('chaskis')
 source=("https://files.shendrick.net/projects/chaskis/releases/$pkgver/debian/chaskis.deb")
-sha256sums=('fe03a07766eeb681da06c02de35ce03fbc298803d8902318733b1c5107c05b4e')
+sha256sums=('043e8e9449c665c6790d20c8a5f3e4d25c9ff518bc8645389a9429e95614eb2f')
 validpgpkeys=()
 
 package() {
