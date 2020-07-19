@@ -176,7 +176,7 @@ def ParseTestResults( String filePattern )
 
 ///
 /// Apparently when Jenkins copies the SSH key to the secrets folder, it
-/// doesn't restrict the permissoins enough >_>.
+/// doesn't restrict the permissions enough >_>.
 /// Taken from : https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open
 ///
 def SetupPrivateKey( String keyPath )
@@ -244,8 +244,8 @@ def GitPush( String repoLocation, String credId, String url )
     )
     {
         SetupPrivateKey( GIT_KEY );
-
-        bat "cd ${repoLocation} && ssh -o BatchMode=yes -i \"${GIT_KEY}\" git push ${url}";
+        bat "cd \"${repoLocation}\" && git config core.sshCommand 'ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i \"${GIT_KEY}\"'";
+        bat "cd \"${repoLocation}\" && git push ${url}";
     }
 }
 
