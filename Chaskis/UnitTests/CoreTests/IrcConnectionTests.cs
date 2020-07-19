@@ -514,7 +514,13 @@ namespace Chaskis.UnitTests.CoreTests
                 using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
                 {
                     void threadExitedAction() { readerThreadExitedEvent.Set(); }
-                    void onReadLineAction( string s ) { messages.AppendLine( s ); }
+                    void onReadLineAction( string s )
+                    {
+                        lock( messages )
+                        {
+                            messages.AppendLine( s );
+                        }
+                    }
 
                     try
                     {
