@@ -229,17 +229,15 @@ var nugetPackTask = Task( "nuget_pack" )
         EnsureDirectoryExists( outputPath );
         CleanDirectory( outputPath );
 
-        NuGetPackSettings settings = new NuGetPackSettings
+        DotNetCorePackSettings settings = new DotNetCorePackSettings
         {
             OutputDirectory = outputPath,
-            Properties = new Dictionary<string, string>
-            {
-                ["Configuration"] = "Release"
-            }
+            Configuration = "Release",
+            NoBuild = true
         };
 
-        NuGetPack(
-            paths.ChaskisCoreFolder.CombineWithFilePath( "Chaskis.Core.csproj" ),
+        DotNetCorePack(
+            paths.ChaskisCoreFolder.CombineWithFilePath( "Chaskis.Core.csproj" ).ToString(),
             settings
         );
 

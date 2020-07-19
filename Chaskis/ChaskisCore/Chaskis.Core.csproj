@@ -28,11 +28,12 @@
     <Version>0.20.0</Version>
     <Authors>Seth Hendrick</Authors>
     <Company />
-    <PackageLicenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>BSL-1.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/xforever1313/Chaskis/</PackageProjectUrl>
+    <icon>../../Documentation/icon.png</icon>
     <PackageIconUrl>https://files.shendrick.net/projects/chaskis/assets/icon.png</PackageIconUrl>
-    <PackageTags>chaskis irc bot framework plugin seth hendrick xforever1313 mono linux windows</PackageTags>
-    <Copyright>Copyright © Seth Hendrick 2016-2019</Copyright>
+    <PackageTags>chaskis irc bot framework plugin seth hendrick xforever1313 docker linux windows</PackageTags>
+    <Copyright>Copyright © Seth Hendrick 2016-2020</Copyright>
     <RepositoryUrl>https://github.com/xforever1313/Chaskis.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
