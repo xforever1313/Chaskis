@@ -28,6 +28,10 @@
     <Version>0.20.0</Version>
     <Authors>Seth Hendrick</Authors>
     <Company />
+    <!--
+      This is here so our templates can get it
+      <PackageLicenseUrl>https://github.com/xforever1313/Chaskis/blob/master/LICENSE_1_0.txt</PackageLicenseUrl>
+    -->
     <PackageLicenseExpression>BSL-1.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/xforever1313/Chaskis/</PackageProjectUrl>
     <icon>../../Documentation/icon.png</icon>

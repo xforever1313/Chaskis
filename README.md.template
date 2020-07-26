@@ -11,7 +11,16 @@ Build Status
 Packages
 --------------
 
-[![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/) [![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/) [![AUR](https://img.shields.io/aur/version/chaskis.svg)](https://aur.archlinux.org/packages/chaskis/) [![Copr](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/package/chaskis/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/package/chaskis/)
+[![NuGet](https://img.shields.io/nuget/v/ChaskisCore.svg)](https://www.nuget.org/packages/ChaskisCore/)
+[![Chocolatey](https://img.shields.io/chocolatey/v/chaskis.svg)](https://chocolatey.org/packages/chaskis/)
+[![AUR](https://img.shields.io/aur/version/chaskis.svg)](https://aur.archlinux.org/packages/chaskis/)
+
+Docker Images
+--------------
+
+[![Windows](https://img.shields.io/docker/v/xforever1313/chaskis.windows?label=Windows%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.windows)
+[![Ubuntu](https://img.shields.io/docker/v/xforever1313/chaskis.ubuntu?label=Ubuntu%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.ubuntu)
+[![Raspbian](https://img.shields.io/docker/v/xforever1313/chaskis.raspbian?label=Raspbian%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.raspbian)
 
 About
 --------
@@ -28,15 +37,14 @@ Install Instructions
 ----------------------
 
 ### Windows ###
-Run the Windows [installer](https://files.shendrick.net/projects/chaskis/releases/).  This will install Chaskis to C:\Program Files\Chaskis.  The service will also be installed but NOT enabled.
+Run the Windows [installer](https://files.shendrick.net/projects/chaskis/releases/latest/windows/ChaskisInstaller.msi).  This will install Chaskis to ```C:\Program Files\Chaskis```.  The service will also be installed but NOT enabled.
 
 You can also install via [chocolatey](https://chocolatey.org/packages/chaskis/) by running ```choco install chaskis```.
 
 ### Linux ###
 
- * **Arch** - Install with the AUR: ```yaourt -S chaskis```
- * **Debian** - [Install](http://www.mono-project.com/download/#download-lin) an up-to-date version of mono, and install the .deb file.
- * **Fedora** - Install with [copr](https://copr.fedorainfracloud.org/coprs/xforever1313/chaskis/) with the commands ```dnf copr enable xforever1313/chaskis``` and ```dnf install chaskis```
+ * **Arch** - Install with the AUR: ```yaourt -S chaskis```.  There is a dependency of the dotnet runtime
+ * **Debian** - [Install](https://docs.microsoft.com/en-us/dotnet/core/install/linux) an up-to-date version of the dotnet core runtime, and install the [.deb file](https://files.shendrick.net/projects/chaskis/releases/latest/debian/chaskis.deb).
 
 Configuration
 ---------------
@@ -58,6 +66,7 @@ The other way to run Chaskis is by the service.  The advantage of a service is y
 
 * [Windows Instructions](https://github.com/xforever1313/Chaskis/wiki/Running-as-a-Windows-Service)
 * [Linux Instructions](https://github.com/xforever1313/Chaskis/wiki/Running-as-a-Linux-Service)
+* [Docker Instructions](https://github.com/xforever1313/Chaskis/wiki/Running-with-Docker)
 
 Writing Plugins
 ----------------
