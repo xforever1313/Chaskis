@@ -18,9 +18,9 @@ Packages
 Docker Images
 --------------
 
-[![Windows](https://img.shields.io/docker/v/xforever1313/chaskis.windows?label=Windows%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.windows)
-[![Ubuntu](https://img.shields.io/docker/v/xforever1313/chaskis.ubuntu?label=Ubuntu%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.ubuntu)
-[![Raspbian](https://img.shields.io/docker/v/xforever1313/chaskis.raspbian?label=Raspbian%20Docker&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.raspbian)
+[![Windows](https://img.shields.io/docker/v/xforever1313/chaskis.windows?label=Windows&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.windows)
+[![Ubuntu](https://img.shields.io/docker/v/xforever1313/chaskis.ubuntu?label=Ubuntu&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.ubuntu)
+[![Raspbian](https://img.shields.io/docker/v/xforever1313/chaskis.raspbian?label=Raspbian&style=flat-square)](https://hub.docker.com/r/xforever1313/chaskis.raspbian)
 
 About
 --------
