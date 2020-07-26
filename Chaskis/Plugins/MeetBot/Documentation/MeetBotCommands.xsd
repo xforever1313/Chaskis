@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MeetBotCommands"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotCommands.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotCommands.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotCommands.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:simpleType name="Restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Anyone"/>
+            <xs:enumeration value="ChairsAndBotAdmins"/>
+            <xs:enumeration value="ChairsOnly"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Action">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="StartMeeting"/>
+            <xs:enumeration value="EndMeeting"/>
+            <xs:enumeration value="Topic"/>
+            <xs:enumeration value="Agree"/>
+            <xs:enumeration value="Chair"/>
+            <xs:enumeration value="Unchair"/>
+            <xs:enumeration value="Action"/>
+            <xs:enumeration value="Info"/>
+            <xs:enumeration value="Link"/>
+            <xs:enumeration value="Unlink"/>
+            <xs:enumeration value="Help"/>
+            <xs:enumeration value="Accept"/>
+            <xs:enumeration value="Reject"/>
+            <xs:enumeration value="Save"/>
+            <xs:enumeration value="CancelMeeting"/>
+            <xs:enumeration value="Purge"/>
+            <xs:enumeration value="Silence"/>
+            <xs:enumeration value="Voice"/>
+            <xs:enumeration value="Banish"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="command" type="MeetBotCommand"/>
+    <xs:complexType name="MeetBotCommand">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="helptext" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="example" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="restriction" type="Restriction" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="action" type="Action"/>
+    </xs:complexType>
+    
+    <xs:element name="meetbotcommands" type="MeetBotCommands"/>
+    <xs:complexType name="MeetBotCommands">
+        <xs:sequence>
+            <xs:element name="command" type="MeetBotCommand" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
