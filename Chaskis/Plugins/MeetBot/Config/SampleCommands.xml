@@ -6,14 +6,14 @@
 -->
 <meetbotcommands xmlns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotCommands.xsd">
     <command action="StartMeeting">
-        <name>#startmeeting</name>
+        <prefix>#startmeeting</prefix>
         <helptext>Starts a meeting. The person who invoked it becomes a chair and the owner.  Any other text becomes the meeting topic (see also: #meetingtopic).</helptext>
         <example>
             #startmeeting This is my topic!
         </example>
     </command>
     <command action="EndMeeting">
-        <name>#endmeeting</name>
+        <prefix>#endmeeting</prefix>
         <helptext>Ends a meeting, saves the logs, and restores the previous topic.</helptext>
         <example>
             #endmeeting
@@ -21,7 +21,7 @@
         <restriction>ChairsAndBotAdmins</restriction>
     </command>
     <command action="Topic">
-        <name>#topic</name>
+        <prefix>#topic</prefix>
         <helptext>Sets the current topic of discussion. The IRC Channel topic is also changed (topic will be restored after the meeting ends).</helptext>
         <example>
             #topic How to make a good IRC bot.
@@ -29,8 +29,8 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Agree">
-        <name>#agree</name>
-        <name>#agreed</name>
+        <prefix>#agree</prefix>
+        <prefix>#agreed</prefix>
         <helptext>Mark something as agreed upon. The rest of the line is the details.</helptext>
         <example>
             #agree This is a good idea!
@@ -38,7 +38,7 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Chair">
-        <name>#chair</name>
+        <prefix>#chair</prefix>
         <helptext>Adds new chair(s) to the meeting. The rest of the line is a list of nicks separated by whitespace.  Bot will respond with current chairs for verification.</helptext>
         <example>
             #chair xforever1313 xbot1313
@@ -46,7 +46,7 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Unchair">
-        <name>#unchair</name>
+        <prefix>#unchair</prefix>
         <helptext>Removes chair(s) from the meeting. The rest of the line is a list of nicks separated by whitespace.  Bot will respond with current chairs for verification. Owner can not be removed as a chair.</helptext>
         <example>
             #unchair xforever1313 xbot1313
@@ -54,7 +54,7 @@
         <restriction>ChairsAndBotAdmins</restriction>
     </command>
     <command action="Action">
-        <name>#action</name>
+        <prefix>#action</prefix>
         <helptext>Add an ACTION item to the minutes.  Provide the IRC nick of the person doing the action, followed by what the action is.  Surround in &lt;&gt; to include whitespace.</helptext>
         <example>
             #action xforever1313 Make an awesome bot!
@@ -64,14 +64,14 @@
         </example>
     </command>
     <command action="Info">
-        <name>#info</name>
+        <prefix>#info</prefix>
         <helptext>Add an INFO item to the minutes.</helptext>
         <example>
             #info Dotnet Core runs on both Windows and Linux.
         </example>
     </command>
     <command action="Link">
-        <name>#link</name>
+        <prefix>#link</prefix>
         <helptext>
             Add a link to the minutes.  The link will be clickable if meeting notes are rendered as HTML.  The URL must be the first thing on the line, separated by a space from the rest of the line.  If a URL is the first thing in a message, it implicitly becomes a link.
         </helptext>
@@ -83,28 +83,28 @@
         </example>
     </command>
     <command action="Unlink">
-        <name>#unlink</name>
+        <prefix>#unlink</prefix>
         <helptext>Show a link, but it will NOT be clickable if meeting notes are rendered as HTML.</helptext>
         <example>#unlink https://github.com/xforever1313/Chaskis GitHub Link</example>
     </command>
     <command>
-        <name>#meetingtopic</name>
+        <prefix>#meetingtopic</prefix>
         <helptext>
             Sets the "meeting topic". This will always appear in the channel topic even as #topic changes the topic. The format of the IRC channel topic is "topic (Meeting Topic: meeting_topic)".  Chairs Only.
         </helptext>
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Help">
-        <name>#help</name>
-        <name>#halp</name>
-        <name>#commands</name>
+        <prefix>#help</prefix>
+        <prefix>#halp</prefix>
+        <prefix>#commands</prefix>
         <helptext>
             Alias to perform the Chaskis help command on MeetBot. Can only be performed when a meeting is active.
         </helptext>
     </command>
     <command action="Accept">
-        <name>#accepted</name>
-        <name>#accept</name>
+        <prefix>#accepted</prefix>
+        <prefix>#accept</prefix>
         <helptext>
             Mark something as accepted. The rest of the line is the details.
         </helptext>
@@ -114,8 +114,8 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Reject">
-        <name>#rejected</name>
-        <name>#reject</name>
+        <prefix>#rejected</prefix>
+        <prefix>#reject</prefix>
         <helptext>
             Mark something as rejected. The rest of the line is the details.
         </helptext>
@@ -125,21 +125,21 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Save">
-        <name>#save</name>
+        <prefix>#save</prefix>
         <helptext>
             Writes out the logs right now.
         </helptext>
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="CancelMeeting">
-        <name>#cancelmeeting</name>
+        <prefix>#cancelmeeting</prefix>
         <helptext>
             Cancels the current meeting. No logs are saved.
         </helptext>
         <restriction>ChairsAndBotAdmins</restriction>
     </command>
     <command action="Purge">
-        <name>#purge</name>
+        <prefix>#purge</prefix>
         <helptext>
             Purges everything a user has said so far in the meeting from the meeting notes. Could be useful if a spammer comes into the channel. Chairs can not be purged.
         </helptext>
@@ -149,8 +149,8 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Silence">
-        <name>#silence</name>
-        <name>#quiet</name>
+        <prefix>#silence</prefix>
+        <prefix>#quiet</prefix>
         <helptext>
             Anything a user says after being silenced will not show up in the meeting notes. Chairs can not be silenced.
         </helptext>
@@ -160,7 +160,7 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Voice">
-        <name>#voice</name>
+        <prefix>#voice</prefix>
         <helptext>
             Only impacts users who were silenced. Anything they say will now show up in the meeting notes.
         </helptext>
@@ -170,8 +170,8 @@
         <restriction>ChairsOnly</restriction>
     </command>
     <command action="Banish">
-        <name>#banish</name>
-        <name>#ban</name>
+        <prefix>#banish</prefix>
+        <prefix>#ban</prefix>
         <helptext>
             Purges AND silences a user. Anything the user says will not show up in the meeing notes. Users can not be unbanned until the end of the meeting. Chairs can not be banned.
         </helptext>

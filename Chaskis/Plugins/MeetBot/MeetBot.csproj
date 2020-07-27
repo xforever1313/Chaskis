@@ -12,11 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Config\SampleCommands.xml" />
     <None Remove="Documentation\DefaultCommands.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Config\DefaultCommands.xml" />
+    <EmbeddedResource Include="Config\SampleCommands.xml" />
   </ItemGroup>
 
   <ItemGroup>

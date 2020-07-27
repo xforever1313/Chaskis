@@ -13,6 +13,8 @@ namespace Chaskis.Plugins.MeetBot
     /// </remarks>
     public enum MeetingAction
     {
+        Unknown,
+
         StartMeeting,
 
         EndMeeting,
@@ -61,6 +63,8 @@ namespace Chaskis.Plugins.MeetBot
     /// </remarks>
     public enum CommandRestriction
     {
+        Unknown,
+
         /// <summary>
         /// Anyone can perform a command.
         /// </summary>
