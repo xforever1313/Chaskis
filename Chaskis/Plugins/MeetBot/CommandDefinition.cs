@@ -88,16 +88,16 @@ namespace Chaskis.Plugins.MeetBot
 
         public static void FromXml( this CommandDefinition cmd, XElement commandElement, GenericLogger logger = null )
         {
-            if( CommandXmlElementName.Equals( commandElement.Name ) == false )
+            if( CommandXmlElementName.Equals( commandElement.Name.LocalName ) == false )
             {
                 throw new ArgumentException(
-                    $"Invalid XML element name.  Expected: {CommandXmlElementName}, Got: {commandElement.Name}"
+                    $"Invalid XML element name.  Expected: {CommandXmlElementName}, Got: {commandElement.Name.LocalName}"
                 );
             }
 
             foreach( XAttribute attribute in commandElement.Attributes() )
             {
-                if( actionXmlAttrName.Equals( attribute.Name ) )
+                if( actionXmlAttrName.Equals( attribute.Name.LocalName ) )
                 {
                     if( Enum.TryParse( attribute.Value, out MeetingAction action ) )
                     {
@@ -116,15 +116,15 @@ namespace Chaskis.Plugins.MeetBot
 
             foreach( XElement child in commandElement.Elements() )
             {
-                if( prefixXmlElementName.Equals( child.Name ) )
+                if( prefixXmlElementName.Equals( child.Name.LocalName ) )
                 {
                     cmd.AddPrefix( child.Value );
                 }
-                else if( helpTextXmlElementName.Equals( child.Name ) )
+                else if( helpTextXmlElementName.Equals( child.Name.LocalName ) )
                 {
                     cmd.HelpText = child.Value;
                 }
-                else if( restrictionXmlElementName.Equals( child.Name ) )
+                else if( restrictionXmlElementName.Equals( child.Name.LocalName ) )
                 {
                     if( Enum.TryParse( child.Value, out CommandRestriction restriction ) )
                     {
@@ -137,7 +137,7 @@ namespace Chaskis.Plugins.MeetBot
                 }
                 else
                 {
-                    logger?.WarningWriteLine( "Unexpected Command Child: " + child.Name );
+                    logger?.WarningWriteLine( "Unexpected Command Child: " + child.Name.LocalName );
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace Chaskis.Plugins.MeetBot
             builder.Remove( builder.Length - 1, 1 );
 
             return new Regex(
-                @"^(" + builder.ToString() + ")(?<additionalInfo>.+)",
+                @"^(" + builder.ToString() + ")(?<additionalInfo>.+)?",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture
             );
         }

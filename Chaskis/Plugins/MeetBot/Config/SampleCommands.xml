@@ -87,7 +87,7 @@
         <helptext>Show a link, but it will NOT be clickable if meeting notes are rendered as HTML.</helptext>
         <example>#unlink https://github.com/xforever1313/Chaskis GitHub Link</example>
     </command>
-    <command>
+    <command action="MeetingTopic">
         <prefix>#meetingtopic</prefix>
         <helptext>
             Sets the "meeting topic". This will always appear in the channel topic even as #topic changes the topic. The format of the IRC channel topic is "topic (Meeting Topic: meeting_topic)".  Chairs Only.

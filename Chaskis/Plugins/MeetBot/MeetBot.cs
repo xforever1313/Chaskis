@@ -86,15 +86,11 @@ namespace Chaskis.Plugins.MeetBot
             this.defaultNotesDirectory = Path.Combine(
                 this.pluginDir,
                 "meeting_notes"
-             );
+            );
 
             XmlLoader loader = new XmlLoader( this.logger );
 
-            IList<CommandDefinition> defs;
-            using( Stream s = typeof( MeetBot ).Assembly.GetManifestResourceStream( "Config.SampleCommands.xml" ) )
-            {
-                defs = loader.ParseCommandFile( s, true );
-            }
+            IList<CommandDefinition> defs = loader.ParseDefaultFile();
 
             this.cmdDefs = new CommandDefinitionCollection( defs );
 

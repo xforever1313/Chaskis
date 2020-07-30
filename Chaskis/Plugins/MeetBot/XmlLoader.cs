@@ -28,6 +28,14 @@ namespace Chaskis.Plugins.MeetBot
 
         // ---------------- Functions ----------------
 
+        public IList<CommandDefinition> ParseDefaultFile()
+        {
+            using( Stream s = typeof( MeetBot ).Assembly.GetManifestResourceStream( "Chaskis.Plugins.MeetBot.Config.SampleCommands.xml" ) )
+            {
+                return ParseCommandFile( s, true );
+            }
+        }
+
         public IList<CommandDefinition> ParseCommandFile( Stream stream, bool isDefault )
         {
             List<CommandDefinition> cmdDefs = new List<CommandDefinition>();
@@ -37,16 +45,16 @@ namespace Chaskis.Plugins.MeetBot
             const string expectedRootName = "meetbotcommands";
 
             XElement root = doc.Root;
-            if( expectedRootName.Equals( root.Name ) == false )
+            if( expectedRootName.Equals( root.Name.LocalName ) == false )
             {
                 throw new ArgumentException(
-                    $"XML root name does not match {expectedRootName}, got {root.Name}"
+                    $"XML root name does not match {expectedRootName}, got {root.Name.LocalName}"
                 );
             }
 
             foreach( XElement child in root.Elements() )
             {
-                if( CommandDefinitionExtensions.CommandXmlElementName.Equals( child.Name ) )
+                if( CommandDefinitionExtensions.CommandXmlElementName.Equals( child.Name.LocalName ) )
                 {
                     CommandDefinition def = new CommandDefinition();
                     def.FromXml( child, this.logger );

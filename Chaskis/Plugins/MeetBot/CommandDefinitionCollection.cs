@@ -87,6 +87,11 @@ namespace Chaskis.Plugins.MeetBot
             // Ensure each command exists at least once.
             foreach( MeetingAction action in Enum.GetValues( typeof( MeetingAction ) ) )
             {
+                if( action == MeetingAction.Unknown )
+                {
+                    continue;
+                }
+
                 {
                     IEnumerable<CommandDefinition> defaultDefs = this.defs.Where(
                         c => ( c.MeetingAction == action ) && c.IsDefault

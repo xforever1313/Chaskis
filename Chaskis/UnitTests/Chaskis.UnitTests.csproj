@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Plugins\IsItDownBot\IsItDownBot.csproj" />
     <ProjectReference Include="..\Plugins\KarmaBot\KarmaBot.csproj" />
     <ProjectReference Include="..\Plugins\MathBot\MathBot.csproj" />
+    <ProjectReference Include="..\Plugins\MeetBot\MeetBot.csproj" />
     <ProjectReference Include="..\Plugins\MessageFixerBot\MessageFixerBot.csproj" />
     <ProjectReference Include="..\Plugins\NewVersionNotifier\NewVersionNotifier.csproj" />
     <ProjectReference Include="..\Plugins\QuoteBot\QuoteBot.csproj" />

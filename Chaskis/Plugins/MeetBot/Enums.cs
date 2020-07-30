@@ -35,6 +35,8 @@ namespace Chaskis.Plugins.MeetBot
 
         Unlink,
 
+        MeetingTopic,
+
         Help,
 
         Accept,
