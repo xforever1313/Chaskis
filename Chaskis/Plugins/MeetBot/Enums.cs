@@ -82,4 +82,39 @@ namespace Chaskis.Plugins.MeetBot
         /// </summary>
         ChairsOnly
     }
+
+    /// <summary>
+    /// How to generate meeting notes.
+    /// </summary>
+    public enum MeetingNotesGeneratorType
+    {
+        Unknown,
+
+        /// <summary>
+        /// Generate the meeting notes into a default XML file that
+        /// can later be parsed out.
+        /// </summary>
+        /// <remarks>
+        /// Lower-case so we can parse the enum from the config XML.
+        /// </remarks>
+        xml,
+
+        /// <summary>
+        /// Generate the meeting notes into an html file generated from
+        /// a cshtml file.
+        /// </summary>
+        /// <remarks>
+        /// Lower-case so we can parse the enum from the config XML.
+        /// </remarks>
+        html,
+
+        /// <summary>
+        /// Generate the meeting notes into an html file generated from
+        /// a cstxt file.
+        /// </summary>
+        /// <remarks>
+        /// Lower-case so we can parse the enum from the config XML.
+        /// </remarks>
+        txt
+    }
 }
