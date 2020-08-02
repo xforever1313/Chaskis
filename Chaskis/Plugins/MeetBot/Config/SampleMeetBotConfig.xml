@@ -15,7 +15,7 @@
     {%meetbotroot%} - Gets replaced to the absolute path to the MeetBot plugin configuration in the Chassis Root:  Chasis/Plugins/Meetbot.
                       Not valid in any filename options.
 -->
-<meetbotconfig>
+<meetbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotConfig.xsd">
     <!--
         Remove or comment out to use the default command set compiled into the plugin.
         
