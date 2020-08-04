@@ -22,7 +22,7 @@ Url: https://github.com/xforever1313/Chaskis/
 # there is no need to recompile.  Just unpack the .deb and call it a day.
 
 %description
-Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux (with the use of Mono).  Users of the bot can add or remove plugins to run, or even write their own.
+Chaskis is a framework for creating IRC Bots in an easy way.  It is a plugin-based architecture written in C# that can be run on Windows or Linux.  Users of the bot can add or remove plugins to run, or even write their own.
 
 Chaskis is named after the [Chasqui](https://en.wikipedia.org/wiki/Chasqui), messengers who ran trails in the Inca Empire to deliver messages.
 
