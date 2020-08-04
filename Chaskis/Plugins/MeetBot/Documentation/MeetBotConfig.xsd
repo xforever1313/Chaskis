@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MeetBotConfig"
+    targetNamespace="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotConfig.xsd"
+    elementFormDefault="qualified"
+    xmlns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotConfig.xsd"
+    xmlns:mstns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotConfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+    <xs:simpleType name="GeneratorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="xml"/>
+            <xs:enumeration value="html"/>
+            <xs:enumeration value="txt"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="FileTimeStamp">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="utc" type="xs:boolean" use="optional" default="true"/>
+                <xs:attribute name="culture" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="GeneratorFileName">
+        <xs:sequence>
+            <xs:element name="timestamp" type="FileTimeStamp" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Generator">
+        <xs:sequence>
+            <xs:element name="channel" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="templatepath" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="output" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="filename" type="GeneratorFileName" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="postsaveaction" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="postsavemsg" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="GeneratorType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="GeneratorList">
+        <xs:sequence>
+            <xs:element name="generator" type="Generator" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MeetBotConfig">
+        <xs:sequence>
+            <xs:element name="commandconfig" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="enablebackups" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="generators" type="GeneratorList" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="meetbotconfig" type="MeetBotConfig"/>
+    
+</xs:schema>

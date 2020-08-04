@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    For all configuration options, unless otherwise specified, the following strings
+    can be used for variable substitution:
+    
+    {%channel%} - Gets replaced with the channel the meeting took place in.
+    {%meetingtopic%} - Gets replaced with the meeting topic.  The meeting topic is determined by the following:
+                            - If the meeting topic is specified during #startmeeting, and #meetingtopic is never
+                              used, then {%meetingtopic%} is replaced with the meeting topic set during #startmeeting.
+                            - If #meetingtopic is specified, this gets replaced by the meeting topic specified
+                              closest to the end of the meeting.
+                              This means that using #meetingtopic and #save can write out multiple logs of different names
+                              during the meeting if configured (in)correctly.
+                            - If no meeting topic is specified, the default value, "Untitled Meeting" will be used.
+    {%meetbotroot%} - Gets replaced to the absolute path to the MeetBot plugin configuration in the Chassis Root:  Chasis/Plugins/Meetbot.
+                      Not valid in any filename options.
+                      
+    {%generatortype%} - The type of generator (e.g. xml, html, txt).
+-->
+<meetbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/meetbot/2020/MeetBotConfig.xsd">
+    <!--
+        Remove or comment out to use the default command set compiled into the plugin.
+        
+        If specified, you are able to override the commands meetbot uses, including the help.
+        Perhaps you want your help text in Spanish?
+    -->
+    
+    <!--
+    <commandconfig>{%meetbotroot}/Commands.xml</commandconfig>
+    -->
+
+    <!--
+        If this is set to true, if at least 1 generator during a meeting fails to save its meeting notes,
+        the default XML generator is run, and puts the meeting notes in a backup folder.
+        
+        The backup folder is located in {%meetbotroot%}/backups.
+        
+        The filename will be named {%channel%}-{%meetingtopic%}-{%timestamp%}.xml, where the timestamp is
+        yyyy-MM-dd_HH-mm-ss-ffff, is UTC time, and has an invarient culture.
+        
+        The bot will report if this happens, and give the file name (but not the path) to the channel.
+    -->
+    <enablebackups>true</enablebackups>
+
+    <!--
+        When a meeting is concluded or a save occurrs, the meeting notes can be generated in a variety of ways.
+        Comment out or delete a generator to not generate meeting notes of that type.  If no generators
+        are specified, then NO meeting notes will be generated, but MeetBot will otherwise function in the channel.
+        
+        You are also allowed to specify multiple generators of the same type.  Maybe you want to
+        have one set of meeting notes whose headers are in English and one in Spanish?  However,
+        be mindful of file name collisions; if multiple generators write out to the same file,
+        one set of meeting notes will be overwritten.
+        
+        Generators have a few options:
+        - type: An attribute on how to output the meeting notes.  You are allowed to specify multiple of the same type.
+                An example of each is below.
+        - channel: Which channel this generator is used for.  If not specified, the generator
+                   will be used for all channels EXCEPT for any channel that is tied
+                   to a specific channel.  You may specify more than one channel per generator.
+        - templatepath: The path to the Razor template file to generate the meeting notes.  Not every
+                        generator supports templates (such as XML), and will be ignored if specified.
+                        If this is not specified, the default template of each type will be used.
+                        The Razor Syntax is the one RazorLight (https://github.com/toddams/RazorLight) uses.
+        - output: Where to output the meeting notes.  This value should be an absolute path.
+                  It is defaulted to {%meetbotroot%}/notes/{%channel%}/ if not specified.
+        - filename: When the meeting is saved, it will save the meeting notes as a text file.
+                    If not specified, the filename will be named {%channel%}-{%meetingtopic%}-{%timestamp%}, where the timestamp is
+                    yyyy-MM-dd_HH-mm-ss-ffff, is UTC time, and has an invarient culture.  The file extension will be the generator type.
+
+                    The text file will be named by the following options:
+                        - timestamp:  This is format string of the timestamp of when the meeting starts.
+                                        
+                                      This value is passed directly into C#'s DateTime.ToString() function.
+                                      See this documentation for more information:
+                                      https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tostring?view=netcore-3.1.
+                                      Default value if not specified is "yyyy-MM-dd_HH-mm-ss-ffff".
+                                      
+                                      The timestamp element contains an attribute in the form of a true or false
+                                      if the timestamp of the timestamp should
+                                      use UTC time (DateTime.UtcNow) or local time (DateTime.Now).  Default value if
+                                      not specified is to use UTC.
+                                       
+                                      The timestamp element can also contain an attribute in the form of a culture string.
+                                      Depending on the string passed into DateTime.ToString(), the output can change
+                                      depending on the culture.  Leave this blank to default it to "Invariant Culture"
+                                      (see: https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.invariantculture?view=netcore-3.1 ).
+                                       
+                                      The output of DateTime.ToString() will then be passed into the {%timestamp%}
+                                      variable of the filename's "name" element.
+
+                        - name:  What to call the file.  The file gets put into the output directory when
+                                 the meeting is saved.  Any variable (minus {%meetbotroot%} is valid, but the recommended ones are
+                                 {%meetingtopic%}, {%generatortype%} (for the extension), and {%timestamp%}.
+                                 Note, ANY whitespace is replaced with '_'.
+                                 
+        - postsaveaction: After saving the meeting notes, this action is run directly on the command line, and can include
+                          variables.  Variables can be {%fullfilepath%} for the absolute path including the file name of the file that was just
+                          saved, or {%filename%} for the just the filename of the file that was just saved.
+                    
+                          An example use case could be setting the permissions to 644 via chmod or something.
+                    
+                          If this option is not specified, no action is taken.
+                    
+                          The bot will specify if the option was successful or not in the channel.
+                    
+        - postsavemsg: When the meeting notes are saved, the bot will send this out to the channel for each generator.
+                       Perhaps you copied the files to an HTTP server and want to tell people where to find them?
+                       {%filename%} is a useful variable here.
+                       
+                       If not specified, the bot will still acknowledge if the meeting notes got saved or not.
+                       
+                       The postsavemsg will not fire if the postsave action failed.
+    -->
+    <generators>
+        <generator type="xml">
+            <!--
+            <channel>#channel1</channel>
+            <channel>#channel2</channel>
+            -->
+            <output>{%meetbotroot%}/notes/{%channel%}/</output>
+            <filename>
+                <timestamp utc="true" culture="en-US">yyyy-MM-dd_HH-mm-ss-ffff</timestamp>
+                <name>{%meetingtopic%}-{%timestamp%}.{%generatortype%}</name>
+            </filename>
+            <!--
+            <postsaveaction>chmod 644 {%fullfilepath%}</postsaveaction>
+            <postsavemsg>
+                Meeting Notes Saved, view them at https://files.shendrick.net/meetingnotes/{%filename%}
+            </postsavemsg>
+            -->
+        </generator>
+        <generator type="html">
+            <templatepath>{%meetbotroot%}/templates/default.cshtml</templatepath>
+            <output>{%meetbotroot%}/notes/{%channel%}/</output>
+            <filename>
+                <timestamp utc="true" culture="en-US">yyyy-MM-dd_HH-mm-ss-ffff</timestamp>
+                <name>{%meetingtopic%}-{%timestamp%}.{%generatortype%}</name>
+            </filename>
+        </generator>
+        <generator type="txt">
+            <templatepath>{%meetbotroot%}/templates/default.cstxt</templatepath>
+            <output>{%meetbotroot%}/notes/{%channel%}/</output>
+            <filename>
+                <timestamp utc="true" culture="en-US">yyyy-MM-dd_HH-mm-ss-ffff</timestamp>
+                <name>{%meetingtopic%}-{%timestamp%}.{%generatortype%}</name>
+            </filename>
+        </generator>
+    </generators>
+</meetbotconfig>

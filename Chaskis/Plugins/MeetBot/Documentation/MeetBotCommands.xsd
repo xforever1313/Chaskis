@@ -25,6 +25,7 @@
             <xs:enumeration value="Action"/>
             <xs:enumeration value="Info"/>
             <xs:enumeration value="Link"/>
+            <xs:enumeration value="MeetingTopic"/>
             <xs:enumeration value="Unlink"/>
             <xs:enumeration value="Help"/>
             <xs:enumeration value="Accept"/>
@@ -38,7 +39,6 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="command" type="MeetBotCommand"/>
     <xs:complexType name="MeetBotCommand">
         <xs:sequence>
             <xs:element name="prefix" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
