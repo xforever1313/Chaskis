@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml.Linq;
 using SethCS.Basic;
 
@@ -70,6 +71,38 @@ namespace Chaskis.Plugins.MeetBot
             }
 
             return cmdDefs;
+        }
+
+        public MeetBotConfig ParseDefaultConfigFile( string meetbotRoot )
+        {
+            string configFile = Path.Combine(
+                meetbotRoot,
+                "MeetBotConfig.xml"
+            );
+
+            using( FileStream reader = new FileStream( configFile, FileMode.Open, FileAccess.Read ) )
+            {
+                return ParseConfigFile( reader, meetbotRoot );
+            }
+        }
+
+        public MeetBotConfig ParseConfigAsString( string xmlString, string meetbotRoot )
+        {
+            using( MemoryStream stream = new MemoryStream( Encoding.UTF8.GetBytes( xmlString ) ) )
+            {
+                return ParseConfigFile( stream, meetbotRoot );
+            }
+        }
+
+        public MeetBotConfig ParseConfigFile( Stream stream, string meetbotRoot )
+        {
+            XDocument doc = XDocument.Load( stream );
+
+            XElement root = doc.Root;
+
+            MeetBotConfig config = new MeetBotConfig( meetbotRoot );
+            config.FromXml( root, this.logger );
+            return config;
         }
     }
 }

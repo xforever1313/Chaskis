@@ -62,6 +62,21 @@ namespace Chaskis.Plugins.MeetBot
         // ---------------- Functions ----------------
 
         /// <summary>
+        /// Gets the command config path
+        /// with any variables subsituted.
+        /// </summary>
+        /// <returns>Null means only use the default.  Otherwise, the path to the file.</returns>
+        public string GetCommandConfigPath()
+        {
+            if( this.CommandConfigPath == null )
+            {
+                return null;
+            }
+
+            return Regexes.MeetBotRootConfigVariable.Replace( this.CommandConfigPath, this.MeetBotRoot );
+        }
+
+        /// <summary>
         /// Validates all configuration.  If validation fails, a <see cref="ListedValidationException"/>
         /// is thrown.
         /// </summary>
@@ -116,11 +131,11 @@ namespace Chaskis.Plugins.MeetBot
             {
                 if( commandConfigElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    config.CommandConfigPath = childElement.Value;
+                    config.CommandConfigPath = childElement.Value.Trim();
                 }
                 else if( enableBackupsElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    config.EnableBackups = bool.Parse( childElement.Value );
+                    config.EnableBackups = bool.Parse( childElement.Value.Trim() );
                 }
                 // Parse Generators:
                 else if( generatorsElementName.Equals( childElement.Name.LocalName ) )

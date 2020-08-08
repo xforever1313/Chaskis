@@ -17,37 +17,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
     {
         // ---------------- Fields ----------------
 
-        private string meetbotPath;
-
-        // ---------------- Setup / Teardown ----------------
-
-        [OneTimeSetUp]
-        public void FixtureSetup()
-        {
-            this.meetbotPath = Path.Combine( "Chaskis", "Plugins", "MeetBot" );
-        }
-
-        [OneTimeTearDown]
-        public void FixtureTeardown()
-        {
-        }
-
-        [SetUp]
-        public void TestSetup()
-        {
-        }
-
-        [TearDown]
-        public void TestTeardown()
-        {
-        }
+        private static readonly string meetbotPath = Path.Combine(
+            "Chaskis",
+            "Plugins",
+            "MeetBot"
+        );
 
         // ---------------- Tests ----------------
 
         [Test]
         public void DefaultSettingsTest()
         {
-            MeetBotConfig uut = new MeetBotConfig( this.meetbotPath );
+            MeetBotConfig uut = new MeetBotConfig( meetbotPath );
 
             Assert.AreEqual( meetbotPath, uut.MeetBotRoot );
             Assert.IsNull( uut.CommandConfigPath ); // <- Null means use the default config file.
@@ -61,7 +42,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         [Test]
         public void DefaultSettingsValidateTest()
         {
-            MeetBotConfig uut = new MeetBotConfig( this.meetbotPath );
+            MeetBotConfig uut = new MeetBotConfig( meetbotPath );
 
             Assert.DoesNotThrow( () => uut.Validate() );
         }
@@ -72,9 +53,9 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         [Test]
         public void InvalidGeneratorValidateTest()
         {
-            MeetBotConfig uut = new MeetBotConfig( this.meetbotPath );
+            MeetBotConfig uut = new MeetBotConfig( meetbotPath );
 
-            GeneratorConfig config = new GeneratorConfig( this.meetbotPath )
+            GeneratorConfig config = new GeneratorConfig( meetbotPath )
             {
                 Type = MeetingNotesGeneratorType.Unknown
             };

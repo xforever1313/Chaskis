@@ -309,6 +309,7 @@ namespace Chaskis.Plugins.MeetBot
 
         private const string channelElementName = "channel";
         private const string outputElementName = "output";
+        private const string templateElementName = "templatepath";
         private const string fileNameElementName = "filename";
         private const string timestampElementName = "timestamp";
         private const string timestampUtcAttrName = "utc";
@@ -351,14 +352,15 @@ namespace Chaskis.Plugins.MeetBot
             {
                 if( channelElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    foreach( XElement channelElement in childElement.Elements() )
-                    {
-                        config.Channels.Add( channelElement.Value );
-                    }
+                    config.Channels.Add( childElement.Value.Trim() );
+                }
+                else if( templateElementName.Equals( childElement.Name.LocalName ) )
+                {
+                    config.TemplatePath = childElement.Value.Trim();
                 }
                 else if( outputElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    config.Output = childElement.Value;
+                    config.Output = childElement.Value.Trim();
                 }
                 else if( fileNameElementName.Equals( childElement.Name.LocalName ) )
                 {
@@ -367,16 +369,16 @@ namespace Chaskis.Plugins.MeetBot
                         // Parse timestamp info.
                         if( timestampElementName.Equals( fileElement.Name.LocalName ) )
                         {
-                            config.TimeStampFormat = fileElement.Value;
+                            config.TimeStampFormat = fileElement.Value.Trim();
                             foreach( XAttribute timestampAttr in fileElement.Attributes() )
                             {
                                 if( timestampUtcAttrName.Equals( timestampAttr.Name.LocalName ) )
                                 {
-                                    config.TimeStampUseUtc = bool.Parse( timestampAttr.Value );
+                                    config.TimeStampUseUtc = bool.Parse( timestampAttr.Value.Trim() );
                                 }
                                 else if( timestampCultureAttrName.Equals( timestampAttr.Name.LocalName ) )
                                 {
-                                    config.TimeStampCulture = new CultureInfo( timestampAttr.Value );
+                                    config.TimeStampCulture = new CultureInfo( timestampAttr.Value.Trim() );
                                 }
                                 else
                                 {
@@ -388,17 +390,17 @@ namespace Chaskis.Plugins.MeetBot
                         }
                         else if( fileNameNameElementName.Equals( fileElement.Name.LocalName ) )
                         {
-                            config.FileName = fileElement.Value;
+                            config.FileName = fileElement.Value.Trim();
                         }
                     }
                 }
                 else if( postSaveActionElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    config.PostSaveAction = childElement.Value;
+                    config.PostSaveAction = childElement.Value.Trim();
                 }
                 else if( postSaveMsgElementName.Equals( childElement.Name.LocalName ) )
                 {
-                    config.PostSaveMessage = childElement.Value;
+                    config.PostSaveMessage = childElement.Value.Trim();
                 }
             }
         }
