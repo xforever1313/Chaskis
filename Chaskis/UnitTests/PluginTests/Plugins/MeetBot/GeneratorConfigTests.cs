@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using Chaskis.Plugins.MeetBot;
+using Chaskis.UnitTests.Common;
 using Moq;
 using NUnit.Framework;
 using SethCS.Extensions;
@@ -162,11 +163,12 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             GeneratorConfig uut = new GeneratorConfig( meetbotPath )
             {
-                FileName = "{%meetingtopic%}-{%timestamp%}.{%generatortype%}",
+                FileName = "{%meetbotroot%}{%meetingtopic%}-{%channel%}-{%timestamp%}.{%generatortype%}",
                 Type = MeetingNotesGeneratorType.html
             };
 
-            string expectedString = $"{meetingNameUnderscored}-{timestamp.ToFileNameString()}.html";
+            // {%meetbotroot%} should NOT be replaced for the file name.
+            string expectedString = $"{{%meetbotroot%}}{meetingNameUnderscored}-{channel}-{timestamp.ToFileNameString()}.html";
             string actualString = uut.GetFileName( this.mockMeetingInfo.Object );
 
             Assert.AreEqual( expectedString, actualString );
@@ -175,6 +177,220 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
                 Path.Combine( meetbotPath, expectedString ),
                 uut.GetFullOutputPath( this.mockMeetingInfo.Object )
             );
+        }
+
+        [Test]
+        public void GetPostSaveActionTest()
+        {
+            GeneratorConfig uut = new GeneratorConfig( meetbotPath )
+            {
+                FileName = "{%meetbotroot%}{%meetingtopic%}-{%channel%}-{%timestamp%}.{%generatortype%}",
+                PostSaveAction = null,
+                Type = MeetingNotesGeneratorType.txt
+            };
+
+            // If the post save action setting is null, we expect null
+            // to return, to show that we want no action to be performed.
+            Assert.IsNull( uut.GetPostSaveAction( this.mockMeetingInfo.Object ) );
+
+            uut.PostSaveAction = "cp {%fullfilepath%} {%meetbotroot%}/{%channel%}/notes";
+
+            // {%meetbotroot%} should NOT be replaced for the file name.
+            string expectedFileName = $"{{%meetbotroot%}}{meetingNameUnderscored}-{channel}-{timestamp.ToFileNameString()}.txt";
+            string expectedCommand = $"cp {Path.Combine( meetbotPath, expectedFileName )} {meetbotPath}/{channel}/notes";
+
+            Assert.AreEqual( expectedCommand, uut.GetPostSaveAction( mockMeetingInfo.Object ) );
+        }
+
+        [Test]
+        public void GetPostSaveMessageTest()
+        {
+            GeneratorConfig uut = new GeneratorConfig( meetbotPath )
+            {
+                FileName = "{%meetingtopic%}-{%channel%}-{%timestamp%}.{%generatortype%}",
+                PostSaveMessage = null,
+                Type = MeetingNotesGeneratorType.txt
+            };
+
+            // If the post save action setting is null, we expect null
+            // to return, to show that we want to send the default message.
+            Assert.IsNull( uut.GetPostSaveMessage( this.mockMeetingInfo.Object ) );
+
+            uut.PostSaveMessage = "Notes have been posted to http://somewhere/notes/{%channel%}/{%filename%}";
+
+            // {%meetbotroot%} should NOT be replaced for the file name.
+            string expectedFileName = $"{meetingNameUnderscored}-{channel}-{timestamp.ToFileNameString()}.txt";
+            string expectedCommand = $"Notes have been posted to http://somewhere/notes/{channel}/{expectedFileName}";
+
+            Assert.AreEqual( expectedCommand, uut.GetPostSaveMessage( mockMeetingInfo.Object ) );
+        }
+
+        /// <summary>
+        /// Not having optional things should validate.
+        /// </summary>
+        [Test]
+        public void ValidateOptionalNotSpecifiedTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+            uut.Channels.Clear();
+            uut.PostSaveAction = null;
+            uut.PostSaveMessage = null;
+            Assert.AreEqual( 0, uut.TryValidate().Count );
+        }
+
+        /// <summary>
+        /// Filling in optional things should still validate.
+        /// </summary>
+        [Test]
+        public void ValidateOptionalSpecifiedTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+            uut.Channels.Add( channel );
+            uut.PostSaveAction = "save action";
+            uut.PostSaveMessage = "save message";
+            Assert.AreEqual( 0, uut.TryValidate().Count );
+
+        }
+
+        /// <summary>
+        /// Unknown type should not validate, all others should.
+        /// </summary>
+        [Test]
+        public void TypeValidationTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+
+            foreach( MeetingNotesGeneratorType type in Enum.GetValues( typeof( MeetingNotesGeneratorType ) ) )
+            {
+                uut.Type = type;
+                if( type == MeetingNotesGeneratorType.Unknown )
+                {
+                    Assert.AreEqual( 1, uut.TryValidate().Count );
+                }
+                else
+                {
+                    Assert.AreEqual( 0, uut.TryValidate().Count );
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invalid channels should not validate.
+        /// </summary>
+        [Test]
+        public void ValidateInvalidChannelsTest()
+        { 
+            // Invalid channels should not validate.
+            GeneratorConfig uut = GetValidConfig();
+            uut.Channels.Add( null );
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut = GetValidConfig();
+            uut.Channels.Add( string.Empty );
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut = GetValidConfig();
+            uut.Channels.Add( "    " );
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        [Test]
+        public void ValidateTemplateTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+            uut.TemplatePath = null;
+
+            // XML should validate with a null, no others should.
+            foreach( MeetingNotesGeneratorType type in Enum.GetValues( typeof( MeetingNotesGeneratorType ) ) )
+            {
+                uut.Type = type;
+                if( type != MeetingNotesGeneratorType.xml )
+                {
+                    Assert.AreEqual( 1, uut.TryValidate().Count );
+                }
+                else
+                {
+                    Assert.AreEqual( 0, uut.TryValidate().Count );
+                }
+            }
+
+            // Meanwhile, if a template IS specified, but is not found,
+            // it should not validate.
+
+            uut.Type = MeetingNotesGeneratorType.html;
+            uut.TemplatePath = "lol.cshtml";
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        [Test]
+        public void OutputValidationTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+
+            uut.Output = null;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.Output = string.Empty;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.Output = "       ";
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        [Test]
+        public void FilenameValidationTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+
+            uut.FileName = null;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.FileName = string.Empty;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.FileName = "       ";
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        [Test]
+        public void TimeStampCultureValidationTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+
+            uut.TimeStampCulture = null;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        [Test]
+        public void TimeStampFormatValidationTest()
+        {
+            GeneratorConfig uut = GetValidConfig();
+
+            uut.TimeStampFormat = null;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.TimeStampFormat = string.Empty;
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            uut.TimeStampFormat = "       ";
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+
+            // Not a real format:
+            uut.TimeStampFormat = ";"; // 1 character long triggers the FormatException.
+            Assert.AreEqual( 1, uut.TryValidate().Count );
+        }
+
+        // ---------------- Test Helpers ----------------
+
+        private GeneratorConfig GetValidConfig()
+        {
+            GeneratorConfig uut = new GeneratorConfig( meetbotPath )
+            {
+                Type = MeetingNotesGeneratorType.html,
+                TemplatePath = Path.Combine( TestHelpers.PluginDir, "MeetBot", "Templates", "default.cshtml" ),
+            };
+
+            return uut;
         }
     }
 }

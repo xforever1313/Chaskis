@@ -219,7 +219,7 @@ namespace Chaskis.Plugins.MeetBot
 
         private string ReplaceAll( string input, IMeetingInfo meetingInfo )
         {
-            ReplaceWithMeetingInfo( input, meetingInfo );
+            input = ReplaceWithMeetingInfo( input, meetingInfo );
 
             input = Regexes.FileNameConfigVariable.Replace( input, this.GetFileName( meetingInfo ) );
             input = Regexes.MeetBotRootConfigVariable.Replace( input, this.meetbotRoot );
@@ -252,7 +252,7 @@ namespace Chaskis.Plugins.MeetBot
             }
 
             // XML does not require a template, all others do.
-            if( this.Type != MeetingNotesGeneratorType.xml )
+            if( ( this.Type != MeetingNotesGeneratorType.xml ) && ( this.Type != MeetingNotesGeneratorType.Unknown ) )
             {
                 if( string.IsNullOrWhiteSpace( this.GetTemplatePath() ) )
                 {
