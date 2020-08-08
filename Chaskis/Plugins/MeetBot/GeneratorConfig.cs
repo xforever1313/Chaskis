@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 using SethCS.Basic;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.MeetBot
 {
@@ -134,6 +135,12 @@ namespace Chaskis.Plugins.MeetBot
                 {
                     return Path.Combine( this.defaultTemplatesPath, "default.cstxt" );
                 }
+                else if( this.Type == MeetingNotesGeneratorType.Unknown )
+                {
+                    throw new InvalidOperationException(
+                        $"{nameof( MeetingNotesGeneratorType.Unknown )} does not have a template!"
+                    );
+                }
                 else
                 {
                     return null;
@@ -153,7 +160,7 @@ namespace Chaskis.Plugins.MeetBot
             return ReplaceWithMeetingInfo(
                 this.FileName,
                 meetingInfo
-            );
+            ).NormalizeWhiteSpace( '_' );
         }
 
         /// <summary>

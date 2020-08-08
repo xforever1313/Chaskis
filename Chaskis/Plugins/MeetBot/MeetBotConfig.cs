@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using SethCS.Basic;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.MeetBot
 {
@@ -22,6 +23,7 @@ namespace Chaskis.Plugins.MeetBot
         /// </summary>
         public MeetBotConfig( string meetbotRoot )
         {
+            ArgumentChecker.StringIsNotNullOrEmpty( meetbotRoot, nameof( meetbotRoot ) );
             this.MeetBotRoot = meetbotRoot;
 
             this.CommandConfigPath = null;
@@ -77,6 +79,14 @@ namespace Chaskis.Plugins.MeetBot
                 {
                     errors.AddRange( config.TryValidate() );
                 }
+            }
+
+            if( errors.IsEmpty() == false )
+            {
+                throw new ListedValidationException(
+                    $"Errors when validating {nameof( MeetBotConfig )}",
+                    errors
+                );
             }
         }
     }
