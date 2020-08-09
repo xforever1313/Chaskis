@@ -6,6 +6,7 @@
 //
 
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Chaskis.Plugins.MeetBot;
 using NUnit.Framework;
 using SethCS.Basic;
@@ -37,7 +38,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             // Ensure our collection validates.
             Assert.DoesNotThrow( () => collection.InitStage1_ValidateDefinitions() );
             Assert.DoesNotThrow( () => collection.InitStage2_FilterOutOverrides() );
-            Assert.DoesNotThrow( () => collection.InitStage3_BuildRegexes() );
+            Assert.DoesNotThrow( () => collection.InitStage3_BuildDictionaries() );
         }
 
         [TearDown]
@@ -365,6 +366,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             Assert.AreEqual( expectedPrefix, foundDef.CommandPrefix );
             Assert.AreEqual( expectedArgs, foundDef.CommandArgs );
             Assert.AreEqual( expectedAction, foundDef.FoundDefinition.MeetingAction );
+
+            // Check dictionaries for sameness.
+            Assert.AreSame(
+                list.MeetingActionToCommandDef[foundDef.FoundDefinition.MeetingAction],
+                foundDef.FoundDefinition
+            );
+
+            Regex foundRegex = list.MeetingActionToRegex[foundDef.FoundDefinition.MeetingAction];
+            Assert.AreSame(
+                list.RegexToCommandDef[foundRegex],
+                foundDef.FoundDefinition
+            );
         }
     }
 }

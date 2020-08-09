@@ -118,7 +118,7 @@ namespace Chaskis.Plugins.MeetBot
 
             this.cmdDefs.InitStage1_ValidateDefinitions();
             this.cmdDefs.InitStage2_FilterOutOverrides();
-            this.cmdDefs.InitStage3_BuildRegexes();
+            this.cmdDefs.InitStage3_BuildDictionaries();
         }
 
         private void BuildRootHelpMsg()

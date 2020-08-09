@@ -21,6 +21,8 @@ namespace Chaskis.Plugins.MeetBot
         private readonly List<CommandDefinition> defs;
 
         private readonly Dictionary<Regex, CommandDefinition> regexDefs;
+        private readonly Dictionary<MeetingAction, CommandDefinition> actionDefs;
+        private readonly Dictionary<MeetingAction, Regex> actionRegex;
 
         // ---------------- Constructor ----------------
 
@@ -31,6 +33,12 @@ namespace Chaskis.Plugins.MeetBot
 
             this.regexDefs = new Dictionary<Regex, CommandDefinition>();
             this.RegexToCommandDef = new ReadOnlyDictionary<Regex, CommandDefinition>( this.regexDefs );
+
+            this.actionDefs = new Dictionary<MeetingAction, CommandDefinition>();
+            this.MeetingActionToCommandDef = new ReadOnlyDictionary<MeetingAction, CommandDefinition>( this.actionDefs );
+
+            this.actionRegex = new Dictionary<MeetingAction, Regex>();
+            this.MeetingActionToRegex = new ReadOnlyDictionary<MeetingAction, Regex>( this.actionRegex );
         }
 
         // ---------------- Properties ----------------
@@ -38,6 +46,10 @@ namespace Chaskis.Plugins.MeetBot
         public IReadOnlyList<CommandDefinition> CommandDefinitions { get; private set; }
 
         public IReadOnlyDictionary<Regex, CommandDefinition> RegexToCommandDef { get; private set; }
+
+        public IReadOnlyDictionary<MeetingAction, CommandDefinition> MeetingActionToCommandDef { get; private set; }
+
+        public IReadOnlyDictionary<MeetingAction, Regex> MeetingActionToRegex { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -161,11 +173,17 @@ namespace Chaskis.Plugins.MeetBot
             }
         }
 
-        public void InitStage3_BuildRegexes()
+        public void InitStage3_BuildDictionaries()
         {
             foreach( CommandDefinition commandDef in this.CommandDefinitions )
             {
                 this.regexDefs.Add( commandDef.GetPrefixRegex(), commandDef );
+                this.actionDefs.Add( commandDef.MeetingAction, commandDef );
+            }
+
+            foreach( KeyValuePair<Regex, CommandDefinition> pair in this.regexDefs )
+            {
+                this.actionRegex.Add( pair.Value.MeetingAction, pair.Key );
             }
         }
 
