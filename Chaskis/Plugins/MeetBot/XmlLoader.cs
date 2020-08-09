@@ -37,6 +37,14 @@ namespace Chaskis.Plugins.MeetBot
             }
         }
 
+        public IList<CommandDefinition> ParseCommandFileFromString( string xmlString )
+        {
+            using( MemoryStream stream = new MemoryStream( Encoding.UTF8.GetBytes( xmlString ) ) )
+            {
+                return ParseCommandFile( stream, false );
+            }
+        }
+
         public IList<CommandDefinition> ParseCommandFile( Stream stream, bool isDefault )
         {
             List<CommandDefinition> cmdDefs = new List<CommandDefinition>();

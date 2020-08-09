@@ -99,7 +99,7 @@ namespace Chaskis.Plugins.MeetBot
             {
                 if( actionXmlAttrName.Equals( attribute.Name.LocalName ) )
                 {
-                    if( Enum.TryParse( attribute.Value, out MeetingAction action ) )
+                    if( Enum.TryParse( attribute.Value.Trim(), out MeetingAction action ) )
                     {
                         cmd.MeetingAction = action;
                     }
@@ -118,15 +118,15 @@ namespace Chaskis.Plugins.MeetBot
             {
                 if( prefixXmlElementName.Equals( child.Name.LocalName ) )
                 {
-                    cmd.AddPrefix( child.Value );
+                    cmd.AddPrefix( child.Value.Trim() );
                 }
                 else if( helpTextXmlElementName.Equals( child.Name.LocalName ) )
                 {
-                    cmd.HelpText = child.Value;
+                    cmd.HelpText = child.Value.Trim();
                 }
                 else if( restrictionXmlElementName.Equals( child.Name.LocalName ) )
                 {
-                    if( Enum.TryParse( child.Value, out CommandRestriction restriction ) )
+                    if( Enum.TryParse( child.Value.Trim(), out CommandRestriction restriction ) )
                     {
                         cmd.Restriction = restriction;
                     }

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Chaskis.Plugins.MeetBot;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ using SethCS.Basic;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
     [TestFixture]
-    public class XmlLoadDefaultCommandTests
+    public class XmlLoadOverideCommandTests
     {
         // ---------------- Fields ----------------
 
@@ -33,8 +34,25 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             this.logger = new GenericLogger();
             this.xmlLoader = new XmlLoader( this.logger );
 
-            IList<CommandDefinition> defs = this.xmlLoader.ParseDefaultFile();
-            this.collection = new CommandDefinitionCollection( defs );
+            string xmlString;
+            using( Stream s = typeof( CommandDefinitionCollection ).Assembly.GetManifestResourceStream( "Chaskis.Plugins.MeetBot.Config.SampleCommands.xml" ) )
+            {
+                using( StreamReader reader = new StreamReader( s ) )
+                {
+                    xmlString = reader.ReadToEnd();
+                }
+            }
+
+            // Replace all occurrances with !command instead of #command.
+            xmlString = xmlString.Replace( "<prefix>#", "<prefix>!" );
+
+            // Load both default and user-defined.  User-defined will override the default ones.
+            IList<CommandDefinition> defaultDefs = this.xmlLoader.ParseDefaultFile();
+            IList<CommandDefinition> userDefs = this.xmlLoader.ParseCommandFileFromString( xmlString );
+
+            List<CommandDefinition> allDefs = new List<CommandDefinition>( defaultDefs );
+            allDefs.AddRange( userDefs );
+            this.collection = new CommandDefinitionCollection( allDefs );
 
             // Ensure our collection validates.
             Assert.DoesNotThrow( () => collection.InitStage1_ValidateDefinitions() );
@@ -49,10 +67,11 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         // ---------------- Tests ----------------
 
         [Test]
-        public void AllDefaultTest()
+        public void AllNotDefaultTest()
         {
-            // All actions here are the default
-            Assert.IsTrue( collection.CommandDefinitions.All( d => d.IsDefault ) );
+            // All actions here are not the default.
+            // They were all overridden.
+            Assert.IsTrue( collection.CommandDefinitions.All( d => d.IsDefault == false ) );
         }
 
         [Test]
@@ -60,7 +79,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#startmeeting",
+                "!startmeeting",
                 MeetingAction.StartMeeting,
                 CommandRestriction.Anyone
             );
@@ -71,7 +90,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#endmeeting",
+                "!endmeeting",
                 MeetingAction.EndMeeting,
                 CommandRestriction.ChairsAndBotAdmins
             );
@@ -82,7 +101,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#topic",
+                "!topic",
                 MeetingAction.Topic,
                 CommandRestriction.ChairsOnly
             );
@@ -93,14 +112,14 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#agree",
+                "!agree",
                 MeetingAction.Agree,
                 CommandRestriction.ChairsOnly
             );
 
             CommandExists(
                 collection,
-                "#agreed",
+                "!agreed",
                 MeetingAction.Agree,
                 CommandRestriction.ChairsOnly
             );
@@ -111,7 +130,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#chair",
+                "!chair",
                 MeetingAction.Chair,
                 CommandRestriction.ChairsOnly
             );
@@ -122,7 +141,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#unchair",
+                "!unchair",
                 MeetingAction.Unchair,
                 CommandRestriction.ChairsAndBotAdmins
             );
@@ -133,7 +152,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#action",
+                "!action",
                 MeetingAction.Action,
                 CommandRestriction.Anyone
             );
@@ -144,7 +163,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#info",
+                "!info",
                 MeetingAction.Info,
                 CommandRestriction.Anyone
             );
@@ -155,7 +174,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#link",
+                "!link",
                 MeetingAction.Link,
                 CommandRestriction.Anyone
             );
@@ -166,7 +185,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#unlink",
+                "!unlink",
                 MeetingAction.Unlink,
                 CommandRestriction.Anyone
             );
@@ -177,7 +196,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#meetingtopic",
+                "!meetingtopic",
                 MeetingAction.MeetingTopic,
                 CommandRestriction.ChairsOnly
             );
@@ -188,21 +207,21 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#help",
+                "!help",
                 MeetingAction.Help,
                 CommandRestriction.Anyone
             );
 
             CommandExists(
                 collection,
-                "#halp",
+                "!halp",
                 MeetingAction.Help,
                 CommandRestriction.Anyone
             );
 
             CommandExists(
                 collection,
-                "#commands",
+                "!commands",
                 MeetingAction.Help,
                 CommandRestriction.Anyone
             );
@@ -213,14 +232,14 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#accepted",
+                "!accepted",
                 MeetingAction.Accept,
                 CommandRestriction.ChairsOnly
             );
 
             CommandExists(
                 collection,
-                "#accept",
+                "!accept",
                 MeetingAction.Accept,
                 CommandRestriction.ChairsOnly
             );
@@ -231,14 +250,14 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#rejected",
+                "!rejected",
                 MeetingAction.Reject,
                 CommandRestriction.ChairsOnly
             );
 
             CommandExists(
                 collection,
-                "#reject",
+                "!reject",
                 MeetingAction.Reject,
                 CommandRestriction.ChairsOnly
             );
@@ -249,7 +268,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#save",
+                "!save",
                 MeetingAction.Save,
                 CommandRestriction.ChairsOnly
             );
@@ -260,7 +279,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#cancelmeeting",
+                "!cancelmeeting",
                 MeetingAction.CancelMeeting,
                 CommandRestriction.ChairsAndBotAdmins
             );
@@ -271,7 +290,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#purge",
+                "!purge",
                 MeetingAction.Purge,
                 CommandRestriction.ChairsOnly
             );
@@ -282,14 +301,14 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#silence",
+                "!silence",
                 MeetingAction.Silence,
                 CommandRestriction.ChairsOnly
             );
 
             CommandExists(
                 collection,
-                "#quiet",
+                "!quiet",
                 MeetingAction.Silence,
                 CommandRestriction.ChairsOnly
             );
@@ -300,7 +319,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#voice",
+                "!voice",
                 MeetingAction.Voice,
                 CommandRestriction.ChairsOnly
             );
@@ -312,14 +331,14 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         {
             CommandExists(
                 collection,
-                "#banish",
+                "!banish",
                 MeetingAction.Banish,
                 CommandRestriction.ChairsOnly
             );
 
             CommandExists(
                 collection,
-                "#ban",
+                "!ban",
                 MeetingAction.Banish,
                 CommandRestriction.ChairsOnly
             );
@@ -344,7 +363,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 
             Assert.AreEqual( expectedAction, def.MeetingAction );
             Assert.AreEqual( expectedRestriction, def.Restriction );
-            Assert.IsTrue( def.IsDefault );
+            Assert.IsFalse( def.IsDefault );
             Assert.IsTrue( def.GetPrefixRegex().IsMatch( prefix ) );
         }
     }
