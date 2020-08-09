@@ -11,7 +11,7 @@ namespace Chaskis.Plugins.MeetBot
     /// Result of finding a <see cref="CommandDefinition"/>
     /// inside of a <see cref="CommandDefinitionCollection"/>
     /// </summary>
-    public class CommandDefinitionFindResult
+    public class CommandDefinitionFindResult : IMeetingMessage
     {
         // ---------------- Constructor ----------------
 
@@ -23,12 +23,19 @@ namespace Chaskis.Plugins.MeetBot
 
         public string CommandPrefix { get; set; }
 
-        /// <summary>
-        /// Any arguments to the command.  Really, any text that comes after the <see cref="CommandPrefix"/>.
-        /// <see cref="string.Empty"/> if no args were specified (only the prefix was).
-        /// </summary>
+        /// <inheritdoc/>
         public string CommandArgs { get; set; }
 
         public CommandDefinition FoundDefinition { get; set; }
+
+        /// <summary>
+        /// Helper to get <see cref="CommandDefinition.Restriction"/>
+        /// </summary>
+        public CommandRestriction Restriction => FoundDefinition.Restriction;
+
+        /// <summary>
+        /// Helper to get <see cref="CommandDefinition.MeetingAction"/>
+        /// </summary>
+        public MeetingAction MeetingAction => FoundDefinition.MeetingAction;
     }
 }

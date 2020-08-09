@@ -16,5 +16,11 @@ namespace Chaskis.Plugins.MeetBot
         DateTime StartTime { get; }
 
         string Channel { get; }
+
+        /// <summary>
+        /// Owner of the meeting.  Username is
+        /// set to lowercase no matter what.
+        /// </summary>
+        string Owner { get; }
     }
 }

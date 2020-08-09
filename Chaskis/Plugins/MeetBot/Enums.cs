@@ -117,4 +117,42 @@ namespace Chaskis.Plugins.MeetBot
         /// </remarks>
         txt
     }
+
+    public enum ParseMessageResult
+    {
+        /// <summary>
+        /// The message was parsed successfully, and added
+        /// to the meeting notes.
+        /// </summary>
+        Success,
+
+        /// <summary>
+        /// A command is reserved for chairs only,
+        /// and the user who tried it is not a chair.
+        /// </summary>
+        ChairOnlyCommand,
+
+        /// <summary>
+        /// A command is reserved for chairs and bot admins
+        /// only, and the user who tried it is neither of those.
+        /// </summary>
+        ChairBotAdminOnlyMessage,
+
+        /// <summary>
+        /// The user who sent a command is silenced.
+        /// </summary>
+        UserIsSilenced,
+
+        /// <summary>
+        /// An action is attempted on the owner (such as dechairing or banning),
+        /// that the owner is immune to.
+        /// </summary>
+        CanNotDoThisToOwner,
+
+        /// <summary>
+        /// An action is attempted to another chair (such as banning or silencing)
+        /// that a chair is immune to.  A chair must be dechaired first.
+        /// </summary>
+        CanNotDoThisToChair
+    }
 }
