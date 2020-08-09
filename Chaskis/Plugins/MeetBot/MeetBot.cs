@@ -31,6 +31,7 @@ namespace Chaskis.Plugins.MeetBot
         private readonly List<IIrcHandler> ircHandlers;
 
         private CommandDefinitionCollection cmdDefs;
+        private MeetBotConfig meetbotConfig;
 
         private string rootHelpMessage;
 
@@ -88,16 +89,36 @@ namespace Chaskis.Plugins.MeetBot
                 "meeting_notes"
             );
 
+            ReadConfigFiles();
+            BuildRootHelpMsg();
+        }
+
+        private void ReadConfigFiles()
+        {
             XmlLoader loader = new XmlLoader( this.logger );
 
+            this.meetbotConfig = loader.ParseDefaultConfigFile( this.pluginDir );
+            this.meetbotConfig.Validate();
+
             IList<CommandDefinition> defs = loader.ParseDefaultFile();
+
+            if( string.IsNullOrEmpty( this.meetbotConfig.CommandConfigPath ) == false )
+            {
+                using( FileStream reader = new FileStream( this.meetbotConfig.CommandConfigPath, FileMode.Open, FileAccess.Read ) )
+                {
+                    IList<CommandDefinition> userDefs = loader.ParseCommandFile( reader, false );
+                    foreach( CommandDefinition userDef in userDefs )
+                    {
+                        defs.Add( userDef );
+                    }
+                }
+            }
 
             this.cmdDefs = new CommandDefinitionCollection( defs );
 
             this.cmdDefs.InitStage1_ValidateDefinitions();
             this.cmdDefs.InitStage2_FilterOutOverrides();
-
-            BuildRootHelpMsg();
+            this.cmdDefs.InitStage3_BuildRegexes();
         }
 
         private void BuildRootHelpMsg()
@@ -120,13 +141,28 @@ namespace Chaskis.Plugins.MeetBot
         {
             if( helpArgs.Length == 0 )
             {
-                msgArgs.Writer.SendAction(
+                msgArgs.Writer.SendMessage(
                     this.rootHelpMessage,
                     msgArgs.Channel
                 );
             }
             else if( helpArgs.Length == 1 )
             {
+                CommandDefinitionFindResult result = this.cmdDefs.Find( helpArgs[0] );
+                if( result == null )
+                {
+                    msgArgs.Writer.SendMessage(
+                        $"'{helpArgs[0]}' is not a command I know.  Try the help command with no arguments to see what commands I know.",
+                        msgArgs.Channel
+                    );
+                }
+                else
+                {
+                    msgArgs.Writer.SendMessage(
+                        result.FoundDefinition.GetFullHelpText( result.CommandPrefix ),
+                        msgArgs.Channel
+                    );
+                }
             }
         }
 

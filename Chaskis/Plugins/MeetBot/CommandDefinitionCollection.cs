@@ -7,8 +7,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using SethCS.Exceptions;
 
@@ -20,17 +20,24 @@ namespace Chaskis.Plugins.MeetBot
 
         private readonly List<CommandDefinition> defs;
 
+        private readonly Dictionary<Regex, CommandDefinition> regexDefs;
+
         // ---------------- Constructor ----------------
 
         public CommandDefinitionCollection( IEnumerable<CommandDefinition> defs )
         {
             this.defs = new List<CommandDefinition>( defs );
             this.CommandDefinitions = this.defs.AsReadOnly();
+
+            this.regexDefs = new Dictionary<Regex, CommandDefinition>();
+            this.RegexToCommandDef = new ReadOnlyDictionary<Regex, CommandDefinition>( this.regexDefs );
         }
 
         // ---------------- Properties ----------------
 
         public IReadOnlyList<CommandDefinition> CommandDefinitions { get; private set; }
+
+        public IReadOnlyDictionary<Regex, CommandDefinition> RegexToCommandDef { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -152,6 +159,41 @@ namespace Chaskis.Plugins.MeetBot
                     );
                 }
             }
+        }
+
+        public void InitStage3_BuildRegexes()
+        {
+            foreach( CommandDefinition commandDef in this.CommandDefinitions )
+            {
+                this.regexDefs.Add( commandDef.GetPrefixRegex(), commandDef );
+            }
+        }
+
+        /// <summary>
+        /// Takes in a string to parse.  If the string
+        /// matches a regex, the found <see cref="CommandDefinition"/> is returned.
+        /// Otherwise, this returns null.
+        /// </summary>
+        public CommandDefinitionFindResult Find( string command )
+        {
+            foreach( KeyValuePair<Regex, CommandDefinition> def in this.regexDefs )
+            {
+                Match match = def.Key.Match( command );
+                if( match.Success )
+                {
+                    CommandDefinitionFindResult result = new CommandDefinitionFindResult
+                    {
+                        CommandPrefix = match.Groups["command"].Value,
+                        CommandArgs = match.Groups["args"].Value,
+                        FoundDefinition = def.Value
+                    };
+
+                    return result;
+                }
+            }
+
+            // Couldn't find anything, return null.
+            return null;
         }
     }
 }

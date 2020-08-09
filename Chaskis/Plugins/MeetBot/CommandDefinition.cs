@@ -71,6 +71,30 @@ namespace Chaskis.Plugins.MeetBot
 
             this.prefixes.Add( prefix );
         }
+
+        public string GetFullHelpText( string prefix )
+        {
+            if( string.IsNullOrWhiteSpace( prefix ) )
+            {
+                throw new ArgumentNullException( nameof( prefix ) );
+            }
+
+            string restrictionString;
+            if( this.Restriction == CommandRestriction.ChairsOnly )
+            {
+                restrictionString = "  Chairs Only.";
+            }
+            else if( this.Restriction == CommandRestriction.ChairsAndBotAdmins )
+            {
+                restrictionString = "  Chairs and Bot Admins Only.";
+            }
+            else
+            {
+                restrictionString = string.Empty;
+            }
+
+            return $"'{prefix}': {this.HelpText}.{restrictionString}";
+        }
     }
 
     public static class CommandDefinitionExtensions
@@ -157,7 +181,7 @@ namespace Chaskis.Plugins.MeetBot
             builder.Remove( builder.Length - 1, 1 );
 
             return new Regex(
-                @"^(" + builder.ToString() + ")(?<additionalInfo>.+)?",
+                $@"^(?<command>{builder})(\s+(?<args>.+))?$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture
             );
         }
