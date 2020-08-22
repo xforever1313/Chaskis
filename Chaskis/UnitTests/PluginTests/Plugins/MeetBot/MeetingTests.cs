@@ -81,26 +81,13 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         // -------- Standard Message --------
 
         [Test]
-        public void StandardMessage()
+        public void StandardMessageTest()
         {
-            const string prefix = "";
-            const string args = "Hello, World!";
-            const MeetingAction action = MeetingAction.Unknown;
-            const CommandRestriction restrict = CommandRestriction.Unknown;
-
-            IMeetingMessage msg = MakeMessage(
-                prefix,
-                args,
-                action,
-                restrict
+            AddAndCheckMessage(
+                "Hello, World!",
+                1,
+                user1
             );
-
-            ParseMessageResult result = this.uut.ParseMessage( msg, user1, this.testTime );
-
-            // Should be a successful parse.
-            Assert.AreEqual( ParseMessageResult.Success, result );
-            Assert.AreEqual( 1, uut.MeetingNotes.Count );
-            CompareNotes( msg, uut.MeetingNotes.Last() );
 
             EnsureDefaultLists();
         }
@@ -319,7 +306,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         /// are we still in a good state?
         /// </summary>
         [Test]
-        public void ChairUnchairSameUser()
+        public void ChairUnchairSameUserTest()
         {
             // Chair 1 user.
             {
@@ -448,7 +435,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         /// Ensures the owner can't accidently unchair themselves.
         /// </summary>
         [Test]
-        public void OwnerCantUnchairThemself()
+        public void OwnerCantUnchairThemselfTest()
         {
             // Ensure owner can unchair chair.
             {
@@ -485,7 +472,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
         /// A chair is able to unchair themselves.
         /// </summary>
         [Test]
-        public void ChairCanUnchairThemSelf()
+        public void ChairCanUnchairThemSelfTest()
         {
             // Chair 1 user.
             {
@@ -551,7 +538,284 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             }
         }
 
+        // -------- Purge / Banish Tests --------
+
+        [Test]
+        public void PurgeUserTest()
+        {
+            // Add some messages
+
+            AddAndCheckMessage(
+                "Hello World 1",
+                1,
+                user1
+            );
+
+            AddAndCheckMessage(
+                "Hello World 2",
+                2,
+                user1
+            );
+
+            // Purge the user.
+            {
+                const string prefix = "#purge";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Purge;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, owner, this.testTime );
+
+                // Should be a successful parse.
+                Assert.AreEqual( ParseMessageResult.Success, result );
+
+                // Only 1 message should remain; the purge one.
+                Assert.AreEqual( 1, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), owner );
+
+                EnsureDefaultLists();
+            }
+
+            // User should still be able to chat though.  Should be 2 messages now
+            // (new message + purge message).
+
+            AddAndCheckMessage(
+                "Hello World 2",
+                2,
+                user1
+            );
+        }
+
+        [Test]
+        public void BanUserTest()
+        {
+            // Add some messages
+
+            AddAndCheckMessage(
+                "Hello World 1",
+                1,
+                user1
+            );
+
+            AddAndCheckMessage(
+                "Hello World 2",
+                2,
+                user1
+            );
+
+            void CheckLists()
+            {
+                // 1 user should be added to the banned users.
+                Assert.AreEqual( 1, uut.BannedUsers.Count );
+                Assert.IsTrue( uut.BannedUsers.Contains( user1 ) );
+
+                // 1 Person should still be in the chairs, no one should be silenced.
+                Assert.AreEqual( 0, uut.SilencedUsers.Count );
+                Assert.AreEqual( 1, uut.Chairs.Count );
+                Assert.IsTrue( uut.Chairs.Contains( owner ) );
+            }
+
+            // Ban the user.
+            IMeetingMessage banMsg;
+            {
+                const string prefix = "#ban";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Banish;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                banMsg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( banMsg, owner, this.testTime );
+
+                // Should be a successful parse.
+                Assert.AreEqual( ParseMessageResult.Success, result );
+
+                // Only 1 message should remain; the ban one.
+                Assert.AreEqual( 1, uut.MeetingNotes.Count );
+                CompareNotes( banMsg, uut.MeetingNotes.Last(), owner );
+
+                CheckLists();
+            }
+
+            // User should no longer be able to chat.
+            // Last message received should still be the ban message.
+
+            {
+                AddMessage(
+                    "Hello World 3",
+                    user1,
+                    ParseMessageResult.UserIsSilenced
+                );
+
+                Assert.AreEqual( 1, uut.MeetingNotes.Count );
+                CompareNotes( banMsg, uut.MeetingNotes.Last(), owner );
+
+                CheckLists();
+            }
+        }
+
+        [Test]
+        public void CanNotBanOwnerOrChairTest()
+        {
+            // Make user1 a chair.
+            AddChairMessage( user1, owner );
+
+            // Sanity check
+            Assert.IsTrue( this.uut.Chairs.Contains( user1 ) );
+
+            void CheckLists()
+            {
+                Assert.AreEqual( 0, this.uut.BannedUsers.Count );
+                Assert.AreEqual( 0, this.uut.SilencedUsers.Count );
+                Assert.AreEqual( 2, this.uut.Chairs.Count );
+                Assert.IsTrue( this.uut.Chairs.Contains( owner ) );
+                Assert.IsTrue( this.uut.Chairs.Contains( user1 ) );
+            }
+
+            // Make sure we can not ban an owner.
+            {
+                const string prefix = "#ban";
+                const string args = owner;
+                const MeetingAction action = MeetingAction.Banish;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, user1, this.testTime );
+                // Error message is the generic "Can not do this to chair", even if we try
+                // to ban the owner. It just makes things easier that way.
+                Assert.AreEqual( ParseMessageResult.CanNotDoThisToChair, result );
+
+                CheckLists();
+
+                // 2 Messages: the first chair and the failed ban attempt.
+                Assert.AreEqual( 2, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), user1 );
+            }
+
+            // Make sure a not-chair can not ban a chair.
+            {
+                const string prefix = "#ban";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Banish;
+                const CommandRestriction restrict = CommandRestriction.Anyone;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, user2, this.testTime );
+                Assert.AreEqual( ParseMessageResult.CanNotDoThisToChair, result );
+
+                CheckLists();
+
+                // 3 Messages: the first chair and the failed ban attempt.
+                Assert.AreEqual( 3, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), user2 );
+            }
+        }
+
+        // -------- Silence / Voice Tests --------
+
+
+
         // ---------------- Test Helpers ----------------
+
+        private IMeetingMessage AddChairMessage(
+            string userToChair,
+            string userThatChairs,
+            ParseMessageResult expectedResult = ParseMessageResult.Success
+        )
+        {
+            const string prefix = "#chair";
+            string args = userToChair;
+            const MeetingAction action = MeetingAction.Chair;
+            const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+            IMeetingMessage msg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( msg, userThatChairs, this.testTime );
+            Assert.AreEqual( expectedResult, result );
+
+            return msg;
+        }
+
+        /// <summary>
+        /// Adds a normal message to the meeting notes,
+        /// and returns the message that was added.
+        /// </summary>
+        private IMeetingMessage AddMessage(
+            string message,
+            string user,
+            ParseMessageResult expectedResult = ParseMessageResult.Success,
+            DateTime? timestamp = null
+        )
+        {
+            const string prefix = "";
+            string args = message;
+            const MeetingAction action = MeetingAction.Unknown;
+            const CommandRestriction restrict = CommandRestriction.Unknown;
+
+            IMeetingMessage msg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( msg, user, timestamp ?? this.testTime );
+            Assert.AreEqual( expectedResult, result );
+
+            return msg;
+        }
+
+        /// <summary>
+        /// Adds a normal message to the meeting notes,
+        /// and checks it to make sure it got added correctly.
+        /// </summary>
+        private void AddAndCheckMessage(
+            string message,
+            int expectedNumberOfMessages,
+            string user,
+            DateTime? timestamp = null
+        )
+        {
+            IMeetingMessage msg = AddMessage(
+                message,
+                user,
+                ParseMessageResult.Success,
+                timestamp
+            );
+
+            // Should be a successful parse.
+            Assert.AreEqual( expectedNumberOfMessages, uut.MeetingNotes.Count );
+            CompareNotes( msg, uut.MeetingNotes.Last() );
+        }
 
         private Mock<IMeetingMessage> MakeMockMessage(
             string prefix,
