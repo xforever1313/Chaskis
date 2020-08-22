@@ -538,6 +538,44 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             }
         }
 
+        /// <summary>
+        /// Ensures if there is extra whitespace in the chair command,
+        /// we don't trip all over it.
+        /// </summary>
+        [Test]
+        public void ChairWithSeveralWhitespacesTest()
+        {
+            const string prefix = "#chair";
+            string args = $"  {user1}      {user2}    ";
+            const MeetingAction action = MeetingAction.Chair;
+            const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+            IMeetingMessage msg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            // Owner is chair by default.
+            ParseMessageResult result = this.uut.ParseMessage( msg, owner, this.testTime );
+
+            // Should be a successful parse.
+            Assert.AreEqual( ParseMessageResult.Success, result );
+            Assert.AreEqual( 1, uut.MeetingNotes.Count );
+            CompareNotes( msg, uut.MeetingNotes.Last(), owner );
+
+            // New chair should show up in list.
+            Assert.AreEqual( 3, uut.Chairs.Count() );
+            Assert.IsTrue( uut.Chairs.Contains( owner ) );
+            Assert.IsTrue( uut.Chairs.Contains( user1 ) );
+            Assert.IsTrue( uut.Chairs.Contains( user2 ) );
+
+            // Other lists should be empty
+            Assert.AreEqual( 0, uut.SilencedUsers.Count );
+            Assert.AreEqual( 0, uut.BannedUsers.Count );
+        }
+
         // -------- Purge / Banish Tests --------
 
         [Test]
@@ -733,11 +771,313 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
                 Assert.AreEqual( 3, uut.MeetingNotes.Count );
                 CompareNotes( msg, uut.MeetingNotes.Last(), user2 );
             }
+
+            // Make sure chair and owner can still chat
+            AddAndCheckMessage(
+                "Owner Check",
+                4,
+                owner
+            );
+
+            AddAndCheckMessage(
+                "Chair Check",
+                5,
+                user1
+            );
         }
 
         // -------- Silence / Voice Tests --------
 
+        /// <summary>
+        /// Ensures if we are a bot admin, we can silence someone, if
+        /// configured to do so.
+        /// </summary>
+        [Test]
+        public void BotAdminSilenceTest()
+        {
+            const string prefix = "#silence";
+            const string args = user1;
+            const MeetingAction action = MeetingAction.Silence;
+            const CommandRestriction restrict = CommandRestriction.ChairsAndBotAdmins;
 
+            IMeetingMessage silenceMsg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( silenceMsg, adminName, this.testTime );
+            Assert.AreEqual( ParseMessageResult.Success, result );
+
+            Assert.AreEqual( 1, uut.SilencedUsers.Count );
+            Assert.IsTrue( uut.SilencedUsers.Contains( user1 ) );
+
+            Assert.AreEqual( 1, uut.MeetingNotes.Count );
+            CompareNotes( silenceMsg, uut.MeetingNotes.Last(), adminName );
+        }
+
+        /// <summary>
+        /// Ensures a normal user can not silence someone
+        /// if the setting is set to chair and bot admin.
+        /// </summary>
+        [Test]
+        public void NormalUserCantSilenceWithBotAdminSettingTest()
+        {
+            const string prefix = "#silence";
+            const string args = user2;
+            const MeetingAction action = MeetingAction.Silence;
+            const CommandRestriction restrict = CommandRestriction.ChairsAndBotAdmins;
+
+            IMeetingMessage silenceMsg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( silenceMsg, user1, this.testTime );
+            Assert.AreEqual( ParseMessageResult.ChairBotAdminOnlyMessage, result );
+
+            EnsureDefaultLists();
+
+            Assert.AreEqual( 1, uut.MeetingNotes.Count );
+            CompareNotes( silenceMsg, uut.MeetingNotes.Last(), user1, expectedMeetingAction: MeetingAction.Unknown );
+        }
+
+        /// <summary>
+        /// Ensures a normal user can not silence someone
+        /// if the setting is set to chair and bot admin.
+        /// </summary>
+        [Test]
+        public void NormalUserCantSilenceWithChairOnlySettingTest()
+        {
+            const string prefix = "#silence";
+            const string args = user2;
+            const MeetingAction action = MeetingAction.Silence;
+            const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+            IMeetingMessage silenceMsg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( silenceMsg, user1, this.testTime );
+            Assert.AreEqual( ParseMessageResult.ChairOnlyCommand, result );
+
+            EnsureDefaultLists();
+
+            Assert.AreEqual( 1, uut.MeetingNotes.Count );
+            CompareNotes( silenceMsg, uut.MeetingNotes.Last(), user1, expectedMeetingAction: MeetingAction.Unknown );
+        }
+
+        [Test]
+        public void SilenceVoiceTest()
+        {
+            // Make a standard message from a user
+            AddAndCheckMessage(
+                "Hello, world",
+                1,
+                user1
+            );
+
+            void CheckLists()
+            {
+                Assert.AreEqual( 0, this.uut.BannedUsers.Count );
+                Assert.AreEqual( 1, this.uut.Chairs.Count );
+                Assert.IsTrue( this.uut.Chairs.Contains( owner ) );
+            }
+
+            // User said something dumb, silence him!
+            IMeetingMessage silenceMsg;
+            {
+                const string prefix = "#silence";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Silence;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                silenceMsg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( silenceMsg, owner, this.testTime );
+                Assert.AreEqual( ParseMessageResult.Success, result );
+
+                CheckLists();
+                Assert.AreEqual( 1, uut.SilencedUsers.Count );
+                Assert.IsTrue( uut.SilencedUsers.Contains( user1 ) );
+
+                // 2 Messages: the first message and the silence.
+                Assert.AreEqual( 2, uut.MeetingNotes.Count );
+                CompareNotes( silenceMsg, uut.MeetingNotes.Last(), owner );
+            }
+
+            // Silence user message should not be added to the logs.
+            {
+                AddMessage(
+                    "Can you hear me?",
+                    user1,
+                    ParseMessageResult.UserIsSilenced
+                );
+
+                CheckLists();
+                Assert.AreEqual( 1, uut.SilencedUsers.Count );
+                Assert.IsTrue( uut.SilencedUsers.Contains( user1 ) );
+
+                // Most recent message should be the silence.
+                Assert.AreEqual( 2, uut.MeetingNotes.Count );
+                CompareNotes( silenceMsg, uut.MeetingNotes.Last(), owner );
+            }
+
+            // Unsilence the user.
+            {
+                const string prefix = "#voice";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Voice;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, owner, this.testTime );
+                Assert.AreEqual( ParseMessageResult.Success, result );
+
+                CheckLists();
+                Assert.AreEqual( 0, uut.SilencedUsers.Count );
+
+                // 3 Messages: now including the voice message.
+                Assert.AreEqual( 3, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), owner );
+            }
+
+            // User should now be able to chat.
+            AddAndCheckMessage(
+                "Hello, world, again!",
+                4,
+                user1
+            );
+        }
+
+        [Test]
+        public void CanNotSilenceOwnerOrChairTest()
+        {
+            // Make user1 a chair.
+            AddChairMessage( user1, owner );
+
+            // Sanity check
+            Assert.IsTrue( this.uut.Chairs.Contains( user1 ) );
+
+            void CheckLists()
+            {
+                Assert.AreEqual( 0, this.uut.BannedUsers.Count );
+                Assert.AreEqual( 0, this.uut.SilencedUsers.Count );
+                Assert.AreEqual( 2, this.uut.Chairs.Count );
+                Assert.IsTrue( this.uut.Chairs.Contains( owner ) );
+                Assert.IsTrue( this.uut.Chairs.Contains( user1 ) );
+            }
+
+            // Make sure we can not silence an owner.
+            {
+                const string prefix = "#silence";
+                const string args = owner;
+                const MeetingAction action = MeetingAction.Silence;
+                const CommandRestriction restrict = CommandRestriction.ChairsOnly;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, user1, this.testTime );
+                // Error message is the generic "Can not do this to chair", even if we try
+                // to silence the owner. It just makes things easier that way.
+                Assert.AreEqual( ParseMessageResult.CanNotDoThisToChair, result );
+
+                CheckLists();
+
+                // 2 Messages: the first chair and the failed silence attempt.
+                Assert.AreEqual( 2, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), user1 );
+            }
+
+            // Make sure a not-chair can not silence a chair.
+            {
+                const string prefix = "#silence";
+                const string args = user1;
+                const MeetingAction action = MeetingAction.Silence;
+                const CommandRestriction restrict = CommandRestriction.Anyone;
+
+                IMeetingMessage msg = MakeMessage(
+                    prefix,
+                    args,
+                    action,
+                    restrict
+                );
+
+                ParseMessageResult result = this.uut.ParseMessage( msg, user2, this.testTime );
+                Assert.AreEqual( ParseMessageResult.CanNotDoThisToChair, result );
+
+                CheckLists();
+
+                // 3 Messages: the first chair and the failed silence attempt.
+                Assert.AreEqual( 3, uut.MeetingNotes.Count );
+                CompareNotes( msg, uut.MeetingNotes.Last(), user2 );
+            }
+
+            // Make sure chair and owner can still chat
+            AddAndCheckMessage(
+                "Owner Check",
+                4,
+                owner
+            );
+
+            AddAndCheckMessage(
+                "Chair Check",
+                5,
+                user1
+            );
+        }
+
+        // -------- Help Tests --------
+
+        /// <summary>
+        /// Ensure help messages are not added to the meeting notes
+        /// (why clutter them?).
+        /// </summary>
+        [Test]
+        public void HelpTest()
+        {
+            const string prefix = "#help";
+            const string args = "#link";
+            const MeetingAction action = MeetingAction.Help;
+            const CommandRestriction restrict = CommandRestriction.Anyone;
+
+            IMeetingMessage msg = MakeMessage(
+                prefix,
+                args,
+                action,
+                restrict
+            );
+
+            ParseMessageResult result = this.uut.ParseMessage( msg, owner, this.testTime );
+            Assert.AreEqual( ParseMessageResult.Success, result );
+
+            EnsureDefaultLists();
+
+            // Should be nothing in the meeting notes, helps are not added.
+            Assert.AreEqual( 0, uut.MeetingNotes.Count );
+        }
 
         // ---------------- Test Helpers ----------------
 
@@ -814,7 +1154,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 
             // Should be a successful parse.
             Assert.AreEqual( expectedNumberOfMessages, uut.MeetingNotes.Count );
-            CompareNotes( msg, uut.MeetingNotes.Last() );
+            CompareNotes( msg, uut.MeetingNotes.Last(), user );
         }
 
         private Mock<IMeetingMessage> MakeMockMessage(
@@ -872,10 +1212,11 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
             IMeetingMessage msg,
             IReadOnlyMeetingNote note,
             string userName = user1,
-            DateTime? time = null
+            DateTime? time = null,
+            MeetingAction? expectedMeetingAction = null
         )
         {
-            Assert.AreEqual( msg.MeetingAction, note.MeetingAction );
+            Assert.AreEqual( expectedMeetingAction ?? msg.MeetingAction, note.MeetingAction );
             Assert.AreEqual( userName, note.UserName );
             Assert.AreEqual( time ?? this.testTime, note.TimeStamp );
 
