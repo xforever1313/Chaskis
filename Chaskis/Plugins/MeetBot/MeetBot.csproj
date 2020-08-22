@@ -11,6 +11,12 @@
     <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
+  <!-- For Code Coverage -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Config\SampleCommands.xml" />
     <None Remove="Documentation\DefaultCommands.xml" />

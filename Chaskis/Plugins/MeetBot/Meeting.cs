@@ -7,8 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Chaskis.Core;
+using System.Linq;
 
 namespace Chaskis.Plugins.MeetBot
 {
@@ -22,16 +21,16 @@ namespace Chaskis.Plugins.MeetBot
         private readonly HashSet<string> silencedUsers;
         private readonly HashSet<string> bannedUsers;
 
-        private readonly IIrcConfig ircConfig;
+        private readonly IEnumerable<string> botAdmins;
 
         // ---------------- Constructor ----------------
 
-        public Meeting( IMeetingInfo meetingInfo, IIrcConfig ircConfig )
+        public Meeting( IMeetingInfo meetingInfo, IEnumerable<string> botAdmins )
         {
             this.MeetingInfo = meetingInfo;
 
             this.meetingNotes = new List<MeetingNote>();
-            this.MeetingNotes = new List<IReadOnlyMeetingNote>( this.meetingNotes );
+            this.MeetingNotes = this.meetingNotes.AsReadOnly();
 
             this.chairs = new HashSet<string>();
             this.Chairs = this.chairs;
@@ -42,7 +41,7 @@ namespace Chaskis.Plugins.MeetBot
             this.bannedUsers = new HashSet<string>();
             this.BannedUsers = bannedUsers;
 
-            this.ircConfig = ircConfig;
+            this.botAdmins = botAdmins;
 
             this.chairs.Add( meetingInfo.Owner );
         }
@@ -311,7 +310,7 @@ namespace Chaskis.Plugins.MeetBot
             }
             else if( msg.Restriction == CommandRestriction.ChairsAndBotAdmins )
             {
-                if( ( this.chairs.Contains( user ) == false ) && ( this.ircConfig.Admins.Contains( user ) == false ) )
+                if( ( this.chairs.Contains( user ) == false ) && ( this.botAdmins.Contains( user ) == false ) )
                 {
                     return ParseMessageResult.ChairBotAdminOnlyMessage;
                 }
@@ -322,7 +321,7 @@ namespace Chaskis.Plugins.MeetBot
 
         private void DoUserSplitAction( string stringToSplit, Action<string> action )
         {
-            string[] users = stringToSplit.Split( ' ' );
+            string[] users = stringToSplit.ToLower().Split( ' ' );
             foreach( string user in users )
             {
                 if( string.IsNullOrWhiteSpace( user ) == false )
