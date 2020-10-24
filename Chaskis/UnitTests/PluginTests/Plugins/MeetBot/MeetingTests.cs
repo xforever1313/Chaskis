@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
 using Chaskis.Plugins.MeetBot;
 using Moq;
 using NUnit.Framework;

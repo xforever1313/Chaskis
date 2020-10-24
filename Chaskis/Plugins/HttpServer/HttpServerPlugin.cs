@@ -80,8 +80,15 @@ namespace Chaskis.Plugins.HttpServer
                 ChaskisEventProtocol.IRC,
                 this.OnConnect
             );
-
             this.handlers.Add( coreEvent );
+
+            ConnectedEventConfig connectedEventConfig = new ConnectedEventConfig
+            {
+                ConnectedAction = this.OnConnect
+            };
+            this.handlers.Add(
+                new ConnectedEventHandler( connectedEventConfig )
+            );
         }
 
         public void Dispose()
@@ -107,24 +114,22 @@ namespace Chaskis.Plugins.HttpServer
             );
         }
 
+        private void OnConnect( ConnectedEventArgs args )
+        {
+            this.httpResponseHandler = new HttpResponseHandler( args.Writer )
+            {
+                IsIrcConnected = true
+            };
+            this.server = new HttpServer( config, this.httpResponseHandler );
+            this.server.OnStatus += this.Status;
+            this.server.OnError += this.ErrorStatus;
+            this.server.Start();
+            this.Status( "HTTP Server Started" );
+        }
+
         private void OnConnect( ChaskisEventHandlerLineActionArgs args )
         {
-            if( args.EventArgs["event_id"] == ChaskisCoreEvents.ConnectionMade )
-            {
-                if( this.server == null )
-                {
-                    this.httpResponseHandler = new HttpResponseHandler( args.IrcWriter )
-                    {
-                        IsIrcConnected = true
-                    };
-                    this.server = new HttpServer( config, this.httpResponseHandler );
-                    this.server.OnStatus += this.Status;
-                    this.server.OnError += this.ErrorStatus;
-                    this.server.Start();
-                    this.Status( "HTTP Server Started" );
-                }
-            }
-            else if( args.EventArgs["event_id"] == ChaskisCoreEvents.DisconnectInProgress )
+            if( args.EventArgs["event_id"] == ChaskisCoreEvents.DisconnectInProgress )
             {
                 if( this.httpResponseHandler != null )
                 {
