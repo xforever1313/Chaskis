@@ -5,10 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Chaskis.Core
 {
     /// <summary>
@@ -16,12 +12,6 @@ namespace Chaskis.Core
     /// </summary>
     public static class ChaskisCoreEvents
     {
-        /// <summary>
-        /// Event that is fired when the TCP connection has finished connecting.
-        /// This can happen when the bot starts up or after a reconnection.
-        /// </summary>
-        public static readonly string ConnectionMade = "CONNECTED";
-
         /// <summary>
         /// Event that is fired after the bot joins a channel.
         /// The channel that was joined comes after this string after 1 space.

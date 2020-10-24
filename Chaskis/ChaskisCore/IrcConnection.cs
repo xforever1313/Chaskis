@@ -279,7 +279,6 @@ namespace Chaskis.Core
             this.OnReadLine(
                 new ConnectedEventArgs( this.Config.Server, ChaskisEventProtocol.IRC, this ).ToXml()
             );
-            this.AddCoreEvent( ChaskisCoreEvents.ConnectionMade );
 
             // Join Channel.
             // JOIN <channels>
