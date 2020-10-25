@@ -5,10 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Xml.Linq;
-using SethCS.Exceptions;
-using SethCS.Extensions;
 
 namespace Chaskis.Core
 {
@@ -18,17 +15,22 @@ namespace Chaskis.Core
     /// </summary>
     public class ConnectedEventArgs : BaseConnectionEventArgs
     {
+        // ---------------- Fields ----------------
+
+        internal const string XmlRootName = "chaskis_connect_event";
+
         // ---------------- Constructor ----------------
 
-        public ConnectedEventArgs( string server, ChaskisEventProtocol protocol, IIrcWriter writer ) :
-            base( server, protocol )
+        internal ConnectedEventArgs() :
+            base()
         {
-            this.Writer = writer;
         }
 
         // ---------------- Properties ----------------
 
-        public IIrcWriter Writer { get; private set; }
+        public IIrcWriter Writer { get; internal set; }
+
+        protected override string XmlElementName => XmlRootName;
     }
 
     /// <summary>
@@ -36,57 +38,17 @@ namespace Chaskis.Core
     /// </summary>
     internal static class ConnectedEventArgsExtensions
     {
-        internal const string XmlElementName = "chaskis_connect_event";
-
         public static ConnectedEventArgs FromXml( string xmlString, IIrcWriter writer )
         {
-            XElement root = XElement.Parse( xmlString );
-            string server = null;
-            ChaskisEventProtocol? protocol = null;
-
-            if( XmlElementName.EqualsIgnoreCase( root.Name.LocalName ) == false )
+            ConnectedEventArgs args = new ConnectedEventArgs
             {
-                throw new ValidationException(
-                    $"Invalid XML root name: {XmlElementName} for {nameof( ConnectedEventArgs )}"
-                );
-            }
+                Writer = writer
+            };
 
-            foreach( XElement child in root.Elements() )
-            {
-                if( "server".EqualsIgnoreCase( child.Name.LocalName ) )
-                {
-                    server = child.Value;
-                }
-                else if( "protocol".EqualsIgnoreCase( child.Name.LocalName ) )
-                {
-                    if( Enum.TryParse<ChaskisEventProtocol>( child.Value, out ChaskisEventProtocol foundProtocol ) )
-                    {
-                        protocol = foundProtocol;
-                    }
-                }
-            }
+            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
+            BaseConnectionEventArgs.ParseBaseXml( args, root );
 
-            if( ( server != null ) && ( protocol != null ) )
-            {
-                return new ConnectedEventArgs( server, protocol.Value, writer );
-            }
-            else
-            {
-                throw new ValidationException(
-                    $"Could not find all required properties when creating {nameof( ConnectedEventArgs )}"
-                );
-            }
-        }
-
-        public static string ToXml( this ConnectedEventArgs args )
-        {
-            XElement root = new XElement(
-                XmlElementName,
-                new XElement( "server", args.Server ),
-                new XElement( "protocol", args.Protocol.ToString() )
-            );
-
-            return root.ToString( SaveOptions.DisableFormatting );
+            return args;
         }
     }
 }

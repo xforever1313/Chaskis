@@ -37,7 +37,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
 
             ConnectedEventConfig config = new ConnectedEventConfig
             {
-                ConnectedAction = ConnectedFunction
+                LineAction = ConnectedFunction
             };
 
             this.uut = new ConnectedEventHandler( config );
@@ -68,11 +68,12 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void SuccessTest()
         {
-            ConnectedEventArgs expectedArgs = new ConnectedEventArgs(
-                "server",
-                ChaskisEventProtocol.IRC,
-                this.ircWriter.Object
-            );
+            ConnectedEventArgs expectedArgs = new ConnectedEventArgs
+            {
+                Protocol = ChaskisEventProtocol.IRC,
+                Server = "server",
+                Writer = this.ircWriter.Object
+            };
 
             HandlerArgs handlerArgs = ConstructArgs( expectedArgs.ToXml() );
 

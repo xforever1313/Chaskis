@@ -21,10 +21,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         {
             ConnectedEventConfig config = new ConnectedEventConfig();
 
-            config.ConnectedAction = null;
+            config.LineAction = null;
             Assert.Throws<ListedValidationException>( () => config.Validate() );
 
-            config.ConnectedAction = delegate ( ConnectedEventArgs args )
+            config.LineAction = delegate ( ConnectedEventArgs args )
             {
             };
 

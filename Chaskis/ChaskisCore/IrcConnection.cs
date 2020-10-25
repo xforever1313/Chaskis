@@ -277,7 +277,12 @@ namespace Chaskis.Core
 
             StaticLogger.Log.WriteLine( "Connection made!" );
             this.OnReadLine(
-                new ConnectedEventArgs( this.Config.Server, ChaskisEventProtocol.IRC, this ).ToXml()
+                new ConnectedEventArgs
+                {
+                    Server = this.Config.Server,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Writer = this
+                }.ToXml()
             );
 
             // Join Channel.

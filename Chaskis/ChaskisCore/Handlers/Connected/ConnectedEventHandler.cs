@@ -22,7 +22,7 @@ namespace Chaskis.Core
         private readonly ConnectedEventConfig config;
 
         private static readonly Regex regex = new Regex(
-            @"<chaskis_connect_event>.+</chaskis_connect_event>",
+            $@"<{ConnectedEventArgs.XmlRootName}>.+</{ConnectedEventArgs.XmlRootName}>",
             RegexOptions.ExplicitCapture | RegexOptions.Compiled
         );
 
@@ -53,7 +53,7 @@ namespace Chaskis.Core
             if( match.Success )
             {
                 ConnectedEventArgs connectionArgs = ConnectedEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
-                this.config.ConnectedAction( connectionArgs );
+                this.config.LineAction( connectionArgs );
             }
         }
     }

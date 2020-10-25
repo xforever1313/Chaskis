@@ -84,7 +84,7 @@ namespace Chaskis.Plugins.HttpServer
 
             ConnectedEventConfig connectedEventConfig = new ConnectedEventConfig
             {
-                ConnectedAction = this.OnConnect
+                LineAction = this.OnConnect
             };
             this.handlers.Add(
                 new ConnectedEventHandler( connectedEventConfig )

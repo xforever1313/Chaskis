@@ -6,14 +6,14 @@
 //
 
 using System.Collections.Generic;
-using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
     /// <summary>
     /// Event to configure <see cref="ConnectedEventHandler"/>
     /// </summary>
-    public class ConnectedEventConfig
+    public sealed class ConnectedEventConfig :
+        BaseConnectionEventConfig<ConnectedEventConfig, ConnectedHandlerAction, ConnectedEventArgs>
     {
         // ---------------- Constructor ----------------
 
@@ -21,33 +21,17 @@ namespace Chaskis.Core
         {
         }
 
-        // ---------------- Properties ----------------
-
-        public ConnectedHandlerAction ConnectedAction { get; set; }
-
         // ---------------- Functions ----------------
 
-        public void Validate()
-        {
-            List<string> errors = new List<string>();
-
-            if( ConnectedAction == null )
-            {
-                errors.Add( $"{nameof( this.ConnectedAction )} can not be null" );
-            }
-
-            if( errors.Count != 0 )
-            {
-                throw new ListedValidationException(
-                    $"Errors when validating {nameof( ConnectedEventConfig )}",
-                    errors
-                 );
-            }
-        }
-
-        public ConnectedEventConfig Clone()
+        public override ConnectedEventConfig Clone()
         {
             return (ConnectedEventConfig)this.MemberwiseClone();
+        }
+
+        protected override IEnumerable<string> ValidateChild()
+        {
+            // Nothing to validate.
+            return null;
         }
     }
 }

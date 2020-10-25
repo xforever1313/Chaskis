@@ -24,7 +24,12 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
             Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
 
-            ConnectedEventArgs uut = new ConnectedEventArgs( server, protocol, mockWriter.Object );
+            ConnectedEventArgs uut = new ConnectedEventArgs
+            {
+                Protocol = protocol,
+                Server = server,
+                Writer = mockWriter.Object
+            };
 
             Assert.AreSame( mockWriter.Object, uut.Writer );
             Assert.AreEqual( uut.Server, server );
@@ -38,7 +43,12 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
             Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
 
-            ConnectedEventArgs uut = new ConnectedEventArgs( server, protocol, mockWriter.Object );
+            ConnectedEventArgs uut = new ConnectedEventArgs
+            {
+                Protocol = protocol,
+                Server = server,
+                Writer = mockWriter.Object
+            };
             string xmlString = uut.ToXml();
             ConnectedEventArgs postXml = ConnectedEventArgsExtensions.FromXml( xmlString, mockWriter.Object );
 
