@@ -82,7 +82,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                     ).FailIfFalse( "Did not get disconnecting message" );
 
                     this.testFrame.ProcessRunner.WaitForStringFromChaskis(
-                        @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>DISCONNECTED</event_id><server>(?<server>\S+)</server><nick>chaskisbot</nick></args><passthrough_args /></chaskis_event>",
+                        @"<chaskis_disconnected_event><server>(?<server>\S+)</server><protocol>IRC</protocol></chaskis_disconnected_event>",
                         15 * 1000
                     ).FailIfFalse( "Did not get disconnect message" );
                 }

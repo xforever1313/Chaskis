@@ -29,11 +29,6 @@ namespace Chaskis.Core
         public static readonly string WatchdogFailed = "WATCHDOG FAILED";
 
         /// <summary>
-        /// Event that happens when the bot finishes disconnecting from the server.
-        /// </summary>
-        public static readonly string DisconnectComplete = "DISCONNECTED";
-
-        /// <summary>
         /// Event that happens when the bot is attempting to reconnect to the server.
         /// </summary>
         public static readonly string Reconnecting = "ATTEMPTING RECONNECT";

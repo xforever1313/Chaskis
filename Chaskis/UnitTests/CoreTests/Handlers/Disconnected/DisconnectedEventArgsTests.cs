@@ -6,13 +6,14 @@
 //
 
 using Chaskis.Core;
+using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
+namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
 {
     [TestFixture]
-    public class DisconnectingEventArgsTests
+    public class DisconnectedEventArgsTests
     {
         // ---------------- Tests ----------------
 
@@ -22,7 +23,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
             const string server = "irc.somewhere.net";
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
 
-            DisconnectingEventArgs uut = new DisconnectingEventArgs
+            DisconnectedEventArgs uut = new DisconnectedEventArgs
             {
                 Protocol = protocol,
                 Server = server
@@ -38,13 +39,13 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
             const string server = "irc.somewhere.net";
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
 
-            DisconnectingEventArgs uut = new DisconnectingEventArgs
+            DisconnectedEventArgs uut = new DisconnectedEventArgs
             {
                 Protocol = protocol,
                 Server = server
             };
             string xmlString = uut.ToXml();
-            DisconnectingEventArgs postXml = DisconnectingEventArgsExtensions.FromXml( xmlString );
+            DisconnectedEventArgs postXml = DisconnectedEventArgsExtensions.FromXml( xmlString );
 
             Assert.AreEqual( uut.Server, postXml.Server );
             Assert.AreEqual( uut.Protocol, postXml.Protocol );
@@ -56,27 +57,27 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
             const string xmlString = "<lol><server>irc.somewhere.net</server><protocol>IRC</protocol></lol>";
 
             Assert.Throws<ValidationException>(
-                () => DisconnectingEventArgsExtensions.FromXml( xmlString )
+                () => DisconnectedEventArgsExtensions.FromXml( xmlString )
             );
         }
 
         [Test]
         public void MissingServerDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_disconnecting_event><protocol>IRC</protocol></chaskis_disconnecting_event>";
+            const string xmlString = "<chaskis_disconnected_event><protocol>IRC</protocol></chaskis_disconnected_event>";
 
             Assert.Throws<ValidationException>(
-                () => DisconnectingEventArgsExtensions.FromXml( xmlString )
+                () => DisconnectedEventArgsExtensions.FromXml( xmlString )
             );
         }
 
         [Test]
         public void MissingProtocolDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_disconnecting_event><server>irc.somewhere.net</server></chaskis_disconnecting_event>";
+            const string xmlString = "<chaskis_disconnected_event><server>irc.somewhere.net</server></chaskis_disconnected_event>";
 
             Assert.Throws<ValidationException>(
-                () => DisconnectingEventArgsExtensions.FromXml( xmlString )
+                () => DisconnectedEventArgsExtensions.FromXml( xmlString )
             );
         }
     }

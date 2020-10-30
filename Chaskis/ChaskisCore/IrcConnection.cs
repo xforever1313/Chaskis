@@ -626,7 +626,13 @@ namespace Chaskis.Core
                 this.readerThread.Join();
                 this.readerThread = null; // REMEMBER TO SET THIS TO NULL!!!  Connect() requires this to be null.
 
-                this.AddCoreEvent( ChaskisCoreEvents.DisconnectComplete );
+                this.OnReadLine(
+                    new DisconnectedEventArgs
+                    {
+                        Server = this.Config.Server,
+                        Protocol = ChaskisEventProtocol.IRC
+                    }.ToXml()
+                );
 
                 // We sent our disconnect complete event, we are no longer connected.
                 this.IsConnected = false;
