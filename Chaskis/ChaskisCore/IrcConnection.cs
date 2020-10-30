@@ -294,7 +294,14 @@ namespace Chaskis.Core
                 Thread.Sleep( this.Config.RateLimit );
             }
 
-            this.AddCoreEvent( ChaskisCoreEvents.FinishedJoiningChannels );
+            this.ReadEvent(
+                new FinishedJoiningChannelsEventArgs
+                {
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
 
             // Once we connected, go ahead and start the watchdog.
             // This will be the only time the watchdog should be started.
