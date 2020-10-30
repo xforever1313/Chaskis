@@ -602,7 +602,13 @@ namespace Chaskis.Core
             // all of those writes become no-ops.
             lock( this.ircWriterLock )
             {
-                this.AddCoreEvent( ChaskisCoreEvents.DisconnectInProgress );
+                this.OnReadLine(
+                    new DisconnectingEventArgs
+                    {
+                        Server = this.Config.Server,
+                        Protocol = ChaskisEventProtocol.IRC
+                    }.ToXml()
+                );
 
                 // - Close the TCP stream.  If we are waiting for data to come over TCP from the IRC server,
                 //   we need to close the IRC connection for the reader thread to abort.

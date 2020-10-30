@@ -9,23 +9,23 @@ using Chaskis.Core;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
+namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
 {
     [TestFixture]
-    public class ConnectedEventConfigTests
+    public class DisconnectingEventConfigTests
     {
         // ---------------- Tests ----------------
 
         [Test]
         public void ValidateTest()
         {
-            ConnectedEventConfig config = new ConnectedEventConfig
+            DisconnectingEventConfig config = new DisconnectingEventConfig
             {
                 LineAction = null
             };
             Assert.Throws<ListedValidationException>( () => config.Validate() );
 
-            config.LineAction = delegate ( ConnectedEventArgs args )
+            config.LineAction = delegate ( DisconnectingEventArgs args )
             {
             };
 
@@ -35,8 +35,8 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void CloneTest()
         {
-            ConnectedEventConfig config = new ConnectedEventConfig();
-            ConnectedEventConfig clone = config.Clone();
+            DisconnectingEventConfig config = new DisconnectingEventConfig();
+            DisconnectingEventConfig clone = config.Clone();
 
             Assert.AreNotSame( config, clone );
         }

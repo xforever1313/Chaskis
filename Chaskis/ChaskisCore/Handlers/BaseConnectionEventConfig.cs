@@ -11,8 +11,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public abstract class BaseConnectionEventConfig<TChildType, TLineAction, TLineActionArgs> : IConnectionEvent
-        where TChildType : IConnectionEvent
+    public abstract class BaseConnectionEventConfig<TChildType, TLineAction, TLineActionArgs> : IConnectionEventConfig<TChildType>
+        where TChildType : IConnectionEventConfig<TChildType>
         where TLineAction : Delegate
         where TLineActionArgs : IConnectionEventArgs
     {
@@ -28,6 +28,7 @@ namespace Chaskis.Core
 
         // ---------------- Functions ----------------
 
+        /// <inheritdoc/>
         public void Validate()
         {
             List<string> errors = new List<string>();
@@ -52,6 +53,7 @@ namespace Chaskis.Core
             }
         }
 
+        /// <inheritdoc/>
         public abstract TChildType Clone();
 
         /// <summary>

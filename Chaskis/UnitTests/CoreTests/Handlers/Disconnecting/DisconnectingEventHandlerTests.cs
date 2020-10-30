@@ -7,24 +7,21 @@
 
 using Chaskis.Core;
 using Chaskis.UnitTests.Common;
-using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
+namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnecting
 {
     [TestFixture]
-    public class ConnectedEventHandlerTests
+    public class DisconnectingEventHandlerTests
     {
         // ---------------- Fields ----------------
 
-        private ConnectedEventHandler uut;
+        private DisconnectingEventHandler uut;
 
         private IrcConfig ircConfig;
 
-        private Mock<IIrcWriter> ircWriter;
-
-        private ConnectedEventArgs responseReceived;
+        private DisconnectingEventArgs responseReceived;
 
         // ---------------- Setup / Teardown ----------------
 
@@ -32,15 +29,14 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         public void TestSetup()
         {
             this.ircConfig = TestHelpers.GetTestIrcConfig();
-            this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            ConnectedEventConfig config = new ConnectedEventConfig
+            DisconnectingEventConfig config = new DisconnectingEventConfig
             {
-                LineAction = ConnectedFunction
+                LineAction = DisconnectingFunction
             };
 
-            this.uut = new ConnectedEventHandler( config );
+            this.uut = new DisconnectingEventHandler( config );
         }
 
         [TearDown]
@@ -54,7 +50,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         public void InvalidConfigTest()
         {
             Assert.Throws<ListedValidationException>(
-                () => new ConnectedEventHandler( new ConnectedEventConfig() )
+                () => new DisconnectingEventHandler( new DisconnectingEventConfig() )
             );
         }
 
@@ -68,11 +64,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void SuccessTest()
         {
-            ConnectedEventArgs expectedArgs = new ConnectedEventArgs
+            DisconnectingEventArgs expectedArgs = new DisconnectingEventArgs
             {
                 Protocol = ChaskisEventProtocol.IRC,
-                Server = "server",
-                Writer = this.ircWriter.Object
+                Server = "server"
             };
 
             HandlerArgs handlerArgs = ConstructArgs( expectedArgs.ToXml() );
@@ -82,7 +77,6 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
             Assert.IsNotNull( this.responseReceived );
             Assert.AreEqual( expectedArgs.Server, this.responseReceived.Server );
             Assert.AreEqual( expectedArgs.Protocol, this.responseReceived.Protocol );
-            Assert.AreSame( expectedArgs.Writer, this.responseReceived.Writer );
         }
 
         [Test]
@@ -97,7 +91,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
 
         // ---------------- Test Helpers ----------------
 
-        private void ConnectedFunction( ConnectedEventArgs args )
+        private void DisconnectingFunction( DisconnectingEventArgs args )
         {
             this.responseReceived = args;
         }
@@ -107,7 +101,6 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
             HandlerArgs args = new HandlerArgs
             {
                 Line = line,
-                IrcWriter = this.ircWriter.Object,
                 IrcConfig = this.ircConfig
             };
 

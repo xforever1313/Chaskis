@@ -74,13 +74,13 @@ namespace Chaskis.Plugins.HttpServer
             this.config = XmlLoader.LoadConfig( configPath );
             this.log = pluginInit.Log;
 
-            IChaskisEventCreator eventCreator = pluginInit.ChaskisEventCreator;
-
-            ChaskisEventHandler coreEvent = eventCreator.CreateCoreEventHandler(
-                ChaskisEventProtocol.IRC,
-                this.OnConnect
+            DisconnectingEventConfig disconnectingConfig = new DisconnectingEventConfig
+            {
+                LineAction = this.OnDisconnecting
+            };
+            this.handlers.Add(
+                new DisconnectingEventHandler( disconnectingConfig )
             );
-            this.handlers.Add( coreEvent );
 
             ConnectedEventConfig connectedEventConfig = new ConnectedEventConfig
             {
@@ -127,14 +127,11 @@ namespace Chaskis.Plugins.HttpServer
             this.Status( "HTTP Server Started" );
         }
 
-        private void OnConnect( ChaskisEventHandlerLineActionArgs args )
+        private void OnDisconnecting( DisconnectingEventArgs args )
         {
-            if( args.EventArgs["event_id"] == ChaskisCoreEvents.DisconnectInProgress )
+            if( this.httpResponseHandler != null )
             {
-                if( this.httpResponseHandler != null )
-                {
-                    this.httpResponseHandler.IsIrcConnected = false;
-                }
+                this.httpResponseHandler.IsIrcConnected = false;
             }
         }
 
