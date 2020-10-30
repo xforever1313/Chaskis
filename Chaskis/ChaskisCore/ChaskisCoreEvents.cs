@@ -27,10 +27,5 @@ namespace Chaskis.Core
         /// Event that happens if the watchdog timer fails.
         /// </summary>
         public static readonly string WatchdogFailed = "WATCHDOG FAILED";
-
-        /// <summary>
-        /// Event that happens when the bot is attempting to reconnect to the server.
-        /// </summary>
-        public static readonly string Reconnecting = "ATTEMPTING RECONNECT";
     }
 }

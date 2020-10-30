@@ -839,7 +839,13 @@ namespace Chaskis.Core
                         timeoutMinutes++;
                     }
 
-                    this.AddCoreEvent( ChaskisCoreEvents.Reconnecting );
+                    this.ReadEvent(
+                        new ReconnectingEventArgs
+                        {
+                            Protocol = ChaskisEventProtocol.IRC,
+                            Server = this.Config.Server
+                        }.ToXml()
+                    );
 
                     // Try connecting.
                     Connect();
