@@ -291,8 +291,6 @@ namespace Chaskis.Core
             foreach( string channel in this.Config.Channels )
             {
                 this.connection.WriteLine( "JOIN {0}", channel );
-
-                this.AddCoreEvent( ChaskisCoreEvents.JoinChannel + " " + channel );
                 Thread.Sleep( this.Config.RateLimit );
             }
 

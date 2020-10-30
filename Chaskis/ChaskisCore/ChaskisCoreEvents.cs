@@ -13,12 +13,6 @@ namespace Chaskis.Core
     public static class ChaskisCoreEvents
     {
         /// <summary>
-        /// Event that is fired after the bot joins a channel.
-        /// The channel that was joined comes after this string after 1 space.
-        /// </summary>
-        public static readonly string JoinChannel = "JOIN";
-
-        /// <summary>
         /// Event that happens after the bot is done joining channels after it connected.
         /// </summary>
         public static readonly string FinishedJoiningChannels = "FINISHED JOINING CHANNELS";
