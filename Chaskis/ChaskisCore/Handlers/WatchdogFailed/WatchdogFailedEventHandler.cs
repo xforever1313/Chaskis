@@ -9,23 +9,25 @@ using System.Text.RegularExpressions;
 
 namespace Chaskis.Core
 {
-    public delegate void ConnectedHandlerAction( ConnectedEventArgs args );
+    public delegate void WatchdogFailedHandlerAction( WatchdogFailedEventArgs args );
 
     /// <summary>
-    /// Event that gets fired when the bot joins a server.
+    /// Event that is fired when the bot does not get a PONG from the server,
+    /// so our watchdog fails.  This means we are about to try to reconnect to the server.
     /// </summary>
-    public sealed class ConnectedEventHandler : BaseConnectionEventHandler<ConnectedEventConfig>
+    public sealed class WatchdogFailedEventHandler : BaseConnectionEventHandler<WatchdogFailedEventConfig>
     {
         // ---------------- Fields ----------------
 
         private static readonly Regex regex = new Regex(
-            $@"^<{ConnectedEventArgs.XmlRootName}>.+</{ConnectedEventArgs.XmlRootName}>",
+            $@"^<{WatchdogFailedEventArgs.XmlRootName}>.+</{WatchdogFailedEventArgs.XmlRootName}>",
             RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
+
         // ---------------- Constructor ----------------
 
-        public ConnectedEventHandler( ConnectedEventConfig config ) :
+        public WatchdogFailedEventHandler( WatchdogFailedEventConfig config ) :
             base( config, regex )
         {
         }
@@ -34,7 +36,7 @@ namespace Chaskis.Core
 
         protected override void HandleEventInternal( HandlerArgs args, Match match )
         {
-            ConnectedEventArgs connectionArgs = ConnectedEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
+            WatchdogFailedEventArgs connectionArgs = WatchdogFailedEventArgsExtensions.FromXml( args.Line );
             this.config.LineAction( connectionArgs );
         }
     }

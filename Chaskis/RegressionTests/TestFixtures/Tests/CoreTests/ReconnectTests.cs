@@ -72,7 +72,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 () =>
                 {
                     this.testFrame.ProcessRunner.WaitForStringFromChaskis(
-                        @"<chaskis_event source_type=""CORE""\s+source_plugin=""IRC""\s+dest_plugin=""""><args><event_id>WATCHDOG\s+FAILED</event_id><server>(?<server>\S+)</server><nick>chaskisbot</nick></args><passthrough_args /></chaskis_event>",
+                        @"<chaskis_watchdogfailed_event><server>(?<server>\S+)</server><protocol>IRC</protocol></chaskis_watchdogfailed_event>",
                         150 * 1000
                     ).FailIfFalse( "Did not get watchdog failed message" );
 

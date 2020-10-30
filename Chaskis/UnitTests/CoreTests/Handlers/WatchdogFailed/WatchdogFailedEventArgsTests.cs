@@ -9,10 +9,10 @@ using Chaskis.Core;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.Reconnecting
+namespace Chaskis.UnitTests.CoreTests.Handlers.WatchdogFailed
 {
     [TestFixture]
-    public class ReconnectingEventArgsTests
+    public class WatchdogFailedEventArgsTests
     {
         // ---------------- Tests ----------------
 
@@ -22,7 +22,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Reconnecting
             const string server = "irc.somewhere.net";
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
 
-            ReconnectingEventArgs uut = new ReconnectingEventArgs
+            WatchdogFailedEventArgs uut = new WatchdogFailedEventArgs
             {
                 Protocol = protocol,
                 Server = server
@@ -38,13 +38,13 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Reconnecting
             const string server = "irc.somewhere.net";
             const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
 
-            ReconnectingEventArgs uut = new ReconnectingEventArgs
+            WatchdogFailedEventArgs uut = new WatchdogFailedEventArgs
             {
                 Protocol = protocol,
                 Server = server
             };
             string xmlString = uut.ToXml();
-            ReconnectingEventArgs postXml = ReconnectingEventArgsExtensions.FromXml( xmlString );
+            WatchdogFailedEventArgs postXml = WatchdogFailedEventArgsExtensions.FromXml( xmlString );
 
             Assert.AreEqual( uut.Server, postXml.Server );
             Assert.AreEqual( uut.Protocol, postXml.Protocol );
@@ -56,27 +56,27 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Reconnecting
             const string xmlString = "<lol><server>irc.somewhere.net</server><protocol>IRC</protocol></lol>";
 
             Assert.Throws<ValidationException>(
-                () => ReconnectingEventArgsExtensions.FromXml( xmlString )
+                () => WatchdogFailedEventArgsExtensions.FromXml( xmlString )
             );
         }
 
         [Test]
         public void MissingServerDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_reconnecting_event><protocol>IRC</protocol></chaskis_reconnecting_event>";
+            const string xmlString = "<chaskis_watchdogfailed_event><protocol>IRC</protocol></chaskis_watchdogfailed_event>";
 
             Assert.Throws<ValidationException>(
-                () => ReconnectingEventArgsExtensions.FromXml( xmlString )
+                () => WatchdogFailedEventArgsExtensions.FromXml( xmlString )
             );
         }
 
         [Test]
         public void MissingProtocolDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_reconnecting_event><server>irc.somewhere.net</server></chaskis_reconnecting_event>";
+            const string xmlString = "<chaskis_watchdogfailed_event><server>irc.somewhere.net</server></chaskis_watchdogfailed_event>";
 
             Assert.Throws<ValidationException>(
-                () => ReconnectingEventArgsExtensions.FromXml( xmlString )
+                () => WatchdogFailedEventArgsExtensions.FromXml( xmlString )
             );
         }
     }

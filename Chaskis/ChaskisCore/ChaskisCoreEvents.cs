@@ -16,10 +16,5 @@ namespace Chaskis.Core
         /// Event that happens after the bot is done joining channels after it connected.
         /// </summary>
         public static readonly string FinishedJoiningChannels = "FINISHED JOINING CHANNELS";
-
-        /// <summary>
-        /// Event that happens if the watchdog timer fails.
-        /// </summary>
-        public static readonly string WatchdogFailed = "WATCHDOG FAILED";
     }
 }

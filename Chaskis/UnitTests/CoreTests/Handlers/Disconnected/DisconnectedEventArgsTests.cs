@@ -6,7 +6,6 @@
 //
 
 using Chaskis.Core;
-using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 

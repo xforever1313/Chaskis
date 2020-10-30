@@ -25,7 +25,7 @@ namespace Chaskis.Core
 
         private static readonly Regex regex = new Regex(
             $@"^<{DisconnectingEventArgs.XmlRootName}>.+</{DisconnectingEventArgs.XmlRootName}>",
-            RegexOptions.ExplicitCapture | RegexOptions.Compiled
+            RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
 

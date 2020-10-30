@@ -912,7 +912,14 @@ namespace Chaskis.Core
 
         private void Watchdog_OnFailure()
         {
-            this.AddCoreEvent( ChaskisCoreEvents.WatchdogFailed );
+            this.ReadEvent(
+                new WatchdogFailedEventArgs
+                {
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server
+                }.ToXml()
+            );
+
             // This should be the only spot where we attempt a reconnect.
             this.AttemptReconnect();
         }

@@ -22,7 +22,7 @@ namespace Chaskis.Core
 
         private static readonly Regex regex = new Regex(
             $@"^<{ReconnectingEventArgs.XmlRootName}>.+</{ReconnectingEventArgs.XmlRootName}>",
-            RegexOptions.ExplicitCapture | RegexOptions.Compiled
+            RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
 
