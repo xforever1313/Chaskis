@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Event to configure <see cref="ConnectedEventHandler"/>
     /// </summary>
     public sealed class ConnectedEventConfig :
-        BaseConnectionEventConfig<ConnectedEventConfig, ConnectedHandlerAction, ConnectedEventArgs>
+        BaseCoreEvent<ConnectedEventConfig, ConnectedHandlerAction, ConnectedEventArgs>
     {
         // ---------------- Constructor ----------------
 

@@ -17,7 +17,7 @@ namespace Chaskis.Core
     /// No <see cref="IIrcWriter"/> is passed in since there is no IRC connection
     /// to write to.
     /// </remarks>
-    public class ReconnectingEventArgs : BaseConnectionEventArgs
+    public class ReconnectingEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
@@ -42,8 +42,8 @@ namespace Chaskis.Core
         {
             ReconnectingEventArgs args = new ReconnectingEventArgs();
 
-            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
-            BaseConnectionEventArgs.ParseBaseXml( args, root );
+            XElement root = BaseCoreEventArgs.ParseXml( args, xmlString );
+            BaseCoreEventArgs.ParseBaseXml( args, root );
 
             return args;
         }

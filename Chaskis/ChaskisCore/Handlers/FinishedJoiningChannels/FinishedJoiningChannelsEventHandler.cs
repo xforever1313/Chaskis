@@ -15,7 +15,7 @@ namespace Chaskis.Core
     /// Event that gets fired when the bot joins a server and finishes joining the channels
     /// it is configured to join.
     /// </summary>
-    public sealed class FinishedJoiningChannelsEventHandler : BaseConnectionEventHandler<FinishedJoiningChannelsEventConfig>
+    public sealed class FinishedJoiningChannelsEventHandler : BaseCoreEventHandler<FinishedJoiningChannelsEventConfig>
     {
         // ---------------- Fields ----------------
 

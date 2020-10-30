@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Object to configure <see cref="DisconnectingEventHandler"/>
     /// </summary>
     public class DisconnectingEventConfig :
-        BaseConnectionEventConfig<DisconnectingEventConfig, DisconnectingHandlerAction, DisconnectingEventArgs>
+        BaseCoreEvent<DisconnectingEventConfig, DisconnectingHandlerAction, DisconnectingEventArgs>
     {
         // ---------------- Constructor ----------------
 

@@ -14,11 +14,11 @@ using SethCS.Extensions;
 namespace Chaskis.Core
 {
     /// <inheritdoc/>
-    public abstract class BaseConnectionEventArgs : IConnectionEventArgs
+    public abstract class BaseCoreEventArgs : ICoreEventArgs
     {
         // ---------------- Constructor ----------------
 
-        protected BaseConnectionEventArgs()
+        protected BaseCoreEventArgs()
         {
         }
 
@@ -38,7 +38,7 @@ namespace Chaskis.Core
         /// Helper function for parsing an XML string and validating it is correct.
         /// </summary>
         internal static XElement ParseXml<TArgs>( TArgs args, string xmlString )
-            where TArgs : BaseConnectionEventArgs
+            where TArgs : BaseCoreEventArgs
         {
             XElement root = XElement.Parse( xmlString );
 
@@ -56,7 +56,7 @@ namespace Chaskis.Core
         /// Helper function for parsing XML for elements that are common for ALL
         /// connection events.
         /// </summary>
-        internal static void ParseBaseXml( BaseConnectionEventArgs args, XElement rootNode )
+        internal static void ParseBaseXml( BaseCoreEventArgs args, XElement rootNode )
         {
             string server = null;
             ChaskisEventProtocol? protocol = null;
@@ -78,7 +78,7 @@ namespace Chaskis.Core
             if( ( server == null ) || ( protocol == null ) )
             {
                 throw new ValidationException(
-                    $"Could not find all required properties when creating {nameof( BaseConnectionEventArgs )}"
+                    $"Could not find all required properties when creating {nameof( BaseCoreEventArgs )}"
                 );
             }
 

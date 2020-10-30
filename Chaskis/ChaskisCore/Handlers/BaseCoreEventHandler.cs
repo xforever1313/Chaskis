@@ -10,8 +10,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public abstract class BaseConnectionEventHandler<TConfig> : IIrcHandler
-        where TConfig : IConnectionEventConfig<TConfig>
+    public abstract class BaseCoreEventHandler<TConfig> : IIrcHandler
+        where TConfig : ICoreEventConfig<TConfig>
     {
         // ---------------- Fields ----------------
 
@@ -21,7 +21,7 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        protected BaseConnectionEventHandler( TConfig config, Regex regex )
+        protected BaseCoreEventHandler( TConfig config, Regex regex )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             ArgumentChecker.IsNotNull( regex, nameof( regex ) );

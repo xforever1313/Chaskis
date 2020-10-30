@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// written to the IRC server will make it there.  There is also
     /// no guarentee that we'll get anything else from the server.
     /// </summary>
-    public sealed class DisconnectingEventHandler : BaseConnectionEventHandler<DisconnectingEventConfig>
+    public sealed class DisconnectingEventHandler : BaseCoreEventHandler<DisconnectingEventConfig>
     {
         // ---------------- Fields ----------------
 

@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Object to configure <see cref="WatchdogFailedEventHandler"/>
     /// </summary>
     public class WatchdogFailedEventConfig :
-        BaseConnectionEventConfig<WatchdogFailedEventConfig, WatchdogFailedHandlerAction, WatchdogFailedEventArgs>
+        BaseCoreEvent<WatchdogFailedEventConfig, WatchdogFailedHandlerAction, WatchdogFailedEventArgs>
     {
         // ---------------- Constructor ----------------
 

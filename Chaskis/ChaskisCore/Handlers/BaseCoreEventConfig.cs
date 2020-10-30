@@ -11,14 +11,14 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public abstract class BaseConnectionEventConfig<TChildType, TLineAction, TLineActionArgs> : IConnectionEventConfig<TChildType>
-        where TChildType : IConnectionEventConfig<TChildType>
+    public abstract class BaseCoreEvent<TChildType, TLineAction, TLineActionArgs> : ICoreEventConfig<TChildType>
+        where TChildType : ICoreEventConfig<TChildType>
         where TLineAction : Delegate
-        where TLineActionArgs : IConnectionEventArgs
+        where TLineActionArgs : ICoreEventArgs
     {
         // ---------------- Constructor ----------------
 
-        protected BaseConnectionEventConfig()
+        protected BaseCoreEvent()
         {
         }
 

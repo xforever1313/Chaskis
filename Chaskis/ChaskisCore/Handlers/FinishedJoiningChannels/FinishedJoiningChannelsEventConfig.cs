@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Event to configure <see cref="FinishedJoiningChannelsEventHandler"/>
     /// </summary>
     public sealed class FinishedJoiningChannelsEventConfig :
-        BaseConnectionEventConfig<FinishedJoiningChannelsEventConfig, FinishedJoiningChannelsHandlerAction, FinishedJoiningChannelsEventArgs>
+        BaseCoreEvent<FinishedJoiningChannelsEventConfig, FinishedJoiningChannelsHandlerAction, FinishedJoiningChannelsEventArgs>
     {
         // ---------------- Constructor ----------------
 

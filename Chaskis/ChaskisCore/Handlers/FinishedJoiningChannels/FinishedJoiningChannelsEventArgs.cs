@@ -12,7 +12,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Args that are passed into <see cref="FinishedJoiningChannelsEventHandler"/>.
     /// </summary>
-    public class FinishedJoiningChannelsEventArgs : BaseConnectionEventArgs
+    public class FinishedJoiningChannelsEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
@@ -44,8 +44,8 @@ namespace Chaskis.Core
                 Writer = writer
             };
 
-            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
-            BaseConnectionEventArgs.ParseBaseXml( args, root );
+            XElement root = BaseCoreEventArgs.ParseXml( args, xmlString );
+            BaseCoreEventArgs.ParseBaseXml( args, root );
 
             return args;
         }

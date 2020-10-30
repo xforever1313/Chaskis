@@ -17,7 +17,7 @@ namespace Chaskis.Core
     /// No <see cref="IIrcWriter"/> is passed in since there is no IRC connection
     /// to write to.
     /// </remarks>
-    public class WatchdogFailedEventArgs : BaseConnectionEventArgs
+    public class WatchdogFailedEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
@@ -42,8 +42,8 @@ namespace Chaskis.Core
         {
             WatchdogFailedEventArgs args = new WatchdogFailedEventArgs();
 
-            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
-            BaseConnectionEventArgs.ParseBaseXml( args, root );
+            XElement root = BaseCoreEventArgs.ParseXml( args, xmlString );
+            BaseCoreEventArgs.ParseBaseXml( args, root );
 
             return args;
         }

@@ -17,7 +17,7 @@ namespace Chaskis.Core
     /// No <see cref="IIrcWriter"/> is passed in since there is no guarentee that
     /// when this event gets processed we are connected still.
     /// </remarks>
-    public class DisconnectingEventArgs : BaseConnectionEventArgs
+    public class DisconnectingEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
@@ -42,8 +42,8 @@ namespace Chaskis.Core
         {
             DisconnectingEventArgs args = new DisconnectingEventArgs();
 
-            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
-            BaseConnectionEventArgs.ParseBaseXml( args, root );
+            XElement root = BaseCoreEventArgs.ParseXml( args, xmlString );
+            BaseCoreEventArgs.ParseBaseXml( args, root );
 
             return args;
         }

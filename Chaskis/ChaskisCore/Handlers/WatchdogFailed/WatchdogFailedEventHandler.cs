@@ -15,7 +15,7 @@ namespace Chaskis.Core
     /// Event that is fired when the bot does not get a PONG from the server,
     /// so our watchdog fails.  This means we are about to try to reconnect to the server.
     /// </summary>
-    public sealed class WatchdogFailedEventHandler : BaseConnectionEventHandler<WatchdogFailedEventConfig>
+    public sealed class WatchdogFailedEventHandler : BaseCoreEventHandler<WatchdogFailedEventConfig>
     {
         // ---------------- Fields ----------------
 

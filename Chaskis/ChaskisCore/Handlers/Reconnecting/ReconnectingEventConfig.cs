@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Object to configure <see cref="ReconnectingEventHandler"/>
     /// </summary>
     public class ReconnectingEventConfig :
-        BaseConnectionEventConfig<ReconnectingEventConfig, ReconnectingHandlerAction, ReconnectingEventArgs>
+        BaseCoreEvent<ReconnectingEventConfig, ReconnectingHandlerAction, ReconnectingEventArgs>
     {
         // ---------------- Constructor ----------------
 

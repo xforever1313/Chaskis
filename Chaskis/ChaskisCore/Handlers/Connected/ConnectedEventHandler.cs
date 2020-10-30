@@ -14,7 +14,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Event that gets fired when the bot joins a server.
     /// </summary>
-    public sealed class ConnectedEventHandler : BaseConnectionEventHandler<ConnectedEventConfig>
+    public sealed class ConnectedEventHandler : BaseCoreEventHandler<ConnectedEventConfig>
     {
         // ---------------- Fields ----------------
 

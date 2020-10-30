@@ -8,18 +8,15 @@
 namespace Chaskis.Core
 {
     /// <summary>
-    /// When the status of the bot being
-    /// connected to a server changes,
-    /// this class gets passed into
-    /// event handlers as an argument.
+    /// When the core creates an event, these are arguments
+    /// all events shall contain.
     /// </summary>
-    public interface IConnectionEventArgs
+    public interface ICoreEventArgs
     {
         // ---------------- Properties ----------------
 
         /// <summary>
-        /// The server that had its connection
-        /// status changed.
+        /// The server that issued the event.
         /// </summary>
         string Server { get; }
 

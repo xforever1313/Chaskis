@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// Args that are passed into <see cref="ConnectedEventHandler"/> when
     /// the bot connects to a server.
     /// </summary>
-    public class ConnectedEventArgs : BaseConnectionEventArgs
+    public class ConnectedEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
@@ -45,8 +45,8 @@ namespace Chaskis.Core
                 Writer = writer
             };
 
-            XElement root = BaseConnectionEventArgs.ParseXml( args, xmlString );
-            BaseConnectionEventArgs.ParseBaseXml( args, root );
+            XElement root = BaseCoreEventArgs.ParseXml( args, xmlString );
+            BaseCoreEventArgs.ParseBaseXml( args, root );
 
             return args;
         }

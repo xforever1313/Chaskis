@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// so expect nothing to be able to be written out,
     /// and nothing to be received.
     /// </summary>
-    public sealed class DisconnectedEventHandler : BaseConnectionEventHandler<DisconnectedEventConfig>
+    public sealed class DisconnectedEventHandler : BaseCoreEventHandler<DisconnectedEventConfig>
     {
         // ---------------- Fields ----------------
 

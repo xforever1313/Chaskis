@@ -7,7 +7,7 @@
 
 namespace Chaskis.Core
 {
-    public interface IConnectionEventConfig<TConfig>
+    public interface ICoreEventConfig<TConfig>
     {
         /// <summary>
         /// Ensure the implementation is configured correctly.

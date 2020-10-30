@@ -16,7 +16,7 @@ namespace Chaskis.Core
     /// to the server.  When this event is fired, there is no connection to the server yet.
     /// Use the <see cref="ConnectedEventHandler"/> to know when the server connects to the server.
     /// </summary>
-    public sealed class ReconnectingEventHandler : BaseConnectionEventHandler<ReconnectingEventConfig>
+    public sealed class ReconnectingEventHandler : BaseCoreEventHandler<ReconnectingEventConfig>
     {
         // ---------------- Fields ----------------
 
