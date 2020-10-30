@@ -202,12 +202,12 @@ namespace Chaskis.Plugins.WelcomeBot
 
             ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
                 "karmabot",
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     ["ACTION"] = "QUERY",
                     ["NAME"] = args.User
                 },
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     ["CHANNEL"] = args.Channel,
                     ["NAME"] = args.User

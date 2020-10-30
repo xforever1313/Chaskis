@@ -47,7 +47,7 @@ namespace Chaskis.Plugins.QuoteBot
         public Task<int> AddQuoteAsync( Quote quote )
         {
             return Task<int>.Run(
-                delegate ()
+                delegate
                 {
                     return this.AddQuote( quote );
                 }
@@ -77,7 +77,7 @@ namespace Chaskis.Plugins.QuoteBot
         public Task<bool> DeleteQuoteAsync( int id )
         {
             return Task<bool>.Run(
-                delegate ()
+                delegate
                 {
                     return this.DeleteQuote( id );
                 }
@@ -111,7 +111,7 @@ namespace Chaskis.Plugins.QuoteBot
         public Task<Quote> GetQuoteAsync( int id )
         {
             return Task<Quote>.Run(
-                delegate ()
+                delegate
                 {
                     return this.GetQuote( id );
                 }
@@ -125,7 +125,7 @@ namespace Chaskis.Plugins.QuoteBot
         public Task<Quote> GetRandomQuoteAsync()
         {
             return Task<Quote>.Run(
-                delegate ()
+                delegate
                 {
                     return this.GetRandomQuote();
                 }

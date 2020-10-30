@@ -38,7 +38,7 @@ namespace Chaskis.Service
             }
             catch( Exception e )
             {
-                logger.LogError( "FATAL ERROR:" + Environment.NewLine + e.ToString() );
+                logger.LogError( "FATAL ERROR:" + Environment.NewLine + e );
                 throw new Exception( "Rethrowing", e );
             }
         }

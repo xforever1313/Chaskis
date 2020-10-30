@@ -13,7 +13,7 @@ using SethCS.Extensions;
 
 namespace Chaskis.Service
 {
-    public class Program
+    public static class Program
     {
         // ---------------- Properties ----------------
 

@@ -150,7 +150,7 @@ namespace Chaskis.Core
             // Right now, each line is its own event... should we change this to each handler being
             // its own event?
             this.BeginInvoke(
-                delegate ()
+                delegate
                 {
                     try
                     {
