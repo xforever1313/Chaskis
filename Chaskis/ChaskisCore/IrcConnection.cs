@@ -529,6 +529,17 @@ namespace Chaskis.Core
 
         public void SendKick( string userToKick, string channel, string reason = null )
         {
+            this.OnReadLine(
+                new SendKickEventArgs
+                {
+                    Channel = channel,
+                    Reason = reason ?? string.Empty,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
+
             string kickString;
             if( string.IsNullOrWhiteSpace( reason ) )
             {

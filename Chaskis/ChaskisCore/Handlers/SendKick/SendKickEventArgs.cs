@@ -13,21 +13,22 @@ using SethCS.Extensions;
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Args that are passed into <see cref="SendJoinEventHandler"/> when
-    /// the bot attempts to join a channel.
+    /// Args that are passed into <see cref="SendKickEventHandler"/> when
+    /// the bot sends the kick command to a channel.
     /// </summary>
-    public sealed class SendJoinEventArgs : BaseCoreEventArgs
+    public sealed class SendKickEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
-        internal const string XmlRootName = "chaskis_sendjoin_event";
+        internal const string XmlRootName = "chaskis_sendkick_event";
 
         // ---------------- Constructor ----------------
 
-        internal SendJoinEventArgs() :
+        internal SendKickEventArgs() :
             base()
         {
             this.Channel = null;
+            this.Reason = null;
         }
 
         // ---------------- Properties ----------------
@@ -35,9 +36,15 @@ namespace Chaskis.Core
         public IIrcWriter Writer { get; internal set; }
 
         /// <summary>
-        /// The channel the bot attempted to join.
+        /// The channel the bot sent the message from.
         /// </summary>
         public string Channel { get; internal set; }
+
+        /// <summary>
+        /// The reason the user was kicked from the channel.
+        /// Set to <see cref="string.Empty"/> if there was no reason.
+        /// </summary>
+        public string Reason { get; internal set; }
 
         protected override string XmlElementName => XmlRootName;
 
@@ -46,18 +53,19 @@ namespace Chaskis.Core
             return new List<XElement>
             {
                 new XElement( "channel", this.Channel ),
+                new XElement( "reason", this.Reason ?? string.Empty )
             };
         }
     }
 
     /// <summary>
-    /// Extensions to <see cref="SendJoinEventArgs"/>
+    /// Extensions to <see cref="SendKickEventArgs"/>
     /// </summary>
-    internal static class SendJoinEventArgsExtensions
+    internal static class SendKickEventArgsExtensions
     {
-        public static SendJoinEventArgs FromXml( string xmlString, IIrcWriter writer )
+        public static SendKickEventArgs FromXml( string xmlString, IIrcWriter writer )
         {
-            SendJoinEventArgs args = new SendJoinEventArgs
+            SendKickEventArgs args = new SendKickEventArgs
             {
                 Writer = writer
             };
@@ -71,12 +79,16 @@ namespace Chaskis.Core
                 {
                     args.Channel = child.Value;
                 }
+                else if( "reason".EqualsIgnoreCase( child.Name.LocalName ) )
+                {
+                    args.Reason = child.Value;
+                }
             }
 
-            if( args.Channel == null )
+            if( ( args.Channel == null ) || ( args.Reason == null ) )
             {
                 throw new ValidationException(
-                    $"Could not find all required properties when creating {nameof( SendJoinEventArgs )}"
+                    $"Could not find all required properties when creating {nameof( SendKickEventArgs )}"
                 );
             }
 

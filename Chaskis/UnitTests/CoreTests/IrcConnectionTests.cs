@@ -572,11 +572,11 @@ namespace Chaskis.UnitTests.CoreTests
 
             // Finally, join channels.
             this.mac.Setup(
-                m => m.WriteLine( "JOIN {0}", channel1 )
+                m => m.WriteLine( $"JOIN {channel1}" )
             );
 
             this.mac.Setup(
-                m => m.WriteLine( "JOIN {0}", channel2 )
+                m => m.WriteLine( $"JOIN {channel2}" )
             );
         }
 
