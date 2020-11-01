@@ -28,7 +28,7 @@ namespace Chaskis.Core
             base()
         {
             this.Channel = null;
-            this.PartReason = null;
+            this.Reason = null;
         }
 
         // ---------------- Properties ----------------
@@ -44,7 +44,7 @@ namespace Chaskis.Core
         /// The reason they bot left the channel.
         /// Set to <see cref="string.Empty"/> if there was no reason.
         /// </summary>
-        public string PartReason { get; internal set; }
+        public string Reason { get; internal set; }
 
         protected override string XmlElementName => XmlRootName;
 
@@ -53,7 +53,7 @@ namespace Chaskis.Core
             return new List<XElement>
             {
                 new XElement( "channel", this.Channel ),
-                new XElement( "reason", this.PartReason ?? string.Empty )
+                new XElement( "reason", this.Reason ?? string.Empty )
             };
         }
     }
@@ -81,11 +81,11 @@ namespace Chaskis.Core
                 }
                 else if( "reason".EqualsIgnoreCase( child.Name.LocalName ) )
                 {
-                    args.PartReason = child.Value;
+                    args.Reason = child.Value;
                 }
             }
 
-            if( ( args.Channel == null ) || ( args.PartReason == null ) )
+            if( ( args.Channel == null ) || ( args.Reason == null ) )
             {
                 throw new ValidationException(
                     $"Could not find all required properties when creating {nameof( SendPartEventArgs )}"

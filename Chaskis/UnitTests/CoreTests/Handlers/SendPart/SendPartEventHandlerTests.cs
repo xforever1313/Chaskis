@@ -78,7 +78,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.SendPart
                 Writer = this.ircWriter.Object,
 
                 Channel = channel,
-                PartReason = reason
+                Reason = reason
             };
 
             HandlerArgs handlerArgs = ConstructArgs( expectedArgs.ToXml() );
@@ -89,7 +89,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.SendPart
             Assert.AreEqual( expectedArgs.Server, this.responseReceived.Server );
             Assert.AreEqual( expectedArgs.Protocol, this.responseReceived.Protocol );
             Assert.AreEqual( expectedArgs.Channel, this.responseReceived.Channel );
-            Assert.AreEqual( expectedArgs.PartReason, this.responseReceived.PartReason );
+            Assert.AreEqual( expectedArgs.Reason, this.responseReceived.Reason );
             Assert.AreSame( expectedArgs.Writer, this.responseReceived.Writer );
         }
 

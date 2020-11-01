@@ -51,7 +51,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.SendPart
                 Writer = mockWriter.Object,
 
                 Channel = channel,
-                PartReason = reason
+                Reason = reason
             };
 
             DoRoundTripTest( uut );
@@ -67,7 +67,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.SendPart
                 Writer = mockWriter.Object,
 
                 Channel = channel,
-                PartReason = null
+                Reason = null
             };
 
             DoRoundTripTest( uut );
@@ -137,13 +137,13 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.SendPart
             Assert.AreEqual( uut.Channel, postXml.Channel );
             
             // Should never be null.  Should always be empty string.
-            if( uut.PartReason == null )
+            if( uut.Reason == null )
             {
-                Assert.AreEqual( string.Empty, postXml.PartReason );
+                Assert.AreEqual( string.Empty, postXml.Reason );
             }
             else
             {
-                Assert.AreEqual( uut.PartReason, postXml.PartReason );
+                Assert.AreEqual( uut.Reason, postXml.Reason );
             }
             Assert.AreSame( uut.Writer, postXml.Writer );
         }

@@ -516,7 +516,7 @@ namespace Chaskis.Core
                 new SendPartEventArgs
                 {
                     Channel = channel,
-                    PartReason = reason,
+                    Reason = reason,
                     Protocol = ChaskisEventProtocol.IRC,
                     Server = this.Config.Server,
                     Writer = this
