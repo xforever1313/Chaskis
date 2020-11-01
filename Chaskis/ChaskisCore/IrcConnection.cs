@@ -6,7 +6,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -294,7 +293,7 @@ namespace Chaskis.Core
                 Thread.Sleep( this.Config.RateLimit );
             }
 
-            this.ReadEvent(
+            this.OnReadLine(
                 new FinishedJoiningChannelsEventArgs
                 {
                     Protocol = ChaskisEventProtocol.IRC,
@@ -488,7 +487,20 @@ namespace Chaskis.Core
         public void SendPart( string reason, string channel )
         {
             // TODO: Make reason string more smart if not specified.
-            string partString = string.Format( "PART {0} :{1}", channel, reason ?? this.Config.QuitMessage );
+            reason = reason ?? this.Config.QuitMessage;
+
+            this.OnReadLine(
+                new SendPartEventArgs
+                {
+                    Channel = channel,
+                    PartReason = reason,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
+
+            string partString = string.Format( "PART {0} :{1}", channel, reason );
             this.SendRawCmd( partString );
         }
 
@@ -719,24 +731,6 @@ namespace Chaskis.Core
             this.OnReadLine( s );
         }
 
-        private void AddCoreEvent( string eventStr )
-        {
-            ChaskisEvent e = new ChaskisEvent(
-                ChaskisEventSource.CORE,
-                ChaskisEventProtocol.IRC.ToString(),
-                string.Empty, // For BCAST
-                new Dictionary<string, string>()
-                {
-                    ["event_id"] = eventStr,
-                    ["server"] = this.Config.Server,
-                    ["nick"] = this.Config.Nick
-                },
-                null
-            );
-
-            this.SendChaskisEvent( e );
-        }
-
         private void OnReadLine( string s )
         {
             this.ReadEvent?.Invoke( s );
@@ -844,7 +838,7 @@ namespace Chaskis.Core
                         timeoutMinutes++;
                     }
 
-                    this.ReadEvent(
+                    this.OnReadLine(
                         new ReconnectingEventArgs
                         {
                             Protocol = ChaskisEventProtocol.IRC,
@@ -919,7 +913,7 @@ namespace Chaskis.Core
 
         private void Watchdog_OnFailure()
         {
-            this.ReadEvent(
+            this.OnReadLine(
                 new WatchdogFailedEventArgs
                 {
                     Protocol = ChaskisEventProtocol.IRC,

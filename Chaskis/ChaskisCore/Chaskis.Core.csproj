@@ -23,6 +23,10 @@
     <PackageReference Condition="$(NoDotNet)!=''" Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\SendPart\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <PackageId>ChaskisCore</PackageId>
     <Version>0.20.0</Version>
