@@ -9,26 +9,29 @@ using System.Text.RegularExpressions;
 
 namespace Chaskis.Core
 {
-    public delegate void SendPartHandlerAction( SendPartEventArgs args );
+    public delegate void SendJoinHandlerAction( SendJoinEventArgs args );
 
     /// <summary>
-    /// Event that gets fired when the bot requests to leave a channel.
+    /// Event that gets fired when the bot attempts to join a channel.
     /// 
-    /// This does not mean the bot has left the channel, rather it simply sent
-    /// the command that will cause the server to remove it from the channel.
+    /// This does NOT mean the bot successfully joined the channel, it simply
+    /// requested the server to join the channel.  To determine if a bot joined
+    /// a channel successfully or not, subscribe to the <see cref="JoinHandler"/>,
+    /// and look for <see cref="JoinHandlerArgs.User"/>
+    /// to match the bot's name.
     /// </summary>
-    public sealed class SendPartEventHandler : BaseCoreEventHandler<SendPartEventConfig>
+    public sealed class SendJoinEventHandler : BaseCoreEventHandler<SendJoinEventConfig>
     {
         // ---------------- Fields ----------------
 
         private static readonly Regex regex = new Regex(
-            $@"^<{SendPartEventArgs.XmlRootName}>.+</{SendPartEventArgs.XmlRootName}>",
+            $@"^<{SendJoinEventArgs.XmlRootName}>.+</{SendJoinEventArgs.XmlRootName}>",
             RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
         // ---------------- Constructor ----------------
 
-        public SendPartEventHandler( SendPartEventConfig config ) :
+        public SendJoinEventHandler( SendJoinEventConfig config ) :
             base( config, regex )
         {
         }
@@ -37,7 +40,7 @@ namespace Chaskis.Core
 
         protected override void HandleEventInternal( HandlerArgs args, Match match )
         {
-            SendPartEventArgs connectionArgs = SendPartEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
+            SendJoinEventArgs connectionArgs = SendJoinEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
             this.config.LineAction( connectionArgs );
         }
     }

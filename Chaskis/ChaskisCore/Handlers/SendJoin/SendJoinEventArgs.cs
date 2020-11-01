@@ -13,22 +13,21 @@ using SethCS.Extensions;
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Args that are passed into <see cref="SendPartEventHandler"/> when
-    /// the bot leaves a channel.
+    /// Args that are passed into <see cref="SendJoinEventHandler"/> when
+    /// the bot attempts to join a channel.
     /// </summary>
-    public sealed class SendPartEventArgs : BaseCoreEventArgs
+    public sealed class SendJoinEventArgs : BaseCoreEventArgs
     {
         // ---------------- Fields ----------------
 
-        internal const string XmlRootName = "chaskis_sendpart_event";
+        internal const string XmlRootName = "chaskis_sendjoin_event";
 
         // ---------------- Constructor ----------------
 
-        internal SendPartEventArgs() :
+        internal SendJoinEventArgs() :
             base()
         {
             this.Channel = null;
-            this.PartReason = null;
         }
 
         // ---------------- Properties ----------------
@@ -36,16 +35,9 @@ namespace Chaskis.Core
         public IIrcWriter Writer { get; internal set; }
 
         /// <summary>
-        /// The channel the bot left.
+        /// The channel the bot attempted to join.
         /// </summary>
         public string Channel { get; internal set; }
-
-        /// <summary>
-        /// The reason they bot left the channel.
-        /// Set to <see cref="string.Empty"/> if there was no reason.
-        /// </summary>
-        public string PartReason { get; internal set; }
-
         protected override string XmlElementName => XmlRootName;
 
         protected override IEnumerable<XElement> ChildToXml()
@@ -53,19 +45,18 @@ namespace Chaskis.Core
             return new List<XElement>
             {
                 new XElement( "channel", this.Channel ),
-                new XElement( "reason", this.PartReason ?? string.Empty )
             };
         }
     }
 
     /// <summary>
-    /// Extensions to <see cref="SendPartEventArgs"/>
+    /// Extensions to <see cref="SendJoinEventArgs"/>
     /// </summary>
-    internal static class SendPartEventArgsExtensions
+    internal static class SendJoinEventArgsExtensions
     {
-        public static SendPartEventArgs FromXml( string xmlString, IIrcWriter writer )
+        public static SendJoinEventArgs FromXml( string xmlString, IIrcWriter writer )
         {
-            SendPartEventArgs args = new SendPartEventArgs
+            SendJoinEventArgs args = new SendJoinEventArgs
             {
                 Writer = writer
             };
@@ -79,16 +70,12 @@ namespace Chaskis.Core
                 {
                     args.Channel = child.Value;
                 }
-                else if( "reason".EqualsIgnoreCase( child.Name.LocalName ) )
-                {
-                    args.PartReason = child.Value;
-                }
             }
 
-            if( ( args.Channel == null ) || ( args.PartReason == null ) )
+            if( args.Channel == null )
             {
                 throw new ValidationException(
-                    $"Could not find all required properties when creating {nameof( SendPartEventArgs )}"
+                    $"Could not find all required properties when creating {nameof( SendJoinEventArgs )}"
                 );
             }
 

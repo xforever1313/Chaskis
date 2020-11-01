@@ -289,8 +289,21 @@ namespace Chaskis.Core
             // If channel does not exist it will be created.
             foreach( string channel in this.Config.Channels )
             {
-                this.connection.WriteLine( "JOIN {0}", channel );
-                Thread.Sleep( this.Config.RateLimit );
+                this.SendJoin( channel );
+            }
+
+            // Wait for joins to go out before continuing.
+            using( ManualResetEventSlim e = new ManualResetEventSlim( false ) )
+            {
+                const int maxSeconds = 10;
+
+                this.writerQueue.AddEvent( () => e.Set() );
+                if( e.Wait( TimeSpan.FromSeconds( maxSeconds ) ) == false )
+                {
+                    throw new TimeoutException(
+                        $"Writer Queue did not join the channels within {maxSeconds} seconds"
+                    );
+                }
             }
 
             this.OnReadLine(
@@ -477,13 +490,23 @@ namespace Chaskis.Core
             this.SendRawCmd( pongString );
         }
 
-        /// <summary>
-        /// Sends a part to the current channel we are on.
-        /// Note, this will make the bot LEAVE the channel.  Only use
-        /// if you know what you are doing.
-        /// </summary>
-        /// <param name="reason">The reason for parting.</param>
-        /// <param name="channel">Which channel to part from.</param>
+        /// <inheritdoc/>
+        public void SendJoin( string channel )
+        {
+            this.OnReadLine(
+                new SendJoinEventArgs
+                {
+                    Channel = channel,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                }.ToXml()
+            );
+
+            string joinString = $"JOIN {channel}";
+            this.SendRawCmd( joinString );
+        }
+
+        /// <inheritdoc/>
         public void SendPart( string reason, string channel )
         {
             // TODO: Make reason string more smart if not specified.
@@ -500,7 +523,7 @@ namespace Chaskis.Core
                 }.ToXml()
             );
 
-            string partString = string.Format( "PART {0} :{1}", channel, reason );
+            string partString = $"PART {channel} :{reason}";
             this.SendRawCmd( partString );
         }
 
@@ -509,11 +532,11 @@ namespace Chaskis.Core
             string kickString;
             if( string.IsNullOrWhiteSpace( reason ) )
             {
-                kickString = string.Format( "KICK {0} {1}", channel, userToKick );
+                kickString = $"KICK {channel} {userToKick}";
             }
             else
             {
-                kickString = string.Format( "KICK {0} {1} :{2}", channel, userToKick, reason );
+                kickString = $"KICK {channel} {userToKick} :{reason}";
             }
 
             this.SendRawCmd( kickString );

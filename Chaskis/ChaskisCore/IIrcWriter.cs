@@ -69,11 +69,21 @@ namespace Chaskis.Core
         void ReceivedPong( string response );
 
         /// <summary>
+        /// Tells the bot to join the specified IRC channel.
+        /// </summary>
+        void SendJoin( string channel );
+
+        /// <summary>
         /// Sends a part to the given channel.
         /// Note, this will make the bot LEAVE the channel.  Only use
         /// if you know what you are doing.
         /// </summary>
-        /// <param name="reason">The reason for parting.</param>
+        /// <param name="reason">
+        /// The reason for parting.  Null to use the quit message.
+        /// Note that on some servers, the reason' won't show up in the part message
+        /// unless the bot has been in the channel for a minimum amount of time
+        /// (e.g. freenode is about 5 minutes).
+        /// </param>
         /// <param name="channel">The channel to leave.</param>
         void SendPart( string reason, string channel );
 
