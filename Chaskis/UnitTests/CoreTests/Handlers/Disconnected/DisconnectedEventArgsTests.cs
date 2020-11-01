@@ -14,30 +14,16 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
     [TestFixture]
     public class DisconnectedEventArgsTests
     {
+        // ---------------- Fields ----------------
+
+        private const string server = "irc.somewhere.net";
+        private const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
+
         // ---------------- Tests ----------------
-
-        [Test]
-        public void ConstructorTest()
-        {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-
-            DisconnectedEventArgs uut = new DisconnectedEventArgs
-            {
-                Protocol = protocol,
-                Server = server
-            };
-
-            Assert.AreEqual( uut.Server, server );
-            Assert.AreEqual( uut.Protocol, protocol );
-        }
 
         [Test]
         public void XmlRoundTripTest()
         {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-
             DisconnectedEventArgs uut = new DisconnectedEventArgs
             {
                 Protocol = protocol,
@@ -53,7 +39,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
         [Test]
         public void InvalidXmlRootName()
         {
-            const string xmlString = "<lol><server>irc.somewhere.net</server><protocol>IRC</protocol></lol>";
+            string xmlString = $"<lol><server>{server}</server><protocol>{protocol}</protocol></lol>";
 
             Assert.Throws<ValidationException>(
                 () => DisconnectedEventArgsExtensions.FromXml( xmlString )
@@ -63,7 +49,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
         [Test]
         public void MissingServerDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_disconnected_event><protocol>IRC</protocol></chaskis_disconnected_event>";
+            string xmlString = $"<chaskis_disconnected_event><protocol>{protocol}</protocol></chaskis_disconnected_event>";
 
             Assert.Throws<ValidationException>(
                 () => DisconnectedEventArgsExtensions.FromXml( xmlString )
@@ -73,7 +59,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
         [Test]
         public void MissingProtocolDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_disconnected_event><server>irc.somewhere.net</server></chaskis_disconnected_event>";
+            string xmlString = $"<chaskis_disconnected_event><server>{server}</server></chaskis_disconnected_event>";
 
             Assert.Throws<ValidationException>(
                 () => DisconnectedEventArgsExtensions.FromXml( xmlString )

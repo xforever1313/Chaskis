@@ -15,34 +15,32 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
     [TestFixture]
     public class ConnectedEventArgsTests
     {
-        // ---------------- Tests ----------------
+        // ---------------- Fields ----------------
 
-        [Test]
-        public void ConstructorTest()
+        private const string server = "irc.somewhere.net";
+        private const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
+
+        private Mock<IIrcWriter> mockWriter;
+
+        // ---------------- Setup / Teardown ----------------
+
+        [SetUp]
+        public void TestSetup()
         {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
-
-            ConnectedEventArgs uut = new ConnectedEventArgs
-            {
-                Protocol = protocol,
-                Server = server,
-                Writer = mockWriter.Object
-            };
-
-            Assert.AreSame( mockWriter.Object, uut.Writer );
-            Assert.AreEqual( uut.Server, server );
-            Assert.AreEqual( uut.Protocol, protocol );
+            this.mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
         }
+
+        [TearDown]
+        public void TestTeardown()
+        {
+            this.mockWriter = null;
+        }
+
+        // ---------------- Tests ----------------
 
         [Test]
         public void XmlRoundTripTest()
         {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
-
             ConnectedEventArgs uut = new ConnectedEventArgs
             {
                 Protocol = protocol,
@@ -60,8 +58,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void InvalidXmlRootName()
         {
-            const string xmlString = "<lol><server>irc.somewhere.net</server><protocol>IRC</protocol></lol>";
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
+            string xmlString = $"<lol><server>{server}</server><protocol>{protocol}</protocol></lol>";
 
             Assert.Throws<ValidationException>(
                 () => ConnectedEventArgsExtensions.FromXml( xmlString, mockWriter.Object )
@@ -71,8 +68,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void MissingServerDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_connect_event><protocol>IRC</protocol></chaskis_connect_event>";
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
+            string xmlString = $"<chaskis_connect_event><protocol>{protocol}</protocol></chaskis_connect_event>";
 
             Assert.Throws<ValidationException>(
                 () => ConnectedEventArgsExtensions.FromXml( xmlString, mockWriter.Object )
@@ -82,8 +78,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Connected
         [Test]
         public void MissingProtocolDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_connect_event><server>irc.somewhere.net</server></chaskis_connect_event>";
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
+            string xmlString = $"<chaskis_connect_event><server>{server}</server></chaskis_connect_event>";
 
             Assert.Throws<ValidationException>(
                 () => ConnectedEventArgsExtensions.FromXml( xmlString, mockWriter.Object )

@@ -15,34 +15,32 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.FinishedJoiningChannels
     [TestFixture]
     public class FinishedJoiningChannelsEventArgsTests
     {
-        // ---------------- Tests ----------------
+        // ---------------- Fields ----------------
 
-        [Test]
-        public void ConstructorTest()
+        private const string server = "irc.somewhere.net";
+        private const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
+
+        private Mock<IIrcWriter> mockWriter;
+
+        // ---------------- Setup / Teardown ----------------
+
+        [SetUp]
+        public void TestSetup()
         {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
-
-            FinishedJoiningChannelsEventArgs uut = new FinishedJoiningChannelsEventArgs
-            {
-                Protocol = protocol,
-                Server = server,
-                Writer = mockWriter.Object
-            };
-
-            Assert.AreSame( mockWriter.Object, uut.Writer );
-            Assert.AreEqual( uut.Server, server );
-            Assert.AreEqual( uut.Protocol, protocol );
+            this.mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
         }
+
+        [TearDown]
+        public void TestTeardown()
+        {
+            this.mockWriter = null;
+        }
+
+        // ---------------- Tests ----------------
 
         [Test]
         public void XmlRoundTripTest()
         {
-            const string server = "irc.somewhere.net";
-            const ChaskisEventProtocol protocol = ChaskisEventProtocol.IRC;
-            Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
-
             FinishedJoiningChannelsEventArgs uut = new FinishedJoiningChannelsEventArgs
             {
                 Protocol = protocol,
@@ -60,7 +58,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.FinishedJoiningChannels
         [Test]
         public void InvalidXmlRootName()
         {
-            const string xmlString = "<lol><server>irc.somewhere.net</server><protocol>IRC</protocol></lol>";
+            string xmlString = $"<lol><server>{server}</server><protocol>{protocol}</protocol></lol>";
             Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
 
             Assert.Throws<ValidationException>(
@@ -71,7 +69,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.FinishedJoiningChannels
         [Test]
         public void MissingServerDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_finishedjoiningchannels_event><protocol>IRC</protocol></chaskis_finishedjoiningchannels_event>";
+            string xmlString = $"<chaskis_finishedjoiningchannels_event><protocol>{protocol}</protocol></chaskis_finishedjoiningchannels_event>";
             Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
 
             Assert.Throws<ValidationException>(
@@ -82,7 +80,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.FinishedJoiningChannels
         [Test]
         public void MissingProtocolDuringXmlParsing()
         {
-            const string xmlString = "<chaskis_finishedjoiningchannels_event><server>irc.somewhere.net</server></chaskis_finishedjoiningchannels_event>";
+            string xmlString = $"<chaskis_finishedjoiningchannels_event><server>{server}</server></chaskis_finishedjoiningchannels_event>";
             Mock<IIrcWriter> mockWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
 
             Assert.Throws<ValidationException>(
