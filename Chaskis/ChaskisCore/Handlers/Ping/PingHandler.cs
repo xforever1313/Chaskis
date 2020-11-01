@@ -16,7 +16,7 @@ namespace Chaskis.Core
     /// We need to send a PONG back, otherwise
     /// the server will terminate our connection.
     /// </summary>
-    public sealed class PingHandler : IIrcHandler
+    internal sealed class PingHandler : IIrcHandler
     {
         // -------- Fields --------
 

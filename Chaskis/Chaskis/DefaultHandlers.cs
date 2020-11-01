@@ -98,12 +98,6 @@ namespace Chaskis.Cli
             this.AddAdminHandler();
             this.AddDebugHandlers();
             this.AddCtcpPingHandler();
-
-            // Must always check for pings.
-            this.handlers.Add( new PingHandler() );
-
-            // Must always handle pongs.
-            this.handlers.Add( new PongHandler() );
         }
 
         public void Init_Stage2( IDictionary<string, PluginConfig> plugins )

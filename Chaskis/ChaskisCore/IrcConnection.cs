@@ -108,6 +108,9 @@ namespace Chaskis.Core
 
         private readonly IrcWatchdog watchDog;
 
+        private readonly PingHandler pingHandler;
+        private readonly PongHandler pongHandler;
+
         // -------- Constructor --------
 
         public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue ) :
@@ -148,6 +151,9 @@ namespace Chaskis.Core
                 this.Watchdog_OnFailure,
                 60 * 1000
             );
+
+            this.pingHandler = new PingHandler();
+            this.pongHandler = new PongHandler();
         }
 
         // ---------------- Properties ----------------
@@ -771,6 +777,31 @@ namespace Chaskis.Core
         }
 
         /// <summary>
+        /// Issue #27
+        /// Handle pings and pongs on the reader thread, NOT the string parsing thread.
+        /// This is so if the string parsing thread hangs, we do not end up in a
+        /// connection loop if our watchdog fails.
+        /// </summary>
+        /// <remarks>
+        /// Not contained within <see cref="OnReadLine(string)"/> so there isn't
+        /// a performance cost when we call <see cref="OnReadLine(string)"/> outside
+        /// of the <see cref="ReaderThread"/>.
+        /// </remarks>
+        private void ResolvePingsAndPongs( string s )
+        {
+            HandlerArgs args = new HandlerArgs
+            {
+                BlackListedChannels = null,
+                IrcConfig = this.Config,
+                IrcWriter = this,
+                Line = s,
+            };
+
+            this.pingHandler.HandleEvent( args );
+            this.pongHandler.HandleEvent( args );
+        }
+
+        /// <summary>
         /// The thread that does the reading.
         /// </summary>
         private void ReaderThread()
@@ -789,6 +820,7 @@ namespace Chaskis.Core
                             // Do nothing.
                             if( this.KeepReading )
                             {
+                                this.ResolvePingsAndPongs( s );
                                 this.OnReadLine( s );
                             }
                         }
