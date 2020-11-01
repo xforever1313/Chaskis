@@ -13,7 +13,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Used to handle receiving pongs from a connection.
     /// </summary>
-    public class PongHandler : IIrcHandler
+    public sealed class PongHandler : IIrcHandler
     {
         // -------- Fields --------
 

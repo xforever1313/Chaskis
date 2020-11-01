@@ -16,7 +16,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Handles the event where someone joins the watched channel.
     /// </summary>
-    public class JoinHandler : IIrcHandler
+    public sealed class JoinHandler : IIrcHandler
     {
         // -------- Fields --------
 

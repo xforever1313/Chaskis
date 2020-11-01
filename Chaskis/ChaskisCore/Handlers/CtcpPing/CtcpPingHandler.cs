@@ -13,7 +13,7 @@ namespace Chaskis.Core
     public delegate void CtcpPingHandlerAction( CtcpPingHandlerArgs response );
 
     [PrivateMessage( MessageRegexPattern )]
-    public class CtcpPingHandler : IIrcHandler
+    public sealed class CtcpPingHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 

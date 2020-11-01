@@ -13,7 +13,7 @@ namespace Chaskis.Core
 {
     public delegate void KickHandlerAction( KickHandlerArgs args );
 
-    public class KickHandler : IIrcHandler
+    public sealed class KickHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 

@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Configuration for responding to a message received from IRC.
     /// </summary>
-    public class MessageHandler : IIrcHandler
+    public sealed class MessageHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 

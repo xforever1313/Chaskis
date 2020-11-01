@@ -15,7 +15,7 @@ namespace Chaskis.Core
     /// This class will fire for ALL IRC messages and pass in the raw
     /// IRC message as the message string.
     /// </summary>
-    public class AllHandler : IIrcHandler
+    public sealed class AllHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 

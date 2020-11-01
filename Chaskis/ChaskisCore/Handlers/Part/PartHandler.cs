@@ -15,7 +15,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Handles when a user parts.  That is, leaves the channel and logs off.
     /// </summary>
-    public class PartHandler : IIrcHandler
+    public sealed class PartHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 

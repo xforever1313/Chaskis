@@ -13,7 +13,7 @@ namespace Chaskis.Core
     public delegate void ActionHandlerAction( ActionHandlerArgs response );
 
     [PrivateMessage( MessageRegexPattern )]
-    public class ActionHandler : IIrcHandler
+    public sealed class ActionHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 
