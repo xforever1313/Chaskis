@@ -433,24 +433,9 @@ namespace Chaskis.Core
         /// </summary>
         private void SendMessageHelper( string line, string channel, string msgType )
         {
-            this.AddToWriterQueue(
-                delegate ()
-                {
-                    lock( this.ircWriterLock )
-                    {
-                        // This should be in the lock.  If this is before the lock,
-                        // IsConnected can return true, this thread can be preempted,
-                        // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
-                        // to a socket that is closed which is a problem.
-                        if( this.connection.IsConnected == false )
-                        {
-                            return;
-                        }
-
-                        // PRIVMSG < msgtarget > < message >
-                        this.connection.WriteLine( $"{msgType} {channel} :{line}" );
-                    }
-                } 
+            // PRIVMSG < msgtarget > < message >
+            this.SendRawCmd(
+                $"{msgType} {channel} :{line}"
             );
         }
 
@@ -573,11 +558,25 @@ namespace Chaskis.Core
                 );
             }
 
+            this.OnReadLine(
+                new SendEventArgs
+                {
+                    Command = cmd,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
+
             this.AddToWriterQueue(
                 delegate ()
                 {
                     lock( this.ircWriterLock )
                     {
+                        // This should be in the lock.  If this is before the lock,
+                        // IsConnected can return true, this thread can be preempted,
+                        // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
+                        // to a socket that is closed which is a problem.
                         if( this.connection.IsConnected == false )
                         {
                             return;

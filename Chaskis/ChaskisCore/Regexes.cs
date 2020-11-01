@@ -47,25 +47,5 @@ namespace Chaskis.Core
             @"^:(((?<nickOrServer>\S+)!(?<username>\S+)@(?<host>\S+))|" + // All three nick, user, and host.
             @"((?<nickOrServer>\S+)@(?<host>\S+))|"+ // Just nick and host.
             @"((?<nickOrServer>\S+)))"; // Just nick or server.
-
-        /// <summary>
-        /// Pattern that can be used to capture Chaskis
-        /// IRC connect events.
-        /// Groups:
-        ///     server - the Server we connected to
-        ///     nick - The user name we connected as.
-        /// </summary>
-        public static readonly string ChaskisIrcConnectEvent =
-            @"CONNECT\s+TO\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)";
-
-        /// <summary>
-        /// Pattern that can be used to capture Chaskis
-        /// IRC disconnect events.
-        /// Groups:
-        ///     server - the Server we disconnected from
-        ///     nick - The user name we disconnected as.
-        /// </summary>
-        public static readonly string ChaskisIrcDisconnectEvent =
-            @"DISCONNECT\s+FROM\s+(?<server>\S+)\s+AS\s+(?<nick>\S+)";
     }
 }

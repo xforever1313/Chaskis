@@ -81,19 +81,28 @@ namespace Chaskis.Plugins.ConsoleOut
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
             {
-                AllAction = delegate ( AllHandlerArgs args )
+                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
                 {
-                    Console.WriteLine( args.Line );
-                }
-            };
+                    AllAction = LineAction
+                };
 
-            AllHandler handler = new AllHandler(
-                allHandlerConfig
-            );
+                AllHandler handler = new AllHandler(
+                    allHandlerConfig
+                );
 
-            this.handlers.Add( handler );
+                this.handlers.Add( handler );
+            }
+
+            {
+                SendEventConfig onSendConfig = new SendEventConfig
+                {
+                    LineAction = LineAction
+                };
+
+                SendEventHandler handler = new SendEventHandler( onSendConfig );
+                this.handlers.Add( handler );
+            }
         }
 
         /// <summary>
@@ -119,6 +128,17 @@ namespace Chaskis.Plugins.ConsoleOut
         public void Dispose()
         {
             // Nothing to dispose.
+        }
+
+        private static void LineAction( AllHandlerArgs args )
+        {
+
+            Console.WriteLine( args.Line );
+        }
+
+        private static void LineAction( SendEventArgs args )
+        {
+            Console.WriteLine( args.Command );
         }
     }
 }
