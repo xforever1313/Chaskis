@@ -389,6 +389,16 @@ namespace Chaskis.Core
         /// <param name="userName">The user to send the ping to.</param>
         public void SendCtcpPong( string msg, string userName )
         {
+            this.OnReadLine(
+                new SendCtcpPongEventArgs
+                {
+                    ChannelOrUser = userName,
+                    Message = msg,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
             this.SendMessageInternal( msg, userName, "\u0001PING ", "\u0001", "NOTICE" );
         }
 
