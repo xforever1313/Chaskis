@@ -376,6 +376,16 @@ namespace Chaskis.Core
         /// <param name="channel">The user or #channel to send the NOTICE to.</param>
         public void SendNotice( string msg, string channel )
         {
+            this.OnReadLine(
+                new SendNoticeEventArgs
+                {
+                    ChannelOrUser = channel,
+                    Message = msg,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
             this.SendMessageInternal( msg, channel, string.Empty, string.Empty, "NOTICE" );
         }
 
