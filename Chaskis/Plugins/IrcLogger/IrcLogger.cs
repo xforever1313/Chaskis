@@ -112,12 +112,12 @@ namespace Chaskis.Plugins.IrcLogger
 
             this.logManager = new LogManager( config, initor.Log );
 
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
+            ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
             {
-                AllAction = this.HandleLogEvent
+                LineAction = this.HandleLogEvent
             };
 
-            AllHandler handler = new AllHandler(
+            ReceiveHandler handler = new ReceiveHandler(
                 allHandlerConfig
             );
 
@@ -155,7 +155,7 @@ namespace Chaskis.Plugins.IrcLogger
         /// <summary>
         /// Handles writing an event to the log.
         /// </summary>
-        private void HandleLogEvent( AllHandlerArgs args )
+        private void HandleLogEvent( ReceiveHandlerArgs args )
         {
             bool log = true;
             for( int i = 0; i < ( this.config.IgnoreRegexes.Count ) && log; ++i )

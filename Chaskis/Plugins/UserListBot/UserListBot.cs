@@ -136,20 +136,20 @@ namespace Chaskis.Plugins.UserListBot
                 this.handlers.Add( userQueryHandler );
             }
             {
-                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
+                ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
                 {
-                    AllAction = this.HandleNamesResponse
+                    LineAction = this.HandleNamesResponse
                 };
-                AllHandler nameResponseHandler = new AllHandler( allHandlerConfig );
+                ReceiveHandler nameResponseHandler = new ReceiveHandler( allHandlerConfig );
                 this.handlers.Add( nameResponseHandler );
             }
 
             {
-                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
+                ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
                 {
-                    AllAction = this.HandleEndOfNamesResponse
+                    LineAction = this.HandleEndOfNamesResponse
                 };
-                AllHandler endOfNamesHandler = new AllHandler( allHandlerConfig );
+                ReceiveHandler endOfNamesHandler = new ReceiveHandler( allHandlerConfig );
                 this.handlers.Add( endOfNamesHandler );
             }
         }
@@ -201,7 +201,7 @@ namespace Chaskis.Plugins.UserListBot
         /// Handles the names response from the server.
         /// Adds the names to the list.
         /// </summary>
-        private void HandleNamesResponse( AllHandlerArgs args )
+        private void HandleNamesResponse( ReceiveHandlerArgs args )
         {
             this.userList.ParseNameResponse( args.Line );
         }
@@ -211,7 +211,7 @@ namespace Chaskis.Plugins.UserListBot
         /// </summary>
         /// <param name="writer">The IRC Writer to write to.</param>
         /// <param name="response">The response from the channel.</param>
-        private void HandleEndOfNamesResponse( AllHandlerArgs args )
+        private void HandleEndOfNamesResponse( ReceiveHandlerArgs args )
         {
             Tuple<string, string> foundUsers = this.userList.CheckAndHandleEndMessage( args.Line );
             if( foundUsers != null )

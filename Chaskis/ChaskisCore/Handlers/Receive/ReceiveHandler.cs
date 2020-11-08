@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2018.
+//          Copyright Seth Hendrick 2016-2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -9,25 +9,26 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void AllHandlerAction( AllHandlerArgs args );
+    public delegate void ReceiveHandlerAction( ReceiveHandlerArgs args );
 
     /// <summary>
-    /// This class will fire for ALL IRC messages and pass in the raw
-    /// IRC message as the message string.
+    /// This class will fire for ALL IRC messages that are RECEIVED
+    /// and pass in the raw IRC message as the message string.
+    /// 
+    /// Note, this should really only be used when you want to get ALL output
+    /// from the server without any filtering, or there is syntax you expect
+    /// from the server that you want but the bot does not support.  To filter
+    /// use any of the other handlers.
     /// </summary>
-    public sealed class AllHandler : IIrcHandler
+    public sealed class ReceiveHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 
-        private readonly AllHandlerConfig config;
+        private readonly ReceiveHandlerConfig config;
 
         // ---------------- Constructor ----------------
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="allAction">The action to take when ANY message appears from IRC (JOIN, PART, PRIVMSG, PING, etc).</param>
-        public AllHandler( AllHandlerConfig allConfig )
+        public ReceiveHandler( ReceiveHandlerConfig allConfig )
         {
             ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
@@ -47,11 +48,11 @@ namespace Chaskis.Core
         /// with no parsing.  It is up to the AllAction to parse the channel and user
         /// name if they so desire.
         /// </summary>
-        public AllHandlerAction AllAction
+        public ReceiveHandlerAction LineAction
         {
             get
             {
-                return this.config.AllAction;
+                return this.config.LineAction;
             }
         }
 
@@ -81,9 +82,9 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            AllHandlerArgs allArgs = new AllHandlerArgs( args.IrcWriter, args.Line );
+            ReceiveHandlerArgs allArgs = new ReceiveHandlerArgs( args.IrcWriter, args.Line );
 
-            this.AllAction( allArgs );
+            this.LineAction( allArgs );
         }
     }
 }

@@ -8,13 +8,13 @@
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Arguments that are passed in when <see cref="AllHandler"/> is triggered.
+    /// Arguments that are passed in when <see cref="ReceiveHandler"/> is triggered.
     /// </summary>
-    public class AllHandlerArgs
+    public class ReceiveHandlerArgs
     {
         // ---------------- Constructor ----------------
 
-        public AllHandlerArgs( IIrcWriter writer, string line )
+        public ReceiveHandlerArgs( IIrcWriter writer, string line )
         {
             this.Writer = writer;
             this.Line = line;

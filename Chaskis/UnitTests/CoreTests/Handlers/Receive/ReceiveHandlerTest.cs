@@ -12,17 +12,17 @@ using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.All
+namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
 {
     [TestFixture]
-    public class AllHandlerTest
+    public class ReceiveHandlerTest
     {
         // -------- Fields --------
 
         /// <summary>
         /// Unit Under Test.
         /// </summary>
-        private AllHandler uut;
+        private ReceiveHandler uut;
 
         /// <summary>
         /// Irc Config to use.
@@ -37,7 +37,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         /// <summary>
         /// The response received from the event handler (if any).
         /// </summary>
-        private AllHandlerArgs responseReceived;
+        private ReceiveHandlerArgs responseReceived;
 
         /// <summary>
         /// A user.
@@ -53,11 +53,11 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            AllHandlerConfig allHandlerConfig = new AllHandlerConfig
+            ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
             {
-                AllAction = this.AllFunction
+                LineAction = this.AllFunction
             };
-            this.uut = new AllHandler( allHandlerConfig );
+            this.uut = new ReceiveHandler( allHandlerConfig );
         }
 
         // -------- Tests --------
@@ -69,7 +69,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         public void InvalidConfigTest()
         {
             Assert.Throws<ValidationException>(
-                () => new AllHandler( new AllHandlerConfig() )
+                () => new ReceiveHandler( new ReceiveHandlerConfig() )
             );
         }
 
@@ -170,7 +170,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
-        private void AllFunction( AllHandlerArgs args )
+        private void AllFunction( ReceiveHandlerArgs args )
         {
             Assert.AreSame( this.ircWriter.Object, args.Writer );
             this.responseReceived = args;

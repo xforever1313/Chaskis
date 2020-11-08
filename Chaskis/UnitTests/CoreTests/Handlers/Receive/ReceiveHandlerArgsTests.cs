@@ -9,10 +9,10 @@ using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.All
+namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
 {
     [TestFixture]
-    public class AllHandlerArgsTests
+    public class ReceiveHandlerArgsTests
     {
         // ---------------- Tests ----------------
 
@@ -25,7 +25,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
             Mock<IIrcWriter> writer = new Mock<IIrcWriter>( MockBehavior.Strict );
             const string line = "line";
 
-            AllHandlerArgs uut = new AllHandlerArgs(
+            ReceiveHandlerArgs uut = new ReceiveHandlerArgs(
                 writer.Object,
                 line
             );

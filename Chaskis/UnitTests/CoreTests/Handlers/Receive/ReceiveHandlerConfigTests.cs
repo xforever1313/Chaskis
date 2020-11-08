@@ -9,10 +9,10 @@ using Chaskis.Core;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.All
+namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
 {
     [TestFixture]
-    public class AllHandlerConfigTests
+    public class ReceiveHandlerConfigTests
     {
         // ---------------- Tests ----------------
 
@@ -22,12 +22,12 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void ValidateTest()
         {
-            AllHandlerConfig config = new AllHandlerConfig();
+            ReceiveHandlerConfig config = new ReceiveHandlerConfig();
 
-            config.AllAction = null;
+            config.LineAction = null;
             Assert.Throws<ValidationException>( () => config.Validate() );
 
-            config.AllAction = delegate ( AllHandlerArgs args )
+            config.LineAction = delegate ( ReceiveHandlerArgs args )
             {
             };
 
@@ -37,8 +37,8 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void CloneTest()
         {
-            AllHandlerConfig config1 = new AllHandlerConfig();
-            AllHandlerConfig clone = config1.Clone();
+            ReceiveHandlerConfig config1 = new ReceiveHandlerConfig();
+            ReceiveHandlerConfig clone = config1.Clone();
 
             Assert.AreNotSame( config1, clone );
         }

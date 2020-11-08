@@ -11,7 +11,7 @@ using Chaskis.UnitTests.Common;
 using Chaskis.Core;
 using NUnit.Framework;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.All
+namespace Chaskis.UnitTests.CoreTests.Handlers.ChaskisEvent
 {
     [TestFixture]
     public class ChaskisEventTest
@@ -64,7 +64,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void CreateTargetedPluginEvent()
         {
-            ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
+            Core.ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
                 this.targetPluginName,
                 this.expectedArgs,
                 this.expectedPassthroughArgs
@@ -73,7 +73,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
             string xmlString = e.ToString();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            Core.ChaskisEvent recreatedEvent = Core.ChaskisEvent.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -83,7 +83,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void CreateTargetedPluginEventNoArgs()
         {
-            ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
+            Core.ChaskisEvent e = this.factory.EventCreators[pluginName].CreateTargetedEvent(
                 this.targetPluginName,
                 new Dictionary<string, string>()
             );
@@ -91,7 +91,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
             string xmlString = e.ToString();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            Core.ChaskisEvent recreatedEvent = Core.ChaskisEvent.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -101,7 +101,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void CreateBCastEvent()
         {
-            ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
+            Core.ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
                 this.expectedArgs,
                 this.expectedPassthroughArgs
             );
@@ -109,7 +109,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
             string xmlString = e.ToString();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            Core.ChaskisEvent recreatedEvent = Core.ChaskisEvent.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -119,18 +119,18 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.All
         [Test]
         public void CreateBCastEventNoArgs()
         {
-            ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
+            Core.ChaskisEvent e = this.factory.EventCreators[pluginName].CreateBcastEvent(
                 new Dictionary<string, string>()
             );
 
             string xmlString = e.ToString();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            ChaskisEvent recreatedEvent = ChaskisEvent.FromXml( xmlString );
+            Core.ChaskisEvent recreatedEvent = Core.ChaskisEvent.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
-        private void CompareEvents( ChaskisEvent expected, ChaskisEvent actual )
+        private void CompareEvents( Core.ChaskisEvent expected, Core.ChaskisEvent actual )
         {
             Assert.AreEqual( expected.SourceType, actual.SourceType );
             Assert.AreEqual( expected.SourcePlugin, actual.SourcePlugin );

@@ -82,12 +82,12 @@ namespace Chaskis.Plugins.ConsoleOut
         public void Init( PluginInitor initor )
         {
             {
-                AllHandlerConfig allHandlerConfig = new AllHandlerConfig
+                ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
                 {
-                    AllAction = LineAction
+                    LineAction = LineAction
                 };
 
-                AllHandler handler = new AllHandler(
+                ReceiveHandler handler = new ReceiveHandler(
                     allHandlerConfig
                 );
 
@@ -130,7 +130,7 @@ namespace Chaskis.Plugins.ConsoleOut
             // Nothing to dispose.
         }
 
-        private static void LineAction( AllHandlerArgs args )
+        private static void LineAction( ReceiveHandlerArgs args )
         {
 
             Console.WriteLine( args.Line );

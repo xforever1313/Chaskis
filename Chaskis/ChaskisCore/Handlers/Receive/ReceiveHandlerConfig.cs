@@ -11,13 +11,13 @@ using SethCS.Exceptions;
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Configuration used for <see cref="AllHandler"/>
+    /// Configuration used for <see cref="ReceiveHandler"/>
     /// </summary>
-    public class AllHandlerConfig
+    public class ReceiveHandlerConfig
     {
         // ---------------- Constructor ----------------
 
-        public AllHandlerConfig()
+        public ReceiveHandlerConfig()
         {
         }
 
@@ -27,11 +27,11 @@ namespace Chaskis.Core
         /// The action to take when ANY message appears from IRC (JOIN, PART, PRIVMSG, PING, etc).
         /// As far as the passed in IrcResponse to the action goes, the channel and remote user
         /// will be String.Empty, since this class does no parsing of the IRC message.
-        /// It just grabs the line from the IRC channel and passes it into the AllAction
-        /// with no parsing.  It is up to the AllAction to parse the channel and user
+        /// It just grabs the line from the IRC channel and passes it into the <see cref="LineAction"/>
+        /// with no parsing.  It is up to the <see cref="LineAction"/> to parse the channel and user
         /// name if they so desire.
         /// </summary>
-        public AllHandlerAction AllAction { get; set; }
+        public ReceiveHandlerAction LineAction { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -39,12 +39,12 @@ namespace Chaskis.Core
         {
             bool success = true;
             StringBuilder errorString = new StringBuilder();
-            errorString.AppendLine( "Errors when validating " + nameof( AllHandlerConfig ) );
+            errorString.AppendLine( "Errors when validating " + nameof( ReceiveHandlerConfig ) );
 
-            if( this.AllAction == null )
+            if( this.LineAction == null )
             {
                 success = false;
-                errorString.AppendLine( "\t- " + nameof( this.AllAction ) + " can not be null" );
+                errorString.AppendLine( "\t- " + nameof( this.LineAction ) + " can not be null" );
             }
 
             if( success == false )
@@ -53,9 +53,9 @@ namespace Chaskis.Core
             }
         }
 
-        public AllHandlerConfig Clone()
+        public ReceiveHandlerConfig Clone()
         {
-            return (AllHandlerConfig)this.MemberwiseClone();
+            return (ReceiveHandlerConfig)this.MemberwiseClone();
         }
     }
 }
