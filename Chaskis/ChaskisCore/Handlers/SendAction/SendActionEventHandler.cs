@@ -9,24 +9,24 @@ using System.Text.RegularExpressions;
 
 namespace Chaskis.Core
 {
-    public delegate void SendNoticeEventHandlerAction( SendNoticeEventArgs args );
+    public delegate void SendActionEventHandlerAction( SendActionEventArgs args );
 
     /// <summary>
-    /// Event that is fired when the bot sends a NOTICE to
+    /// Event that is fired when the bot sends an action to
     /// the IRC Server.
     /// </summary>
-    public sealed class SendNoticeEventHandler : BaseCoreEventHandler<SendNoticeEventConfig>
+    public sealed class SendActionEventHandler : BaseCoreEventHandler<SendActionEventConfig>
     {
         // ---------------- Fields ----------------
 
         private static readonly Regex regex = new Regex(
-            $@"^<{SendNoticeEventArgs.XmlRootName}>.+</{SendNoticeEventArgs.XmlRootName}>",
+            $@"^<{SendActionEventArgs.XmlRootName}>.+</{SendActionEventArgs.XmlRootName}>",
             RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
         // ---------------- Constructor ----------------
 
-        public SendNoticeEventHandler( SendNoticeEventConfig config ) :
+        public SendActionEventHandler( SendActionEventConfig config ) :
             base( config, regex )
         {
         }
@@ -35,7 +35,7 @@ namespace Chaskis.Core
 
         protected override void HandleEventInternal( HandlerArgs args, Match match )
         {
-            SendNoticeEventArgs eventArgs = SendNoticeEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
+            SendActionEventArgs eventArgs = SendActionEventArgsExtensions.FromXml( args.Line, args.IrcWriter );
             this.config.LineAction( eventArgs );
         }
     }

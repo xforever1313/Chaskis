@@ -364,6 +364,16 @@ namespace Chaskis.Core
         /// <param name="channel">Which channel to send the action to.</param>
         public void SendAction( string msg, string channel )
         {
+            this.OnReadLine(
+                new SendActionEventArgs
+                {
+                    ChannelOrUser = channel,
+                    Message = msg,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
             this.SendMessageInternal( msg, channel, "\u0001ACTION ", "\u0001", PrivateMessageHelper.IrcCommand );
         }
 
