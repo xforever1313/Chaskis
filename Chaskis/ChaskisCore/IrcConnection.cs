@@ -352,6 +352,17 @@ namespace Chaskis.Core
         /// <param name="channel">The user or #channel to send the message to.</param>
         public void SendMessage( string msg, string channel )
         {
+            this.OnReadLine(
+                new SendMessageEventArgs
+                {
+                    ChannelOrUser = channel,
+                    Message = msg,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+            );
+
             this.SendMessageInternal( msg, channel, string.Empty, string.Empty, PrivateMessageHelper.IrcCommand );
         }
 
