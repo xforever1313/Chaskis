@@ -117,18 +117,6 @@ namespace Chaskis.Core
                 );
             }
 
-            public ChaskisEventHandler CreateCoreEventHandler(
-                ChaskisEventProtocol? expectedProtocol,
-                Action<ChaskisEventHandlerLineActionArgs> lineAction
-            )
-            {
-                return new ChaskisEventHandler(
-                    expectedProtocol,
-                    this.sourcePlugin,
-                    lineAction
-                );
-            }
-
             public ChaskisEventHandler CreatePluginEventHandler(
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
@@ -140,6 +128,7 @@ namespace Chaskis.Core
                     lineAction
                 );
             }
+
             public ChaskisEventHandler CreatePluginEventHandler(
                 string expectedSourcePlugin,
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
@@ -190,25 +179,6 @@ namespace Chaskis.Core
             string targetPluginName,
             IDictionary<string, string> args,
             IDictionary<string, string> passThroughArgs = null
-        );
-
-        /// <summary>
-        /// Creates an event handler that waits for a CORE event
-        /// that targets this plugin or is a broadcast.
-        /// </summary>
-        /// <param name="argPattern">
-        /// Chaskis events have arguments after the source and plugin.
-        /// You can filter events based on its arguments with this parameter
-        /// and only capture events whose arguments match this pattern.
-        /// </param>
-        /// <param name="expectedProtocol">
-        /// The protocol to trigger on.  Null for "Don't Care."
-        /// </param>
-        /// <param name="lineAction">The action to take when our arg pattern matches.</param>
-        /// <returns></returns>
-        ChaskisEventHandler CreateCoreEventHandler(
-            ChaskisEventProtocol? expectedProtocol,
-            Action<ChaskisEventHandlerLineActionArgs> lineAction
         );
 
         /// <summary>
