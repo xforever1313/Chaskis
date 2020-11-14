@@ -10,22 +10,19 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void ReceiveHandlerAction( ReceiveHandlerArgs args );
+    public delegate void AnyChaskisEventHandlerAction( AnyChaskisEventHandlerArgs args );
 
     /// <summary>
-    /// This class will fire for ALL IRC messages that are RECEIVED
-    /// and pass in the raw IRC message as the message string.
+    /// This class will fire for ALL chaskis events that are triggered.
     /// 
     /// Note, this should really only be used when you want to get ALL output
-    /// from the server without any filtering, or there is syntax you expect
-    /// from the server that you want but the bot does not support.  To filter
-    /// use any of the other handlers.
+    /// from the chaskis event without any filtering.  Really only meant to be used for debugging.
     /// </summary>
-    public sealed class ReceiveHandler : IIrcHandler
+    public sealed class AnyChaskisEventHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 
-        private readonly ReceiveHandlerConfig config;
+        private readonly AnyChaskisEventHandlerConfig config;
 
         private static readonly Regex chaskisEventRegex = new Regex(
             @"^<chaskis_",
@@ -34,7 +31,7 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        public ReceiveHandler( ReceiveHandlerConfig allConfig )
+        public AnyChaskisEventHandler( AnyChaskisEventHandlerConfig allConfig )
         {
             ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
@@ -54,7 +51,7 @@ namespace Chaskis.Core
         /// with no parsing.  It is up to the AllAction to parse the channel and user
         /// name if they so desire.
         /// </summary>
-        public ReceiveHandlerAction LineAction
+        public AnyChaskisEventHandlerAction LineAction
         {
             get
             {
@@ -88,15 +85,12 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            // Do not handle Chaskis Events.  This handler is only
-            // for receiving messages via IRC.
-            if( chaskisEventRegex.IsMatch( args.Line ) )
+            if( chaskisEventRegex.IsMatch( args.Line ) == false )
             {
                 return;
             }
 
-            ReceiveHandlerArgs allArgs = new ReceiveHandlerArgs( args.IrcWriter, args.Line );
-
+            AnyChaskisEventHandlerArgs allArgs = new AnyChaskisEventHandlerArgs( args.IrcWriter, args.Line );
             this.LineAction( allArgs );
         }
     }

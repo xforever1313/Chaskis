@@ -100,6 +100,16 @@ namespace Chaskis.RegressionTests
             this.log = pluginInit.Log;
 
             {
+                AnyChaskisEventHandlerConfig chaskisEventConfig = new AnyChaskisEventHandlerConfig
+                {
+                    LineAction = PrintChaskisEvent
+                };
+
+                AnyChaskisEventHandler handler = new AnyChaskisEventHandler( chaskisEventConfig );
+                this.handlers.Add( handler );
+            }
+
+            {
                 MessageHandlerConfig msgConfig = new MessageHandlerConfig
                 {
                     LineRegex = sleepPattern,
@@ -251,6 +261,14 @@ namespace Chaskis.RegressionTests
                 "Canary Alive!",
                 args.Channel
             );
+        }
+
+        /// <summary>
+        /// So chaskis events show up in the logs.
+        /// </summary>
+        private void PrintChaskisEvent( AnyChaskisEventHandlerArgs args )
+        {
+            Console.WriteLine( args.Line );
         }
     }
 }

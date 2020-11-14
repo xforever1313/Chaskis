@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2016-2018.
+//          Copyright Seth Hendrick 2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -12,17 +12,17 @@ using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
-namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
+namespace Chaskis.UnitTests.CoreTests.Handlers.AnyChaskisEvent
 {
     [TestFixture]
-    public class ReceiveHandlerTest
+    public class AnyChaskisEventHandlerTest
     {
         // -------- Fields --------
 
         /// <summary>
         /// Unit Under Test.
         /// </summary>
-        private ReceiveHandler uut;
+        private AnyChaskisEventHandler uut;
 
         /// <summary>
         /// Irc Config to use.
@@ -35,9 +35,9 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         private Mock<IIrcWriter> ircWriter;
 
         /// <summary>
-        /// The response received from the event handler (if any).
+        /// The response AnyChaskisEventd from the event handler (if any).
         /// </summary>
-        private ReceiveHandlerArgs responseReceived;
+        private AnyChaskisEventHandlerArgs responseReceived;
 
         /// <summary>
         /// A user.
@@ -53,11 +53,11 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
             this.ircWriter = new Mock<IIrcWriter>( MockBehavior.Strict );
             this.responseReceived = null;
 
-            ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
+            AnyChaskisEventHandlerConfig allHandlerConfig = new AnyChaskisEventHandlerConfig
             {
                 LineAction = this.AllFunction
             };
-            this.uut = new ReceiveHandler( allHandlerConfig );
+            this.uut = new AnyChaskisEventHandler( allHandlerConfig );
         }
 
         // -------- Tests --------
@@ -69,7 +69,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         public void InvalidConfigTest()
         {
             Assert.Throws<ValidationException>(
-                () => new ReceiveHandler( new ReceiveHandlerConfig() )
+                () => new AnyChaskisEventHandler( new AnyChaskisEventHandlerConfig() )
             );
         }
 
@@ -91,7 +91,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         public void ArgumentNullTest()
         {
             Assert.Throws<ArgumentNullException>( () =>
-                new ReceiveHandler( null )
+                new AnyChaskisEventHandler( null )
             );
 
             Assert.Throws<ArgumentNullException>( () =>
@@ -102,7 +102,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         }
 
         /// <summary>
-        /// Ensures that if the bot parts, the event is fired.
+        /// Ensures that if the bot parts, the event is not fired.
         /// </summary>
         [Test]
         public void BotParts()
@@ -115,11 +115,11 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
             );
 
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
-            this.CheckResponse( ircString );
+            Assert.IsNull( this.responseReceived );
         }
 
         /// <summary>
-        /// Ensures that if a PRIMSG appears, the event is fired.
+        /// Ensures that if a PRIMSG appears, the event is not fired.
         /// </summary>
         [Test]
         public void MessageCommandAppears()
@@ -132,11 +132,11 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
             );
 
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
-            this.CheckResponse( ircString );
+            Assert.IsNull( this.responseReceived );
         }
 
         /// <summary>
-        /// Ensures that if a JOIN appears, the event is fired.
+        /// Ensures that if a JOIN appears, the event is not fired.
         /// </summary>
         [Test]
         public void JoinCommandAppears()
@@ -149,22 +149,22 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
             );
 
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
-            this.CheckResponse( ircString );
+            Assert.IsNull( this.responseReceived );
         }
 
         /// <summary>
-        /// Ensures that if a PING appears, the event is fired.
+        /// Ensures that if a PING appears, the event is not fired.
         /// </summary>
         [Test]
         public void PingAppears()
         {
             string ircString = TestHelpers.ConstructPingString( "12345" );
             this.uut.HandleEvent( this.ConstructArgs( ircString ) );
-            this.CheckResponse( ircString );
+            Assert.IsNull( this.responseReceived );
         }
 
         [Test]
-        public void ChaskisEventAppears()
+        public void SendNoticeAppears()
         {
             SendNoticeEventArgs e = new SendNoticeEventArgs
             {
@@ -177,9 +177,23 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
             };
 
             string eventString = e.ToXml();
-
             this.uut.HandleEvent( this.ConstructArgs( eventString ) );
-            Assert.IsNull( this.responseReceived );
+            this.CheckResponse( eventString );
+        }
+
+        [Test]
+        public void SendJoinAppears()
+        {
+            SendJoinEventArgs e = new SendJoinEventArgs
+            {
+                Protocol = ChaskisEventProtocol.IRC,
+                Server = "irc.somewhere.net",
+                Writer = this.ircWriter.Object
+            };
+
+            string eventString = e.ToXml();
+            this.uut.HandleEvent( this.ConstructArgs( eventString ) );
+            this.CheckResponse( eventString );
         }
 
         // -------- Test Helpers --------
@@ -189,7 +203,7 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         /// </summary>
         /// <param name="writer">The writer that can be written to.</param>
         /// <param name="response">The response from the server.</param>
-        private void AllFunction( ReceiveHandlerArgs args )
+        private void AllFunction( AnyChaskisEventHandlerArgs args )
         {
             Assert.AreSame( this.ircWriter.Object, args.Writer );
             this.responseReceived = args;
@@ -198,13 +212,13 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
         /// <summary>
         /// Ensures the bot responds accordingly.
         /// </summary>
-        /// <param name="rawIrcString">The raw IRC string we expect.</param>
-        private void CheckResponse( string rawIrcString )
+        /// <param name="rawString">The raw string we expect.</param>
+        private void CheckResponse( string rawString )
         {
             Assert.IsNotNull( this.responseReceived );
 
             // Ensure its the raw string.
-            Assert.AreEqual( rawIrcString, this.responseReceived.Line );
+            Assert.AreEqual( rawString, this.responseReceived.Line );
         }
 
         private HandlerArgs ConstructArgs( string line )
