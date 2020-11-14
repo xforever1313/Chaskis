@@ -246,114 +246,6 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         /// <summary>
-        /// Ensures our kick command string is formatted correctly if no
-        /// reason is specified.
-        /// </summary>
-        [Test]
-        public void SendKickCommandWithNoReasonTest()
-        {
-            // According to RFC2812, the kick command is:
-            // TheChannel TheUser :reason
-
-            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
-            {
-                SendKickEventArgs sendArgs = null;
-                void onKickEvent( string line )
-                {
-                    // Skip generic send event.
-                    if( SendEventHandler.Regex.IsMatch( line ) )
-                    {
-                        return;
-                    }
-                    sendArgs = SendKickEventArgsExtensions.FromXml( line, connection );
-                }
-
-                this.DoConnect( connection );
-
-                this.mac.Setup(
-                    m => m.WriteLine( $"KICK {channel1} {userName}" )
-                );
-
-                try
-                {
-                    connection.ReadEvent += onKickEvent;
-                    connection.SendKick( userName, channel1 );
-                }
-                finally
-                {
-                    connection.ReadEvent -= onKickEvent;
-                }
-
-                this.DoDisconnect( connection );
-
-                // Check send event.
-                Assert.IsNotNull( sendArgs );
-                Assert.AreEqual( channel1, sendArgs.Channel );
-                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
-                Assert.AreEqual( string.Empty, sendArgs.Reason );
-                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
-                Assert.AreSame( connection, sendArgs.Writer );
-            }
-
-            this.mac.VerifyAll();
-        }
-
-        /// <summary>
-        /// Ensures our kick command string is formatted correctly if we specify
-        /// a reason.
-        /// </summary>
-        [Test]
-        public void SendKickCommandWithReasonTest()
-        {
-            // According to RFC2812, the kick command is:
-            // TheChannel TheUser :reason
-
-            const string reason = "Some Reason";
-
-            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
-            {
-                SendKickEventArgs sendArgs = null;
-                void onKickEvent( string line )
-                {
-                    // Skip generic send event.
-                    if( SendEventHandler.Regex.IsMatch( line ) )
-                    {
-                        return;
-                    }
-
-                    sendArgs = SendKickEventArgsExtensions.FromXml( line, connection );
-                }
-
-                this.DoConnect( connection );
-                this.mac.Setup(
-                    m => m.WriteLine( $"KICK {channel1} {userName} :{reason}" )
-                );
-
-                try
-                {
-                    connection.ReadEvent += onKickEvent;
-                    connection.SendKick( userName, channel1, reason );
-                }
-                finally
-                {
-                    connection.ReadEvent -= onKickEvent;
-                }
-
-                this.DoDisconnect( connection );
-
-                // Check send event.
-                Assert.IsNotNull( sendArgs );
-                Assert.AreEqual( channel1, sendArgs.Channel );
-                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
-                Assert.AreEqual( reason, sendArgs.Reason );
-                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
-                Assert.AreSame( connection, sendArgs.Writer );
-            }
-
-            this.mac.VerifyAll();
-        }
-
-        /// <summary>
         /// Ensures our broadcast message helper works as expected.
         /// It should send the same message to all channels the bot is in.
         /// </summary>
@@ -397,11 +289,15 @@ namespace Chaskis.UnitTests.CoreTests
             using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
             {
                 SendMessageEventArgs sendArgs = null;
+                bool triggeredSendEvent = false;
                 void onSendEvent( string line )
                 {
-                    // Skip generic send event.
-                    if( SendEventHandler.Regex.IsMatch( line ) )
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) && 
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
                     {
+                        triggeredSendEvent = true;
                         return;
                     }
                     sendArgs = SendMessageEventArgsExtensions.FromXml( line, connection );
@@ -426,6 +322,7 @@ namespace Chaskis.UnitTests.CoreTests
 
                 // Check send event.
                 Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( triggeredSendEvent );
                 Assert.AreEqual( channel, sendArgs.ChannelOrUser );
                 Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
                 Assert.AreEqual( message, sendArgs.Message );
@@ -483,6 +380,170 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         [Test]
+        public void SendActionTest()
+        {
+            // According to RFC2812, sending a message's syntax is:
+            // PRIVMSG target :[0001]ACTION message[0001]
+            const string channel = "seth"; // "Channel" can be a username.
+            const string message = "My Action";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                SendActionEventArgs sendArgs = null;
+                bool triggeredSendEvent = false;
+                void onSendEvent( string line )
+                {
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        triggeredSendEvent = true;
+                        return;
+                    }
+                    sendArgs = SendActionEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"PRIVMSG {channel} :\u0001ACTION {message}\u0001" )
+                );
+
+                this.DoConnect( connection );
+
+                try
+                {
+                    connection.ReadEvent += onSendEvent;
+                    connection.SendAction( message, channel );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onSendEvent;
+                }
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( triggeredSendEvent );
+                Assert.AreEqual( channel, sendArgs.ChannelOrUser );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( message, sendArgs.Message );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendNoticeTest()
+        {
+            // According to RFC2812, sending a message's syntax is:
+            // NOTICE target :message
+            const string channel = "seth"; // "Channel" can be a username.
+            const string message = "My Notice";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                SendNoticeEventArgs sendArgs = null;
+                bool triggeredSendEvent = false;
+                void onSendEvent( string line )
+                {
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        triggeredSendEvent = true;
+                        return;
+                    }
+                    sendArgs = SendNoticeEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"NOTICE {channel} :{message}" )
+                );
+
+                this.DoConnect( connection );
+
+                try
+                {
+                    connection.ReadEvent += onSendEvent;
+                    connection.SendNotice( message, channel );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onSendEvent;
+                }
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( triggeredSendEvent );
+                Assert.AreEqual( channel, sendArgs.ChannelOrUser );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( message, sendArgs.Message );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendCtcpPongTest()
+        {
+            // NOTICE target :[0001]PING message[0001]
+            const string channel = "seth"; // "Channel" can be a username.
+            const string message = "My Ping";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                SendCtcpPongEventArgs sendArgs = null;
+                bool triggeredSendEvent = false;
+                void onSendEvent( string line )
+                {
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        triggeredSendEvent = true;
+                        return;
+                    }
+                    sendArgs = SendCtcpPongEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"NOTICE {channel} :\u0001PING {message}\u0001" )
+                );
+
+                this.DoConnect( connection );
+
+                try
+                {
+                    connection.ReadEvent += onSendEvent;
+                    connection.SendCtcpPong( message, channel );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onSendEvent;
+                }
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( triggeredSendEvent );
+                Assert.AreEqual( channel, sendArgs.ChannelOrUser );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( message, sendArgs.Message );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
         public void SendPingTest()
         {
             // According to RFC2812, sending a PING message
@@ -497,7 +558,7 @@ namespace Chaskis.UnitTests.CoreTests
                 SendEventArgs sendArgs = null;
                 void onSendEvent( string line )
                 {
-                    if( line.Contains( "watchdog" ) )
+                    if( line.Contains( IrcConnection.WatchdogStr ) )
                     {
                         // Ignore watchdog statuses.
                         return;
@@ -547,7 +608,7 @@ namespace Chaskis.UnitTests.CoreTests
                 SendEventArgs sendArgs = null;
                 void onSendEvent( string line )
                 {
-                    if( line.Contains( "watchdog" ) )
+                    if( line.Contains( IrcConnection.WatchdogStr ) )
                     {
                         // Ignore watchdog statuses.
                         return;
@@ -575,6 +636,239 @@ namespace Chaskis.UnitTests.CoreTests
                 Assert.IsNotNull( sendArgs );
                 Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
                 Assert.AreEqual( fullMessage, sendArgs.Command );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures our kick command string is formatted correctly if no
+        /// reason is specified.
+        /// </summary>
+        [Test]
+        public void SendKickCommandWithNoReasonTest()
+        {
+            // According to RFC2812, the kick command is:
+            // KICK TheChannel TheUser :reason
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                bool sendEventTriggered = false;
+                SendKickEventArgs sendArgs = null;
+                void onKickEvent( string line )
+                {
+                    // Skip generic send event.
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        sendEventTriggered = true;
+                        return;
+                    }
+                    sendArgs = SendKickEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.DoConnect( connection );
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"KICK {channel1} {userName}" )
+                );
+
+                try
+                {
+                    connection.ReadEvent += onKickEvent;
+                    connection.SendKick( userName, channel1 );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onKickEvent;
+                }
+
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( sendEventTriggered );
+                Assert.AreEqual( channel1, sendArgs.Channel );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( string.Empty, sendArgs.Reason );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures our kick command string is formatted correctly if we specify
+        /// a reason.
+        /// </summary>
+        [Test]
+        public void SendKickCommandWithReasonTest()
+        {
+            // According to RFC2812, the kick command is:
+            // KICK TheChannel TheUser :reason
+
+            const string reason = "Some Reason";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                bool sendEventTriggered = false;
+                SendKickEventArgs sendArgs = null;
+                void onKickEvent( string line )
+                {
+                    // Skip generic send event.
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        sendEventTriggered = true;
+                        return;
+                    }
+                    sendArgs = SendKickEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.DoConnect( connection );
+                this.mac.Setup(
+                    m => m.WriteLine( $"KICK {channel1} {userName} :{reason}" )
+                );
+
+                try
+                {
+                    connection.ReadEvent += onKickEvent;
+                    connection.SendKick( userName, channel1, reason );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onKickEvent;
+                }
+
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( sendEventTriggered );
+                Assert.AreEqual( channel1, sendArgs.Channel );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( reason, sendArgs.Reason );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
+        public void SendJoinCommandTest()
+        {
+            // According to RFC2812, the command is:
+            // JOIN channel
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                bool sendEventTriggered = false;
+                SendJoinEventArgs sendArgs = null;
+                void onKickEvent( string line )
+                {
+                    // Skip generic send event.
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        sendEventTriggered = true;
+                        return;
+                    }
+                    sendArgs = SendJoinEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.DoConnect( connection );
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"JOIN {channel1}" )
+                );
+
+                try
+                {
+                    connection.ReadEvent += onKickEvent;
+                    connection.SendJoin( channel1 );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onKickEvent;
+                }
+
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( sendEventTriggered );
+                Assert.AreEqual( channel1, sendArgs.Channel );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        /// <summary>
+        /// Ensures our kick command string is formatted correctly if we specify
+        /// a reason.
+        /// </summary>
+        [Test]
+        public void SendPartCommandWithReasonTest()
+        {
+            // According to RFC2812, the command is:
+            // PART TheChannel :reason
+
+            const string reason = "Some Reason";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                bool sendEventTriggered = false;
+                SendPartEventArgs sendArgs = null;
+                void onKickEvent( string line )
+                {
+                    // Skip generic send event.
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        sendEventTriggered = true;
+                        return;
+                    }
+                    sendArgs = SendPartEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.DoConnect( connection );
+                this.mac.Setup(
+                    m => m.WriteLine( $"PART {channel1} :{reason}" )
+                );
+
+                try
+                {
+                    connection.ReadEvent += onKickEvent;
+                    connection.SendPart( reason, channel1 );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onKickEvent;
+                }
+
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( sendEventTriggered );
+                Assert.AreEqual( channel1, sendArgs.Channel );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( reason, sendArgs.Reason );
                 Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
                 Assert.AreSame( connection, sendArgs.Writer );
             }

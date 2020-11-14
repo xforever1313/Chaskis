@@ -104,7 +104,7 @@ namespace Chaskis.Core
         /// </summary>
         private readonly INonDisposableStringParsingQueue parsingQueue;
 
-        private const string watchdogStr = "watchdog";
+        public static readonly string WatchdogStr = "watchdog";
 
         private readonly IrcWatchdog watchDog;
 
@@ -147,7 +147,7 @@ namespace Chaskis.Core
             this.parsingQueue = parsingQueue;
             this.watchDog = new IrcWatchdog(
                 StaticLogger.Log,
-                () => this.SendPing( watchdogStr ),
+                () => this.SendPing( WatchdogStr ),
                 this.Watchdog_OnFailure,
                 60 * 1000
             );
@@ -503,7 +503,7 @@ namespace Chaskis.Core
         /// <param name="response">The response from the server.</param>
         public void ReceivedPong( string response )
         {
-            if( response.EqualsIgnoreCase( watchdogStr ) )
+            if( response.EqualsIgnoreCase( WatchdogStr ) )
             {
                 if ( this.watchDog.Started )
                 {
