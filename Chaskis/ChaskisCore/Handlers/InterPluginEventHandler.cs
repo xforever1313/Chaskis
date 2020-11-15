@@ -23,14 +23,11 @@ namespace Chaskis.Core
     {
         // ---------------- Fields ---------------
 
-        /// <summary>
-        /// Pattern to watch for Chaskis Events.
-        /// </summary>
-        private const string chaskisPattern = @"^\<\?xml\s+version=""1.0""\s+encoding=""utf-16""\?\>\<chaskis_event.+\</chaskis_event\>$";
+        private static string interPluginHelper = $@"^\<{InterPluginEventExtensions.XmlRootName}.+\</{InterPluginEventExtensions.XmlRootName}\>$";
 
         private static readonly Regex chaskisRegex = new Regex(
-            chaskisPattern,
-            RegexOptions.Compiled
+            interPluginHelper,
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
         private readonly string expectedPlugin;
@@ -99,7 +96,7 @@ namespace Chaskis.Core
                 return;
             }
             
-            InterPluginEvent e = InterPluginEvent.FromXml( args.Line );
+            InterPluginEvent e = InterPluginEventExtensions.FromXml( args.Line );
             string targetPlugin = e.DestinationPlugin;
 
             // We'll handle the event if it is targeted specifically to this plugin, OR it is a broadcast event.
@@ -118,8 +115,6 @@ namespace Chaskis.Core
             // For BCAST events, the handler should subscribe to a specific source plugin.
             // This way, plugin1 will trigger one handler, while plugin 2 will
             // trigger a different handler.
-            //
-            // The exception to this rule is events from the CORE, which target ALL plugins.
             else if( string.IsNullOrEmpty( targetPlugin ) )
             {
                 sendEvent = false;
@@ -149,8 +144,8 @@ namespace Chaskis.Core
 
         public ChaskisEventHandlerLineActionArgs(
             string pluginName,
-            IDictionary<string, string> eventArgs,
-            IDictionary<string, string> passThroughArgs,
+            IReadOnlyDictionary<string, string> eventArgs,
+            IReadOnlyDictionary<string, string> passThroughArgs,
             IIrcWriter ircWriter
         )
         {
@@ -170,9 +165,9 @@ namespace Chaskis.Core
         /// <summary>
         /// Event args
         /// </summary>
-        public IDictionary<string, string> EventArgs { get; private set; }
+        public IReadOnlyDictionary<string, string> EventArgs { get; private set; }
 
-        public IDictionary<string, string> PassThroughArgs { get; private set; }
+        public IReadOnlyDictionary<string, string> PassThroughArgs { get; private set; }
 
         /// <summary>
         /// The IRC writer that can be used to send messages to

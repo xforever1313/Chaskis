@@ -5,10 +5,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
+using System.Xml.Linq;
+using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Core
 {
@@ -24,72 +24,9 @@ namespace Chaskis.Core
         /// <summary>
         /// String for a broadcast event.
         /// </summary>
-        public const string BroadcastEventStr = "BCAST";
-
-        public const string XmlElementName = "chaskis_event";
+        public static readonly string BroadcastEventStr = "BCAST";
 
         // ---------------- Constructor ----------------
-
-        internal static InterPluginEvent FromXml( string xmlString )
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml( xmlString );
-
-            InterPluginEvent e = new InterPluginEvent();
-
-            XmlNode rootNode = doc.DocumentElement;
-            if( rootNode.Name != XmlElementName )
-            {
-                throw new XmlException(
-                    "Root XML node should be named \"" + XmlElementName + "\".  Got: " + rootNode.Name
-                );
-            }
-
-            // Get Attributes
-            foreach( XmlAttribute attr in rootNode.Attributes )
-            {
-                switch( attr.Name )
-                {
-                    case "source_plugin":
-                        e.SourcePlugin = attr.Value;
-                        break;
-
-                    case "dest_plugin":
-                        e.DestinationPlugin = attr.Value;
-                        break;
-                }
-            }
-
-            foreach( XmlNode node in rootNode.ChildNodes )
-            {
-                switch( node.Name )
-                {
-                    case "args":
-                        foreach( XmlNode argNode in node.ChildNodes )
-                        {
-                            e.Args[argNode.Name] = argNode.InnerText;
-                        }
-                        break;
-
-                    case "passthrough_args":
-                        foreach( XmlNode argNode in node.ChildNodes )
-                        {
-                            e.PassThroughArgs[argNode.Name] = argNode.InnerText;
-                        }
-                        break;
-                }
-            }
-
-            return e;
-        }
-
-        private InterPluginEvent()
-        {
-            this.SourcePlugin = string.Empty;
-            this.DestinationPlugin = string.Empty;
-            this.Args = new Dictionary<string, string>();
-            this.PassThroughArgs = new Dictionary<string, string>();
-        }
 
         /// <summary>
         /// Constructor.
@@ -100,19 +37,19 @@ namespace Chaskis.Core
         /// <param name="destinationPlugin">
         /// The plugin this event wishes to talk to.
         /// 
-        /// Null for a "broadcast" (all plugins may listen).
+        /// Null or empty string for a "broadcast" (all plugins may listen).
         /// </param>
         internal InterPluginEvent(
             string sourcePlugin,
             string destinationPlugin,
-            IDictionary<string, string> args,
-            IDictionary<string, string> passThroughArgs = null
+            IReadOnlyDictionary<string, string> args,
+            IReadOnlyDictionary<string, string> passThroughArgs = null
         )
         {
             this.SourcePlugin = sourcePlugin.ToUpper();
-            if( destinationPlugin == null )
+            if( string.IsNullOrWhiteSpace( destinationPlugin ) )
             {
-                this.DestinationPlugin = BroadcastEventStr;
+                this.DestinationPlugin = string.Empty;
             }
             else
             {
@@ -138,93 +75,111 @@ namespace Chaskis.Core
         /// <summary>
         /// Required arguments for the event.
         /// </summary>
-        public IDictionary<string, string> Args { get; private set; }
+        public IReadOnlyDictionary<string, string> Args { get; private set; }
 
         /// <summary>
         /// Arguments that are passed through directly to the response.
         /// </summary>
-        public IDictionary<string, string> PassThroughArgs { get; private set; }
+        public IReadOnlyDictionary<string, string> PassThroughArgs { get; private set; }
 
-        // ---------------- Functions ----------------
-
-        /// <summary>
-        /// Creates the event string, which is <see cref="ToXml"/> in string format.
-        /// </summary>
         public override string ToString()
         {
-            using( StringWriter stringWriter = new StringWriter() )
-            {
-                XmlDocument doc = this.ToXml();
-                using( XmlTextWriter writer = new XmlTextWriter( stringWriter ) )
-                {
-                    writer.Formatting = Formatting.None; // All one line.
-                    doc.Save( writer );
-                }
+            return this.ToXml();
+        }
+    }
 
-                return stringWriter.ToString();
+    internal static class InterPluginEventExtensions
+    {
+        internal const string XmlRootName = "interplugin_event";
+
+        internal static InterPluginEvent FromXml( string xmlString )
+        {
+            string source = string.Empty;
+            string destination = string.Empty;
+            Dictionary<string, string> args = new Dictionary<string, string>();
+            Dictionary<string, string> passThrough = new Dictionary<string, string>();
+
+            XElement root = XElement.Parse( xmlString );
+
+            if( XmlRootName.EqualsIgnoreCase( root.Name.LocalName ) == false )
+            {
+                throw new ValidationException(
+                    $"Invalid XML root name: {XmlRootName} for {nameof( InterPluginEvent )}"
+                );
             }
+
+            foreach( XAttribute attr in root.Attributes() )
+            {
+                if( "source".EqualsIgnoreCase( attr.Name.LocalName ) )
+                {
+                    source = attr.Value;
+                }
+                else if( "destination".EqualsIgnoreCase( attr.Name.LocalName ) )
+                {
+                    destination = attr.Value;
+                }
+            }
+
+            foreach( XElement child in root.Elements() )
+            {
+                if( "args".EqualsIgnoreCase( child.Name.LocalName ) )
+                {
+                    foreach( XElement arg in child.Elements() )
+                    {
+                        args[arg.Name.LocalName] = arg.Value;
+                    }
+                }
+                else if( "passargs".EqualsIgnoreCase( child.Name.LocalName ) )
+                {
+                    foreach( XElement arg in child.Elements() )
+                    {
+                        passThrough[arg.Name.LocalName] = arg.Value;
+                    }
+                }
+            }
+
+            return new InterPluginEvent(
+                source,
+                destination,
+                args,
+                passThrough
+            );
         }
 
-        public XmlDocument ToXml()
+        internal static string ToXml( this InterPluginEvent e )
         {
-            XmlDocument doc = new XmlDocument();
+            XElement root = new XElement( XmlRootName );
 
-            XmlNode rootNode = doc.DocumentElement;
-
-            XmlNode chaskisNode = doc.CreateElement( XmlElementName );
-
-            // Add Attributes to the chaskis node
             {
+                XElement args = new XElement( "args" );
+                foreach( KeyValuePair<string, string> arg in e.Args )
                 {
-                    XmlAttribute sourcePlugin = doc.CreateAttribute( "source_plugin" );
-                    sourcePlugin.Value = this.SourcePlugin;
-                    chaskisNode.Attributes.Append( sourcePlugin );
+                    args.Add( new XElement( arg.Key, arg.Value ) );
                 }
 
+                root.Add( args );
+            }
+            
+            // No need to waste time or bytes if there are not pass through args.
+            if( e.PassThroughArgs != null )
+            {
+                XElement passThrough = new XElement( "passargs" );
+                foreach( KeyValuePair<string, string> arg in e.PassThroughArgs )
                 {
-                    XmlAttribute destinationPlugin = doc.CreateAttribute( "dest_plugin" );
-                    destinationPlugin.Value = this.DestinationPlugin;
-                    chaskisNode.Attributes.Append( destinationPlugin );
+                    passThrough.Add( new XElement( arg.Key, arg.Value ) );
                 }
+                root.Add( passThrough );
             }
 
-            // Add arguments
-            {
-                XmlElement argsNode = doc.CreateElement( "args" );
+            root.Add(
+                new XAttribute( "source", e.SourcePlugin )
+            );
 
-                if( this.Args != null )
-                {
-                    foreach( KeyValuePair<string, string> args in this.Args )
-                    {
-                        XmlElement argNode = doc.CreateElement( args.Key );
-                        argNode.InnerText = args.Value.ToString();
-                        argsNode.AppendChild( argNode );
-                    }
-                }
+            root.Add(
+                new XAttribute( "destination", e.DestinationPlugin )
+            );
 
-                chaskisNode.AppendChild( argsNode );
-            }
-
-            // Add pass-through args
-            {
-                XmlElement passThroughArgs = doc.CreateElement( "passthrough_args" );
-
-                if( this.PassThroughArgs != null )
-                {
-                    foreach( KeyValuePair<string, string> args in this.PassThroughArgs )
-                    {
-                        XmlElement argNode = doc.CreateElement( args.Key );
-                        argNode.InnerText = args.Value.ToString();
-                        passThroughArgs.AppendChild( argNode );
-                    }
-                }
-
-                chaskisNode.AppendChild( passThroughArgs );
-            }
-
-            doc.InsertBefore( chaskisNode, rootNode );
-
-            return doc;
+            return root.ToString( SaveOptions.DisableFormatting );
         }
     }
 }

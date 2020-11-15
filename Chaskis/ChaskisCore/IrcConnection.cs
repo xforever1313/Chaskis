@@ -807,7 +807,7 @@ namespace Chaskis.Core
         /// </summary>
         public void SendInterPluginEvent( InterPluginEvent e )
         {
-            string s = e.ToString();
+            string s = e.ToXml();
             this.OnReadLine( s );
         }
 

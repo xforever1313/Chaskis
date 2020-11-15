@@ -90,19 +90,26 @@ namespace Chaskis.Core
 
             // ---------------- Functions ----------------
 
-            public InterPluginEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
+            public InterPluginEvent CreateBcastEvent(
+                IReadOnlyDictionary<string, string> args,
+                IReadOnlyDictionary<string, string> passThroughArgs = null
+            )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
 
                 return new InterPluginEvent(
                     this.sourcePlugin,
                     null,
-                    new Dictionary<string, string>( args ),
-                    ( passThroughArgs != null ) ? new Dictionary<string, string>( passThroughArgs ) : null
+                    args,
+                    passThroughArgs
                 );
             }
 
-            public InterPluginEvent CreateTargetedEvent( string targetPluginName, IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
+            public InterPluginEvent CreateTargetedEvent(
+                string targetPluginName,
+                IReadOnlyDictionary<string, string> args,
+                IReadOnlyDictionary<string, string> passThroughArgs = null
+            )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
                 ArgumentChecker.StringIsNotNullOrEmpty( targetPluginName, nameof( targetPluginName ) );
@@ -110,8 +117,8 @@ namespace Chaskis.Core
                 return new InterPluginEvent(
                     this.sourcePlugin,
                     targetPluginName,
-                    new Dictionary<string, string>( args ),
-                    ( passThroughArgs != null ) ? new Dictionary<string, string>( passThroughArgs ) : null
+                    args,
+                    passThroughArgs
                 );
             }
 
@@ -156,7 +163,10 @@ namespace Chaskis.Core
         /// Key is the argument name, value is the argument's value.
         /// </param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        InterPluginEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null );
+        InterPluginEvent CreateBcastEvent(
+            IReadOnlyDictionary<string, string> args,
+            IReadOnlyDictionary<string, string> passThroughArgs = null
+        );
 
         /// <summary>
         /// Generates a ChaskisEvent that is meant to be directed to
@@ -173,8 +183,8 @@ namespace Chaskis.Core
         /// <returns>A Chaskis event that is ready to be fired.</returns>
         InterPluginEvent CreateTargetedEvent(
             string targetPluginName,
-            IDictionary<string, string> args,
-            IDictionary<string, string> passThroughArgs = null
+            IReadOnlyDictionary<string, string> args,
+            IReadOnlyDictionary<string, string> passThroughArgs = null
         );
 
         /// <summary>

@@ -70,10 +70,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.InterPluginEvent
                 this.expectedPassthroughArgs
             );
 
-            string xmlString = e.ToString();
+            string xmlString = e.ToXml();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            Core.InterPluginEvent recreatedEvent = Core.InterPluginEvent.FromXml( xmlString );
+            Core.InterPluginEvent recreatedEvent = InterPluginEventExtensions.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -88,10 +88,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.InterPluginEvent
                 new Dictionary<string, string>()
             );
 
-            string xmlString = e.ToString();
+            string xmlString = e.ToXml();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            Core.InterPluginEvent recreatedEvent = Core.InterPluginEvent.FromXml( xmlString );
+            Core.InterPluginEvent recreatedEvent = InterPluginEventExtensions.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -106,10 +106,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.InterPluginEvent
                 this.expectedPassthroughArgs
             );
 
-            string xmlString = e.ToString();
+            string xmlString = e.ToXml();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            Core.InterPluginEvent recreatedEvent = Core.InterPluginEvent.FromXml( xmlString );
+            Core.InterPluginEvent recreatedEvent = InterPluginEventExtensions.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 
@@ -123,10 +123,10 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.InterPluginEvent
                 new Dictionary<string, string>()
             );
 
-            string xmlString = e.ToString();
+            string xmlString = e.ToXml();
             Assert.IsFalse( xmlString.Contains( Environment.NewLine ) );
 
-            Core.InterPluginEvent recreatedEvent = Core.InterPluginEvent.FromXml( xmlString );
+            Core.InterPluginEvent recreatedEvent = InterPluginEventExtensions.FromXml( xmlString );
             this.CompareEvents( e, recreatedEvent );
         }
 

@@ -2,4 +2,5 @@
 <pluginconfig>
     <assembly path="{%chaskispath%}/Plugins/ConsoleOut/ConsoleOut.dll" />
     <assembly path="{%chaskispath%}/Plugins/UserListBot/UserListBot.dll" />
+    <assembly path="{%regressiontestpath%}/RegressionTestPlugin/bin/Debug/netstandard2.0/RegressionTestPlugin.dll" />
 </pluginconfig>
