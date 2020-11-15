@@ -15,7 +15,7 @@ using SethCS.Extensions;
 
 namespace Chaskis.Core
 {
-    public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler, IChaskisEventSender
+    public class IrcConnection : IDisposable, IConnection, IChaskisEventScheduler, IInterPluginEventSender
     {
         // ---------------- Fields ----------------
 
@@ -805,7 +805,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Adds the given Chaskis to the event queue.
         /// </summary>
-        public void SendChaskisEvent( ChaskisEvent e )
+        public void SendInterPluginEvent( InterPluginEvent e )
         {
             string s = e.ToString();
             this.OnReadLine( s );

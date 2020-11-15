@@ -17,7 +17,7 @@ namespace Chaskis.Core
     /// to all plugins, without the need of plugins
     /// to be aware of each other.
     /// </summary>
-    public class ChaskisEvent
+    public class InterPluginEvent
     {
         // ---------------- Fields ----------------
 
@@ -30,12 +30,12 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        internal static ChaskisEvent FromXml( string xmlString )
+        internal static InterPluginEvent FromXml( string xmlString )
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml( xmlString );
 
-            ChaskisEvent e = new ChaskisEvent();
+            InterPluginEvent e = new InterPluginEvent();
 
             XmlNode rootNode = doc.DocumentElement;
             if( rootNode.Name != XmlElementName )
@@ -50,14 +50,6 @@ namespace Chaskis.Core
             {
                 switch( attr.Name )
                 {
-                    case "source_type":
-                        ChaskisEventSource sourceType;
-                        if( Enum.TryParse( attr.Value, out sourceType ) )
-                        {
-                            e.SourceType = sourceType;
-                        }
-                        break;
-
                     case "source_plugin":
                         e.SourcePlugin = attr.Value;
                         break;
@@ -91,9 +83,8 @@ namespace Chaskis.Core
             return e;
         }
 
-        private ChaskisEvent()
+        private InterPluginEvent()
         {
-            this.SourceType = ChaskisEventSource.CORE;
             this.SourcePlugin = string.Empty;
             this.DestinationPlugin = string.Empty;
             this.Args = new Dictionary<string, string>();
@@ -103,7 +94,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Constructor.
         /// Only classes inside of ChaskisCore can create instances of this class directly.
-        /// All plugins must use <see cref="ChaskisEventFactory"/>
+        /// All plugins must use <see cref="InterPluginEventFactory"/>
         /// </summary>
         /// <param name="sourcePlugin">The plugin that generated this event.</param>
         /// <param name="destinationPlugin">
@@ -111,15 +102,13 @@ namespace Chaskis.Core
         /// 
         /// Null for a "broadcast" (all plugins may listen).
         /// </param>
-        internal ChaskisEvent(
-            ChaskisEventSource sourceType,
+        internal InterPluginEvent(
             string sourcePlugin,
             string destinationPlugin,
             IDictionary<string, string> args,
             IDictionary<string, string> passThroughArgs = null
         )
         {
-            this.SourceType = sourceType;
             this.SourcePlugin = sourcePlugin.ToUpper();
             if( destinationPlugin == null )
             {
@@ -134,11 +123,6 @@ namespace Chaskis.Core
         }
 
         // ---------------- Properties ----------------
-
-        /// <summary>
-        /// Did this event come from the CORE or from a Plugin?
-        /// </summary>
-        public ChaskisEventSource SourceType { get; private set; }
 
         /// <summary>
         /// Which plugin created the event.
@@ -191,12 +175,6 @@ namespace Chaskis.Core
 
             // Add Attributes to the chaskis node
             {
-                {
-                    XmlAttribute sourceType = doc.CreateAttribute( "source_type" );
-                    sourceType.Value = this.SourceType.ToString();
-                    chaskisNode.Attributes.Append( sourceType );
-                }
-
                 {
                     XmlAttribute sourcePlugin = doc.CreateAttribute( "source_plugin" );
                     sourcePlugin.Value = this.SourcePlugin;

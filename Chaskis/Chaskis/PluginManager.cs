@@ -29,7 +29,7 @@ namespace Chaskis.Cli
         /// </summary>
         private readonly Dictionary<string, PluginConfig> plugins;
 
-        private ChaskisEventFactory eventFactory;
+        private InterPluginEventFactory eventFactory;
 
         // -------- Constructor --------
 
@@ -67,7 +67,7 @@ namespace Chaskis.Cli
             IList<PluginConfig> existingPlugins,
             IIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
-            IChaskisEventSender eventSender,
+            IInterPluginEventSender eventSender,
             HttpClient httpClient,
             string chaskisConfigRoot
         )
@@ -145,7 +145,7 @@ namespace Chaskis.Cli
                 this.plugins.Add( existingPlugin.Name, existingPlugin );
             }
 
-            this.eventFactory = ChaskisEventFactory.CreateInstance( this.plugins.Keys.ToList() );
+            this.eventFactory = InterPluginEventFactory.CreateInstance( this.plugins.Keys.ToList() );
             foreach( KeyValuePair<string, PluginConfig> plugin in this.plugins )
             {
                 try

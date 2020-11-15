@@ -12,13 +12,13 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public class ChaskisEventFactory
+    public class InterPluginEventFactory
     {
         // ---------------- Fields ----------------
 
-        private readonly Dictionary<string, IChaskisEventCreator> eventCreators;
+        private readonly Dictionary<string, IInterPluginEventCreator> eventCreators;
 
-        private static ChaskisEventFactory instance;
+        private static InterPluginEventFactory instance;
 
         // ---------------- Constructor ----------------
 
@@ -28,16 +28,16 @@ namespace Chaskis.Core
         /// Calling this function at all will result in a <see cref="InvalidOperationException"/>
         /// </summary>
         /// <returns>The single instance of this class.</returns>
-        public static ChaskisEventFactory CreateInstance( IReadOnlyList<string> pluginNameList )
+        public static InterPluginEventFactory CreateInstance( IReadOnlyList<string> pluginNameList )
         {
             if( instance == null )
             {
-                instance = new ChaskisEventFactory( pluginNameList );
+                instance = new InterPluginEventFactory( pluginNameList );
             }
             else
             {
                 throw new InvalidOperationException(
-                    nameof( ChaskisEventFactory ) + " instace already created."
+                    nameof( InterPluginEventFactory ) + " instace already created."
                 );
             }
 
@@ -47,17 +47,17 @@ namespace Chaskis.Core
         /// <summary>
         /// Constructor.
         /// </summary>
-        private ChaskisEventFactory( IReadOnlyList<string> pluginNameList )
+        private InterPluginEventFactory( IReadOnlyList<string> pluginNameList )
         {
             ArgumentChecker.IsNotNull( pluginNameList, nameof( pluginNameList ) );
 
-            this.eventCreators = new Dictionary<string, IChaskisEventCreator>();
+            this.eventCreators = new Dictionary<string, IInterPluginEventCreator>();
             foreach( string s in pluginNameList )
             {
-                this.eventCreators.Add( s, new ChaskisEventCreator( s ) );
+                this.eventCreators.Add( s, new InterPluginEventCreator( s ) );
             }
 
-            this.EventCreators = new ReadOnlyDictionary<string, IChaskisEventCreator>( this.eventCreators );
+            this.EventCreators = new ReadOnlyDictionary<string, IInterPluginEventCreator>( this.eventCreators );
         }
 
         // ---------------- Properties ----------------
@@ -65,13 +65,13 @@ namespace Chaskis.Core
         /// <summary>
         /// Read-only dictionary of event creators 
         /// </summary>
-        public IReadOnlyDictionary<string, IChaskisEventCreator> EventCreators { get; private set; }
+        public IReadOnlyDictionary<string, IInterPluginEventCreator> EventCreators { get; private set; }
 
         // ---------------- Functions ----------------
 
         // ---------------- Helper Classes ----------------
 
-        private class ChaskisEventCreator : IChaskisEventCreator
+        private class InterPluginEventCreator : IInterPluginEventCreator
         {
             // ---------------- Fields ----------------
 
@@ -83,19 +83,18 @@ namespace Chaskis.Core
             /// Constructor.
             /// </summary>
             /// <param name="pluginName">The associated plugin.</param>
-            public ChaskisEventCreator( string pluginName )
+            public InterPluginEventCreator( string pluginName )
             {
                 this.sourcePlugin = pluginName;
             }
 
             // ---------------- Functions ----------------
 
-            public ChaskisEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
+            public InterPluginEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-                return new ChaskisEvent(
-                    ChaskisEventSource.PLUGIN,
+                return new InterPluginEvent(
                     this.sourcePlugin,
                     null,
                     new Dictionary<string, string>( args ),
@@ -103,13 +102,12 @@ namespace Chaskis.Core
                 );
             }
 
-            public ChaskisEvent CreateTargetedEvent( string targetPluginName, IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
+            public InterPluginEvent CreateTargetedEvent( string targetPluginName, IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null )
             {
                 ArgumentChecker.IsNotNull( args, nameof( args ) );
                 ArgumentChecker.StringIsNotNullOrEmpty( targetPluginName, nameof( targetPluginName ) );
 
-                return new ChaskisEvent(
-                    ChaskisEventSource.PLUGIN,
+                return new InterPluginEvent(
                     this.sourcePlugin,
                     targetPluginName,
                     new Dictionary<string, string>( args ),
@@ -117,25 +115,23 @@ namespace Chaskis.Core
                 );
             }
 
-            public ChaskisEventHandler CreatePluginEventHandler(
+            public InterPluginEventHandler CreatePluginEventHandler(
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
             {
-                return new ChaskisEventHandler(
-                    ChaskisEventSource.PLUGIN,
+                return new InterPluginEventHandler(
                     null,
                     this.sourcePlugin,
                     lineAction
                 );
             }
 
-            public ChaskisEventHandler CreatePluginEventHandler(
+            public InterPluginEventHandler CreatePluginEventHandler(
                 string expectedSourcePlugin,
                 Action<ChaskisEventHandlerLineActionArgs> lineAction
             )
             {
-                return new ChaskisEventHandler(
-                    ChaskisEventSource.PLUGIN,
+                return new InterPluginEventHandler(
                     expectedSourcePlugin,
                     this.sourcePlugin,
                     lineAction
@@ -144,7 +140,7 @@ namespace Chaskis.Core
         }
     }
 
-    public interface IChaskisEventCreator
+    public interface IInterPluginEventCreator
     {
         /// <summary>
         /// Generates a ChaskisEvent that will be transmitted
@@ -160,7 +156,7 @@ namespace Chaskis.Core
         /// Key is the argument name, value is the argument's value.
         /// </param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null );
+        InterPluginEvent CreateBcastEvent( IDictionary<string, string> args, IDictionary<string, string> passThroughArgs = null );
 
         /// <summary>
         /// Generates a ChaskisEvent that is meant to be directed to
@@ -175,7 +171,7 @@ namespace Chaskis.Core
         /// Key is the argument name, value is the argument's value.
         /// </param>
         /// <returns>A Chaskis event that is ready to be fired.</returns>
-        ChaskisEvent CreateTargetedEvent(
+        InterPluginEvent CreateTargetedEvent(
             string targetPluginName,
             IDictionary<string, string> args,
             IDictionary<string, string> passThroughArgs = null
@@ -193,7 +189,7 @@ namespace Chaskis.Core
         /// <param name="expectedSourcePlugin">The SPECIFIC plugin we want to listen to.</param>
         /// <param name="lineAction">The action to take when our arg pattern matches.</param>
         /// <returns></returns>
-        ChaskisEventHandler CreatePluginEventHandler(
+        InterPluginEventHandler CreatePluginEventHandler(
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         );
 
@@ -213,7 +209,7 @@ namespace Chaskis.Core
         /// </param>
         /// <param name="lineAction">The action to take when our arg pattern matches.</param>
         /// <returns></returns>
-        ChaskisEventHandler CreatePluginEventHandler(
+        InterPluginEventHandler CreatePluginEventHandler(
             string expectedSourcePlugin,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         );

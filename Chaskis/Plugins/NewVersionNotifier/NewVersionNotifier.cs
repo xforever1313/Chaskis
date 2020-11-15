@@ -27,8 +27,8 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private string pluginDir;
 
-        private IChaskisEventCreator chaskisEventCreator;
-        private IChaskisEventSender eventSender;
+        private IInterPluginEventCreator chaskisEventCreator;
+        private IInterPluginEventSender eventSender;
         private IIrcConfig ircConfig;
         private GenericLogger logger;
 
@@ -122,7 +122,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
                 }
             }
 
-            ChaskisEventHandler eventHandler = this.chaskisEventCreator.CreatePluginEventHandler(
+            InterPluginEventHandler eventHandler = this.chaskisEventCreator.CreatePluginEventHandler(
                 "chaskis",
                 this.HandleChaskisEvent
             );
@@ -161,7 +161,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
             {
                 string channel = args.Channel;
 
-                ChaskisEvent e = this.chaskisEventCreator.CreateTargetedEvent(
+                InterPluginEvent e = this.chaskisEventCreator.CreateTargetedEvent(
                     "chaskis",
                     new Dictionary<string, string>()
                     {
@@ -174,7 +174,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
                     }
                 );
 
-                this.eventSender.SendChaskisEvent( e );
+                this.eventSender.SendInterPluginEvent( e );
             }
         }
 

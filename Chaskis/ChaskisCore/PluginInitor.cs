@@ -53,12 +53,12 @@ namespace Chaskis.Core
         /// <summary>
         /// Allows a plugin to send Chaskis Events.
         /// </summary>
-        public IChaskisEventSender ChaskisEventSender { get; set; }
+        public IInterPluginEventSender ChaskisEventSender { get; set; }
 
         /// <summary>
         /// Allows the plugin to create Chaskis Events.
         /// </summary>
-        public IChaskisEventCreator ChaskisEventCreator { get; set; }
+        public IInterPluginEventCreator ChaskisEventCreator { get; set; }
 
         /// <summary>
         /// The single HttpClient to use for the IRC Bot.

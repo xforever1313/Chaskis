@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// This class allows plugins to talk to other plugins.  Plugins can create these events
     /// and other plugins can "subscribe" to those events.
     /// </summary>
-    public class ChaskisEventHandler : IIrcHandler
+    public class InterPluginEventHandler : IIrcHandler
     {
         // ---------------- Fields ---------------
 
@@ -33,35 +33,11 @@ namespace Chaskis.Core
             RegexOptions.Compiled
         );
 
-        private readonly ChaskisEventSource expectedSource;
         private readonly string expectedPlugin;
         private readonly string creatorPlugin;
         private readonly Action<ChaskisEventHandlerLineActionArgs> lineAction;
 
         // ---------------- Constructor ----------------
-
-        /// <summary>
-        /// Constructor.  Use this to capture a CORE event.
-        /// </summary>
-        /// <param name="argPattern">
-        /// Chaskis events have arguments after the source and plugin.
-        /// You can filter events based on its arguments with this parameter
-        /// and only capture events whose arguments match this pattern.
-        /// </param>
-        /// <param name="expectedProtocol">The protocol we expected.</param>
-        /// <param name="creatorPluginName">The plugin that created this event.</param>
-        internal ChaskisEventHandler(
-            ChaskisEventProtocol? expectedProtocol,
-            string creatorPluginName,
-            Action<ChaskisEventHandlerLineActionArgs> lineAction
-        ) : this(
-            ChaskisEventSource.CORE,
-            expectedProtocol.HasValue ? expectedProtocol.Value.ToString() : null,
-            creatorPluginName,
-            lineAction
-        )
-        {
-        }
 
         /// <summary>
         /// Constructor.  Use this to capture a PLUGIN event.
@@ -80,26 +56,13 @@ namespace Chaskis.Core
         /// if expectedSource is set to <see cref="ChaskisEventSource.CORE"/>.
         /// </param>
         /// <param name="creatorPluginName">The plugin that created this event.</param>
-        internal ChaskisEventHandler(
-            ChaskisEventSource expectedSource,
+        internal InterPluginEventHandler(
             string expectedSourcePlugin,
             string creatorPluginName,
             Action<ChaskisEventHandlerLineActionArgs> lineAction
         )
         {
-            if( expectedSource == ChaskisEventSource.CORE )
-            {
-                if( Enum.TryParse( expectedSourcePlugin, out ChaskisEventProtocol protocol ) == false )
-                {
-                    throw new ArgumentException(
-                        "Invalid protocol passed into constructor.  Ensure you want a CORE event. Got: " + expectedSourcePlugin
-                    );
-                }
-            }
-
             ArgumentChecker.IsNotNull( lineAction, nameof( lineAction ) );
-
-            this.expectedSource = expectedSource;
 
             if( expectedSourcePlugin != null )
             {
@@ -136,17 +99,13 @@ namespace Chaskis.Core
                 return;
             }
             
-            ChaskisEvent e = ChaskisEvent.FromXml( args.Line );
+            InterPluginEvent e = InterPluginEvent.FromXml( args.Line );
             string targetPlugin = e.DestinationPlugin;
 
             // We'll handle the event if it is targeted specifically to this plugin, OR it is a broadcast event.
             bool sendEvent = ( this.creatorPlugin == targetPlugin ) || ( string.IsNullOrEmpty( targetPlugin ) );
 
-            if( e.SourceType == ChaskisEventSource.CORE )
-            {
-                sendEvent = true;
-            }
-            else if( this.expectedPlugin != null )
+            if( this.expectedPlugin != null )
             {
                 sendEvent &= ( e.SourcePlugin == this.expectedPlugin );
             }
@@ -181,7 +140,7 @@ namespace Chaskis.Core
     }
 
     /// <summary>
-    /// Event arguments for <see cref="ChaskisEventHandler"/> action if the line matches
+    /// Event arguments for <see cref="InterPluginEventHandler"/> action if the line matches
     /// a regex.
     /// </summary>
     public class ChaskisEventHandlerLineActionArgs

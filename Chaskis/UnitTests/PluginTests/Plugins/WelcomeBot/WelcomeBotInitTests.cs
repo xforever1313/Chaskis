@@ -18,8 +18,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
     {
         // ---------------- Fields ----------------
 
-        private Mock<IChaskisEventCreator> mockEventCreator;
-        private Mock<IChaskisEventSender> mockEventSender;
+        private Mock<IInterPluginEventCreator> mockEventCreator;
+        private Mock<IInterPluginEventSender> mockEventSender;
 
         private PluginInitor initor;
 
@@ -28,8 +28,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
         [SetUp]
         public void TestSetup()
         {
-            this.mockEventCreator = new Mock<IChaskisEventCreator>( MockBehavior.Strict );
-            this.mockEventSender = new Mock<IChaskisEventSender>( MockBehavior.Strict );
+            this.mockEventCreator = new Mock<IInterPluginEventCreator>( MockBehavior.Strict );
+            this.mockEventSender = new Mock<IInterPluginEventSender>( MockBehavior.Strict );
 
             this.initor = new PluginInitor
             {
@@ -59,7 +59,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             ).Returns(
                 delegate ( string pluginName, Action<ChaskisEventHandlerLineActionArgs> action )
                 {
-                    return new ChaskisEventHandler( ChaskisEventProtocol.IRC, pluginName, action );
+                    return new InterPluginEventHandler( pluginName, "welcomebot", action );
                 }
             );
 
@@ -181,7 +181,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
             ).Returns(
                 delegate ( string pluginName, Action<ChaskisEventHandlerLineActionArgs> action )
                 {
-                    return new ChaskisEventHandler( ChaskisEventProtocol.IRC, pluginName, action );
+                    return new InterPluginEventHandler( pluginName, "welcomebot", action );
                 }
             );
 
@@ -193,7 +193,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
 
                 // In reality, we don't care about order, but this is easier to test.
                 Assert.IsTrue( uut.GetHandlers()[0] is JoinHandler );
-                Assert.IsTrue( uut.GetHandlers()[1] is ChaskisEventHandler );
+                Assert.IsTrue( uut.GetHandlers()[1] is InterPluginEventHandler );
             }
         }
     }

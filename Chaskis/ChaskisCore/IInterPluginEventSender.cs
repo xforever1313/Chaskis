@@ -11,12 +11,12 @@ namespace Chaskis.Core
     /// Interface that allows one to send chaskis events
     /// to other plugins.
     /// </summary>
-    public interface IChaskisEventSender
+    public interface IInterPluginEventSender
     {
         /// <summary>
         /// Sends a chaskis event to plugins
         /// loaded into the bot.
         /// </summary>
-        void SendChaskisEvent( ChaskisEvent e );
+        void SendInterPluginEvent( InterPluginEvent e );
     }
 }

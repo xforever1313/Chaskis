@@ -40,22 +40,6 @@ namespace Chaskis.Core
     }
 
     /// <summary>
-    /// Where the event was fired.
-    /// </summary>
-    public enum ChaskisEventSource
-    {
-        /// <summary>
-        /// The event was fired from ChaskisCore.
-        /// </summary>
-        CORE,
-
-        /// <summary>
-        /// The event was fired from a plugin.
-        /// </summary>
-        PLUGIN
-    }
-
-    /// <summary>
     /// The verbosity level for writing to the Chaskis Log.
     /// </summary>
     public enum LogVerbosityLevel

@@ -23,11 +23,11 @@ namespace Chaskis.UnitTests.CoreTests.Handlers
 
         private Mock<IIrcWriter> mockWriter;
 
-        private ChaskisEventFactory factoryInstance;
+        private InterPluginEventFactory factoryInstance;
         //private string sourcePluginName;
         private string creatorPluginName;
 
-        private IChaskisEventCreator creator;
+        private IInterPluginEventCreator creator;
 
         // ---------------- Setup / Teardown ---------------
 

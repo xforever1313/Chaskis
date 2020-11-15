@@ -32,8 +32,8 @@ namespace Chaskis.Cli
         /// </summary>
         private IDictionary<string, PluginConfig> plugins;
 
-        private IChaskisEventSender chaskisEventSender;
-        private IChaskisEventCreator chaskisEventCreator;
+        private IInterPluginEventSender chaskisEventSender;
+        private IInterPluginEventCreator chaskisEventCreator;
 
         /// <summary>
         /// IRC handlers we will be using.
@@ -265,7 +265,7 @@ namespace Chaskis.Cli
 
             this.handlers.Add( versionHandler );
 
-            ChaskisEventHandler chaskisHandler = this.chaskisEventCreator.CreatePluginEventHandler(
+            InterPluginEventHandler chaskisHandler = this.chaskisEventCreator.CreatePluginEventHandler(
                 this.HandleChaskisVersionCommand
             );
 
@@ -319,13 +319,13 @@ namespace Chaskis.Cli
                     responseArgs["ERROR"] = "Need Plugin Key";
                 }
 
-                ChaskisEvent responseEvent = this.chaskisEventCreator.CreateTargetedEvent(
+                InterPluginEvent responseEvent = this.chaskisEventCreator.CreateTargetedEvent(
                     args.PluginName,
                     responseArgs,
                     args.PassThroughArgs
                 );
 
-                this.chaskisEventSender.SendChaskisEvent( responseEvent );
+                this.chaskisEventSender.SendInterPluginEvent( responseEvent );
             }
         }
 

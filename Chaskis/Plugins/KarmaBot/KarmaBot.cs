@@ -34,9 +34,9 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         private KarmaBotDatabase dataBase;
 
-        private IChaskisEventSender eventSender;
+        private IInterPluginEventSender eventSender;
 
-        private IChaskisEventCreator eventCreator;
+        private IInterPluginEventCreator eventCreator;
 
         // -------- Constructor --------
 
@@ -156,7 +156,7 @@ namespace Chaskis.Plugins.KarmaBot
             }
 
             {
-                ChaskisEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
+                InterPluginEventHandler chaskisQuery = initor.ChaskisEventCreator.CreatePluginEventHandler(
                     this.HandleChaskisQueryCommand
                 );
                 this.handlers.Add( chaskisQuery );
@@ -276,13 +276,13 @@ namespace Chaskis.Plugins.KarmaBot
                         return;
                 }
 
-                ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
+                InterPluginEvent e = this.eventCreator.CreateTargetedEvent(
                     args.PluginName,
                     responseArgs,
                     args.PassThroughArgs
                 );
 
-                this.eventSender.SendChaskisEvent( e );
+                this.eventSender.SendInterPluginEvent( e );
             }
         }
     }

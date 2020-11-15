@@ -103,7 +103,7 @@ namespace Chaskis.UnitTests.Common
             ":anickname@blah.org" // A nickname with a Host.
         }.AsReadOnly();
 
-        private static ChaskisEventFactory factoryInstance;
+        private static InterPluginEventFactory factoryInstance;
 
         // ---------------- Functions ----------------
 
@@ -247,11 +247,11 @@ namespace Chaskis.UnitTests.Common
             return "PING :" + response;
         }
 
-        public static ChaskisEventFactory CreateEventFactory()
+        public static InterPluginEventFactory CreateEventFactory()
         {
             if( factoryInstance == null )
             {
-                factoryInstance = ChaskisEventFactory.CreateInstance( new List<string>( FactoryPluginNames ) );
+                factoryInstance = InterPluginEventFactory.CreateInstance( new List<string>( FactoryPluginNames ) );
             }
 
             return factoryInstance;

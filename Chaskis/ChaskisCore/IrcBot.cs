@@ -76,7 +76,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Access to our chaskis event sender.
         /// </summary>
-        public IChaskisEventSender ChaskisEventSender => this.ircConnection;
+        public IInterPluginEventSender ChaskisEventSender => this.ircConnection;
 
         // -------- Functions -------
 

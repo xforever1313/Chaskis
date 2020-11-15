@@ -32,9 +32,9 @@ namespace Chaskis.Plugins.WelcomeBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private IChaskisEventCreator eventCreator;
+        private IInterPluginEventCreator eventCreator;
 
-        private IChaskisEventSender eventSender;
+        private IInterPluginEventSender eventSender;
 
         // -------- Constructor -------
 
@@ -139,7 +139,7 @@ namespace Chaskis.Plugins.WelcomeBot
 
                 if( config.EnableJoinMessages && config.KarmaBotIntegration )
                 {
-                    ChaskisEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
+                    InterPluginEventHandler karmaHandler = this.eventCreator.CreatePluginEventHandler(
                         "karmabot",
                         HandleKarmaQuery
                     );
@@ -200,7 +200,7 @@ namespace Chaskis.Plugins.WelcomeBot
                 args.Channel
             );
 
-            ChaskisEvent e = this.eventCreator.CreateTargetedEvent(
+            InterPluginEvent e = this.eventCreator.CreateTargetedEvent(
                 "karmabot",
                 new Dictionary<string, string>
                 {
@@ -214,7 +214,7 @@ namespace Chaskis.Plugins.WelcomeBot
                 }
             );
 
-            this.eventSender.SendChaskisEvent( e );
+            this.eventSender.SendInterPluginEvent( e );
         }
 
         public static void KickMessage( KickHandlerArgs args )
