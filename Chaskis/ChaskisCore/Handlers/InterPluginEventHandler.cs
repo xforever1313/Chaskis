@@ -25,7 +25,7 @@ namespace Chaskis.Core
 
         private static string interPluginHelper = $@"^\<{InterPluginEventExtensions.XmlRootName}.+\</{InterPluginEventExtensions.XmlRootName}\>$";
 
-        private static readonly Regex chaskisRegex = new Regex(
+        internal static readonly Regex Regex = new Regex(
             interPluginHelper,
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
@@ -91,7 +91,7 @@ namespace Chaskis.Core
         /// </summary>
         public void HandleEvent( HandlerArgs args )
         {
-            if( chaskisRegex.IsMatch( args.Line ) == false )
+            if( Regex.IsMatch( args.Line ) == false )
             {
                 return;
             }

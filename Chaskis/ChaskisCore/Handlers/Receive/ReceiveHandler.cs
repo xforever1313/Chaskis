@@ -27,11 +27,6 @@ namespace Chaskis.Core
 
         private readonly ReceiveHandlerConfig config;
 
-        private static readonly Regex chaskisEventRegex = new Regex(
-            @"^<chaskis_",
-            RegexOptions.Compiled | RegexOptions.ExplicitCapture
-        );
-
         // ---------------- Constructor ----------------
 
         public ReceiveHandler( ReceiveHandlerConfig allConfig )
@@ -88,9 +83,13 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            // Do not handle Chaskis Events.  This handler is only
+            // Do not handle Chaskis Events or inter-plugin events.  This handler is only
             // for receiving messages via IRC.
-            if( chaskisEventRegex.IsMatch( args.Line ) )
+            if( AnyChaskisEventHandler.Regex.IsMatch( args.Line ) )
+            {
+                return;
+            }
+            else if( InterPluginEventHandler.Regex.IsMatch( args.Line ) )
             {
                 return;
             }

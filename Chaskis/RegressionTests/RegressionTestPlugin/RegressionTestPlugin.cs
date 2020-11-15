@@ -110,6 +110,15 @@ namespace Chaskis.RegressionTests
             }
 
             {
+                AnyInterPluginEventHandlerConfig interPluginConfig = new AnyInterPluginEventHandlerConfig
+                {
+                    LineAction = PrintInterPluginEvent
+                };
+                AnyInterPluginEventHandler handler = new AnyInterPluginEventHandler( interPluginConfig );
+                this.handlers.Add( handler );
+            }
+
+            {
                 MessageHandlerConfig msgConfig = new MessageHandlerConfig
                 {
                     LineRegex = sleepPattern,
@@ -267,6 +276,11 @@ namespace Chaskis.RegressionTests
         /// So chaskis events show up in the logs.
         /// </summary>
         private void PrintChaskisEvent( AnyChaskisEventHandlerArgs args )
+        {
+            Console.WriteLine( args.Line );
+        }
+
+        private void PrintInterPluginEvent( AnyInterPluginEventHandlerArgs args )
         {
             Console.WriteLine( args.Line );
         }

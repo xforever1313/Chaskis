@@ -11,6 +11,7 @@ using Chaskis.Core;
 using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
+using System.Collections.Generic;
 
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyChaskisEvent
 {
@@ -194,6 +195,30 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.AnyChaskisEvent
             string eventString = e.ToXml();
             this.uut.HandleEvent( this.ConstructArgs( eventString ) );
             this.CheckResponse( eventString );
+        }
+
+        [Test]
+        public void SendInterPluginEvent()
+        {
+            var args = new Dictionary<string, string>
+            {
+                ["arq1"] = "1"
+            };
+
+            var passArgs = new Dictionary<string, string>
+            {
+                ["pass1"] = "2"
+            };
+
+            Core.InterPluginEvent e = new Core.InterPluginEvent(
+                "plugin1",
+                "plugin2",
+                args,
+                passArgs
+            );
+
+            this.uut.HandleEvent( this.ConstructArgs( e.ToXml() ) );
+            Assert.IsNull( this.responseReceived );
         }
 
         // -------- Test Helpers --------

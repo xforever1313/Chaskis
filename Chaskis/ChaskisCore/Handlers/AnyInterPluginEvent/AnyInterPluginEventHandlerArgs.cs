@@ -8,13 +8,13 @@
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Arguments that are passed in when <see cref="AnyChaskisEventHandler"/> is triggered.
+    /// Arguments that are passed in when <see cref="AnyInterPluginEventHandler"/> is triggered.
     /// </summary>
-    public class AnyChaskisEventHandlerArgs
+    public class AnyInterPluginEventHandlerArgs
     {
         // ---------------- Constructor ----------------
 
-        public AnyChaskisEventHandlerArgs( IIrcWriter writer, string line )
+        public AnyInterPluginEventHandlerArgs( IIrcWriter writer, string line )
         {
             this.Writer = writer;
             this.Line = line;
@@ -23,7 +23,7 @@ namespace Chaskis.Core
         // ---------------- Properties ----------------
 
         /// <summary>
-        /// The Writer to use so we can respond to the chaskis event.
+        /// The Writer to use so we can respond to the event.
         /// </summary>
         public IIrcWriter Writer { get; private set; }
 

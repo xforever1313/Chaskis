@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Handlers\AnyInterPluginEvent\" />
     <Folder Include="Handlers\SendKick\" />
     <Folder Include="Handlers\SendPart\" />
   </ItemGroup>

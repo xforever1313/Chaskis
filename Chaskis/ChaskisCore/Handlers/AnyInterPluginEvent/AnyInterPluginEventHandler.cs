@@ -10,28 +10,28 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public delegate void AnyChaskisEventHandlerAction( AnyChaskisEventHandlerArgs args );
+    public delegate void AnyInterPluginEventHandlerAction( AnyInterPluginEventHandlerArgs args );
 
     /// <summary>
-    /// This class will fire for ALL chaskis events that are triggered.
+    /// This class will fire for ALL inter-plugin events that are triggered.
     /// 
     /// Note, this should really only be used when you want to get ALL output
-    /// from the chaskis event without any filtering.  Really only meant to be used for debugging.
+    /// from the inter-plugin event without any filtering.  Really only meant to be used for debugging.
     /// </summary>
-    public sealed class AnyChaskisEventHandler : IIrcHandler
+    public sealed class AnyInterPluginEventHandler : IIrcHandler
     {
         // ---------------- Fields ----------------
 
-        private readonly AnyChaskisEventHandlerConfig config;
+        private readonly AnyInterPluginEventHandlerConfig config;
 
-        internal static readonly Regex Regex = new Regex(
-            @"^<chaskis_",
+        private static readonly Regex chaskisEventRegex = new Regex(
+            $@"^\<{InterPluginEventExtensions.XmlRootName}.+",
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
         // ---------------- Constructor ----------------
 
-        public AnyChaskisEventHandler( AnyChaskisEventHandlerConfig allConfig )
+        public AnyInterPluginEventHandler( AnyInterPluginEventHandlerConfig allConfig )
         {
             ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
@@ -42,8 +42,8 @@ namespace Chaskis.Core
         }
 
         // ---------------- Properties ----------------
-
-        public AnyChaskisEventHandlerAction LineAction
+        
+        public AnyInterPluginEventHandlerAction LineAction
         {
             get
             {
@@ -77,12 +77,12 @@ namespace Chaskis.Core
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 
-            if( Regex.IsMatch( args.Line ) == false )
+            if( chaskisEventRegex.IsMatch( args.Line ) == false )
             {
                 return;
             }
 
-            AnyChaskisEventHandlerArgs allArgs = new AnyChaskisEventHandlerArgs( args.IrcWriter, args.Line );
+            AnyInterPluginEventHandlerArgs allArgs = new AnyInterPluginEventHandlerArgs( args.IrcWriter, args.Line );
             this.LineAction( allArgs );
         }
     }

@@ -1,5 +1,5 @@
 ﻿//
-//          Copyright Seth Hendrick 2018.
+//          Copyright Seth Hendrick 2020.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -11,23 +11,23 @@ using SethCS.Exceptions;
 namespace Chaskis.Core
 {
     /// <summary>
-    /// Configuration used for <see cref="AnyChaskisEventHandler"/>
+    /// Configuration used for <see cref="AnyInterPluginEventHandler"/>
     /// </summary>
-    public class AnyChaskisEventHandlerConfig
+    public class AnyInterPluginEventHandlerConfig
     {
         // ---------------- Constructor ----------------
 
-        public AnyChaskisEventHandlerConfig()
+        public AnyInterPluginEventHandlerConfig()
         {
         }
 
         // ---------------- Properties ----------------
 
         /// <summary>
-        /// The action to take when ANY chaskis event occurs.  It is up to this action to
+        /// The action to take for ANY inter-plugin event.  It is up to this action to
         /// actually parse the string.
         /// </summary>
-        public AnyChaskisEventHandlerAction LineAction { get; set; }
+        public AnyInterPluginEventHandlerAction LineAction { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -35,7 +35,7 @@ namespace Chaskis.Core
         {
             bool success = true;
             StringBuilder errorString = new StringBuilder();
-            errorString.AppendLine( "Errors when validating " + nameof( AnyChaskisEventHandlerConfig ) );
+            errorString.AppendLine( "Errors when validating " + nameof( AnyInterPluginEventHandlerConfig ) );
 
             if( this.LineAction == null )
             {
@@ -49,9 +49,9 @@ namespace Chaskis.Core
             }
         }
 
-        public AnyChaskisEventHandlerConfig Clone()
+        public AnyInterPluginEventHandlerConfig Clone()
         {
-            return (AnyChaskisEventHandlerConfig)this.MemberwiseClone();
+            return (AnyInterPluginEventHandlerConfig)this.MemberwiseClone();
         }
     }
 }
