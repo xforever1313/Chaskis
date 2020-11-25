@@ -2,6 +2,7 @@
 
 #addin nuget:?package=Cake.ArgumentBinder&version=0.2.2
 #addin nuget:?package=Cake.FileHelpers&version=3.2.1
+#addin nuget:?package=Cake.LicenseHeaderUpdater&version=0.0.1
 
 // ---------------- Tools ----------------
 
@@ -32,6 +33,7 @@ using System.Threading;
 #load "Docker.cake"
 #load "DistroCreator.cake"
 #load "ImportantPaths.cake"
+#load "LicenseHeader.cake"
 #load "MSBuild.cake"
 #load "Pkgbuild.cake"
 #load "RegressionTest.cake"
