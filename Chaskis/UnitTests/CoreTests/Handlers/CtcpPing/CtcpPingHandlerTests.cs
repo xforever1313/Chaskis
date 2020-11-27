@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System.Collections.Generic;
 using Chaskis.Core;
 using Chaskis.UnitTests.Common;
 using Moq;
@@ -140,6 +139,28 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpPing
             );
 
             // Instead of action string, create a message string.
+            string ircString = TestHelpers.ConstructMessageString( remoteUser, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
+        [Test]
+        public void IgnoreCtcpVersionTest()
+        {
+            const string expectedMessage = "\u0001VERSION\u0001";
+
+            CtcpPingHandlerConfig config = new CtcpPingHandlerConfig
+            {
+                LineRegex = @".+", // Take any string so if we weren't filtering out, it would incorrectly trigger
+                LineAction = this.MessageFunction,
+                RespondToSelf = false
+            };
+
+            CtcpPingHandler uut = new CtcpPingHandler(
+                config
+            );
+
             string ircString = TestHelpers.ConstructMessageString( remoteUser, this.ircConfig.Nick, expectedMessage );
             uut.HandleEvent( this.ConstructArgs( ircString ) );
 

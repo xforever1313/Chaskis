@@ -242,6 +242,28 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Action
             Assert.IsNull( this.responseReceived );
         }
 
+        [Test]
+        public void IgnoreCtcpVersionTest()
+        {
+            const string expectedMessage = "\u0001VERSION\u0001";
+
+            ActionHandlerConfig config = new ActionHandlerConfig
+            {
+                LineRegex = @".+", // Take any string so if we weren't filtering out, it would incorrectly trigger
+                LineAction = this.MessageFunction,
+                RespondToSelf = false
+            };
+
+            ActionHandler uut = new ActionHandler(
+                config
+            );
+
+            string ircString = TestHelpers.ConstructMessageString( remoteUser, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
         // ---------------- Test Helpers ----------------
 
         private void DoGoodMessageTest( string user, string channel )

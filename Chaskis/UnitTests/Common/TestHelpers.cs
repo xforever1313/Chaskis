@@ -224,6 +224,24 @@ namespace Chaskis.UnitTests.Common
         }
 
         /// <summary>
+        /// Constructs a CTCP Version message sent from a server.
+        /// </summary>
+        /// <param name="remoteUser">Nickname of the user who sent the message</param>
+        /// <param name="channel">The irc channel used</param>
+        /// <param name="message">The message, if any.  Set to null for no message, just VERSION returns.</param>
+        /// <returns>The constructed CTCP Version IRC message sent from the server.</returns>
+        public static string ConstructCtcpVersionString(
+            string remoteUser,
+            string channel,
+            string message = null
+        )
+        {
+            message = ( " " + message ) ?? string.Empty;
+
+            return ConstructIrcString( remoteUser, "PRIVMSG", channel, "\u0001VERSION" + message + "\u0001" );
+        }
+
+        /// <summary>
         /// Constructs a PONG String from the server.
         /// </summary>
         /// <param name="server">The server URL</param>

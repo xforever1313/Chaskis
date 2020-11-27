@@ -856,6 +856,28 @@ namespace Chaskis.UnitTests.CoreTests.Handlers.Message
             Assert.IsNull( this.responseReceived );
         }
 
+        [Test]
+        public void IgnoreCtcpVersionTest()
+        {
+            const string expectedMessage = "\u0001VERSION\u0001";
+
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineRegex = @".+", // Take any string so if we weren't filtering out PING, it would incorrectly trigger
+                LineAction = this.MessageFunction,
+                RespondToSelf = false
+            };
+
+            MessageHandler uut = new MessageHandler(
+                config
+            );
+
+            string ircString = this.GenerateMessage( remoteUser, this.ircConfig.Nick, expectedMessage );
+            uut.HandleEvent( this.ConstructArgs( ircString ) );
+
+            Assert.IsNull( this.responseReceived );
+        }
+
         // -------- Test Helpers --------
 
         private void DoGoodMessageTest( string user, string channel )
