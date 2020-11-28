@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -98,6 +99,7 @@ namespace Chaskis.Cli
             this.AddAdminHandler();
             this.AddDebugHandlers();
             this.AddCtcpPingHandler();
+            this.AddCtcpVersionHandler();
         }
 
         public void Init_Stage2( IDictionary<string, PluginConfig> plugins )
@@ -532,6 +534,8 @@ namespace Chaskis.Cli
             // Otherwise, quietly ignore...
         }
 
+        // -------- CTCP Ping --------
+
         private void AddCtcpPingHandler()
         {
             CtcpPingHandlerConfig config = new CtcpPingHandlerConfig
@@ -551,6 +555,26 @@ namespace Chaskis.Cli
                 args.Message,
                 args.Channel
             );
+        }
+
+        // -------- CTCP Version --------
+
+        private void AddCtcpVersionHandler()
+        {
+            CtcpVersionHandlerConfig config = new CtcpVersionHandlerConfig
+            {
+                LineAction = HandleCtcpVersion,
+                ResponseOption = ResponseOptions.PmsOnly
+            };
+
+            CtcpVersionHandler handler = new CtcpVersionHandler( config );
+            this.handlers.Add( handler );
+        }
+
+        private void HandleCtcpVersion( CtcpVersionHandlerArgs args )
+        {
+            string version = $"{Chaskis.UserAgent} v{Chaskis.VersionStr} : {Environment.OSVersion}";
+            args.Writer.SendCtcpVersionResponse( version, args.Channel );
         }
     }
 }

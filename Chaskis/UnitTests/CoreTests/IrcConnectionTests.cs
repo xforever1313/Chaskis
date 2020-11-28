@@ -546,7 +546,7 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void SendCtcpVersionTest()
         {
-            // PRIVMSG target :[0001]VERSION message[0001]
+            // NOTICE target :[0001]VERSION message[0001]
             const string channel = "seth"; // "Channel" can be a username.
             const string message = "Chaskis IRC Bot";
 
@@ -568,7 +568,7 @@ namespace Chaskis.UnitTests.CoreTests
                 }
 
                 this.mac.Setup(
-                    m => m.WriteLine( $"PRIVMSG {channel} :\u0001VERSION {message}\u0001" )
+                    m => m.WriteLine( $"NOTICE {channel} :\u0001VERSION {message}\u0001" )
                 );
 
                 this.DoConnect( connection );
@@ -576,7 +576,7 @@ namespace Chaskis.UnitTests.CoreTests
                 try
                 {
                     connection.ReadEvent += onSendEvent;
-                    connection.SendCtcpVersion( message, channel );
+                    connection.SendCtcpVersionResponse( message, channel );
                 }
                 finally
                 {

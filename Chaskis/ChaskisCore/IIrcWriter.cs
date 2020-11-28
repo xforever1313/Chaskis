@@ -59,7 +59,7 @@ namespace Chaskis.Core
         /// The message to send.  Usually the bot ID and the operating system information.
         /// </param>
         /// <param name="userName">The user name to send the message to.</param>
-        void SendCtcpVersion( string message, string userName );
+        void SendCtcpVersionResponse( string message, string userName );
 
         /// <summary>
         /// Sends a pong using the given response.

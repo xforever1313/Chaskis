@@ -434,7 +434,7 @@ namespace Chaskis.Core
         }
 
         /// <inheritdoc/>
-        public void SendCtcpVersion( string message, string userName )
+        public void SendCtcpVersionResponse( string message, string userName )
         {
             this.OnReadLine(
                 new SendCtcpVersionEventArgs
@@ -447,7 +447,8 @@ namespace Chaskis.Core
                 }.ToXml()
            );
 
-            this.SendMessageInternal( message, userName, "\u0001VERSION ", "\u0001", PrivateMessageHelper.IrcCommand );
+           // CTCP users notices for responses.
+           this.SendMessageInternal( message, userName, "\u0001VERSION ", "\u0001", "NOTICE" );
         }
 
         private void SendMessageInternal( string msg, string channel, string prefix, string suffix, string type )
