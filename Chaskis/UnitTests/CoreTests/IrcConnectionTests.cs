@@ -544,6 +544,60 @@ namespace Chaskis.UnitTests.CoreTests
         }
 
         [Test]
+        public void SendCtcpVersionTest()
+        {
+            // PRIVMSG target :[0001]VERSION message[0001]
+            const string channel = "seth"; // "Channel" can be a username.
+            const string message = "Chaskis IRC Bot";
+
+            using( IrcConnection connection = new IrcConnection( this.defaultConfig, this.parsingQueue.Object, this.mac.Object ) )
+            {
+                SendCtcpVersionEventArgs sendArgs = null;
+                bool triggeredSendEvent = false;
+                void onSendEvent( string line )
+                {
+                    if(
+                        SendEventHandler.Regex.IsMatch( line ) &&
+                        ( line.Contains( IrcConnection.WatchdogStr ) == false ) // <- Skip Watchdogs
+                    )
+                    {
+                        triggeredSendEvent = true;
+                        return;
+                    }
+                    sendArgs = SendCtcpVersionEventArgsExtensions.FromXml( line, connection );
+                }
+
+                this.mac.Setup(
+                    m => m.WriteLine( $"PRIVMSG {channel} :\u0001VERSION {message}\u0001" )
+                );
+
+                this.DoConnect( connection );
+
+                try
+                {
+                    connection.ReadEvent += onSendEvent;
+                    connection.SendCtcpVersion( message, channel );
+                }
+                finally
+                {
+                    connection.ReadEvent -= onSendEvent;
+                }
+                this.DoDisconnect( connection );
+
+                // Check send event.
+                Assert.IsNotNull( sendArgs );
+                Assert.IsTrue( triggeredSendEvent );
+                Assert.AreEqual( channel, sendArgs.ChannelOrUser );
+                Assert.AreEqual( ChaskisEventProtocol.IRC, sendArgs.Protocol );
+                Assert.AreEqual( message, sendArgs.Message );
+                Assert.AreEqual( this.defaultConfig.Server, sendArgs.Server );
+                Assert.AreSame( connection, sendArgs.Writer );
+            }
+
+            this.mac.VerifyAll();
+        }
+
+        [Test]
         public void SendPingTest()
         {
             // According to RFC2812, sending a PING message

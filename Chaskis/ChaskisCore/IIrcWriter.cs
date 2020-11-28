@@ -51,6 +51,17 @@ namespace Chaskis.Core
         void SendCtcpPong( string message, string userName );
 
         /// <summary>
+        /// Sends a CTCP Version message to the specified user.
+        /// 
+        /// This is usually done in response to getting a CTCP Version request.
+        /// </summary>
+        /// <param name="msg">
+        /// The message to send.  Usually the bot ID and the operating system information.
+        /// </param>
+        /// <param name="userName">The user name to send the message to.</param>
+        void SendCtcpVersion( string message, string userName );
+
+        /// <summary>
         /// Sends a pong using the given response.
         /// </summary>
         /// <param name="response">The response we need to send.</param>

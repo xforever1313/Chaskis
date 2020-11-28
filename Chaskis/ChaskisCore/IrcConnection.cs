@@ -433,6 +433,23 @@ namespace Chaskis.Core
             this.SendMessageInternal( msg, userName, "\u0001PING ", "\u0001", "NOTICE" );
         }
 
+        /// <inheritdoc/>
+        public void SendCtcpVersion( string message, string userName )
+        {
+            this.OnReadLine(
+                new SendCtcpVersionEventArgs
+                {
+                    ChannelOrUser = userName,
+                    Message = message,
+                    Protocol = ChaskisEventProtocol.IRC,
+                    Server = this.Config.Server,
+                    Writer = this
+                }.ToXml()
+           );
+
+            this.SendMessageInternal( message, userName, "\u0001VERSION ", "\u0001", PrivateMessageHelper.IrcCommand );
+        }
+
         private void SendMessageInternal( string msg, string channel, string prefix, string suffix, string type )
         {
             if ( this.IsConnected == false )
