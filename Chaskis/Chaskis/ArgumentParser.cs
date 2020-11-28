@@ -30,16 +30,6 @@ namespace Chaskis.Cli
         private const string rootRegex = rootArg + "(?<path>.+)";
 
         /// <summary>
-        /// The argument for the irc plugin config.
-        /// </summary>
-        private const string failPluginArg = "--failOnBadPlugin=";
-
-        /// <summary>
-        /// The regex to search for a plugin regex.
-        /// </summary>
-        private const string failPluginRegex = failPluginArg + "(?<yesOrNo>(yes|no))";
-
-        /// <summary>
         /// The argument to turn on bootstrapping.
         /// </summary>
         private const string bootStrapArg = "--bootstrap";
@@ -57,7 +47,6 @@ namespace Chaskis.Cli
             ArgumentChecker.StringIsNotNullOrEmpty( defaultRootDir, nameof( defaultRootDir ) );
 
             this.ChaskisRoot = defaultRootDir;
-            this.FailOnPluginFailure = true;
             this.IsValid = true;
 
             foreach( string arg in args )
@@ -89,25 +78,6 @@ namespace Chaskis.Cli
                         this.IsValid = false;
                     }
                 }
-                else if( arg.StartsWith( failPluginArg ) )
-                {
-                    Match failMatch = Regex.Match( arg, failPluginRegex );
-                    if( failMatch.Success )
-                    {
-                        if( failMatch.Groups["yesOrNo"].Value == "yes" )
-                        {
-                            this.FailOnPluginFailure = true;
-                        }
-                        else
-                        {
-                            this.FailOnPluginFailure = false;
-                        }
-                    }
-                    else
-                    {
-                        this.IsValid = false;
-                    }
-                }
                 else
                 {
                     this.IsValid = false;
@@ -133,12 +103,6 @@ namespace Chaskis.Cli
         /// Whether or not to print the version information.
         /// </summary>
         public bool PrintVersion { get; private set; }
-
-        /// <summary>
-        /// Whether or not to fail if the a plug loads, or attempt to continue.
-        /// Defaulted to false (will not fail).
-        /// </summary>
-        public bool FailOnPluginFailure { get; private set; }
 
         /// <summary>
         /// Whether or not the args were parsed correctly.

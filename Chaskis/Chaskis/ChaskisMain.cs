@@ -58,7 +58,7 @@ namespace Chaskis.Cli
                     {
                         chaskis.InitState1_LoadIrcConfig();
                         bool pluginLoaded = chaskis.InitStage2_LoadPlugins();
-                        if( ( pluginLoaded == false ) && parser.FailOnPluginFailure )
+                        if( ( pluginLoaded == false ) )
                         {
                             throw new PluginLoadException( "Fail on assembly was enabled.  Terminating." );
                         }
@@ -98,8 +98,6 @@ namespace Chaskis.Cli
             Console.WriteLine( "                            If --bootstrap is passed in, location of where to bootstrap." );
             Console.WriteLine( "--bootstrap --------------  Puts default configuration in this area." );
             Console.WriteLine( "                            Default is in AppData if --chaskisroot is not specified." );
-            Console.WriteLine( "--failOnBadPlugin=yes|no -  Whether or not to fail if a plugin load fails." );
-            Console.WriteLine( "                            Defaulted to yes." );
         }
 
         /// <summary>

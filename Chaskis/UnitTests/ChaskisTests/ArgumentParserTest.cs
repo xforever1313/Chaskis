@@ -32,7 +32,6 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
@@ -51,7 +50,6 @@ namespace Chaskis.UnitTests.ChaskisTests
 
                 ArgumentParser uut = new ArgumentParser( args, rootDir );
                 Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsTrue( uut.FailOnPluginFailure );
                 Assert.IsTrue( uut.PrintHelp );
                 Assert.IsFalse( uut.PrintVersion );
                 Assert.IsFalse( uut.BootStrap );
@@ -69,49 +67,10 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsTrue( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
             Assert.IsTrue( uut.IsValid );
-        }
-
-        /// <summary>
-        /// Ensures the plugin failure argument is working.
-        /// </summary>
-        [Test]
-        public void FailOnPluginFailureTest()
-        {
-            {
-                string[] args = { "--failOnBadPlugin=yes" };
-
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsTrue( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsTrue( uut.IsValid );
-            }
-            {
-                string[] args = { "--failOnBadPlugin=no" };
-
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsFalse( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsTrue( uut.IsValid );
-            }
-            {
-                string[] args = { "--failOnBadPlugin=derp" };
-
-                ArgumentParser uut = new ArgumentParser( args, rootDir );
-                Assert.AreEqual( rootDir, uut.ChaskisRoot );
-                Assert.IsTrue( uut.FailOnPluginFailure );
-                Assert.IsFalse( uut.PrintHelp );
-                Assert.IsFalse( uut.PrintVersion );
-                Assert.IsFalse( uut.IsValid );
-            }
         }
 
         /// <summary>
@@ -125,7 +84,6 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, differentRoot );
             Assert.AreEqual( differentRoot, uut.ChaskisRoot );
-            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsFalse( uut.BootStrap );
@@ -142,7 +100,6 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             ArgumentParser uut = new ArgumentParser( args, rootDir );
             Assert.AreEqual( rootDir, uut.ChaskisRoot );
-            Assert.IsTrue( uut.FailOnPluginFailure );
             Assert.IsFalse( uut.PrintHelp );
             Assert.IsFalse( uut.PrintVersion );
             Assert.IsTrue( uut.BootStrap );
