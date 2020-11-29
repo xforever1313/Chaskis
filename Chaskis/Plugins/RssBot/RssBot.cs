@@ -121,7 +121,16 @@ namespace Chaskis.Plugins.RssBot
             {
                 FeedReader reader = new FeedReader( feed, initor.HttpClient );
 
-                reader.Init();
+                try
+                {
+                    reader.Init();
+                }
+                catch( Exception e )
+                {
+                    this.pluginLogger.WriteLine(
+                        "Error when initing feed.  Will try again during the next update." + Environment.NewLine + e
+                    );
+                }
 
                 int eventId = this.scheduler.ScheduleRecurringEvent(
                     feed.RefreshInterval,
@@ -207,7 +216,7 @@ namespace Chaskis.Plugins.RssBot
             {
                 this.pluginLogger.ErrorWriteLine(
                     "An Exception was caught while updating feed {0}:{1}{2}",
-                    reader.FeedTitle,
+                    reader.FeedTitle ?? "<Unknown Title>",
                     Environment.NewLine,
                     err.ToString()
                 );

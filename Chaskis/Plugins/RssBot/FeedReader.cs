@@ -64,8 +64,8 @@ namespace Chaskis.Plugins.RssBot
         {
             Task<SyndicationFeed> task = this.FetchFeed();
             task.Wait();
-            this.feed = task.Result;
-            this.FeedTitle = this.feed.Title.Text;
+
+            SortFeeds( task.Result );
         }
 
         /// <summary>
@@ -80,28 +80,47 @@ namespace Chaskis.Plugins.RssBot
         /// </returns>
         public async Task<IList<SyndicationItem>> UpdateAsync()
         {
-            List<SyndicationItem> newItems = new List<SyndicationItem>();
-
             SyndicationFeed updatedFeed = await this.FetchFeedAsync();
+            return SortFeeds( updatedFeed );
+        }
+
+        private List<SyndicationItem> SortFeeds( SyndicationFeed latestFeed )
+        {
+            List<SyndicationItem> newItems = new List<SyndicationItem>();
 
             // this.feed can be modified by multiple threads if UpdateAsync() is called multiple times...
             // lock it up.
             lock( this.feedLock )
             {
-                foreach( SyndicationItem item in updatedFeed.Items )
+                if( this.feed == null )
                 {
-                    // If our item does not exist, call OnNewItem.
-                    if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
-                    {
-                        newItems.Add( item );
-                    }
-                }
+                    // If we are null, we have not gotten any feed data yet.
+                    // Therefore, do not add any new items as we do not want to spam
+                    // channels.
+                    //
+                    // This can happen if when the IRC bot starts up, the URL to get the
+                    // feed is down during initialization, so we get nothing.
 
-                this.feed = updatedFeed;
+                    this.feed = latestFeed;
+                    this.FeedTitle = this.feed.Title.Text;
+                }
+                else
+                {
+                    // If our feed is not null, then we have at least 1 update.
+                    // we can post to channels any new updates.
+                    foreach( SyndicationItem item in latestFeed.Items )
+                    {
+                        // If our item does not exist, call OnNewItem.
+                        if( this.feed.Items.FirstOrDefault( i => i.Id == item.Id ) == null )
+                        {
+                            newItems.Add( item );
+                        }
+                    }
+                    this.feed = latestFeed;
+                }
             }
 
             newItems.Sort( this.SortByDate );
-
             return newItems;
         }
 
