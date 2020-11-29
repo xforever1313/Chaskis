@@ -150,7 +150,9 @@ namespace Chaskis.UnitTests.CoreTests
             {
                 // Do not call connection.Init().
                 Assert.Throws<InvalidOperationException>( () => connection.Connect() );
-                Assert.DoesNotThrow( () => connection.Disconnect() ); // <- Should be a no-op since we are not connected.
+
+                this.mac.Setup( m => m.Dispose() );
+                Assert.DoesNotThrow( () => connection.Dispose() ); // <- Should be a no-op since we are not connected.
             }
         }
 
@@ -1099,7 +1101,7 @@ namespace Chaskis.UnitTests.CoreTests
         private void DoDisconnect( IrcConnection connection )
         {
             this.SetupDisconnection();
-            connection.Disconnect();
+            connection.Dispose();
             Assert.IsFalse( connection.IsConnected );
             Assert.IsFalse( this.mac.Object.IsConnected );
         }

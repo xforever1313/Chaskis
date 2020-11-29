@@ -25,7 +25,13 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Wait until we finish joining all channels.
         /// </summary>
-        WaitForFinishJoiningChannels
+        WaitForFinishJoiningChannels,
+
+        /// <summary>
+        /// We should expect the server to NOT connect to anything,
+        /// as the process may purposefully not connect.
+        /// </summary>
+        ExpectNoConnection
     }
 
     public class ChaskisFixtureConfig

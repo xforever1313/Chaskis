@@ -57,11 +57,7 @@ namespace Chaskis.Cli
                     using( Chaskis chaskis = new Chaskis( parser.ChaskisRoot ) )
                     {
                         chaskis.InitState1_LoadIrcConfig();
-                        bool pluginLoaded = chaskis.InitStage2_LoadPlugins();
-                        if( ( pluginLoaded == false ) )
-                        {
-                            throw new PluginLoadException( "Fail on assembly was enabled.  Terminating." );
-                        }
+                        chaskis.InitStage2_LoadPlugins();
                         chaskis.InitStage3_DefaultHandlers();
                         chaskis.InitStage4_OpenConnection();
 

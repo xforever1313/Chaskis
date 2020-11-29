@@ -63,7 +63,7 @@ namespace Chaskis.RegressionTests.TestCore
             );
         }
 
-        private void PerformFixtureSetupInternal( ChaskisFixtureConfig config  )
+        private void PerformFixtureSetupInternal( ChaskisFixtureConfig config )
         {
             if( config == null )
             {
@@ -88,10 +88,14 @@ namespace Chaskis.RegressionTests.TestCore
 
             // ---------------- Start Server ----------------
 
-            Step.Run(
-                "Starting server",
-                () => this.IrcServer.StartServer( config.Port )
-            );
+            // If we don't expect a connection, no sense in starting the server.
+            if( config.ConnectionWaitMode != ConnectionWaitMode.ExpectNoConnection )
+            {
+                Step.Run(
+                    "Starting server",
+                    () => this.IrcServer.StartServer( config.Port )
+                );
+            }
 
             // ---------------- Start Process ----------------
 
@@ -106,27 +110,34 @@ namespace Chaskis.RegressionTests.TestCore
 
             // ---------------- Wait to join ----------------
 
-            Step.Run(
-                "Waiting for client to connect to server",
-                () => this.IrcServer.WaitForConnection().FailIfFalse( "Server never got IRC connection" )
-            );
+            if( config.ConnectionWaitMode != ConnectionWaitMode.ExpectNoConnection )
+            {
+                Step.Run(
+                    "Waiting for client to connect to server",
+                    () => this.IrcServer.WaitForConnection().FailIfFalse( "Server never got IRC connection" )
+                );
 
-            Step.Run(
-                "Wait for client to finish connecting.",
-                () =>
-                {
-                    if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForConnected )
+                Step.Run(
+                    "Wait for client to finish connecting.",
+                    () =>
                     {
-                        this.ProcessRunner.WaitForClientToConnect();
-                    }
-                    else if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForFinishJoiningChannels )
-                    {
-                        this.ProcessRunner.WaitToFinishJoiningChannels();
-                    }
+                        if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForConnected )
+                        {
+                            this.ProcessRunner.WaitForClientToConnect();
+                        }
+                        else if( config.ConnectionWaitMode == ConnectionWaitMode.WaitForFinishJoiningChannels )
+                        {
+                            this.ProcessRunner.WaitToFinishJoiningChannels();
+                        }
 
-                    // Else, do nothing.
-                }
-            );
+                        // Else, do nothing.
+                    }
+                );
+            }
+            else
+            {
+                Console.WriteLine( "Expecting no connecting, skipping wait" );
+            }
         }
 
         public void PerformFixtureTeardown()
@@ -210,7 +221,7 @@ namespace Chaskis.RegressionTests.TestCore
                 TestContext.CurrentContext.Test.Name + ".log"
             );
 
-            this.logFile = new FileStream( fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite );
+            this.logFile = new FileStream( fileName, FileMode.Create, FileAccess.ReadWrite );
             this.logWriter = new StreamWriter( this.logFile );
 
             Logger.OnWriteLine += this.Logger_OnWriteLine;

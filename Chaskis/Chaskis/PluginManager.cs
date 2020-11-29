@@ -62,7 +62,7 @@ namespace Chaskis.Cli
         /// <param name="existingPlugins">Already created plugins that do not need to be inited via reflection.</param>
         /// <param name="ircConfig">The irc config we are using.</param>
         /// <param name="chaskisConfigRoot">The root of the chaskis config.</param>
-        public bool LoadPlugins(
+        public void LoadPlugins(
             IList<AssemblyConfig> assemblyList,
             IList<PluginConfig> existingPlugins,
             IIrcConfig ircConfig,
@@ -72,7 +72,7 @@ namespace Chaskis.Cli
             string chaskisConfigRoot
         )
         {
-            bool success = true;
+            List<Exception> exceptions = new List<Exception>();
 
             foreach( AssemblyConfig assemblyConfig in assemblyList )
             {
@@ -121,7 +121,7 @@ namespace Chaskis.Cli
                 {
                     StringBuilder errorString = new StringBuilder();
                     errorString.AppendLine( "*************" );
-                    errorString.AppendLine( "Warning! Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
+                    errorString.AppendLine( "Error when loading assembly " + assemblyConfig.AssemblyPath + ":" );
                     errorString.AppendLine( e.Message );
                     errorString.AppendLine();
                     errorString.AppendLine( e.StackTrace );
@@ -134,10 +134,18 @@ namespace Chaskis.Cli
                     }
                     errorString.AppendLine( "*************" );
 
-                    success = false;
-
                     StaticLogger.Log.ErrorWriteLine( errorString.ToString() );
+
+                    exceptions.Add( e );
                 }
+            }
+
+            if( exceptions.Count != 0 )
+            {
+                throw new AggregateException(
+                    "Exceptions found when loading plugins:",
+                    exceptions
+                );
             }
 
             foreach( PluginConfig existingPlugin in existingPlugins )
@@ -197,13 +205,19 @@ namespace Chaskis.Cli
                     }
                     errorString.AppendLine( "*************" );
 
-                    success = false;
-
                     StaticLogger.Log.ErrorWriteLine( errorString.ToString() );
+
+                    exceptions.Add( e );
                 }
             }
 
-            return success;
+            if( exceptions.Count != 0 )
+            {
+                throw new AggregateException(
+                    "Exceptions found when initializing plugins:",
+                    exceptions
+                );
+            }
         }
     }
 }

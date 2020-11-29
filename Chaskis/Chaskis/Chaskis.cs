@@ -119,23 +119,21 @@ namespace Chaskis.Cli
         /// Loads the Plugins from the chaskis root.
         /// The IRC config MUST be loaded first.
         /// </summary>
-        /// <returns>True if load was successful, else false.</returns>
-        public bool InitStage2_LoadPlugins()
+        public void InitStage2_LoadPlugins()
         {
             string pluginConfigFile = Path.Combine( this.chaskisRoot, "PluginConfig.xml" );
 
             StaticLogger.Log.WriteLine( "Using Plugin config file '{0}'", pluginConfigFile );
 
             IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( pluginConfigFile );
-            return InitStage2_LoadPlugins( pluginList );
+            InitStage2_LoadPlugins( pluginList );
         }
 
         /// <summary>
         /// Loads plugins via a plugin list.
         /// </summary>
         /// <param name="pluginList">The list of plugins to load.</param>
-        /// <returns>True if load was successful, else false.</returns>
-        public bool InitStage2_LoadPlugins( IList<AssemblyConfig> pluginList )
+        public void InitStage2_LoadPlugins( IList<AssemblyConfig> pluginList )
         {
             if( this.ircConfig == null )
             {
@@ -154,26 +152,19 @@ namespace Chaskis.Cli
                 this.defaultHandlers,
                 new GenericLogger()
             );
-               
 
-            if( manager.LoadPlugins(
-                    pluginList,
-                    new List<PluginConfig>() { defaultChaskisPlugin },
-                    this.ircConfig,
-                    this.ircBot.Scheduler,
-                    this.ircBot.ChaskisEventSender,
-                    this.httpClient,
-                    this.chaskisRoot
-                )
-            )
-            {
-                this.plugins = manager.Plugins;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            manager.LoadPlugins(
+                pluginList,
+                new List<PluginConfig>() { defaultChaskisPlugin },
+                this.ircConfig,
+                this.ircBot.Scheduler,
+                this.ircBot.ChaskisEventSender,
+                this.httpClient,
+                this.chaskisRoot
+            );
+
+            this.plugins = manager.Plugins;
         }
 
         /// <summary>

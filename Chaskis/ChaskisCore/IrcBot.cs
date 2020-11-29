@@ -106,9 +106,9 @@ namespace Chaskis.Core
         /// </summary>
         public void Dispose()
         {
-            if( this.ircConnection.IsConnected )
+            try
             {
-                try
+                if( this.ircConnection.IsConnected )
                 {
                     // Stop reacting to strings from the server, we don't care any more.
                     this.ircConnection.ReadEvent -= this.IrcConnection_ReadEvent;
@@ -120,10 +120,10 @@ namespace Chaskis.Core
 
                     this.parsingQueue.WaitForAllEventsToExecute();
                 }
-                finally
-                {
-                    this.ircConnection.Disconnect();
-                }
+            }
+            finally
+            {
+                this.ircConnection?.Dispose();
             }
         }
 

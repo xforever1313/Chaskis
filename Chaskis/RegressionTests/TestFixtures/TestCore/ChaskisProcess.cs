@@ -174,6 +174,22 @@ namespace Chaskis.RegressionTests.TestCore
             }
 
             this.process.StandardInput.WriteLine( "q" );
+            return this.Wait( timeout );
+        }
+
+        /// <summary>
+        /// Waits for the process to stop. This really should only be called
+        /// if we are expecting the process to exit on its own.
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public bool Wait( int timeout = TestConstants.DefaultTimeout )
+        {
+            if( this.process == null )
+            {
+                throw new InvalidOperationException( "There is no process to wait for!" );
+            }
+
             bool success = this.process.WaitForExit( timeout );
             if( success )
             {

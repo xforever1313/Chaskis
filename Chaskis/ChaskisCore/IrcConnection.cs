@@ -200,6 +200,7 @@ namespace Chaskis.Core
             if( this.inited == false )
             {
                 // Start Executing
+                this.eventScheduler.Start();
                 this.writerQueue.Start();
                 this.inited = true;
             }
@@ -663,50 +664,6 @@ namespace Chaskis.Core
         }
 
         /// <summary>
-        /// Disconnected.
-        /// No-Op if already disconnected.
-        /// </summary>
-        public void Disconnect()
-        {
-            if( IsConnected != false )
-            {
-                StaticLogger.Log.WriteLine( "Disconnecting..." );
-
-                // Stop all scheduled events.  This will prevent any more events
-                // from being queued from this perspective.
-                this.eventScheduler.Dispose();
-
-                // - Next, prevent the reader thread from adding more events.
-                //   Set KeepReading to false.  The abort logic in the Reader
-                //   thread depends on this.  This will also prevent any more
-                //   events being posted to the string parsing queue.
-                this.KeepReading = false;
-
-                // - We could be in the reconnecting state.  Trigger that thread to awaken
-                //   if its sleeping between reconnects.
-                //   Since KeepReading is set to false, the reconnection thread wil exit.
-                this.reconnectAbortEvent.Set();
-
-                // Drain our writer queue before disconnecting so everything that needs to go out goes out.
-                {
-                    ManualResetEvent doneEvent = new ManualResetEvent( false );
-                    this.writerQueue.AddEvent( () => doneEvent.Set() );
-
-                    // Wait for our last event to execute before leaving.
-                    doneEvent.WaitOne();
-                    this.writerQueue.Dispose();
-                }
-
-                this.DisconnectHelper();
-
-                this.watchDog.Dispose();
-                this.connection.Dispose();
-
-                StaticLogger.Log.WriteLine( "Disconnect Complete." );
-            }
-        }
-
-        /// <summary>
         /// Helps disconnect the connection.
         /// </summary>
         private void DisconnectHelper()
@@ -755,13 +712,49 @@ namespace Chaskis.Core
         }
 
         /// <summary>
-        /// Cleans up everything.
-        /// Calls Disconnect.
+        /// Disconnects and cleans up everything.
         /// </summary>
         public void Dispose()
         {
-            Disconnect();
+            // Stop all scheduled events.  This will prevent any more events
+            // from being queued from this perspective.  This should be called
+            // regardless if we are connected or not.
+            this.eventScheduler.Dispose();
+
+            if( IsConnected != false )
+            {
+                StaticLogger.Log.WriteLine( "Disconnecting..." );
+
+                // - Next, prevent the reader thread from adding more events.
+                //   Set KeepReading to false.  The abort logic in the Reader
+                //   thread depends on this.  This will also prevent any more
+                //   events being posted to the string parsing queue.
+                this.KeepReading = false;
+
+                // - We could be in the reconnecting state.  Trigger that thread to awaken
+                //   if its sleeping between reconnects.
+                //   Since KeepReading is set to false, the reconnection thread wil exit.
+                this.reconnectAbortEvent.Set();
+
+                // Drain our writer queue before disconnecting so everything that needs to go out goes out.
+                {
+                    ManualResetEvent doneEvent = new ManualResetEvent( false );
+                    this.writerQueue.AddEvent( () => doneEvent.Set() );
+
+                    // Wait for our last event to execute before leaving.
+                    doneEvent.WaitOne();
+                    this.writerQueue.Dispose(); // Dispose now so no more events get executed.
+                }
+
+                this.DisconnectHelper();
+
+                StaticLogger.Log.WriteLine( "Disconnect Complete." );
+            }
+
+            this.watchDog.Dispose();
+            this.connection.Dispose();
             this.writerQueue.OnError -= this.EventQueue_OnError;
+            this.writerQueue.Dispose();
         }
 
         /// <summary>
