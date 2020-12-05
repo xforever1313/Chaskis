@@ -654,6 +654,14 @@ pipeline
                         GitCommit( "Chaskis", "Deployed Version ${GetChaskisVersion()}", false );
                     }
                 }
+                stage( 'Release Notes' )
+                {
+                    steps
+                    {
+                        CallCakeOnBuildMachine( "--target=make_release_notes" );
+                        archiveArtifacts "Chaskis\\ReleaseNotes.md";
+                    }
+                }
             }
             when
             {
