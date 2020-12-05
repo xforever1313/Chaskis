@@ -6,6 +6,7 @@
 //
 
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Chaskis.Plugins.QuoteBot;
 using NUnit.Framework;
@@ -30,11 +31,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
         private Quote quote2;
         private Quote quote3;
 
+        /// <summary>
+        /// So one test runs at a time.
+        /// </summary>
+        private static Mutex mutex = new Mutex();
+
         // ---------------- Setup / Teardown ----------------
 
         [SetUp]
         public void TestSetup()
         {
+            Assert.IsTrue( mutex.WaitOne( 60 * 1000 ) );
+
             this.DeleteDb();
             this.uut = new QuoteBotDatabase( dbPath );
 
@@ -55,8 +63,15 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
         [TearDown]
         public void TestTeardown()
         {
-            this.uut.Dispose();
-            this.DeleteDb();
+            try
+            {
+                this.uut.Dispose();
+                this.DeleteDb();
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
+            }
         }
 
         /// <summary>

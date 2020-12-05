@@ -6,6 +6,7 @@
 //
 
 using System.IO;
+using System.Threading;
 using Chaskis.Plugins.KarmaBot;
 using NUnit.Framework;
 
@@ -36,6 +37,11 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
         /// </summary>
         private KarmaBotDatabase uut;
 
+        /// <summary>
+        /// So one test runs at a time.
+        /// </summary>
+        private static Mutex mutex = new Mutex();
+
         private static readonly string databasePath = Path.Combine(
             TestContext.CurrentContext.TestDirectory,
             databaseName
@@ -44,6 +50,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
         [SetUp]
         public void TestSetUp()
         {
+            Assert.IsTrue( mutex.WaitOne( 60 * 1000 ) );
+
             if( File.Exists( databasePath ) )
             {
                 File.Delete( databasePath );
@@ -55,11 +63,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
         [TearDown]
         public void TestTeardown()
         {
-            this.uut.Dispose();
-
-            if( File.Exists( databasePath ) )
+            try
             {
-                File.Delete( databasePath );
+                this.uut.Dispose();
+
+                if( File.Exists( databasePath ) )
+                {
+                    File.Delete( databasePath );
+                }
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
             }
         }
 
