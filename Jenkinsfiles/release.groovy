@@ -222,6 +222,28 @@ def PostDirectoryToWebsite( String localDirectory )
     }
 }
 
+def SetLatestOnWebsite()
+{
+    withCredentials(
+        [sshUserPrivateKey(
+            credentialsId: GetWebsiteCredsId(),
+            usernameVariable: "SSHUSER",
+            keyFileVariable: "WEBSITE_KEY" // <- Note: WEBSITE_KEY must be in all quotes below, or SCP won't work if the path has whitespace.
+        )]
+    )
+    {
+        def releaseLocation = "/home/${SSHUSER}/files.shendrick.net/projects/chaskis/releases/${GetChaskisVersion()}/";
+
+        SetupPrivateKey( WEBSITE_KEY );
+
+        String verbose = "-v"; // Make "-v" for verbose mode.
+        String options = "-o BatchMode=yes -o StrictHostKeyChecking=no -i \"${WEBSITE_KEY}\"";
+
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net rm /home/${SSHUSER}/files.shendrick.net/projects/chaskis/releases/latest";
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net ln -s ${releaseLocation} /home/${SSHUSER}/files.shendrick.net/projects/chaskis/releases/latest";
+    }
+}
+
 def GitCommit( String workingDir, String message, Boolean toggleIgnoreLineEndings )
 {
     if( toggleIgnoreLineEndings )
@@ -570,6 +592,7 @@ pipeline
                     {
                         // PKGBUILD for Arch Linux requires files be deployed to the website first.
                         PostDirectoryToWebsite( distFolder );
+                        SetLatestOnWebsite();
                     }
                     when
                     {
