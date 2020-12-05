@@ -61,6 +61,8 @@ Task( "update_licenses" )
 
         List<FilePath> files = new List<FilePath>();
 
+        files.Add( File( "./Chaskis/RegressionTests/TestFixtures/TestCore/ChaskisConstants.cs.template" ) );
+
         SolutionParserResult slnResult = ParseSolution( paths.SolutionPath );
         foreach( SolutionProject proj in slnResult.Projects )
         {
