@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.UserListBot
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.3.2";
+        internal const string VersionStr = "0.3.3";
 
         /// <summary>
         /// The handlers for this plugin.

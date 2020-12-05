@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.WelcomeBot
     {
         // -------- Fields --------
 
-        internal const string VersionStr = "0.4.1";
+        internal const string VersionStr = "0.4.2";
 
         /// <summary>
         /// Whether or not the plugin is loaded an ready to go.
