@@ -23,6 +23,7 @@
 
 using Cake.ArgumentBinder;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -37,6 +38,7 @@ using System.Threading;
 #load "MSBuild.cake"
 #load "Pkgbuild.cake"
 #load "RegressionTest.cake"
+#load "ReleaseNotes.cake"
 #load "TestRunner.cake"
 #load "Templatize.cake"
 #load "UnitTest.cake"
