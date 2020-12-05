@@ -4,7 +4,7 @@ Task( "make_release_notes" )
     {
         if( isJenkins == false )
         {
-            //throw new InvalidOperationException( "Can only be run on Jenkins" );
+            throw new InvalidOperationException( "Can only be run on Jenkins" );
         }
 
         DirectoryPath distFolder = paths.OutputPackages;
