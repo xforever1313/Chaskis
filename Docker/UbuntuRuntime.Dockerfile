@@ -10,6 +10,9 @@ RUN dpkg -i packages-microsoft-prod.deb
 RUN apt -y update
 RUN apt -y install dotnet-runtime-3.1
 
+# For the cowsay bot plugin
+RUN apt -y install cowsay
+
 # Delete unneeded things:
 RUN apt -y remove wget
 RUN dpkg -r remove packages-microsoft-prod
