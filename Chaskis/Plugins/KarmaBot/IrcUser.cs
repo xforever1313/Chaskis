@@ -40,5 +40,12 @@ namespace Chaskis.Plugins.KarmaBot
         /// The name of the user.
         /// </summary>
         public string UserName { get; set; }
+
+        // -------- Functions --------
+
+        public IrcUser Clone()
+        {
+            return (IrcUser)this.MemberwiseClone();
+        }
     }
 }

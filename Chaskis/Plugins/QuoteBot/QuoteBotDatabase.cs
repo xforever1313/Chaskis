@@ -138,18 +138,18 @@ namespace Chaskis.Plugins.QuoteBot
         /// <returns>A random quote.  Null if none are in the database.</returns>
         public Quote GetRandomQuote()
         {
-            IEnumerable<Quote> ids;
             lock( this.quotes )
             {
-                ids = this.quotes.FindAll();
-            }
+                IEnumerable<Quote> ids = this.quotes.FindAll();
 
-            if( ids.Count() == 0 )
-            {
-                return null;
-            }
+                if( ids.Count() == 0 )
+                {
+                    return null;
+                }
 
-            return ids.ElementAt( this.random.Next( 0, ids.Count() ) );
+                // Unsure if Clone() is needed, but without weird things happen.
+                return ids.ElementAt( this.random.Next( 0, ids.Count() ) ).Clone();
+            }
         }
 
         /// <summary>
@@ -165,7 +165,15 @@ namespace Chaskis.Plugins.QuoteBot
 
             lock( this.quotes )
             {
-                return this.quotes.FindOne( q => q.Id == id );
+                Quote foundQuote = this.quotes.FindOne( q => q.Id == id );
+                if( foundQuote != null )
+                {
+                    // Unsure if clone is needed here or not, but without
+                    // weird things happen.
+                    foundQuote = foundQuote.Clone();
+                }
+
+                return foundQuote;
             }
         }
 

@@ -185,7 +185,14 @@ namespace Chaskis.Plugins.KarmaBot
         {
             lock( this.users )
             {
-                return this.users.FindOne( u => u.UserName.Equals( userName ) );
+                IrcUser user = this.users.FindOne( u => u.UserName.Equals( userName ) );
+                if( user != null )
+                {
+                    // Unsure if the clone is needed, but without it, bad things happen.
+                    user = user.Clone();
+                }
+
+                return user;
             }
         }
 

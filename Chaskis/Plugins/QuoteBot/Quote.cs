@@ -108,5 +108,10 @@ namespace Chaskis.Plugins.QuoteBot
                 this.TimeStamp.ToShortDateString()
             );
         }
+
+        public Quote Clone()
+        {
+            return (Quote)this.MemberwiseClone();
+        }
     }
 }
