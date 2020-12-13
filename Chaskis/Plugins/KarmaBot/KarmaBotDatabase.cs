@@ -24,7 +24,7 @@ namespace Chaskis.Plugins.KarmaBot
         /// </summary>
         private readonly LiteDatabase dbConnection;
 
-        private readonly LiteCollection<IrcUser> users;
+        private readonly ILiteCollection<IrcUser> users;
 
         /// <summary>
         /// Cache for irc users so we don't need to consistently query the database
@@ -40,7 +40,12 @@ namespace Chaskis.Plugins.KarmaBot
         /// <param name="databaseLocation">The database location.</param>
         public KarmaBotDatabase( string databaseLocation )
         {
-            this.dbConnection = new LiteDatabase( databaseLocation );
+            ConnectionString connectionString = new ConnectionString();
+            connectionString.Upgrade = true;
+            connectionString.Filename = databaseLocation;
+            connectionString.Connection = ConnectionType.Shared; // <- So multiple threads can access it without issue.
+
+            this.dbConnection = new LiteDatabase( connectionString );
             this.users = this.dbConnection.GetCollection<IrcUser>();
 
             this.ircUserCache = new Dictionary<string, IrcUser>();

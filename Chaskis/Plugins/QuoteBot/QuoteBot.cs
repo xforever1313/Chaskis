@@ -23,7 +23,7 @@ namespace Chaskis.Plugins.QuoteBot
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.4.3";
+        internal const string VersionStr = "0.5.0";
 
         /// <summary>
         /// The handlers for this plugin.

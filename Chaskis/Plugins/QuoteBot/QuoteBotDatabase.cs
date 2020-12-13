@@ -22,7 +22,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private readonly LiteDatabase dbConnection;
 
-        private readonly LiteCollection<Quote> quotes;
+        private readonly ILiteCollection<Quote> quotes;
 
         private readonly Random random;
 
@@ -30,7 +30,12 @@ namespace Chaskis.Plugins.QuoteBot
 
         public QuoteBotDatabase( string databaseLocation )
         {
-            this.dbConnection = new LiteDatabase( databaseLocation );
+            ConnectionString connectionString = new ConnectionString();
+            connectionString.Upgrade = true;
+            connectionString.Filename = databaseLocation;
+            connectionString.Connection = ConnectionType.Shared; // <- So multiple threads can access it without issue.
+
+            this.dbConnection = new LiteDatabase( connectionString );
             this.quotes = this.dbConnection.GetCollection<Quote>();
             this.random = new Random();
         }
