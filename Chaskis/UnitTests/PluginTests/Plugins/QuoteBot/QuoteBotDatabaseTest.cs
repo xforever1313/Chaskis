@@ -5,11 +5,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Chaskis.Plugins.QuoteBot;
 using NUnit.Framework;
+using SethCS.Extensions;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
@@ -82,6 +84,13 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
             if( File.Exists( dbPath ) )
             {
                 File.Delete( dbPath );
+
+                if( Environment.UserName.EqualsIgnoreCase( "ContainerUser" ) )
+                {
+                    // No idea why we need to do this in a docker container, but we do >_>.
+                    Console.WriteLine( "Sleeping after deleting in container" );
+                    Thread.Sleep( 5000 );
+                }
             }
         }
 
