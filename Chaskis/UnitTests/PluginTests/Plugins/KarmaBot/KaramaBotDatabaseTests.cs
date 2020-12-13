@@ -5,12 +5,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.IO;
 using System.Threading;
 using Chaskis.Plugins.KarmaBot;
 using NUnit.Framework;
-using SethCS.Extensions;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
 {
@@ -54,7 +52,10 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
         {
             Assert.IsTrue( mutex.WaitOne( 60 * 1000 ) );
 
-            this.DeleteDb();
+            if( File.Exists( databasePath ) )
+            {
+                File.Delete( databasePath );
+            }
 
             this.uut = new KarmaBotDatabase( databasePath );
         }
@@ -65,26 +66,15 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
             try
             {
                 this.uut.Dispose();
-                this.DeleteDb();
+
+                if( File.Exists( databasePath ) )
+                {
+                    File.Delete( databasePath );
+                }
             }
             finally
             {
                 mutex.ReleaseMutex();
-            }
-        }
-
-        private void DeleteDb()
-        {
-            if( File.Exists( databasePath ) )
-            {
-                File.Delete( databasePath );
-
-                if( Environment.UserName.EqualsIgnoreCase( "ContainerUser" ) )
-                {
-                    // No idea why we need to do this in a docker container, but we do >_>.
-                    Console.WriteLine( "Sleeping after deleting in container" );
-                    Thread.Sleep( 5000 );
-                }
             }
         }
 
