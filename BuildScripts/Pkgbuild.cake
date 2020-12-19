@@ -63,7 +63,7 @@ public class PkgBuildRunner
         this.BuildPkgFile();
         this.BuildSrcInfo();
 
-        FilePath glob = new FilePath( "*.pkg.tar.xz" );
+        FilePath glob = new FilePath( "*.pkg.tar.*" );
         FilePathCollection files = this.context.GetFiles( this.workDir.CombineWithFilePath( glob ).ToString() );
 
         if( files.Count != 1 )

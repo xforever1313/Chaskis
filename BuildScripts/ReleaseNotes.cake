@@ -7,7 +7,7 @@ Task( "make_release_notes" )
             throw new InvalidOperationException( "Can only be run on Jenkins" );
         }
 
-        DirectoryPath distFolder = paths.OutputPackages;
+        DirectoryPath distFolder = Directory( Argument( "dist", paths.OutputPackages.ToString() ) );
 
         // Windows Stuff
         DirectoryPath windowsFolder = distFolder.Combine( "windows" );
@@ -31,7 +31,7 @@ Task( "make_release_notes" )
         string debChecksum = System.IO.File.ReadAllText( debFile.ToString() ).Trim();
 
         // Arch Stuff
-        FilePath pkgFile = distFolder.CombineWithFilePath( File( $"arch_linux/chaskis-{chaskisExeVersion}-1-any.pkg.tar.xz.sha256" ) );
+        FilePath pkgFile = distFolder.CombineWithFilePath( File( $"arch_linux/chaskis-{chaskisExeVersion}-1-any.pkg.tar.zst.sha256" ) );
         string pkgChecksum = System.IO.File.ReadAllText( pkgFile.ToString() ).Trim();
 
         Dictionary<string, Version> pluginVersions = new Dictionary<string, Version>();
