@@ -222,6 +222,29 @@ def PostDirectoryToWebsite( String localDirectory )
     }
 }
 
+def SetSymlinksToLatest()
+{
+    withCredentials(
+        [sshUserPrivateKey(
+            credentialsId: GetWebsiteCredsId(),
+            usernameVariable: "SSHUSER",
+            keyFileVariable: "WEBSITE_KEY" // <- Note: WEBSITE_KEY must be in all quotes below, or SCP won't work if the path has whitespace.
+        )]
+    )
+    {
+        def releaseRoot = "/home/${SSHUSER}/files.shendrick.net/projects/chaskis/releases/";
+        def releaseLocation = "${releaseRoot}${GetChaskisVersion()}/"
+
+        SetupPrivateKey( WEBSITE_KEY );
+
+        String verbose = "-v"; // Make "-v" for verbose mode.
+        String options = "-o BatchMode=yes -o StrictHostKeyChecking=no -i \"${WEBSITE_KEY}\"";
+
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net rm ${releaseRoot}latest";
+        bat "ssh ${verbose} ${options} ${SSHUSER}@shendrick.net ln -s ${releaseLocation} ${releaseRoot}latest";
+    }
+}
+
 def SetLatestOnWebsite()
 {
     withCredentials(
@@ -708,6 +731,10 @@ pipeline
                             bat "choco push ${distFolder}\\chocolatey\\*.nupkg -k ${choco_api_key} --source https://push.chocolatey.org/";
                         }
                     }
+                }
+                stage( "Set Symlinks")
+                {
+                    SetSymlinksToLatest();
                 }
             }
             when
