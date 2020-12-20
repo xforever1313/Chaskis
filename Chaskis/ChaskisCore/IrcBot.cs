@@ -80,10 +80,6 @@ namespace Chaskis.Core
 
         // -------- Functions -------
 
-        /// <summary>
-        /// Inits the IRC bot.
-        /// </summary>
-        /// <param name="ircHandlers">IRC handlers.  Key is the plugin name, value is the corresponding handlers.</param>
         public void Init()
         {
             this.ircConnection.Init();

@@ -104,7 +104,6 @@ namespace Chaskis.Cli
         /// <summary>
         /// Loads the IRC config from the chaskis root.
         /// </summary>
-        /// <param name="xmlFilePath">The path to the IRC config XML.</param>
         public void InitState1_LoadIrcConfig()
         {
             string ircConfigFile = Path.Combine( this.chaskisRoot, "IrcConfig.xml" );
@@ -219,7 +218,7 @@ namespace Chaskis.Cli
         }
 
         /// <summary>
-        /// Tearsdown this class.
+        /// Tears down this class.
         /// </summary>
         public void Dispose()
         {
