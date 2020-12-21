@@ -81,13 +81,15 @@ namespace Chaskis.Plugins.MetricsBot
                 if( dbValue == null )
                 {
                     dbValue = new MessageInfo( cache.Key, cache.Value );
-
                     this.messageInfo.Insert( dbValue );
                 }
                 else
                 {
-                    ++dbValue.Count;
-                    this.messageInfo.Update( dbValue );
+                    if( dbValue.Count != cache.Value )
+                    {
+                        dbValue.Count = cache.Value;
+                        this.messageInfo.Update( dbValue );
+                    }
                 }
             }
         }
@@ -103,7 +105,7 @@ namespace Chaskis.Plugins.MetricsBot
             Dictionary<MessageInfoKey, long> oldCache;
             lock( this.cacheLock )
             {
-                // Lock the swap so there is as little time time locked as possible.
+                // Swap references so there is as little time time locked as possible.
                 oldCache = this.messageInfoCache;
                 this.messageInfoCache = newCache;
             }

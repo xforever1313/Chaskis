@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Text;
 using SethCS.Extensions;
 
 namespace Chaskis.Plugins.MetricsBot
@@ -18,17 +19,32 @@ namespace Chaskis.Plugins.MetricsBot
         {
         }
 
+        public MessageInfoKey(
+            Protocol protocol,
+            string server,
+            string channel,
+            string ircUser,
+            MessageType messageType
+        )
+        {
+            this.Protocol = protocol;
+            this.Server = server;
+            this.Channel = channel;
+            this.IrcUser = ircUser;
+            this.MessageType = messageType;
+        }
+
         // ----------------- Properties -----------------
 
-        public Protocol Protocol { get; set; }
+        public Protocol Protocol { get; private set; }
 
-        public string Server { get; set; }
+        public string Server { get; private set; }
 
-        public string Channel { get; set; }
+        public string Channel { get; private set; }
 
-        public string IrcUser { get; set; }
+        public string IrcUser { get; private set; }
 
-        public MessageType MessageType { get; set; }
+        public MessageType MessageType { get; private set; }
 
         // ----------------- Functions -----------------
 
@@ -56,20 +72,30 @@ namespace Chaskis.Plugins.MetricsBot
         {
             return
                 this.Protocol.GetHashCode() +
-                ( this.Server?.GetHashCode() ?? 0 ) +
-                ( this.Channel?.GetHashCode() ?? 0 ) +
-                ( this.IrcUser?.GetHashCode() ?? 0 ) +
+                StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.Server ) +
+                StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.Channel ) +
+                StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.IrcUser ) +
                 this.MessageType.GetHashCode();
         }
 
-        public MessageInfoKey Clone()
+        public override string ToString()
         {
-            return (MessageInfoKey)this.MemberwiseClone();
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine( $"{nameof( Protocol )}: {this.Protocol}" );
+            builder.AppendLine( $"{nameof( Server )}: {this.Server ?? "[null]"}" );
+            builder.AppendLine( $"{nameof( Channel )}: {this.Channel ?? "[null]"}" );
+            builder.AppendLine( $"{nameof( IrcUser )}: {this.IrcUser ?? "[null]"}" );
+            builder.AppendLine( $"{nameof( MessageType )}: {this.MessageType}" );
+
+            return builder.ToString();
         }
     }
 
     internal sealed class MessageInfo
     {
+        // ---------------- Constructor ----------------
+
         public MessageInfo() :
             this( null, 0 )
         {
@@ -81,8 +107,22 @@ namespace Chaskis.Plugins.MetricsBot
             this.Count = count;
         }
 
+        // ---------------- Properties ----------------
+
         public MessageInfoKey Id { get; set; }
 
         public long Count { get; set; }
+
+        // ---------------- Functions ----------------
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine( this.Id.ToString() );
+            builder.AppendLine( $"{nameof( Count )}: {this.Count}" );
+
+            return builder.ToString();
+        }
     }
 }

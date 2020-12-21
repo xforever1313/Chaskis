@@ -12,7 +12,8 @@ using NUnit.Framework;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
-    class MetricsBotDatabaseTests
+    [TestFixture]
+    public class MetricsBotDatabaseTests
     {
         // ---------------- Fields ----------------
 
@@ -30,14 +31,29 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 
         private MetricsBotDatabase uut;
 
-        private readonly MessageInfoKey defaultKey = new MessageInfoKey
-        {
-            Channel = "#somechannel",
-            IrcUser = "someuser",
-            MessageType = MessageType.PrivMsg,
-            Protocol = Protocol.IRC,
-            Server = "irc.somewhere.net"
-        };
+        private static readonly MessageInfoKey defaultKey1 = new MessageInfoKey(
+            channel: "#somechannel",
+            ircUser:  "someuser",
+            messageType : MessageType.PrivMsg,
+            protocol: Protocol.IRC,
+            server: "irc.somewhere.net"
+        );
+
+        private static readonly MessageInfoKey defaultKey2 = new MessageInfoKey(
+            channel: "#somechannel2",
+            ircUser: "someuser",
+            messageType: MessageType.PrivMsg,
+            protocol: Protocol.IRC,
+            server: "irc.somewhere.net"
+        );
+
+        private static readonly MessageInfoKey defaultKey1AllCaps = new MessageInfoKey(
+            channel: defaultKey1.Channel.ToUpper(),
+            ircUser:  defaultKey1.IrcUser.ToUpper(),
+            messageType : MessageType.PrivMsg,
+            protocol: Protocol.IRC,
+            server: defaultKey1.Server.ToUpper()
+        );
 
         // ---------------- Setup / Teardown ----------------
 
@@ -45,6 +61,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         public void TestSetup()
         {
             Assert.IsTrue( mutex.WaitOne( 60 * 1000 ) );
+
+            DeleteDb();
             this.uut = new MetricsBotDatabase( dbPath );
         }
 
@@ -76,30 +94,102 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         public void AddTest()
         {
             // Nothing should be there are the start.
-            Assert.IsNull( this.uut.GetInfo( this.defaultKey ) );
+            Assert.IsNull( this.uut.GetInfo( defaultKey1 ) );
 
             // Add one message, it should be inserted.
             {
-                this.uut.AddNewMessage( this.defaultKey );
+                this.uut.AddNewMessage( defaultKey1 );
                 this.uut.WriteCacheToDatabase();
                 this.uut.UpdateCacheFromDatabase();
 
-                MessageInfo foundInfo = this.uut.GetInfo( this.defaultKey );
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1 );
                 Assert.IsNotNull( foundInfo );
-                Assert.AreEqual( this.defaultKey, foundInfo.Id );
+                Assert.AreEqual( defaultKey1, foundInfo.Id );
                 Assert.AreEqual( 1, foundInfo.Count );
             }
 
-            // Add another message message, it should be updated instead of inserted.
+            // Add another message, it should be updated instead of inserted.
             {
-                this.uut.AddNewMessage( this.defaultKey );
+                this.uut.AddNewMessage( defaultKey1 );
                 this.uut.WriteCacheToDatabase();
                 this.uut.UpdateCacheFromDatabase();
 
-                MessageInfo foundInfo = this.uut.GetInfo( this.defaultKey );
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1 );
                 Assert.IsNotNull( foundInfo );
-                Assert.AreEqual( this.defaultKey, foundInfo.Id );
+                Assert.AreEqual( defaultKey1, foundInfo.Id );
                 Assert.AreEqual( 2, foundInfo.Count );
+            }
+        }
+
+        [Test]
+        public void AddWithCapsTest()
+        {
+            // Nothing should be there are the start.
+            Assert.IsNull( this.uut.GetInfo( defaultKey1 ) );
+
+            // Add one message, it should be inserted.
+            {
+                this.uut.AddNewMessage( defaultKey1 );
+                this.uut.WriteCacheToDatabase();
+                this.uut.UpdateCacheFromDatabase();
+
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1 );
+                Assert.IsNotNull( foundInfo );
+                Assert.AreEqual( defaultKey1, foundInfo.Id );
+                Assert.AreEqual( 1, foundInfo.Count );
+            }
+
+            // Add another message, it should be updated instead of inserted,
+            // even if everything is in all caps (casing should not matter)
+            {
+                this.uut.AddNewMessage( defaultKey1AllCaps );
+                this.uut.WriteCacheToDatabase();
+                this.uut.UpdateCacheFromDatabase();
+
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1AllCaps );
+                Assert.IsNotNull( foundInfo );
+                Assert.AreEqual( defaultKey1AllCaps, foundInfo.Id );
+                Assert.AreEqual( 2, foundInfo.Count );
+            }
+        }
+
+        [Test]
+        public void AddTwoDifferentKeysTest()
+        {
+            // Nothing should be there are the start.
+            Assert.IsNull( this.uut.GetInfo( defaultKey1 ) );
+            Assert.IsNull( this.uut.GetInfo( defaultKey2 ) );
+
+            // Add one message, it should be inserted.
+            {
+                this.uut.AddNewMessage( defaultKey1 );
+                this.uut.WriteCacheToDatabase();
+                this.uut.UpdateCacheFromDatabase();
+
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1 );
+                Assert.IsNotNull( foundInfo );
+                Assert.AreEqual( defaultKey1, foundInfo.Id );
+                Assert.AreEqual( 1, foundInfo.Count );
+
+                Assert.IsNull( this.uut.GetInfo( defaultKey2 ) );
+            }
+
+            // Add another message that is a different key,
+            // old key should not be altered.
+            {
+                this.uut.AddNewMessage( defaultKey2 );
+                this.uut.WriteCacheToDatabase();
+                this.uut.UpdateCacheFromDatabase();
+
+                MessageInfo foundInfo1 = this.uut.GetInfo( defaultKey1 );
+                Assert.IsNotNull( foundInfo1 );
+                Assert.AreEqual( defaultKey1, foundInfo1.Id );
+                Assert.AreEqual( 1, foundInfo1.Count );
+
+                MessageInfo foundInfo2 = this.uut.GetInfo( defaultKey2 );
+                Assert.IsNotNull( foundInfo2 );
+                Assert.AreEqual( defaultKey2, foundInfo2.Id );
+                Assert.AreEqual( 1, foundInfo2.Count );
             }
         }
 
@@ -113,24 +203,22 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         public void CacheOverrideTest()
         {
             // Nothing should be there are the start.
-            Assert.IsNull( this.uut.GetInfo( this.defaultKey ) );
+            Assert.IsNull( this.uut.GetInfo( defaultKey1 ) );
 
             // Add one message, it should be inserted.
             {
-                this.uut.AddNewMessage( this.defaultKey );
+                this.uut.AddNewMessage( defaultKey1 );
 
-                MessageInfo foundInfo = this.uut.GetInfo( this.defaultKey );
+                MessageInfo foundInfo = this.uut.GetInfo( defaultKey1 );
                 Assert.IsNotNull( foundInfo );
-                Assert.AreEqual( this.defaultKey, foundInfo.Id );
+                Assert.AreEqual( defaultKey1, foundInfo.Id );
                 Assert.AreEqual( 1, foundInfo.Count );
             }
 
             // Now, clear the cache with information from the database.
             // Everything should be lost.
             this.uut.UpdateCacheFromDatabase();
-            Assert.IsNull( this.uut.GetInfo( this.defaultKey ) );
+            Assert.IsNull( this.uut.GetInfo( defaultKey1 ) );
         }
-
-        // ---------------- Test Helpers ----------------
     }
 }
