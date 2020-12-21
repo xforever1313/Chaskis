@@ -63,6 +63,22 @@ namespace Chaskis.Plugins.MetricsBot
 
         // ---------------- Properties ----------------
 
+        /// <summary/>
+        /// Returns the current cache reference.
+        /// This should be called from the same thread
+        /// that calls <see cref="AddNewMessage"/>
+        /// <summary>
+        public IReadOnlyCache CurrentCache
+        {
+            get
+            {
+                lock( this.cacheLock )
+                {
+                    return this.cache;
+                }
+            }
+        }
+
         // ---------------- Functions ----------------
 
         public void AddNewMessage( MessageInfoKey key )

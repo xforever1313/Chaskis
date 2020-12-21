@@ -19,7 +19,7 @@ namespace Chaskis.Plugins.MetricsBot
     /// 
     /// This way, we don't block the receive thread for as little as possible.
     /// </summary>
-    internal class MetricsBotCache
+    internal class MetricsBotCache : IReadOnlyCache
     {
         // ---------------- Fields ----------------
 
