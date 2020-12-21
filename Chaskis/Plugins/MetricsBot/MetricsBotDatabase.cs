@@ -11,16 +11,34 @@ using LiteDB;
 
 namespace Chaskis.Plugins.MetricsBot
 {
+    /// <summary>
+    /// Connection to the database so data can persist upon restart.
+    /// </summary>
+    /// <remarks>
+    /// The database design is made such that the "primary keys"
+    /// are the server, channel, etc that sent the message,
+    /// and the value is the count.  Another strategy could have been to
+    /// just save each message to the database, and count the number
+    /// of rows instead.  But, if a channel is really active, this would
+    /// cause the database to get stupidly big, and there is a cost to counting rows in
+    /// a big database.
+    /// So instead, we just track the counts of each user so our database size
+    /// is only as big as, really, the number of channels and users in those channels
+    /// the bot is in.
+    /// </remarks>
     internal sealed class MetricsBotDatabase : IDisposable
     {
         // ---------------- Fields ----------------
 
         private readonly LiteDatabase dbConnection;
         private readonly ILiteCollection<MessageInfo> messageInfo;
+        private readonly ILiteCollection<DayOfWeekInfo> dayOfWeekInfo;
+        private readonly ILiteCollection<HourOfDayInfo> hourOfDayInfo;
+
         private readonly BsonMapper mapper;
 
         private readonly object cacheLock;
-        private Dictionary<MessageInfoKey, long> messageInfoCache;
+        private MetricsBotCache cache;
 
         // ---------------- Constructor ----------------
 
@@ -34,10 +52,10 @@ namespace Chaskis.Plugins.MetricsBot
 
             this.dbConnection = new LiteDatabase( connectionString );
             this.messageInfo = this.dbConnection.GetCollection<MessageInfo>();
+            this.dayOfWeekInfo = this.dbConnection.GetCollection<DayOfWeekInfo>();
+            this.hourOfDayInfo = this.dbConnection.GetCollection<HourOfDayInfo>();
 
             this.mapper = mapper ?? BsonMapper.Global;
-
-            this.messageInfoCache = new Dictionary<MessageInfoKey, long>();
 
             this.cacheLock = new object();
             this.UpdateCacheFromDatabase();
@@ -51,28 +69,19 @@ namespace Chaskis.Plugins.MetricsBot
         {
             lock( this.cacheLock )
             {
-                if( this.messageInfoCache.ContainsKey( key ) == false )
-                {
-                    this.messageInfoCache[key] = 1;
-                }
-                else
-                {
-                    ++this.messageInfoCache[key];
-                }
+                this.cache.AddNewMessage( key );
             }
         }
 
         public void WriteCacheToDatabase()
         {
-            Dictionary<MessageInfoKey, long> copy;
+            MetricsBotCache copy;
             lock( this.cacheLock )
             {
-                // We *probably* don't need to make a deep-copy of MessageInfoKey
-                // since they are immutable.
-                copy = new Dictionary<MessageInfoKey, long>( this.messageInfoCache );
+                copy = this.cache.Clone();
             }
 
-            foreach( KeyValuePair<MessageInfoKey, long> cache in copy )
+            foreach( KeyValuePair<MessageInfoKey, long> cache in copy.MessageCounts )
             {
                 MessageInfo dbValue = this.messageInfo.FindById(
                     this.mapper.ToDocument( cache.Key )
@@ -92,34 +101,72 @@ namespace Chaskis.Plugins.MetricsBot
                     }
                 }
             }
+
+            foreach( KeyValuePair<DayOfWeekInfoKey, long> cache in copy.DayOfWeekCounts )
+            {
+                DayOfWeekInfo dbValue = this.dayOfWeekInfo.FindById(
+                    this.mapper.ToDocument( cache.Key )
+                );
+
+                if( dbValue == null )
+                {
+                    dbValue = new DayOfWeekInfo( cache.Key, cache.Value );
+                    this.dayOfWeekInfo.Insert( dbValue );
+                }
+                else
+                {
+                    if( dbValue.Count != cache.Value )
+                    {
+                        dbValue.Count = cache.Value;
+                        this.dayOfWeekInfo.Update( dbValue );
+                    }
+                }
+            }
+
+            foreach( KeyValuePair<HourOfDayInfoKey, long> cache in copy.HourOfDayCounts )
+            {
+                HourOfDayInfo dbValue = this.hourOfDayInfo.FindById(
+                    this.mapper.ToDocument( cache.Key )
+                );
+
+                if( dbValue == null )
+                {
+                    dbValue = new HourOfDayInfo( cache.Key, cache.Value );
+                    this.hourOfDayInfo.Insert( dbValue );
+                }
+                else
+                {
+                    if( dbValue.Count != cache.Value )
+                    {
+                        dbValue.Count = cache.Value;
+                        this.hourOfDayInfo.Update( dbValue );
+                    }
+                }
+            }
         }
 
         public void UpdateCacheFromDatabase()
         {
-            Dictionary<MessageInfoKey, long> newCache = new Dictionary<MessageInfoKey, long>();
-            foreach( MessageInfo info in this.messageInfo.FindAll() )
-            {
-                newCache[info.Id] = info.Count;
-            }
+            MetricsBotCache newCache = new MetricsBotCache(
+                this.messageInfo,
+                this.dayOfWeekInfo,
+                this.hourOfDayInfo
+            );
 
-            Dictionary<MessageInfoKey, long> oldCache;
             lock( this.cacheLock )
             {
                 // Swap references so there is as little time time locked as possible.
-                oldCache = this.messageInfoCache;
-                this.messageInfoCache = newCache;
+                this.cache = newCache;
             }
-
-            oldCache.Clear();
         }
 
         public MessageInfo GetInfo( MessageInfoKey key )
         {
             lock( this.cacheLock )
             {
-                if( this.messageInfoCache.ContainsKey( key ) )
+                if( this.cache.MessageCounts.ContainsKey( key ) )
                 {
-                    return new MessageInfo( key, this.messageInfoCache[key] );
+                    return new MessageInfo( key, this.cache.MessageCounts[key] );
                 }
                 else
                 {
