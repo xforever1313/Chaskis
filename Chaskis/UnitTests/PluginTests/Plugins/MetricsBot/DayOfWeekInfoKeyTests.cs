@@ -5,57 +5,51 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using Chaskis.Plugins.MetricsBot;
 using NUnit.Framework;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
     [TestFixture]
-    public class MessageInfoKeyTests
+    public class DayOfWeekInfoKeyTests
     {
         [Test]
         public void EqualsTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
                 uut1.Server,
                 uut1.Channel,
-                uut1.IrcUser,
-                uut1.MessageType
+                uut1.DayOfWeek
             );
 
             Assert.AreEqual( uut1, uut2 );
             Assert.AreEqual( uut1.GetHashCode(), uut2.GetHashCode() );
         }
 
-        /// <summary>
-        /// Caps should not matter for a key.
-        /// </summary>
         [Test]
         public void EqualsCapsTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
                 uut1.Server.ToUpper(),
                 uut1.Channel.ToUpper(),
-                uut1.IrcUser.ToUpper(),
-                uut1.MessageType
+                uut1.DayOfWeek
             );
 
             Assert.AreEqual( uut1, uut2 );
@@ -67,20 +61,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         [Test]
         public void EqualsProtocolNotEqualTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
-                uut1.Server.ToUpper(),
-                uut1.Channel.ToUpper(),
-                uut1.IrcUser.ToUpper(),
-                uut1.MessageType
+                uut1.Server,
+                uut1.Channel,
+                uut1.DayOfWeek
             );
 
             Assert.AreNotEqual( uut1, uut2 );
@@ -91,20 +83,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         [Test]
         public void EqualsServerNotEqualTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
                 "irc.somewhereelse.net",
                 uut1.Channel,
-                uut1.IrcUser,
-                uut1.MessageType
+                uut1.DayOfWeek
             );
 
             Assert.AreNotEqual( uut1, uut2 );
@@ -114,20 +104,18 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         [Test]
         public void EqualsChannelNotEqualTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
                 uut1.Server,
-                "#someotherchannel",
-                uut1.IrcUser,
-                uut1.MessageType
+                "#channel2",
+                uut1.DayOfWeek
             );
 
             Assert.AreNotEqual( uut1, uut2 );
@@ -135,45 +123,20 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
         }
 
         [Test]
-        public void EqualsUserNotEqualTest()
+        public void EqualsDayOfWeekNotEqualTest()
         {
-            MessageInfoKey uut1 = new MessageInfoKey(
+            DayOfWeekInfoKey uut1 = new DayOfWeekInfoKey(
                 Protocol.IRC,
                 "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
+                "#achannel",
+                DayOfWeek.Monday
             );
 
-            MessageInfoKey uut2 = new MessageInfoKey(
+            DayOfWeekInfoKey uut2 = new DayOfWeekInfoKey(
                 uut1.Protocol,
                 uut1.Server,
                 uut1.Channel,
-                "someonelese",
-                uut1.MessageType
-            );
-
-            Assert.AreNotEqual( uut1, uut2 );
-            Assert.AreNotEqual( uut1.GetHashCode(), uut2.GetHashCode() );
-        }
-
-        [Test]
-        public void MessageTypeNotEqualTest()
-        {
-            MessageInfoKey uut1 = new MessageInfoKey(
-                Protocol.IRC,
-                "irc.somewhere.net",
-                "#somechannel",
-                "someuser",
-                MessageType.PrivMsg
-            );
-
-            MessageInfoKey uut2 = new MessageInfoKey(
-                uut1.Protocol,
-                uut1.Server,
-                uut1.Channel,
-                uut1.IrcUser,
-                MessageType.Kick
+                DayOfWeek.Sunday
             );
 
             Assert.AreNotEqual( uut1, uut2 );

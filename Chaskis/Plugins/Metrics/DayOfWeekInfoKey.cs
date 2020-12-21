@@ -11,27 +11,25 @@ using SethCS.Extensions;
 
 namespace Chaskis.Plugins.MetricsBot
 {
-    internal sealed class MessageInfoKey : IEquatable<MessageInfoKey>
+    internal sealed class DayOfWeekInfoKey : IEquatable<DayOfWeekInfoKey>
     {
         // ----------------- Constructor -----------------
 
-        public MessageInfoKey()
+        public DayOfWeekInfoKey()
         {
         }
 
-        public MessageInfoKey(
+        public DayOfWeekInfoKey(
             Protocol protocol,
             string server,
             string channel,
-            string ircUser,
-            MessageType messageType
+            DayOfWeek dayOfWeek
         )
         {
             this.Protocol = protocol;
             this.Server = server;
             this.Channel = channel;
-            this.IrcUser = ircUser;
-            this.MessageType = messageType;
+            this.DayOfWeek = dayOfWeek;
         }
 
         // ----------------- Properties -----------------
@@ -42,9 +40,7 @@ namespace Chaskis.Plugins.MetricsBot
 
         public string Channel { get; private set; }
 
-        public string IrcUser { get; private set; }
-
-        public MessageType MessageType { get; private set; }
+        public DayOfWeek DayOfWeek { get; private set; }
 
         // ----------------- Functions -----------------
 
@@ -53,7 +49,7 @@ namespace Chaskis.Plugins.MetricsBot
             return base.Equals( obj );
         }
 
-        public bool Equals( MessageInfoKey other )
+        public bool Equals( DayOfWeekInfoKey other )
         {
             if( other == null )
             {
@@ -64,8 +60,7 @@ namespace Chaskis.Plugins.MetricsBot
                 ( this.Protocol == other.Protocol ) &&
                 this.Server.EqualsIgnoreCase( other.Server ) &&
                 this.Channel.EqualsIgnoreCase( other.Channel ) &&
-                this.IrcUser.EqualsIgnoreCase( other.IrcUser ) &&
-                ( this.MessageType == other.MessageType );
+                ( this.DayOfWeek == other.DayOfWeek );
         }
 
         public override int GetHashCode()
@@ -74,8 +69,7 @@ namespace Chaskis.Plugins.MetricsBot
                 this.Protocol.GetHashCode() +
                 StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.Server ) +
                 StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.Channel ) +
-                StringComparer.InvariantCultureIgnoreCase.GetHashCode( this.IrcUser ) +
-                this.MessageType.GetHashCode();
+                this.DayOfWeek.GetHashCode();
         }
 
         public override string ToString()
@@ -85,8 +79,7 @@ namespace Chaskis.Plugins.MetricsBot
             builder.AppendLine( $"{nameof( Protocol )}: {this.Protocol}" );
             builder.AppendLine( $"{nameof( Server )}: {this.Server ?? "[null]"}" );
             builder.AppendLine( $"{nameof( Channel )}: {this.Channel ?? "[null]"}" );
-            builder.AppendLine( $"{nameof( IrcUser )}: {this.IrcUser ?? "[null]"}" );
-            builder.AppendLine( $"{nameof( MessageType )}: {this.MessageType}" );
+            builder.AppendLine( $"{nameof( DayOfWeek )}: {this.DayOfWeek}" );
 
             return builder.ToString();
         }
