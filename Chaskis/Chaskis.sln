@@ -65,7 +65,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chaskis.UnitTests", "UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetBot", "Plugins\MeetBot\MeetBot.csproj", "{66B64047-B97B-484C-B531-9160DF8BE3BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsBot", "Plugins\Metrics\MetricsBot.csproj", "{66A7F59B-C594-4B86-BACD-1CD1D24F9885}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsBot", "Plugins\MetricsBot\MetricsBot.csproj", "{66A7F59B-C594-4B86-BACD-1CD1D24F9885}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
