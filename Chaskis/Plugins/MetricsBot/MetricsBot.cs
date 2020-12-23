@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using Chaskis.Core;
+using SethCS.Extensions;
 
 namespace Metrics
 {
@@ -16,9 +17,29 @@ namespace Metrics
     {
         // ---------------- Fields ----------------
 
+        private static readonly string versionStr;
+
+        private readonly List<IIrcHandler> handlers;
+
         internal const string PluginName = "metrics_bot";
 
+        private const string userStatsCmd = "stats";
+
+        private const string allUserStatsCmd = "allstats";
+
+        private IIrcConfig ircConfig;
+
         // ---------------- Constructor ----------------
+
+        public MetricsBot()
+        {
+            this.handlers = new List<IIrcHandler>();
+        }
+
+        static MetricsBot()
+        {
+            versionStr = typeof( MetricsBot ).Assembly.GetName().Version.ToString( 3 );
+        }
 
         // ---------------- Properties ----------------
 
@@ -26,7 +47,7 @@ namespace Metrics
         {
             get
             {
-                throw new NotImplementedException();
+                return "https://github.com/xforever1313/Chaskis/tree/master/Chaskis/Plugins/MetricsBot";
             }
         }
 
@@ -34,7 +55,7 @@ namespace Metrics
         {
             get
             {
-                throw new NotImplementedException();
+                return versionStr;
             }
         }
 
@@ -42,20 +63,15 @@ namespace Metrics
         {
             get
             {
-                throw new NotImplementedException();
+                return "I keep track of how many messages were sent in the channels I am in.";
             }
         }
 
         // ---------------- Functions ----------------
 
-        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
-        {
-            throw new NotImplementedException();
-        }
-
         public void Init( PluginInitor pluginInit )
         {
-            throw new NotImplementedException();
+            this.ircConfig = pluginInit.IrcConfig;
         }
 
         public void Dispose()
@@ -63,9 +79,37 @@ namespace Metrics
             throw new NotImplementedException();
         }
 
+        public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
+        {
+            // Possible Commands:
+            // !stats <user>
+            // !botname stats
+            // !allstats <user>
+            // !botname allstats
+
+            string response;
+            if ( ( helpArgs.Length == 1 ) && helpArgs[0].EqualsIgnoreCase( userStatsCmd ) )
+            {
+                response = $"Usage: !{userStatsCmd} [user].  Gets status for the specified user.  If user is not specified, the stats of the user who sent the command is returned.";
+            }
+            else if ( ( helpArgs.Length == 1 ) && helpArgs[0].EqualsIgnoreCase( allUserStatsCmd ) )
+            {
+                response = $"Usage: !{allUserStatsCmd} [user].  Gets status for the specified user across all channels I am in.  If user is not specified, the stats of the user who sent the command is returned.";
+            }
+            else 
+            {
+                response = $"Possible commands:  '{userStatsCmd}', '{allUserStatsCmd}'";
+            }
+
+            msgArgs.Writer.SendMessage(
+                response,
+                msgArgs.Channel
+            );
+        }
+
         public IList<IIrcHandler> GetHandlers()
         {
-            throw new NotImplementedException();
+            return this.handlers.AsReadOnly();
         }
     }
 }
