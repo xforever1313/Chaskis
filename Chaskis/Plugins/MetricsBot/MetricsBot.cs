@@ -7,10 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Chaskis.Core;
 using SethCS.Extensions;
 
-namespace Metrics
+namespace Chaskis.Plugins.MetricsBot
 {
     [ChaskisPlugin( PluginName )]
     public class MetricsBot : IPlugin
@@ -28,6 +29,8 @@ namespace Metrics
         private const string allUserStatsCmd = "allstats";
 
         private IIrcConfig ircConfig;
+
+        private MetricsBotDatabase database;
 
         // ---------------- Constructor ----------------
 
@@ -72,11 +75,28 @@ namespace Metrics
         public void Init( PluginInitor pluginInit )
         {
             this.ircConfig = pluginInit.IrcConfig;
+
+            string pluginPath = Path.Combine(
+                pluginInit.ChaskisConfigPluginRoot,
+                "MetricsBot"
+            );
+            string databasePath = Path.Combine(
+                pluginPath,
+                "metrics.ldb"
+            );
+
+            this.database = new MetricsBotDatabase( databasePath );
+
+            // Actually responding to commands
+            // should come after we add commands to the database.
+            // This way, when a user asks for the stats,
+            // that message they just sent is counted.
+            this.SetupStatsCommand();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            this.database?.Dispose();
         }
 
         public void HandleHelp( MessageHandlerArgs msgArgs, string[] helpArgs )
@@ -110,6 +130,25 @@ namespace Metrics
         public IList<IIrcHandler> GetHandlers()
         {
             return this.handlers.AsReadOnly();
+        }
+
+        // -------- Handlers --------
+
+        private void SetupStatsCommand()
+        {
+            MessageHandlerConfig config = new MessageHandlerConfig
+            {
+                LineAction = this.HandleStatsCommand,
+                ResponseOption = ResponseOptions.ChannelOnly,
+                LineRegex = $@"!{userStatsCmd}(\s+(?<userName>\S+))?"
+            };
+
+            MessageHandler handler = new MessageHandler( config );
+            this.handlers.Add( handler );
+        }
+
+        private void HandleStatsCommand( MessageHandlerArgs msgArgs )
+        {
         }
     }
 }
