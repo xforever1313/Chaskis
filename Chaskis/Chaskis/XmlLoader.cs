@@ -35,7 +35,7 @@ namespace Chaskis.Cli
         /// <exception cref="FormatException">If the port in the XML file is invalid.</exception>
         /// <exception cref="ApplicationException">If the irc config isn't valid.</exception>
         /// <returns>The IrcConfig objected based on the XML.</returns>
-        public static IIrcConfig ParseIrcConfig( string fileName )
+        public static IReadOnlyIrcConfig ParseIrcConfig( string fileName )
         {
             if( File.Exists( fileName ) == false )
             {

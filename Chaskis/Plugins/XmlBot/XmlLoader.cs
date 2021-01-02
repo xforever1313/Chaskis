@@ -25,7 +25,7 @@ namespace Chaskis.Plugins.XmlBot
         /// <param name="rng">
         /// Leave this null to use the default RNG, otherwise pass this in if you want to use your own (e.g. with a different seed)
         /// </param>
-        public static IList<IIrcHandler> LoadXmlBotConfig( string file, IIrcConfig ircConfig, Random rng = null )
+        public static IList<IIrcHandler> LoadXmlBotConfig( string file, IReadOnlyIrcConfig ircConfig, Random rng = null )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
 

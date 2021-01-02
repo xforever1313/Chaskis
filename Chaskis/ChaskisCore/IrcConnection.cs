@@ -113,7 +113,7 @@ namespace Chaskis.Core
 
         // -------- Constructor --------
 
-        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue ) :
+        public IrcConnection( IReadOnlyIrcConfig config, INonDisposableStringParsingQueue parsingQueue ) :
             this( config, parsingQueue, new IrcMac( config, StaticLogger.Log ) )
         {
         }
@@ -122,7 +122,7 @@ namespace Chaskis.Core
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration to use.</param>
-        public IrcConnection( IIrcConfig config, INonDisposableStringParsingQueue parsingQueue, IIrcMac macLayer )
+        public IrcConnection( IReadOnlyIrcConfig config, INonDisposableStringParsingQueue parsingQueue, IIrcMac macLayer )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
@@ -188,7 +188,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Read-only reference to the IRC Config to use.
         /// </summary>
-        public IIrcConfig Config { get; private set; }
+        public IReadOnlyIrcConfig Config { get; private set; }
 
         // ---------------- Functions ----------------
 

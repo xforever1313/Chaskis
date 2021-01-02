@@ -26,7 +26,7 @@ namespace Chaskis.Plugins.ServerDiagnostics
 
         private ServerDiagnosticsConfig config;
 
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
 
         /// <summary>
         /// The cool down for the bot for each command.

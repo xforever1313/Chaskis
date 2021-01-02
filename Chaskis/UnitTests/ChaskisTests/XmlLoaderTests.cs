@@ -72,7 +72,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.BridgeBots.Add( "telegrambot", @"^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
             this.ircConfig.BridgeBots.Add( "slackbot", @"^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -84,7 +84,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.Channels.Add( "#mychannel" );
             this.ircConfig.Channels.Add( "#chaskis" );
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithThreeChannels.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -101,7 +101,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             this.ircConfig.UseSsl = true;
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithAdmins.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -115,7 +115,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithEmptyPassword.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -129,7 +129,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -140,7 +140,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.RateLimit = 0;
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithNoRateLimit.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -161,7 +161,7 @@ namespace Chaskis.UnitTests.ChaskisTests
                 expectedConfig.Channels.Add( channel );
             }
 
-            IIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
                 Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
             );
             Assert.AreEqual( expectedConfig, config );

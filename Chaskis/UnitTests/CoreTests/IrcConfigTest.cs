@@ -39,7 +39,7 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void EqualsTest()
         {
-            IIrcConfig interfaceIrcConfig = this.ircConfig.Clone();
+            IReadOnlyIrcConfig interfaceIrcConfig = this.ircConfig.Clone();
             ReadOnlyIrcConfig roIrcConfig = new ReadOnlyIrcConfig( this.ircConfig.Clone() );
 
             // Ensure both the interface and the RO config are equal, but not the same reference.
@@ -133,7 +133,7 @@ namespace Chaskis.UnitTests.CoreTests
         [Test]
         public void ReadOnlyTest()
         {
-            IIrcConfig config = new ReadOnlyIrcConfig( ircConfig );
+            IReadOnlyIrcConfig config = new ReadOnlyIrcConfig( ircConfig );
 
             // First, ensure properties are all equal
             Assert.AreEqual( this.ircConfig.Server, config.Server );
@@ -372,7 +372,7 @@ namespace Chaskis.UnitTests.CoreTests
         /// <param name="ircConfig">The IRC config object to test.</param>
         /// <param name="interfaceConfig">The interfaced IRC object to test.</param>
         /// <param name="roIrcConfig">The read-only IRC object to test.</param>
-        private void CheckNotEqual( IrcConfig ircConfig, IIrcConfig interfaceConfig, ReadOnlyIrcConfig roIrcConfig )
+        private void CheckNotEqual( IrcConfig ircConfig, IReadOnlyIrcConfig interfaceConfig, ReadOnlyIrcConfig roIrcConfig )
         {
             // Ensure not equals works going from real -> interface
             Assert.AreNotEqual( ircConfig, interfaceConfig );
@@ -383,7 +383,7 @@ namespace Chaskis.UnitTests.CoreTests
             Assert.AreNotEqual( roIrcConfig, ircConfig );
 
             // Ensure not equals works going from interface -> interface
-            IIrcConfig iircConfig = ircConfig;
+            IReadOnlyIrcConfig iircConfig = ircConfig;
             Assert.AreNotEqual( iircConfig, interfaceConfig );
             Assert.AreNotEqual( interfaceConfig, iircConfig );
 
@@ -404,7 +404,7 @@ namespace Chaskis.UnitTests.CoreTests
             ReadOnlyIrcConfig roConfig = new ReadOnlyIrcConfig( config.Clone() );
             Assert.Throws<ValidationException>( () => roConfig.Validate() );
 
-            IIrcConfig iircConfig = config;
+            IReadOnlyIrcConfig iircConfig = config;
             Assert.Throws<ValidationException>( () => iircConfig.Validate() );
         }
     }

@@ -17,7 +17,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Interface for an IrcConfig object.
     /// </summary>
-    public interface IIrcConfig : IEquatable<IIrcConfig>
+    public interface IReadOnlyIrcConfig : IEquatable<IReadOnlyIrcConfig>
     {
         /// <summary>
         /// The server to connect to.
@@ -107,7 +107,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Clone this instance.
         /// </summary>
-        IIrcConfig Clone();
+        IReadOnlyIrcConfig Clone();
 
         /// <summary>
         /// Sees if the given object is equal to this instance.
@@ -128,7 +128,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Mutable IrcConfig object.
     /// </summary>
-    public class IrcConfig : IIrcConfig
+    public class IrcConfig : IReadOnlyIrcConfig
     {
         // -------- Constructor --------
 
@@ -233,7 +233,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Returns a copy of this object.
         /// </summary>
-        public IIrcConfig Clone()
+        public IReadOnlyIrcConfig Clone()
         {
             IrcConfig clone = (IrcConfig)this.MemberwiseClone();
 
@@ -255,7 +255,7 @@ namespace Chaskis.Core
             return IrcConfigHelpers.Equals( this, obj );
         }
 
-        public bool Equals( IIrcConfig other )
+        public bool Equals( IReadOnlyIrcConfig other )
         {
             return IrcConfigHelpers.Equals( this, other );
         }
@@ -285,14 +285,14 @@ namespace Chaskis.Core
     /// Wraps an IIrcConfig object such that its readonly.
     /// Note: All setters throw ReadOnlyException.
     /// </summary>
-    public class ReadOnlyIrcConfig : IIrcConfig
+    public class ReadOnlyIrcConfig : IReadOnlyIrcConfig
     {
         // -------- Fields --------
 
         /// <summary>
         /// The wrapped config.
         /// </summary>
-        private readonly IIrcConfig wrappedConfig;
+        private readonly IReadOnlyIrcConfig wrappedConfig;
 
         // -------- Constructor --------
 
@@ -300,7 +300,7 @@ namespace Chaskis.Core
         /// Constructor.
         /// </summary>
         /// <param name="config">The config to wrap.</param>
-        public ReadOnlyIrcConfig( IIrcConfig config )
+        public ReadOnlyIrcConfig( IReadOnlyIrcConfig config )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
@@ -487,7 +487,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Returns a copy of this object.
         /// </summary>
-        public IIrcConfig Clone()
+        public IReadOnlyIrcConfig Clone()
         {
             return new ReadOnlyIrcConfig( this.wrappedConfig.Clone() );
         }
@@ -503,7 +503,7 @@ namespace Chaskis.Core
             return IrcConfigHelpers.Equals( this, obj );
         }
 
-        public bool Equals( IIrcConfig other )
+        public bool Equals( IReadOnlyIrcConfig other )
         {
             return IrcConfigHelpers.Equals( this, other );
         }
@@ -549,7 +549,7 @@ namespace Chaskis.Core
         /// Only password can be empty, all others need some value in them.
         /// </summary>
         /// <param name="config">Config to validate.</param>
-        internal static void Validate( IIrcConfig config )
+        internal static void Validate( IReadOnlyIrcConfig config )
         {
             bool success = true;
             StringBuilder builder = new StringBuilder();
@@ -689,7 +689,7 @@ namespace Chaskis.Core
         /// </summary>
         /// <param name="config">The config to get the hash code of.</param>
         /// <returns>The hash code of the IRC config object.</returns>
-        internal static int GetHashCode( IIrcConfig config )
+        internal static int GetHashCode( IReadOnlyIrcConfig config )
         {
             return
                 config.Server.GetHashCode() +
@@ -714,9 +714,9 @@ namespace Chaskis.Core
         /// <param name="config1">The IIrcConfig object to check.</param>
         /// <param name="obj">The object to check.</param>
         /// <returns>True if the given object is equal to this one, else false.</returns>
-        internal static bool Equals( IIrcConfig config1, object config2 )
+        internal static bool Equals( IReadOnlyIrcConfig config1, object config2 )
         {
-            IIrcConfig other = config2 as IIrcConfig;
+            IReadOnlyIrcConfig other = config2 as IReadOnlyIrcConfig;
 
             if( other == null )
             {
@@ -726,7 +726,7 @@ namespace Chaskis.Core
             return Equals( config1, other );
         }
 
-        internal static bool Equals( IIrcConfig config1, IIrcConfig other )
+        internal static bool Equals( IReadOnlyIrcConfig config1, IReadOnlyIrcConfig other )
         {
             bool isEqual =
                 ( config1.Server == other.Server ) &&

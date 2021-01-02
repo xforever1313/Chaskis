@@ -28,7 +28,7 @@ namespace Chaskis.Plugins.MetricsBot
 
         private const string allUserStatsCmd = "allstats";
 
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
 
         private MetricsBotDatabase database;
 

@@ -39,7 +39,7 @@ namespace Chaskis.Plugins.XmlBot
         public static void Deserialize(
             this MessageHandlerConfig msgConfig,
             XmlNode handlerNode,
-            IIrcConfig ircConfig,
+            IReadOnlyIrcConfig ircConfig,
             Random rng = null
         )
         {
@@ -64,7 +64,7 @@ namespace Chaskis.Plugins.XmlBot
         public static void Deserialze(
             this ActionHandlerConfig actionConfig,
             XmlNode handlerNode,
-            IIrcConfig ircConfig,
+            IReadOnlyIrcConfig ircConfig,
             Random rng = null
         )
         {
@@ -135,7 +135,7 @@ namespace Chaskis.Plugins.XmlBot
         private static void HandleResponse(
             IPrivateMessageHandlerArgs args,
             IReadOnlyList<string> responses,
-            IIrcConfig ircConfig,
+            IReadOnlyIrcConfig ircConfig,
             Random rng
         )
         {

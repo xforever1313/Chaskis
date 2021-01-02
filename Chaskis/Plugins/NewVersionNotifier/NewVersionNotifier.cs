@@ -29,7 +29,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         private IInterPluginEventCreator chaskisEventCreator;
         private IInterPluginEventSender eventSender;
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
         private GenericLogger logger;
 
         private string cachedFilePath;

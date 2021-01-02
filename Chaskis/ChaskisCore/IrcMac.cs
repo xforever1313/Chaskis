@@ -41,7 +41,7 @@ namespace Chaskis.Core
     {
         // ---------------- Fields ----------------
 
-        private readonly IIrcConfig config;
+        private readonly IReadOnlyIrcConfig config;
 
         private readonly GenericLogger log;
 
@@ -54,7 +54,7 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        public IrcMac( IIrcConfig config, GenericLogger log )
+        public IrcMac( IReadOnlyIrcConfig config, GenericLogger log )
         {
             this.config = config;
             this.log = log;

@@ -17,7 +17,7 @@ namespace Chaskis.UnitTests.CoreTests
     {
         // ---------------- Fields ----------------
 
-        private IIrcConfig config;
+        private IReadOnlyIrcConfig config;
 
         const string remoteUser = "someuser";
 

@@ -65,7 +65,7 @@ namespace Chaskis.Cli
         public void LoadPlugins(
             IList<AssemblyConfig> assemblyList,
             IList<PluginConfig> existingPlugins,
-            IIrcConfig ircConfig,
+            IReadOnlyIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
             IInterPluginEventSender eventSender,
             HttpClient httpClient,

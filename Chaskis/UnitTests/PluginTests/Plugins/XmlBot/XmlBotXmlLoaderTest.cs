@@ -37,7 +37,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
             "TestFiles"
         );
 
-        private IIrcConfig testConfig;
+        private IReadOnlyIrcConfig testConfig;
 
         private Mock<IIrcWriter> mockIrcWriter;
 

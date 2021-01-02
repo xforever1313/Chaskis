@@ -43,7 +43,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The IRC config we are using.
         /// </summary>
-        public IIrcConfig IrcConfig { get; set; }
+        public IReadOnlyIrcConfig IrcConfig { get; set; }
 
         /// <summary>
         /// The event scheduler that can be used to schedule events to run on the event queue.

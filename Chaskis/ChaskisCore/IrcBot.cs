@@ -23,7 +23,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The irc config.
         /// </summary>
-        private readonly IIrcConfig ircConfig;
+        private readonly IReadOnlyIrcConfig ircConfig;
 
         /// <summary>
         /// The IRC Connection.
@@ -42,7 +42,7 @@ namespace Chaskis.Core
         /// </summary>
         /// <param name="ircConfig">The irc config object to use.  This will be cloned after being passed in.</param>
         /// <param name="parsingQueue">The global parsing queue we are using.</param>
-        public IrcBot( IIrcConfig ircConfig, INonDisposableStringParsingQueue parsingQueue )
+        public IrcBot( IReadOnlyIrcConfig ircConfig, INonDisposableStringParsingQueue parsingQueue )
         {
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
             ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
@@ -66,7 +66,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Read-only reference to the irc config object.
         /// </summary>
-        public IIrcConfig IrcConfig { get; private set; }
+        public IReadOnlyIrcConfig IrcConfig { get; private set; }
 
         /// <summary>
         /// Access to our scheduler.

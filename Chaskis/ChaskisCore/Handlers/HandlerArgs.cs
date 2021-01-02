@@ -38,7 +38,7 @@ namespace Chaskis.Core
         /// <summary>
         /// The associated IRC config.
         /// </summary>
-        public IIrcConfig IrcConfig { get; set; }
+        public IReadOnlyIrcConfig IrcConfig { get; set; }
 
         /// <summary>
         /// The writer we can use to write to the server.

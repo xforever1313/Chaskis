@@ -17,7 +17,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Returns the IRCConfig.
         /// </summary>
-        IIrcConfig Config { get; }
+        IReadOnlyIrcConfig Config { get; }
 
         /// <summary>
         /// Whether or not we are connected.

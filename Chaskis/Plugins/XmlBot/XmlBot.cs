@@ -25,7 +25,7 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
 
         // ---------------- Constructor ----------------
 
@@ -132,7 +132,7 @@ namespace Chaskis.Plugins.XmlBot
         /// </summary>
         /// <param name="command">The command our bot is listening for.</param>
         /// <param name="response">The response our bot will generate.</param>
-        public static MessageHandlerAction GetMessageHandler( string response, IIrcConfig ircConfig )
+        public static MessageHandlerAction GetMessageHandler( string response, IReadOnlyIrcConfig ircConfig )
         {
             ArgumentChecker.StringIsNotNullOrEmpty( response, nameof( response ) );
 

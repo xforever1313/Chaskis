@@ -30,7 +30,7 @@ namespace Chaskis.Plugins.QuoteBot
         /// </summary>
         private readonly List<IIrcHandler> handlers;
 
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
 
         private QuoteBotConfig quoteBotConfig;
 

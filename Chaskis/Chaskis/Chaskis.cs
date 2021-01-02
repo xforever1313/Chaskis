@@ -33,7 +33,7 @@ namespace Chaskis.Cli
         /// <summary>
         /// The IRC config to use.
         /// </summary>
-        private IIrcConfig ircConfig;
+        private IReadOnlyIrcConfig ircConfig;
 
         /// <summary>
         /// The plugins we are using.
