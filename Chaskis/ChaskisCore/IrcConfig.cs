@@ -430,7 +430,7 @@ namespace Chaskis.Core
             {
                 foreach( string admin in config.Admins )
                 {
-                    if( string.IsNullOrEmpty( admin ) || string.IsNullOrWhiteSpace( admin ) )
+                    if( string.IsNullOrWhiteSpace( admin ) )
                     {
                         builder.AppendLine( "-\tAdmin can not be null, empty, or whitespace." );
                         success = false;

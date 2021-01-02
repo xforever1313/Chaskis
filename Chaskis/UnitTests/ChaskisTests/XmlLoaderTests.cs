@@ -72,7 +72,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.BridgeBots.Add( "telegrambot", @"^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
             this.ircConfig.BridgeBots.Add( "slackbot", @"^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -84,7 +84,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.Channels.Add( "#mychannel" );
             this.ircConfig.Channels.Add( "#chaskis" );
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithThreeChannels.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -101,7 +101,7 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             this.ircConfig.UseSsl = true;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                 Path.Combine( testXmlFiles, "ValidIrcConfigWithAdmins.xml" )
             );
             Assert.AreEqual( this.ircConfig, config );
@@ -115,7 +115,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithEmptyPassword.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -129,7 +129,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -140,7 +140,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.RateLimit = 0;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                                     Path.Combine( testXmlFiles, "ValidIrcConfigWithNoRateLimit.xml" )
                                 );
             Assert.AreEqual( this.ircConfig, config );
@@ -161,7 +161,7 @@ namespace Chaskis.UnitTests.ChaskisTests
                 expectedConfig.Channels.Add( channel );
             }
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfig(
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
                 Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
             );
             Assert.AreEqual( expectedConfig, config );
@@ -174,7 +174,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithUserName()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyUserName.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyUserName.xml" ) )
             );
         }
 
@@ -185,7 +185,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithEmptyNick()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyNick.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyNick.xml" ) )
             );
         }
 
@@ -196,7 +196,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithEmptyPort()
         {
             Assert.Throws<FormatException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyPort.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyPort.xml" ) )
             );
         }
 
@@ -207,7 +207,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithEmptyRealName()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyRealName.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyRealName.xml" ) )
             );
         }
 
@@ -218,7 +218,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithNoServer()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoServer.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigNoServer.xml" ) )
             );
         }
 
@@ -229,7 +229,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithNoChannel()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
             );
         }
 
@@ -240,7 +240,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlWithEmptyChannel()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyChannel.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyChannel.xml" ) )
             );
         }
 
@@ -251,7 +251,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidXmlEmptyAdmin()
         {
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyAdmins.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyAdmins.xml" ) )
             );
         }
 
@@ -262,7 +262,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestIrcConfigBadRootName()
         {
             Assert.Throws<XmlException>( () =>
-                XmlLoader.ParseIrcConfig( Path.Combine( testXmlFiles, "InvalidIrcConfigBadRootNode.xml" ) )
+                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigBadRootNode.xml" ) )
             );
         }
 

@@ -8,7 +8,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using Chaskis.Core;
+using SethCS.Extensions;
 
 namespace Chaskis.Cli
 {
@@ -27,6 +29,14 @@ namespace Chaskis.Cli
         /// </summary>
         private const string pluginConfigRootNodeName = "pluginconfig";
 
+        public static IReadOnlyIrcConfig ParseIrcConfigFromString( string str )
+        {
+            using( StringReader reader = new StringReader( str ) )
+            {
+                return ParseIrcConfigFromTextReader( reader );
+            }
+        }
+
         /// <summary>
         /// Parses the given XML file and returns the IRC Config settings.
         /// </summary>
@@ -35,118 +45,118 @@ namespace Chaskis.Cli
         /// <exception cref="FormatException">If the port in the XML file is invalid.</exception>
         /// <exception cref="ApplicationException">If the irc config isn't valid.</exception>
         /// <returns>The IrcConfig objected based on the XML.</returns>
-        public static IReadOnlyIrcConfig ParseIrcConfig( string fileName )
+        public static IReadOnlyIrcConfig ParseIrcConfigFromFile( string fileName )
         {
             if( File.Exists( fileName ) == false )
             {
                 throw new FileNotFoundException( "Could not find IRC Config file " + fileName );
             }
 
-            XmlDocument doc = new XmlDocument();
+            using( TextReader reader = File.OpenText( fileName ) )
+            {
+                return ParseIrcConfigFromTextReader( reader );
+            }
+        }
 
-            doc.Load( fileName );
+        private static IReadOnlyIrcConfig ParseIrcConfigFromTextReader( TextReader reader )
+        {
+            XDocument doc = XDocument.Load( reader );
 
-            XmlNode rootNode = doc.DocumentElement;
-            if( rootNode.Name != ircConfigRootNodeName )
+            if( ircConfigRootNodeName.EqualsIgnoreCase( doc.Root.Name.LocalName ) == false )
             {
                 throw new XmlException(
-                    "Root XML node should be named \"" + ircConfigRootNodeName + "\".  Got: " + rootNode.Name
+                    $"Root XML node should be named '{ircConfigRootNodeName}'.  Got: '{doc.Root.Name.LocalName}'"
                 );
             }
 
             IrcConfig config = new IrcConfig();
 
-            foreach( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XElement childNode in doc.Root.Elements() )
             {
-                switch( childNode.Name.ToLower() )
+                if( "server".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
-                    case "server":
-                        config.Server = childNode.InnerText;
-                        break;
-
-                    case "channels":
-                        foreach( XmlNode channelNode in childNode.ChildNodes )
+                    config.Server = childNode.Value;
+                }
+                else if( "port".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.Port = short.Parse( childNode.Value );
+                }
+                else if( "usessl".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.UseSsl = bool.Parse( childNode.Value );
+                }
+                else if( "username".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.UserName = childNode.Value;
+                }
+                else if( "nick".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.Nick = childNode.Value;
+                }
+                else if( "realname".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.RealName = childNode.Value;
+                }
+                else if( "quitmessage".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.QuitMessage = childNode.Value;
+                }
+                else if( "serverpasswordfile".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.ServerPassword = ReadFirstLineOfFile( childNode.Value, "Server Password File" );
+                }
+                else if( "nickservpasswordfile".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.NickServPassword = ReadFirstLineOfFile( childNode.Value, "NickServ Password File" );
+                }
+                else if( "ratelimit".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.RateLimit = int.Parse( childNode.Value );
+                }
+                else if( "channels".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    foreach( XElement channelNode in childNode.Elements() )
+                    {
+                        if( "channel".EqualsIgnoreCase( channelNode.Name.LocalName ) )
                         {
-                            switch( channelNode.Name )
-                            {
-                                case "channel":
-                                    config.Channels.Add( channelNode.InnerText );
-                                    break;
-                            }
+                            config.Channels.Add( channelNode.Value );
                         }
-                        break;
-
-                    case "port":
-                        config.Port = short.Parse( childNode.InnerText );
-                        break;
-
-                    case "usessl":
-                        config.UseSsl = bool.Parse( childNode.InnerText );
-                        break;
-
-                    case "username":
-                        config.UserName = childNode.InnerText;
-                        break;
-
-                    case "nick":
-                        config.Nick = childNode.InnerText;
-                        break;
-
-                    case "realname":
-                        config.RealName = childNode.InnerText;
-                        break;
-
-                    case "quitmessage":
-                        config.QuitMessage = childNode.InnerText;
-                        break;
-
-                    case "bridgebots":
-                        foreach( XmlNode bridgeBotNode in childNode.ChildNodes )
+                    }
+                }
+                else if( "bridgebots".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    foreach( XElement bridgeBotNode in childNode.Elements() )
+                    {
+                        if( "bridgebot".EqualsIgnoreCase( bridgeBotNode.Name.LocalName ) )
                         {
-                            if( bridgeBotNode.Name == "bridgebot" )
-                            {
-                                string botName = string.Empty;
-                                string botRegex = string.Empty;
+                            string botName = string.Empty;
+                            string botRegex = string.Empty;
 
-                                foreach( XmlNode bridgeBotChild in bridgeBotNode.ChildNodes )
+                            foreach( XElement bridgeBotChild in bridgeBotNode.Elements() )
+                            {
+                                if( "botname".EqualsIgnoreCase( bridgeBotChild.Name.LocalName ) )
                                 {
-                                    switch( bridgeBotChild.Name )
-                                    {
-                                        case "botname":
-                                            botName = bridgeBotChild.InnerText;
-                                            break;
-
-                                        case "botregex":
-                                            botRegex = bridgeBotChild.InnerText;
-                                            break;
-                                    }
+                                    botName = bridgeBotChild.Value;
                                 }
-                                config.BridgeBots.Add( botName, botRegex );
+                                else if( "botregex".EqualsIgnoreCase( bridgeBotChild.Name.LocalName ) )
+                                {
+                                    botRegex = bridgeBotChild.Value;
+                                }
                             }
-                        }
-                        break;
 
-                    case "admins":
-                        foreach( XmlNode adminNode in childNode.ChildNodes )
+                            config.BridgeBots.Add( botName, botRegex );
+                        }
+                    }
+                }
+                else if( "admins".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    foreach( XElement adminNode in childNode.Elements() )
+                    {
+                        if( "admin".EqualsIgnoreCase( adminNode.Name.LocalName ) )
                         {
-                            if( adminNode.Name == "admin" )
-                            {
-                                config.Admins.Add( adminNode.InnerText.ToLower() );
-                            }
+                            config.Admins.Add( adminNode.Value.ToLower() );
                         }
-                        break;
-
-                    case "serverpasswordfile":
-                        config.ServerPassword = ReadFirstLineOfFile( childNode.InnerText, "Server Password File" );
-                        break;
-
-                    case "nickservpasswordfile":
-                        config.NickServPassword = ReadFirstLineOfFile( childNode.InnerText, "NickServ Password File" );
-                        break;
-
-                    case "ratelimit":
-                        config.RateLimit = int.Parse( childNode.InnerText );
-                        break;
+                    }
                 }
             }
 

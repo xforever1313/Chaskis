@@ -110,7 +110,7 @@ namespace Chaskis.Cli
 
             StaticLogger.Log.WriteLine( "Using IRC config file '{0}'", ircConfigFile );
 
-            this.ircConfig = XmlLoader.ParseIrcConfig( ircConfigFile );
+            this.ircConfig = XmlLoader.ParseIrcConfigFromFile( ircConfigFile );
             this.ircBot = new IrcBot( this.ircConfig, this.parsingQueue );
         }
 
