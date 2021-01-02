@@ -72,9 +72,33 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.BridgeBots.Add( "telegrambot", @"^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
             this.ircConfig.BridgeBots.Add( "slackbot", @"^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithBridgeBots.xml" )
-            );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <quitmessage>I am being shut down!</quitmessage>
+    <bridgebots>
+        <bridgebot>
+            <botname>telegrambot</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+        <bridgebot>
+            <botname>slackbot</botname>
+            <botregex><![CDATA[^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+    </bridgebots>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -84,9 +108,25 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.Channels.Add( "#mychannel" );
             this.ircConfig.Channels.Add( "#chaskis" );
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithThreeChannels.xml" )
-            );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+	<channels>
+        <channel>#testchannel</channel>
+        <channel>#mychannel</channel>
+        <channel>#chaskis</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -101,9 +141,28 @@ namespace Chaskis.UnitTests.ChaskisTests
 
             this.ircConfig.UseSsl = true;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                Path.Combine( testXmlFiles, "ValidIrcConfigWithAdmins.xml" )
-            );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+    <channels>
+	    <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+    <usessl>true</usessl>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <quitmessage>I am being shut down!</quitmessage>
+    <admins>
+        <admin>person1</admin>
+        <admin>PERSON2</admin>
+    </admins>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -115,9 +174,37 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithEmptyPassword.xml" )
-                                );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <serverpasswordfile></serverpasswordfile>
+    <nickservpasswordfile></nickservpasswordfile>
+    <ratelimit>800</ratelimit>
+    <quitmessage>I am being shut down!</quitmessage>
+    <!--
+    <bridgebots>
+        <bridgebot>
+            <botname>telegrambot\d*</botname>
+            <botregex><![CDATA[(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+        <bridgebot>
+            <botname>slackbot</botname>
+            <botregex><![CDATA[(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+    </bridgebots>
+    -->
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -129,20 +216,47 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.NickServPassword = string.Empty;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithNoPassword.xml" )
-                                );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
         [Test]
-        public void TestValidXmlWithRateLimit()
+        public void TestValidXmlWithNoRateLimit()
         {
             this.ircConfig.RateLimit = 0;
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                                    Path.Combine( testXmlFiles, "ValidIrcConfigWithNoRateLimit.xml" )
-                                );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( this.ircConfig, config );
         }
 
@@ -161,9 +275,23 @@ namespace Chaskis.UnitTests.ChaskisTests
                 expectedConfig.Channels.Add( channel );
             }
 
-            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromFile(
-                Path.Combine( testXmlFiles, "ValidIrcConfigJustChannelServer.xml" )
-            );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<!--
+This is technically a valid config, as everything else will get default values.
+However, it is highly recommended not to use this config, which is why
+this will fail the schema but pass Chaskis's IrcConfig validation.
+-->
+
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
             Assert.AreEqual( expectedConfig, config );
         }
 
@@ -173,8 +301,23 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithUserName()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username></username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyUserName.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -184,8 +327,23 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithEmptyNick()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick></nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyNick.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -195,8 +353,23 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithEmptyPort()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port></port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<FormatException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyPort.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -206,8 +379,23 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithEmptyRealName()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname></realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigEmptyRealName.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -217,8 +405,22 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithNoServer()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigNoServer.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -228,8 +430,20 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithNoChannel()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigNoChannel.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -239,8 +453,29 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlWithEmptyChannel()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+    <server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+        <channel></channel>
+    </channels>
+    <port>6667</port>
+    <username>testbot</username>
+    <nick>testbot</nick>
+    <realname>test bot</realname>
+    <password>apassword</password>
+    <quitmessage>I am being shut down!</quitmessage>
+    <admins>
+        <admin>person1</admin>
+        <admin>person2</admin>
+    </admins>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyChannel.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -250,8 +485,28 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidXmlEmptyAdmin()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+    <channels>
+        <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+	<password>apassword</password>
+    <quitmessage>I am being shut down!</quitmessage>
+    <admins>
+        <admin></admin>
+        <admin>person2</admin>
+    </admins>
+</ircbotconfig>
+";
+
             Assert.Throws<ValidationException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigWithEmptyAdmins.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -261,8 +516,23 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestIrcConfigBadRootName()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<derp xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+	<channels>
+        <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+	<password>apassword</password>
+</derp>
+";
+
             Assert.Throws<XmlException>( () =>
-                XmlLoader.ParseIrcConfigFromFile( Path.Combine( testXmlFiles, "InvalidIrcConfigBadRootNode.xml" ) )
+                XmlLoader.ParseIrcConfigFromString( xmlString )
             );
         }
 
@@ -274,7 +544,18 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestValidPluginConfig()
         {
-            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "ValidPluginConfig.xml" ) );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<pluginconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"">
+    <assembly path=""/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll"" />
+    <assembly path=""/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll"" >
+        <ignorechannel>#blacklist</ignorechannel>
+        <ignorechannel>#evil</ignorechannel>
+    </assembly>
+</pluginconfig>
+";
+
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromString( xmlString );
             Assert.AreEqual( 2, configs.Count );
 
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll", configs[0].AssemblyPath );
@@ -292,7 +573,13 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestValidPluginConfigNoPlugins()
         {
-            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "ValidPluginConfigEmpty.xml" ) );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<pluginconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"">
+</pluginconfig>
+";
+
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromString( xmlString );
             Assert.AreEqual( 0, configs.Count );
         }
 
@@ -302,8 +589,16 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidPluginConfigBadRootName()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<derp xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"">
+	<assembly path=""/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll"" />
+	<assembly path=""/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll"" />
+</derp>
+";
+
             Assert.Throws<XmlException>( () =>
-                XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "InvalidPluginConfigBadRootNode.xml" ) )
+                XmlLoader.ParsePluginConfigFromString( xmlString )
             );
         }
 
@@ -313,8 +608,16 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestInvalidPluginConfigNoPath()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<pluginconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd"">
+	<assembly />
+	<assembly path=""/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll"" />
+</pluginconfig>
+";
+
             Assert.Throws<ArgumentNullException>( () =>
-                XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyPath.xml" ) )
+                XmlLoader.ParsePluginConfigFromString( xmlString )
             );
         }
     }

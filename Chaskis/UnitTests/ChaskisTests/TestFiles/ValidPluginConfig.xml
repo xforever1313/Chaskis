@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<pluginconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/pluginconfigschema.xsd">
-    <assembly path="/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll" />
-    <assembly path="/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin2.dll" >
-        <ignorechannel>#blacklist</ignorechannel>
-        <ignorechannel>#evil</ignorechannel>
-    </assembly>
-</pluginconfig>
