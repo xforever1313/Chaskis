@@ -247,7 +247,7 @@ namespace Chaskis.Core
             // Therefore, this is the first command that gets sent.
             if( string.IsNullOrEmpty( this.Config.ServerPassword ) == false )
             {
-                this.connection.WriteLine( "PASS {0}", this.Config.GetServerPassword() );
+                this.connection.WriteLine( $"PASS {this.Config.GetServerPassword()}" );
                 Thread.Sleep( this.Config.RateLimit );
             }
             else

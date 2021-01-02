@@ -2,59 +2,119 @@
 <!--
 
 Sample Bot Config.  This tells Chaskis where to connect to,
-ane which channel(s) to watch.
+and which channel(s) to watch.
 
-Server - The IRC Server to connect to.  Required.
+-->
+<ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
+    <!-- Server - The IRC Server to connect to.  Required. -->
+	<server>irc.testdomain.com</server>
+    
+    <!-- Channels - The list of channels to join. At least 1 is required. -->
+    <channels>
+	    <channel>#testchannel</channel>
+        <channel>#testchannel2</channel>
+    </channels>
+    
+    <!-- Port - The port to use for the TCP connection.  Can not be negative.  Defaulted to 6667.-->
+	<port>6667</port>
+    
+    <!--
+    UseSsl - Should the connection to the IRC server be an SSL connection?  Options are true (enable SSL)
+                or false (do not use SSL).  Defaulted to false.
+    -->
+    <usessl>false</usessl>
+    
+    <!--
+    UserName - The bot's username.  Required.  This is not the Nickname, and does not show up
+               in the channel to other users.  This can not be changed without reconnecting.
+               This is how the server identifies the bot.
+    -->
+	<username>testbot</username>
 
-Channels - The list of channels to join. At least 1 is required.
+    <!-- Nick - The bot's nickname.  Required.  This is what a user sees as the bot's name. -->
+	<nick>testbot</nick>
+    
+    <!-- RealName - The bot's real (full) name.  Required. -->
+	<realname>test bot</realname>
 
-Port - The port to use for the TCP connection.  Can not be negative.  Defaulted to 6667.
-
-usessl - Should the connection to the IRC server be an SSL connection?  Options are true (enable SSL)
-         or false (do not use SSL).  Defaulted to false.
-
-UserName - The bot's username.  Required.  This is not the Nickname, and does not show up
-           in the channel to other users.  This can not be changed without reconnecting.
-           This is how the server identifies the bot.
-           
-Nick - The bot's nickname.  Required.  This is what a user sees as the bot's name.
-
-realname - The bot's real (full) name.  Required.
-
-serverpasswordfile - A file that contains the server password.
-                     The bot will read the first line of the file,
-                     and make that the server password.  This is NOT NICKSERV's password (used to register
+    <!--
+    ServerPassword - The password to login to the server.  This is NOT NICKSERV's password (used to register
                      a nickname to a server),
                      this is the password to actually connect to the server itself.
-                     Leave blank if there is no server password.
-                     This is set to a file so the IRC bot configuration can be shared
-                     without exposing sensitive information.  If the read password from the file
-                     is the empty string (which can happen if the file is empty, OR the first line in the file
-                     is empty), it will be treated as not specifying a password.
+                     Leave blank or comment out if there is no server password.
                      
-
-nickservpasswordfile - A file that contains the NickServ password.  NickServ is a bot that is usually
-                       used to register nicknames.  The first line in this file is read
-                       and sent in a PM to NickServ after joining the server.  Leave
-                       blank to send no such message.
-                       This is set to a file so the IRC bot configuration can be shared
-                       without exposing sensitive information.  If the read password from the file
+                     The method attribute can be three options, and each option inteprets the XML node's value differently:
+                     - inline, where the value in the XML node is the password.  Default value.
+                     - file, where the value in the XML node is a path to the file that contains the password.
+                       The bot will read the first line of the file,
+                       and make that the server password.  If the read password from the file
                        is the empty string (which can happen if the file is empty, OR the first line in the file
                        is empty), it will be treated as not specifying a password.
+                     - envvar, where the value in the XML node is the environment variable name that contains
+                       the password
+    -->
+    <serverpassword method="file">path/to/server/password</serverpassword>
 
-ratelimit - How many milliseconds occur between messages that are sent to the IRC server
-            from the bot.  Most servers have flood limiting, and if the bot does not follow it, it can
-            get kicked or banned.  Can not be negative.
+    <!--
+    NickServPassword - NickServ is a bot that is usually
+                       used to register nicknames.  The password is sent in a PM to NickServ
+                       after joining the server.  Leave
+                       blank to send no such message.
+                       
+                     The method attribute can be three options, and each option inteprets the XML node's value differently:
+                     - inline, where the value in the XML node is the password.  Default value.
+                     - file, where the value in the XML node is a path to the file that contains the password.
+                       The bot will read the first line of the file,
+                       and make that the server password.  If the read password from the file
+                       is the empty string (which can happen if the file is empty, OR the first line in the file
+                       is empty), it will be treated as not specifying a password.
+                     - envvar, where the value in the XML node is the environment variable name that contains
+                       the password
+    -->
+    <nickservpassword method="file">path/to/nickserv/password</nickservpassword>
 
-quitemessage - Message to send to the channels just before the bot disconnects from the server.  Optional.
+    <!--
+    NickServNick - The nickname of the NickServ service.  Usually, this is, well, "NickServ", but some
+                   servers may use a different nick name for their Nick Service.
+                   
+                   When a NickServ password is specified, this who the NickServMessage is sent to via PM.
+    -->
+    <nickservnick>NickServ</nickservnick>
+    
+    <!--
+    NickServMessage - If a NickServ password is specified, this is the format in which the message is sent
+                      to the server.  Usually, this is "IDENTIFY <password>", but not all IRC servers
+                      are created equal.  For this message, the string "{%password%}" gets replaced with
+                      NickServ's password before being sent to the server.
+    -->
+    <nickservmessage>IDENTIFY {%password%}</nickservmessage>
 
-Admins - Optional.
-        These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
-        **IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
-        The value passed in is the IRC user name.
-        Note that casing is ignored.  The config gets read in and set to lowercase.
+    <!--
+    ratelimit - How many milliseconds occur between messages that are sent to the IRC server
+                from the bot.  Most servers have flood limiting, and if the bot does not follow it, it can
+                get kicked or banned.  Can not be negative.
+    -->
+    <ratelimit>800</ratelimit>
+    
+    <!--
+    quitmessage - Message to send to the channels just before the bot disconnects from the server.  Optional.
+    -->
+    <quitmessage>I am being shut down!</quitmessage>
+    
+    <!--
+    Admins - Optional.
+            These are people who can do "advanced" stuff in the bot such as deleting stuff from plugins.
+            **IT IS UP TO A PLUGIN TO ENFORCE THIS**  Plugins can ignore this option if they so choose.
+            The value passed in is the IRC user name.
+            Note that casing is ignored.
+    -->
+    <admins>
+        <admin>person1</admin>
+        <admin>person2</admin>
+    </admins>
 
-Bridge bots - Optional.
+    <!--
+    Bridge bots - Optional.
               These are IRC bots that bridge other services such as telegram or slack.
               Typically in a channel, bridge bots like this:
 
@@ -72,27 +132,8 @@ Bridge bots - Optional.
               bridge.  The bridgeMessage is the message they sent.  Chaskis, under the hood, will treat the bridgeUser
               as the nick and the bridgeMessage as the message when processing privmsg events.  Note, if the regex fails
               to match Chaskis will treat the bridge bot as a regular user.
--->
-<ircbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd">
-	<server>irc.testdomain.com</server>
-    <channels>
-	    <channel>#testchannel</channel>
-        <channel>#testchannel2</channel>
-    </channels>
-	<port>6667</port>
-    <usessl>false</usessl>
-	<username>testbot</username>
-	<nick>testbot</nick>
-	<realname>test bot</realname>
-    <serverpasswordfile>path/to/server/password</serverpasswordfile>
-    <nickservpasswordfile>path/to/nickserv/password</nickservpasswordfile>
-    <ratelimit>800</ratelimit>
-    <quitmessage>I am being shut down!</quitmessage>
-    <admins>
-        <admin>person1</admin>
-        <admin>person2</admin>
-    </admins>
-
+    -->
+    
     <!--
     <bridgebots>
         <bridgebot>

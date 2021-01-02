@@ -163,6 +163,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         {
             this.ircConfig.ServerPasswordMethod = PasswordMethod.Inline;
             this.ircConfig.ServerPassword = "serverpass";
+            this.ircConfig.NickServNick = "SomeNickServ";
             this.ircConfig.NickServPasswordMethod = PasswordMethod.Inline;
             this.ircConfig.NickServPassword = "nickservpass";
             this.ircConfig.NickServMessage = "IDENTIFY AS {%password%}";
@@ -181,6 +182,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
     <ratelimit>800</ratelimit>
     <serverpassword method=""inline"">{this.ircConfig.ServerPassword}</serverpassword>
     <nickservpassword method=""inline"">{this.ircConfig.NickServPassword}</nickservpassword>
+    <nickservnick>{this.ircConfig.NickServNick}</nickservnick>
     <nickservmessage>{this.ircConfig.NickServMessage}</nickservmessage>
     <quitmessage>I am being shut down!</quitmessage>
 </ircbotconfig>

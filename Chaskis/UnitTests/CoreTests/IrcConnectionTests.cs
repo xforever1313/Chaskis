@@ -128,7 +128,7 @@ namespace Chaskis.UnitTests.CoreTests
             {
                 // We need to send the server password too!
                 this.mac.Setup(
-                    m => m.WriteLine( "PASS {0}", serverPassword )
+                    m => m.WriteLine( $"PASS {serverPassword}" )
                 );
 
                 this.DoConnect( connection );
@@ -182,6 +182,7 @@ namespace Chaskis.UnitTests.CoreTests
             IrcConfig ircConfig = new IrcConfig
             {
                 Nick = nick,
+                NickServPasswordMethod = PasswordMethod.Inline,
                 NickServPassword = nickServPass,
                 QuitMessage = quitMessage,
                 RealName = realName,
@@ -196,7 +197,7 @@ namespace Chaskis.UnitTests.CoreTests
             {
                 // We need to send the nickserv password too!
                 this.mac.Setup(
-                    m => m.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", nickServPass )
+                    m => m.WriteLine( $"PRIVMSG NickServ :IDENTIFY {nickServPass}" )
                 );
 
                 this.DoConnect( connection );
@@ -217,6 +218,7 @@ namespace Chaskis.UnitTests.CoreTests
             IrcConfig ircConfig = new IrcConfig
             {
                 Nick = nick,
+                NickServPasswordMethod = PasswordMethod.Inline,
                 NickServPassword = nickServPass,
                 QuitMessage = quitMessage,
                 RealName = realName,
@@ -232,11 +234,11 @@ namespace Chaskis.UnitTests.CoreTests
             {
                 // We need to send the passwords too!
                 this.mac.Setup(
-                    m => m.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", nickServPass )
+                    m => m.WriteLine( $"PRIVMSG NickServ :IDENTIFY {nickServPass}" )
                 );
 
                 this.mac.Setup(
-                    m => m.WriteLine( "PASS {0}", serverPassword )
+                    m => m.WriteLine( $"PASS {serverPassword}" )
                 );
 
                 this.DoConnect( connection );

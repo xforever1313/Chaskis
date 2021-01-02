@@ -12,6 +12,14 @@
     <xs:element name="bridgebots" type="BridgeBots"/>
     <xs:element name="bridgebot" type="BridgeBot"/>
 
+    <xs:simpleType name="PasswordMethod">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="inline"/>
+            <xs:enumeration value="envvar"/>
+            <xs:enumeration value="file"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="IrcBotConfig">
         <xs:sequence>
             <xs:element name="server" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
@@ -21,8 +29,26 @@
             <xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="nick" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="realname" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="serverpasswordfile" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="nickservpasswordfile" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="serverpassword" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="method" type="PasswordMethod"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="nickservpassword" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="method" type="PasswordMethod"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="nickservnick" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="nickservmessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="ratelimit" type="xs:int" minOccurs="0" maxOccurs="1"/>
             <xs:element name="quitmessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="admins" type="Admin" minOccurs="0" maxOccurs="1"/>
@@ -41,7 +67,7 @@
             <xs:element name="channel" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
-
+    
     <xs:complexType name="BridgeBot">
         <xs:sequence>
             <xs:element name="botname" type="xs:string" minOccurs="1" maxOccurs="1"/>
