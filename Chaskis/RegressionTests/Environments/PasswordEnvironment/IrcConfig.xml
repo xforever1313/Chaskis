@@ -9,8 +9,8 @@
     <username>chaskisbot</username>
     <nick>chaskisbot</nick>
     <realname>Chaskis Test Bot</realname>
-    <serverpasswordfile>{%testenvpath%}/ServerPassword.txt</serverpasswordfile>
-    <nickservpasswordfile>{%testenvpath%}/NickServPassword.txt</nickservpasswordfile>
+    <serverpassword method="file">{%testenvpath%}/ServerPassword.txt</serverpassword>
+    <nickservpassword method="file">{%testenvpath%}/NickServPassword.txt</nickservpassword>
     <ratelimit>100</ratelimit>
     <quitmessage>I'm going down!</quitmessage>
     <admins>

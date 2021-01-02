@@ -119,6 +119,8 @@ namespace Chaskis.UnitTests.Common
             ircConfig.RealName = "Some Real Name";
             ircConfig.ServerPassword = "ServerPassword";
             ircConfig.NickServPassword = "Password";
+            ircConfig.NickServNick = "NickServ";
+            ircConfig.NickServMessage = "IDENTIFY {%password%}";
             ircConfig.BridgeBots[BridgeBotUser] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
             ircConfig.Admins.Add( "person1" );
             ircConfig.Admins.Add( "person2" );

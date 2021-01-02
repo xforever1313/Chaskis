@@ -247,7 +247,7 @@ namespace Chaskis.Core
             // Therefore, this is the first command that gets sent.
             if( string.IsNullOrEmpty( this.Config.ServerPassword ) == false )
             {
-                this.connection.WriteLine( "PASS {0}", this.Config.ServerPassword );
+                this.connection.WriteLine( "PASS {0}", this.Config.GetServerPassword() );
                 Thread.Sleep( this.Config.RateLimit );
             }
             else
@@ -270,7 +270,9 @@ namespace Chaskis.Core
             // so it registers our bot and does not change its nickname on us.
             if( string.IsNullOrEmpty( this.Config.NickServPassword ) == false )
             {
-                this.connection.WriteLine( "PRIVMSG NickServ :IDENTIFY {0}", this.Config.NickServPassword );
+                this.connection.WriteLine(
+                    $"PRIVMSG {this.Config.NickServNick} :{this.Config.GetNickServMessage()}"
+                );
                 Thread.Sleep( this.Config.RateLimit );
             }
             else

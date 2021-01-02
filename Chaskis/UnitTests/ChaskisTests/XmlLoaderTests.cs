@@ -19,22 +19,14 @@ namespace Chaskis.UnitTests.ChaskisTests
     [TestFixture]
     public class XmlLoaderTests
     {
-        // -------- Fields --------
-
-        /// <summary>
-        /// Where the test xml files are located.
-        /// </summary>
-        private static readonly string testXmlFiles =
-            Path.Combine(
-                TestContext.CurrentContext.TestDirectory, "..", "..", "..", "ChaskisTests", "TestFiles"
-            );
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// The IRC Config to use.  Based off of the XML files.
         /// </summary>
         private IrcConfig ircConfig;
 
-        // -------- Setup / Teardown --------
+        // ---------------- Setup / Teardown ----------------
 
         [SetUp]
         public void TestSetup()
@@ -51,7 +43,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.RateLimit = 800;
         }
 
-        // -------- Tests --------
+        // ---------------- Tests ----------------
 
         /// <summary>
         /// Tests an XML file that is valid and contains a password.
@@ -67,7 +59,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         /// Tests an XML file that is valid and contains a password.
         /// </summary>
         [Test]
-        public void TestValidXmlWithPasswordAndBridgeBots()
+        public void TestValidXmlWithAndBridgeBots()
         {
             this.ircConfig.BridgeBots.Add( "telegrambot", @"^(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)" );
             this.ircConfig.BridgeBots.Add( "slackbot", @"^(?<bridgeUser>\w+)--(?<bridgeMessage>.+)" );
@@ -103,7 +95,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         }
 
         [Test]
-        public void TestValidXmlWithThreeChannelsAndPassword()
+        public void TestValidXmlWithThreeChannels()
         {
             this.ircConfig.Channels.Add( "#mychannel" );
             this.ircConfig.Channels.Add( "#chaskis" );
@@ -166,6 +158,90 @@ namespace Chaskis.UnitTests.ChaskisTests
             Assert.AreEqual( this.ircConfig, config );
         }
 
+        [Test]
+        public void TestValidXmlWithInlinePasswords()
+        {
+            this.ircConfig.ServerPasswordMethod = PasswordMethod.Inline;
+            this.ircConfig.ServerPassword = "serverpass";
+            this.ircConfig.NickServPasswordMethod = PasswordMethod.Inline;
+            this.ircConfig.NickServPassword = "nickservpass";
+            this.ircConfig.NickServMessage = "IDENTIFY AS {%password%}";
+
+            string xmlString =
+$@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+    <channels>
+	    <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <serverpassword method=""inline"">{this.ircConfig.ServerPassword}</serverpassword>
+    <nickservpassword method=""inline"">{this.ircConfig.NickServPassword}</nickservpassword>
+    <nickservmessage>{this.ircConfig.NickServMessage}</nickservmessage>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
+            Assert.AreEqual( this.ircConfig, config );
+            Assert.AreEqual( this.ircConfig.ServerPassword, config.GetServerPassword() );
+            Assert.AreEqual( this.ircConfig.NickServPassword, config.GetNickServPassword() );
+            Assert.AreEqual( $"IDENTIFY AS {this.ircConfig.NickServPassword}", config.GetNickServMessage() );
+        }
+
+        [Test]
+        public void TestValidXmlWithEnvVarPasswords()
+        {
+            const string expectedServerPass = "serverpass";
+            const string expectedNickServPass = "nickservpass";
+
+            this.ircConfig.ServerPasswordMethod = PasswordMethod.EnvVar;
+            this.ircConfig.ServerPassword = "CHASKIS_SERVER_PASS";
+            this.ircConfig.NickServPasswordMethod = PasswordMethod.EnvVar;
+            this.ircConfig.NickServPassword = "CHASKIS_NICKSERV_PASS";
+            this.ircConfig.NickServMessage = "IDENTIFY AS {%password%}";
+
+            string oldServerEnvVar = Environment.GetEnvironmentVariable( this.ircConfig.ServerPassword );
+            string oldNickServEnvVar = Environment.GetEnvironmentVariable( this.ircConfig.NickServPassword );
+            try
+            {
+                Environment.SetEnvironmentVariable( this.ircConfig.ServerPassword, expectedServerPass );
+                Environment.SetEnvironmentVariable( this.ircConfig.NickServPassword, expectedNickServPass );
+
+                string xmlString =
+    $@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+    <channels>
+	    <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>800</ratelimit>
+    <serverpassword method=""envvar"">{this.ircConfig.ServerPassword}</serverpassword>
+    <nickservpassword method=""envvar"">{this.ircConfig.NickServPassword}</nickservpassword>
+    <nickservmessage>{this.ircConfig.NickServMessage}</nickservmessage>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+                IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
+                Assert.AreEqual( this.ircConfig, config );
+                Assert.AreEqual( expectedServerPass, config.GetServerPassword() );
+                Assert.AreEqual( expectedNickServPass, config.GetNickServPassword() );
+                Assert.AreEqual( $"IDENTIFY AS {expectedNickServPass}", config.GetNickServMessage() );
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable( this.ircConfig.ServerPassword, oldServerEnvVar );
+                Environment.SetEnvironmentVariable( this.ircConfig.NickServPassword, oldNickServEnvVar );
+            }
+        }
+
         /// <summary>
         /// Tests an XML file that is valid and contains an empty password node.
         /// </summary>
@@ -173,6 +249,8 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestValidXmlWithEmptyPassword()
         {
             this.ircConfig.NickServPassword = string.Empty;
+            this.ircConfig.NickServMessage = string.Empty;
+            this.ircConfig.NickServNick = string.Empty;
 
             const string xmlString =
 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
@@ -185,8 +263,10 @@ namespace Chaskis.UnitTests.ChaskisTests
     <username>testbot</username>
     <nick>testbot</nick>
     <realname>test bot</realname>
-    <serverpasswordfile></serverpasswordfile>
-    <nickservpasswordfile></nickservpasswordfile>
+    <serverpassword></serverpassword>
+    <nickservpassword></nickservpassword>
+    <nickservnick></nickservnick>
+    <nickservmessage></nickservmessage>
     <ratelimit>800</ratelimit>
     <quitmessage>I am being shut down!</quitmessage>
     <!--

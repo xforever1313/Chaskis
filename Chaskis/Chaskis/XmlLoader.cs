@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -101,13 +102,35 @@ namespace Chaskis.Cli
                 {
                     config.QuitMessage = childNode.Value;
                 }
-                else if( "serverpasswordfile".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                else if( "serverpassword".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
-                    config.ServerPassword = ReadFirstLineOfFile( childNode.Value, "Server Password File" );
+                    config.ServerPassword = childNode.Value;
+                    foreach( XAttribute attr in childNode.Attributes() )
+                    {
+                        if( attr.Name.LocalName.EqualsIgnoreCase( "method" ) )
+                        {
+                            config.ServerPasswordMethod = ParsePasswordMethod( attr.Value );
+                        }
+                    }
                 }
-                else if( "nickservpasswordfile".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                else if( "nickservpassword".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
-                    config.NickServPassword = ReadFirstLineOfFile( childNode.Value, "NickServ Password File" );
+                    config.NickServPassword = childNode.Value;
+                    foreach( XAttribute attr in childNode.Attributes() )
+                    {
+                        if( attr.Name.LocalName.EqualsIgnoreCase( "method" ) )
+                        {
+                            config.NickServPasswordMethod = ParsePasswordMethod( attr.Value );
+                        }
+                    }
+                }
+                else if( "nickservnick".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.NickServNick = childNode.Value;
+                }
+                else if( "nickservmessage".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.NickServMessage = childNode.Value;
                 }
                 else if( "ratelimit".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
@@ -165,27 +188,17 @@ namespace Chaskis.Cli
             return config;
         }
 
-        private static string ReadFirstLineOfFile( string fileName, string context )
+        private static PasswordMethod ParsePasswordMethod( string str )
         {
-            if( string.IsNullOrWhiteSpace( fileName ) )
+            foreach( PasswordMethod method in Enum.GetValues( typeof( PasswordMethod ) ))
             {
-                return string.Empty;
-            }
-
-            if( File.Exists( fileName ) == false )
-            {
-                throw new FileNotFoundException(
-                    "Could not find file '" + fileName + "', which is needed for " + context
-                );
-            }
-
-            using( FileStream stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
-            {
-                using( StreamReader reader = new StreamReader( stream ) )
+                if( str.EqualsIgnoreCase( method.ToString() ) )
                 {
-                    return reader.ReadLine();
+                    return method;
                 }
             }
+
+            throw new FormatException( $"Invalid {nameof( PasswordMethod )}: {str}" );
         }
 
         public static IList<AssemblyConfig> ParsePluginConfigFromString( string xmlString )

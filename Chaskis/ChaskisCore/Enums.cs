@@ -29,6 +29,24 @@ namespace Chaskis.Core
         ChannelAndPms
     }
 
+    public enum PasswordMethod
+    {
+        /// <summary>
+        /// Read from a separate file.
+        /// </summary>
+        File,
+
+        /// <summary>
+        /// Contained within the configuration file.
+        /// </summary>
+        Inline,
+
+        /// <summary>
+        /// Read from an environment variable.
+        /// </summary>
+        EnvVar
+    }
+
     // ---------------- Chaskis Event Enums ----------------
 
     /// <summary>
