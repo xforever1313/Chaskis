@@ -129,7 +129,7 @@ namespace Chaskis.Core
             ArgumentChecker.IsNotNull( macLayer, nameof( macLayer ) );
 
             this.inited = false;
-            this.Config = new ReadOnlyIrcConfig( config );
+            this.Config = config;
             this.IsConnected = false;
 
             this.connection = macLayer;

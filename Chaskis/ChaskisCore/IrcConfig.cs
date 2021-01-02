@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using SethCS.Exceptions;
@@ -105,24 +104,12 @@ namespace Chaskis.Core
         // -------- Functions ---------
 
         /// <summary>
-        /// Clone this instance.
-        /// </summary>
-        IReadOnlyIrcConfig Clone();
-
-        /// <summary>
         /// Sees if the given object is equal to this instance.
         /// That is, all properties match.
         /// </summary>
         /// <param name="obj">The object to check.</param>
         /// <returns>True if the given object is equal to this one, else false.</returns>
         bool Equals( object other );
-
-        /// <summary>
-        /// Validates the IRC config to ensure no properties are
-        /// bad, such as values being null/empty or negative.
-        /// Only password can be empty, all others need some value in them.
-        /// </summary>
-        void Validate();
     }
 
     /// <summary>
@@ -231,20 +218,6 @@ namespace Chaskis.Core
         // --------- Functions --------
 
         /// <summary>
-        /// Returns a copy of this object.
-        /// </summary>
-        public IReadOnlyIrcConfig Clone()
-        {
-            IrcConfig clone = (IrcConfig)this.MemberwiseClone();
-
-            clone.Channels = new List<string>( clone.Channels );
-            clone.BridgeBots = new Dictionary<string, string>( clone.BridgeBots );
-            clone.Admins = new List<string>( clone.Admins );
-
-            return clone;
-        }
-
-        /// <summary>
         /// Sees if the given object is equal to this instance.
         /// That is, all properties match.
         /// </summary>
@@ -252,296 +225,91 @@ namespace Chaskis.Core
         /// <returns>True if the given object is equal to this one, else false.</returns>
         public override bool Equals( object obj )
         {
-            return IrcConfigHelpers.Equals( this, obj );
+            IReadOnlyIrcConfig other = obj as IReadOnlyIrcConfig;
+
+            if( other == null )
+            {
+                return false;
+            }
+
+            return Equals( other );
         }
 
         public bool Equals( IReadOnlyIrcConfig other )
         {
-            return IrcConfigHelpers.Equals( this, other );
+            bool isEqual =
+                ( this.Server == other.Server ) &&
+                ( this.Channels.Count == other.Channels.Count ) &&
+                ( this.Port == other.Port ) &&
+                ( this.UseSsl == other.UseSsl ) &&
+                ( this.UserName == other.UserName ) &&
+                ( this.Nick == other.Nick ) &&
+                ( this.RealName == other.RealName ) &&
+                ( this.ServerPassword == other.ServerPassword ) &&
+                ( this.NickServPassword == other.NickServPassword ) &&
+                ( this.QuitMessage == other.QuitMessage ) &&
+                ( this.BridgeBots.Count == other.BridgeBots.Count ) &&
+                ( this.Admins.Count == other.Admins.Count ) &&
+                ( this.RateLimit == other.RateLimit );
+
+            if( isEqual )
+            {
+                foreach( string channel in this.Channels )
+                {
+                    if( other.Channels.Contains( channel ) == false )
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            if( isEqual )
+            {
+                foreach( KeyValuePair<string, string> bridgeBot in this.BridgeBots )
+                {
+                    if( other.BridgeBots.ContainsKey( bridgeBot.Key ) )
+                    {
+                        if( bridgeBot.Value != other.BridgeBots[bridgeBot.Key] )
+                        {
+                            isEqual = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            if( isEqual )
+            {
+                foreach( string admin in this.Admins )
+                {
+                    if( other.Admins.Contains( admin ) == false )
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+            }
+
+            return isEqual;
         }
 
-        /// <summary>
-        /// Just returns the base object's hash code.
-        /// </summary>
-        /// <returns>The base object's hash code.</returns>
         public override int GetHashCode()
         {
-            return IrcConfigHelpers.GetHashCode( this );
-        }
-
-        /// <summary>
-        /// Validates the IRC config to ensure no properties are
-        /// bad, such as values being null/empty or negative.
-        /// Only password can be empty, all others need some value in them.
-        /// </summary>
-        /// <exception cref="ValidationException">If this object doesn't validate.</exception>
-        public void Validate()
-        {
-            IrcConfigHelpers.Validate( this );
-        }
-    }
-
-    /// <summary>
-    /// Wraps an IIrcConfig object such that its readonly.
-    /// Note: All setters throw ReadOnlyException.
-    /// </summary>
-    public class ReadOnlyIrcConfig : IReadOnlyIrcConfig
-    {
-        // -------- Fields --------
-
-        /// <summary>
-        /// The wrapped config.
-        /// </summary>
-        private readonly IReadOnlyIrcConfig wrappedConfig;
-
-        // -------- Constructor --------
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="config">The config to wrap.</param>
-        public ReadOnlyIrcConfig( IReadOnlyIrcConfig config )
-        {
-            ArgumentChecker.IsNotNull( config, nameof( config ) );
-
-            this.wrappedConfig = config;
-
-            this.Channels = new List<string>( config.Channels ).AsReadOnly();
-            this.BridgeBots = new ReadOnlyDictionary<string, string>( config.BridgeBots );
-            this.Admins = new List<string>( config.Admins ).AsReadOnly();
-        }
-
-        // -------- Properties --------
-
-        /// <summary>
-        /// The server to connect to.
-        /// </summary>
-        public string Server
-        {
-            get
-            {
-                return this.wrappedConfig.Server;
-            }
-            set
-            {
-                ThrowException( nameof( this.Server ) );
-            }
-        }
-
-        /// <summary>
-        /// The room to connect to (Include the # character in front if needed).
-        /// </summary>
-        public IList<string> Channels { get; private set; }
-
-        /// <summary>
-        /// The port to connect to.
-        /// </summary>
-        public short Port
-        {
-            get
-            {
-                return this.wrappedConfig.Port;
-            }
-            set
-            {
-                ThrowException( nameof( this.Port ) );
-            }
-        }
-
-        public bool UseSsl
-        {
-            get
-            {
-                return this.wrappedConfig.UseSsl;
-            }
-            set
-            {
-                ThrowException( nameof( this.UseSsl ) );
-            }
-        }
-
-        /// <summary>
-        /// The bot's user name.
-        /// </summary>
-        public string UserName
-        {
-            get
-            {
-                return this.wrappedConfig.UserName;
-            }
-            set
-            {
-                ThrowException( nameof( this.UserName ) );
-            }
-        }
-
-        /// <summary>
-        /// The bot's nick name
-        /// </summary>
-        public string Nick
-        {
-            get
-            {
-                return this.wrappedConfig.Nick;
-            }
-            set
-            {
-                ThrowException( nameof( this.Nick ) );
-            }
-        }
-
-        /// <summary>
-        /// The bot's "Real Name"
-        /// </summary>
-        public string RealName
-        {
-            get
-            {
-                return this.wrappedConfig.RealName;
-            }
-            set
-            {
-                ThrowException( nameof( this.RealName ) );
-            }
-        }
-
-        public string ServerPassword
-        {
-            get
-            {
-                return this.wrappedConfig.ServerPassword;
-            }
-            set
-            {
-                ThrowException( nameof( this.ServerPassword ) );
-            }
-        }
-
-        /// <summary>
-        /// The password to use to register the nick name.
-        /// Leave empty to not authenticate.
-        /// </summary>
-        public string NickServPassword
-        {
-            get
-            {
-                return this.wrappedConfig.NickServPassword;
-            }
-            set
-            {
-                ThrowException( nameof( this.NickServPassword ) );
-            }
-        }
-
-        /// <summary>
-        /// The quit message when the bot is leaving.
-        /// Must be less than 160 characters and contain no new lines.
-        /// </summary>
-        public string QuitMessage
-        {
-            get
-            {
-                return this.wrappedConfig.QuitMessage;
-            }
-            set
-            {
-                ThrowException( nameof( this.QuitMessage ) );
-            }
-        }
-
-        /// <summary>
-        /// Read-only Dictionary of bots that act as bridges to other clients (e.g. telegram).
-        /// Key is the bridge's user name
-        /// Value a regex.  Must include (?<bridgeUser>) and (?<bridgeMessage>) regex groups.
-        /// </summary>
-        public IDictionary<string, string> BridgeBots { get; private set; }
-
-        /// <summary>
-        /// Admins who control the bot.
-        /// Plugins can use this to see who has elevated permissions and can
-        /// do things such as delete entries, etc.
-        /// 
-        /// Read-only list.
-        /// </summary>
-        public IList<string> Admins { get; private set; }
-
-        /// <summary>
-        /// How long between sending messages to the IRC channel in milliseconds.
-        /// Each server and/or channel usually has a flood limit that the bot needs
-        /// to observe or risk being kicked/banned.
-        /// </summary>
-        public int RateLimit
-        {
-            get
-            {
-                return this.wrappedConfig.RateLimit;
-            }
-            set
-            {
-                ThrowException( nameof( this.RateLimit ) );
-            }
-        }
-
-        // -------- Functions --------
-
-        /// <summary>
-        /// Returns a copy of this object.
-        /// </summary>
-        public IReadOnlyIrcConfig Clone()
-        {
-            return new ReadOnlyIrcConfig( this.wrappedConfig.Clone() );
-        }
-
-        /// <summary>
-        /// Sees if the given object is equal to this instance.
-        /// That is, all properties match.
-        /// </summary>
-        /// <param name="obj">The object to check.</param>
-        /// <returns>True if the given object is equal to this one, else false.</returns>
-        public override bool Equals( object obj )
-        {
-            return IrcConfigHelpers.Equals( this, obj );
-        }
-
-        public bool Equals( IReadOnlyIrcConfig other )
-        {
-            return IrcConfigHelpers.Equals( this, other );
-        }
-
-        /// <summary>
-        /// Just returns the base object's hash code.
-        /// </summary>
-        /// <returns>The base object's hash code.</returns>
-        public override int GetHashCode()
-        {
-            return IrcConfigHelpers.GetHashCode( this );
-        }
-
-        /// <summary>
-        /// Validates the IRC config to ensure no properties are
-        /// bad, such as values being null/empty or negative.
-        /// Only password can be empty, all others need some value in them.
-        /// </summary>
-        /// <exception cref="ValidationException">If this object doesn't validate.</exception>
-        public void Validate()
-        {
-            IrcConfigHelpers.Validate( this );
-        }
-
-        /// <summary>
-        /// Throws the read-only exception.
-        /// </summary>
-        /// <param name="property">The property that was called.</param>
-        private static void ThrowException( string property )
-        {
-            throw new ReadOnlyException( "Can't modify " + property + ", this config is readonly" );
+            // This class is mutable, so use the base hash code.
+            return base.GetHashCode();
         }
     }
 
     /// <summary>
     /// Helpers that can be used for all Irc Config object types.
     /// </summary>
-    internal static class IrcConfigHelpers
+    public static class IrcConfigExtensions
     {
         /// <summary>
         /// Validates the IRC config to ensure no properties are
@@ -549,7 +317,7 @@ namespace Chaskis.Core
         /// Only password can be empty, all others need some value in them.
         /// </summary>
         /// <param name="config">Config to validate.</param>
-        internal static void Validate( IReadOnlyIrcConfig config )
+        public static void Validate( this IReadOnlyIrcConfig config )
         {
             bool success = true;
             StringBuilder builder = new StringBuilder();
@@ -682,112 +450,6 @@ namespace Chaskis.Core
             {
                 throw new ValidationException( builder.ToString() );
             }
-        }
-
-        /// <summary>
-        /// Gets the hash code of the IRC config object.
-        /// </summary>
-        /// <param name="config">The config to get the hash code of.</param>
-        /// <returns>The hash code of the IRC config object.</returns>
-        internal static int GetHashCode( IReadOnlyIrcConfig config )
-        {
-            return
-                config.Server.GetHashCode() +
-                config.Channels.GetHashCode() +
-                config.Port.GetHashCode() +
-                config.UseSsl.GetHashCode() +
-                config.UserName.GetHashCode() +
-                config.Nick.GetHashCode() +
-                config.RealName.GetHashCode() +
-                config.ServerPassword.GetHashCode() +
-                config.NickServPassword.GetHashCode() +
-                config.QuitMessage.GetHashCode() +
-                config.BridgeBots.GetHashCode() +
-                config.Admins.GetHashCode() +
-                config.RateLimit.GetHashCode();
-        }
-
-        /// <summary>
-        /// Checks to see if the given IIrcConfig object is the same
-        /// as the given object.
-        /// </summary>
-        /// <param name="config1">The IIrcConfig object to check.</param>
-        /// <param name="obj">The object to check.</param>
-        /// <returns>True if the given object is equal to this one, else false.</returns>
-        internal static bool Equals( IReadOnlyIrcConfig config1, object config2 )
-        {
-            IReadOnlyIrcConfig other = config2 as IReadOnlyIrcConfig;
-
-            if( other == null )
-            {
-                return false;
-            }
-
-            return Equals( config1, other );
-        }
-
-        internal static bool Equals( IReadOnlyIrcConfig config1, IReadOnlyIrcConfig other )
-        {
-            bool isEqual =
-                ( config1.Server == other.Server ) &&
-                ( config1.Channels.Count == other.Channels.Count ) &&
-                ( config1.Port == other.Port ) &&
-                ( config1.UseSsl == other.UseSsl ) &&
-                ( config1.UserName == other.UserName ) &&
-                ( config1.Nick == other.Nick ) &&
-                ( config1.RealName == other.RealName ) &&
-                ( config1.ServerPassword == other.ServerPassword ) &&
-                ( config1.NickServPassword == other.NickServPassword ) &&
-                ( config1.QuitMessage == other.QuitMessage ) &&
-                ( config1.BridgeBots.Count == other.BridgeBots.Count ) &&
-                ( config1.Admins.Count == other.Admins.Count ) &&
-                ( config1.RateLimit == other.RateLimit );
-
-            if( isEqual )
-            {
-                foreach( string channel in config1.Channels )
-                {
-                    if( other.Channels.Contains( channel ) == false )
-                    {
-                        isEqual = false;
-                        break;
-                    }
-                }
-            }
-
-            if( isEqual )
-            {
-                foreach( KeyValuePair<string, string> bridgeBot in config1.BridgeBots )
-                {
-                    if( other.BridgeBots.ContainsKey( bridgeBot.Key ) )
-                    {
-                        if( bridgeBot.Value != other.BridgeBots[bridgeBot.Key] )
-                        {
-                            isEqual = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        isEqual = false;
-                        break;
-                    }
-                }
-            }
-
-            if( isEqual )
-            {
-                foreach( string admin in config1.Admins )
-                {
-                    if( other.Admins.Contains( admin ) == false )
-                    {
-                        isEqual = false;
-                        break;
-                    }
-                }
-            }
-
-            return isEqual;
         }
     }
 }

@@ -47,8 +47,7 @@ namespace Chaskis.Core
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
             ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
 
-            this.ircConfig = ircConfig.Clone();
-            this.IrcConfig = new ReadOnlyIrcConfig( this.ircConfig );
+            this.ircConfig = ircConfig;
 
             IrcConnection connection = new IrcConnection( ircConfig, parsingQueue );
             this.ircConnection = connection;
