@@ -188,59 +188,66 @@ namespace Chaskis.Cli
             }
         }
 
+        public static IList<AssemblyConfig> ParsePluginConfigFromString( string xmlString )
+        {
+            using( StringReader reader = new StringReader( xmlString ) )
+            {
+                return ParsePluginConfigFromTextReader( reader );
+            }
+        }
+
         /// <summary>
         /// Parses the given XML file and returns the IRC Plugin Config settings.
         /// </summary>
         /// <param name="fileName">The file name to parse.</param>
         /// <exception cref="FileNotFoundException">If the given filename does not exist.</exception>
-        /// <exception cref="ArgumentNullException">If the XML has empty strings or the filename is null/empty.</exception>
-        /// <exception cref="ApplicationException">If the irc config isn't valid.</exception>
         /// <returns>The IrcConfig objected based on the XML.</returns>
-        public static IList<AssemblyConfig> ParsePluginConfig( string fileName )
+        public static IList<AssemblyConfig> ParsePluginConfigFromFile( string fileName )
         {
             if( File.Exists( fileName ) == false )
             {
                 throw new FileNotFoundException( "Could not find IRC Config file " + fileName );
             }
 
-            XmlDocument doc = new XmlDocument();
+            using( TextReader reader = File.OpenText( fileName ) )
+            {
+                return ParsePluginConfigFromTextReader( reader );
+            }
+        }
 
-            doc.Load( fileName );
+        private static IList<AssemblyConfig> ParsePluginConfigFromTextReader( TextReader reader )
+        {
+            XDocument doc = XDocument.Load( reader );
 
-            XmlNode rootNode = doc.DocumentElement;
-            if( rootNode.Name != pluginConfigRootNodeName )
+            if( pluginConfigRootNodeName.EqualsIgnoreCase( doc.Root.Name.LocalName ) == false )
             {
                 throw new XmlException(
-                    "Root XML node for plugin config should be named \"" + pluginConfigRootNodeName + "\".  Got: " + rootNode.Name
+                    $"Root XML node for plugin config should be named '{pluginConfigRootNodeName}'.  Got: '{doc.Root.Name.LocalName}'"
                 );
             }
 
             List<AssemblyConfig> plugins = new List<AssemblyConfig>();
 
-            foreach( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XElement childNode in doc.Root.Elements() )
             {
-                if( childNode.Name == "assembly" )
+                if( "assembly".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
                     List<string> blackListedChannels = new List<string>();
-
                     string path = string.Empty;
-                    foreach( XmlAttribute attribute in childNode.Attributes )
+
+                    foreach( XAttribute attribute in childNode.Attributes() )
                     {
-                        switch( attribute.Name )
+                        if( "path".EqualsIgnoreCase( attribute.Name.LocalName ) )
                         {
-                            case "path":
-                                path = attribute.Value;
-                                break;
+                            path = attribute.Value;
                         }
                     }
 
-                    foreach( XmlNode assemblyChild in childNode.ChildNodes )
+                    foreach( XElement assemblyChild in childNode.Elements() )
                     {
-                        switch( assemblyChild.Name )
+                        if( "ignorechannel".EqualsIgnoreCase( assemblyChild.Name.LocalName ) )
                         {
-                            case "ignorechannel":
-                                blackListedChannels.Add( assemblyChild.InnerText );
-                                break;
+                            blackListedChannels.Add( assemblyChild.Value );
                         }
                     }
 

@@ -274,7 +274,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestValidPluginConfig()
         {
-            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "ValidPluginConfig.xml" ) );
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "ValidPluginConfig.xml" ) );
             Assert.AreEqual( 2, configs.Count );
 
             Assert.AreEqual( "/home/me/.config/GenericIrcBot/plugins/TestPlugin/TestPlugin.dll", configs[0].AssemblyPath );
@@ -292,7 +292,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         [Test]
         public void TestValidPluginConfigNoPlugins()
         {
-            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "ValidPluginConfigEmpty.xml" ) );
+            IList<AssemblyConfig> configs = XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "ValidPluginConfigEmpty.xml" ) );
             Assert.AreEqual( 0, configs.Count );
         }
 
@@ -303,7 +303,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidPluginConfigBadRootName()
         {
             Assert.Throws<XmlException>( () =>
-                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigBadRootNode.xml" ) )
+                XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "InvalidPluginConfigBadRootNode.xml" ) )
             );
         }
 
@@ -314,7 +314,7 @@ namespace Chaskis.UnitTests.ChaskisTests
         public void TestInvalidPluginConfigNoPath()
         {
             Assert.Throws<ArgumentNullException>( () =>
-                XmlLoader.ParsePluginConfig( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyPath.xml" ) )
+                XmlLoader.ParsePluginConfigFromFile( Path.Combine( testXmlFiles, "InvalidPluginConfigEmptyPath.xml" ) )
             );
         }
     }

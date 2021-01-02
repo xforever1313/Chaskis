@@ -124,7 +124,7 @@ namespace Chaskis.Cli
 
             StaticLogger.Log.WriteLine( "Using Plugin config file '{0}'", pluginConfigFile );
 
-            IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfig( pluginConfigFile );
+            IList<AssemblyConfig> pluginList = XmlLoader.ParsePluginConfigFromFile( pluginConfigFile );
             InitStage2_LoadPlugins( pluginList );
         }
 
