@@ -116,15 +116,20 @@ namespace Chaskis.Plugins.HttpServer
 
         private void OnConnect( ConnectedEventArgs args )
         {
-            this.httpResponseHandler = new HttpResponseHandler( args.Writer )
+            // Only create 1 server!  Remember, this function
+            // gets called each time we connect.
+            if( server == null )
             {
-                IsIrcConnected = true
-            };
-            this.server = new HttpServer( config, this.httpResponseHandler );
-            this.server.OnStatus += this.Status;
-            this.server.OnError += this.ErrorStatus;
-            this.server.Start();
-            this.Status( "HTTP Server Started" );
+                this.httpResponseHandler = new HttpResponseHandler( args.Writer );
+
+                this.server = new HttpServer( config, this.httpResponseHandler );
+                this.server.OnStatus += this.Status;
+                this.server.OnError += this.ErrorStatus;
+                this.server.Start();
+                this.Status( "HTTP Server Started" );
+            }
+
+            this.httpResponseHandler.IsIrcConnected = true;
         }
 
         private void OnDisconnecting( DisconnectingEventArgs args )
