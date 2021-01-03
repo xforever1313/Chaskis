@@ -21,11 +21,6 @@ namespace Chaskis.Core
         public static readonly SemanticVersion Version;
 
         /// <summary>
-        /// The irc config.
-        /// </summary>
-        private readonly IReadOnlyIrcConfig ircConfig;
-
-        /// <summary>
         /// The IRC Connection.
         /// </summary>
         private readonly IrcConnection ircConnection;
@@ -47,7 +42,7 @@ namespace Chaskis.Core
             ArgumentChecker.IsNotNull( ircConfig, nameof( ircConfig ) );
             ArgumentChecker.IsNotNull( parsingQueue, nameof( parsingQueue ) );
 
-            this.ircConfig = ircConfig;
+            this.IrcConfig = ircConfig;
 
             IrcConnection connection = new IrcConnection( ircConfig, parsingQueue );
             this.ircConnection = connection;
@@ -108,7 +103,7 @@ namespace Chaskis.Core
                     // Stop reacting to strings from the server, we don't care any more.
                     this.ircConnection.ReadEvent -= this.IrcConnection_ReadEvent;
 
-                    foreach( string channel in this.ircConfig.Channels )
+                    foreach( string channel in this.IrcConfig.Channels )
                     {
                         this.ircConnection.SendPart( this.IrcConfig.QuitMessage, channel );
                     }
@@ -125,7 +120,7 @@ namespace Chaskis.Core
         private void IrcConnection_ReadEvent( string line )
         {
             HandlerArgs args = new HandlerArgs();
-            args.IrcConfig = this.ircConfig;
+            args.IrcConfig = this.IrcConfig;
             args.IrcWriter = this.ircConnection;
             args.Line = line;
 

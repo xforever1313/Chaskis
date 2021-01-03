@@ -336,7 +336,7 @@ namespace Chaskis.RegressionTests.TestCore
         public void SendPong( string response )
         {
             this.SendRawCommand(
-                ":localhost PONG :" + response
+                ":localhost PONG localhost :" + response
             );
         }
 

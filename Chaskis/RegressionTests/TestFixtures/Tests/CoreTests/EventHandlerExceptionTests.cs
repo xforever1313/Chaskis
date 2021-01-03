@@ -5,8 +5,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System.Threading;
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
+using SethCS.Extensions;
 
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
@@ -80,6 +82,62 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 "Are we still there?",
                 () => this.testFrame.CanaryTest()
             );
+        }
+
+        /// <summary>
+        /// Ensures if we throw an exception, we do NOT get a ThreadInterruptedException
+        /// anywhere in the string parsing queue.  This is a long test,
+        /// and we remain idle for some time minutes while the watchdogs run.
+        /// </summary>
+        [Test]
+        public void DoNoInterruptsFoundTest()
+        {
+            ThreadInterruptedException exception = new ThreadInterruptedException();
+
+            string regex = $@"({exception.Message.Replace( " ", @"\s+" )})|(Thread\s+was\s+interrupted)";
+
+            using( StringWatcher watcher = this.testFrame.ProcessRunner.CreateStringWatcher( regex ) )
+            {
+                const string message = "My Exception";
+
+                Step.Run(
+                    "Throwing exception on string parsing queue",
+                    () =>
+                    {
+                        string command = $"!{TestConstants.RegressionTestCommandPrefix} throw {message}";
+                        this.testFrame.IrcServer.SendMessageToChannelAs(
+                            command,
+                            TestConstants.Channel1,
+                            TestConstants.NormalUser
+                        );
+
+                    // We should get the plugin name, the command from the server, and the message
+                    // the exception contains.
+                    this.testFrame.ProcessRunner.WaitForStringFromChaskis(
+                            @$"{TestConstants.RegressionTestCommandPrefix}.+threw.+{command}.+{message}"
+                        ).FailIfFalse( "Did not get our exception message" );
+                    }
+                );
+
+                Step.Run(
+                    $"Ensure we do not see {nameof( ThreadInterruptedException )}'s anywhere",
+                    () =>
+                    {
+                        for( int i = 1; i <= 5; ++i )
+                        {
+                            this.testFrame.IrcServer.WaitForString( @"PING\s+watchdog", 90 * 1000 )
+                                .FailIfFalse("Didn't get watchdog for somet reason...");
+                        }
+                    }
+                );
+
+                Step.Run(
+                    "Are we still there?",
+                    () => this.testFrame.CanaryTest()
+                );
+
+                Assert.IsFalse( watcher.SawString, $"Saw a {nameof( ThreadInterruptedException )} somewhere" );
+            }
         }
     }
 }
