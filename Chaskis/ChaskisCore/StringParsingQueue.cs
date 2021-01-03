@@ -88,8 +88,7 @@ namespace Chaskis.Core
 
                 errorMessage.WriteLine( "***************" );
                 errorMessage.WriteLine( "Caught Exception in while finalizing String Parsing Queue Thread:" );
-                errorMessage.WriteLine( e.Message );
-                errorMessage.WriteLine( e.StackTrace );
+                errorMessage.WriteLine( e.ToString() );
                 errorMessage.WriteLine( "***************" );
 
                 StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
@@ -145,40 +144,37 @@ namespace Chaskis.Core
         /// </summary>
         public void ParseAndRunEvent( HandlerArgs args )
         {
-            HandlerArgs innerArgs = args;
+            foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
+            {
+                string pluginName = handlers.Key;
+                IHandlerConfig innerHandlers = handlers.Value;
 
-            // Right now, each line is its own event... should we change this to each handler being
-            // its own event?
-            this.BeginInvoke(
-                delegate
+                HandlerArgs innerArgs = args;
+                innerArgs.BlackListedChannels = innerHandlers.BlackListedChannels;
+
+                foreach( IIrcHandler handler in innerHandlers.Handlers )
                 {
-                    try
+                    IIrcHandler innerHandler = handler;
+                    Action theAction = delegate ()
                     {
-                        foreach( KeyValuePair<string, IHandlerConfig> handlers in this.ircHandlers )
+                        try
                         {
-                            innerArgs.BlackListedChannels = handlers.Value.BlackListedChannels;
-                            foreach( IIrcHandler handler in handlers.Value.Handlers )
-                            {
-                                handler.HandleEvent( innerArgs );
-                            }
+                            innerHandler.HandleEvent( innerArgs );
                         }
-                    }
-                    catch( Exception e )
-                    {
-                        string line = args.Line ?? "[null]";
+                        catch( Exception e )
+                        {
+                            throw new EventHandlerException(
+                                pluginName,
+                                innerHandler,
+                                args.Line,
+                                e
+                            );
+                        }
+                    };
 
-                        StringWriter writer = new StringWriter();
-                        writer.WriteLine( "*******************" );
-                        writer.WriteLine( "Caught Exception with line '" + line + "'" );
-                        writer.WriteLine( e.ToString() );
-                        writer.WriteLine( "*******************" );
-
-                        StaticLogger.Log.ErrorWriteLine( writer.ToString() );
-
-                        throw;
-                    }
+                    this.BeginInvoke( theAction );
                 }
-            );
+            }
         }
 
         /// <summary>
@@ -221,8 +217,7 @@ namespace Chaskis.Core
 
             errorMessage.WriteLine( "***************" );
             errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
-            errorMessage.WriteLine( err.Message );
-            errorMessage.WriteLine( err.StackTrace );
+            errorMessage.WriteLine( err.ToString() );
             errorMessage.WriteLine( "***************" );
 
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );

@@ -22,7 +22,7 @@ namespace Chaskis.RegressionTests
 
         public const string VersionStr = "1.0.0";
 
-        private List<IIrcHandler> handlers;
+        private readonly List<IIrcHandler> handlers;
 
         private GenericLogger log;
 
@@ -31,6 +31,7 @@ namespace Chaskis.RegressionTests
         private const string canaryPattern = @"!chaskistest\s+canary";
         private const string asyncAwaitThreadTestPattern = @"!chaskistest\s+asyncawait\s+threadname";
         private const string asyncAwaitExceptionTestPattern = @"!chaskistest\s+asyncawait\s+exception";
+        private const string throwExceptionPattern = @"!chaskistest\s+throw\s+(?<message>.+)";
 
         // ---------------- Constructor ----------------
 
@@ -187,6 +188,20 @@ namespace Chaskis.RegressionTests
 
                 this.handlers.Add( asyncHandler );
             }
+
+            {
+                MessageHandlerConfig msgConfig = new MessageHandlerConfig
+                {
+                    LineRegex = throwExceptionPattern,
+                    LineAction = this.HandleExceptionThrow
+                };
+
+                MessageHandler exceptionHandler = new MessageHandler(
+                    msgConfig
+                );
+
+                this.handlers.Add( exceptionHandler );
+            }
         }
 
         public void Dispose()
@@ -270,6 +285,11 @@ namespace Chaskis.RegressionTests
                 "Canary Alive!",
                 args.Channel
             );
+        }
+
+        private void HandleExceptionThrow( MessageHandlerArgs args )
+        {
+            throw new Exception( args.Match.Groups["message"].Value );
         }
 
         /// <summary>

@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Diagnostics;
 
 namespace Chaskis.Core
@@ -20,8 +19,8 @@ namespace Chaskis.Core
         {
             this.KeepHandling = true;
 
-            // Skip this constructor.
-            this.CreationStack = new StackTrace( 1, true );
+            // Skip the constructors.
+            this.CreationStack = new StackTrace( 2, true );
         }
 
         // ---------------- Properties ----------------
