@@ -149,13 +149,21 @@ namespace Chaskis.Core
                 string pluginName = handlers.Key;
                 IHandlerConfig innerHandlers = handlers.Value;
 
-                HandlerArgs innerArgs = args;
+                // Need to clone because I am silly and forgot that our black-listed
+                // channel list can't be set to the passed-in args since 
+                // each plugin has its own black-listed channels.
+                // Setting this in the passed-in args means we could have a race-condition
+                // between accessing the list, and setting it.
+                //
+                // Luckily, HandlerArgs is small when it clones, its a simple memberwise clone.
+                // It shouldn't be too big of a hit in termps of heap allocations.
+                HandlerArgs innerArgs = args.Clone();
                 innerArgs.BlackListedChannels = innerHandlers.BlackListedChannels;
 
                 foreach( IIrcHandler handler in innerHandlers.Handlers )
                 {
                     IIrcHandler innerHandler = handler;
-                    Action theAction = delegate ()
+                    void theAction()
                     {
                         try
                         {
@@ -170,7 +178,7 @@ namespace Chaskis.Core
                                 e
                             );
                         }
-                    };
+                    }
 
                     this.BeginInvoke( theAction );
                 }

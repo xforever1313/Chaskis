@@ -85,7 +85,7 @@ namespace Chaskis.Core
                 }
 
                 string channel = match.Groups["channel"].Value;
-                if( args.BlackListedChannels.Contains( channel.ToLower() ) )
+                if( args.IsChannelBlackListed( channel ) )
                 {
                     // Blacklisted channel, return.
                     return;

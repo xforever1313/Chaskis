@@ -91,7 +91,7 @@ namespace Chaskis.Core
                 string kickedUser = match.Groups["kickedUser"].Value;
                 string reason = match.Groups["reason"].Value;
 
-                if( args.BlackListedChannels.Contains( channel.ToLower() ) )
+                if( args.IsChannelBlackListed( channel ) )
                 {
                     // Blacklist channel, return.
                     return;

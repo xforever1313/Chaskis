@@ -77,7 +77,7 @@ namespace Chaskis.Core
             if ( match.Success )
             {
                 string channel = match.Groups["channel"].Value;
-                if ( args.BlackListedChannels.Contains( channel ) )
+                if ( args.IsChannelBlackListed( channel ) )
                 {
                     return new PrivateMessageParseResult();
                 }
