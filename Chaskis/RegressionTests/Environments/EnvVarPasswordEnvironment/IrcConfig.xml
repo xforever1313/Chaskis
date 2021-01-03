@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ircbotconfig>
+    <server>localhost</server>
+    <channels>
+        <channel>#chaskistest</channel>
+        <channel>#chaskistest2</channel>
+    </channels>
+    <port>{%port%}</port>
+    <username>chaskisbot</username>
+    <nick>chaskisbot</nick>
+    <realname>Chaskis Test Bot</realname>
+    <serverpassword method="envvar">CHASKIS_SERVER_PASS</serverpassword>
+    <nickservpassword method="envvar">CHASKIS_NICK_SERV_PASS</nickservpassword>
+    <nickservnick>CustomService</nickservnick>
+    <nickservmessage>{%password%} LOG ME IN</nickservmessage>
+    <ratelimit>100</ratelimit>
+    <quitmessage>I'm going down!</quitmessage>
+    <admins>
+        <admin>adminuser</admin>
+    </admins>
+    <bridgebots>
+        <bridgebot>
+            <botname>xforever\d*</botname>
+            <botregex><![CDATA[^<(?<bridgeUser>\w+)>\s+(?<bridgeMessage>.+)]]></botregex>
+        </bridgebot>
+    </bridgebots>
+</ircbotconfig>

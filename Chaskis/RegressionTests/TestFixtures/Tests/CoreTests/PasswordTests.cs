@@ -6,8 +6,6 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
 
@@ -70,6 +68,154 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
                 this.testFrame.ProcessRunner.WaitForStringFromChaskis(
                     @"No\s+NickServ\s+Password\s+Specified"
                 ).FailIfFalse( "Did not get no NickServ password debug message" );
+
+                this.testFrame.ProcessRunner.WaitToFinishJoiningChannels();
+
+                this.testFrame.CanaryTest();
+            }
+        }
+
+        [TestFixture]
+        public class InlinePasswordTests
+        {
+            // ---------------- Fields ----------------
+
+            private ChaskisTestFramework testFrame;
+
+            // ---------------- Setup / Teardown ----------------
+
+            [OneTimeSetUp]
+            public void FixtureSetup()
+            {
+                this.testFrame = new ChaskisTestFramework();
+
+                ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+                {
+                    Environment = "InlinePasswordEnvironment",
+                    ConnectionWaitMode = ConnectionWaitMode.DoNotWait
+                };
+
+                this.testFrame.PerformFixtureSetup( fixtureConfig );
+            }
+
+            [OneTimeTearDown]
+            public void FixtureTeardown()
+            {
+                this.testFrame?.PerformFixtureTeardown();
+            }
+
+            [SetUp]
+            public void TestSetup()
+            {
+                this.testFrame.PerformTestSetup();
+            }
+
+            [TearDown]
+            public void TestTeardown()
+            {
+                this.testFrame.PerformTestTeardown();
+            }
+
+            // ---------------- Tests ----------------
+
+            [Test]
+            public void WaitForPasswordMessages()
+            {
+                this.testFrame.IrcServer.WaitForString(
+                    @"PASS\s+ServerPassword123"
+                ).FailIfFalse( "Did send server password" );
+
+                // For this environment, we also change up the NickServ
+                // nick and the message to send.
+                this.testFrame.IrcServer.WaitForMessageOnChannel(
+                    @"HELLO\s+NickServPassword123",
+                    "IdentityServ"
+                ).FailIfFalse( "Did not send NickServ password to the correct user" );
+
+                this.testFrame.ProcessRunner.WaitToFinishJoiningChannels();
+
+                this.testFrame.CanaryTest();
+            }
+        }
+
+        [TestFixture]
+        public class EnvVarPasswordTests
+        {
+            // ---------------- Fields ----------------
+
+            private const string serverEnvVar = "CHASKIS_SERVER_PASS";
+            private const string nickServEnvVar = "CHASKIS_NICK_SERV_PASS";
+
+            private const string expectedServerPass = "ServerPassword123";
+            private const string expectedNickServPass = "NickServPass123";
+
+            private string oldServerEnvVar;
+            private string oldNickServEnvVar;
+            private ChaskisTestFramework testFrame;
+
+            // ---------------- Setup / Teardown ----------------
+
+            [OneTimeSetUp]
+            public void FixtureSetup()
+            {
+                this.oldServerEnvVar = Environment.GetEnvironmentVariable( serverEnvVar );
+                this.oldNickServEnvVar = Environment.GetEnvironmentVariable( nickServEnvVar );
+
+                Environment.SetEnvironmentVariable( serverEnvVar, expectedServerPass );
+                Environment.SetEnvironmentVariable( nickServEnvVar, expectedNickServPass );
+
+                this.testFrame = new ChaskisTestFramework();
+
+                ChaskisFixtureConfig fixtureConfig = new ChaskisFixtureConfig
+                {
+                    Environment = "EnvVarPasswordEnvironment",
+                    ConnectionWaitMode = ConnectionWaitMode.DoNotWait
+                };
+
+                this.testFrame.PerformFixtureSetup( fixtureConfig );
+            }
+
+            [OneTimeTearDown]
+            public void FixtureTeardown()
+            {
+                try
+                {
+                    this.testFrame?.PerformFixtureTeardown();
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable( serverEnvVar, this.oldServerEnvVar );
+                    Environment.SetEnvironmentVariable( nickServEnvVar, this.oldNickServEnvVar );
+                }
+            }
+
+            [SetUp]
+            public void TestSetup()
+            {
+                this.testFrame.PerformTestSetup();
+            }
+
+            [TearDown]
+            public void TestTeardown()
+            {
+                this.testFrame.PerformTestTeardown();
+            }
+
+            // ---------------- Tests ----------------
+
+            [Test]
+            public void WaitForPasswordMessages()
+            {
+                this.testFrame.IrcServer.WaitForString(
+                    $@"PASS\s+{expectedServerPass}"
+                ).FailIfFalse( "Did send server password" );
+
+                // For this environment, we also change up the NickServ
+                // nick and the message to send.
+                this.testFrame.IrcServer.WaitForMessageOnChannel(
+                    $@"{expectedNickServPass}\s+LOG\s+ME\s+IN",
+                    "CustomService"
+                ).FailIfFalse( "Did not send NickServ password to the correct user" );
 
                 this.testFrame.ProcessRunner.WaitToFinishJoiningChannels();
 
