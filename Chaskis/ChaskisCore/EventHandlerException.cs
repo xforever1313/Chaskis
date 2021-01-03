@@ -15,6 +15,14 @@ namespace Chaskis.Core
     {
         // ---------------- Constructor ----------------
 
+        public EventHandlerException( string context, Exception innerException ) :
+            base( $"A(n) {context} threw a(n) {innerException.GetType().Name}: {innerException.Message} ", innerException )
+        {
+            this.ServerMessage = string.Empty;
+            this.EventHandlerPlugin = context;
+            this.EventHandlerCreationStackTrace = new StackTrace( true );
+        }
+
         public EventHandlerException( string plugin, IIrcHandler handler, string serverMessage, Exception innerException ) :
             base( $"An event handler in {plugin} threw a(n) {innerException.GetType().Name} on this message from the server '{serverMessage}': {innerException.Message}", innerException )
         {

@@ -777,7 +777,7 @@ namespace Chaskis.Core
                 interval,
                 delegate ()
                 {
-                    this.parsingQueue.BeginInvoke( () => theAction( this ) );
+                    this.parsingQueue.BeginInvoke( () => DoScheduledAction( "Recurring Scheduled Event", theAction ) );
                 }
             );
         }
@@ -800,9 +800,21 @@ namespace Chaskis.Core
                 delay,
                 delegate ()
                 {
-                    this.parsingQueue.BeginInvoke( () => theAction( this ) );
+                    this.parsingQueue.BeginInvoke( () => DoScheduledAction( "One-Time Scheduled Event", theAction ) );
                 }
             );
+        }
+
+        private void DoScheduledAction( string context, Action<IIrcWriter> action )
+        {
+            try
+            {
+                action( this );
+            }
+            catch( Exception e )
+            {
+                throw new EventHandlerException( context, e );
+            }
         }
 
         /// <summary>
