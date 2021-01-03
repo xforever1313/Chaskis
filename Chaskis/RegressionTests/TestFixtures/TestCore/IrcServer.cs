@@ -479,6 +479,16 @@ namespace Chaskis.RegressionTests.TestCore
             return success;
         }
 
+        /// <summary>
+        /// Creates a <see cref="StringWatcher"/> to watch for strings
+        /// from the server.  Remember to call <see cref="StringWatcher.Dispose"/>
+        /// when done.
+        /// </summary>
+        public StringWatcher CreateStringWatcher( string regex )
+        {
+            return new StringWatcher( this.buffer, regex, this.serverLog );
+        }
+
         // -------- Helpers --------
 
         protected virtual void Dispose( bool disposing )

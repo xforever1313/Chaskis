@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -20,6 +21,14 @@ namespace Chaskis.RegressionTests.TestCore
     /// </summary>
     public class StringBuffer
     {
+        // ---------------- Events ----------------
+
+        /// <summary>
+        /// Event that is fired when we get a new line on the string, but before
+        /// it gets enqueued to the buffer.
+        /// </summary>
+        public event Action<string> OnNewLine;
+
         // ---------------- Fields ----------------
 
         private readonly ConcurrentQueue<string> buffer;
@@ -38,6 +47,7 @@ namespace Chaskis.RegressionTests.TestCore
         /// </summary>
         public void EnqueueString( string str )
         {
+            this.OnNewLine?.Invoke( str );
             this.buffer.Enqueue( str );
         }
 
