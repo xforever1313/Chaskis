@@ -13,7 +13,7 @@ namespace Chaskis.Core
     public delegate void ActionHandlerAction( ActionHandlerArgs response );
 
     [PrivateMessage( MessageRegexPattern )]
-    public sealed class ActionHandler : IIrcHandler
+    public sealed class ActionHandler : BaseIrcHandler
     {
         // ---------------- Fields ----------------
 
@@ -37,7 +37,6 @@ namespace Chaskis.Core
             config.Validate();
 
             this.config = config.Clone();
-            this.KeepHandling = true;
             this.pmHelper = new PrivateMessageHelper( this.config, pattern );
         }
 
@@ -111,26 +110,9 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
         // ---------------- Function ----------------
 
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

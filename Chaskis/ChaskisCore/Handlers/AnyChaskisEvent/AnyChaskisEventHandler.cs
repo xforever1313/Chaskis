@@ -18,7 +18,7 @@ namespace Chaskis.Core
     /// Note, this should really only be used when you want to get ALL output
     /// from the chaskis event without any filtering.  Really only meant to be used for debugging.
     /// </summary>
-    public sealed class AnyChaskisEventHandler : IIrcHandler
+    public sealed class AnyChaskisEventHandler : BaseIrcHandler
     {
         // ---------------- Fields ----------------
 
@@ -31,14 +31,14 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        public AnyChaskisEventHandler( AnyChaskisEventHandlerConfig allConfig )
+        public AnyChaskisEventHandler( AnyChaskisEventHandlerConfig allConfig ) :
+            base()
         {
             ArgumentChecker.IsNotNull( allConfig, nameof( allConfig ) );
 
             allConfig.Validate();
 
             this.config = allConfig.Clone();
-            this.KeepHandling = true;
         }
 
         // ---------------- Properties ----------------
@@ -51,29 +51,9 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
         // ---------------- Functions ----------------
 
-        /// <summary>
-        /// Handles the event.
-        /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

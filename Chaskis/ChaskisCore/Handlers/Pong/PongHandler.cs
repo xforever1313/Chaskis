@@ -13,9 +13,9 @@ namespace Chaskis.Core
     /// <summary>
     /// Used to handle receiving pongs from a connection.
     /// </summary>
-    internal sealed class PongHandler : IIrcHandler
+    internal sealed class PongHandler : BaseIrcHandler
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// Pattern to watch for after sending a ping.
@@ -30,41 +30,19 @@ namespace Chaskis.Core
                 RegexOptions.Compiled | RegexOptions.ExplicitCapture
             );
 
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
-        /// <summary>
-        /// Constructs a Pong handler.
-        /// </summary>
-        public PongHandler()
+        public PongHandler() :
+            base()
         {
-            this.KeepHandling = true;
         }
 
-        // -------- Properties --------
-
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
-        // -------- Functions --------
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.
         /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

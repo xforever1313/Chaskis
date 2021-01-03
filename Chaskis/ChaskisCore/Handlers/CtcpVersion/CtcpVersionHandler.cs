@@ -16,7 +16,7 @@ namespace Chaskis.Core
     /// Handler for when another IRC uses sends out a CTCP Version Request to the bot.
     /// </summary>
     [PrivateMessage( MessageRegexPattern )]
-    public class CtcpVersionHandler : IIrcHandler
+    public class CtcpVersionHandler : BaseIrcHandler
     {
         // ---------------- Fields ----------------
 
@@ -33,7 +33,8 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        public CtcpVersionHandler( CtcpVersionHandlerConfig config )
+        public CtcpVersionHandler( CtcpVersionHandlerConfig config ) :
+            base()
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
@@ -122,26 +123,9 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
         // ---------------- Function ----------------
 
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

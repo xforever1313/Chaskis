@@ -5,6 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
+using System.Diagnostics;
+
 namespace Chaskis.Core
 {
     /// <summary>
@@ -12,6 +15,15 @@ namespace Chaskis.Core
     /// </summary>
     public interface IIrcHandler
     {
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// Stack-trace where the handler was created.  This is strictly
+        /// used for debugging purposes so we can figure out which handler
+        /// failed where.
+        /// </summary>
+        StackTrace CreationStack { get; }
+
         /// <summary>
         /// Whether or not the handler should keep handling or not.
         /// Set to true to keep handling the event when it appears in the chat.
@@ -26,6 +38,8 @@ namespace Chaskis.Core
         /// before it is removed from the queue.
         /// </summary>
         bool KeepHandling { get; set; }
+
+        // ---------------- Functions ----------------
 
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.

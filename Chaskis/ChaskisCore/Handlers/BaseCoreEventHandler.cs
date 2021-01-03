@@ -10,7 +10,7 @@ using SethCS.Exceptions;
 
 namespace Chaskis.Core
 {
-    public abstract class BaseCoreEventHandler<TConfig> : IIrcHandler
+    public abstract class BaseCoreEventHandler<TConfig> : BaseIrcHandler
         where TConfig : ICoreEventConfig<TConfig>
     {
         // ---------------- Fields ----------------
@@ -21,7 +21,8 @@ namespace Chaskis.Core
 
         // ---------------- Constructor ----------------
 
-        protected BaseCoreEventHandler( TConfig config, Regex regex )
+        protected BaseCoreEventHandler( TConfig config, Regex regex ) :
+            base()
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
             ArgumentChecker.IsNotNull( regex, nameof( regex ) );
@@ -29,22 +30,11 @@ namespace Chaskis.Core
             config.Validate();
             this.config = config.Clone();
             this.regex = regex;
-
-            this.KeepHandling = true;
         }
-
-        // ---------------- Properties ----------------
-
-        /// <inheritdoc/>
-        /// <remarks>
-        /// Defaulted to true.  Override to false in the constructor
-        /// of the child class to not do that.
-        /// </remarks>
-        public bool KeepHandling { get; set; }
 
         // ---------------- Functions ----------------
 
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
             Match match = regex.Match( args.Line );

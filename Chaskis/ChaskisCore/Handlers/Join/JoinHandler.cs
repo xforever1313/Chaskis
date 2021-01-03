@@ -16,7 +16,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Handles the event where someone joins the watched channel.
     /// </summary>
-    public sealed class JoinHandler : IIrcHandler
+    public sealed class JoinHandler : BaseIrcHandler
     {
         // -------- Fields --------
 
@@ -38,22 +38,21 @@ namespace Chaskis.Core
 
         private readonly JoinHandlerConfig config;
 
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JoinHandler( JoinHandlerConfig config )
+        public JoinHandler( JoinHandlerConfig config ) :
+            base()
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
             config.Validate();
             this.config = config.Clone();
-
-            this.KeepHandling = true;
         }
 
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// The action that gets triggered when a user joins.
@@ -65,9 +64,6 @@ namespace Chaskis.Core
                 return this.config.JoinAction;
             }
         }
-
-        /// <inheritdoc/>
-        public bool KeepHandling { get; set; }
 
         /// <summary>
         /// Does the bot respond to itself joining a channel?
@@ -85,7 +81,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.
         /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

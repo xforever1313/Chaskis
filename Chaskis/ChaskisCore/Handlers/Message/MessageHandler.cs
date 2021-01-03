@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Configuration for responding to a message received from IRC.
     /// </summary>
-    public sealed class MessageHandler : IIrcHandler
+    public sealed class MessageHandler : BaseIrcHandler
     {
         // ---------------- Fields ----------------
 
@@ -43,14 +43,14 @@ namespace Chaskis.Core
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MessageHandler( MessageHandlerConfig config )
+        public MessageHandler( MessageHandlerConfig config ) :
+            base()
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
             config.Validate();
 
             this.config = config.Clone();
-            this.KeepHandling = true;
             this.pmHelper = new PrivateMessageHelper( this.config, pattern );
         }
 
@@ -141,29 +141,12 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
         // ------------------------ Function ------------------------
 
         /// <summary>
         /// Fires the action if the line regex matches.
         /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

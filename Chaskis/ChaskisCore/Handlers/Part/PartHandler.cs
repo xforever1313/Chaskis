@@ -15,7 +15,7 @@ namespace Chaskis.Core
     /// <summary>
     /// Handles when a user parts.  That is, leaves the channel and logs off.
     /// </summary>
-    public sealed class PartHandler : IIrcHandler
+    public sealed class PartHandler : BaseIrcHandler
     {
         // ---------------- Fields ----------------
 
@@ -49,7 +49,6 @@ namespace Chaskis.Core
             config.Validate();
 
             this.config = config.Clone();
-            this.KeepHandling = true;
         }
 
         // ---------------- Properties ----------------
@@ -65,29 +64,12 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Whether or not the handler should keep handling or not.
-        /// Set to true to keep handling the event when it appears in the chat.
-        /// Set to false so when the current IRC message is finished processing being,
-        /// it leaves the event queue and never
-        /// happens again.   Useful for events that only need to happen once.
-        ///
-        /// This is a public get/set.  Either classes outside of the handler can
-        /// tell the handler to cancel the event, or it can cancel itself.
-        ///
-        /// Note: when this is set to false, there must be one more IRC message that appears
-        /// before it is removed from the queue.
-        ///
-        /// Defaulted to true.
-        /// </summary>
-        public bool KeepHandling { get; set; }
-
         // ---------------- Functions ----------------
 
         /// <summary>
         /// Handles the event and sends the responses to the channel if desired.
         /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             ArgumentChecker.IsNotNull( args, nameof( args ) );
 

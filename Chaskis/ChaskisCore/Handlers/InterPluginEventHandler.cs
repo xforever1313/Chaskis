@@ -19,7 +19,7 @@ namespace Chaskis.Core
     /// This class allows plugins to talk to other plugins.  Plugins can create these events
     /// and other plugins can "subscribe" to those events.
     /// </summary>
-    public class InterPluginEventHandler : IIrcHandler
+    public class InterPluginEventHandler : BaseIrcHandler
     {
         // ---------------- Fields ---------------
 
@@ -74,22 +74,11 @@ namespace Chaskis.Core
             this.creatorPlugin = creatorPluginName.ToUpper();
 
             this.lineAction = lineAction;
-            this.KeepHandling = true;
         }
-
-        // ---------------- Properties ----------------
-
-        /// <summary>
-        /// <see cref="IIrcHandler.KeepHandling"/>
-        /// </summary>
-        public bool KeepHandling { get; set; }
 
         // ---------------- Functions ----------------
 
-        /// <summary>
-        /// <see cref="IIrcHandler.HandleEvent(HandlerArgs)"/>
-        /// </summary>
-        public void HandleEvent( HandlerArgs args )
+        public override void HandleEvent( HandlerArgs args )
         {
             if( Regex.IsMatch( args.Line ) == false )
             {
