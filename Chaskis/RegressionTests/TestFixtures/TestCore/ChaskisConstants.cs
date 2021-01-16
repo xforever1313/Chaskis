@@ -17,12 +17,12 @@ namespace Chaskis.RegressionTests.TestCore
         /// <summary>
         /// Expected version of Chaskis.exe.
         /// </summary>
-        internal const string ExpectedChaskisExeVersion = "0.30.0";
+        internal const string ExpectedChaskisExeVersion = "0.31.0";
 
         /// <summary>
         /// Expected version of Chaskis.Core.
         /// </summary>
-        internal const string ExpectedChaskisCoreVersion = "0.30.0";
+        internal const string ExpectedChaskisCoreVersion = "0.31.0";
 
         /// <summary>
         /// Expected default plugin name of Chaskis.
