@@ -17,7 +17,7 @@ namespace Chaskis.Plugins.HttpServer
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.2.1";
+        internal const string VersionStr = "0.2.2";
 
         internal const string PluginName = "httpserver";
 

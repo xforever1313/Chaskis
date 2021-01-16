@@ -20,7 +20,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
     {
         // ---------------- Fields ----------------
 
-        internal const string VersionStr = "0.1.3";
+        internal const string VersionStr = "0.2.0";
 
         private const string cacheFileName = ".lastversion.txt";
 
