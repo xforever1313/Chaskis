@@ -98,7 +98,7 @@ namespace Chaskis.Plugins.NewVersionNotifier
                 "NewVersionNotifierConfig.xml"
             );
 
-            this.config = XmlLoader.LoadConfig( configPath );
+            this.config = XmlLoader.LoadConfigFromFile( configPath );
 
             this.cachedFilePath = Path.Combine(
                 this.pluginDir,

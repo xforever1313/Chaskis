@@ -6,8 +6,10 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.NewVersionNotifier
 {
@@ -21,6 +23,8 @@ namespace Chaskis.Plugins.NewVersionNotifier
         {
             this.Message =
                 "I have been updated to version {%version%}.  Release Notes: https://github.com/xforever1313/Chaskis/releases/tag/{%version%}";
+
+            this.ChannelsToSendTo = new List<string>();
         }
 
         // ---------------- Properties ----------------
@@ -30,6 +34,13 @@ namespace Chaskis.Plugins.NewVersionNotifier
         /// {%version%} is replaced with the version string.
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Channels to send the new version notification to.
+        /// If this is empty, then the notification is sent
+        /// to ALL channels the bot joins.
+        /// </summary>
+        public IList<string> ChannelsToSendTo { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -45,15 +56,16 @@ namespace Chaskis.Plugins.NewVersionNotifier
             {
                 return false;
             }
-
             return
-                ( this.Message == other.Message );
+                ( this.Message == other.Message ) &&
+                // Order doesn't matter here.
+                this.ChannelsToSendTo.EqualsIgnoreOrder( other.ChannelsToSendTo );
         }
 
         public override int GetHashCode()
         {
-            return
-                this.Message.GetHashCode();
+            // This object is mutable, so use the base implementation.
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -70,6 +82,15 @@ namespace Chaskis.Plugins.NewVersionNotifier
             {
                 success = false;
                 errorString.AppendLine( "\t-" + nameof( Message ) + " can not be null, empty, or whitespace." );
+            }
+
+            foreach( string channel in this.ChannelsToSendTo )
+            {
+                if( string.IsNullOrWhiteSpace( channel ) )
+                {
+                    success = false;
+                    errorString.AppendLine( "\t-" + nameof( ChannelsToSendTo ) + " can not contain a null, empty, or whitespace channel." );
+                }
             }
 
             if( success == false )

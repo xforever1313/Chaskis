@@ -4,7 +4,13 @@ This plugin sends a message to all the channels the bot is a member
 of when it first joins the channel if the bot's version changed.
 
 - Message: The message to send.  Must be at least 1 character and not all whitespace.  {%version%} is replaced with the Chaskis version.
+- Channels:  The channels to send the message to.  If no channels are specified,
+             then the message will be sent out to ALL channels the bot has joined.
 -->
 <newversionnotifierconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd">
     <message>I have been updated to version {%version%}.  Release Notes: https://github.com/xforever1313/Chaskis/releases/tag/{%version%}</message>
+    <channels>
+        <channel>#channel1</channel>
+        <channel>#channel2</channel>
+    </channels>
 </newversionnotifierconfig>

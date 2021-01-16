@@ -5,9 +5,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.NewVersionNotifier
 {
@@ -22,38 +23,57 @@ namespace Chaskis.Plugins.NewVersionNotifier
 
         // ---------------- Functions ----------------
 
-        public static NewVersionNotifierConfig LoadConfig( string configPath )
+        public static NewVersionNotifierConfig LoadConfigFromString( string xmlString )
         {
-            if( File.Exists( configPath ) == false )
+            using( StringReader reader = new StringReader( xmlString ) )
             {
-                throw new FileNotFoundException( "Could not find " + nameof( NewVersionNotifierConfig ) + " file " + configPath );
+                return LoadFromTextReader( reader );
+            }
+        }
+
+        public static NewVersionNotifierConfig LoadConfigFromFile( string filePath )
+        {
+            if( File.Exists( filePath ) == false )
+            {
+                throw new FileNotFoundException( "Could not find " + nameof( NewVersionNotifierConfig ) + " file: " + filePath );
             }
 
-            XmlDocument doc = new XmlDocument();
+            using( TextReader reader = File.OpenText( filePath ) )
+            {
+                return LoadFromTextReader( reader );
+            }
+        }
 
-            doc.Load( configPath );
+        private static NewVersionNotifierConfig LoadFromTextReader( TextReader reader )
+        {
+            XDocument doc = XDocument.Load( reader );
 
-            XmlElement rootNode = doc.DocumentElement;
-            if( rootNode.Name != rootNodeName )
+            if( rootNodeName.EqualsIgnoreCase( doc.Root.Name.LocalName ) == false )
             {
                 throw new XmlException(
-                    "Root XML node should be named \"" + rootNodeName + "\".  Got: " + rootNode.Name
+                    $"Root XML node should be named '{rootNodeName}'.  Got: '{doc.Root.Name.LocalName}'"
                 );
             }
 
             NewVersionNotifierConfig config = new NewVersionNotifierConfig();
 
-            foreach( XmlNode childNode in rootNode.ChildNodes )
+            foreach( XElement childNode in doc.Root.Elements() )
             {
-                switch( childNode.Name )
+                if( "message".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
-                    case "message":
-                        config.Message = childNode.InnerText;
-                        break;
+                    config.Message = childNode.Value;
+                }
+                else if( "channels".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    foreach( XElement channelNode in childNode.Elements() )
+                    {
+                        if( "channel".EqualsIgnoreCase( channelNode.Name.LocalName ) )
+                        {
+                            config.ChannelsToSendTo.Add( channelNode.Value );
+                        }
+                    }
                 }
             }
-
-            config.Validate();
 
             return config;
         }

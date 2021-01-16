@@ -8,9 +8,16 @@
 >
     <xs:element name="newversionnotifierconfig" type="NewVersionNotifierConfig"/>
 
+    <xs:complexType name="ChannelList">
+        <xs:sequence>
+            <xs:element name="channel" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="NewVersionNotifierConfig">
         <xs:sequence>
             <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="channels" type="ChannelList" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

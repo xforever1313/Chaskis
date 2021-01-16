@@ -20,8 +20,6 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
 
         private string sampleConfigPath;
 
-        private string testFilesPath;
-
         // ---------------- Setup / Teardown ----------------
 
         [OneTimeSetUp]
@@ -32,13 +30,6 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
                 "NewVersionNotifier",
                 "Config",
                 "SampleNewVersionNotifierConfig.xml"
-            );
-
-            this.testFilesPath = Path.Combine(
-                TestHelpers.PluginTestsDir,
-                "Plugins",
-                "NewVersionNotifier",
-                "TestFiles"
             );
         }
 
@@ -66,15 +57,17 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
         public void DefaultTest()
         {
             NewVersionNotifierConfig defaultConfig = new NewVersionNotifierConfig();
-            NewVersionNotifierConfig sampleConfig = XmlLoader.LoadConfig( this.sampleConfigPath );
+            defaultConfig.ChannelsToSendTo.Add( "#channel1" );
+            defaultConfig.ChannelsToSendTo.Add( "#channel2" );
 
+            NewVersionNotifierConfig sampleConfig = XmlLoader.LoadConfigFromFile( this.sampleConfigPath );
             Assert.AreEqual( defaultConfig, sampleConfig );
         }
 
         [Test]
         public void FileNotFoundTest()
         {
-            Assert.Throws<FileNotFoundException>( () => XmlLoader.LoadConfig( "lol" ) );
+            Assert.Throws<FileNotFoundException>( () => XmlLoader.LoadConfigFromFile( "lol" ) );
         }
 
         /// <summary>
@@ -83,28 +76,50 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
         [Test]
         public void EmptyFileCreatesDefaultConfig()
         {
-            NewVersionNotifierConfig defaultConfig = new NewVersionNotifierConfig();
-            NewVersionNotifierConfig emptyConfig = XmlLoader.LoadConfig( Path.Combine( testFilesPath, "Empty.xml" ) );
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
 
+<!-- Empty config should result in the default settings -->
+<newversionnotifierconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd"">
+</newversionnotifierconfig>
+";
+
+            NewVersionNotifierConfig defaultConfig = new NewVersionNotifierConfig();
+            NewVersionNotifierConfig emptyConfig = XmlLoader.LoadConfigFromString( xmlString );
             Assert.AreEqual( defaultConfig, emptyConfig );
         }
 
         [Test]
         public void IncorrectXmlRoot()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+
+<!-- Invalid root node, should throw exceptions -->
+<lolconfig>
+</lolconfig>
+";
+
             Assert.Throws<XmlException>(
-                () => XmlLoader.LoadConfig( Path.Combine( testFilesPath, "BadRoot.xml" ) )
+                () => XmlLoader.LoadConfigFromString( xmlString )
             );
         }
 
         [Test]
         public void ValidFileTest()
         {
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<newversionnotifierconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/newversionnotifierconfigschema/2018/NewVersionNotifierConfigSchema.xsd"">
+    <message>Test Message</message>
+</newversionnotifierconfig>
+";
+
             NewVersionNotifierConfig expectedConfig = new NewVersionNotifierConfig()
             {
                 Message = "Test Message"
             };
-            NewVersionNotifierConfig emptyConfig = XmlLoader.LoadConfig( Path.Combine( testFilesPath, "ValidFile.xml" ) );
+            NewVersionNotifierConfig emptyConfig = XmlLoader.LoadConfigFromString( xmlString );
 
             Assert.AreEqual( expectedConfig, emptyConfig );
         }
