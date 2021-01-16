@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Chaskis.Core;
 using SethCS.Basic;
+using SethCS.Extensions;
 
 namespace Chaskis.Plugins.NewVersionNotifier
 {
@@ -200,6 +201,17 @@ namespace Chaskis.Plugins.NewVersionNotifier
                 {
                     this.logger.WriteLine(
                         "Channel {0} already notified of version update, skipping message",
+                        channel
+                    );
+                    return;
+                }
+                else if(
+                    ( this.config.ChannelsToSendTo.IsEmpty() == false ) &&
+                    ( this.config.ChannelsToSendTo.Contains( channel ) == false )
+                )
+                {
+                    this.logger.WriteLine(
+                        "Channel {0} not in the list to send the version update notification, skipping message",
                         channel
                     );
                     return;
