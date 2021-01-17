@@ -11,6 +11,7 @@
     <realname>Chaskis Test Bot</realname>
     <password></password>
     <ratelimit>100</ratelimit>
+    <watchdogtimeout>30</watchdogtimeout>
     <quitmessage>I'm going down!</quitmessage>
     <admins>
         <admin>adminuser</admin>

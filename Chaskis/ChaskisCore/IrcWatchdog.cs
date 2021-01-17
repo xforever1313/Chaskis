@@ -29,11 +29,11 @@ namespace Chaskis.Core
         private readonly AutoResetEvent watchdogResetEvent;
         private readonly ManualResetEventSlim threadStartedEvent;
 
-        private readonly int timeout;
+        private readonly TimeSpan timeout;
 
         // ---------------- Constructor ----------------
 
-        public IrcWatchdog( GenericLogger log, Action testAction, Action failureAction, int watchdogTimeout )
+        public IrcWatchdog( GenericLogger log, Action testAction, Action failureAction, TimeSpan watchdogTimeout )
         {
             ArgumentChecker.IsNotNull( log, nameof( log ) );
             ArgumentChecker.IsNotNull( testAction, nameof( testAction ) );
@@ -51,7 +51,14 @@ namespace Chaskis.Core
 
             this.testAction = testAction;
             this.failureAction = failureAction;
-            this.timeout = watchdogTimeout;
+            if( watchdogTimeout <= TimeSpan.Zero )
+            {
+                this.timeout = Timeout.InfiniteTimeSpan;
+            }
+            else
+            {
+                this.timeout = watchdogTimeout;
+            }
 
             this.Started = false;
 

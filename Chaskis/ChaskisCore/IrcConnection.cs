@@ -149,7 +149,7 @@ namespace Chaskis.Core
                 StaticLogger.Log,
                 () => this.SendPing( WatchdogStr ),
                 this.Watchdog_OnFailure,
-                60 * 1000
+                this.Config.WatchdogTimeout
             );
 
             this.pingHandler = new PingHandler();
