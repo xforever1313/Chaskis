@@ -134,7 +134,7 @@ namespace Chaskis.Cli
                 }
                 else if( "ratelimit".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
-                    config.RateLimit = int.Parse( childNode.Value );
+                    config.RateLimit = TimeSpan.FromMilliseconds( int.Parse( childNode.Value ) );
                 }
                 else if( "channels".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {

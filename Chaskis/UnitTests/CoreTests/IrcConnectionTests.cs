@@ -60,7 +60,7 @@ namespace Chaskis.UnitTests.CoreTests
                 QuitMessage = quitMessage,
                 RealName = realName,
                 UserName = userName,
-                RateLimit = 0
+                RateLimit = TimeSpan.Zero
             };
 
             defaultConfig.Channels.Add( channel1 );
@@ -87,7 +87,7 @@ namespace Chaskis.UnitTests.CoreTests
                 QuitMessage = quitMessage,
                 RealName = realName,
                 UserName = userName,
-                RateLimit = 0
+                RateLimit = TimeSpan.Zero
             };
 
             ircConfig.Channels.Add( channel1 );
@@ -118,7 +118,7 @@ namespace Chaskis.UnitTests.CoreTests
                 RealName = realName,
                 ServerPassword = serverPassword,
                 UserName = userName,
-                RateLimit = 0
+                RateLimit = TimeSpan.Zero
             };
 
             ircConfig.Channels.Add( channel1 );
@@ -187,7 +187,7 @@ namespace Chaskis.UnitTests.CoreTests
                 QuitMessage = quitMessage,
                 RealName = realName,
                 UserName = userName,
-                RateLimit = 0
+                RateLimit = TimeSpan.Zero
             };
 
             ircConfig.Channels.Add( channel1 );
@@ -224,7 +224,7 @@ namespace Chaskis.UnitTests.CoreTests
                 RealName = realName,
                 ServerPassword = serverPassword,
                 UserName = userName,
-                RateLimit = 0
+                RateLimit = TimeSpan.Zero
             };
 
             ircConfig.Channels.Add( channel1 );

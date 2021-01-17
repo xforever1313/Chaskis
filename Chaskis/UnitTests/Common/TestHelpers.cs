@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Chaskis.Core;
@@ -124,7 +125,7 @@ namespace Chaskis.UnitTests.Common
             ircConfig.BridgeBots[BridgeBotUser] = @"(?<bridgeUser>\w+):\s+(?<bridgeMessage>.+)";
             ircConfig.Admins.Add( "person1" );
             ircConfig.Admins.Add( "person2" );
-            ircConfig.RateLimit = 800;
+            ircConfig.RateLimit = TimeSpan.FromMilliseconds( 800 );
 
             return ircConfig;
         }

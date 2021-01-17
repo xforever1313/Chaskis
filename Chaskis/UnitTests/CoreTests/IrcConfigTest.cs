@@ -119,7 +119,7 @@ namespace Chaskis.UnitTests.CoreTests
             this.ircConfig = TestHelpers.GetTestIrcConfig();
 
             // Rate Limit
-            this.ircConfig.RateLimit = this.ircConfig.RateLimit + 1;
+            this.ircConfig.RateLimit = this.ircConfig.RateLimit + new TimeSpan( 1 );
             this.CheckNotEqual( interfaceIrcConfig, this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
         }
@@ -352,7 +352,7 @@ namespace Chaskis.UnitTests.CoreTests
         public void ValidateRateLimitTest()
         {
             // Negative rate limit.
-            this.ircConfig.RateLimit = -1;
+            this.ircConfig.RateLimit = new TimeSpan( -1 );
             this.CheckNotValid( this.ircConfig );
             this.ircConfig = TestHelpers.GetTestIrcConfig();
         }

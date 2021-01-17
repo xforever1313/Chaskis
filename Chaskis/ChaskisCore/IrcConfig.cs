@@ -138,7 +138,7 @@ namespace Chaskis.Core
         /// Each server and/or channel usually has a flood limit that the bot needs
         /// to observe or risk being kicked/banned.
         /// </summary>
-        int RateLimit { get; }
+        TimeSpan RateLimit { get; }
 
         // ---------------- Functions -----------------
 
@@ -183,7 +183,7 @@ namespace Chaskis.Core
             this.BridgeBots = new Dictionary<string, string>();
             this.Admins = new List<string>();
             this.QuitMessage = string.Empty;
-            this.RateLimit = 0;
+            this.RateLimit = TimeSpan.Zero;
         }
 
         // ---------------- Properties ----------------
@@ -220,7 +220,7 @@ namespace Chaskis.Core
 
         public IList<string> Admins { get; private set; }
 
-        public int RateLimit { get; set; }
+        public TimeSpan RateLimit { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -486,7 +486,7 @@ namespace Chaskis.Core
                 }
             }
 
-            if( config.RateLimit < 0 )
+            if( config.RateLimit < TimeSpan.Zero )
             {
                 builder.AppendLine( $"-\tRate Limit can not be negative." );
                 success = false;

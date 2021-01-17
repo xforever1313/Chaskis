@@ -40,7 +40,7 @@ namespace Chaskis.UnitTests.ChaskisTests
             this.ircConfig.UserName = "testbot";
             this.ircConfig.RealName = "test bot";
             this.ircConfig.QuitMessage = "I am being shut down!";
-            this.ircConfig.RateLimit = 800;
+            this.ircConfig.RateLimit = TimeSpan.FromMilliseconds( 800 );
         }
 
         // ---------------- Tests ----------------
@@ -321,7 +321,7 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
         [Test]
         public void TestValidXmlWithNoRateLimit()
         {
-            this.ircConfig.RateLimit = 0;
+            this.ircConfig.RateLimit = TimeSpan.Zero;
 
             const string xmlString =
 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
