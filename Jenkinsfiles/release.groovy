@@ -492,6 +492,9 @@ pipeline
                 {
                     steps
                     {
+                        // Wait a few seconds since sometimes we get a failure
+                        // where we can't delete >_>.
+                        WindowsSleep( 5 );
                         bat "cd Chaskis && git clean -dfx"
                     }
                 }
