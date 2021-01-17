@@ -136,6 +136,10 @@ namespace Chaskis.Cli
                 {
                     config.RateLimit = TimeSpan.FromMilliseconds( int.Parse( childNode.Value ) );
                 }
+                else if( "watchdogtimeout".EqualsIgnoreCase( childNode.Name.LocalName ) )
+                {
+                    config.WatchdogTimeout = TimeSpan.FromSeconds( int.Parse( childNode.Value ) );
+                }
                 else if( "channels".EqualsIgnoreCase( childNode.Name.LocalName ) )
                 {
                     foreach( XElement channelNode in childNode.Elements() )

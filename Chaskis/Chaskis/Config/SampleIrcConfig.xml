@@ -95,6 +95,21 @@ and which channel(s) to watch.
                 get kicked or banned.  Can not be negative.
     -->
     <ratelimit>800</ratelimit>
+
+    <!--
+    watchdogtimeout - This time is specifies how often we send a PING to the IRC Server.
+                      We then wait for a PONG from the server this amount of time TWICE.
+                      If we don't get a PONG back from the server, the bot assumes the connection
+                      dropped, and the bot reconnects.
+                      
+                      This value is in seconds.
+                      
+                      This value can not be negative.  Zero is the equivalent of an infinite timeout.
+                      While the bot will not stop you from making this value too small, it is highly
+                      discouraged, since you'll spam the server with PINGs.  This should be probably
+                      be at a minimum of 30 seconds.  Honestly, just leave this alone.
+    -->
+    <watchdogtimeout>60</watchdogtimeout>
     
     <!--
     quitmessage - Message to send to the channels just before the bot disconnects from the server.  Optional.

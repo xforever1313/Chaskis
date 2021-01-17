@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml;
 using Chaskis.Cli;
 using Chaskis.Core;
@@ -114,6 +113,34 @@ namespace Chaskis.UnitTests.ChaskisTests
 	<nick>testbot</nick>
 	<realname>test bot</realname>
     <ratelimit>800</ratelimit>
+    <watchdogtimeout>60</watchdogtimeout>
+    <quitmessage>I am being shut down!</quitmessage>
+</ircbotconfig>
+";
+
+            IReadOnlyIrcConfig config = XmlLoader.ParseIrcConfigFromString( xmlString );
+            Assert.AreEqual( this.ircConfig, config );
+        }
+
+        [Test]
+        public void TestWithDifferentTimeouts()
+        {
+            this.ircConfig.RateLimit = TimeSpan.FromMilliseconds( 1000 );
+            this.ircConfig.WatchdogTimeout = TimeSpan.FromSeconds( 30 );
+
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<ircbotconfig xmlns=""https://files.shendrick.net/projects/chaskis/schemas/chaskisircconfig/2017/chaskisircconfig.xsd"">
+	<server>irc.testdomain.com</server>
+	<channels>
+        <channel>#testchannel</channel>
+    </channels>
+	<port>6667</port>
+	<username>testbot</username>
+	<nick>testbot</nick>
+	<realname>test bot</realname>
+    <ratelimit>1000</ratelimit>
+    <watchdogtimeout>30</watchdogtimeout>
     <quitmessage>I am being shut down!</quitmessage>
 </ircbotconfig>
 ";

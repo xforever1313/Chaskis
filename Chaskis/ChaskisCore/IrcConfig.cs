@@ -140,6 +140,16 @@ namespace Chaskis.Core
         /// </summary>
         TimeSpan RateLimit { get; }
 
+        /// <summary>
+        /// When we send a connection check, this is how long we wait for the server to respond
+        /// to our bot.  If this timeout expires TWICE, our watchdog fails, and we reconnect.
+        /// This can not be a negative value.  <see cref="TimeSpan.Zero"/> is the equivalent
+        /// behavior as <see cref="System.Threading.Timeout.InfiniteTimeSpan"/>.
+        /// 
+        /// Defaulted to 1 minute.
+        /// </summary>
+        TimeSpan WatchdogTimeout { get; }
+
         // ---------------- Functions -----------------
 
         /// <summary>
@@ -184,6 +194,7 @@ namespace Chaskis.Core
             this.Admins = new List<string>();
             this.QuitMessage = string.Empty;
             this.RateLimit = TimeSpan.Zero;
+            this.WatchdogTimeout = TimeSpan.FromMinutes( 1 );
         }
 
         // ---------------- Properties ----------------
@@ -222,6 +233,8 @@ namespace Chaskis.Core
 
         public TimeSpan RateLimit { get; set; }
 
+        public TimeSpan WatchdogTimeout { get; set; }
+
         // ---------------- Functions ----------------
 
         /// <summary>
@@ -259,7 +272,8 @@ namespace Chaskis.Core
                 ( this.QuitMessage == other.QuitMessage ) &&
                 ( this.BridgeBots.Count == other.BridgeBots.Count ) &&
                 ( this.Admins.Count == other.Admins.Count ) &&
-                ( this.RateLimit == other.RateLimit );
+                ( this.RateLimit == other.RateLimit ) &&
+                ( this.WatchdogTimeout == other.WatchdogTimeout );
 
             if( isEqual )
             {
@@ -489,6 +503,12 @@ namespace Chaskis.Core
             if( config.RateLimit < TimeSpan.Zero )
             {
                 builder.AppendLine( $"-\tRate Limit can not be negative." );
+                success = false;
+            }
+
+            if( config.WatchdogTimeout < TimeSpan.Zero )
+            {
+                builder.AppendLine( $"-\t{nameof( config.WatchdogTimeout )} can not be negative." );
                 success = false;
             }
 
