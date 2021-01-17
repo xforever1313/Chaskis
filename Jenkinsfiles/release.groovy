@@ -750,3 +750,17 @@ pipeline
         }
     }
 }
+
+// When done, need to manually push docker:
+// maybe we can automate this at some point:
+// docker push xforever1313/chaskis.ubuntu:latest
+// docker push xforever1313/chaskis.ubuntu:<tag>
+// <Switch to Windows>
+// docker push xforever1313/chaskis.winodws:latest
+// docker push xforever1313/chaskis.windows:<tag>
+// <On a Pi>
+// <Checkout>
+// docker build --no-cache -t xforever1313/chaskis.raspbian -f Raspbian32Runtime.Dockerfile .
+// docker tag xforever1313/chaskis.raspbian:latest xforever1313/chaskis.raspbian:<tag>
+// docker push xforever1313/chaskis.raspbian:latest
+// docker push xforever1313/chaskis.raspbian:<tag>
