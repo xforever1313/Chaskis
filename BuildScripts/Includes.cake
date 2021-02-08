@@ -1,8 +1,8 @@
 // ---------------- Addins ----------------
 
-#addin nuget:?package=Cake.ArgumentBinder&version=0.2.2
-#addin nuget:?package=Cake.FileHelpers&version=3.2.1
-#addin nuget:?package=Cake.LicenseHeaderUpdater&version=0.0.1
+#addin nuget:?package=Cake.ArgumentBinder&version=0.3.0
+#addin nuget:?package=Cake.FileHelpers&version=3.3.0
+#addin nuget:?package=Cake.LicenseHeaderUpdater&version=0.2.0
 
 // ---------------- Tools ----------------
 
