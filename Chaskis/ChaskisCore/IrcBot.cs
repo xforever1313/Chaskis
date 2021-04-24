@@ -6,7 +6,6 @@
 //
 
 using System;
-using SethCS.Basic;
 using SethCS.Exceptions;
 
 namespace Chaskis.Core
@@ -18,7 +17,7 @@ namespace Chaskis.Core
         /// <summary>
         /// Semantic Version of the bot.
         /// </summary>
-        public static readonly SemanticVersion Version;
+        public static readonly Version Version;
 
         /// <summary>
         /// The IRC Connection.
@@ -52,7 +51,7 @@ namespace Chaskis.Core
 
         static IrcBot()
         {
-            Version = SemanticVersion.Parse( typeof( IrcBot ).Assembly.GetName().Version.ToString() );
+            Version = typeof( IrcBot ).Assembly.GetName().Version;
         }
 
         // -------- Properties --------

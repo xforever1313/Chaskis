@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cake.ArgumentBinder" Version="0.5.0" />
+    <PackageReference Include="Cake.FileHelpers" Version="4.0.1" />
+    <PackageReference Include="Cake.Frosting" Version="1.1.0" />
+    <PackageReference Include="Cake.LicenseHeaderUpdater" Version="0.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\SethCS\SethCS\SethCS.projitems" Label="Shared" />
+
+</Project>
