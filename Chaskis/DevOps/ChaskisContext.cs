@@ -35,6 +35,16 @@ namespace DevOps
 
         public ImportantPaths Paths { get; private set; }
 
+        /// <summary>
+        /// Dotnet target framework for applications (.exe).
+        /// </summary>
+        public string ApplicationTarget => "netcoreapp3.1";
+        
+        /// <summary>
+        /// Dotnet target framework for plugins or libraries (.dll).
+        /// </summary>
+        public string PluginTarget => "netstandard2.0";
+
         // ---------------- Functions ----------------
 
         public void GenerateSha256( FilePath source, FilePath output )
