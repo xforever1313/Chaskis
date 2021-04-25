@@ -35,6 +35,7 @@ namespace DevOps.Tasks
     
     [TaskName( "regression_test" )]
     [TaskDescription( "Runs all regression tests." )]
+    [IsDependentOn( typeof( BootstrapRegressionTest ) )]
     public class RunRegressionTestTask : DefaultTask
     {
         // ---------------- Functions ----------------
