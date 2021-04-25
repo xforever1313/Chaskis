@@ -13,6 +13,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.FileHelpers;
 using Cake.Frosting;
+using SethCS.Extensions;
 
 namespace DevOps
 {
@@ -27,6 +28,12 @@ namespace DevOps
         {
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.Paths = new ImportantPaths( this.RepoRoot );
+
+#if DEBUG
+            this.RunningRelease = false;
+#else
+            this.RunningRelease = true;
+#endif
         }
 
         // ---------------- Properties ----------------
@@ -44,6 +51,15 @@ namespace DevOps
         /// Dotnet target framework for plugins or libraries (.dll).
         /// </summary>
         public string PluginTarget => "netstandard2.0";
+
+        public bool IsJenkins =>
+            ( "containeruser".EqualsIgnoreCase( System.Environment.UserName ) ) ||
+            ( "jenknode".EqualsIgnoreCase( System.Environment.UserName ) );
+
+        /// <summary>
+        /// Was DevOps.exe compiled for release?
+        /// </summary>
+        public bool RunningRelease { get; set; }
 
         // ---------------- Functions ----------------
 

@@ -6,6 +6,7 @@
 //
 
 using System;
+using Cake.ArgumentBinder;
 using Cake.Common;
 using Cake.Common.Diagnostics;
 using Cake.Common.IO;
@@ -15,13 +16,32 @@ namespace DevOps
 {
     public class DistroCreatorConfig
     {
+        // ---------------- Fields ----------------
+
+        private const string DefaultTarget = "Debug";
+
         // ---------------- Constructor ----------------
+
+        public DistroCreatorConfig()
+        {
+            this.Target = DefaultTarget;
+        }
 
         // ---------------- Properties ----------------
 
+        [StringArgument(
+            "output",
+            Description = "Where to place the distro",
+            Required = true
+        )]
         public string OutputLocation { get; set; }
 
-        public string Target { get; set; } = "Debug";
+        [StringArgument(
+            "build_target",
+            DefaultValue = DefaultTarget,
+            Description = "Which build to make a distro of"
+        )]
+        public string Target { get; set; }
     }
 
     public class DistroCreator
@@ -35,6 +55,11 @@ namespace DevOps
         private readonly FilePath wixFile;
 
         // ---------------- Constructor ----------------
+
+        public DistroCreator( ChaskisContext context ) :
+            this( context, context.CreateFromArguments<DistroCreatorConfig>() )
+        {
+        }
 
         public DistroCreator(
             ChaskisContext context,

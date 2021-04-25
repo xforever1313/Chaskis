@@ -1,339 +1,66 @@
-// ---------------- Arguments ----------------
+// ---------------- Includes ----------------
 
-const string defaultTarget = "default";
-string target = Argument( "target", defaultTarget );
+#load Chaskis/Devops/MsBuildHelpers.cs
 
-// ---------------- Globals ----------------
+// ---------------- Constants ----------------
 
-ImportantPaths paths = new ImportantPaths( MakeAbsolute( new DirectoryPath( "." ) ) );
+const string target = "run_devops";
+const string buildTask = "build";
+bool forceBuild = Argument<bool>( "force_build", false );
+string targetArg = Argument( "target", string.Empty );
 
-bool isWindows = IsRunningOnWindows();
-
-// If we are in a Jenkins Environment, we'll assume Jenkins builds all of the stuff in the correct order
-// since its starting from an empty repo.
-bool isJenkins = 
-    ( Environment.UserName.ToLower() == "containeruser" ) ||
-    ( Environment.UserName.ToLower() == "jenknode" );
-
-#load "BuildScripts/Includes.cake"
+FilePath devopsExe = File( "./Chaskis/DevOps/bin/Debug/netcoreapp3.1/DevOps.dll" );
+FilePath sln = File( "./Chaskis/Chaskis.sln" );
 
 // ---------------- Targets ----------------
 
-Task( "template" )
+Task( buildTask )
 .Does(
     ( context ) =>
     {
-        TemplateConstants templateConstants = new TemplateConstants(
-            context,
-            paths,
-            frameworkTarget
-        );
+        if( forceBuild == false )
+        {
+            Information( "DevOps.dll not found, compiling" );
+        }
 
-        FilesToTemplate files = new FilesToTemplate( paths );
-
-        Templatizer templatizer = new Templatizer( templateConstants, files );
-        templatizer.Template();
-    }
-)
-.Description( "Runs the templator on all template files." );
-
-// -------- Build Targets --------
-
-Task( "debug" )
-.Does(
-    () =>
-    {
-        DoMsBuild( "Debug" );
+        MsBuildHelpers.DoMsBuild( context, sln, "Debug" );
     }
 )
 .Description( "Builds Chaskis with Debug turned on." );
 
-Task( "release" )
+var runTask = Task( target )
 .Does(
     () =>
     {
-        DoMsBuild( "Release" );
-    }
-)
-.Description( "Builds Chaskis with Release turned on." );
+        List<string> args = new List<string>( System.Environment.GetCommandLineArgs() );
+        args.RemoveAt( 0 );
+        args.Insert( 0, devopsExe.ToString() );
 
-// -------- Test Targets --------
-
-var unitTestTask = Task( "unit_test" )
-.Does(
-    ( context ) =>
-    {
-        UnitTestRunner runner = new UnitTestRunner( context, paths );
-        runner.RunTests();
-    }
-)
-.Description( "Runs all the unit tests (does not run code coverage)." );
-if( isJenkins == false )
-{
-    unitTestTask.IsDependentOn( "debug" );
-}
-
-var unitTestCoverageTask = Task( "unit_test_code_coverage" )
-.Does(
-    ( context ) =>
-    {
-        UnitTestRunner runner = new UnitTestRunner( context, paths );
-        runner.RunCodeCoverage();
-    }
-)
-.Description( "Runs code coverage, Windows only." )
-.WithCriteria( isWindows );
-if( isJenkins == false )
-{
-    unitTestCoverageTask.IsDependentOn( "debug" );
-}
-
-const string bootStrapTaskName = "bootstrap_regression_tests";
-
-var bootStrapTask = Task( bootStrapTaskName )
-.Does(
-    ( context ) =>
-    {
-        DistroCreatorConfig distroConfig = new DistroCreatorConfig
+        ProcessSettings processSettings = new ProcessSettings
         {
-            OutputLocation = paths.RegressionDistroFolder.ToString()
+            Arguments = ProcessArgumentBuilder.FromStrings( args )
         };
 
-        DistroCreator distroCreator = new DistroCreator(
-            context,
-            paths,
-            distroConfig
-        );
-        distroCreator.CreateDistro();
-    }
-)
-.Description( "Creates the distro for the regression tests." );
-if( isJenkins == false )
-{
-    bootStrapTask.IsDependentOn( "debug" );
-}
-
-Task( "regression_test" )
-.Does(
-    ( context ) =>
-    {
-        RegressionTestRunner runner = new RegressionTestRunner( context, paths );
-        runner.RunTests();
-    }
-).Description(
-    "Runs all regression tests."
-).IsDependentOn( bootStrapTaskName );
-
-// Need to figure out paths first...
-//Task( "regression_test_code_coverage" )
-//.Does(
-//    ( context ) =>
-//    {
-//        RegressionTestRunner runner = new RegressionTestRunner( context, paths );
-//        runner.RunCodeCoverage();
-//    }
-//).Description(
-//    "Runs all regression tests with code coverage."
-//).IsDependentOn( bootStrapTaskName )
-//.WithCriteria( isWindows );
-
-// -------- Package Targets --------
-
-var msiTask = Task( "msi" )
-.Does(
-    ( context ) =>
-    {
-        DirectoryPath outputPath = paths.OutputPackages.Combine( "windows" );
-        EnsureDirectoryExists( outputPath );
-        CleanDirectory( outputPath );
-
-        DirectoryPath msiLocation = paths.InstallConfigFolder.Combine( "windows/bin/x64/Release" );
-
-        FilePath msiFile = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" );
-        FilePath checksumLocation = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" );
-
-        MSBuildSettings settings = new MSBuildSettings
+        int exitCode = StartProcess( "dotnet", processSettings );
+        if( exitCode != 0 )
         {
-            Configuration = "Install",
-            MaxCpuCount = 0,
-            PlatformTarget = PlatformTarget.x64,
-            Restore = true,
-            WorkingDirectory = paths.SourceFolder
-        };
-
-        if( isJenkins )
-        {
-            settings.NodeReuse = false;
-            settings.Verbosity = Verbosity.Normal;
-            settings.ToolVersion = MSBuildToolVersion.VS2019;
+            throw new Exception( $"DevOps.exe Exited with exit code: {exitCode}" );
         }
-
-        // For WiX, need to call MSBuild, not dotnet core build.  Wix doesn't work with dotnet core.
-        // Its... probably fine??
-        MSBuild( paths.SolutionPath, settings );
-
-        GenerateSha256(
-            context,
-            msiFile,
-            checksumLocation
-        );
-
-        CopyFileToDirectory(
-            msiFile,
-            outputPath
-        );
-
-        CopyFileToDirectory(
-            checksumLocation,
-            outputPath
-        );
-    }
-)
-.Description( "Builds the MSI on Windows." )
-.WithCriteria( isWindows );
-if( isJenkins == false )
-{
-    msiTask.IsDependentOn( "unit_test" );
-}
-
-var makeDistroTask = Task( "make_distro" )
-.Does(
-    ( context ) =>
-    {
-        string output = Argument( "output", string.Empty );
-        if( string.IsNullOrWhiteSpace( output ) )
-        {
-            throw new ArgumentNullException( nameof( output ), "Output must be specified" );
-        }
-
-        DistroCreatorConfig config = new DistroCreatorConfig
-        {
-            OutputLocation = output,
-            Target = "Release"
-        };
-
-        DistroCreator creator = new DistroCreator( context, paths, config );
-        creator.CreateDistro();
-    }
-).Description( "Runs the Chaskis CLI installer and puts a disto in the specified location (using arguemnt 'output')" );
-if( isJenkins == false )
-{
-    makeDistroTask.IsDependentOn( "Release" );
-}
-
-var nugetPackTask = Task( "nuget_pack" )
-.Does(
-    ( context ) =>
-    {
-        DirectoryPath outputPath = paths.OutputPackages.Combine( "nuget" );
-        EnsureDirectoryExists( outputPath );
-        CleanDirectory( outputPath );
-
-        DotNetCorePackSettings settings = new DotNetCorePackSettings
-        {
-            OutputDirectory = outputPath,
-            Configuration = "Release",
-            NoBuild = true
-        };
-
-        DotNetCorePack(
-            paths.ChaskisCoreFolder.CombineWithFilePath( "Chaskis.Core.csproj" ).ToString(),
-            settings
-        );
-
-        FilePath glob = outputPath.CombineWithFilePath( "*.nupkg" );
-        foreach( FilePath file in GetFiles( glob.ToString() ) )
-        {
-            GenerateSha256(
-                context,
-                file,
-                new FilePath( file.FullPath + ".sha256" )
-            );
-        }
-    }
-)
-.Description( "Creates the Chaskis Core NuGet package. ");
-if( isJenkins == false )
-{
-    nugetPackTask.IsDependentOn( "release" );
-}
-
-Task( "choco_pack" )
-.Does(
-    ( context ) =>
-    {
-        DirectoryPath outputPath = paths.OutputPackages.Combine( "chocolatey" );
-        EnsureDirectoryExists( outputPath );
-        CleanDirectory( outputPath );
-
-        DirectoryPath workingPath = paths.ChocolateyInstallConfigFolder.Combine( "package" );
-
-        ChocolateyPackSettings settings = new ChocolateyPackSettings
-        {
-            OutputDirectory = outputPath,
-            WorkingDirectory = workingPath
-        };
-
-        ChocolateyPack(
-            workingPath.CombineWithFilePath( new FilePath( "chaskis.nuspec" ) ),
-            settings
-        );
-
-        FilePath glob = outputPath.CombineWithFilePath( "*.nupkg" );
-        foreach( FilePath file in GetFiles( glob.ToString() ) )
-        {
-            GenerateSha256(
-                context,
-                file,
-                new FilePath( file.FullPath + ".sha256" )
-            );
-        }
-    }
-)
-.WithCriteria( isWindows )
-.Description( "Creates the Chocolatey Package (Windows Only)." );
-
-var debianPackTask = Task( "debian_pack" )
-.Does(
-    ( context ) =>
-    {
-        string buildDir = Argument( "deb_build_dir", string.Empty );
-        DebRunner runner = new DebRunner( context, paths, buildDir );
-        runner.BuildDeb();
     }
 );
-if( isJenkins == false )
+
+if( forceBuild || ( FileExists( devopsExe ) == false ) )
 {
-    debianPackTask.IsDependentOn( "release" );
+    runTask.IsDependentOn( buildTask );
 }
 
-Task( defaultTarget )
-.IsDependentOn( "debug" )
-.Description( "The default target; alias for 'debug'." );
+// ---------------- Run ----------------
 
-var archPackTask = Task( "pkgbuild" )
-.Does(
-    ( context ) =>
-    {
-        PkgBuildRunner runner = new PkgBuildRunner( context, paths );
-        runner.BuildArchPkg();
-    }
-).Description( "Creates the PKGBUILD on Arch Linux" );
-
-Task( "dump_version" )
-.Does(
-    ( context ) =>
-    {
-        VersionDumpRunner runner = new VersionDumpRunner( context, paths );
-        runner.DumpVersion();
-    }
-).DescriptionFromArguments<VersionDumpSettings>( "Dumps the version of Chaskis to a file" );
-
-Task( "appveyor" )
-.IsDependentOn( "unit_test" )
-.IsDependentOn( "nuget_pack" )
-.IsDependentOn( "choco_pack" )
-.IsDependentOn( "msi" )
-.Description( "Runs when building AppVeyor" );
-
-RunTarget( target );
+if( targetArg == buildTask )
+{
+    RunTarget( targetArg );
+}
+else
+{
+    RunTarget( target );
+}
