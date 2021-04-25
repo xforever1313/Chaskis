@@ -16,6 +16,4 @@
     <ProjectReference Include="..\..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj" />
   </ItemGroup>
 
-  <Import Project="..\..\SethCS\SethCS\SethCS.projitems" Label="Shared" />
-
 </Project>
