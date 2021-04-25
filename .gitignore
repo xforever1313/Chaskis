@@ -14,6 +14,7 @@ __pycache__/
 tools
 *.sha256
 *.msi
+.cake/
 
 # globs
 Makefile.in

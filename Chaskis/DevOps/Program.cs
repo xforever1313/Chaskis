@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
+using System;
 using System.IO;
 using System.Reflection;
 using Cake.Frosting;
@@ -29,6 +30,8 @@ namespace DevOps
             return new CakeHost()
                 .UseContext<ChaskisContext>()
                 .SetToolPath( ".cake" )
+                .InstallTool( new Uri( "nuget:?package=OpenCover&version=4.7.922" ) )
+                .InstallTool( new Uri( "nuget:?package=ReportGenerator&version=4.8.8" ) )
                 .AddAssembly( SethCakeLib.GetAssembly() )
                 .UseWorkingDirectory( repoRoot )
                 .Run( args );
