@@ -1,6 +1,6 @@
 // ---------------- Includes ----------------
 
-#load Chaskis/Devops/MsBuildHelpers.cs
+#load Chaskis/DevOps/MsBuildHelpers.cs
 
 // ---------------- Constants ----------------
 
