@@ -43,9 +43,9 @@ namespace DevOps.Tasks
             context.EnsureDirectoryExists( outputPath );
             context.CleanDirectory( outputPath );
 
-            DirectoryPath msiLocation = context.Paths.InstallConfigFolder.Combine( "windows/bin/x64/Release" );
+            DirectoryPath msiLocation = context.Paths.MsiDirectory;
 
-            FilePath msiFile = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi" );
+            FilePath msiFile = context.Paths.MsiPath;
             FilePath checksumLocation = msiLocation.CombineWithFilePath( "ChaskisInstaller.msi.sha256" );
 
             MSBuildSettings settings = new MSBuildSettings

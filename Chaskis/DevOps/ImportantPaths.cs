@@ -37,6 +37,8 @@ public class ImportantPaths
         this.WindowsInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
         this.WixConfigFolder = this.WindowsInstallConfigFolder;
         this.WindowsWixFile = this.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs" ) );
+        this.MsiDirectory = this.WindowsInstallConfigFolder.Combine( new DirectoryPath( "bin/x64/Release/" ) );
+        this.MsiPath = this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi" ) );
         this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
         this.LinuxBinFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
         this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
@@ -149,6 +151,16 @@ public class ImportantPaths
     /// Path to the WIX windows directory.
     /// </summary>
     public FilePath WindowsWixFile { get; private set; }
+
+    /// <summary>
+    /// Path to the directory that will contain the MSI file.
+    /// </summary>
+    public DirectoryPath MsiDirectory { get; private set; }
+
+    /// <summary>
+    /// Path to the MSI file.
+    /// </summary>
+    public FilePath MsiPath { get; private set; }
 
     /// <summary>
     /// Folder where the Linux Install Configs live.

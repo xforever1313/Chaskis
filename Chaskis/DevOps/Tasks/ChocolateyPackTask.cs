@@ -6,6 +6,7 @@
 //
 
 using Cake.Common;
+using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Common.Tools.Chocolatey;
 using Cake.Common.Tools.Chocolatey.Pack;
@@ -22,7 +23,20 @@ namespace DevOps.Tasks
 
         public override bool ShouldRun( ChaskisContext context )
         {
-            return context.IsRunningOnWindows();
+            if( context.IsRunningOnWindows() == false )
+            {
+                context.Error( "Chocolatey can only be run on Windows" );
+                return false;
+            }
+            else if( context.FileExists( context.Paths.MsiPath ) == false )
+            {
+                context.Error( "MSI does not exist.  Try building that first." );
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public override void Run( ChaskisContext context )
