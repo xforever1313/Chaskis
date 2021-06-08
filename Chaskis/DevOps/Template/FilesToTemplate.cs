@@ -60,24 +60,6 @@ namespace DevOps.Template
                 this.paths.FedoraLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "chaskis.spec" ) )
             ),
 
-            // Chocolatey Nuspec
-            new FileToTemplate(
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "template/chaskis.nuspec.template" ) ),
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "package/chaskis.nuspec" ) )
-            ),
-
-            // Chocolatey License
-            new FileToTemplate(
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "template/tools/LICENSE.txt.template" ) ),
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "package/tools/LICENSE.txt" ) )
-            ),
-
-            // Chocolatey Install
-            new FileToTemplate(
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "template/tools/chocolateyinstall.ps1.template" ) ),
-                this.paths.ChocolateyInstallConfigFolder.CombineWithFilePath( new FilePath( "package/tools/chocolateyinstall.ps1" ) )
-            ),
-
             // Root README
             new FileToTemplate(
                 this.paths.ProjectRoot.CombineWithFilePath( new FilePath( "README.md.template" ) ),

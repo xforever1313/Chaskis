@@ -1,7 +1,0 @@
-﻿VERIFICATION
-Verification is intended to assist the Chocolatey moderators and community
-in verifying that this package's contents are trustworthy.
- 
-Checksum can be found in the same directory as the installer on https://files.shendrick.net
-
-Specfically: https://files.shendrick.net/projects/chaskis/releases/x.y.z/windows/
