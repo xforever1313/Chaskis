@@ -10,9 +10,11 @@ using Cake.Common;
 using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Core.IO;
+using Cake.Frosting;
 
 namespace DevOps.Tasks
 {
+    [TaskName( "debian_pack" )]
     public class DebianBuildTask : DefaultTask
     {
         // ---------------- Functions ----------------
@@ -32,9 +34,7 @@ namespace DevOps.Tasks
             );
 
             // First, create and obj and output folders, and ensure they are clean.
-            DirectoryPath outputFolder = context.Paths.OutputPackages.Combine(
-                new DirectoryPath( "debian" )
-            );
+            DirectoryPath outputFolder = context.Paths.DebDirectory;
 
             context.EnsureDirectoryExists( objFolder );
             context.CleanDirectory( objFolder );
@@ -111,8 +111,8 @@ namespace DevOps.Tasks
 
             // Run the checksum.
             context.GenerateSha256(
-                outputFolder.CombineWithFilePath( new FilePath( "chaskis.deb" ) ),
-                outputFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) )
+                context.Paths.DebPath,
+                context.Paths.DebChecksumFile
             );
         }
 

@@ -45,6 +45,9 @@ public class ImportantPaths
         this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
         this.ArchLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "arch" ) );
         this.DebianLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
+        this.DebDirectory = this.OutputPackages.Combine( new DirectoryPath( "debian" ) );
+        this.DebPath = this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb" ) );
+        this.DebChecksumFile = this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
         this.FedoraLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
         this.ChocolateyInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "chocolatey" ) );
         this.CliInstallerProjectFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "ChaskisCliInstaller" ) );
@@ -56,7 +59,7 @@ public class ImportantPaths
         this.DefaultPluginFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "DefaultHandlers.cs" ) );
         this.RegressionTestPluginFile = this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
 
-        this.DebianChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
+        this.SavedDebianChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
         this.SavedMsiChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
     }
 
@@ -195,6 +198,21 @@ public class ImportantPaths
     public DirectoryPath DebianLinuxInstallConfigFolder { get; private set; }
 
     /// <summary>
+    /// Location of the directory that contains the deb file.
+    /// </summary>
+    public DirectoryPath DebDirectory { get; private set; }
+
+    /// <summary>
+    /// Path to the .deb file.
+    /// </summary>
+    public FilePath DebPath { get; private set; }
+
+    /// <summary>
+    /// Path to the checksum file of the .deb file.
+    /// </summary>
+    public FilePath DebChecksumFile { get; private set; }
+
+    /// <summary>
     /// Folder where the Fedora Linux Install Configs live.
     /// </summary>
     public DirectoryPath FedoraLinuxInstallConfigFolder { get; private set; }
@@ -244,7 +262,7 @@ public class ImportantPaths
     /// <summary>
     /// The file that contains the .deb saved checksum.
     /// </summary>
-    public FilePath DebianChecksumFile { get; private set; }
+    public FilePath SavedDebianChecksumFile { get; private set; }
 
     /// <summary>
     /// The file that contains the .MSI saved checksum.

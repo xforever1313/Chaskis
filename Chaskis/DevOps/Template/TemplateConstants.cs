@@ -314,7 +314,7 @@ namespace DevOps.Template
 
         private string GetDebChecksum()
         {
-            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.DebianChecksumFile );
+            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.SavedDebianChecksumFile );
             return lines[0];
         }
 

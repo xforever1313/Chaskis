@@ -161,7 +161,7 @@ namespace DevOps.Tasks
         private static string GetInstallPs1FileContents( ChaskisContext context )
         {
             // First, need to set the checksum of the MSI file.
-            string checksum = System.IO.File.ReadAllText( context.Paths.MsiChecksumFile.ToString() ).Trim();
+            string checksum = File.ReadAllText( context.Paths.MsiChecksumFile.ToString() ).Trim();
 
             string installPs1 =
     $@"

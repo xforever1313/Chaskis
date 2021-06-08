@@ -37,17 +37,6 @@ namespace DevOps.Template
                 this.paths.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs.linux" ) ),
                 new List<string>(){ "LINUX" }
             ),
-
-            // Arch Linux PKGBUILD
-            new FileToTemplate(
-                this.paths.ArchLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "PKGBUILD.template" ) ),
-                this.paths.ArchLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "PKGBUILD" ) )
-            )
-            {
-                // Arch linux PKGBUILD must be \n, not \r\n.
-                LineEnding = "\n"
-            },
-
             // Debian Control File
             new FileToTemplate(
                 this.paths.DebianLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "control.template" ) ),
