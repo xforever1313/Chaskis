@@ -39,6 +39,7 @@ public class ImportantPaths
         this.WindowsWixFile = this.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs" ) );
         this.MsiDirectory = this.WindowsInstallConfigFolder.Combine( new DirectoryPath( "bin/x64/Release/" ) );
         this.MsiPath = this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi" ) );
+        this.MsiChecksumFile = this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
         this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
         this.LinuxBinFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
         this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
@@ -56,7 +57,7 @@ public class ImportantPaths
         this.RegressionTestPluginFile = this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
 
         this.DebianChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
-        this.MsiChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
+        this.SavedMsiChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
     }
 
     // ---------------- Properties ----------------
@@ -163,6 +164,11 @@ public class ImportantPaths
     public FilePath MsiPath { get; private set; }
 
     /// <summary>
+    /// Path to the checksum file of the MSI.
+    /// </summary>
+    public FilePath MsiChecksumFile { get; private set; }
+
+    /// <summary>
     /// Folder where the Linux Install Configs live.
     /// </summary>
     public DirectoryPath LinuxInstallConfigFolder { get; private set; }
@@ -243,5 +249,5 @@ public class ImportantPaths
     /// <summary>
     /// The file that contains the .MSI saved checksum.
     /// </summary>
-    public FilePath MsiChecksumFile { get; private set; }
+    public FilePath SavedMsiChecksumFile { get; private set; }
 }

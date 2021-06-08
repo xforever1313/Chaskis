@@ -13,6 +13,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.FileHelpers;
 using Cake.Frosting;
+using DevOps.Template;
 using SethCS.Extensions;
 
 namespace DevOps
@@ -28,6 +29,7 @@ namespace DevOps
         {
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.Paths = new ImportantPaths( this.RepoRoot );
+            this.TemplateConstants = new TemplateConstants( this );
 
 #if DEBUG
             this.RunningRelease = false;
@@ -41,6 +43,8 @@ namespace DevOps
         public DirectoryPath RepoRoot { get; private set; }
 
         public ImportantPaths Paths { get; private set; }
+
+        public TemplateConstants TemplateConstants { get; private set; }
 
         /// <summary>
         /// Dotnet target framework for applications (.exe).

@@ -320,7 +320,7 @@ namespace DevOps.Template
 
         private string GetMsiChecksum()
         {
-            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.MsiChecksumFile );
+            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.SavedMsiChecksumFile );
             return lines[0];
         }
     }

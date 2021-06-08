@@ -1,0 +1,8 @@
+﻿VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+The MSI contained within the chocolatey package is the same that gets posted to the official msi found at https://files.shendrick.net/projects/chaskis/releases/x.y.z/windows/ , where x.y.z is the release version.
+
+The checksum of the MSI file is located in both the chocolateyinstall.ps1 file within this package, and located at https://files.shendrick.net/projects/chaskis/releases/x.y.z/windows/ChaskisInstaller.msi.sha256 .
+The MSI contained within this package and contained within https://files.shendrick.net/projects/chaskis/releases/x.y.z/windows/ should have the same checksum.
