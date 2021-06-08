@@ -21,7 +21,7 @@ matrix:
 
 install:
     - git submodule update --init --recursive
-    - nuget install -ExcludeVersion -OutputDirectory .cake cake
+    - nuget install -ExcludeVersion -Version 1.0.0 -OutputDirectory .cake cake
 
 build_script:
 - ps: >-
