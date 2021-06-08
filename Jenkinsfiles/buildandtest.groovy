@@ -29,12 +29,19 @@ def RunCommand( String cmd )
 
 def CallCake( String arguments )
 {
-    RunCommand( "./Cake/dotnet-cake ./checkout/build.cake ${arguments}" );
+    if( isUnix() )
+    {
+        RunCommand( "./Cake/dotnet-cake ./checkout/build.cake ${arguments}" );
+    }
+    else
+    {
+        RunCommand( ".\\Cake\\dotnet-cake .\\checkout\\build.cake ${arguments}" );
+    }
 }
 
 def CallDevops( String arguments )
 {
-    RunCommand( "dotnet ./checkout/Chaskis/Chaskis/DevOps/DevOps.dll ${arguments}" );
+    RunCommand( "dotnet ./checkout/Chaskis/DevOps/DevOps.dll ${arguments}" );
 }
 
 def Prepare()
@@ -82,18 +89,15 @@ pipeline
                 {
                     agent
                     {
-                        label "windows && docker && x64";
+                        label "windows && x64";
                     }
                     stages
                     {
-                        stage( 'Enable Docker' )
-                        {
-                            steps
-                            {
-                                bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -Version';
-                                bat 'C:\\"Program Files"\\Docker\\Docker\\DockerCli.exe -SwitchWindowsEngine';
-                            }
-                        }
+                        // Jenkins doesn't seem to like running Docker in
+                        // and agent... it just seems to just hang.
+                        // https://issues.jenkins.io/browse/JENKINS-59893
+                        // Also, WiX doesn't seem to work in Docker for Windows either.
+                        // Therefore, just run on the Windows agent directly.
                         stage( 'clean' )
                         {
                             steps
@@ -110,53 +114,38 @@ pipeline
                                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'checkout'], [$class: 'CleanCheckout'], [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: 'https://github.com/xforever1313/Chaskis.git']]])
                             }
                         }
-                        stage( 'In Docker' )
+                        stage( 'prepare' )
                         {
-                            agent
+                            steps
                             {
-                                docker
+                                Prepare();
+                            }
+                        }
+                        stage( 'build' )
+                        {
+                            steps
+                            {
+                                Build();
+                            }
+                        }
+                        stage( 'unit_test' )
+                        {
+                            steps
+                            {
+                                RunUnitTests();
+                            }
+                            when
+                            {
+                                expression
                                 {
-                                    image 'mcr.microsoft.com/dotnet/sdk:3.1'
-                                    args "-e HOME='${env.WORKSPACE}'"
-                                    reuseNode true
+                                    return params.RunUnitTests;
                                 }
                             }
-                            stages
+                            post
                             {
-                                stage( 'prepare' )
+                                always
                                 {
-                                    steps
-                                    {
-                                        Prepare();
-                                    }
-                                }
-                                stage( 'build' )
-                                {
-                                    steps
-                                    {
-                                        Build();
-                                    }
-                                }
-                                stage( 'unit_test' )
-                                {
-                                    steps
-                                    {
-                                        RunUnitTests();
-                                    }
-                                    when
-                                    {
-                                        expression
-                                        {
-                                            return params.RunUnitTests;
-                                        }
-                                    }
-                                    post
-                                    {
-                                        always
-                                        {
-                                            ParseTestResults( "checkout/TestResults/UnitTests/*.xml" );
-                                        }
-                                    }
+                                    ParseTestResults( "checkout/TestResults/UnitTests/*.xml" );
                                 }
                             }
                         }
