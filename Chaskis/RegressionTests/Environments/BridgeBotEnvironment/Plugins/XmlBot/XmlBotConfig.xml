@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xmlbotconfig xmlns="https://files.shendrick.net/projects/chaskis/schemas/xmlbotconfig/2017/xmlbotconfig.xsd">
+    <message>
+        <command>[Hh]ello {%nick%}</command>
+        <response>Hello {%user%}!</response>
+        <cooldown>0</cooldown>
+        <respondto>ChannelAndPms</respondto>
+    </message>
+</xmlbotconfig>
