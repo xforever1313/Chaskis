@@ -29,6 +29,11 @@ def RunCommand( String cmd )
     }
 }
 
+def CleanDirectory( String path )
+{
+    CallDevops( "--target=clean_directory --path=\"${path}\"" );
+}
+
 def CallCake( String arguments )
 {
     if( isUnix() )
@@ -64,7 +69,7 @@ def RunUnitTests()
 
 def BuildRelease()
 {
-    CallDevOps( "--target=build_release" );
+    CallDevops( "--target=build_release" );
 }
 
 def RunRegressionTests()
@@ -138,6 +143,7 @@ pipeline
                             steps
                             {
                                 Build();
+                                CleanDirectory( pwd() + "\\${archiveFolder}" );
                             }
                         }
                         stage( 'unit_test' )
@@ -266,6 +272,7 @@ pipeline
                                     steps
                                     {
                                         Build();
+                                        CleanDirectory( pwd() + "\\${archiveFolder}" );
                                     }
                                 }
                                 stage( 'unit_test' )
