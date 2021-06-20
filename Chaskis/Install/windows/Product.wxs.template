@@ -373,7 +373,7 @@
             #if LINUX
             
             <Component Guid="{BDA581A7-A21D-4F82-BF91-AB7ECB658A1C}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Win32.Registry.dll" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Service.TargetDir)Microsoft.Win32.Registry.dll" KeyPath="yes" Optional="true"/>
             </Component>
             
             #endif
@@ -389,11 +389,11 @@
             #if LINUX
             
             <Component Guid="{6443D7F3-3A89-4C2C-8063-3C7E28350DCD}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.Service.TargetDir)System.Security.AccessControl.dll" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Service.TargetDir)System.Security.AccessControl.dll" KeyPath="yes" Optional="true"/>
             </Component>
             
             <Component Guid="{24387807-7FDD-4F51-906A-8AE7D1D1C463}" Directory="BinFolder">
-                <File Source="$(var.Chaskis.Service.TargetDir)System.Security.Principal.Windows.dll" KeyPath="yes"/>
+                <File Source="$(var.Chaskis.Service.TargetDir)System.Security.Principal.Windows.dll" KeyPath="yes" Optional="true"/>
             </Component>
             
             #endif
@@ -413,11 +413,11 @@
             #if LINUX
 
             <Component Guid="{b927314d-e31c-4256-862d-442bd6c78daf}" Directory="BinRuntimeUnixLibCoreAppFolder">
-                <File Id="Netcore_System_Security_Principal_Windows_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll" KeyPath="yes"/>
+                <File Id="Netcore_System_Security_Principal_Windows_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll" KeyPath="yes" Optional="true"/>
             </Component>
             
             <Component Guid="{60a301d9-d79c-4300-aa10-2638c9d8f174}" Directory="BinRuntimeUnixLibStandardFolder">
-                <File Id="NetStandard_Microsoft_Win32_Registry_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes"/>
+                <File Id="NetStandard_Microsoft_Win32_Registry_dll" Source="$(var.Chaskis.Service.TargetDir)runtimes\unix\lib\netstandard2.0\Microsoft.Win32.Registry.dll" KeyPath="yes" Optional="true"/>
             </Component>
 
             #endif

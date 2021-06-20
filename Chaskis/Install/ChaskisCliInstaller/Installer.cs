@@ -298,6 +298,13 @@ namespace Chaskis.ChaskisCliInstaller
                                         );
                                     }
 
+                                    bool optional = false;
+                                    XmlAttribute optionalNode = file.Attributes["Optional"];
+                                    if( optionalNode != null )
+                                    {
+                                        optional = bool.Parse( optionalNode.Value );
+                                    }
+
                                     string sourcePath = source.Value;
                                     if( Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX )
                                     {
@@ -308,6 +315,11 @@ namespace Chaskis.ChaskisCliInstaller
 
                                     string relPath;
                                     TryParseVar( sourcePath, out relPath );
+
+                                    if( ( File.Exists( relPath ) == false ) && optional )
+                                    {
+                                        Console.WriteLine( $"Can not file file '{relPath}', but its optional skipping" );
+                                    }
 
                                     string fileName = Path.GetFileName( relPath );
                                     if( ( Environment.OSVersion.Platform == PlatformID.Unix ) || ( Environment.OSVersion.Platform == PlatformID.MacOSX ) )
