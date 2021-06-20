@@ -1,5 +1,7 @@
 @Library( "X13JenkinsLib" )_
 
+def archiveFolder = "archives";
+
 def ParseTestResults( String filePattern )
 {
     def results = xunit thresholds: [
@@ -58,6 +60,16 @@ def Build()
 def RunUnitTests()
 {
     CallDevops( "--target=unit_test" );
+}
+
+def BuildRelease()
+{
+    CallDevOps( "--target=build_release" );
+}
+
+def RunRegressionTests()
+{
+    CallDevops( "--target=regression_test" );
 }
 
 pipeline
@@ -149,6 +161,50 @@ pipeline
                                 }
                             }
                         }
+                        stage( 'Build Msi' )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=build_msi" );
+                            }
+                        }
+                        stage( 'Regression Test' )
+                        {
+                            steps
+                            {
+                                RunRegressionTests();
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.RunRegressionTests;
+                                }
+                            }
+                            post
+                            {
+                                always
+                                {
+                                    ParseTestResults( "checkout\\TestResults\\RegressionTests\\*.xml" );
+                                    bat "MOVE .\\checkout\\TestResults\\RegressionTests\\Logs .\\${archiveFolder}\\windows_regression_logs";
+                                    archiveArtifacts "${archiveFolder}\\windows_regression_logs\\*.log";
+                                }
+                            }
+                        }
+                        stage( 'NuGet Pack' )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=nuget_pack" );
+                            }
+                        }
+                        stage( 'Chocolatey Pack' )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=choco_pack" );
+                            }
+                        }
                     }
                     when
                     {
@@ -158,6 +214,8 @@ pipeline
                         }
                     }
                 }
+
+// ---------------- Linux ----------------
 
                 stage( 'Linux' )
                 {
@@ -229,6 +287,43 @@ pipeline
                                         {
                                             ParseTestResults( "checkout/TestResults/UnitTests/*.xml" );
                                         }
+                                    }
+                                }
+                                stage( 'Build Release' )
+                                {
+                                    steps
+                                    {
+                                        BuildRelease();
+                                    }
+                                }
+                                stage( 'Regression Test' )
+                                {
+                                    steps
+                                    {
+                                        RunRegressionTests();
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return params.RunRegressionTests;
+                                        }
+                                    }
+                                    post
+                                    {
+                                        always
+                                        {
+                                            ParseTestResults( "checkout/TestResults/RegressionTests/*.xml" );
+                                            sh "cp ./checkout/TestResults/RegressionTests/Logs ./${archiveFolder}/linux_regression_logs";
+                                            archiveArtifacts "${archiveFolder}/linux_regression_logs/*.log";
+                                        }
+                                    }
+                                }
+                                stage( 'Debian Pack' )
+                                {
+                                    steps
+                                    {
+                                        CallDevOps( "--target=debian_pack" );
                                     }
                                 }
                             }
