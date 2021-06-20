@@ -78,7 +78,7 @@ namespace DevOps
 
         public void SetDirectoryPermission( DirectoryPath directory, string chmodValue )
         {
-            ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( $"{chmodValue} {directory}" );
+            ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( $"{chmodValue} \"{directory}\"" );
             ProcessSettings settings = new ProcessSettings
             {
                 Arguments = arguments
