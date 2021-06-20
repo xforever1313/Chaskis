@@ -219,6 +219,13 @@ pipeline
                             return params.BuildWindows;
                         }
                     }
+                    post
+                    {
+                        always
+                        {
+                            archiveArtifacts "checkout\\DistPackages\\**\\*"
+                        }
+                    }
                 }
 
 // ---------------- Linux ----------------
@@ -272,7 +279,7 @@ pipeline
                                     steps
                                     {
                                         Build();
-                                        CleanDirectory( pwd() + "\\${archiveFolder}" );
+                                        CleanDirectory( pwd() + "/${archiveFolder}" );
                                     }
                                 }
                                 stage( 'unit_test' )
@@ -341,6 +348,13 @@ pipeline
                         expression
                         {
                             return params.BuildLinux;
+                        }
+                    }
+                    post
+                    {
+                        always
+                        {
+                            archiveArtifacts "checkout/DistPackages/**/*"
                         }
                     }
                 }
