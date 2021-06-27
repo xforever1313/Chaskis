@@ -328,7 +328,7 @@ pipeline
                                         always
                                         {
                                             ParseTestResults( "checkout/TestResults/RegressionTests/*.xml" );
-                                            sh "cp ./checkout/TestResults/RegressionTests/Logs ./${archiveFolder}/linux_regression_logs";
+                                            sh "cp -r ./checkout/TestResults/RegressionTests/Logs/ ./${archiveFolder}/linux_regression_logs";
                                             archiveArtifacts "${archiveFolder}/linux_regression_logs/*.log";
                                         }
                                     }
