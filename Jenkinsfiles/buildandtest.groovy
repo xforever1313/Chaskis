@@ -349,8 +349,8 @@ pipeline
                             {
                                 dockerfile
                                 {
-                                    filename 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
-                                    dir 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
+                                    filename 'ArchBuild.Dockerfile'
+                                    dir 'checkout/Docker'
                                     label 'chaskis-arch-buildenv'
                                     args "-e HOME='${env.WORKSPACE}'"
                                     reuseNode true
