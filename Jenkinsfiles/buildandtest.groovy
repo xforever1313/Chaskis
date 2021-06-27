@@ -89,6 +89,7 @@ pipeline
     {
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
+        booleanParam( name: "BuildArchLinux", defaultValue: true, description: "Should we build for Arch Linux?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
     }
@@ -254,7 +255,7 @@ pipeline
                                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'checkout'], [$class: 'CleanCheckout'], [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: 'https://github.com/xforever1313/Chaskis.git']]])
                             }
                         }
-                        stage( 'In Docker' )
+                        stage( 'In Dotnet Docker' )
                         {
                             agent
                             {
@@ -339,6 +340,37 @@ pipeline
                                     {
                                         CallDevOps( "--target=debian_pack" );
                                     }
+                                }
+                            }
+                        }
+                        stage( 'In Arch Docker' )
+                        {
+                            agent
+                            {
+                                docker
+                                {
+                                    filename 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
+                                    dir 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
+                                    label 'chaskis-arch-buildenv'
+                                    args "-e HOME='${env.WORKSPACE}'"
+                                    reuseNode true
+                                }
+                            }
+                            stages
+                            {
+                                stage( 'arch pkgbuild' )
+                                {
+                                    steps
+                                    {
+                                        CallDevOps( "--target=pkgbuild" );
+                                    }
+                                }
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.BuildArchLinux;
                                 }
                             }
                         }
