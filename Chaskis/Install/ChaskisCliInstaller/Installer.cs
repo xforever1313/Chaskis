@@ -166,7 +166,7 @@ namespace Chaskis.ChaskisCliInstaller
                 }
             }
 
-            IList<Tuple<string, string>> files = null;
+            IList<FileInfo> files = null;
             foreach( XmlNode childNode in rootNode.ChildNodes )
             {
                 if( childNode.Name == "Fragment" )
@@ -189,9 +189,15 @@ namespace Chaskis.ChaskisCliInstaller
 
 
 
-            foreach( Tuple<string, string> file in files )
+            foreach( FileInfo file in files )
             {
-                string filePath = Path.Combine( this.RootDir, file.Item2 );
+                if( File.Exists( file.OriginalFile ) == false )
+                {
+                    Console.WriteLine( $"'{file.OriginalFile}' is missing, but is marked optional. Ignoring." );
+                    continue;
+                }
+
+                string filePath = Path.Combine( this.RootDir, file.Destination );
                 string dirPath = Path.GetDirectoryName( filePath );
 
                 // Create any missing parent directories first.
@@ -206,8 +212,8 @@ namespace Chaskis.ChaskisCliInstaller
                 // Now create the new directory.
                 CreateDirectoryHelper( dirPath );
 
-                this.Status( "Copy " + file.Item1 + "\tto\t" + filePath );
-                File.Copy( file.Item1, filePath, true );
+                this.Status( "Copy " + file.OriginalFile + "\tto\t" + filePath );
+                File.Copy( file.OriginalFile, filePath, true );
             }
         }
 
@@ -256,9 +262,9 @@ namespace Chaskis.ChaskisCliInstaller
             }
         }
 
-        private IList<Tuple<string, string>> ParseComponents( XmlNode fragment )
+        private IList<FileInfo> ParseComponents( XmlNode fragment )
         {
-            List<Tuple<string, string>> files = new List<Tuple<string, string>>();
+            List<FileInfo> files = new List<FileInfo>();
 
             foreach( XmlNode componentGroup in fragment.ChildNodes )
             {
@@ -311,15 +317,11 @@ namespace Chaskis.ChaskisCliInstaller
                                         sourcePath = sourcePath.Replace( "\\", "/" );
                                     }
 
-                                    string originalDir = this.GetComponentPath( sourcePath );
+                                    string originalFile = this.GetComponentPath( sourcePath );
 
                                     string relPath;
                                     TryParseVar( sourcePath, out relPath );
 
-                                    if( ( File.Exists( relPath ) == false ) && optional )
-                                    {
-                                        Console.WriteLine( $"Can not file file '{relPath}', but its optional skipping" );
-                                    }
 
                                     string fileName = Path.GetFileName( relPath );
                                     if( ( Environment.OSVersion.Platform == PlatformID.Unix ) || ( Environment.OSVersion.Platform == PlatformID.MacOSX ) )
@@ -340,11 +342,14 @@ namespace Chaskis.ChaskisCliInstaller
                                             fileName
                                         );
 
-                                    Tuple<string, string> f = new Tuple<string, string>(
-                                        originalDir,
-                                        dest
-                                    );
-                                    files.Add( f );
+                                    var info = new FileInfo
+                                    {
+                                        OriginalFile = originalFile,
+                                        Destination = dest,
+                                        Optional = optional
+                                    };
+
+                                    files.Add( info );
                                 }
                             }
                         }
@@ -481,6 +486,23 @@ namespace Chaskis.ChaskisCliInstaller
             public string Id { get; set; }
 
             public string Parent { get; set; }
+        }
+
+        private class FileInfo
+        {
+            // ---------------- Constructor ----------------
+
+            public FileInfo()
+            {
+            }
+
+            // ---------------- Properties ----------------
+
+            public bool Optional { get; set; }
+            
+            public string OriginalFile { get; set; }
+
+            public string Destination { get; set; }
         }
     }
 }
