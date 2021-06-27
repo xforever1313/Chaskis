@@ -21,7 +21,7 @@ namespace DevOps.Tasks
 
         public override bool ShouldRun( ChaskisContext context )
         {
-            return context.IsRunningOnWindows();
+            return context.IsRunningOnWindows() == false;
         }
 
         public override void Run( ChaskisContext context )

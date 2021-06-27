@@ -338,7 +338,7 @@ pipeline
                                 {
                                     steps
                                     {
-                                        CallDevOps( "--target=debian_pack" );
+                                        CallDevops( "--target=debian_pack" );
                                     }
                                 }
                             }
@@ -347,7 +347,7 @@ pipeline
                         {
                             agent
                             {
-                                docker
+                                dockerfile
                                 {
                                     filename 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
                                     dir 'checkout/Chaskis/Docker/ArchBuild.Dockerfile'
@@ -362,7 +362,7 @@ pipeline
                                 {
                                     steps
                                     {
-                                        CallDevOps( "--target=pkgbuild" );
+                                        CallDevops( "--target=pkgbuild" );
                                     }
                                 }
                             }
