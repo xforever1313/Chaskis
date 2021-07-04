@@ -353,6 +353,7 @@ pipeline
                                     dir 'checkout/Docker'
                                     label 'chaskis-arch-buildenv'
                                     args "-e HOME='${env.WORKSPACE}'"
+                                    additionalBuildArgs "--no-cache"
                                     reuseNode true
                                 }
                             }

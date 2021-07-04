@@ -158,7 +158,7 @@ pkgdesc=""{this.context.TemplateConstants.Summary}""
 arch=('any')
 url=""{this.context.TemplateConstants.ProjectUrl}""
 license=('BSL')
-depends=('dotnet-runtime>=3.1.0')
+depends=('dotnet-runtime-3.1>=3.1.0')
 provides=('chaskis')
 conflicts=('chaskis')
 # This means that chaskis.deb must be committed to the AUR repo.
