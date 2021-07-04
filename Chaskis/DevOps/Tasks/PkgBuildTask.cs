@@ -121,7 +121,7 @@ namespace DevOps.Tasks
 
             if( files.Count != 1 )
             {
-                throw new ApplicationException( "Found 2 files to glob, something weird happened. Got: " + files.Count );
+                throw new ApplicationException( "Found wrong number of files to glob (expected 1), something weird happened. Got: " + files.Count );
             }
 
             FilePath buildPackageFile = files.First();
