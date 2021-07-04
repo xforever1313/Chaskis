@@ -69,9 +69,6 @@ namespace DevOps.Tasks
             FilePath controlFile = context.Paths.DebianLinuxInstallConfigFolder.CombineWithFilePath(
                 new FilePath( "control" )
             );
-            CopyFile( context, controlFile, debianFolder );
-            CopyFile( context, context.Paths.LinuxBinFile, binFolder );
-            CopyFile( context, context.Paths.SystemdFile, systemdUserFolder );
 
             // Next, need to run the distro creator to put everything
             // in the usr/lib/Chaskis folder.
@@ -86,6 +83,11 @@ namespace DevOps.Tasks
                 distroConfig
             );
             distroRunner.CreateDistro();
+
+            // Must come after so they don't get overwritten.
+            CopyFile( context, controlFile, debianFolder );
+            CopyFile( context, context.Paths.LinuxBinFile, binFolder );
+            CopyFile( context, context.Paths.SystemdFile, systemdUserFolder );
 
             // Lastly, need to package everything up.
             ProcessArgumentBuilder arguments = ProcessArgumentBuilder.FromString( "--root-owner-group --build chaskis" );

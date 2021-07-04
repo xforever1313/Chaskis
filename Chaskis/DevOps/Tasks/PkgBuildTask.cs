@@ -176,6 +176,7 @@ package() {{
 
     chmod -R g-w usr
     mv usr ""${{pkgdir}}""
+    mv bin ""${{pkgdir}}""
 }}
 ";
             // PKGBUILD files MUST end in \n, not \r\n.
