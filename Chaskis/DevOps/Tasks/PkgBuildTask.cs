@@ -99,6 +99,9 @@ namespace DevOps.Tasks
             this.context.EnsureDirectoryExists( outputFolder );
             this.context.CleanDirectory( outputFolder );
 
+            // Need the .deb file to exist in the working directory.
+            this.context.CopyFileToDirectory( this.paths.DebPath, this.workDir );
+
             // According the the makepkg documentation https://www.archlinux.org/pacman/makepkg.8.html
             // the build script must be in the same directory makepkg is called from.  We really
             // don't want all of that stuff to crowd the repo, so we'll stuff all the building into

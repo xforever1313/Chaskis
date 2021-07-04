@@ -30,8 +30,7 @@ namespace DevOps.Template
 
             this.chaskisCoreProjectContents = this.CakeContext.FileReadText( this.ImportantPaths.ChaskisCoreVersionFile );
 
-            this.FullName = "Chaskis IRC Bot";
-            this.ChaskisVersion = this.GetChaskisVersion();
+            this.ChaskisVersion = 
             this.ChaskisCoreVersion = this.GetChaskisCoreVersion();
             this.License = this.GetLicense();
             this.RegressionTestPluginVersion = this.GetRegressionTestPluginVersion();
@@ -42,15 +41,11 @@ namespace DevOps.Template
             this.CoreTags = tags + " core";
             this.CliTags = tags + " service full installer admin";
             this.Author = this.GetAuthor();
-            this.AuthorEmail = "seth@shendrick.net";
             this.ProjectUrl = this.GetProjectUrl();
             this.LicenseUrl = this.GetLicenseUrl();
-            this.WikiUrl = "https://github.com/xforever1313/Chaskis/wiki";
-            this.IssueTrackerUrl = "https://github.com/xforever1313/Chaskis/issues";
             this.CopyRight = this.GetCopyRight();
             this.Description = this.GetDescription();
             this.ReleaseNotes = this.GetReleaseNotes();
-            this.Summary = "A generic framework written in C# for making IRC Bots.";
             this.IconUrl = this.GetIconUrl();
             this.RunTime = context.ApplicationTarget;
             this.DebChecksum = this.GetDebChecksum();
@@ -63,7 +58,7 @@ namespace DevOps.Template
 
         public ImportantPaths ImportantPaths { get; private set; }
 
-        public string FullName { get; private set; }
+        public string FullName => "Chaskis IRC Bot";
 
         public string ChaskisVersion { get; private set; }
 
@@ -83,15 +78,17 @@ namespace DevOps.Template
 
         public string Author { get; private set; }
 
-        public string AuthorEmail { get; private set; }
+        public string AuthorEmail => "seth@shendrick.net";
 
         public string ProjectUrl { get; private set; }
 
         public string LicenseUrl { get; private set; }
 
-        public string WikiUrl { get; private set; }
+        public string LicenseShortString => "BSL";
 
-        public string IssueTrackerUrl { get; private set; }
+        public string WikiUrl => "https://github.com/xforever1313/Chaskis/wiki";
+
+        public string IssueTrackerUrl => "https://github.com/xforever1313/Chaskis/issues";
 
         public string CopyRight { get; private set; }
 
@@ -99,7 +96,7 @@ namespace DevOps.Template
 
         public string ReleaseNotes { get; private set; }
 
-        public string Summary { get; private set; }
+        public string Summary => "A generic framework written in C# for making IRC Bots.";
 
         public string IconUrl { get; private set; }
 
