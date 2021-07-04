@@ -91,6 +91,7 @@ pipeline
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
         booleanParam( name: "BuildArchLinux", defaultValue: true, description: "Should we build for Arch Linux?" );
         booleanParam( name: "BuildFedora", defaultValue: true, description: "Should we build for Fedora Linux?" );
+        booleanParam( name: "BuildDocker", defaultValue: true, description: "Should we build Docker Containers?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
     }
@@ -211,6 +212,20 @@ pipeline
                             steps
                             {
                                 CallDevops( "--target=choco_pack" );
+                            }
+                        }
+                        stage( 'Docker Build' )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=build_windows_docker" );
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.BuildDocker;
+                                }
                             }
                         }
                     }
@@ -340,6 +355,21 @@ pipeline
                                     steps
                                     {
                                         CallDevops( "--target=debian_pack" );
+                                        stash includes: "./checkout/DistPackages/debian/chaskis.deb", name: 'deb'
+                                    }
+                                }
+                                stage( 'Docker Build' )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=build_ubuntu_docker" );
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return params.BuildDocker;
+                                        }
                                     }
                                 }
                             }
@@ -421,6 +451,30 @@ pipeline
                         {
                             archiveArtifacts "checkout/DistPackages/**/*"
                         }
+                    }
+                }
+            } // End parallel
+            stage( "Build Raspbian Docker" )
+            {
+                agent
+                {
+                    label "pi && docker && linux"
+                }
+                stages
+                {
+                    stage( 'Build Docker' )
+                    {
+                        unstash "deb"
+                        sh "ls -l"
+                        sh "ls -l /checkout"
+                        sh "ls -l /checkout/DistPackages"
+                    }
+                }
+                when
+                {
+                    expression
+                    {
+                        return params.BuildLinux && params.BuildDocker;
                     }
                 }
             }
