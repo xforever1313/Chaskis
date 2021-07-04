@@ -90,6 +90,7 @@ pipeline
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
         booleanParam( name: "BuildArchLinux", defaultValue: true, description: "Should we build for Arch Linux?" );
+        booleanParam( name: "BuildFedora", defaultValue: true, description: "Should we build for Fedora Linux?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
     }
@@ -372,6 +373,37 @@ pipeline
                                 expression
                                 {
                                     return params.BuildArchLinux;
+                                }
+                            }
+                        }
+                        stage( 'In Fedora Docker' )
+                        {
+                            agent
+                            {
+                                dockerfile
+                                {
+                                    filename 'FedoraBuild.Dockerfile'
+                                    dir 'checkout/Docker'
+                                    label 'chaskis-fedora-buildenv'
+                                    args "-e HOME='${env.WORKSPACE}'"
+                                    reuseNode true
+                                }
+                            }
+                            stages
+                            {
+                                stage( 'Fedora RPM Build' )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=rpmbuild" );
+                                    }
+                                }
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.BuildFedora;
                                 }
                             }
                         }
