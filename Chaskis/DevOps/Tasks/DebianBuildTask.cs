@@ -62,8 +62,6 @@ namespace DevOps.Tasks
             DirectoryPath binFolder = CombineAndCreateDirectory( context, chaskisWorkDir, "bin" );
             DirectoryPath usrFolder = CombineAndCreateDirectory( context, chaskisWorkDir, "usr" );
             DirectoryPath usrLibFolder = CombineAndCreateDirectory( context, usrFolder, "lib" );
-            DirectoryPath systemdFolder = CombineAndCreateDirectory( context, usrLibFolder, "systemd" );
-            DirectoryPath systemdUserFolder = CombineAndCreateDirectory( context, systemdFolder, "user" );
 
             // Move the linux files around.
             FilePath controlFile = context.Paths.DebianLinuxInstallConfigFolder.CombineWithFilePath(
@@ -85,6 +83,9 @@ namespace DevOps.Tasks
             distroRunner.CreateDistro();
 
             // Must come after so they don't get overwritten.
+            DirectoryPath systemdFolder = CombineAndCreateDirectory( context, usrLibFolder, "systemd" );
+            DirectoryPath systemdUserFolder = CombineAndCreateDirectory( context, systemdFolder, "user" );
+
             CopyFile( context, controlFile, debianFolder );
             CopyFile( context, context.Paths.LinuxBinFile, binFolder );
             CopyFile( context, context.Paths.SystemdFile, systemdUserFolder );
