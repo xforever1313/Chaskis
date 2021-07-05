@@ -84,20 +84,15 @@ namespace DevOps.Tasks
                 new DirectoryPath( "fedora" )
             );
 
-            DirectoryPath sourceFolder = this.workDir.Combine(
-                new DirectoryPath( "SOURCE" )
-            );
-
             // Create directories
             this.context.EnsureDirectoryExists( this.workDir );
             this.context.CleanDirectory( this.workDir );
             this.context.SetDirectoryPermission( this.workDir, "755" );
             this.context.EnsureDirectoryExists( outputFolder );
             this.context.CleanDirectory( outputFolder );
-            this.context.EnsureDirectoryExists( sourceFolder );
 
             // Need the .deb file to exist in the source folder
-            this.context.CopyFileToDirectory( this.context.Paths.DebPath, sourceFolder );
+            this.context.CopyFileToDirectory( this.context.Paths.DebPath, this.workDir );
 
             FilePath specFile = this.workDir.CombineWithFilePath(
                 new FilePath( "chaskis.spec" )
