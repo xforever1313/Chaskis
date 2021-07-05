@@ -454,28 +454,28 @@ pipeline
                     }
                 }
             } // End parallel
-            stage( "Build Raspbian Docker" )
+        } // End Build + Test Stage
+        stage( "Build Raspbian Docker" )
+        {
+            agent
             {
-                agent
+                label "pi && docker && linux"
+            }
+            stages
+            {
+                stage( 'Build Docker' )
                 {
-                    label "pi && docker && linux"
+                    unstash "deb"
+                    sh "ls -l"
+                    sh "ls -l /checkout"
+                    sh "ls -l /checkout/DistPackages"
                 }
-                stages
+            }
+            when
+            {
+                expression
                 {
-                    stage( 'Build Docker' )
-                    {
-                        unstash "deb"
-                        sh "ls -l"
-                        sh "ls -l /checkout"
-                        sh "ls -l /checkout/DistPackages"
-                    }
-                }
-                when
-                {
-                    expression
-                    {
-                        return params.BuildLinux && params.BuildDocker;
-                    }
+                    return params.BuildLinux && params.BuildDocker;
                 }
             }
         }

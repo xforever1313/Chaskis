@@ -175,6 +175,7 @@ package() {{
     bsdtar xf data.tar.xz
 
     chmod -R g-w usr
+    chmod -R g-w bin
     mv usr ""${{pkgdir}}""
     mv bin ""${{pkgdir}}""
 }}

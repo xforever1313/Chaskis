@@ -1,10 +1,7 @@
 FROM fedora
 
-# Update everything
-RUN dnf update
-
-# Install the dotnet runtime
-RUN dnf install dotnet-runtime-3.1
+# Update everything + Install dotnet runtime.
+RUN dnf update -y && dnf install dotnet-runtime-3.1 -y
 
 # Make unelevated user.
 RUN useradd --home /home/containeruser/ --create-home containeruser
