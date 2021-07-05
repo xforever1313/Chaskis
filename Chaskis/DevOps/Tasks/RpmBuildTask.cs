@@ -137,6 +137,7 @@ namespace DevOps.Tasks
 %define release 1
 %define source chaskis.deb
 %define libdir /usr/lib/
+%define _binaries_in_noarch_packages_terminate_build   0
 
 Summary: {this.context.TemplateConstants.Summary}
 Name: %{{name}}
@@ -173,9 +174,11 @@ echo '{checksum} chaskis.deb' | sha256sum --check
 cd %{{_sourcedir}}
 ar p %{{_sourcedir}}/chaskis.deb data.tar.xz | tar xJ -C %{{_builddir}}
 chmod -R g-w %{{_builddir}}/usr
+chmod -R g-w %{{_builddir}}/bin
 
 %install
 mv %{{_builddir}}/usr %{{buildroot}}/usr
+mv %{{_builddir}}/bin %{{buildroot}}/usr/bin
 
 %files
 %{{libdir}}/Chaskis/*

@@ -309,6 +309,7 @@ pipeline
                                         Build();
                                         CallDevops( "--target=dump_version --output=\"${pwd()}/${GetVersFile()}\"" );
                                         CleanDirectory( pwd() + "/${archiveFolder}" );
+                                        stash includes: GetVersFile(), name: 'version'
                                     }
                                 }
                                 stage( 'unit_test' )
@@ -481,6 +482,8 @@ pipeline
                     steps
                     {
                         unstash "deb"
+                        unstash "version"
+
                         sh "ls -l"
                         sh "ls -l /checkout"
                         sh "ls -l /checkout/DistPackages"
