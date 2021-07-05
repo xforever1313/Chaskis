@@ -108,6 +108,7 @@ namespace DevOps.Tasks
             );
 
             // Build
+            this.BuildRpmFile();
 
             // Move packages
             FilePath glob = new FilePath( "*.rpm" );
@@ -192,6 +193,26 @@ mv %{{_builddir}}/usr %{{buildroot}}/usr
         {
             this.context.Information( $"Moving '{source}' to '${destination}'" );
             this.context.CopyFileToDirectory( source, destination );
+        }
+
+        private void BuildRpmFile()
+        {
+            this.context.Information( "Building RPM file..." );
+
+            ProcessSettings settings = new ProcessSettings
+            {
+                Arguments = ProcessArgumentBuilder.FromString( "--release f34 local" ),
+                WorkingDirectory = this.workDir
+            };
+            int exitCode = this.context.StartProcess( "fedpkg", settings );
+            if( exitCode != 0 )
+            {
+                throw new ApplicationException(
+                    "Could not package for Fedora, got exit code: " + exitCode
+                );
+            }
+
+            this.context.Information( "Building RPM file... Done!" );
         }
     }
 }

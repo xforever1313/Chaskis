@@ -77,6 +77,16 @@ def RunRegressionTests()
     CallDevops( "--target=regression_test" );
 }
 
+def GetVersFile()
+{
+    return "version.txt";
+}
+
+def GetChaskisVersion()
+{
+    return readFile( GetVersFile() );
+}
+
 pipeline
 {
     agent none
@@ -146,6 +156,7 @@ pipeline
                             steps
                             {
                                 Build();
+                                CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
                                 CleanDirectory( pwd() + "\\${archiveFolder}" );
                             }
                         }
@@ -245,7 +256,7 @@ pipeline
                     }
                 }
 
-// ---------------- Linux ----------------
+                // ---------------- Linux ----------------
 
                 stage( 'Linux' )
                 {
@@ -296,6 +307,7 @@ pipeline
                                     steps
                                     {
                                         Build();
+                                        CallDevops( "--target=dump_version --output=\"${pwd()}/${GetVersFile()}\"" );
                                         CleanDirectory( pwd() + "/${archiveFolder}" );
                                     }
                                 }
@@ -355,21 +367,7 @@ pipeline
                                     steps
                                     {
                                         CallDevops( "--target=debian_pack" );
-                                        stash includes: "./checkout/DistPackages/debian/chaskis.deb", name: 'deb'
-                                    }
-                                }
-                                stage( 'Docker Build' )
-                                {
-                                    steps
-                                    {
-                                        CallDevops( "--target=build_ubuntu_docker" );
-                                    }
-                                    when
-                                    {
-                                        expression
-                                        {
-                                            return params.BuildDocker;
-                                        }
+                                        stash includes: "checkout/DistPackages/debian/*.deb", name: 'deb'
                                     }
                                 }
                             }
@@ -437,6 +435,21 @@ pipeline
                                 }
                             }
                         }
+                        stage( 'Docker Build' )
+                        {
+                            steps
+                            {
+                                sh "docker build -t xforever1313/chaskis.ubuntu -f checkout/Docker/UbuntuRuntime.Dockerfile checkout";
+                                sh "docker tag -t xforever1313/chaskis.ubuntu:latest xforever1313/chaskis.ubuntu:${GetChaskisVersion()}";
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.BuildDocker;
+                                }
+                            }
+                        }
                     }
                     when
                     {
@@ -465,10 +478,13 @@ pipeline
             {
                 stage( 'Build Docker' )
                 {
-                    unstash "deb"
-                    sh "ls -l"
-                    sh "ls -l /checkout"
-                    sh "ls -l /checkout/DistPackages"
+                    steps
+                    {
+                        unstash "deb"
+                        sh "ls -l"
+                        sh "ls -l /checkout"
+                        sh "ls -l /checkout/DistPackages"
+                    }
                 }
             }
             when
