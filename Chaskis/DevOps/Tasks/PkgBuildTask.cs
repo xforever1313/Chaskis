@@ -177,7 +177,7 @@ package() {{
     chmod -R g-w usr
     chmod -R g-w bin
     mv usr ""${{pkgdir}}""
-    mv bin ""${{pkgdir}}""
+    mv bin ""${{pkgdir}}/usr/bin/""
 }}
 ";
             // PKGBUILD files MUST end in \n, not \r\n.
