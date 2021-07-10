@@ -35,6 +35,12 @@ namespace DevOps.Tasks
                 return true;
             }
         }
+        
+        public override void Run( ChaskisContext context )
+        {
+            SpecFileRunner runner = new SpecFileRunner( context );
+            runner.BuildSpecFile();
+        }
     }
 
     public sealed class SpecFileRunner
