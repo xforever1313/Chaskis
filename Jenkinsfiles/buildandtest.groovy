@@ -100,7 +100,6 @@ pipeline
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
         booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
         booleanParam( name: "BuildArchLinux", defaultValue: true, description: "Should we build for Arch Linux?" );
-        booleanParam( name: "BuildFedora", defaultValue: true, description: "Should we build for Fedora Linux?" );
         booleanParam( name: "BuildDocker", defaultValue: true, description: "Should we build Docker Containers?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "RunRegressionTests", defaultValue: true, description: "Should regression tests be run?" );
@@ -371,6 +370,13 @@ pipeline
                                         stash includes: "checkout/DistPackages/debian/*.deb", name: 'deb'
                                     }
                                 }
+                                stage( 'Fedora Spec File' )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=specfile" );
+                                    }
+                                }
                             }
                         }
                         stage( 'In Arch Docker' )
@@ -402,37 +408,6 @@ pipeline
                                 expression
                                 {
                                     return params.BuildArchLinux;
-                                }
-                            }
-                        }
-                        stage( 'In Fedora Docker' )
-                        {
-                            agent
-                            {
-                                dockerfile
-                                {
-                                    filename 'FedoraBuild.Dockerfile'
-                                    dir 'checkout/Docker'
-                                    label 'chaskis-fedora-buildenv'
-                                    args "-e HOME='${env.WORKSPACE}'"
-                                    reuseNode true
-                                }
-                            }
-                            stages
-                            {
-                                stage( 'Fedora RPM Build' )
-                                {
-                                    steps
-                                    {
-                                        CallDevops( "--target=rpmbuild" );
-                                    }
-                                }
-                            }
-                            when
-                            {
-                                expression
-                                {
-                                    return params.BuildFedora;
                                 }
                             }
                         }
