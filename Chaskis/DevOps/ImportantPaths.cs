@@ -18,49 +18,6 @@ public class ImportantPaths
     public ImportantPaths( DirectoryPath repoRoot )
     {
         this.ProjectRoot = repoRoot;
-
-        this.BuildScriptFolder = this.ProjectRoot.Combine( new DirectoryPath( "BuildScripts" ) );
-        this.DocumentationFolder = this.ProjectRoot.Combine( new DirectoryPath( "Documentation" ) );
-        this.SavedChecksumsFolder = this.ProjectRoot.Combine( new DirectoryPath( "SavedChecksums" ) );
-        this.SourceFolder = this.ProjectRoot.Combine( new DirectoryPath( "Chaskis" ) );
-        this.TestResultFolder = this.ProjectRoot.Combine( new DirectoryPath( "TestResults" ) );
-        this.OutputPackages = this.ProjectRoot.Combine( new DirectoryPath( "DistPackages" ) );
-
-        this.ChaskisCliFolder = this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
-        this.ChaskisCoreFolder = this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
-        this.RegressionTestFolder = this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
-        this.RegressionTestProjectFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "TestFixtures" ) );
-        this.RegressionDistroFolder = this.RegressionTestFolder.Combine( new DirectoryPath( "dist" ) );
-        this.UnitTestFolder = this.SourceFolder.Combine( new DirectoryPath( "UnitTests" ) );
-
-        this.InstallConfigFolder = this.SourceFolder.Combine( new DirectoryPath( "Install" ) );
-        this.WindowsInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
-        this.WixConfigFolder = this.WindowsInstallConfigFolder;
-        this.WindowsWixFile = this.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs" ) );
-        this.MsiDirectory = this.WindowsInstallConfigFolder.Combine( new DirectoryPath( "bin/x64/Release/" ) );
-        this.MsiPath = this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi" ) );
-        this.MsiChecksumFile = this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
-        this.LinuxInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
-        this.LinuxBinFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
-        this.SystemdFile = this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
-        this.ArchLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "arch" ) );
-        this.DebianLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
-        this.DebDirectory = this.OutputPackages.Combine( new DirectoryPath( "debian" ) );
-        this.DebPath = this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb" ) );
-        this.DebChecksumFile = this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
-        this.FedoraLinuxInstallConfigFolder = this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
-        this.ChocolateyInstallConfigFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "chocolatey" ) );
-        this.CliInstallerProjectFolder = this.InstallConfigFolder.Combine( new DirectoryPath( "ChaskisCliInstaller" ) );
-
-        this.SolutionPath = this.SourceFolder.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
-        this.ChaskisVersionFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "Chaskis.cs" ) );
-        this.ChaskisCoreVersionFile = this.ChaskisCoreFolder.CombineWithFilePath( new FilePath( "Chaskis.Core.csproj" ) );
-        this.LicenseFile = this.ProjectRoot.CombineWithFilePath( new FilePath( "LICENSE_1_0.txt" ) );
-        this.DefaultPluginFile = this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "DefaultHandlers.cs" ) );
-        this.RegressionTestPluginFile = this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
-
-        this.SavedDebianChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
-        this.SavedMsiChecksumFile = this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
     }
 
     // ---------------- Properties ----------------
@@ -75,197 +32,202 @@ public class ImportantPaths
     /// <summary>
     /// Directory where the various build scripts live.
     /// </summary>
-    public DirectoryPath BuildScriptFolder { get; private set; }
+    public DirectoryPath BuildScriptFolder => this.ProjectRoot.Combine( new DirectoryPath( "BuildScripts" ) );
 
     /// <summary>
     /// Directory where project-level documentation lives.
     /// </summary>
-    public DirectoryPath DocumentationFolder { get; private set; }
+    public DirectoryPath DocumentationFolder => this.ProjectRoot.Combine( new DirectoryPath( "Documentation" ) );
 
     /// <summary>
     /// Directory where saved checksums live.
     /// </summary>
-    public DirectoryPath SavedChecksumsFolder { get; private set; }
+    public DirectoryPath SavedChecksumsFolder => this.ProjectRoot.Combine( new DirectoryPath( "SavedChecksums" ) );
 
     /// <summary>
     /// The path that contains the source code.
     /// </summary>
-    public DirectoryPath SourceFolder { get; private set; }
+    public DirectoryPath SourceFolder => this.ProjectRoot.Combine( new DirectoryPath( "Chaskis" ) );
 
     /// <summary>
     /// Where the unit test results get saved.
     /// </summary>
-    public DirectoryPath TestResultFolder { get; private set; }
+    public DirectoryPath TestResultFolder => this.ProjectRoot.Combine( new DirectoryPath( "TestResults" ) );
 
     /// <summary>
     /// Where to dump packages for distribution.
     /// </summary>
-    public DirectoryPath OutputPackages { get; private set; }
+    public DirectoryPath OutputPackages => this.ProjectRoot.Combine( new DirectoryPath( "DistPackages" ) );
 
     // -------- Project Folders --------
 
     /// <summary>
     /// Folder where the Chaskis CLI project is.
     /// </summary>
-    public DirectoryPath ChaskisCliFolder { get; private set; }
+    public DirectoryPath ChaskisCliFolder => this.SourceFolder.Combine( new DirectoryPath( "Chaskis" ) );
 
     /// <summary>
     /// Folder where the Chaskis.Core project is.
     /// </summary>
-    public DirectoryPath ChaskisCoreFolder { get; private set; }
+    public DirectoryPath ChaskisCoreFolder => this.SourceFolder.Combine( new DirectoryPath( "ChaskisCore" ) );
 
     /// <summary>
     /// Folder where the Regression Tests live.
     /// </summary>
-    public DirectoryPath RegressionTestFolder { get; private set; }
+    public DirectoryPath RegressionTestFolder => this.SourceFolder.Combine( new DirectoryPath( "RegressionTests" ) );
 
     /// <summary>
     /// Folder where the regression test project is.
     /// </summary>
-    public DirectoryPath RegressionTestProjectFolder { get; private set; }
+    public DirectoryPath RegressionTestProjectFolder => this.RegressionTestFolder.Combine( new DirectoryPath( "TestFixtures" ) );
 
     /// <summary>
     /// Where to make a distro for regression tests.
     /// </summary>
-    public DirectoryPath RegressionDistroFolder { get; private set; }
+    public DirectoryPath RegressionDistroFolder => this.RegressionTestFolder.Combine( new DirectoryPath( "dist" ) );
 
     /// <summary>
     /// Folder where the Unit Tests live.
     /// </summary>
-    public DirectoryPath UnitTestFolder { get; private set; }
+    public DirectoryPath UnitTestFolder => this.SourceFolder.Combine( new DirectoryPath( "UnitTests" ) );
 
     // -------- Install Config Folders --------
 
     /// <summary>
     /// Folder where the various install information lives.
     /// </summary>
-    public DirectoryPath InstallConfigFolder { get; private set; }
+    public DirectoryPath InstallConfigFolder => this.SourceFolder.Combine( new DirectoryPath( "Install" ) );
 
     /// <summary>
     /// Folder where the Windows Install Configs live.
     /// </summary>
-    public DirectoryPath WindowsInstallConfigFolder { get; private set; }
+    public DirectoryPath WindowsInstallConfigFolder => this.InstallConfigFolder.Combine( new DirectoryPath( "windows" ) );
 
     /// <summary>
     /// Folder where the MSI configuration lives (powered by WIX).
     /// </summary>
-    public DirectoryPath WixConfigFolder { get; private set; }
+    public DirectoryPath WixConfigFolder => this.WindowsInstallConfigFolder;
 
     /// <summary>
     /// Path to the WIX windows directory.
     /// </summary>
-    public FilePath WindowsWixFile { get; private set; }
+    public FilePath WindowsWixFile => this.WixConfigFolder.CombineWithFilePath( new FilePath( "Product.wxs" ) );
 
     /// <summary>
     /// Path to the directory that will contain the MSI file.
     /// </summary>
-    public DirectoryPath MsiDirectory { get; private set; }
+    public DirectoryPath MsiDirectory => this.WindowsInstallConfigFolder.Combine( new DirectoryPath( "bin/x64/Release/" ) );
 
     /// <summary>
     /// Path to the MSI file.
     /// </summary>
-    public FilePath MsiPath { get; private set; }
+    public FilePath MsiPath => this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi" ) );
 
     /// <summary>
     /// Path to the checksum file of the MSI.
     /// </summary>
-    public FilePath MsiChecksumFile { get; private set; }
+    public FilePath MsiChecksumFile => this.MsiDirectory.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
 
     /// <summary>
     /// Folder where the Linux Install Configs live.
     /// </summary>
-    public DirectoryPath LinuxInstallConfigFolder { get; private set; }
+    public DirectoryPath LinuxInstallConfigFolder => this.InstallConfigFolder.Combine( new DirectoryPath( "linux" ) );
 
     /// <summmary>
     /// Path to the script that goes in the linux bin folder
     /// during install.
     /// </summary>
-    public FilePath LinuxBinFile { get; private set; }
+    public FilePath LinuxBinFile => this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "bin/chaskis" ) );
 
     /// <summary>
     /// Path to the systemd file.
     /// </summary>
-    public FilePath SystemdFile { get; private set; }
+    public FilePath SystemdFile => this.LinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "systemd/chaskis.service" ) );
 
     /// <summary>
     /// Folder where the Arch Linux Install Configs live.
     /// </summary>
-    public DirectoryPath ArchLinuxInstallConfigFolder { get; private set; }
+    public DirectoryPath ArchLinuxInstallConfigFolder => this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "arch" ) );
 
     /// <summary>
     /// Folder where the Debian/Ubuntu Linux Install Configs live.
     /// </summary>
-    public DirectoryPath DebianLinuxInstallConfigFolder { get; private set; }
+    public DirectoryPath DebianLinuxInstallConfigFolder => this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "debian" ) );
 
     /// <summary>
     /// Location of the directory that contains the deb file.
     /// </summary>
-    public DirectoryPath DebDirectory { get; private set; }
+    public DirectoryPath DebDirectory => this.OutputPackages.Combine( new DirectoryPath( "debian" ) );
 
     /// <summary>
     /// Path to the .deb file.
     /// </summary>
-    public FilePath DebPath { get; private set; }
+    public FilePath DebPath => this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb" ) );
 
     /// <summary>
     /// Path to the checksum file of the .deb file.
     /// </summary>
-    public FilePath DebChecksumFile { get; private set; }
+    public FilePath DebChecksumFile => this.DebDirectory.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
 
     /// <summary>
     /// Folder where the Fedora Linux Install Configs live.
     /// </summary>
-    public DirectoryPath FedoraLinuxInstallConfigFolder { get; private set; }
+    public DirectoryPath FedoraLinuxInstallConfigFolder => this.LinuxInstallConfigFolder.Combine( new DirectoryPath( "fedora" ) );
+
+    /// <summary>
+    /// Where the fedora spec file gets outputted.
+    /// </summary>
+    public FilePath SpecFileOutputPath => this.OutputPackages.CombineWithFilePath( new FilePath( "fedora/chaskis.spec" ) );
 
     /// <summary>
     /// Folder where the chocolatey config lives.
     /// </summary>
-    public DirectoryPath ChocolateyInstallConfigFolder { get; private set; }
+    public DirectoryPath ChocolateyInstallConfigFolder => this.InstallConfigFolder.Combine( new DirectoryPath( "chocolatey" ) );
 
     /// <summary>
     /// Folder where the CLI installer lives.
     /// </summary>
-    public DirectoryPath CliInstallerProjectFolder { get; private set; }
+    public DirectoryPath CliInstallerProjectFolder => this.InstallConfigFolder.Combine( new DirectoryPath( "ChaskisCliInstaller" ) );
 
     // -------- Important Files --------
 
     /// <summary>
     /// The path to the Solution.
     /// </summary>
-    public FilePath SolutionPath { get; private set; }
+    public FilePath SolutionPath => this.SourceFolder.CombineWithFilePath( new FilePath( "Chaskis.sln" ) );
 
     /// <summary>
     /// File where the Chaskis version can be found.
     /// </summary>
-    public FilePath ChaskisVersionFile { get; private set; }
+    public FilePath ChaskisVersionFile => this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "Chaskis.cs" ) );
 
     /// <summary>
     /// File where the Chaskis Core version can be found.
     /// </summary>
-    public FilePath ChaskisCoreVersionFile { get; private set; }
+    public FilePath ChaskisCoreVersionFile => this.ChaskisCoreFolder.CombineWithFilePath( new FilePath( "Chaskis.Core.csproj" ) );
 
     /// <summary>
     /// The License file for this project.
     /// </summary>
-    public FilePath LicenseFile { get; private set; }
+    public FilePath LicenseFile => this.ProjectRoot.CombineWithFilePath( new FilePath( "LICENSE_1_0.txt" ) );
 
     /// <summary>
     /// The file for the default Chaskis plugin's main file.
     /// </summary>
-    public FilePath DefaultPluginFile { get; private set; }
+    public FilePath DefaultPluginFile => this.ChaskisCliFolder.CombineWithFilePath( new FilePath( "DefaultHandlers.cs" ) );
 
     /// <summary>
     /// The file for the regression test plugin's main file.
     /// </summary>
-    public FilePath RegressionTestPluginFile { get; private set; }
+    public FilePath RegressionTestPluginFile => this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
 
     /// <summary>
     /// The file that contains the .deb saved checksum.
     /// </summary>
-    public FilePath SavedDebianChecksumFile { get; private set; }
+    public FilePath SavedDebianChecksumFile => this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
 
     /// <summary>
     /// The file that contains the .MSI saved checksum.
     /// </summary>
-    public FilePath SavedMsiChecksumFile { get; private set; }
+    public FilePath SavedMsiChecksumFile => this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
 }
