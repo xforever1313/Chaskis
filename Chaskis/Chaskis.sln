@@ -75,6 +75,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.CakeLib", "..\SethCS\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\SethCS\LibSethCS\LibSethCS.csproj", "{A34B13AB-2898-4B6A-9707-13EDB0D60E6D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.Analyzer", "..\SethCS\Seth.Analyzer\Seth.Analyzer.csproj", "{17F1405E-F1FC-47AF-B56C-AD19C147EE91}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
@@ -664,6 +666,24 @@ Global
 		{A34B13AB-2898-4B6A-9707-13EDB0D60E6D}.Release|x64.Build.0 = Release|Any CPU
 		{A34B13AB-2898-4B6A-9707-13EDB0D60E6D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A34B13AB-2898-4B6A-9707-13EDB0D60E6D}.Release|x86.Build.0 = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|x64.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Debug|x86.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|Any CPU.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|x64.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|x64.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|x86.ActiveCfg = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Install|x86.Build.0 = Debug|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|x64.ActiveCfg = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|x64.Build.0 = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|x86.ActiveCfg = Release|Any CPU
+		{17F1405E-F1FC-47AF-B56C-AD19C147EE91}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
