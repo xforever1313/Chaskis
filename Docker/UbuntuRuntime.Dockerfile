@@ -27,7 +27,7 @@ RUN useradd -d /chaskis -m containeruser && \
 # Install .deb file.
 COPY ./DistPackages/debian/chaskis.deb /tmp/chaskis.deb
 RUN apt -y install /tmp/chaskis.deb && \
-    rm /tmp/chaskis.dev
+    rm /tmp/chaskis.deb
 
 USER containeruser
 RUN mkdir /chaskis/.config
