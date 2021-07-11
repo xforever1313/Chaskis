@@ -416,7 +416,7 @@ pipeline
                             steps
                             {
                                 sh "docker build -t xforever1313/chaskis.ubuntu -f checkout/Docker/UbuntuRuntime.Dockerfile checkout";
-                                sh "docker tag -t xforever1313/chaskis.ubuntu:latest xforever1313/chaskis.ubuntu:${GetChaskisVersion()}";
+                                sh "docker tag xforever1313/chaskis.ubuntu:latest xforever1313/chaskis.ubuntu:${GetChaskisVersion()}";
                             }
                             when
                             {
