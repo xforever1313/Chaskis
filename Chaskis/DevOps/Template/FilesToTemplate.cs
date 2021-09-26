@@ -43,12 +43,6 @@ namespace DevOps.Template
                 this.paths.DebianLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "control" ) )
             ),
 
-            // Fedora Spec File
-            new FileToTemplate(
-                this.paths.FedoraLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "chaskis.spec.template" ) ),
-                this.paths.FedoraLinuxInstallConfigFolder.CombineWithFilePath( new FilePath( "chaskis.spec" ) )
-            ),
-
             // Root README
             new FileToTemplate(
                 this.paths.ProjectRoot.CombineWithFilePath( new FilePath( "README.md.template" ) ),
