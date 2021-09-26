@@ -208,6 +208,8 @@ namespace Chaskis.Cli
                 handlers.Add( plugin.Key, plugin.Value );
             }
 
+            StaticLogger.Log.WriteLine( $"There are {handlers.Count} handlers to process per message" );
+
             // Start the parsing queue before we open any connections.
             // Don't want to miss anything!
             this.parsingQueue.Start( new ReadOnlyDictionary<string, IHandlerConfig>( handlers ) );

@@ -213,6 +213,10 @@
                 <File Source="$(var.Chaskis.TargetDir)Chaskis.dll" KeyPath="yes"/>
             </Component>
 
+            <Component Guid="{04b94ecc-dac8-4b44-ba3a-8dd0b461b9e4}" Directory="BinFolder">
+                <File Source="$(var.Chaskis.TargetDir)System.Threading.Channels.dll" KeyPath="yes"/>
+            </Component>
+
             <Component Guid="{285D243E-2311-46B0-8E84-95E48856A37E}" Directory="BinFolder">
                 <File Source="$(var.Chaskis.TargetDir)Chaskis.deps.json" KeyPath="yes"/>
             </Component>

@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using SethCS.Basic;
 
 namespace Chaskis.Core
@@ -47,33 +49,24 @@ namespace Chaskis.Core
     {
         // ---------------- Fields ----------------
 
-        /// <summary>
-        /// Event queue.
-        /// </summary>
-        private readonly InterruptibleEventExecutor eventQueue;
+        private readonly Channel<Action> channel;
+
+        private Task runner;
+        private CancellationTokenSource cancelToken;
 
         private bool inited;
 
         private bool isDisposed;
 
-        /// <summary>
-        /// The IRC handlers.
-        /// </summary>
         private IReadOnlyDictionary<string, IHandlerConfig> ircHandlers;
 
         // ---------------- Constructor ----------------
 
         public StringParsingQueue()
         {
-            this.eventQueue = new InterruptibleEventExecutor(
-                15 * 1000, // Lets start with 15 seconds and see how that works.,
-                nameof( StringParsingQueue ) + " Thread"
-            );
-
-            this.eventQueue.OnError += this.EventQueue_OnError;
-
             this.inited = false;
             this.isDisposed = false;
+            this.channel = Channel.CreateUnbounded<Action>();
         }
 
         ~StringParsingQueue()
@@ -109,8 +102,13 @@ namespace Chaskis.Core
             if( this.inited == false )
             {
                 this.ircHandlers = ircHandlers;
-                this.eventQueue.Start();
+                this.cancelToken = new CancellationTokenSource();
+                this.runner = Task.Run( ThreadEntry );
                 this.inited = true;
+            }
+            else
+            {
+                throw new InvalidOperationException( "Already started" );
             }
         }
 
@@ -156,7 +154,7 @@ namespace Chaskis.Core
                 // between accessing the list, and setting it.
                 //
                 // Luckily, HandlerArgs is small when it clones, its a simple memberwise clone.
-                // It shouldn't be too big of a hit in termps of heap allocations.
+                // It shouldn't be too big of a hit in terms of heap allocations.
                 HandlerArgs innerArgs = args.Clone();
                 innerArgs.BlackListedChannels = innerHandlers.BlackListedChannels;
 
@@ -195,31 +193,90 @@ namespace Chaskis.Core
             {
                 throw new ArgumentNullException( nameof( action ) );
             }
-
-            this.eventQueue.AddEvent( action );
+            if( this.channel.Writer.TryWrite( action ) == false )
+            {
+                StaticLogger.Log.ErrorWriteLine( "Could not enqueue action onto channel" );
+            }
         }
 
         protected virtual void Dispose( bool isDisposing )
         {
             if( this.isDisposed == false )
             {
-                if( isDisposing )
+                if( inited )
                 {
-                    // Free managed objects here.
-                    this.eventQueue.OnError -= this.EventQueue_OnError;
-                }
-
-                // Free unmanaged objects or threads here.
-                if( this.inited )
-                {
-                    this.eventQueue.Dispose();
+                    if( isDisposing )
+                    {
+                        // If we are disposing, gracefully wait for all tasks to complete.
+                        this.channel.Writer.Complete();
+                        Task.WaitAll( this.runner );
+                        this.cancelToken.Dispose();
+                    }
+                    else
+                    {
+                        // Otherwise, if we are being GC'ed just force everything to stop.
+                        this.cancelToken.Cancel();
+                        this.cancelToken.Dispose();
+                    }
                 }
 
                 this.isDisposed = true;
             }
         }
 
-        private void EventQueue_OnError( Exception err )
+        private void DisposeCheck()
+        {
+            if( this.isDisposed )
+            {
+                throw new ObjectDisposedException( nameof( StringParsingQueue ) );
+            }
+        }
+
+        private async void ThreadEntry()
+        {
+            try
+            {
+                while( await this.channel.Reader.WaitToReadAsync( this.cancelToken.Token ) )
+                {
+                    try
+                    {
+                        Action action = await this.channel.Reader.ReadAsync( this.cancelToken.Token );
+                        action();
+                    }
+                    catch( TaskCanceledException e )
+                    {
+                        PrintError( e );
+                        return;
+                    }
+                    catch( Exception e )
+                    {
+                        PrintError( e );
+                    }
+                }
+            }
+            catch( TaskCanceledException e )
+            {
+                PrintError( e );
+                return;
+            }
+            catch( Exception e )
+            {
+                StringWriter errorMessage = new StringWriter();
+
+                errorMessage.WriteLine( "***************" );
+                errorMessage.WriteLine( "FATAL Exception in " + Thread.CurrentThread.Name + ":" );
+                errorMessage.WriteLine( e.ToString() );
+                errorMessage.WriteLine( "***************" );
+
+                StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
+            }
+            finally
+            {
+                StaticLogger.Log.WriteLine( "Exiting processing thread" );
+            }
+        }
+
+        private void PrintError( Exception err )
         {
             StringWriter errorMessage = new StringWriter();
 
@@ -229,14 +286,6 @@ namespace Chaskis.Core
             errorMessage.WriteLine( "***************" );
 
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
-        }
-
-        private void DisposeCheck()
-        {
-            if( this.isDisposed )
-            {
-                throw new ObjectDisposedException( nameof( StringParsingQueue ) );
-            }
         }
     }
 }
