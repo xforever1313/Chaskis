@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.SendCtcpPong
 {
     [TestFixture]
-    public class SendCtcpPongEventArgsTests
+    public sealed class SendCtcpPongEventArgsTests
     {
         // ---------------- Fields ----------------
 

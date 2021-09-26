@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.UserListBot
 {
     [TestFixture]
-    public class UserListBotConfigTest
+    public sealed class UserListBotConfigTest
     {
         // -------- Fields --------
 

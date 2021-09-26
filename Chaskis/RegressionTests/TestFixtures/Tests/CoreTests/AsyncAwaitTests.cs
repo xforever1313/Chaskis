@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
     [TestFixture]
-    public class AsyncAwaitTests
+    public sealed class AsyncAwaitTests
     {
         // ---------------- Fields ----------------
 

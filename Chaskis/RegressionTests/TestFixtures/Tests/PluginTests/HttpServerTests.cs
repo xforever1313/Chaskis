@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class HttpServerTests
+    public sealed class HttpServerTests
     {
         // ---------------- Fields ----------------
 

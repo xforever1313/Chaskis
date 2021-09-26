@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.InterPluginEvent
 {
     [TestFixture]
-    public class InterPluginEventTest
+    public sealed class InterPluginEventTest
     {
         // ---------------- Fields ----------------
 

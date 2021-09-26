@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
     [TestFixture]
-    public class MeetBotConfigTests
+    public sealed class MeetBotConfigTests
     {
         // ---------------- Fields ----------------
 

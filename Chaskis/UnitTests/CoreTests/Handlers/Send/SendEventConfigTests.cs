@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Send
 {
     [TestFixture]
-    public class SendEventConfigTests
+    public sealed class SendEventConfigTests
     {
         // ---------------- Tests ----------------
 

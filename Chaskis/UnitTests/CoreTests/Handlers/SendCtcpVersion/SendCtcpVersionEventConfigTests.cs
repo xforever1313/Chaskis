@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.SendCtcpVersion
 {
     [TestFixture]
-    public class SendCtcpVersionEventConfigTests
+    public sealed class SendCtcpVersionEventConfigTests
     {
         // ---------------- Tests ----------------
 

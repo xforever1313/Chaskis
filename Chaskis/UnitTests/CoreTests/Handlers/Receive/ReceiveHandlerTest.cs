@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
 {
     [TestFixture]
-    public class ReceiveHandlerTest
+    public sealed class ReceiveHandlerTest
     {
         // -------- Fields --------
 

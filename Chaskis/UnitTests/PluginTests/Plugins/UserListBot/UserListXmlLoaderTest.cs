@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.UserListBot
 {
     [TestFixture]
-    public class UserListXmlLoaderTest
+    public sealed class UserListXmlLoaderTest
     {
         // -------- Fields --------
 

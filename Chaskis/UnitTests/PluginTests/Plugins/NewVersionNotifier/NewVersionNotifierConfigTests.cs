@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.NewVersionNotifier
 {
     [TestFixture]
-    public class NewVersionNotifierConfigTests
+    public sealed class NewVersionNotifierConfigTests
     {
         // ---------------- Fields ----------------
 

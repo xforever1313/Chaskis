@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
 {
     [TestFixture]
-    public class IrcLoggerXmlLoaderTest
+    public sealed class IrcLoggerXmlLoaderTest
     {
         // -------- Fields --------
 

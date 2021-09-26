@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpPing
 {
     [TestFixture]
-    public class CtcpPingHandlerArgsTests
+    public sealed class CtcpPingHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

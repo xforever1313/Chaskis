@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.FinishedJoiningChannels
 {
     [TestFixture]
-    public class FinishedJoiningChannelsEventHandlerTests
+    public sealed class FinishedJoiningChannelsEventHandlerTests
     {
         // ---------------- Fields ----------------
 

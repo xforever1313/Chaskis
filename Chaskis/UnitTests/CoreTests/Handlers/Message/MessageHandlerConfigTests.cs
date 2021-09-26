@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Message
 {
     [TestFixture]
-    public class MessageHandlerConfigTests
+    public sealed class MessageHandlerConfigTests
     {
         /// <summary>
         /// Ensures the default values when constructing are correct.

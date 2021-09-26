@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot
 {
     [TestFixture]
-    public class UrlResponseTest
+    public sealed class UrlResponseTest
     {
         // ---------------- Fields ----------------
 

@@ -18,7 +18,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         string TestFilesLocation { get; }
     }
 
-    public class RssBotTests
+    public sealed class RssBotTests
     {
         // ---------------- Fields ----------------
 
@@ -31,7 +31,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         // ---------------- Helper Classes ----------------
 
         [TestFixture]
-        public class HappyPathRssBotTests : IRssBotTestFixture
+        public sealed class HappyPathRssBotTests : IRssBotTestFixture
         {
             // ---------------- Properties ----------------
 
@@ -138,7 +138,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         /// Ensures if our bot gets a 404, we don't crash.
         /// </summary>
         [TestFixture]
-        public class RssBot404Tests : IRssBotTestFixture
+        public sealed class RssBot404Tests : IRssBotTestFixture
         {
             // ---------------- Properties ----------------
 

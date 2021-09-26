@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
     [TestFixture]
-    public class MetricsBotDatabaseTests
+    public sealed class MetricsBotDatabaseTests
     {
         // ---------------- Fields ----------------
 

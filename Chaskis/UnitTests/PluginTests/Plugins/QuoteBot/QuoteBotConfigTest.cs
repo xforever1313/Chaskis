@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
-    public class QuoteBotConfigTest
+    public sealed class QuoteBotConfigTest
     {
         // ---------------- Tests ----------------
 

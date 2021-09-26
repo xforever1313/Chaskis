@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.WelcomeBot
 {
     [TestFixture]
-    public class WelcomeBotConfigTests
+    public sealed class WelcomeBotConfigTests
     {
         // ---------------- Tests ----------------
 

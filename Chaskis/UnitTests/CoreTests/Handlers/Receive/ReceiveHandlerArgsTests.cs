@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Receive
 {
     [TestFixture]
-    public class ReceiveHandlerArgsTests
+    public sealed class ReceiveHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
     [TestFixture]
-    public class DayOfWeekInfoKeyTests
+    public sealed class DayOfWeekInfoKeyTests
     {
         [Test]
         public void EqualsTest()

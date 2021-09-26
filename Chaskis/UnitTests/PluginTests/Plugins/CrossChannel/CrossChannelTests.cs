@@ -15,7 +15,7 @@ using Chaskis.Plugins.CrossChannel;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CrossChannel
 {
     [TestFixture]
-    public class CrossChannelTests
+    public sealed class CrossChannelTests
     {
         // ---------------- Fields ----------------
 

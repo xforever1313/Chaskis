@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.WatchdogFailed
 {
     [TestFixture]
-    public class WatchdogFailedEventHandlerTests
+    public sealed class WatchdogFailedEventHandlerTests
     {
         // ---------------- Fields ----------------
 

@@ -8,13 +8,10 @@
 using Chaskis.RegressionTests.TestCore;
 using NUnit.Framework;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
-    public class BridgeBotTests
+    [TestFixture]
+    public sealed class BridgeBotTests
     {
         // ---------------- Fields ----------------
 

@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Ping
 {
     [TestFixture]
-    public class PingHandlerTest
+    public sealed class PingHandlerTest
     {
         // -------- Fields --------
 

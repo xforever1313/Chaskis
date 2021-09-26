@@ -16,7 +16,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
-    public class XmlLoaderTests
+    public sealed class XmlLoaderTests
     {
         // ---------------- Fields ----------------
 

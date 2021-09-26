@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.IsItDownBot
 {
     [TestFixture]
-    public class IsItDownBotConfigTests
+    public sealed class IsItDownBotConfigTests
     {
         // ---------------- Fields ----------------
 

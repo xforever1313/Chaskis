@@ -18,7 +18,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class IrcConnectionTests
+    public sealed class IrcConnectionTests
     {
         // ---------------- Fields ----------------
 

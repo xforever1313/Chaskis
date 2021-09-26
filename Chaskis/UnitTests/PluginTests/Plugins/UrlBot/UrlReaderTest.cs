@@ -17,7 +17,7 @@ using SethCS.Extensions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot
 {
     [TestFixture]
-    public class UrlReaderTest
+    public sealed class UrlReaderTest
     {
         // ---------------- Fields ----------------
 

@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Join
 {
     [TestFixture]
-    public class JoinHandlerArgsTests
+    public sealed class JoinHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

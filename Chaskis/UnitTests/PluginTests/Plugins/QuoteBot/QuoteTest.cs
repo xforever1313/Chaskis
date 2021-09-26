@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
-    public class QuoteTest
+    public sealed class QuoteTest
     {
         // ---------------- Tests ----------------
 

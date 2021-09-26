@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Action
 {
     [TestFixture]
-    public class ActionHandlerConfigTests
+    public sealed class ActionHandlerConfigTests
     {
         /// <summary>
         /// Ensures the default values when constructing are correct.

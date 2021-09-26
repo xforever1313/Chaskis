@@ -16,7 +16,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Join
 {
     [TestFixture]
-    public class JoinHandlerTest
+    public sealed class JoinHandlerTest
     {
         // -------- Fields --------
 

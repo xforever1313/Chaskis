@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyChaskisEvent
 {
     [TestFixture]
-    public class AnyChaskisEventHandlerArgsTests
+    public sealed class AnyChaskisEventHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

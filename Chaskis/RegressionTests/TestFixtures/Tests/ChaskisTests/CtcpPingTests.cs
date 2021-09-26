@@ -14,7 +14,7 @@ namespace Chaskis.RegressionTests.Tests.ChaskisTests
     /// Tests the default plugin built into Chaskis.exe.
     /// </summary>
     [TestFixture]
-    public class CtcpPingTests
+    public sealed class CtcpPingTests
     {
         // ---------------- Fields ----------------
 

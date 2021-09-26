@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CapsWatcher
 {
     [TestFixture]
-    public class CapsWatcherConfigTest
+    public sealed class CapsWatcherConfigTest
     {
         // -------- Fields --------
 

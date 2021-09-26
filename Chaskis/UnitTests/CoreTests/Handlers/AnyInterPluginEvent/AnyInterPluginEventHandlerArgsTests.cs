@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyInterPluginEvent
 {
     [TestFixture]
-    public class AnyInterPluginEventHandlerArgsTests
+    public sealed class AnyInterPluginEventHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

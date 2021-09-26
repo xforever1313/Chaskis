@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
     [TestFixture]
-    public class TaskAbortTests
+    public sealed class TaskAbortTests
     {
         // ---------------- Fields ----------------
 

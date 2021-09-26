@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
-    public class ArgumentParserTest
+    public sealed class ArgumentParserTest
     {
         // -------- Fields --------
 

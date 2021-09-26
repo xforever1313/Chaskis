@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class RegexTests
+    public sealed class RegexTests
     {
         [Test]
         public void IrcPrefixTest()

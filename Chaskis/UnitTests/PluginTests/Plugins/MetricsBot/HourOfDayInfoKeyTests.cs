@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
     [TestFixture]
-    public class HourOfDayInfoKeyTests
+    public sealed class HourOfDayInfoKeyTests
     {
         [Test]
         public void EqualsTest()

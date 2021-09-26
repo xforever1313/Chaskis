@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.ChaskisTests
 {
     [TestFixture]
-    public class AssemblyConfigTest
+    public sealed class AssemblyConfigTest
     {
         /// <summary>
         /// Ensures passing in string.Empty or null to the constructor results in an error.

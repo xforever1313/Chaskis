@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
 {
     [TestFixture]
-    public class KarmaBotConfigTest
+    public sealed class KarmaBotConfigTest
     {
         /// <summary>
         /// Ensures the default constructor validates.

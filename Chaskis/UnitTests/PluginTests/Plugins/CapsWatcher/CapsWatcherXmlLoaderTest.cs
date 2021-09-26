@@ -15,7 +15,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CapsWatcher
 {
     [TestFixture]
-    public class CapsWatcherXmlLoaderTest
+    public sealed class CapsWatcherXmlLoaderTest
     {
         // -------- Fields --------
 

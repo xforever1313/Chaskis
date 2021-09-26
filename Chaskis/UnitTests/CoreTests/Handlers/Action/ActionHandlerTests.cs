@@ -15,7 +15,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Action
 {
     [TestFixture]
-    public class ActionHandlerTests
+    public sealed class ActionHandlerTests
     {
         // ---------------- Fields ----------------
 

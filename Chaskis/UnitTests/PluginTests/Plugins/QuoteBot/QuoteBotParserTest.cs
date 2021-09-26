@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
-    public class QuoteBotParserTest
+    public sealed class QuoteBotParserTest
     {
         // ---------------- Fields ----------------
 

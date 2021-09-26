@@ -15,7 +15,7 @@ using SethCS.Basic;
 namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
 {
     [TestFixture]
-    public class LogManagerTest
+    public sealed class LogManagerTest
     {
         // -------- Fields --------
 

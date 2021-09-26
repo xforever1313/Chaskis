@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CapsWatcher
 {
     [TestFixture]
-    public class CapsWatcherTest
+    public sealed class CapsWatcherTest
     {
         // ---------------- Fields ----------------
 

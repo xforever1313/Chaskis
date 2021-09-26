@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.ChaskisTests
 {
     [TestFixture]
-    public class MissingAssemblyTests
+    public sealed class MissingAssemblyTests
     {
         // ---------------- Fields ----------------
 

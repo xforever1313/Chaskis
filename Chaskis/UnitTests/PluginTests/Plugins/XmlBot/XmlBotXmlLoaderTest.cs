@@ -19,7 +19,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.XmlBot
 {
     [TestFixture]
-    public class XmlBotXmlLoaderTest
+    public sealed class XmlBotXmlLoaderTest
     {
         // ---------------- Fields ----------------
 

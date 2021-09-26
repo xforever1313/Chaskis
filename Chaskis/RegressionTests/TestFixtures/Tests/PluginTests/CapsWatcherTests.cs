@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class CapsWatcherTests
+    public sealed class CapsWatcherTests
     {
         // ---------------- Fields ----------------
 
