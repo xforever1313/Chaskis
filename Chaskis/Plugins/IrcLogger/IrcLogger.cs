@@ -111,6 +111,7 @@ namespace Chaskis.Plugins.IrcLogger
             }
 
             this.logManager = new LogManager( config, initor.Log );
+            this.logManager.Start();
 
             ReceiveHandlerConfig allHandlerConfig = new ReceiveHandlerConfig
             {
