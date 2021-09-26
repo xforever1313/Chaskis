@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using SethCS.Basic;
 
@@ -45,50 +44,18 @@ namespace Chaskis.Core
     /// This is the class that takes strings from a server,
     /// parses them, and calls the IRC Handlers.
     /// </summary>
-    public class StringParsingQueue : IDisposable, INonDisposableStringParsingQueue
+    public sealed class StringParsingQueue : ChaskisActionChannel, INonDisposableStringParsingQueue
     {
         // ---------------- Fields ----------------
-
-        private readonly Channel<Action> channel;
-
-        private Task runner;
-        private CancellationTokenSource cancelToken;
-
-        private bool inited;
-
-        private bool isDisposed;
 
         private IReadOnlyDictionary<string, IHandlerConfig> ircHandlers;
 
         // ---------------- Constructor ----------------
 
-        public StringParsingQueue()
+        public StringParsingQueue() :
+            base( nameof( StringParsingQueue ) )
         {
-            this.inited = false;
-            this.isDisposed = false;
-            this.channel = Channel.CreateUnbounded<Action>();
         }
-
-        ~StringParsingQueue()
-        {
-            try
-            {
-                this.Dispose( false );
-            }
-            catch( Exception e )
-            {
-                StringWriter errorMessage = new StringWriter();
-
-                errorMessage.WriteLine( "***************" );
-                errorMessage.WriteLine( "Caught Exception in while finalizing String Parsing Queue Thread:" );
-                errorMessage.WriteLine( e.ToString() );
-                errorMessage.WriteLine( "***************" );
-
-                StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
-            }
-        }
-
-        // ---------------- Properties ----------------
 
         // ---------------- Functions ----------------
 
@@ -97,19 +64,9 @@ namespace Chaskis.Core
         /// </summary>
         public void Start( IReadOnlyDictionary<string, IHandlerConfig> ircHandlers )
         {
-            DisposeCheck();
-
-            if( this.inited == false )
-            {
-                this.ircHandlers = ircHandlers;
-                this.cancelToken = new CancellationTokenSource();
-                this.runner = Task.Run( ThreadEntry );
-                this.inited = true;
-            }
-            else
-            {
-                throw new InvalidOperationException( "Already started" );
-            }
+            ThrowIfStarted();
+            this.ircHandlers = ircHandlers;
+            Start();
         }
 
         /// <summary>
@@ -123,17 +80,6 @@ namespace Chaskis.Core
 
             // Wait for our last event to execute before leaving.
             doneEvent.WaitOne();
-        }
-
-        /// <summary>
-        /// Disposes this class.
-        /// </summary>
-        public void Dispose()
-        {
-            DisposeCheck();
-
-            this.Dispose( true );
-            GC.SuppressFinalize( this );
         }
 
         /// <summary>
@@ -183,97 +129,36 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Invokes the given action on the event queue thread.
-        /// Does not block.
-        /// </summary>
-        public void BeginInvoke( Action action )
+        protected override void OnBadEnqueue( Action action )
         {
-            if( action == null )
-            {
-                throw new ArgumentNullException( nameof( action ) );
-            }
-            if( this.channel.Writer.TryWrite( action ) == false )
-            {
-                StaticLogger.Log.ErrorWriteLine( "Could not enqueue action onto channel" );
-            }
+            StaticLogger.Log.ErrorWriteLine( "Could not enqueue action onto channel" );
         }
 
-        protected virtual void Dispose( bool isDisposing )
+        protected override void OnError( Exception e )
         {
-            if( this.isDisposed == false )
-            {
-                if( inited )
-                {
-                    if( isDisposing )
-                    {
-                        // If we are disposing, gracefully wait for all tasks to complete.
-                        this.channel.Writer.Complete();
-                        Task.WaitAll( this.runner );
-                        this.cancelToken.Dispose();
-                    }
-                    else
-                    {
-                        // Otherwise, if we are being GC'ed just force everything to stop.
-                        this.cancelToken.Cancel();
-                        this.cancelToken.Dispose();
-                    }
-                }
-
-                this.isDisposed = true;
-            }
+            this.PrintError( e );
         }
 
-        private void DisposeCheck()
+        protected override void OnTaskCancelled( TaskCanceledException e )
         {
-            if( this.isDisposed )
-            {
-                throw new ObjectDisposedException( nameof( StringParsingQueue ) );
-            }
+            this.PrintError( e );
         }
 
-        private async void ThreadEntry()
+        protected override void OnThreadExit()
         {
-            try
-            {
-                while( await this.channel.Reader.WaitToReadAsync( this.cancelToken.Token ) )
-                {
-                    try
-                    {
-                        Action action = await this.channel.Reader.ReadAsync( this.cancelToken.Token );
-                        action();
-                    }
-                    catch( TaskCanceledException e )
-                    {
-                        PrintError( e );
-                        return;
-                    }
-                    catch( Exception e )
-                    {
-                        PrintError( e );
-                    }
-                }
-            }
-            catch( TaskCanceledException e )
-            {
-                PrintError( e );
-                return;
-            }
-            catch( Exception e )
-            {
-                StringWriter errorMessage = new StringWriter();
+            StaticLogger.Log.WriteLine( $"Exiting {this.Name}" );
+        }
 
-                errorMessage.WriteLine( "***************" );
-                errorMessage.WriteLine( "FATAL Exception in " + Thread.CurrentThread.Name + ":" );
-                errorMessage.WriteLine( e.ToString() );
-                errorMessage.WriteLine( "***************" );
+        protected override void OnFatalError( Exception e )
+        {
+            StringWriter errorMessage = new StringWriter();
 
-                StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
-            }
-            finally
-            {
-                StaticLogger.Log.WriteLine( "Exiting processing thread" );
-            }
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( $"FATAL Exception in {this.Name}:" );
+            errorMessage.WriteLine( e.ToString() );
+            errorMessage.WriteLine( "***************" );
+
+            StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
 
         private void PrintError( Exception err )
@@ -281,7 +166,7 @@ namespace Chaskis.Core
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
+            errorMessage.WriteLine( $"Caught Exception in {this.Name}:" );
             errorMessage.WriteLine( err.ToString() );
             errorMessage.WriteLine( "***************" );
 

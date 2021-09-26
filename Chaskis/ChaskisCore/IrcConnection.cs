@@ -65,10 +65,7 @@ namespace Chaskis.Core
 
         private readonly IIrcMac connection;
 
-        /// <summary>
-        /// Lock for the IRC writer.
-        /// </summary>
-        private readonly object ircWriterLock;
+        private readonly MacWriter macWriter;
 
         /// <summary>
         /// The thread that reads.
@@ -79,11 +76,6 @@ namespace Chaskis.Core
         /// Whether or not to keep reading.
         /// </summary>
         private bool keepReading;
-
-        /// <summary>
-        /// Writer Queue.
-        /// </summary>
-        private readonly EventExecutor writerQueue;
 
         private readonly EventScheduler eventScheduler;
 
@@ -137,10 +129,8 @@ namespace Chaskis.Core
             this.keepReadingObject = new object();
             this.KeepReading = false;
 
-            this.writerQueue = new EventExecutor( config.Server +  " IRC Writer Queue" );
-            this.writerQueue.OnError += this.WriterQueue_OnError;
+            this.macWriter = new MacWriter( StaticLogger.Log, macLayer, this.Config.RateLimit );
 
-            this.ircWriterLock = new object();
             this.reconnectAbortEvent = new ManualResetEvent( false );
             this.eventScheduler = new EventScheduler();
 
@@ -201,7 +191,7 @@ namespace Chaskis.Core
             {
                 // Start Executing
                 this.eventScheduler.Start();
-                this.writerQueue.Start();
+                this.macWriter.Start();
                 this.inited = true;
             }
         }
@@ -247,8 +237,7 @@ namespace Chaskis.Core
             // Therefore, this is the first command that gets sent.
             if( string.IsNullOrEmpty( this.Config.ServerPassword ) == false )
             {
-                this.connection.WriteLine( $"PASS {this.Config.GetServerPassword()}" );
-                Thread.Sleep( this.Config.RateLimit );
+                this.macWriter.SendMessage( $"PASS {this.Config.GetServerPassword()}" );
             }
             else
             {
@@ -259,18 +248,16 @@ namespace Chaskis.Core
             // This command is used at the beginning of a connection to specify the username,
             // real name and initial user modes of the connecting client.
             // <realname> may contain spaces, and thus must be prefixed with a colon.
-            this.connection.WriteLine( "USER {0} 0 * :{1}", this.Config.UserName, this.Config.RealName );
-            Thread.Sleep( this.Config.RateLimit );
+            this.macWriter.SendMessage( $"USER {this.Config.UserName} 0 * :{this.Config.RealName}" );
 
             // NICK <nickname>
-            this.connection.WriteLine( "NICK {0}", this.Config.Nick );
-            Thread.Sleep( this.Config.RateLimit );
+            this.macWriter.SendMessage( $"NICK {this.Config.Nick}" );
 
             // If the server has a NickServ service, tell nickserv our password
             // so it registers our bot and does not change its nickname on us.
             if( string.IsNullOrEmpty( this.Config.NickServPassword ) == false )
             {
-                this.connection.WriteLine(
+                this.macWriter.SendMessage(
                     $"PRIVMSG {this.Config.NickServNick} :{this.Config.GetNickServMessage()}"
                 );
                 Thread.Sleep( this.Config.RateLimit );
@@ -306,7 +293,7 @@ namespace Chaskis.Core
             {
                 const int maxSeconds = 10;
 
-                this.writerQueue.AddEvent( () => e.Set() );
+                this.macWriter.BeginInvoke( () => e.Set() );
                 if( e.Wait( TimeSpan.FromSeconds( maxSeconds ) ) == false )
                 {
                     throw new TimeoutException(
@@ -630,39 +617,14 @@ namespace Chaskis.Core
                 }.ToXml()
             );
 
-            this.AddToWriterQueue(
-                delegate ()
-                {
-                    lock( this.ircWriterLock )
-                    {
-                        // This should be in the lock.  If this is before the lock,
-                        // IsConnected can return true, this thread can be preempted,
-                        // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
-                        // to a socket that is closed which is a problem.
-                        if( this.connection.IsConnected == false )
-                        {
-                            return;
-                        }
-
-                        this.connection.WriteLine( cmd );
-                    }
-                }
-            );
-        }
-
-        /// <summary>
-        /// Adds action to the writer queue.
-        /// Used for rate-limiting.
-        /// </summary>
-        private void AddToWriterQueue( Action action )
-        {
-            this.writerQueue.AddEvent(
-                delegate ()
-                {
-                    action();
-                    Thread.Sleep( this.Config.RateLimit );
-                }
-            );
+            // This should be in the lock.  If this is before the lock,
+            // IsConnected can return true, this thread can be preempted,
+            // and a thread that disconnects the connection runs.  Now, when this thread runs again, we try to write
+            // to a socket that is closed which is a problem.
+            lock( this.macWriter )
+            {
+                this.macWriter.SendMessage( cmd );
+            }
         }
 
         /// <summary>
@@ -670,11 +632,11 @@ namespace Chaskis.Core
         /// </summary>
         private void DisconnectHelper()
         {
-            // First, acquire the ircWriterLock.  This will prevent anything writing to the connection,
+            // First, acquire the mac writer.  This will prevent anything writing to the connection,
             // as those are also guarded by this lock.
             // When this lock is released, the connection's IsConnected flag will be set to false, so
             // all of those writes become no-ops.
-            lock( this.ircWriterLock )
+            lock( this.macWriter )
             {
                 this.OnReadLine(
                     new DisconnectingEventArgs
@@ -741,11 +703,11 @@ namespace Chaskis.Core
                 // Drain our writer queue before disconnecting so everything that needs to go out goes out.
                 {
                     ManualResetEvent doneEvent = new ManualResetEvent( false );
-                    this.writerQueue.AddEvent( () => doneEvent.Set() );
+                    this.macWriter.BeginInvoke( () => doneEvent.Set() );
 
                     // Wait for our last event to execute before leaving.
                     doneEvent.WaitOne();
-                    this.writerQueue.Dispose(); // Dispose now so no more events get executed.
+                    this.macWriter.Dispose(); // Dispose now so no more events get executed.
                 }
 
                 this.DisconnectHelper();
@@ -755,8 +717,7 @@ namespace Chaskis.Core
 
             this.watchDog.Dispose();
             this.connection.Dispose();
-            this.writerQueue.OnError -= this.EventQueue_OnError;
-            this.writerQueue.Dispose();
+            this.macWriter.Dispose();
         }
 
         /// <summary>
@@ -1022,19 +983,6 @@ namespace Chaskis.Core
 
             errorMessage.WriteLine( "***************" );
             errorMessage.WriteLine( "Caught Exception in Event Queue (" +  Thread.CurrentThread.Name + "):" );
-            errorMessage.WriteLine( err.Message );
-            errorMessage.WriteLine( err.StackTrace );
-            errorMessage.WriteLine( "***************" );
-
-            StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
-        }
-
-        private void WriterQueue_OnError( Exception err )
-        {
-            StringWriter errorMessage = new StringWriter();
-
-            errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in WriterQueue (" + Thread.CurrentThread.Name + "):" );
             errorMessage.WriteLine( err.Message );
             errorMessage.WriteLine( err.StackTrace );
             errorMessage.WriteLine( "***************" );
