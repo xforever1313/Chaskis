@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using SethCS.Basic;
 
@@ -48,7 +49,7 @@ namespace Chaskis.Core
                     }
 
                     this.mac.WriteLine( message );
-                    Task.Delay( this.rateLimit );
+                    Thread.Sleep( this.rateLimit );
                 }
             );
         }
