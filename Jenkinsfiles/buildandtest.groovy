@@ -452,16 +452,30 @@ pipeline
             }
             stages
             {
+                stage( 'clean' )
+                {
+                    steps
+                    {
+                        cleanWs();
+                    }
+                }
+                stage( 'checkout' )
+                {
+                    steps
+                    {
+                        // TODO: put this back in once configured in Jenkins
+                        // checkout scm;
+                        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'checkout'], [$class: 'CleanCheckout'], [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: 'https://github.com/xforever1313/Chaskis.git']]])
+                        unstash "deb"
+                        unstash "version"
+                    }
+                }
                 stage( 'Build Docker' )
                 {
                     steps
                     {
-                        unstash "deb"
-                        unstash "version"
-
-                        sh "ls -l"
-                        sh "ls -l /checkout"
-                        sh "ls -l /checkout/DistPackages"
+                        sh "docker build -t xforever1313/chaskis.raspbian -f checkout/Docker/Raspbian32Runtime.Dockerfile checkout";
+                        sh "docker tag xforever1313/chaskis.raspbian:latest xforever1313/chaskis.raspbian:${GetChaskisVersion()}";
                     }
                 }
             }

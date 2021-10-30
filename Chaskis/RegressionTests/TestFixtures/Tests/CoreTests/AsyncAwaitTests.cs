@@ -53,59 +53,6 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
         // ---------------- Tests ----------------
 
         /// <summary>
-        /// Ensures that if we do async/await, we get on a background thread.
-        /// </summary>
-        [Test]
-        public void DoBackgroundThreadCheckTest()
-        {
-            Step.Run(
-                "Start the test",
-                () =>
-                {
-                    this.testFrame.IrcServer.SendMessageToChannelAs(
-                        $"!{TestConstants.RegressionTestCommandPrefix} asyncawait threadname",
-                        TestConstants.Channel1,
-                        TestConstants.NormalUser
-                    );
-                }
-            );
-
-            Step.Run(
-                "Ensure before we call await, we are on the Parsing Queue Thread",
-                () =>
-                {
-                    this.testFrame.IrcServer.WaitForMessageOnChannel(
-                        @"Starting\s+from\s+StringParsingQueue\s+Thread",
-                        TestConstants.Channel1
-                    ).FailIfFalse( "Did not get parsing queue message." );
-                }
-            );
-
-            Step.Run(
-                "Ensure our background thread is NOT the String Parsing Queue Thread",
-                () =>
-                {
-                    this.testFrame.IrcServer.WaitForMessageOnChannel(
-                        // Called "Thread pool worker" on mono, empty if .NET Framework.
-                        @"Background\s+Thread\s+Name:\s+(Thread\s+Pool\s+Worker)?END",
-                        TestConstants.Channel1
-                    ).FailIfFalse( "Did not get background thread name." );
-                }
-            );
-
-            Step.Run(
-                "Ensure when we return from the await, we are back on the String Parsing Queue Thread",
-                () =>
-                {
-                    this.testFrame.IrcServer.WaitForMessageOnChannel(
-                        @"Finishing\s+from\s+StringParsingQueue\s+Thread",
-                        TestConstants.Channel1
-                    ).FailIfFalse( "Not back on staring parsing thread." );
-                }
-            );
-        }
-
-        /// <summary>
         /// Ensures if we get an exception from a background thread,
         /// we do not crash.
         /// </summary>
