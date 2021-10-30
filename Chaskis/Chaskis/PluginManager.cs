@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using Chaskis.Core;
@@ -68,7 +67,6 @@ namespace Chaskis.Cli
             IReadOnlyIrcConfig ircConfig,
             IChaskisEventScheduler scheduler,
             IInterPluginEventSender eventSender,
-            HttpClient httpClient,
             string chaskisConfigRoot
         )
         {
@@ -166,7 +164,6 @@ namespace Chaskis.Cli
                         ChaskisEventSender = eventSender,
                         ChaskisConfigRoot = chaskisConfigRoot,
                         ChaskisEventCreator = this.eventFactory.EventCreators[plugin.Key],
-                        HttpClient = httpClient,
                         Log = plugin.Value.Log
                     };
 

@@ -57,7 +57,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot
             this.logger.OnWriteLine += ( s => Console.WriteLine( s ) );
             this.logger.OnErrorWriteLine += ( s => Console.WriteLine( s ) );
 
-            this.reader = new UrlReader( this.logger, PluginTestHelpers.HttpClient );
+            this.reader = new UrlReader( this.logger );
         }
 
         [TearDown]
@@ -87,7 +87,8 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.UrlBot
 
             Task<UrlResponse> response = this.reader.AsyncGetDescription( url );
             response.Wait();
-            Assert.IsFalse( response.Result.IsValid );
+            Assert.AreEqual( "My Title", response.Result.Title );
+            Assert.AreEqual( "My Title", response.Result.TitleShortened );
         }
 
         [Test]

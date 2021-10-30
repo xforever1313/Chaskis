@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
 using Chaskis.Core;
 using SethCS.Basic;
@@ -54,10 +53,6 @@ namespace Chaskis.Cli
 
         private readonly StringParsingQueue parsingQueue;
 
-        private readonly HttpClient httpClient;
-
-        internal const string UserAgent = "Chaskis IRC Bot";
-
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -71,8 +66,6 @@ namespace Chaskis.Cli
             this.plugins = new Dictionary<string, PluginConfig>();
             this.fullyLoaded = false;
             this.chaskisRoot = chaskisRoot;
-            this.httpClient = new HttpClient();
-            this.httpClient.DefaultRequestHeaders.Add( "User-Agent", UserAgent );
             // Leave the default timeout.  This was set to 10 seconds, but that may not be correct.
             // It takes 15 seconds for DNS to timeout, so a 10 second timeout probably doesn't make a ton of sense.
 
@@ -159,7 +152,6 @@ namespace Chaskis.Cli
                 this.ircConfig,
                 this.ircBot.Scheduler,
                 this.ircBot.ChaskisEventSender,
-                this.httpClient,
                 this.chaskisRoot
             );
 
@@ -246,7 +238,6 @@ namespace Chaskis.Cli
             finally
             {
                 this.parsingQueue.Dispose();
-                this.httpClient.Dispose();
             }
         }
     }

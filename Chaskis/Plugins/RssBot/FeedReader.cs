@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
+using Flurl.Http;
 using SethCS.Exceptions;
 
 namespace Chaskis.Plugins.RssBot
@@ -26,7 +27,7 @@ namespace Chaskis.Plugins.RssBot
         private SyndicationFeed feed;
         private readonly object feedLock;
 
-        private readonly HttpClient httpClient;
+        private static readonly string userAgent = $"Chaskis IRC Bot - {nameof( RssBot )} Plugin";
 
         // ---------------- Constructor ----------------
 
@@ -34,15 +35,13 @@ namespace Chaskis.Plugins.RssBot
         /// Constructor.
         /// </summary>
         /// <param name="feedConfig">The feed to read.</param>
-        public FeedReader( Feed feedConfig, HttpClient httpClient )
+        public FeedReader( Feed feedConfig )
         {
             ArgumentChecker.IsNotNull( feedConfig, nameof( feedConfig ) );
-            ArgumentChecker.IsNotNull( httpClient, nameof( httpClient ) );
 
             this.feedConfig = feedConfig.Clone();
             this.feedLock = new object();
 
-            this.httpClient = httpClient;
             this.Url = feedConfig.Url;
         }
 
@@ -126,7 +125,13 @@ namespace Chaskis.Plugins.RssBot
 
         private async Task<SyndicationFeed> FetchFeed()
         {
-            HttpResponseMessage response = await this.httpClient.GetAsync( this.feedConfig.Url );
+            IFlurlRequest baseRequest = this.Url
+                .WithHeader( "User-Agent", userAgent )
+                .WithTimeout( TimeSpan.FromSeconds( 15 ) );
+
+            IFlurlResponse flurlResponse = await baseRequest.GetAsync();
+
+            HttpResponseMessage response = flurlResponse.ResponseMessage;
             if( response.IsSuccessStatusCode )
             {
                 using( Stream content = await response.Content.ReadAsStreamAsync() )
