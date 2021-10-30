@@ -1054,12 +1054,12 @@ namespace Chaskis.UnitTests.CoreTests
 
             // We should send the user name...
             this.mac.Setup(
-                m => m.WriteLine( "USER {0} 0 * :{1}", userName, realName )
+                m => m.WriteLine( $"USER {userName} 0 * :{realName}" )
             );
 
             // Then the nick name...
             this.mac.Setup(
-                m => m.WriteLine( "NICK {0}", nick )
+                m => m.WriteLine( $"NICK {nick}" )
             );
 
             // Finally, join channels.
