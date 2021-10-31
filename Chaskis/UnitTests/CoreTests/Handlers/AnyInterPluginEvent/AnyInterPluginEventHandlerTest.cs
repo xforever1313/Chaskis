@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyInterPluginEvent
 {
     [TestFixture]
-    public class AnyInterPluginEventHandlerTest
+    public sealed class AnyInterPluginEventHandlerTest
     {
         // -------- Fields --------
 

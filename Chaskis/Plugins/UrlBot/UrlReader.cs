@@ -6,10 +6,14 @@
 //
 
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Flurl;
+using Flurl.Http;
 using HtmlAgilityPack;
 using SethCS.Basic;
 
@@ -41,17 +45,17 @@ namespace Chaskis.Plugins.UrlBot
         private const int maxFileSize = 1 * 1000 * 1000;
 
         private readonly GenericLogger logger;
-        private readonly HttpClient httpClient;
+
+        private static readonly string userAgent = $"Chaskis IRC Bot - {nameof( UrlBot )} Plugin";
 
         // -------- Constructor --------
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UrlReader( GenericLogger logger, HttpClient client )
+        public UrlReader( GenericLogger logger )
         {
             this.logger = logger;
-            this.httpClient = client;
         }
 
         // -------- Properties --------
@@ -89,47 +93,71 @@ namespace Chaskis.Plugins.UrlBot
                 {
                     UrlResponse response = new UrlResponse();
 
+                    IFlurlRequest baseRequest = url
+                        .WithHeader( "User-Agent", userAgent )
+                        // Only grab html pages.
+                        .WithHeader( "Accept", "text/html,application/xhtml" )
+                        .WithAutoRedirect( true )
+                        .WithTimeout( TimeSpan.FromSeconds( 15 ) );
+
                     try
                     {
-                        long totalBytes;
+                        IFlurlResponse getResponse = await baseRequest.GetAsync();
 
-                        // Get the length of the file we are going to download.
-                        // Ignore if its going to be too big.
-                        // 
-                        // The HEAD method is the same thing as a GET request... the only
-                        // difference being the content does not get returned.
-                        //
-                        // Check the content length first so we don't download a massive file.
+                        HttpResponseMessage responseMessage = getResponse.ResponseMessage;
+                        if( responseMessage.IsSuccessStatusCode == false )
                         {
-                            HttpRequestMessage headRequest = new HttpRequestMessage( HttpMethod.Head, url );
-                            HttpResponseMessage headResponse = await this.httpClient.SendAsync( headRequest );
-
-                            // Set to max value if there is no content length.  We'll assume the file is too big
-                            // if its trying to hide this.
-                            totalBytes = headResponse.Content.Headers.ContentLength ?? long.MaxValue;
+                            this.logger.WriteLine(
+                                $"Got status code {responseMessage.StatusCode} from '{url}' - ignoring."
+                            );
+                            return response;
                         }
 
-                        // If th length is too big, ignore.
-                        if( totalBytes <= maxFileSize )
+                        string mediaType = responseMessage?.Content?.Headers?.ContentType?.MediaType;
+                        if( "text/html" != mediaType )
                         {
-                            HttpResponseMessage getResponse = await this.httpClient.GetAsync( url );
+                            this.logger.WriteLine(
+                                $"Got non-html media type {mediaType ?? "[null]"} for url '{url}' - ignoring."
+                            );
 
-                            string webResponse = await getResponse.Content.ReadAsStringAsync();
+                            return response;
+                        }
 
-                            HtmlDocument doc = new HtmlDocument();
-                            doc.LoadHtml( webResponse );
+                        StringBuilder builder = new StringBuilder();
 
-                            HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
-                            if( node != null )
+                        // We only care about the head section of the HTML, not the body.
+                        // Only read through the head section.
+                        using( Stream stream = await getResponse.GetStreamAsync() )
+                        {
+                            using( StreamReader reader = new StreamReader( stream ) )
                             {
-                                // Issue #15: Ensure we decode characters such as &lt; and &gt;
-                                response.Title = WebUtility.HtmlDecode( node.InnerText );
+                                string line = reader.ReadLine();
+                                while( line != null )
+                                {
+                                    builder.AppendLine( line );
+                                    if( line.Contains( "</head>" ) )
+                                    {
+                                        line = null;
+                                    }
+                                    else
+                                    {
+                                        line = reader.ReadLine();
+                                    }
+                                }
                             }
                         }
-                        else
+                        builder.AppendLine( "</html>" );
+
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.LoadHtml( builder.ToString() );
+
+                        HtmlNode node = doc.DocumentNode.SelectSingleNode( "//title" );
+                        if( node != null )
                         {
-                            this.logger.WriteLine( "Ignoring URL '{0}' whose file size is {1}", url, totalBytes );
+                            // Issue #15: Ensure we decode characters such as &lt; and &gt;
+                            response.Title = WebUtility.HtmlDecode( node.InnerText );
                         }
+
                     }
                     catch( Exception e )
                     {

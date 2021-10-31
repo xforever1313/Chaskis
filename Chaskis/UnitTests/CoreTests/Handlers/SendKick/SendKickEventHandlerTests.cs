@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.SendKick
 {
     [TestFixture]
-    public class SendKickEventHandlerTests
+    public sealed class SendKickEventHandlerTests
     {
         // ---------------- Fields ----------------
 

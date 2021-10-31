@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
     [TestFixture]
-    public class MeetingTests
+    public sealed class MeetingTests
     {
         // ---------------- Fields ----------------
 

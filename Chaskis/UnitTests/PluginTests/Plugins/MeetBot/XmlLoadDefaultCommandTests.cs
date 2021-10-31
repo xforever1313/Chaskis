@@ -15,7 +15,7 @@ using SethCS.Basic;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
     [TestFixture]
-    public class XmlLoadDefaultCommandTests
+    public sealed class XmlLoadDefaultCommandTests
     {
         // ---------------- Fields ----------------
 

@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.HttpServer
 {
     [TestFixture]
-    public class XmlLoaderTests
+    public sealed class XmlLoaderTests
     {
         // ---------------- Fields ----------------
 

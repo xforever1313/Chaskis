@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CowSayBot
 {
     [TestFixture]
-    public class CowFileInfoTest
+    public sealed class CowFileInfoTest
     {
         /// <summary>
         /// Ensures that a cow file with a good string

@@ -15,7 +15,7 @@ using SethCS.Basic;
 namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
 {
     [TestFixture]
-    public class LogManagerTest
+    public sealed class LogManagerTest
     {
         // -------- Fields --------
 
@@ -84,6 +84,7 @@ namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
         {
             this.testConfig.MaxNumberMessagesPerLog = 0;
             this.uut = new LogManager( this.testConfig, log );
+            this.uut.Start();
 
             // Ensure no file is currently open.
             Assert.AreEqual( string.Empty, this.uut.CurrentFileName );

@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MathBot
 {
     [TestFixture]
-    public class MathBotCalculatorTest
+    public sealed class MathBotCalculatorTest
     {
         // -------- Tests --------
 

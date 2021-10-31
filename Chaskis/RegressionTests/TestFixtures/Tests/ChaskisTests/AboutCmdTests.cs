@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.ChaskisTests
 {
     [TestFixture]
-    public class AboutCmdTests
+    public sealed class AboutCmdTests
     {
         // ---------------- Fields ----------------
 

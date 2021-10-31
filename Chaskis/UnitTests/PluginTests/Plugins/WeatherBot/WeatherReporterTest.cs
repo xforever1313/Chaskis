@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.WeatherBot
 {
     [TestFixture]
-    public class WeatherReporterTest
+    public sealed class WeatherReporterTest
     {
         // -------- Fields ---------
 

@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.IrcLogger
 {
     [TestFixture]
-    public class IrcLoggerConfigTest
+    public sealed class IrcLoggerConfigTest
     {
         /// <summary>
         /// Ensures the default values match

@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class MathBotTests
+    public sealed class MathBotTests
     {
         // ---------------- Fields ----------------
 

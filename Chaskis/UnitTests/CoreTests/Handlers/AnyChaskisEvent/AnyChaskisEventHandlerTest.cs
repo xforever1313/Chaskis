@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyChaskisEvent
 {
     [TestFixture]
-    public class AnyChaskisEventHandlerTest
+    public sealed class AnyChaskisEventHandlerTest
     {
         // -------- Fields --------
 

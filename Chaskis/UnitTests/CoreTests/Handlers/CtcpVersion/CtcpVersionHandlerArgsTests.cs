@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpVersion
 {
     [TestFixture]
-    public class CtcpVersionHandlerArgsTests
+    public sealed class CtcpVersionHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.RssBot
 {
     [TestFixture]
-    public class RssBotConfigTest
+    public sealed class RssBotConfigTest
     {
         // ---------------- Setup / Teardown ----------------
 

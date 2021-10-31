@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class MessageFixerBotTests
+    public sealed class MessageFixerBotTests
     {
         // ---------------- Fields ----------------
 

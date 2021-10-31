@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpPing
 {
     [TestFixture]
-    public class CtcpPingHandlerTests
+    public sealed class CtcpPingHandlerTests
     {
         // ---------------- Fields ----------------
 

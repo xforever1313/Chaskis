@@ -573,7 +573,7 @@ namespace Chaskis.Cli
 
         private void HandleCtcpVersion( CtcpVersionHandlerArgs args )
         {
-            string version = $"{Chaskis.UserAgent} v{Chaskis.VersionStr} : {Environment.OSVersion}";
+            string version = $"Chaskis IRC Bot v{Chaskis.VersionStr} : {Environment.OSVersion}";
             args.Writer.SendCtcpVersionResponse( version, args.Channel );
         }
     }

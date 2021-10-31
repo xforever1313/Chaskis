@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.SendMessage
 {
     [TestFixture]
-    public class SendMessageEventHandlerTests
+    public sealed class SendMessageEventHandlerTests
     {
         // ---------------- Fields ----------------
 

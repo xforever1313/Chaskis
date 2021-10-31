@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Message
 {
     [TestFixture]
-    public class MessageHandlerArgsTests
+    public sealed class MessageHandlerArgsTests
     {
         // ---------------- Tests ----------------
 

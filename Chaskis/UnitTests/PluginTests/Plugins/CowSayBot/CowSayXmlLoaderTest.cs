@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CowSayBot
 {
     [TestFixture]
-    public class CowSayXmlLoaderTest
+    public sealed class CowSayXmlLoaderTest
     {
         // -------- Fields --------
 

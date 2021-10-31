@@ -14,7 +14,7 @@ using XmlLoader = Chaskis.Plugins.MeetBot.XmlLoader;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
     [TestFixture]
-    public class XmlLoaderParseMeetbotConfigTests
+    public sealed class XmlLoaderParseMeetbotConfigTests
     {
         // ---------------- Fields ----------------
 

@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class ParsingTests
+    public sealed class ParsingTests
     {
         // ---------------- Fields ----------------
 

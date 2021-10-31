@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests
 {
     [TestFixture]
-    public class IrcConfigTest
+    public sealed class IrcConfigTest
     {
         // -------- Fields --------
 

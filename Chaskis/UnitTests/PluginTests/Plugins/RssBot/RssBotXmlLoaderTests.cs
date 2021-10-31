@@ -15,7 +15,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.RssBot
 {
     [TestFixture]
-    public class RssBotXmlLoaderTests
+    public sealed class RssBotXmlLoaderTests
     {
         /// <summary>
         /// Ensures a good XML results in a good config.

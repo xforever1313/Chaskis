@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Reconnecting
 {
     [TestFixture]
-    public class ReconnectingEventHandlerTests
+    public sealed class ReconnectingEventHandlerTests
     {
         // ---------------- Fields ----------------
 

@@ -15,7 +15,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.QuoteBot
 {
     [TestFixture]
-    public class QuoteBotXmlLoaderTests
+    public sealed class QuoteBotXmlLoaderTests
     {
         // ---------------- Fields ----------------
 

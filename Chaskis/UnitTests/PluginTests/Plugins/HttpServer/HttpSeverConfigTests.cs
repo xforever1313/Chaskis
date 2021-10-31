@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.HttpServer
 {
     [TestFixture]
-    public class HttpSeverConfigTests
+    public sealed class HttpSeverConfigTests
     {
         // ----------------- Tests -----------------
 

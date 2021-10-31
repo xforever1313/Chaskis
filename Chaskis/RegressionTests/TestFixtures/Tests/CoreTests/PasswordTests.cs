@@ -13,10 +13,10 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
 {
     // Different environments for passwords, so need two fixtures.
 
-    public class PasswordTests
+    public sealed class PasswordTests
     {
         [TestFixture]
-        public class NoPasswordTests
+        public sealed class NoPasswordTests
         {
             // ---------------- Fields ----------------
 
@@ -76,7 +76,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
         }
 
         [TestFixture]
-        public class InlinePasswordTests
+        public sealed class InlinePasswordTests
         {
             // ---------------- Fields ----------------
 
@@ -139,7 +139,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
         }
 
         [TestFixture]
-        public class EnvVarPasswordTests
+        public sealed class EnvVarPasswordTests
         {
             // ---------------- Fields ----------------
 
@@ -227,7 +227,7 @@ namespace Chaskis.RegressionTests.Tests.CoreTests
         /// Tests where the password is in a file.
         /// </summary>
         [TestFixture]
-        public class FilePasswordTests
+        public sealed class FilePasswordTests
         {
             // ---------------- Fields ----------------
 

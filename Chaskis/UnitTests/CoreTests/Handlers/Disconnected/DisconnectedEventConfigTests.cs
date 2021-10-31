@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Disconnected
 {
     [TestFixture]
-    public class DisconnectedEventConfigTests
+    public sealed class DisconnectedEventConfigTests
     {
         // ---------------- Tests ----------------
 

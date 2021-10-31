@@ -6,10 +6,8 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using Chaskis.Plugins.MeetBot;
 using Chaskis.UnitTests.Common;
 using Moq;
@@ -18,7 +16,8 @@ using SethCS.Extensions;
 
 namespace Chaskis.UnitTests.PluginTests.Plugins.MeetBot
 {
-    public class GeneratorConfigTests
+    [TestFixture]
+    public sealed class GeneratorConfigTests
     {
         // ---------------- Fields ----------------
 

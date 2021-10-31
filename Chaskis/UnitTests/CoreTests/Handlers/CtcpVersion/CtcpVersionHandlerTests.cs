@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpVersion
 {
     [TestFixture]
-    public class CtcpVersionHandlerTests
+    public sealed class CtcpVersionHandlerTests
     {
         // ---------------- Fields ----------------
 

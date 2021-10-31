@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.MetricsBot
 {
     [TestFixture]
-    public class MessageInfoKeyTests
+    public sealed class MessageInfoKeyTests
     {
         [Test]
         public void EqualsTest()

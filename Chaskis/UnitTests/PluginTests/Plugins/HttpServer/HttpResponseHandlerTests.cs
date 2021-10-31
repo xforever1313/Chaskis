@@ -19,7 +19,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.HttpServer
 {
     [TestFixture]
-    public class HttpResponseHandlerTests
+    public sealed class HttpResponseHandlerTests
     {
         // ---------------- Fields ----------------
 

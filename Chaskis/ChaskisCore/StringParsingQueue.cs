@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using SethCS.Basic;
 
 namespace Chaskis.Core
@@ -43,59 +44,18 @@ namespace Chaskis.Core
     /// This is the class that takes strings from a server,
     /// parses them, and calls the IRC Handlers.
     /// </summary>
-    public class StringParsingQueue : IDisposable, INonDisposableStringParsingQueue
+    public sealed class StringParsingQueue : ChaskisActionChannel, INonDisposableStringParsingQueue
     {
         // ---------------- Fields ----------------
 
-        /// <summary>
-        /// Event queue.
-        /// </summary>
-        private readonly InterruptibleEventExecutor eventQueue;
-
-        private bool inited;
-
-        private bool isDisposed;
-
-        /// <summary>
-        /// The IRC handlers.
-        /// </summary>
         private IReadOnlyDictionary<string, IHandlerConfig> ircHandlers;
 
         // ---------------- Constructor ----------------
 
-        public StringParsingQueue()
+        public StringParsingQueue() :
+            base( nameof( StringParsingQueue ) )
         {
-            this.eventQueue = new InterruptibleEventExecutor(
-                15 * 1000, // Lets start with 15 seconds and see how that works.,
-                nameof( StringParsingQueue ) + " Thread"
-            );
-
-            this.eventQueue.OnError += this.EventQueue_OnError;
-
-            this.inited = false;
-            this.isDisposed = false;
         }
-
-        ~StringParsingQueue()
-        {
-            try
-            {
-                this.Dispose( false );
-            }
-            catch( Exception e )
-            {
-                StringWriter errorMessage = new StringWriter();
-
-                errorMessage.WriteLine( "***************" );
-                errorMessage.WriteLine( "Caught Exception in while finalizing String Parsing Queue Thread:" );
-                errorMessage.WriteLine( e.ToString() );
-                errorMessage.WriteLine( "***************" );
-
-                StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
-            }
-        }
-
-        // ---------------- Properties ----------------
 
         // ---------------- Functions ----------------
 
@@ -104,14 +64,9 @@ namespace Chaskis.Core
         /// </summary>
         public void Start( IReadOnlyDictionary<string, IHandlerConfig> ircHandlers )
         {
-            DisposeCheck();
-
-            if( this.inited == false )
-            {
-                this.ircHandlers = ircHandlers;
-                this.eventQueue.Start();
-                this.inited = true;
-            }
+            ThrowIfStarted();
+            this.ircHandlers = ircHandlers;
+            Start();
         }
 
         /// <summary>
@@ -125,17 +80,6 @@ namespace Chaskis.Core
 
             // Wait for our last event to execute before leaving.
             doneEvent.WaitOne();
-        }
-
-        /// <summary>
-        /// Disposes this class.
-        /// </summary>
-        public void Dispose()
-        {
-            DisposeCheck();
-
-            this.Dispose( true );
-            GC.SuppressFinalize( this );
         }
 
         /// <summary>
@@ -156,7 +100,7 @@ namespace Chaskis.Core
                 // between accessing the list, and setting it.
                 //
                 // Luckily, HandlerArgs is small when it clones, its a simple memberwise clone.
-                // It shouldn't be too big of a hit in termps of heap allocations.
+                // It shouldn't be too big of a hit in terms of heap allocations.
                 HandlerArgs innerArgs = args.Clone();
                 innerArgs.BlackListedChannels = innerHandlers.BlackListedChannels;
 
@@ -185,58 +129,48 @@ namespace Chaskis.Core
             }
         }
 
-        /// <summary>
-        /// Invokes the given action on the event queue thread.
-        /// Does not block.
-        /// </summary>
-        public void BeginInvoke( Action action )
+        protected override void OnBadEnqueue( Action action )
         {
-            if( action == null )
-            {
-                throw new ArgumentNullException( nameof( action ) );
-            }
-
-            this.eventQueue.AddEvent( action );
+            StaticLogger.Log.ErrorWriteLine( "Could not enqueue action onto channel" );
         }
 
-        protected virtual void Dispose( bool isDisposing )
+        protected override void OnError( Exception e )
         {
-            if( this.isDisposed == false )
-            {
-                if( isDisposing )
-                {
-                    // Free managed objects here.
-                    this.eventQueue.OnError -= this.EventQueue_OnError;
-                }
-
-                // Free unmanaged objects or threads here.
-                if( this.inited )
-                {
-                    this.eventQueue.Dispose();
-                }
-
-                this.isDisposed = true;
-            }
+            this.PrintError( e );
         }
 
-        private void EventQueue_OnError( Exception err )
+        protected override void OnTaskCancelled( TaskCanceledException e )
+        {
+            this.PrintError( e );
+        }
+
+        protected override void OnThreadExit()
+        {
+            StaticLogger.Log.WriteLine( $"Exiting {this.Name}" );
+        }
+
+        protected override void OnFatalError( Exception e )
         {
             StringWriter errorMessage = new StringWriter();
 
             errorMessage.WriteLine( "***************" );
-            errorMessage.WriteLine( "Caught Exception in " + Thread.CurrentThread.Name + ":" );
-            errorMessage.WriteLine( err.ToString() );
+            errorMessage.WriteLine( $"FATAL Exception in {this.Name}:" );
+            errorMessage.WriteLine( e.ToString() );
             errorMessage.WriteLine( "***************" );
 
             StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
 
-        private void DisposeCheck()
+        private void PrintError( Exception err )
         {
-            if( this.isDisposed )
-            {
-                throw new ObjectDisposedException( nameof( StringParsingQueue ) );
-            }
+            StringWriter errorMessage = new StringWriter();
+
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( $"Caught Exception in {this.Name}:" );
+            errorMessage.WriteLine( err.ToString() );
+            errorMessage.WriteLine( "***************" );
+
+            StaticLogger.Log.ErrorWriteLine( errorMessage.ToString() );
         }
     }
 }

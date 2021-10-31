@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class CrossChannelTests
+    public sealed class CrossChannelTests
     {
         // ---------------- Fields ----------------
 

@@ -5,11 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chaskis.Core;
 using Chaskis.UnitTests.Common;
 using Moq;
@@ -18,7 +14,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests.Handlers.Kick
 {
-    public class KickHandlerTests
+    [TestFixture]
+    public sealed class KickHandlerTests
     {
         // ---------------- Fields ----------------
 

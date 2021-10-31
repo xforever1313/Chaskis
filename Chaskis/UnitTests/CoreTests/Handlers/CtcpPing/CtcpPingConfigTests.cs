@@ -7,14 +7,13 @@
 
 using System.Text.RegularExpressions;
 using Chaskis.Core;
-using Moq;
 using NUnit.Framework;
 using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpPing
 {
     [TestFixture]
-    public class CtcpPingConfigTests
+    public sealed class CtcpPingConfigTests
     {
         /// <summary>
         /// Ensures the default values when constructing are correct.

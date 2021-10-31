@@ -13,7 +13,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.CtcpVersion
 {
     [TestFixture]
-    public class CtcpVersionConfigTests
+    public sealed class CtcpVersionConfigTests
     {
         /// <summary>
         /// Ensures the default values when constructing are correct.

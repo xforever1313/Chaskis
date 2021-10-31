@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.CoreTests.Handlers.Pong
 {
     [TestFixture]
-    public class PongHandlerTest
+    public sealed class PongHandlerTest
     {
         // -------- Fields --------
 

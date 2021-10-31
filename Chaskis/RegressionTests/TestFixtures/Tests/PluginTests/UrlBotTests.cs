@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.PluginTests
 {
     [TestFixture]
-    public class UrlBotTests
+    public sealed class UrlBotTests
     {
         // ---------------- Fields ----------------
 
@@ -96,23 +96,6 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
                 "https://files.shendrick.net/projects/chaskis/testfiles/urlbot/escapedcharacters.html",
                 @"Title:\s+<My ""Title"">"
             );
-        }
-
-        /// <summary>
-        /// Ensures if a file is too big, we ignore it.
-        /// </summary>
-        [Test]
-        public void FileTooBigTest()
-        {
-            this.testFrame.IrcServer.SendMessageToChannelAs(
-                "https://files.shendrick.net/projects/chaskis/testfiles/urlbot/bigsize.html",
-                TestConstants.Channel1,
-                TestConstants.NormalUser
-            );
-
-            this.testFrame.ProcessRunner.WaitForStringFromChaskis(
-                @"Ignoring\s+URL.+whose\s+file\s+size\s+is\s+\d+"
-            ).FailIfFalse( "Did not get debug message from Chaskis Process" );
         }
 
         // ---------------- Test Helpers ----------------

@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.SendJoin
 {
     [TestFixture]
-    public class SendJoinEventArgsTests
+    public sealed class SendJoinEventArgsTests
     {
         // ---------------- Fields ----------------
 

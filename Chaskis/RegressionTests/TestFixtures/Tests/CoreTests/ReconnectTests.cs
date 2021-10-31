@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
     [TestFixture]
-    public class ReconnectTests
+    public sealed class ReconnectTests
     {
         // ---------------- Fields ----------------
 

@@ -11,7 +11,8 @@ using SethCS.Exceptions;
 
 namespace Chaskis.UnitTests.CoreTests.Handlers.Part
 {
-    public class PartHandlerConfigTests
+    [TestFixture]
+    public sealed class PartHandlerConfigTests
     {
         // ---------------- Tests ----------------
 

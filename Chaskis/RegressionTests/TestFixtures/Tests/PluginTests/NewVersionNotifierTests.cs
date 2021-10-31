@@ -20,14 +20,14 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         ChaskisTestFramework TestFrame { get; }
     }
 
-    public class NewVersionNotifier
+    public sealed class NewVersionNotifier
     {
         /// <summary>
         /// Tests ensures that if we have a different version number than the previous release,
         /// do we send the correct message?
         /// </summary>
         [TestFixture]
-        public class DifferentVersionTests : INewVersionNotifierTestFixture
+        public sealed class DifferentVersionTests : INewVersionNotifierTestFixture
         {
             // ---------------- Fields ----------------
 
@@ -82,7 +82,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         /// Tests ensures that if we no version file, we get a message.
         /// </summary>
         [TestFixture]
-        public class NoVersionFileTests : INewVersionNotifierTestFixture
+        public sealed class NoVersionFileTests : INewVersionNotifierTestFixture
         {
             // ---------------- Fields ----------------
 
@@ -137,7 +137,7 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         /// Tests ensures that if the version does NOT change, no message goes out.
         /// </summary>
         [TestFixture]
-        public class NoVersionChangeTests : INewVersionNotifierTestFixture
+        public sealed class NoVersionChangeTests : INewVersionNotifierTestFixture
         {
             // ---------------- Fields ----------------
 
@@ -206,7 +206,8 @@ namespace Chaskis.RegressionTests.Tests.PluginTests
         /// Ensures if we specify which channels to send to,
         /// we only send to those channels.
         /// </summary>
-        public class SingleChannelTest : INewVersionNotifierTestFixture
+        [TestFixture]
+        public sealed class SingleChannelTest : INewVersionNotifierTestFixture
         {
             // ---------------- Fields ----------------
 

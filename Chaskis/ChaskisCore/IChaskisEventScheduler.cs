@@ -28,27 +28,30 @@ namespace Chaskis.Core
         /// Its parameter is an <see cref="IIrcWriter"/> so messages can be sent
         /// out to the channel.
         /// </param>
-        /// <returns>The id of the event which can be used to stop it</returns>
-        int ScheduleRecurringEvent( TimeSpan interval, Action<IIrcWriter> action );
+        /// <param name="startRightAway">
+        /// If set to false, the event will not start executing until <see cref="StartEvent(int)"/> is called.
+        /// </param>
+        /// <returns>The id of the event which can be used to start or stop it</returns>
+        int ScheduleRecurringEvent( TimeSpan interval, Action<IIrcWriter> action, bool startRightAway = true );
 
         /// <summary>
-        /// Schedules a single event
+        /// Enables the given event.
         /// </summary>
-        /// <returns>The event.</returns>
-        /// <param name="delay">How long to wait until we fire the first event.</param>
-        /// <param name="action">
-        /// The action to perform after the delay.
-        /// Its parameter is an <see cref="IIrcWriter"/> so messages can be sent
-        /// out to the channel.
-        /// </param>
-        /// <returns>The id of the event which can be used to stop it</returns>
-        int ScheduleEvent( TimeSpan delay, Action<IIrcWriter> action );
+        /// <exception cref="ArgumentException">If the event does not exist.</exception>
+        /// <param name="id">ID of the event to stop.</param>
+        void StartEvent( int id );
 
         /// <summary>
         /// Stops the event from running.
-        /// No-Op if the event is not running.
         /// </summary>
+        /// <exception cref="ArgumentException">If the event does not exist.</exception>
         /// <param name="id">ID of the event to stop.</param>
         void StopEvent( int id );
+
+        /// <summary>
+        /// Stops and disposes the event, and removes its ID from the event scheduler.
+        /// No-Op if the event doesn't exist.
+        /// </summary>
+        void DisposeEvent( int id );
     }
 }

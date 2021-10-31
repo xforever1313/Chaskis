@@ -13,7 +13,7 @@ using SethCS.Extensions;
 namespace Chaskis.RegressionTests.Tests.CoreTests
 {
     [TestFixture]
-    public class EventHandlerExceptionTests
+    public sealed class EventHandlerExceptionTests
     {
         // ---------------- Fields ----------------
 

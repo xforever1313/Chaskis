@@ -12,7 +12,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.CoreTests.Handlers.AnyInterPluginEvent
 {
     [TestFixture]
-    public class AnyInterPluginEventHandlerConfigTests
+    public sealed class AnyInterPluginEventHandlerConfigTests
     {
         // ---------------- Tests ----------------
 

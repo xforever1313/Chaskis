@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.KarmaBot
 {
     [TestFixture]
-    public class KarmabotXmlLoaderTests
+    public sealed class KarmabotXmlLoaderTests
     {
         // -------- Fields --------
 

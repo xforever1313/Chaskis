@@ -86,7 +86,7 @@ namespace Chaskis.Plugins.UrlBot
         /// <param name="pluginInit">The class that has information required for initing the plugin.</param>
         public void Init( PluginInitor initor )
         {
-            this.urlReader = new UrlReader( initor.Log, initor.HttpClient );
+            this.urlReader = new UrlReader( initor.Log );
 
             MessageHandlerConfig msgConfig = new MessageHandlerConfig
             {

@@ -9,6 +9,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Chaskis.Core;
 using SethCS.Basic;
 using SethCS.Exceptions;
 using SethCS.Extensions;
@@ -18,14 +20,18 @@ namespace Chaskis.Plugins.IrcLogger
     /// <summary>
     /// This is the class that managers and writes to logs.
     /// </summary>
-    public class LogManager : IDisposable
+    public sealed class LogManager : ChaskisActionChannel
     {
-        // -------- Fields --------
+        // ---------------- Fields ----------------
 
         /// <summary>
         /// The configuration to use.
         /// </summary>
         private readonly IrcLoggerConfig config;
+
+        private readonly GenericLogger statusLog;
+
+        private bool isDisposed;
 
         /// <summary>
         /// The current number of messages written to the log.
@@ -42,23 +48,15 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         private StreamWriter outFileWriter;
 
-        /// <summary>
-        /// IO to the file system isn't cheap, let's background it.
-        /// </summary>
-        private readonly EventExecutor writerThread;
-
-        private bool isDisposed;
-
-        private readonly GenericLogger statusLog;
-
-        // -------- Constructor --------
+        // ---------------- Constructor ----------------
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="config">The config to use.</param>
         /// <param name="statusLog">The log to use for reporting status.</param>
-        public LogManager( IrcLoggerConfig config, GenericLogger statusLog )
+        public LogManager( IrcLoggerConfig config, GenericLogger statusLog ) :
+            base( nameof( LogManager ) )
         {
             ArgumentChecker.IsNotNull( config, nameof( config ) );
 
@@ -73,35 +71,10 @@ namespace Chaskis.Plugins.IrcLogger
             }
 
             this.statusLog = statusLog;
-
-            this.writerThread = new EventExecutor( "IRC Logger" );
-
-            this.writerThread.OnError += WriterThread_OnError;
-
-            this.writerThread.Start();
             this.isDisposed = false;
         }
 
-        private void WriterThread_OnError( Exception e )
-        {
-            this.statusLog.ErrorWriteLine(
-                "Caught Exception while writing to file in IRC Logger: " + Environment.NewLine + e.ToString()
-            );
-        }
-
-        ~LogManager()
-        {
-            try
-            {
-                this.Dispose( false );
-            }
-            catch( Exception )
-            {
-                // Don't let the GC thread die.
-            }
-        }
-
-        // -------- Properties --------
+        // ---------------- Properties ----------------
 
         /// <summary>
         /// The current file name open.
@@ -115,14 +88,19 @@ namespace Chaskis.Plugins.IrcLogger
         /// </summary>
         public string LastFileName { get; private set; }
 
-        // -------- Functions --------
+        // ---------------- Functions ----------------
+
+        public new void Start()
+        {
+            base.Start();
+        }
 
         /// <summary>
         /// Starts writing a message in the background event queue.
         /// </summary>
         public void AsyncLogToFile( string message )
         {
-            this.writerThread.AddEvent( () => this.LogToFileInternal( message ) );
+            this.BeginInvoke( () => this.LogToFileInternal( message ) );
         }
 
         /// <summary>
@@ -262,52 +240,65 @@ namespace Chaskis.Plugins.IrcLogger
             );
         }
 
-        /// <summary>
-        /// Closes all log files.
-        /// </summary>
-        public void Dispose()
+        protected override void Dispose( bool fromDispose )
         {
-            this.Dispose( true );
-            GC.SuppressFinalize( this );
-        }
+            base.Dispose( fromDispose );
 
-        protected void Dispose( bool fromDispose )
-        {
             if( this.isDisposed )
             {
                 return;
             }
 
-            try
+            if( fromDispose )
             {
-                if( fromDispose )
-                {
-                    ManualResetEvent doneEvent = new ManualResetEvent( false );
-                    this.writerThread.AddEvent( () => doneEvent.Set() );
-
-                    if( doneEvent.WaitOne( 15 * 1000 ) == false )
-                    {
-                        this.statusLog.ErrorWriteLine( "IRC Logger hung for 15 seconds during tear down, giving up." );
-                    }
-
-                    this.writerThread.Dispose();
-
-                    // Closes the underlying stream as well.
-                    this.outFileWriter?.Dispose();
-
-                    this.writerThread.OnError -= this.WriterThread_OnError;
-                }
-                else
-                {
-                    // If we are from the finallizer, forget all the events,
-                    // Just stop the event queue.
-                    this.writerThread.Dispose();
-                }
+                // Closes the underlying stream as well.
+                this.outFileWriter?.Dispose();
             }
-            finally
-            {
-                this.isDisposed = true;
-            }
+            this.isDisposed = true;
+        }
+
+        protected override void OnBadEnqueue( Action action )
+        {
+            this.statusLog.ErrorWriteLine( "Could not enqueue action onto channel" );
+        }
+
+        protected override void OnError( Exception e )
+        {
+            this.PrintError( e );
+        }
+
+        protected override void OnTaskCancelled( TaskCanceledException e )
+        {
+            this.PrintError( e );
+        }
+
+        protected override void OnThreadExit()
+        {
+            this.statusLog.WriteLine( $"Exiting {this.Name}" );
+        }
+
+        protected override void OnFatalError( Exception e )
+        {
+            StringWriter errorMessage = new StringWriter();
+
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( $"FATAL Exception in {this.Name}:" );
+            errorMessage.WriteLine( e.ToString() );
+            errorMessage.WriteLine( "***************" );
+
+            this.statusLog.ErrorWriteLine( errorMessage.ToString() );
+        }
+
+        private void PrintError( Exception err )
+        {
+            StringWriter errorMessage = new StringWriter();
+
+            errorMessage.WriteLine( "***************" );
+            errorMessage.WriteLine( $"Caught Exception in {this.Name}:" );
+            errorMessage.WriteLine( err.ToString() );
+            errorMessage.WriteLine( "***************" );
+
+            this.statusLog.ErrorWriteLine( errorMessage.ToString() );
         }
     }
 }

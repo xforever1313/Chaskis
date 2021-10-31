@@ -14,7 +14,7 @@ using SethCS.Exceptions;
 namespace Chaskis.UnitTests.PluginTests.Plugins.CowSayBot
 {
     [TestFixture]
-    public class CowSayBotConfigTest
+    public sealed class CowSayBotConfigTest
     {
         /// <summary>
         /// Path to the fake cowsay executable.

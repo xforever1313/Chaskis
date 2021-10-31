@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Chaskis.UnitTests.PluginTests.Plugins.SearchAndReplaceBot
 {
     [TestFixture]
-    public class MessageFixerTests
+    public sealed class MessageFixerTests
     {
         // ---------------- Fields ----------------
 
