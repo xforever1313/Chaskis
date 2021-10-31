@@ -48,8 +48,6 @@ namespace DevOps.Template
             this.ReleaseNotes = this.GetReleaseNotes();
             this.IconUrl = this.GetIconUrl();
             this.RunTime = context.ApplicationTarget;
-            this.DebChecksum = this.GetDebChecksum();
-            this.MsiChecksum = this.GetMsiChecksum();
         }
 
         // ---------------- Properties ----------------
@@ -307,18 +305,6 @@ namespace DevOps.Template
             }
 
             return match.Groups["PackageIconUrl"].Value;
-        }
-
-        private string GetDebChecksum()
-        {
-            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.SavedDebianChecksumFile );
-            return lines[0];
-        }
-
-        private string GetMsiChecksum()
-        {
-            string[] lines = this.CakeContext.FileReadLines( this.ImportantPaths.SavedMsiChecksumFile );
-            return lines[0];
         }
     }
 

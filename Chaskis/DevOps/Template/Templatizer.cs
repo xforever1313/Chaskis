@@ -130,8 +130,6 @@ namespace DevOps.Template
             contents = Regex.Replace( contents, @"{%Summary%}", this.constants.Summary );
             contents = Regex.Replace( contents, @"{%IconUrl%}", this.constants.IconUrl );
             contents = Regex.Replace( contents, @"{%RunTime%}", this.constants.RunTime );
-            contents = Regex.Replace( contents, @"{%DebCheckSum%}", this.constants.DebChecksum );
-            contents = Regex.Replace( contents, @"{%MsiCheckSum%}", this.constants.MsiChecksum );
 
             return contents;
         }

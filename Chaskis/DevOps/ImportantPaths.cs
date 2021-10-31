@@ -40,11 +40,6 @@ public class ImportantPaths
     public DirectoryPath DocumentationFolder => this.ProjectRoot.Combine( new DirectoryPath( "Documentation" ) );
 
     /// <summary>
-    /// Directory where saved checksums live.
-    /// </summary>
-    public DirectoryPath SavedChecksumsFolder => this.ProjectRoot.Combine( new DirectoryPath( "SavedChecksums" ) );
-
-    /// <summary>
     /// The path that contains the source code.
     /// </summary>
     public DirectoryPath SourceFolder => this.ProjectRoot.Combine( new DirectoryPath( "Chaskis" ) );
@@ -220,14 +215,4 @@ public class ImportantPaths
     /// The file for the regression test plugin's main file.
     /// </summary>
     public FilePath RegressionTestPluginFile => this.RegressionTestFolder.CombineWithFilePath( new FilePath( "RegressionTestPlugin/RegressionTestPlugin.cs" ) );
-
-    /// <summary>
-    /// The file that contains the .deb saved checksum.
-    /// </summary>
-    public FilePath SavedDebianChecksumFile => this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "chaskis.deb.sha256" ) );
-
-    /// <summary>
-    /// The file that contains the .MSI saved checksum.
-    /// </summary>
-    public FilePath SavedMsiChecksumFile => this.SavedChecksumsFolder.CombineWithFilePath( new FilePath( "ChaskisInstaller.msi.sha256" ) );
 }
