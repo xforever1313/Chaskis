@@ -628,19 +628,19 @@
 
             <!-- Flurl -->
             <Component Guid="{70C6EE23-3E84-4D85-AB91-4C348C6387BA}" Directory="RssBotFolder">
-                <File Source="$(var.RssBot.TargetDir)Flurl.dll" KeyPath="yes"/>
+                <File Id="RssBotFlurl" Source="$(var.RssBot.TargetDir)Flurl.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{FD374691-E6AB-4025-B5C4-001553321E4D}" Directory="RssBotFolder">
-                <File Source="$(var.RssBot.TargetDir)Flurl.Http.dll" KeyPath="yes"/>
+                <File Id="RssBotFlurlHttp" Source="$(var.RssBot.TargetDir)Flurl.Http.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{D82F3950-7CD5-41F8-8CA0-93FDA5670959}" Directory="RssBotFolder">
-                <File Source="$(var.RssBot.TargetDir)Newtonsoft.Json.dll" KeyPath="yes"/>
+                <File Id="RssBotJson" Source="$(var.RssBot.TargetDir)Newtonsoft.Json.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{5AFBAD72-1492-4373-8F23-850A81C89393}" Directory="RssBotFolder">
-                <File Source="$(var.RssBot.TargetDir)System.Text.Encoding.CodePages.dll" KeyPath="yes"/>
+                <File Id="RssBotCodePages" Source="$(var.RssBot.TargetDir)System.Text.Encoding.CodePages.dll" KeyPath="yes"/>
             </Component>
 
             <!-- Required DLLs for RSS Bot -->
@@ -705,22 +705,22 @@
             <Component Guid="{F7006A35-9716-4EF3-92B1-ABF93EAECFE2}" Directory="UrlBotFolder">
                 <File Source="$(var.UrlBot.TargetPath)" KeyPath="yes"/>
             </Component>
-            
+
             <!-- Flurl -->
             <Component Guid="{C358BA9C-0CA4-4619-BC72-91ECF1DF2757}" Directory="UrlBotFolder">
-                <File Source="$(var.UrlBot.TargetDir)Flurl.dll" KeyPath="yes"/>
+                <File Id="UrlBotFlurl" Source="$(var.UrlBot.TargetDir)Flurl.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{2D0CC030-88D6-41B8-B03D-405715F2CE71}" Directory="UrlBotFolder">
-                <File Source="$(var.UrlBot.TargetDir)Flurl.Http.dll" KeyPath="yes"/>
+                <File Id="UrlBotFlurlHttp" Source="$(var.UrlBot.TargetDir)Flurl.Http.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{540C067B-2B56-4A5D-AF64-413AE77BA2E5}" Directory="UrlBotFolder">
-                <File Source="$(var.UrlBot.TargetDir)Newtonsoft.Json.dll" KeyPath="yes"/>
+                <File Id="UrlBotJson" Source="$(var.UrlBot.TargetDir)Newtonsoft.Json.dll" KeyPath="yes"/>
             </Component>
 
             <Component Guid="{6AF9BEF1-41C3-4875-A933-EE1C9EF61791}" Directory="UrlBotFolder">
-                <File Source="$(var.UrlBot.TargetDir)System.Text.Encoding.CodePages.dll" KeyPath="yes"/>
+                <File Id="UrlBotCodePages" Source="$(var.UrlBot.TargetDir)System.Text.Encoding.CodePages.dll" KeyPath="yes"/>
             </Component>
 
             <!-- HtmlAgilityPack.dll -->
