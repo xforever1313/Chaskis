@@ -281,7 +281,7 @@ namespace Chaskis.Plugins.RssBot
             {
                 foreach( int eventId in this.feedReaders.Keys )
                 {
-                    this.scheduler.StopEvent( eventId );
+                    this.scheduler.DisposeEvent( eventId );
                 }
             }
         }

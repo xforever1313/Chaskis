@@ -190,7 +190,6 @@ namespace Chaskis.Core
             if( this.inited == false )
             {
                 // Start Executing
-                this.eventScheduler.Start();
                 this.macWriter.Start();
                 this.inited = true;
             }
@@ -730,40 +729,32 @@ namespace Chaskis.Core
         /// out to the channel.
         /// </param>
         /// <returns>The id of the event which can be used to stop it</returns>
-        public int ScheduleRecurringEvent( TimeSpan interval, Action<IIrcWriter> action )
+        public int ScheduleRecurringEvent( TimeSpan interval, Action<IIrcWriter> action, bool startRightAway = true )
         {
             Action<IIrcWriter> theAction = action;
             return this.eventScheduler.ScheduleRecurringEvent(
                 interval,
-                interval,
                 delegate ()
                 {
                     this.parsingQueue.BeginInvoke( () => DoScheduledAction( "Recurring Scheduled Event", theAction ) );
-                }
+                },
+                startRightAway
             );
         }
 
-        /// <summary>
-        /// Schedules a single event
-        /// </summary>
-        /// <returns>The event.</returns>
-        /// <param name="delay">How long to wait until we fire the first event.</param>
-        /// <param name="action">
-        /// The action to perform after the delay.
-        /// Its parameter is an <see cref="IIrcWriter"/> so messages can be sent
-        /// out to the channel.
-        /// </param>
-        /// <returns>The id of the event which can be used to stop it</returns>
-        public int ScheduleEvent( TimeSpan delay, Action<IIrcWriter> action )
+        public void StartEvent( int id )
         {
-            Action<IIrcWriter> theAction = action;
-            return this.eventScheduler.ScheduleEvent(
-                delay,
-                delegate ()
-                {
-                    this.parsingQueue.BeginInvoke( () => DoScheduledAction( "One-Time Scheduled Event", theAction ) );
-                }
-            );
+            this.eventScheduler.StartEvent( id );
+        }
+
+        public void StopEvent( int id )
+        {
+            this.eventScheduler.StopEvent( id );
+        }
+
+        public void DisposeEvent( int id )
+        {
+            this.eventScheduler.DisposeEvent( id );
         }
 
         private void DoScheduledAction( string context, Action<IIrcWriter> action )
@@ -776,16 +767,6 @@ namespace Chaskis.Core
             {
                 throw new EventHandlerException( context, e );
             }
-        }
-
-        /// <summary>
-        /// Stops the event from running.
-        /// No-Op if the event is not running.
-        /// </summary>
-        /// <param name="id">ID of the event to stop.</param>
-        public void StopEvent( int id )
-        {
-            this.eventScheduler.StopEvent( id );
         }
 
         /// <summary>
