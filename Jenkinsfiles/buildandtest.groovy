@@ -48,7 +48,7 @@ def CallCake( String arguments )
 
 def CallDevops( String arguments )
 {
-    RunCommand( "dotnet ./checkout/Chaskis/DevOps/bin/Debug/netcoreapp3.1/DevOps.dll ${arguments}" );
+    RunCommand( "dotnet ./checkout/Chaskis/DevOps/bin/Debug/net6.0/DevOps.dll ${arguments}" );
 }
 
 def Prepare()

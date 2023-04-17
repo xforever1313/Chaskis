@@ -9,7 +9,7 @@ const string buildTask = "build";
 bool forceBuild = Argument<bool>( "force_build", false );
 string targetArg = Argument( "target", string.Empty );
 
-FilePath devopsExe = File( "./Chaskis/DevOps/bin/Debug/netcoreapp3.1/DevOps.dll" );
+FilePath devopsExe = File( "./Chaskis/DevOps/bin/Debug/net6.0/DevOps.dll" );
 FilePath sln = File( "./Chaskis/Chaskis.sln" );
 
 // ---------------- Targets ----------------

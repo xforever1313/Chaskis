@@ -49,7 +49,7 @@ namespace DevOps
         /// <summary>
         /// Dotnet target framework for applications (.exe).
         /// </summary>
-        public string ApplicationTarget => "netcoreapp3.1";
+        public string ApplicationTarget => "net6.0";
         
         /// <summary>
         /// Dotnet target framework for plugins or libraries (.dll).

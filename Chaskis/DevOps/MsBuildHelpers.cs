@@ -7,9 +7,9 @@
 
 #if CAKE
 #else
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Build;
-using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -24,19 +24,19 @@ namespace DevOps
         /// <param name="configuration">The configuration to use (e.g. Debug, Release, etc.).</param>
         public static void DoMsBuild( ICakeContext context, FilePath sln, string configuration )
         {
-            DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings
+            DotNetMSBuildSettings msBuildSettings = new DotNetMSBuildSettings
             {
                 WorkingDirectory = sln.GetDirectory().ToString()
             }
             .SetMaxCpuCount( System.Environment.ProcessorCount )
             .SetConfiguration( configuration );
 
-            DotNetCoreBuildSettings settings = new DotNetCoreBuildSettings
+            DotNetBuildSettings settings = new DotNetBuildSettings
             {
                 MSBuildSettings = msBuildSettings
             };
 
-            context.DotNetCoreBuild( sln.ToString(), settings );
+            context.DotNetBuild( sln.ToString(), settings );
         }
     }
 

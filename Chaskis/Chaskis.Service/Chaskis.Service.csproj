@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>dotnet-Chaskis.Service-2F890A12-BD27-4873-A672-874A508596E4</UserSecretsId>
     <ApplicationManifest>Chaskis.Service.exe.manifest</ApplicationManifest>
   </PropertyGroup>

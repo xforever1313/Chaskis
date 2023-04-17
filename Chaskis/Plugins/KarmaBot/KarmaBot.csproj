@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!-- Required so Nuget packages get copied on compilation, and we can grab them during install -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
